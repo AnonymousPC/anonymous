@@ -1,0 +1,305 @@
+#pragma once
+
+namespace aux
+{
+    constexpr int                date_to_int ( tuple<int,int,int> );
+    constexpr tuple<int,int,int> int_to_date ( int );
+}
+
+
+
+
+/// Class time_point
+
+// Core
+
+constexpr time_point::time_point ( int_type auto YYYY, int_type auto MM, int_type auto DD, int_type auto hh, int_type auto mm, int_type auto ss, int_type auto ms, int_type auto us, int_type auto ns )
+    extends tuple<int,int,int,int,int,int,int,int,int> ( YYYY, MM, DD, hh, mm, ss, ms, us, ns )
+{
+    #if debug
+        if ( aux::int_to_date(aux::date_to_int({YYYY, MM, DD})) != ap::tuple(YYYY, MM, DD) or
+             abs(hh) >= 24 or abs(mm) >= 60 or abs(ss) >= 60 or abs(ms) >= 1000 or abs(us) >= 1000 or abs(ns) >= 1000 or not aux::is_same_sign(hh, mm, ss, ms, us, ns) )
+            throw value_error("date {} is out of domain [(Z), [1,12], [1,28|29|30|31], (+-24), (+-60), (+-60), (+-1000), (+-1000), (+-1000)",
+                              "{:04d}-{:04d}-{:04d} {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d}"s.format(year(), month(), day(), hour(), minute(), second(), millisecond(), microsecond(), nanosecond()));
+    #endif
+}
+
+
+// Conversion
+
+template < class clock_type >
+constexpr time_point::time_point ( std::chrono::time_point<clock_type> cvt )
+    extends time_point ( date(1970, 1, 1) + ap::hour(time_zone()) + ap::nanosecond(cvt.time_since_epoch().count()) )
+{
+
+}
+
+template < class clock_type >
+constexpr time_point::operator std::chrono::time_point<clock_type> ( ) const
+{
+    return std::chrono::time_point<std::chrono::system_clock> ( std::chrono::nanoseconds ( self - date(1970, 1, 1) - ap::hour(time_zone()) ) );
+}
+
+
+// Interface
+
+constexpr int& time_point::year ( )
+{
+    return self[1c];
+}
+
+constexpr const int& time_point::year ( ) const
+{
+    return self[1c];
+}
+
+constexpr int& time_point::month ( )
+{
+    return self[2c];
+}
+
+constexpr const int& time_point::month ( ) const
+{
+    return self[2c];
+}
+
+constexpr int& time_point::day ( )
+{
+    return self[3c];
+}
+
+constexpr const int& time_point::day ( ) const
+{
+    return self[3c];
+}
+
+constexpr int& time_point::hour ( )
+{
+    return self[4c];
+}
+
+constexpr const int& time_point::hour ( ) const
+{
+    return self[4c];
+}
+
+constexpr int& time_point::minute ( )
+{
+    return self[5c];
+}
+
+constexpr const int& time_point::minute ( ) const
+{
+    return self[5c];
+}
+
+constexpr int& time_point::second ( )
+{
+    return self[6c];
+}
+
+constexpr const int& time_point::second ( ) const
+{
+    return self[6c];
+}
+
+constexpr int& time_point::millisecond ( )
+{
+    return self[7c];
+}
+
+constexpr const int& time_point::millisecond ( ) const
+{
+    return self[7c];
+}
+
+constexpr int& time_point::microsecond ( )
+{
+    return self[8c];
+}
+
+constexpr const int& time_point::microsecond ( ) const
+{
+    return self[8c];
+}
+
+constexpr int& time_point::nanosecond ( )
+{
+    return self[9c];
+}
+
+constexpr const int& time_point::nanosecond ( ) const
+{
+    return self[9c];
+}
+
+constexpr int time_point::weekday ( ) const
+{
+    return (aux::date_to_int(ap::tuple(year(), month(), day())) + 5) % 7 + 1;
+}
+
+
+
+
+
+
+/// Time_point: factory
+
+constexpr time_point now ( )
+{
+    return time_point(std::chrono::system_clock::now());
+}
+
+constexpr time_point today ( )
+{
+    return time_point(now().year(), now().month(), now().day(), 0, 0, 0, 0, 0, 0);
+}
+
+constexpr time_point date ( int_type auto YYYY, int_type auto MM, int_type auto DD )
+{
+    return time_point(YYYY, MM, DD, 0, 0, 0, 0, 0, 0);
+}
+
+
+
+/// Time_point: operator
+
+constexpr std::ostream& operator << ( std::ostream& left, const time_point& right )
+{
+    return left << "{:04d}-{:02d}-{:02d} {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d}"s
+                   .format(right.year(),        right.month(),       right.day(),
+                           right.hour(),        right.minute(),      right.second(),
+                           right.millisecond(), right.microsecond(), right.nanosecond());
+}
+
+constexpr time_point operator + ( const time_point& left, const duration& right )
+{
+    let dur = hour(aux::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+              duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond()) +
+              right;
+    let dt = aux::int_to_date(dur.hour() / 24);
+    dur.hour() %= 24;
+
+    return time_point(dt[1c], dt[2c], dt[3c], dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
+}
+
+constexpr time_point operator + ( const duration& left, const time_point& right )
+{
+    let dur = left +
+              hour(aux::date_to_int({right.year(), right.month(), right.day()})) * 24 +
+              duration(right.hour(), right.minute(), right.second(), right.millisecond(), right.microsecond(), right.nanosecond());
+    let dt = aux::int_to_date(dur.hour() / 24);
+    dur.hour() %= 24;
+
+    return time_point(dt[1c], dt[2c], dt[3c], dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
+}
+
+constexpr duration operator - ( const time_point& left, const time_point& right )
+{
+    let dur1 = hour(aux::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+               duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond());
+    let dur2 = hour(aux::date_to_int({right.year(), right.month(), right.day()})) * 24 +
+               duration(right.hour(), right.minute(), right.second(), right.millisecond(), right.microsecond(), right.nanosecond());
+
+    return dur1 - dur2;
+}
+
+constexpr time_point operator - ( const time_point& left, const duration& right )
+{
+    let dur = hour(aux::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+              duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond()) -
+              right;
+    let dt = aux::int_to_date(dur.hour() / 24);
+    dur.hour() %= 24;
+
+    return time_point(dt[1c], dt[2c], dt[3c], dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
+}
+
+constexpr time_point& operator += ( time_point& left, const duration& right )
+{
+    return left = left + right;
+}
+
+constexpr time_point& operator -= ( time_point& left, const duration& right )
+{
+    return left = left - right;
+}
+
+
+
+/// Time_point: other
+
+constexpr void sleep_until ( time_point time )
+{
+    sleep_for(time - now());
+}
+
+constexpr int time_zone ( )
+{
+    return (boost::posix_time::second_clock::local_time() - boost::posix_time::second_clock::universal_time()).hours();
+}
+
+
+
+
+
+
+
+// Auxiliary
+
+constexpr int aux::date_to_int ( tuple<int,int,int> date )
+{
+    using namespace literals;
+
+    let [y, m, d] = date;
+
+    return + y * 365                                                                                        // Count normal year  from 0000 to y-1.
+           + ( y == 0 ? 0 otherwise ( ( y - 1 ) / 4 - ( y - 1 ) / 100 + ( y - 1 ) / 400 + 1 ) )             // Count leap   year  from 0000 to y-1.
+
+           + ( m - 1 ) * 31                                                                                 // Count approx month from 1    to m-1.
+           + ( m <= 2 ? 0 otherwise ( y % 4 != 0 or ( y % 100 == 0 but y % 400 != 0 ) ) ? -2 otherwise -1 ) // Count leap   month from 1    to m-1. Here only converts 28/29 to 30.
+           + ( m <= 8 ? - ( m - 1 ) / 2 otherwise - ( m - 2 ) / 2 )                                         // Count 30-day month from 1    to m-1.
+
+           + d * 1                                                                                          // Count day from 1 to d.
+
+           - 1;                                                                                             // Minus 0000.01.01.
+}
+
+constexpr tuple<int,int,int> aux::int_to_date ( int days )
+{
+    let y_400      = days / ( 303*365+97*366 ); // Chunk by 400 years.
+    let y_400_more = days % ( 303*365+97*366 ); // Chunk by 400 years.
+
+    let y_100      = ( y_400_more - 1 ) / ( 76*365+24*366 ); // As the first 100 years has 1 day more in 0000, minus it.
+    let y_100_more = ( y_400_more - 1 ) % ( 76*365+24*366 ) + ( y_100 == 0 ? 1 otherwise 0 ); // If is the first 100 years, add the 1 day back.
+
+    let y_4        = ( y_100_more + ( y_100 == 0 ? 0 otherwise 1 ) ) / ( 3*365+366 ); // If in the first 100 years, only chunk by 4 years; otherwise make up 1 day.
+    let y_4_more   = ( y_100_more + ( y_100 == 0 ? 0 otherwise 1 ) ) % ( 3*365+366 ) - ( y_100 != 0 and y_4 == 0 ? 1 otherwise 0 ); // Only in 0100-0103, 0200-0203, 0300-0303 you need to minus 1.
+
+    let y_1        = ( y_4_more - ( y_100 == 0 or y_4 != 0 ? 1 otherwise 0 ) ) / 365; // In 4-year which contains leap years, turn 366 into 365 vice versa.
+    let y_1_more   = ( y_4_more - ( y_100 == 0 or y_4 != 0 ? 1 otherwise 0 ) ) % 365 + ( ( y_100 == 0 or y_4 != 0 ) and y_1 == 0 ? 1 otherwise 0 ); // In first year of leap year you should add 1 back.
+
+    let y          = y_400 * 400 + y_100 * 100 + y_4 * 4 + y_1; // Accumulate year.
+
+    let is_leap    = y_1 == 0 and ( y_100 == 0 or y_4 != 0 ); // Judge lear year.
+
+    int m = 1;
+    let d = y_1_more + 1; // As first day refers to xxxx.01.01.
+
+    let month_day  = [&] { return m >= 8  ? m % 2 == 0 ? 31 otherwise 30 otherwise
+                                  m != 2  ? m % 2 != 0 ? 31 otherwise 30 otherwise
+                                  is_leap ?              29 otherwise 28; };
+    while ( true )
+    {
+        let md = month_day();
+        if ( d > md )
+        {
+            d -= md;
+            m++;
+        }
+        else
+            break;
+    }
+
+    return { y, m, d };
+}

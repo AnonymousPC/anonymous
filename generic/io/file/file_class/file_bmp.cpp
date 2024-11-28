@@ -1,0 +1,52 @@
+#pragma once
+
+/// Class file_bmp
+
+// Core
+
+file_bmp::file_bmp ( const char* pth )
+{
+    open(pth);
+}
+
+file_bmp::file_bmp ( const path& pth )
+{
+    open(pth);
+}
+
+// Interface (override)
+
+file_bmp& file_bmp::open ( const path& pth )
+{
+    // Open file.
+    file_interface::open(pth);
+
+    // Read data.
+    aux::read_from_boost_gil(self, path(self), boost::gil::bmp_tag(), depth());
+
+    return self;
+}
+
+file_bmp& file_bmp::save ( )
+{
+    // Save file.
+    file_interface::save();
+
+    // Write data.
+    aux::write_to_boost_gil(self, path(self), boost::gil::bmp_tag(), depth());
+
+    return self;
+}
+
+
+// Interface
+
+int& file_bmp::depth ( )
+{
+    return image_depth;
+}
+
+const int& file_bmp::depth ( ) const
+{
+    return image_depth;
+}

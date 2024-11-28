@@ -1,0 +1,136 @@
+#pragma once
+
+/// Class ipv6
+
+// Core
+
+ipv6::ipv6 ( int init_1, int init_2, int init_3, int init_4, int init_5, int init_6, int init_7, int init_8 )
+    extends ipv6 ( init_1, init_2, init_3, init_4, init_5, init_6, init_7, init_8, 0 )
+{
+
+}
+
+ipv6::ipv6 ( int init_1, int init_2, int init_3, int init_4, int init_5, int init_6, int init_7, int init_8, int init_port )
+    extends tuple<int,int,int,int,int,int,int,int,int> ( init_1, init_2, init_3, init_4, init_5, init_6, init_7, init_8, init_port )
+{
+    if ( self.first  () < 0 or self.first  () > 255 or
+         self.second () < 0 or self.second () > 255 or
+         self.third  () < 0 or self.third  () > 255 or
+         self.fourth () < 0 or self.fourth () > 255 or
+         self.fifth  () < 0 or self.fifth  () > 255 or
+         self.sixth  () < 0 or self.sixth  () > 255 or
+         self.seventh() < 0 or self.seventh() > 255 or
+         self.eighth () < 0 or self.eighth () > 255 or
+         self.port   () < 0 or self.port   () > 65535 )
+        throw network_error("ipv6 {} does not matches ipv6 domain (example: [fe80::1a2b:3c4d:5e6f:7g8h]:80)", self);
+}
+
+// Parse
+
+int& ipv6::first ( )
+{
+    return self[1c];
+}
+
+const int& ipv6::first ( ) const
+{
+    return self[1c];
+}
+
+int& ipv6::second ( )
+{
+    return self[2c];
+}
+
+const int& ipv6::second ( ) const
+{
+  return self[2c];
+}
+
+int& ipv6::third ( )
+{
+    return self[3c];
+}
+
+const int& ipv6::third ( ) const
+{
+    return self[3c];
+}
+
+int& ipv6::fourth ( )
+{
+    return self[4c];
+}
+
+const int& ipv6::fourth ( ) const
+{
+    return self[4c];
+}
+
+int& ipv6::fifth ( )
+{
+    return self[5c];
+}
+
+const int& ipv6::fifth ( ) const
+{
+    return self[5c];
+}
+
+int& ipv6::sixth ( )
+{
+    return self[6c];
+}
+
+const int& ipv6::sixth ( ) const
+{
+    return self[6c];
+}
+
+int& ipv6::seventh ( )
+{
+    return self[7c];
+}
+
+const int& ipv6::seventh ( ) const
+{
+    return self[7c];
+}
+
+int& ipv6::eighth ( )
+{
+    return self[8c];
+}
+
+const int& ipv6::eighth ( ) const
+{
+    return self[8c];
+}
+
+int& ipv6::port ( )
+{
+    return self[9c];
+}
+
+const int& ipv6::port ( ) const
+{
+    return self[9c];
+}
+
+
+
+
+
+std::ostream& operator << ( std::ostream& left, const ipv6& right )
+{
+    let str      = "[{}:{}:{}:{}:{}:{}:{}:{}]:{}"s.format(right[1c], right[2c], right[3c], right[4c], right[5c], right[6c], right[7c], right[8c], right.port());
+    let compress = str.find("(:|^)(0(?::0)*)(?::|$)"rgx);
+
+    if ( compress != "" )
+    {
+        let pos = str.find(compress);
+        str.erase(pos, pos + compress.size() - 1).insert(pos, "::");
+    }
+
+    return left << str;
+}

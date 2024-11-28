@@ -1,0 +1,6816 @@
+# depslib dependency file v1.0
+1732701533 source:f:\code\anonymous\main.cpp
+	"../generic/basic/interface.hpp"
+	"../generic/container/interface.hpp"
+	"../generic/io/interface.hpp"
+	"../generic/math/interface.hpp"
+	"../specific/audio/interface.hpp"
+	"../specific/neural/interface.hpp"
+	"../specific/spirit/interface.hpp"
+	"../specific/stock/interface.hpp"
+	"lipsync.cpp"
+
+1727669081 f:\code\container\interface.h
+	"../basic/interface.h"
+	"discrete/discrete.h"
+	"array/array.h"
+	"chain/chain.h"
+	"collection/collection.h"
+	"polymorphic/polymorphic.h"
+	"string/string.h"
+	"utility/utility.h"
+
+1706966943 f:\code\container\any.h
+	"string.h"
+	"any.cpp"
+
+1700222073 f:\code\container\math.h
+	"error.h"
+	"stream.h"
+	"iterator.h"
+	"range.h"
+	<algorithm>
+	<cmath>
+	"math.cpp"
+
+1699879086 f:\code\container\error.h
+	"stream.h"
+	<algorithm>
+	<fstream>
+	<vector>
+	<string>
+	"error.cpp"
+
+1699879086 f:\code\container\stream.h
+	"stream.cpp"
+
+1700107230 f:\code\container\stream.cpp
+
+1699879151 f:\code\container\error.cpp
+
+1707051813 f:\code\container\iterator.h
+	"iterator.cpp"
+
+1707051828 f:\code\container\iterator.cpp
+
+1699879086 f:\code\container\range.h
+	"error.h"
+	"range.cpp"
+
+1699879151 f:\code\container\range.cpp
+
+1699879151 f:\code\container\math.cpp
+
+1707287635 f:\code\container\vector.h
+	"array.h"
+	"iterator.h"
+	"vector.cpp"
+
+1707112490 f:\code\container\vector.cpp
+
+1706967928 f:\code\container\string.h
+	"array.h"
+	"string.cpp"
+
+1706967328 f:\code\container\string.cpp
+
+1706966936 f:\code\container\any.cpp
+
+1706967000 f:\code\container\bitset.h
+	"string.h"
+	"bitset.cpp"
+
+1706966990 f:\code\container\bitset.cpp
+
+1706967029 f:\code\container\complex.h
+	"complex.cpp"
+
+1706968258 f:\code\container\pair.h
+	"math.h"
+	"pair.cpp"
+
+1706968075 f:\code\container\pair.cpp
+
+1706967012 f:\code\container\complex.cpp
+
+1697946377 f:\code\container\fstream.h
+	"math.h"
+	"string.h"
+	<fstream>
+	<fstream>
+	"fstream.cpp"
+
+1697946377 f:\code\container\fstream.cpp
+
+1706967133 f:\code\container\list.h
+	"list.cpp"
+
+1706967122 f:\code\container\list.cpp
+
+1706968066 f:\code\container\map.h
+	"tree.h"
+	"pair.h"
+	"set.h"
+	"multiset.h"
+	"map.cpp"
+
+1706967343 f:\code\container\tree.h
+	"tree.cpp"
+	"tree_binary.h"
+
+1699879151 f:\code\container\tree.cpp
+
+1706967976 f:\code\container\tree_binary.h
+	"iterator.h"
+	"tree.h"
+	"tree_binary.cpp"
+	"tree_binary_search.h"
+
+1706967357 f:\code\container\tree_binary.cpp
+
+1706968045 f:\code\container\tree_binary_search.h
+	"tree_binary.h"
+	"tree_binary_search.cpp"
+	"tree_binary_search_redblack.h"
+
+1706967384 f:\code\container\tree_binary_search.cpp
+
+1706967999 f:\code\container\tree_binary_search_redblack.h
+	"tree_binary_search_redblack.h"
+	"tree_binary_search_redblack.cpp"
+
+1706967405 f:\code\container\tree_binary_search_redblack.cpp
+
+1706967310 f:\code\container\set.h
+	"tree.h"
+	"set.cpp"
+
+1706968055 f:\code\container\set.cpp
+
+1706967151 f:\code\container\map.cpp
+
+1706714129 f:\code\container\matrix.h
+	"array.h"
+	"vector.h"
+	"matrix.cpp"
+
+1706714128 f:\code\container\matrix.cpp
+
+1699879086 f:\code\container\random.h
+	<time.h>
+	<algorithm>
+	<random>
+	"random.cpp"
+
+1699879151 f:\code\container\random.cpp
+
+1706967320 f:\code\container\stack.h
+	"list.h"
+	"stack.cpp"
+
+1699856388 f:\code\container\time.h
+	"time.cpp"
+
+1699856436 f:\code\container\time.cpp
+
+1715923425 f:\code\file\interface.h
+	"../container/interface.h"
+	"exception.h"
+	"file_system/file_system.h"
+	"file/file.h"
+	"path/path.h"
+
+1709208326 f:\code\file\file.h
+	"fstream.h"
+
+1704358180 f:\code\file\file.cpp
+
+1704878084 f:\code\file\file_bmp.h
+	"file_bmp.cpp"
+
+1704889873 f:\code\file\file_bmp.cpp
+
+1704877671 f:\code\file\file_csv.h
+	"file_csv.cpp"
+
+1704877681 f:\code\file\file_csv.cpp
+
+1704872122 f:\code\file\file_txt.h
+	"file_txt.cpp"
+
+1704874693 f:\code\file\file_txt.cpp
+
+1698632310 f:\code\file\file_wav.h
+	"file_wav.cpp"
+
+1704258566 f:\code\file\file_wav.cpp
+
+1727671623 f:\code\math\interface.h
+	"../container/interface.h"
+	"numeric/numeric.h"
+	"geometric/geometric.h"
+	"arithmetic/arithmetic.h"
+	"linear/linear.h"
+	"random/random.h"
+
+1709194361 f:\code\math\fourier.h
+	"fourier.cpp"
+
+1709194883 f:\code\math\fourier.cpp
+
+1724765011 f:\code\runtime\interface.h
+	"../basic/interface.h"
+	"async/async.h"
+
+1703866421 f:\code\runtime\time.h
+	"time.cpp"
+
+1703866413 f:\code\runtime\time.cpp
+
+1709196111 f:\code\file\fstream.h
+	"fstream.cpp"
+
+1709196111 f:\code\file\fstream.cpp
+
+1703697104 f:\code\runtime\thread.h
+	"time.h"
+	"thread.cpp"
+
+1700536648 f:\code\runtime\thread.cpp
+
+1727672626 f:\code\basic\interface.h
+	<algorithm>
+	<chrono>
+	<concepts>
+	<csignal>
+	<filesystem>
+	<format>
+	<fstream>
+	<iostream>
+	<iomanip>
+	<map>
+	<new>
+	<ranges>
+	<regex>
+	<stacktrace>
+	<stdfloat>
+	<string>
+	<text_encoding>
+	<thread>
+	<utility>
+	<stdexec/execution.hpp>
+	<exec/static_thread_pool.hpp>
+	<tbbexec/tbb_thread_pool.hpp>
+	<cxxabi.h>
+	<windows.h>
+	<winhttp.h>
+	<tbb/tbb.h>
+	<boost/date_time.hpp>
+	<boost/locale.hpp>
+	<eigen3/Eigen/Eigen>
+	<eigen3/unsupported/Eigen/FFT>
+	"abi.h"
+	"concept.h"
+	"exception.h"
+	"range.h"
+	"typedef.h"
+	"utility.h"
+
+1714575926 f:\code\basic\error.h
+	"concept.h"
+	"error.cpp"
+
+1702972876 f:\code\basic\stream.h
+	"stream.cpp"
+
+1702273858 f:\code\basic\stream.cpp
+
+1711703118 f:\code\basic\error.cpp
+
+1711680459 f:\code\basic\math.h
+	"error.h"
+	"range.h"
+	"math.cpp"
+
+1727620615 f:\code\basic\range.h
+	"error.h"
+	"concept.h"
+	"range.cpp"
+
+1727450459 f:\code\basic\range.cpp
+
+1711446233 f:\code\basic\math.cpp
+
+1702041419 f:\code\basic\random.h
+	"random.cpp"
+
+1702045767 f:\code\basic\random.cpp
+
+1706967243 f:\code\container\multiset.h
+	"set.h"
+	"multiset.cpp"
+
+1706967230 f:\code\container\multiset.cpp
+
+1700466291 f:\code\runtime\lock.h
+	"thread.h"
+	"lock.cpp"
+
+1700465691 f:\code\runtime\lock.cpp
+
+1706968034 f:\code\container\multimap.h
+	"map.h"
+	"multimap.cpp"
+
+1701839323 f:\code\anonymous\binarytree.h
+	"binarytree.cpp"
+
+1701838969 f:\code\anonymous\binarytree.cpp
+
+1706967210 f:\code\container\multimap.cpp
+
+1706967043 f:\code\container\heap.h
+	"vector.h"
+	"heap.cpp"
+
+1706967036 f:\code\container\heap.cpp
+
+1709277672 f:\code\math\random.h
+	"random.cpp"
+
+1709277764 f:\code\math\random.cpp
+
+1709194502 f:\code\math\strassen.h
+	"strassen.cpp"
+
+1709194521 f:\code\math\strassen.cpp
+
+1713077800 f:\code\basic\print.h
+	"concept.h"
+	"print.cpp"
+
+1712894072 f:\code\basic\print.cpp
+
+1702975421 f:\code\basic\initializer_list.h
+	"initializer_list.cpp"
+
+1702975697 f:\code\basic\initializer_list.cpp
+
+1723512276 f:\code\basic\function.h
+	"concept.h"
+	"function.cpp"
+
+1723683331 f:\code\basic\function.cpp
+
+1705394927 f:\code\container\print.h
+	"print.cpp"
+
+1705402271 f:\code\container\print.cpp
+
+1706166946 f:\code\container\function.h
+	"function.cpp"
+
+1706108246 f:\code\container\function.cpp
+
+1706967316 f:\code\container\stack.cpp
+
+1706967286 f:\code\container\queue.h
+	"list.h"
+	"queue.cpp"
+
+1706967279 f:\code\container\queue.cpp
+
+1703699496 f:\code\runtime\lock_free.h
+	"lock_free.cpp"
+
+1703699818 f:\code\runtime\lock_free.cpp
+
+1706967273 f:\code\container\priority_queue.h
+	"heap.h"
+	"priority_queue.cpp"
+
+1703859271 f:\code\container\priority_queue.cpp
+
+1705321174 f:\code\container\keyword.h
+	"pair.h"
+	"keyword.cpp"
+
+1705323034 f:\code\container\keyword.cpp
+
+1727677274 f:\code\neural\interface.h
+	"../math/interface.h"
+	"model/model.h"
+	"layer/layer.h"
+	"optimizer/optimizer.h"
+
+1709194338 f:\code\math\dot.h
+	"dot.cpp"
+
+1709194337 f:\code\math\dot.cpp
+
+1704536196 f:\code\neural\neural.h
+	"neural.cpp"
+
+1704536539 f:\code\neural\neural.cpp
+
+1704373348 f:\code\file\file_idx.h
+	"file_idx.cpp"
+
+1704375475 f:\code\file\file_idx.cpp
+
+1707200558 f:\code\container\array.h
+	"array_algo.h"
+	"array_iterator.h"
+	"array_stream.h"
+	"array_view.h"
+	"vector.h"
+	"array.cpp"
+
+1707287882 f:\code\container\array.cpp
+
+1706168751 f:\code\anonymous\main.h
+
+1706967434 f:\code\container\tuple.h
+	"tuple.cpp"
+
+1706967427 f:\code\container\tuple.cpp
+
+1705811002 f:\code\basic\type_traits.h
+	"type_traits.cpp"
+
+1705713962 f:\code\basic\type_traits.cpp
+
+1727622831 f:\code\basic\concept.h
+	"concept.cpp"
+
+1727595866 f:\code\basic\concept.cpp
+
+1706703107 f:\code\container\view.h
+	"iterator.h"
+	"view.cpp"
+	"vector.h"
+	"view_range.h"
+
+1706703038 f:\code\container\view.cpp
+
+1706966980 f:\code\container\array_stream.h
+	"queue.h"
+	"array_stream.cpp"
+
+1706966973 f:\code\container\array_stream.cpp
+
+1707058211 f:\code\container\array_view.h
+	"array_view.cpp"
+
+1707030448 f:\code\container\array_view.cpp
+
+1706774639 f:\code\container\view_range.h
+	"view_range.cpp"
+
+1706774684 f:\code\container\view_range.cpp
+
+1707287383 f:\code\container\array_algo.h
+	"array_algo.cpp"
+
+1707288576 f:\code\container\array_algo.cpp
+	"vector.h"
+
+1707052043 f:\code\container\array_iterator.h
+	"array_iterator.cpp"
+
+1707052058 f:\code\container\array_iterator.cpp
+
+1709256524 f:\code\container\chain\heap.h
+	"../linear/array.h"
+	"heap.cpp"
+
+1709256629 f:\code\container\chain\heap.cpp
+
+1709624768 f:\code\container\chain\list.h
+	"list.cpp"
+
+1709634413 f:\code\container\chain\list.cpp
+
+1709633485 f:\code\container\chain\priority_queue.h
+	"../linear/array.h"
+	"priority_queue.cpp"
+
+1709633408 f:\code\container\chain\priority_queue.cpp
+
+1709256224 f:\code\container\chain\queue.h
+	"list.h"
+	"queue.cpp"
+
+1709633844 f:\code\container\chain\queue.cpp
+
+1709256284 f:\code\container\chain\stack.h
+	"list.h"
+	"stack.cpp"
+
+1709256316 f:\code\container\chain\stack.cpp
+
+1707367439 f:\code\container\discrete\any.h
+	"any.cpp"
+
+1706966936 f:\code\container\discrete\any.cpp
+
+1710039771 f:\code\container\discrete\complex.h
+	"complex.cpp"
+
+1710039770 f:\code\container\discrete\complex.cpp
+
+1710039786 f:\code\container\discrete\pair.h
+	"pair.cpp"
+
+1710039793 f:\code\container\discrete\pair.cpp
+
+1709624374 f:\code\container\discrete\tuple.h
+	"../meta/constexpr_int.h"
+	"tuple.cpp"
+
+1709624374 f:\code\container\discrete\tuple.cpp
+
+1710039645 f:\code\container\linear\array.h
+	"../chain/queue.h"
+	"array_base/array_algo_1d.h"
+	"array_base/array_algo_nd.h"
+	"array_base/array_iterator.h"
+	"array_base/array_stream.h"
+	"array_view/array_axis_view.h"
+	"array_view/array_filter_view.h"
+	"array_view/array_range_view.h"
+	"array/vector.h"
+	"array/matrix.h"
+	"array/array_nd.h"
+	"array/array_fix_len.h"
+	"array.cpp"
+
+1708415818 f:\code\container\linear\array_algo.h
+	"array_algo.cpp"
+
+1708415760 f:\code\container\linear\array_algo.cpp
+	"vector.h"
+
+1708436171 f:\code\container\linear\vector.h
+	"array.h"
+	"vector.cpp"
+
+1708415872 f:\code\container\linear\vector.cpp
+
+1708170786 f:\code\container\linear\array_iterator.h
+	"array_iterator.cpp"
+
+1707641432 f:\code\container\linear\array_iterator.cpp
+
+1707307308 f:\code\container\linear\array_stream.h
+	"../chain/queue.h"
+	"array_stream.cpp"
+
+1706966973 f:\code\container\linear\array_stream.cpp
+
+1708177026 f:\code\container\linear\array_view.h
+	"array_view.cpp"
+
+1708177026 f:\code\container\linear\array_view.cpp
+
+1710039646 f:\code\container\linear\array.cpp
+
+1707825347 f:\code\container\linear\bitset.h
+	"../string/string.h"
+	"bitset.cpp"
+
+1707748375 f:\code\container\linear\string.h
+	"array.h"
+	"string.cpp"
+
+1707814693 f:\code\container\linear\string.cpp
+	<algorithm>
+
+1707313336 f:\code\container\linear\bitset.cpp
+
+1708436565 f:\code\container\mesh\map.h
+	"../discrete/pair.h"
+	"set.h"
+	"multiset.h"
+	"map.cpp"
+
+1706967343 f:\code\container\mesh\tree.h
+	"tree.cpp"
+	"tree_binary.h"
+
+1699879151 f:\code\container\mesh\tree.cpp
+
+1707981799 f:\code\container\mesh\tree_binary.h
+	"iterator.h"
+	"tree.h"
+	"tree_binary.cpp"
+	"tree_binary_search.h"
+
+1707051813 f:\code\container\mesh\iterator.h
+	"iterator.cpp"
+
+1707051828 f:\code\container\mesh\iterator.cpp
+
+1707981807 f:\code\container\mesh\tree_binary.cpp
+
+1706968045 f:\code\container\mesh\tree_binary_search.h
+	"tree_binary.h"
+	"tree_binary_search.cpp"
+	"tree_binary_search_redblack.h"
+
+1707981812 f:\code\container\mesh\tree_binary_search.cpp
+
+1706967999 f:\code\container\mesh\tree_binary_search_redblack.h
+	"tree_binary_search_redblack.h"
+	"tree_binary_search_redblack.cpp"
+
+1706967405 f:\code\container\mesh\tree_binary_search_redblack.cpp
+
+1708436537 f:\code\container\mesh\set.h
+	"../tree/tree.h"
+	"set.cpp"
+
+1706968055 f:\code\container\mesh\set.cpp
+
+1706967243 f:\code\container\mesh\multiset.h
+	"set.h"
+	"multiset.cpp"
+
+1706967230 f:\code\container\mesh\multiset.cpp
+
+1706967151 f:\code\container\mesh\map.cpp
+
+1706968034 f:\code\container\mesh\multimap.h
+	"map.h"
+	"multimap.cpp"
+
+1706967210 f:\code\container\mesh\multimap.cpp
+
+1708415087 f:\code\container\linear\matrix.h
+	"array_nd.h"
+	"matrix.cpp"
+
+1707981785 f:\code\container\linear\matrix.cpp
+
+1709820806 f:\code\basic\allocator.cpp
+
+1709820833 f:\code\basic\allocator.h
+	"allocator.cpp"
+
+1727613786 f:\code\container\string\string.h
+	"../array/array.h"
+	"string_base/string_global.h"
+	"string_base/string_algo.h"
+	"string_base/string_regex.h"
+	"string_class/basic_string.h"
+	"string_view/basic_string_range_view.h"
+	"string_view/basic_string_view.h"
+
+1709864139 f:\code\container\string\string.cpp
+
+1709864030 f:\code\container\string\string_algo.h
+	"string_algo.cpp"
+
+1709782348 f:\code\container\string\string_algo.cpp
+	"basic_string.h"
+
+1709782104 f:\code\container\string\string_view.h
+	"string_view.cpp"
+
+1709196457 f:\code\container\string\string_view.cpp
+
+1709864022 f:\code\container\string\basic_string.h
+	"string_algo.h"
+	"basic_string.cpp"
+
+1709864021 f:\code\container\string\basic_string.cpp
+	"basic_string_view.h"
+
+1709864061 f:\code\container\string\c_str_view.h
+	"c_str_view.cpp"
+
+1709864094 f:\code\container\string\c_str_view.cpp
+
+1708434418 f:\code\container\linear\array_fix_len.h
+	"array_fix_len.cpp"
+
+1708414831 f:\code\container\linear\array_fix_len.cpp
+
+1708436458 f:\code\container\linear\array_nd.h
+	"array_nd.cpp"
+
+1708415127 f:\code\container\linear\array_nd.cpp
+
+1706967343 f:\code\container\tree\tree.h
+	"tree.cpp"
+	"tree_binary.h"
+
+1699879151 f:\code\container\tree\tree.cpp
+
+1708436939 f:\code\container\tree\tree_binary.h
+	"iterator.h"
+	"tree.h"
+
+1707981807 f:\code\container\tree\tree_binary.cpp
+
+1706968045 f:\code\container\tree\tree_binary_search.h
+	"tree_binary.h"
+	"tree_binary_search.cpp"
+	"tree_binary_search_redblack.h"
+
+1707981812 f:\code\container\tree\tree_binary_search.cpp
+
+1706967999 f:\code\container\tree\tree_binary_search_redblack.h
+	"tree_binary_search_redblack.h"
+	"tree_binary_search_redblack.cpp"
+
+1706967405 f:\code\container\tree\tree_binary_search_redblack.cpp
+
+1707051813 f:\code\container\tree\iterator.h
+	"iterator.cpp"
+
+1707051828 f:\code\container\tree\iterator.cpp
+
+1707825347 f:\code\container\discrete\bitset.h
+	"../string/string.h"
+	"bitset.cpp"
+
+1707313336 f:\code\container\discrete\bitset.cpp
+
+1708667017 f:\code\container\linear\array_base\array_algo.h
+	"array_algo.cpp"
+
+1708667023 f:\code\container\linear\array_base\array_algo.cpp
+	"../array/vector.h"
+
+1708666032 f:\code\container\linear\array_base\array_iterator.h
+	"array_iterator.cpp"
+
+1709188999 f:\code\container\linear\array_base\array_iterator.cpp
+
+1708665485 f:\code\container\linear\array_base\array_stream.h
+	"array_stream.cpp"
+
+1706966973 f:\code\container\linear\array_base\array_stream.cpp
+
+1708177026 f:\code\container\linear\array_view\array_view.h
+	"array_view.cpp"
+
+1708177026 f:\code\container\linear\array_view\array_view.cpp
+
+1710039197 f:\code\container\linear\array\vector.h
+	"vector.cpp"
+
+1710001815 f:\code\container\linear\array\vector.cpp
+
+1708415087 f:\code\container\linear\array\matrix.h
+	"array_nd.h"
+	"matrix.cpp"
+
+1710039245 f:\code\container\linear\array\array_nd.h
+	"array_nd.cpp"
+
+1709738498 f:\code\container\linear\array\array_nd.cpp
+
+1709868898 f:\code\container\linear\array\matrix.cpp
+
+1709781863 f:\code\container\linear\array\array_fix_len.h
+	"array_fix_len.cpp"
+
+1708945750 f:\code\container\linear\array\array_fix_len.cpp
+
+1709782651 f:\code\container\linear\array_view\array_range_view.h
+	"array_range_view.cpp"
+
+1709656161 f:\code\container\linear\array_view\array_range_view.cpp
+
+1710001405 f:\code\container\linear\array_base\array_algo_1d.h
+	"array_algo_1d.cpp"
+
+1710001650 f:\code\container\linear\array_base\array_algo_1d.cpp
+	"../array/vector.h"
+
+1710001566 f:\code\container\linear\array_base\array_algo_nd.h
+	"array_algo_nd.cpp"
+
+1710001655 f:\code\container\linear\array_base\array_algo_nd.cpp
+
+1708957204 f:\code\container\linear\array_view\array_dimension_view.h
+	"array_dimension_view.cpp"
+
+1708956609 f:\code\container\linear\array_view\array_dimension_view.cpp
+
+1709709277 f:\code\container\linear\array_view\array_dim_view.h
+	"array_dim_view.cpp"
+
+1709711523 f:\code\container\linear\array_view\array_dim_view.cpp
+
+1709782745 f:\code\container\linear\array_view\array_filter_view.h
+	"array_filter_view.cpp"
+
+1709436097 f:\code\container\linear\array_view\array_filter_view.cpp
+
+1712750020 f:\code\file\directory\directory.h
+	"../path/path.h"
+	"directory.cpp"
+
+1712750391 f:\code\file\directory\directory.cpp
+	"../file/file.h"
+
+1713014420 f:\code\file\file\file.h
+	"../path/path.h"
+	"file_stream/fstream.h"
+	"file_base/basic_file.h"
+	"file_class/file_bmp.h"
+	"file_class/file_csv.h"
+	"file_class/file_idx.h"
+	"file_class/file_txt.h"
+
+1711010045 f:\code\file\support\fstream.h
+	"../directory/directory.h"
+	"fstream.cpp"
+
+1711010083 f:\code\file\support\fstream.cpp
+
+1709194338 f:\code\math\linear\dot.h
+	"dot.cpp"
+
+1712895698 f:\code\math\linear\dot.cpp
+
+1709194361 f:\code\math\linear\fourier.h
+	"fourier.cpp"
+
+1711542275 f:\code\math\linear\fourier.cpp
+
+1709194502 f:\code\math\linear\strassen.h
+	"strassen.cpp"
+
+1709194521 f:\code\math\linear\strassen.cpp
+
+1727619233 f:\code\math\random\random.h
+	"engine/random_engine_algo.cpp"
+	"engine/linear_congruential_engine.cpp"
+	"engine/mersenne_twister_engine.cpp"
+	"engine/subtract_with_carry_engine.cpp"
+	"engine/discard_block_engine.cpp"
+	"engine/shuffle_order_engine.cpp"
+	"engine/floating_point_engine.cpp"
+	"container/array.cpp"
+	"distribution/uniform_distribution.cpp"
+	"distribution/random.cpp"
+	"distribution/bernoulli_distribution.cpp"
+	"distribution/binomial_distribution.cpp"
+	"distribution/geometric_distribution.cpp"
+	"distribution/poisson_distribution.cpp"
+	"distribution/exponential_distribution.cpp"
+	"distribution/gamma_distribution.cpp"
+	"distribution/normal_distribution.cpp"
+	"distribution/chi_squared_distribution.cpp"
+	"distribution/fisher_f_distribution.cpp"
+	"distribution/student_t_distribution.cpp"
+
+1712577192 f:\code\math\random\random.cpp
+
+1709471858 f:\code\basic\std.h
+	"std.cpp"
+
+1709471858 f:\code\basic\std.cpp
+
+1709539846 f:\code\container\discrete\structure.h
+	"structure.cpp"
+
+1709539840 f:\code\container\discrete\structure.cpp
+
+1709566136 f:\code\container\structure\structure.h
+	"structure.cpp"
+
+1709564615 f:\code\container\structure\structure.cpp
+
+1709619840 f:\code\container\meta\constexpr_int.h
+	"constexpr_int.cpp"
+
+1709626726 f:\code\container\meta\constexpr_int.cpp
+
+1709624048 f:\code\container\std\structured_binding.h
+	"structured_binding.cpp"
+
+1709623838 f:\code\container\std\structured_binding.cpp
+
+1709703015 f:\code\container\std\swap.h
+	"../../math/interface.h"
+	"swap.cpp"
+
+1709634015 f:\code\container\std\swap.cpp
+
+1709820081 f:\code\container\linear\array_view\array_axis_view.h
+	"array_axis_view.cpp"
+
+1709820073 f:\code\container\linear\array_view\array_axis_view.cpp
+	"array_range_view.h"
+
+1714412538 f:\code\file\path\path.h
+	"path.cpp"
+
+1713002307 f:\code\file\path\path.cpp
+
+1709863958 f:\code\container\string\basic_string_view.h
+	"basic_string_view.cpp"
+
+1709863971 f:\code\container\string\basic_string_view.cpp
+
+1709959305 f:\code\container\collection\tree\tree.h
+	"tree.cpp"
+	"tree_binary.h"
+
+1699879151 f:\code\container\collection\tree\tree.cpp
+
+1709973762 f:\code\container\collection\tree\tree_binary.h
+	"tree.h"
+	"tree_binary.cpp"
+
+1709973762 f:\code\container\collection\tree\tree_binary.cpp
+
+1710137341 f:\code\container\collection\tree.h
+	"tree/binary_tree.h"
+	"tree/binary_search_tree.h"
+	"tree/redblack_tree.h"
+
+1710142822 f:\code\container\collection\tree\binary_tree.h
+	"binary_tree.cpp"
+
+1710137847 f:\code\container\collection\tree\binary_tree.cpp
+
+1710137487 f:\code\container\collection\tree\binary_search_tree.h
+	"binary_search_tree.cpp"
+
+1710138387 f:\code\container\collection\tree\binary_search_tree.cpp
+
+1710142455 f:\code\container\collection\tree\redblack_tree.h
+	"redblack_tree.cpp"
+
+1710142980 f:\code\container\collection\tree\redblack_tree.cpp
+
+1727613684 f:\code\container\array\array.h
+	"../chain/chain_class/queue.h"
+	"array_base/array_global.h"
+	"array_base/array_algo_1d.h"
+	"array_base/array_algo_nd.h"
+	"array_class/array_1d.h"
+	"array_class/array_-1d.h"
+	"array_class/array_nd.h"
+	"array_class/fixed_array.h"
+	"array_class/inplace_array.h"
+	"array_view/array_coordinate.h"
+	"array_view/array_axis_view.h"
+	"array_view/array_filter_view.h"
+	"array_view/array_flatten_view.h"
+	"array_view/array_line.h"
+	"array_view/array_range_view.h"
+	"array_view/array_reshape_view.h"
+	"array_view/array_span_view.h"
+	"array_view/array_type_view.h"
+	"array_view/array_view_iterator.h"
+
+1727592506 f:\code\container\array\array_base\array_algo_1d.h
+	"array_algo_1d.cpp"
+
+1727424049 f:\code\container\array\array_base\array_algo_1d.cpp
+	"../array_class/array_1d.h"
+	"../array_class/inplace_array.h"
+
+1715920404 f:\code\container\array\array_class\vector.h
+	"vector.cpp"
+
+1715911381 f:\code\container\array\array_class\vector.cpp
+
+1727592498 f:\code\container\array\array_base\array_algo_nd.h
+	"array_algo_nd.cpp"
+
+1727425845 f:\code\container\array\array_base\array_algo_nd.cpp
+
+1710666579 f:\code\container\array\array_base\array_iterator.h
+	"array_iterator.cpp"
+
+1709188999 f:\code\container\array\array_base\array_iterator.cpp
+
+1727596683 f:\code\container\array\array_base\array_global.h
+	"array_global.cpp"
+
+1708665485 f:\code\container\array\array_base\array_stream.h
+	"array_stream.cpp"
+
+1706966973 f:\code\container\array\array_base\array_stream.cpp
+
+1711518950 f:\code\container\array\array_class\matrix.h
+	"array_nd.h"
+	"matrix.cpp"
+
+1727667158 f:\code\container\array\array_class\array_nd.h
+	"array_nd.cpp"
+
+1727667300 f:\code\container\array\array_class\array_nd.cpp
+
+1711523196 f:\code\container\array\array_class\matrix.cpp
+
+1724381673 f:\code\container\array\array_class\array_fix_len.h
+	"array_fix_len.cpp"
+
+1724381650 f:\code\container\array\array_class\array_fix_len.cpp
+
+1724991403 f:\code\container\array\array_view\array_axis_view.h
+	"array_axis_view.cpp"
+
+1724991387 f:\code\container\array\array_view\array_axis_view.cpp
+
+1725979417 f:\code\container\array\array_view\array_range_view.h
+	"array_range_view.cpp"
+
+1726022991 f:\code\container\array\array_view\array_range_view.cpp
+
+1725979403 f:\code\container\array\array_view\array_filter_view.h
+	"array_filter_view.cpp"
+
+1725470526 f:\code\container\array\array_view\array_filter_view.cpp
+
+1727613693 f:\code\container\chain\chain.h
+	"../array/array.h"
+	"../discrete/discrete.h"
+	"chain_base/chain_global.h"
+	"chain_class/deque.h"
+	"chain_class/list.h"
+	"chain_class/priority_queue.h"
+	"chain_class/queue.h"
+	"chain_class/stack.h"
+
+1727573826 f:\code\container\chain\chain_class\list.h
+	"list.cpp"
+
+1727573848 f:\code\container\chain\chain_class\list.cpp
+
+1727573598 f:\code\container\chain\chain_class\priority_queue.h
+	"priority_queue.cpp"
+
+1709633408 f:\code\container\chain\chain_class\priority_queue.cpp
+
+1727573601 f:\code\container\chain\chain_class\queue.h
+	"queue.cpp"
+
+1722921439 f:\code\container\chain\chain_class\queue.cpp
+
+1727573603 f:\code\container\chain\chain_class\stack.h
+	"stack.cpp"
+
+1722921517 f:\code\container\chain\chain_class\stack.cpp
+
+1724991572 f:\code\container\array\array_view\array_reshape_view.h
+	"array_reshape_view.cpp"
+
+1724991582 f:\code\container\array\array_view\array_reshape_view.cpp
+
+1727527369 f:\code\container\array\array_base\array_global.cpp
+
+1727589441 f:\code\container\string\string_base\string_algo.h
+	"string_algo.cpp"
+
+1727591774 f:\code\container\string\string_base\string_algo.cpp
+	"../string_class/basic_string.h"
+
+1727593763 f:\code\container\string\string_class\basic_string.h
+	"basic_string.cpp"
+
+1727592987 f:\code\container\string\string_class\basic_string.cpp
+
+1727593761 f:\code\container\string\string_view\basic_string_view.h
+	"basic_string_view.cpp"
+
+1727593146 f:\code\container\string\string_view\basic_string_view.cpp
+
+1710826648 f:\code\container\string\string_view\c_str_view.h
+	"c_str_view.cpp"
+
+1709864094 f:\code\container\string\string_view\c_str_view.cpp
+
+1727592192 f:\code\container\string\string_base\string_global.h
+	"string_global.cpp"
+
+1727589306 f:\code\container\string\string_base\string_global.cpp
+
+1727613749 f:\code\container\discrete\discrete.h
+	"discrete_base/discrete_global.h"
+	"discrete_class/pair.h"
+	"discrete_class/tuple.h"
+
+1709619840 f:\code\container\discrete\discrete_base\constexpr_int.h
+	"constexpr_int.cpp"
+
+1709626726 f:\code\container\discrete\discrete_base\constexpr_int.cpp
+
+1722223134 f:\code\container\discrete\discrete_base\structured_binding.h
+	"structured_binding.cpp"
+
+1722844804 f:\code\container\discrete\discrete_base\structured_binding.cpp
+
+1707367439 f:\code\container\discrete\discrete_class\any.h
+	"any.cpp"
+
+1706966936 f:\code\container\discrete\discrete_class\any.cpp
+
+1711526992 f:\code\container\discrete\discrete_class\complex.h
+	"complex.cpp"
+
+1711527018 f:\code\container\discrete\discrete_class\complex.cpp
+
+1722932763 f:\code\container\discrete\discrete_class\pair.h
+	"pair.cpp"
+
+1724256647 f:\code\container\discrete\discrete_class\pair.cpp
+
+1727494416 f:\code\container\discrete\discrete_class\tuple.h
+	"tuple.cpp"
+
+1727494460 f:\code\container\discrete\discrete_class\tuple.cpp
+
+1727595449 f:\code\container\discrete\discrete_base\discrete_global.h
+	"discrete_global.cpp"
+
+1727511904 f:\code\container\discrete\discrete_base\discrete_global.cpp
+
+1727613744 f:\code\container\collection\collection.h
+	"collection_base/collection_global.h"
+	"collection_base/collection_algo.h"
+	"collection_class/set.h"
+	"collection_class/map.h"
+	"collection_data/map_pair/map_pair.h"
+	"collection_data/flat/sorted_vector.h"
+	"collection_data/tree/tree.h"
+	"collection_view/collection_keys_view.h"
+	"collection_view/collection_values_view.h"
+
+1710405692 f:\code\container\collection\collection_base\tree.h
+	"tree/binary_tree.h"
+	"tree/binary_search_tree.h"
+	"tree/redblack_tree.h"
+
+1724943977 f:\code\container\collection\collection_base\tree\binary_tree.h
+	"binary_tree.cpp"
+
+1721797579 f:\code\container\collection\collection_base\tree\binary_tree.cpp
+
+1725003378 f:\code\container\collection\collection_base\tree\binary_search_tree.h
+	"binary_search_tree.cpp"
+
+1725003384 f:\code\container\collection\collection_base\tree\binary_search_tree.cpp
+
+1722927697 f:\code\container\collection\collection_base\tree\redblack_tree.h
+	"redblack_tree.cpp"
+
+1722930848 f:\code\container\collection\collection_base\tree\redblack_tree.cpp
+
+1727574029 f:\code\container\collection\collection_class\set.h
+	"set.cpp"
+
+1727574115 f:\code\container\collection\collection_class\map.h
+	"map.cpp"
+
+1727588749 f:\code\container\collection\collection_base\collection_global.h
+	"collection_global.cpp"
+
+1727594083 f:\code\container\collection\collection_base\collection_global.cpp
+
+1727573745 f:\code\container\collection\collection_class\set.cpp
+
+1727574129 f:\code\container\collection\collection_class\map.cpp
+
+1723019186 f:\code\container\collection\collection_base\map_pair\map_pair.h
+	"map_pair.cpp"
+
+1723081113 f:\code\container\collection\collection_base\map_pair\map_pair.cpp
+
+1710746786 f:\code\container\collection\collection_base\tree\tree.h
+	"binary_tree.h"
+	"binary_search_tree.h"
+	"redblack_tree.h"
+
+1723526667 f:\code\container\array\array_view\array_view_iterator.h
+	"array_view_iterator.cpp"
+
+1723529236 f:\code\container\array\array_view\array_view_iterator.cpp
+
+1725014331 f:\code\container\collection\collection_base\flat\sorted_vector.h
+	"sorted_vector.cpp"
+
+1725014623 f:\code\container\collection\collection_base\flat\sorted_vector.cpp
+
+1711447591 f:\code\file\fstream\fstream.h
+	"fstream.cpp"
+
+1711447591 f:\code\file\fstream\fstream.cpp
+
+1712679123 f:\code\file\file\file.cpp
+	"../directory/directory.h"
+
+1711434489 f:\code\file\file\file_txt.h
+	"file_txt.cpp"
+
+1712729327 f:\code\file\file\file_txt.cpp
+
+1711448210 f:\code\file\file\file_bmp.h
+	"file_bmp.cpp"
+
+1712729327 f:\code\file\file\file_bmp.cpp
+
+1711457810 f:\code\file\file\file_csv.h
+	"file_csv.cpp"
+
+1712729327 f:\code\file\file\file_csv.cpp
+
+1711458085 f:\code\file\file\file_idx.h
+	"file_idx.cpp"
+
+1712729327 f:\code\file\file\file_idx.cpp
+
+1711472477 f:\code\container\discrete\discrete_class\fraction.h
+	"fraction.cpp"
+
+1711472801 f:\code\container\discrete\discrete_class\fraction.cpp
+
+1727619013 f:\code\math\linear\linear.h
+	"third-party/eigen.cpp"
+	"1d/convolve.cpp"
+	"1d/cross.cpp"
+	"1d/dot.cpp"
+	"1d/fft.cpp"
+	"1d/norm.cpp"
+	"1d/operator.cpp"
+	"1d/tensor.cpp"
+	"2d/convolve.cpp"
+	"2d/det.cpp"
+	"2d/eigen.cpp"
+	"2d/evd.cpp"
+	"2d/inverse.cpp"
+	"2d/lu.cpp"
+	"2d/norm.cpp"
+	"2d/operator.cpp"
+	"2d/qr.cpp"
+	"2d/rank.cpp"
+	"2d/singular.cpp"
+	"2d/svd.cpp"
+	"2d/tr.cpp"
+	"nd/operator.cpp"
+	"nd/swap.cpp"
+	"nd/transpose.cpp"
+
+1711469780 f:\code\math\linear\algo\basic.cpp
+
+1711511467 f:\code\container\discrete\discrete_base\constexpr_for.h
+	"constexpr_for.cpp"
+
+1711511467 f:\code\container\discrete\discrete_base\constexpr_for.cpp
+
+1727616118 f:\code\math\numeric\numeric.h
+	"fraction.cpp"
+
+1727614125 f:\code\math\numeric\fraction.cpp
+
+1712895718 f:\code\math\linear\basic.cpp
+
+1712400412 f:\code\math\linear\matrix.cpp
+
+1716972937 f:\code\math\numeric\complex.cpp
+
+1711967504 f:\code\math\numeric\polar.cpp
+
+1711701113 f:\code\math\numeric\common_type.cpp
+
+1712044005 f:\code\math\numeric\global.cpp
+
+1711701844 f:\code\math\numeric\math.cpp
+
+1711701844 f:\code\math\numeric\math_int.cpp
+
+1727616091 f:\code\math\geometric\geometric.h
+	"degree.cpp"
+	"radian.cpp"
+	"complex.cpp"
+	"polar.cpp"
+
+1727614391 f:\code\math\geometric\degree.cpp
+
+1727614448 f:\code\math\geometric\radian.cpp
+
+1712049952 f:\code\math\geometric\circle_fraction.cpp
+
+1727614502 f:\code\math\geometric\polar.cpp
+
+1718519071 f:\code\math\common_type\common_type.h
+
+1712125819 f:\code\math\geometric\cycle.cpp
+
+1717226395 f:\code\math\geometric\trigonometry.cpp
+
+1717426573 f:\code\math\numeric\arithmetic.cpp
+
+1712895712 f:\code\math\linear\convolve.cpp
+
+1713014982 f:\code\file\file\file_stream\fstream.h
+	"fstream.cpp"
+
+1713015357 f:\code\file\file\file_stream\fstream.cpp
+
+1713014230 f:\code\file\file\file_class\file_bmp.h
+	"file_bmp.cpp"
+
+1715923025 f:\code\file\file\file_class\file_bmp.cpp
+
+1713014185 f:\code\file\file\file_class\file_csv.h
+	"file_csv.cpp"
+
+1713015038 f:\code\file\file\file_class\file_csv.cpp
+
+1713014338 f:\code\file\file\file_class\file_idx.h
+	"file_idx.cpp"
+
+1713014338 f:\code\file\file\file_class\file_idx.cpp
+
+1713014379 f:\code\file\file\file_class\file_txt.h
+	"file_txt.cpp"
+
+1713015038 f:\code\file\file\file_class\file_txt.cpp
+
+1714579095 f:\code\math\linear\multiply.cpp
+
+1712817577 f:\code\math\texture\texture.h
+	"utf_8.cpp"
+
+1712815878 f:\code\math\texture\utf_8.cpp
+
+1724826447 f:\code\runtime\async\async.h
+	"async.cpp"
+
+1712909189 f:\code\runtime\async\function\function.h
+	"function.cpp"
+
+1720532463 f:\code\runtime\async\thread\thread.h
+	"thread.cpp"
+
+1720532483 f:\code\runtime\async\thread\thread.cpp
+
+1720532493 f:\code\runtime\async\coroutine\coroutine.h
+	"coroutine.cpp"
+
+1713287383 f:\code\runtime\async\channel\channel.h
+	"channel.cpp"
+
+1712907703 f:\code\runtime\async\function\function.cpp
+
+1712911427 f:\code\runtime\async\deduction_guide.cpp
+
+1713002309 f:\code\file\file_system\file_system.h
+	"../path/path.h"
+	"file_system.cpp"
+
+1713104010 f:\code\file\file_system\file_system.cpp
+
+1713104151 f:\code\file\file\file_base\basic_file.h
+	"basic_file.cpp"
+
+1715923663 f:\code\file\file\file_base\basic_file.cpp
+
+1713022053 f:\code\runtime\thread\thread.h
+	"thread.cpp"
+
+1713021813 f:\code\runtime\thread\thread.cpp
+
+1713413619 f:\code\runtime\atomic\atomic.h
+	"atomic.cpp"
+
+1713413676 f:\code\runtime\atomic\atomic.cpp
+
+1715702060 f:\code\runtime\memory\memory.h
+	"shared_ptr/shared_ptr.h"
+	"unique_ptr/unique_ptr.h"
+
+1721955519 f:\code\runtime\memory\shared_ptr\shared_ptr.h
+	"shared_ptr.cpp"
+
+1721955707 f:\code\runtime\memory\shared_ptr\shared_ptr.cpp
+
+1715414400 f:\code\runtime\memory\unique_ptr\unique_ptr.h
+	"unique_ptr.cpp"
+
+1713285775 f:\code\runtime\async\deferred_task\deferred_task.h
+
+1715928809 f:\code\runtime\memory\unique_ptr\unique_ptr.cpp
+
+1713163672 f:\code\runtime\async\deduction_guide\deduction_guide.h
+
+1713185464 f:\code\runtime\async\deduction\deduction.h
+
+1727613753 f:\code\container\polymorphic\polymorphic.h
+	"polymorphic_class/any.h"
+	"polymorphic_class/function.h"
+	"polymorphic_class/optional.h"
+	"polymorphic_class/variant.h"
+
+1725982477 f:\code\container\polymorphic\polymorphic_class\any.h
+	"any.cpp"
+
+1727623768 f:\code\container\polymorphic\polymorphic_class\any.cpp
+
+1727588423 f:\code\container\polymorphic\polymorphic_class\function.h
+	"function.cpp"
+
+1727588542 f:\code\container\polymorphic\polymorphic_class\optional.h
+	"optional.cpp"
+
+1727605057 f:\code\container\polymorphic\polymorphic_class\variant.h
+	"variant.cpp"
+
+1720532502 f:\code\runtime\async\coroutine\coroutine.cpp
+
+1727604287 f:\code\container\polymorphic\polymorphic_class\function.cpp
+
+1713288728 f:\code\runtime\async\channel\channel.cpp
+
+1714455388 f:\code\runtime\connect\connect.h
+	"lock/lock.h"
+	"condition/condition.h"
+	"event/event.h"
+	"semaphore/semaphore.h"
+	"channel/channel.h"
+
+1715149935 f:\code\runtime\connect\lock\lock.h
+	"lock.cpp"
+
+1719224378 f:\code\runtime\connect\lock\lock.cpp
+
+1715080965 f:\code\runtime\connect\event\event.h
+	"event.cpp"
+
+1715170354 f:\code\runtime\connect\channel\channel.h
+
+1715091285 f:\code\runtime\connect\channel\channel.cpp
+
+1713344522 f:\code\runtime\connect\lock\mutex.h
+	"mutex.cpp"
+
+1713364273 f:\code\runtime\connect\lock\mutex.cpp
+
+1714295575 f:\code\runtime\connect\lock\basic_lock.h
+	"basic_lock.cpp"
+
+1714295759 f:\code\runtime\connect\lock\basic_lock.cpp
+
+1714204402 f:\code\runtime\connect\event\basic_event.h
+	"basic_event.cpp"
+
+1713415979 f:\code\runtime\connect\channel\basic_channel.h
+	"basic_channel.cpp"
+
+1713415187 f:\code\runtime\connect\channel\basic_channel.cpp
+
+1714049907 f:\code\runtime\connect\event\basic_event.cpp
+
+1717214938 f:\code\locale\interface.h
+	"../container/interface.h"
+	"../math/interface.h"
+	"chrono/chrono.h"
+	"encode/encode.h"
+
+1717214923 f:\code\locale\chrono\chrono.h
+	"duration/duration.h"
+	"time_point/time_point.h"
+
+1716916708 f:\code\locale\chrono\time_point\time_point.h
+	"time_point.cpp"
+
+1714372968 f:\code\locale\chrono\duration\duration.h
+	"duration.cpp"
+
+1721204403 f:\code\locale\chrono\duration\duration.cpp
+
+1712933333 f:\code\locale\encode\encode.h
+
+1715928941 f:\code\runtime\connect\event\event.cpp
+
+1715150798 f:\code\runtime\connect\condition\condition.h
+	"condition.cpp"
+
+1714311431 f:\code\runtime\connect\semaphore
+
+1714206343 f:\code\runtime\connect\condition\basic_condition.h
+	"basic_condition.cpp"
+
+1714206087 f:\code\runtime\connect\condition\basic_condition.cpp
+
+1715928854 f:\code\runtime\connect\condition\condition.cpp
+
+1717479673 f:\code\locale\chrono\time_point\time_point.cpp
+
+1722842226 f:\code\container\string\string_view\basic_c_str_view.h
+	"basic_string_view.h"
+	"basic_c_str_view.cpp"
+
+1722387759 f:\code\container\string\string_view\basic_c_str_view.cpp
+
+1713519463 f:\code\runtime\connect\semaphore\semaphore.h
+
+1715017399 f:\code\math\linear\operator.cpp
+
+1717660233 f:\code\math\linear\matrix_algo.cpp
+
+1717643967 f:\code\math\linear\matrix_multiply.cpp
+
+1717573984 f:\code\math\linear\linear_operator.cpp
+
+1717643887 f:\code\math\linear\vector_convolve.cpp
+
+1717574065 f:\code\math\linear\vector_dot.cpp
+
+1727618669 f:\code\math\random\engine\linear_congruential_engine.cpp
+
+1727618712 f:\code\math\random\engine\mersenne_twister_engine.cpp
+
+1727618736 f:\code\math\random\engine\subtract_with_carry_engine.cpp
+
+1715533209 f:\code\math\random\engine\random_engine_state.cpp
+
+1727442713 f:\code\basic\exception.h
+	"concept.h"
+	"abi.h"
+	"exception.cpp"
+
+1727442832 f:\code\basic\exception.cpp
+
+1725470438 f:\code\math\random\engine\discard_block_engine.cpp
+
+1717429924 f:\code\math\random\engine\shuffle_order_engine.cpp
+
+1715747250 f:\code\math\random\engine\random_engine_algo.cpp
+
+1725470432 f:\code\math\random\engine\floating_point_engine.cpp
+
+1727618804 f:\code\math\random\distribution\uniform_distribution.cpp
+
+1725958547 f:\code\math\random\distribution\bernoulli_distribution.cpp
+
+1725959189 f:\code\math\random\distribution\binomial_distribution.cpp
+
+1725959218 f:\code\math\random\distribution\poisson_distribution.cpp
+
+1727618757 f:\code\math\random\distribution\normal_distribution.cpp
+
+1725957882 f:\code\math\random\distribution\geometric_distribution.cpp
+
+1725958567 f:\code\math\random\distribution\exponential_distribution.cpp
+
+1715709295 f:\code\math\random\utility\random.cpp
+
+1715763921 f:\code\container\string\string_format\formatter.h
+	"formatter.cpp"
+
+1715839182 f:\code\container\string\string_format\formatter.cpp
+
+1715923441 f:\code\container\exception.h
+
+1715923437 f:\code\file\exception.h
+
+1716034500 f:\code\basic\formatter.h
+	"formatter.cpp"
+
+1716034512 f:\code\basic\formatter.cpp
+
+1716099543 f:\code\basic\format_string.h
+	"format_string.cpp"
+
+1716099479 f:\code\basic\format_string.cpp
+
+1716907308 f:\code\math\random\distribution\bernoulli.cpp
+
+1716907319 f:\code\math\random\distribution\binomial.cpp
+
+1716906272 f:\code\math\random\distribution\exponential.cpp
+
+1716907384 f:\code\math\random\distribution\geometric.cpp
+
+1716908209 f:\code\math\random\distribution\normal.cpp
+
+1716906477 f:\code\math\random\distribution\poisson.cpp
+
+1716905470 f:\code\math\random\distribution\uniform.cpp
+
+1717315942 f:\code\math\statistics\statistics.h
+	"data/population.cpp"
+	"data/sample.cpp"
+	"estimation/interval_estimation.cpp"
+	"estimation/maximum_likelihood_estimation.cpp"
+	"estimation/moment_estimation.cpp"
+	"estimation/structured_binding.cpp"
+
+1716964910 f:\code\math\statistics\distribution\distribution.cpp
+
+1716969136 f:\code\math\statistics\distribution\normal_distribution.cpp
+
+1727614244 f:\code\math\geometric\complex.cpp
+
+1727663521 f:\code\math\random\distribution\random.cpp
+
+1717390905 f:\code\math\statistics\estimation\interval_estimation.cpp
+
+1717390723 f:\code\math\statistics\estimation\maximum_likelihood_estimation.cpp
+
+1717408385 f:\code\math\statistics\estimation\moment_estimation.cpp
+
+1717748236 f:\code\math\statistics\data\population.cpp
+
+1717748222 f:\code\math\statistics\data\sample.cpp
+
+1721744180 f:\code\math\statistics\estimation\structured_binding.cpp
+
+1727618751 f:\code\math\random\distribution\gamma_distribution.cpp
+
+1725958890 f:\code\math\random\distribution\chi_squared_distribution.cpp
+
+1725958969 f:\code\math\random\distribution\fisher_f_distribution.cpp
+
+1725959094 f:\code\math\random\distribution\student_t_distribution.cpp
+
+1727423942 f:\code\math\random\container\array.cpp
+
+1717573264 f:\code\math\linear\linear_algo.cpp
+
+1727667031 f:\code\container\array\array_class\array_1d.h
+	"array_1d.cpp"
+
+1717569424 f:\code\container\array\array_class\array_transposed.h
+	"array_transposed.cpp"
+
+1727667250 f:\code\container\array\array_class\array_1d.cpp
+
+1717569343 f:\code\container\array\array_class\array_transposed.cpp
+
+1725979106 f:\code\container\array\array_class\array_-1d.h
+	"array_-1d.cpp"
+
+1717573600 f:\code\container\array\array_class\array_-1d.cpp
+
+1717750004 f:\code\math\linear\ndarray_operator.cpp
+
+1717690586 f:\code\math\linear\matrix_det_inverse.cpp
+
+1717678303 f:\code\math\linear\matrix_rank.cpp
+
+1717751122 f:\code\math\linear\ndarray_transpose.cpp
+
+1717736544 f:\code\math\equation\equation.h
+	"polynomial/polynomial.cpp"
+
+1717749194 f:\code\math\equation\polynomial\polynomial.cpp
+
+1718519145 f:\code\math\optimize\optimize.h
+	"simplex/simplex.cpp"
+	"grg/grg.cpp"
+	"evolution/evolution.cpp"
+
+1717753562 f:\code\math\formula\formula.h
+	"polynomial/polynomial.cpp"
+
+1717768916 f:\code\math\formula\polynomial\polynomial.cpp
+
+1718965627 f:\code\math\numeric\class\fraction.cpp
+
+1717426573 f:\code\math\numeric\algo\arithmetic.cpp
+
+1719840120 f:\code\math\geometric\class\degree.cpp
+
+1719840120 f:\code\math\geometric\class\radian.cpp
+
+1719839640 f:\code\math\geometric\class\complex.cpp
+
+1719840317 f:\code\math\geometric\class\polar.cpp
+
+1717226395 f:\code\math\geometric\algo\trigonometry.cpp
+
+1727619150 f:\code\math\linear\1d\convolve.cpp
+
+1727616285 f:\code\math\linear\1d\dot.cpp
+
+1718707701 f:\code\math\linear\2d\det_inverse.cpp
+
+1725557806 f:\code\math\linear\2d\multiply.cpp
+
+1727618007 f:\code\math\linear\2d\rank.cpp
+
+1727619251 f:\code\math\linear\nd\operator.cpp
+
+1727618565 f:\code\math\linear\nd\transpose.cpp
+
+1722753549 f:\code\math\optimize\simplex\simplex.cpp
+
+1718519101 f:\code\math\optimize\grg\grg.cpp
+
+1718519115 f:\code\math\optimize\evolution\evolution.cpp
+
+1727616857 f:\code\math\linear\1d\operator.cpp
+
+1727617305 f:\code\math\linear\2d\det.cpp
+
+1727617589 f:\code\math\linear\2d\eigen.cpp
+
+1727617663 f:\code\math\linear\2d\inverse.cpp
+
+1725979424 f:\code\container\array\array_view\array_span_view.h
+	"array_span_view.cpp"
+
+1718866345 f:\code\container\array\array_view\array_view_coordinate.h
+
+1718799729 f:\code\container\array\array_view\array_view_coordinate.cpp
+
+1724991627 f:\code\container\array\array_view\array_span_view.cpp
+
+1722834388 f:\code\container\array\array_view\array_coordinate.h
+	"array_coordinate.cpp"
+
+1722834401 f:\code\container\array\array_view\array_coordinate.cpp
+
+1727616101 f:\code\math\arithmetic\arithmetic.h
+	"int/abs.cpp"
+	"int/log_log2_log10_ln.cpp"
+	"int/mod.cpp"
+	"int/pow_sqrt_exp_exp2.cpp"
+	"float/abs.cpp"
+	"float/floor_ceil_round.cpp"
+	"float/log_log2_log10_ln.cpp"
+	"float/mod.cpp"
+	"float/pow_sqrt_exp_exp2.cpp"
+	"angle/abs.cpp"
+	"angle/sin_cos_tan_cot_sec_csc.cpp"
+	"angle/arcsin_arccos_arctan_arccot_arcsec_arccsc.cpp"
+	"complex/abs_norm.cpp"
+	"complex/conj.cpp"
+	"complex/floor_ceil_round.cpp"
+	"complex/log_log2_log10_ln.cpp"
+	"complex/pow_sqrt_exp_exp2.cpp"
+	"polar/abs_norm.cpp"
+	"polar/conj.cpp"
+	"polar/log_log2_log10_ln.cpp"
+	"polar/pow_sqrt_exp_exp2.cpp"
+	"std/common_type.cpp"
+	"std/numeric_limits.cpp"
+
+1727615020 f:\code\math\arithmetic\angle\sin_cos_tan_cot_sec_csc.cpp
+
+1727614707 f:\code\math\arithmetic\angle\arcsin_arccos_arctan_arccot_arcsec_arccsc.cpp
+
+1725959728 f:\code\math\arithmetic\complex\conj.cpp
+
+1727615305 f:\code\math\arithmetic\float\floor_ceil_round.cpp
+
+1719926279 f:\code\math\arithmetic\number\abs.cpp
+
+1721291257 f:\code\math\arithmetic\number\log_ln.cpp
+
+1719927112 f:\code\math\arithmetic\number\mod.cpp
+
+1721109903 f:\code\math\arithmetic\number\pow_sqrt_exp.cpp
+
+1727621945 f:\code\math\arithmetic\std\common_type.cpp
+
+1721110016 f:\code\math\arithmetic\std\numeric_limits.cpp
+
+1727618536 f:\code\math\linear\nd\swap.cpp
+
+1725522055 f:\code\container\array\array_view\array_flatten_view.h
+	"array_flatten_view.cpp"
+
+1725948881 f:\code\container\array\array_view\array_type_view.h
+	"array_type_view.cpp"
+
+1727661830 f:\code\io\interface.h
+	"../basic/interface.h"
+	"../container/interface.h"
+	"../math/interface.h"
+	"utility/utility.h"
+	"file/file.h"
+	"network/network.h"
+
+1722311245 f:\code\io\encode\encode.h
+	"wstring.h"
+	"u8string.h"
+	"u16string.h"
+	"u32string.h"
+	"wstring.cpp"
+	"u8string.cpp"
+	"u16string.cpp"
+	"u32string.cpp"
+
+1727622016 f:\code\io\file\file.h
+	"system/path.h"
+	"system/operation.h"
+	"read_write/file_base/file_stream.h"
+	"read_write/file_base/file_interface.h"
+	"read_write/file_class/file_bmp.h"
+	"read_write/file_class/file_csv.h"
+	"read_write/file_class/file_html.h"
+	"read_write/file_class/file_idx.h"
+	"read_write/file_class/file_json.h"
+	"read_write/file_class/file_txt.h"
+	"read_write/file_class/file_wav.h"
+
+1726316960 f:\code\io\network\network.h
+	"url/url.h"
+	"send_receive/http_base/http_handle_windows.h"
+	"send_receive/http_base/http_handle_linux.h"
+	"send_receive/http_base/http_buf.h"
+	"send_receive/http_base/http_stream.h"
+	"send_receive/http_class/http.h"
+	"send_receive/http_class/https.h"
+
+1717214923 f:\code\runtime\chrono\chrono.h
+	"duration/duration.h"
+	"time_point/time_point.h"
+
+1722912116 f:\code\runtime\chrono\duration\duration.h
+	"duration.cpp"
+
+1722924086 f:\code\runtime\chrono\duration\duration.cpp
+
+1722913812 f:\code\runtime\chrono\time_point\time_point.h
+	"time_point.cpp"
+
+1722913899 f:\code\runtime\chrono\time_point\time_point.cpp
+
+1721406909 f:\code\io\encode\compatible\utf_8.h
+
+1721406748 f:\code\io\encode\compatible\utf_16.h
+
+1721406746 f:\code\io\encode\compatible\utf_32.h
+
+1721408599 f:\code\io\encode\windows\codecvt.cpp
+
+1721408119 f:\code\io\encode\linux\codecvt.cpp
+
+1721445956 f:\code\io\encode\compatible\codecvt.cpp
+
+1721406909 f:\code\io\encode\class\utf_8.h
+
+1721406748 f:\code\io\encode\class\utf_16.h
+
+1721406746 f:\code\io\encode\class\utf_32.h
+
+1721480029 f:\code\io\encode\codecvt\codecvt.cpp
+
+1721479868 f:\code\io\encode\codecvt\codecvt_windows.cpp
+
+1721481692 f:\code\io\encode\codecvt\codecvt_windows_ucrt.cpp
+
+1721478939 f:\code\io\encode\codecvt\codecvt_linux.cpp
+
+1721483771 f:\code\io\encode\codecvt\codecvt_windows_msvcrt.cpp
+
+1721489727 f:\code\io\encode\codecvt\codecvt.h
+
+1721541200 f:\code\io\encode\string\wstring.h
+
+1721540483 f:\code\io\encode\string\wstring.cpp
+
+1721534886 f:\code\io\encode\string\u8string.h
+
+1721534892 f:\code\io\encode\string\u16string.h
+
+1721534889 f:\code\io\encode\string\u32string.h
+
+1721540183 f:\code\io\encode\string\u8string.cpp
+
+1721540183 f:\code\io\encode\string\u16string.cpp
+
+1721540287 f:\code\io\encode\string\u32string.cpp
+
+1717214923 f:\code\io\chrono\chrono.h
+	"duration/duration.h"
+	"time_point/time_point.h"
+
+1714372968 f:\code\io\chrono\duration\duration.h
+	"duration.cpp"
+
+1721204403 f:\code\io\chrono\duration\duration.cpp
+
+1716916708 f:\code\io\chrono\time_point\time_point.h
+	"time_point.cpp"
+
+1717479673 f:\code\io\chrono\time_point\time_point.cpp
+
+1721542555 f:\code\io\network\inetstream\inetstream_windows.h
+
+1721545305 f:\code\io\network\onetstream\onetstream_windows.h
+
+1723018355 f:\code\io\network\netstream\netstream_windows.h
+	"netstream_windows.cpp"
+
+1723104916 f:\code\io\network\netstream\netstream_windows.cpp
+
+1721634642 f:\import\tbb\include\tbb\tbb.h
+	"../oneapi/tbb.h"
+
+1721634638 f:\import\tbb\include\oneapi\tbb.h
+	"oneapi/tbb/blocked_range.h"
+	"oneapi/tbb/blocked_range2d.h"
+	"oneapi/tbb/blocked_range3d.h"
+	"tbb/blocked_rangeNd.h"
+	"oneapi/tbb/cache_aligned_allocator.h"
+	"oneapi/tbb/combinable.h"
+	"oneapi/tbb/concurrent_hash_map.h"
+	"tbb/concurrent_lru_cache.h"
+	"oneapi/tbb/collaborative_call_once.h"
+	"oneapi/tbb/concurrent_priority_queue.h"
+	"oneapi/tbb/concurrent_queue.h"
+	"oneapi/tbb/concurrent_unordered_map.h"
+	"oneapi/tbb/concurrent_unordered_set.h"
+	"oneapi/tbb/concurrent_map.h"
+	"oneapi/tbb/concurrent_set.h"
+	"oneapi/tbb/concurrent_vector.h"
+	"oneapi/tbb/enumerable_thread_specific.h"
+	"oneapi/tbb/flow_graph.h"
+	"oneapi/tbb/global_control.h"
+	"oneapi/tbb/info.h"
+	"oneapi/tbb/null_mutex.h"
+	"oneapi/tbb/null_rw_mutex.h"
+	"oneapi/tbb/parallel_for.h"
+	"oneapi/tbb/parallel_for_each.h"
+	"oneapi/tbb/parallel_invoke.h"
+	"oneapi/tbb/parallel_pipeline.h"
+	"oneapi/tbb/parallel_reduce.h"
+	"oneapi/tbb/parallel_scan.h"
+	"oneapi/tbb/parallel_sort.h"
+	"oneapi/tbb/partitioner.h"
+	"oneapi/tbb/queuing_mutex.h"
+	"oneapi/tbb/queuing_rw_mutex.h"
+	"oneapi/tbb/spin_mutex.h"
+	"oneapi/tbb/spin_rw_mutex.h"
+	"oneapi/tbb/mutex.h"
+	"oneapi/tbb/rw_mutex.h"
+	"oneapi/tbb/task.h"
+	"oneapi/tbb/task_arena.h"
+	"oneapi/tbb/task_group.h"
+	"oneapi/tbb/task_scheduler_observer.h"
+	"oneapi/tbb/tbb_allocator.h"
+	"oneapi/tbb/tick_count.h"
+	"oneapi/tbb/version.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\blocked_range.h
+	<cstddef>
+	"detail/_range_common.h"
+	"detail/_namespace_injection.h"
+	"version.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_range_common.h
+	"_config.h"
+	"_utils.h"
+	<concepts>
+	<iterator>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_config.h
+	<cstddef>
+	<version>
+	"_export.h"
+	<cstddef>
+	<android/api-level.h>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_export.h
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_utils.h
+	<type_traits>
+	<cstdint>
+	<atomic>
+	<functional>
+	"_config.h"
+	"_assert.h"
+	"_machine.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_assert.h
+	"_config.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_machine.h
+	"_config.h"
+	"_assert.h"
+	<atomic>
+	<climits>
+	<cstdint>
+	<cstddef>
+	<intrin.h>
+	<windows.h>
+	<immintrin.h>
+	<float.h>
+	<sched.h>
+	<thread>
+	<fenv.h>
+	<cstring>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_namespace_injection.h
+
+1721634640 f:\import\tbb\include\oneapi\tbb\version.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+
+1721634638 f:\import\tbb\include\oneapi\tbb\blocked_range2d.h
+	<cstddef>
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_range_common.h"
+	"blocked_range.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\blocked_range3d.h
+	<cstddef>
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"blocked_range.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\blocked_rangend.h
+	<algorithm>
+	<array>
+	<cstddef>
+	<type_traits>
+	"detail/_config.h"
+	"detail/_template_helpers.h"
+	"detail/_range_common.h"
+	"blocked_range.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_template_helpers.h
+	"_utils.h"
+	"_config.h"
+	<cstddef>
+	<cstdint>
+	<utility>
+	<type_traits>
+	<memory>
+	<iterator>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\cache_aligned_allocator.h
+	"detail/_utils.h"
+	"detail/_namespace_injection.h"
+	<cstdlib>
+	<utility>
+	<memory_resource>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\combinable.h
+	"detail/_namespace_injection.h"
+	"enumerable_thread_specific.h"
+	"cache_aligned_allocator.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\enumerable_thread_specific.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_assert.h"
+	"detail/_template_helpers.h"
+	"detail/_aligned_space.h"
+	"concurrent_vector.h"
+	"tbb_allocator.h"
+	"cache_aligned_allocator.h"
+	"profiling.h"
+	<atomic>
+	<thread>
+	<cstring>
+	<cstddef>
+	"task.h"
+	<windows.h>
+	<pthread.h>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_aligned_space.h
+	<cstddef>
+	"_template_helpers.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\concurrent_vector.h
+	"detail/_namespace_injection.h"
+	"detail/_utils.h"
+	"detail/_assert.h"
+	"detail/_allocator_traits.h"
+	"detail/_segment_table.h"
+	"detail/_containers_helpers.h"
+	"blocked_range.h"
+	"cache_aligned_allocator.h"
+	<algorithm>
+	<utility>
+	<algorithm>
+	<compare>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_allocator_traits.h
+	"_config.h"
+	"_template_helpers.h"
+	<memory>
+	<type_traits>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_segment_table.h
+	"_config.h"
+	"_allocator_traits.h"
+	"_template_helpers.h"
+	"_utils.h"
+	"_assert.h"
+	"_exception.h"
+	<atomic>
+	<type_traits>
+	<memory>
+	<cstring>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_exception.h
+	"_config.h"
+	<new>
+	<exception>
+	<stdexcept>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_containers_helpers.h
+	"_template_helpers.h"
+	"_allocator_traits.h"
+	<type_traits>
+	<memory>
+	<functional>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\tbb_allocator.h
+	"oneapi/tbb/detail/_utils.h"
+	"detail/_namespace_injection.h"
+	<cstdlib>
+	<utility>
+	<memory_resource>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\profiling.h
+	"detail/_config.h"
+	<cstdint>
+	<string>
+	"detail/_string_resource.h"
+	<atomic>
+	<stdlib.h>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_string_resource.h
+
+1721634639 f:\import\tbb\include\oneapi\tbb\task.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_task.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_task.h
+	"_config.h"
+	"_assert.h"
+	"_template_helpers.h"
+	"_small_object_pool.h"
+	"../profiling.h"
+	<cstddef>
+	<cstdint>
+	<climits>
+	<utility>
+	<atomic>
+	<mutex>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_small_object_pool.h
+	"_config.h"
+	"_assert.h"
+	"../profiling.h"
+	<cstddef>
+	<cstdint>
+	<atomic>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\concurrent_hash_map.h
+	"detail/_namespace_injection.h"
+	"detail/_utils.h"
+	"detail/_assert.h"
+	"detail/_allocator_traits.h"
+	"detail/_containers_helpers.h"
+	"detail/_template_helpers.h"
+	"detail/_hash_compare.h"
+	"detail/_range_common.h"
+	"tbb_allocator.h"
+	"spin_rw_mutex.h"
+	<atomic>
+	<initializer_list>
+	<tuple>
+	<iterator>
+	<utility>
+	<cstring>
+
+1721634642 f:\import\tbb\include\oneapi\tbb\detail\_hash_compare.h
+	<functional>
+	"_containers_helpers.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\spin_rw_mutex.h
+	"detail/_namespace_injection.h"
+	"detail/_mutex_common.h"
+	"profiling.h"
+	"detail/_assert.h"
+	"detail/_utils.h"
+	"detail/_scoped_lock.h"
+	<atomic>
+	"detail/_rtm_rw_mutex.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_mutex_common.h
+	"_config.h"
+	"_utils.h"
+	<concepts>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_scoped_lock.h
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_rtm_rw_mutex.h
+	"_assert.h"
+	"_utils.h"
+	"../spin_rw_mutex.h"
+	<atomic>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\concurrent_lru_cache.h
+	"detail/_assert.h"
+	"detail/_aggregator.h"
+	<map>
+	<list>
+	<utility>
+	<algorithm>
+	<atomic>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_aggregator.h
+	"_assert.h"
+	"_utils.h"
+	<atomic>
+	"../profiling.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\collaborative_call_once.h
+	"task_arena.h"
+	"task_group.h"
+	<atomic>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\task_arena.h
+	"detail/_config.h"
+	"detail/_aligned_space.h"
+	"detail/_attach.h"
+	"detail/_exception.h"
+	"detail/_namespace_injection.h"
+	"detail/_small_object_pool.h"
+	"detail/_task.h"
+	"detail/_task_handle.h"
+	"info.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_attach.h
+	"_config.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_task_handle.h
+	"_config.h"
+	"_task.h"
+	"_small_object_pool.h"
+	"_utils.h"
+	<memory>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\info.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	<vector>
+	<cstdint>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\task_group.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_assert.h"
+	"detail/_utils.h"
+	"detail/_template_helpers.h"
+	"detail/_exception.h"
+	"detail/_task.h"
+	"detail/_small_object_pool.h"
+	"detail/_intrusive_list_node.h"
+	"detail/_task_handle.h"
+	"profiling.h"
+	<type_traits>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_intrusive_list_node.h
+
+1721634640 f:\import\tbb\include\oneapi\tbb\concurrent_priority_queue.h
+	"detail/_namespace_injection.h"
+	"detail/_aggregator.h"
+	"detail/_template_helpers.h"
+	"detail/_allocator_traits.h"
+	"detail/_range_common.h"
+	"detail/_exception.h"
+	"detail/_utils.h"
+	"detail/_containers_helpers.h"
+	"cache_aligned_allocator.h"
+	<vector>
+	<iterator>
+	<functional>
+	<utility>
+	<initializer_list>
+	<type_traits>
+
+1721634638 f:\import\tbb\include\oneapi\tbb\concurrent_queue.h
+	"detail/_namespace_injection.h"
+	"detail/_concurrent_queue_base.h"
+	"detail/_allocator_traits.h"
+	"detail/_exception.h"
+	"detail/_containers_helpers.h"
+	"cache_aligned_allocator.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_concurrent_queue_base.h
+	"_utils.h"
+	"_exception.h"
+	"_machine.h"
+	"_allocator_traits.h"
+	"../profiling.h"
+	"../spin_mutex.h"
+	"../cache_aligned_allocator.h"
+	<atomic>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\spin_mutex.h
+	"detail/_namespace_injection.h"
+	"detail/_mutex_common.h"
+	"profiling.h"
+	"detail/_assert.h"
+	"detail/_utils.h"
+	"detail/_scoped_lock.h"
+	<atomic>
+	"detail/_rtm_mutex.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_rtm_mutex.h
+	"_assert.h"
+	"_utils.h"
+	"../spin_mutex.h"
+	"../profiling.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\concurrent_unordered_map.h
+	"detail/_namespace_injection.h"
+	"detail/_concurrent_unordered_base.h"
+	"tbb_allocator.h"
+	<functional>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_concurrent_unordered_base.h
+	"_range_common.h"
+	"_containers_helpers.h"
+	"_segment_table.h"
+	"_hash_compare.h"
+	"_allocator_traits.h"
+	"_node_handle.h"
+	"_assert.h"
+	"_utils.h"
+	"_exception.h"
+	<iterator>
+	<utility>
+	<functional>
+	<initializer_list>
+	<atomic>
+	<type_traits>
+	<memory>
+	<algorithm>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_node_handle.h
+	"_allocator_traits.h"
+	"_assert.h"
+
+1721634638 f:\import\tbb\include\oneapi\tbb\concurrent_unordered_set.h
+	"detail/_namespace_injection.h"
+	"detail/_concurrent_unordered_base.h"
+	"tbb_allocator.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\concurrent_map.h
+	"detail/_namespace_injection.h"
+	"detail/_concurrent_skip_list.h"
+	"tbb_allocator.h"
+	<functional>
+	<tuple>
+	<utility>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_concurrent_skip_list.h
+	"_config.h"
+	"_range_common.h"
+	"_allocator_traits.h"
+	"_template_helpers.h"
+	"_node_handle.h"
+	"_containers_helpers.h"
+	"_assert.h"
+	"_exception.h"
+	"../enumerable_thread_specific.h"
+	<utility>
+	<initializer_list>
+	<atomic>
+	<array>
+	<type_traits>
+	<random>
+	<algorithm>
+	<cstdint>
+	<compare>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\concurrent_set.h
+	"detail/_namespace_injection.h"
+	"detail/_concurrent_skip_list.h"
+	"tbb_allocator.h"
+	<functional>
+	<utility>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\flow_graph.h
+	<atomic>
+	<memory>
+	<type_traits>
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"spin_mutex.h"
+	"null_mutex.h"
+	"spin_rw_mutex.h"
+	"null_rw_mutex.h"
+	"detail/_pipeline_filters.h"
+	"detail/_task.h"
+	"detail/_small_object_pool.h"
+	"cache_aligned_allocator.h"
+	"detail/_exception.h"
+	"detail/_template_helpers.h"
+	"detail/_aggregator.h"
+	"detail/_allocator_traits.h"
+	"detail/_utils.h"
+	"profiling.h"
+	"task_arena.h"
+	<tuple>
+	<list>
+	<queue>
+	<concepts>
+	"detail/_flow_graph_impl.h"
+	"detail/_flow_graph_trace_impl.h"
+	"detail/_hash_compare.h"
+	"detail/_flow_graph_body_impl.h"
+	"detail/_flow_graph_cache_impl.h"
+	"detail/_flow_graph_types_impl.h"
+	"detail/_flow_graph_node_impl.h"
+	"detail/_flow_graph_join_impl.h"
+	"detail/_flow_graph_indexer_impl.h"
+	"detail/_flow_graph_node_set_impl.h"
+	"detail/_flow_graph_nodes_deduction.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\null_mutex.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_mutex_common.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\null_rw_mutex.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_mutex_common.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_pipeline_filters.h
+	"_config.h"
+	"_task.h"
+	"_pipeline_filters_deduction.h"
+	"../tbb_allocator.h"
+	<cstddef>
+	<cstdint>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_pipeline_filters_deduction.h
+	"_config.h"
+	<utility>
+	<type_traits>
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_impl.h
+	"_task.h"
+	"../task_group.h"
+	"../task_arena.h"
+	"../flow_graph_abstractions.h"
+	"../concurrent_priority_queue.h"
+	<list>
+
+1721634638 f:\import\tbb\include\oneapi\tbb\flow_graph_abstractions.h
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_trace_impl.h
+	"../profiling.h"
+	<intrin.h>
+
+1721634642 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_body_impl.h
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_cache_impl.h
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_types_impl.h
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_node_impl.h
+	"_flow_graph_item_buffer_impl.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_item_buffer_impl.h
+	"_aligned_space.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_join_impl.h
+	"_flow_graph_tagged_buffer_impl.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_tagged_buffer_impl.h
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_indexer_impl.h
+	"_flow_graph_types_impl.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_node_set_impl.h
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_flow_graph_nodes_deduction.h
+
+1721634639 f:\import\tbb\include\oneapi\tbb\global_control.h
+	"detail/_config.h"
+	"detail/_assert.h"
+	"detail/_attach.h"
+	"detail/_exception.h"
+	"detail/_namespace_injection.h"
+	"detail/_template_helpers.h"
+	<cstddef>
+	<new>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\parallel_for.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_exception.h"
+	"detail/_task.h"
+	"detail/_small_object_pool.h"
+	"profiling.h"
+	"partitioner.h"
+	"blocked_range.h"
+	"task_group.h"
+	<cstddef>
+	<new>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\partitioner.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_aligned_space.h"
+	"detail/_utils.h"
+	"detail/_template_helpers.h"
+	"detail/_range_common.h"
+	"detail/_task.h"
+	"detail/_small_object_pool.h"
+	"cache_aligned_allocator.h"
+	"task_group.h"
+	"task_arena.h"
+	<algorithm>
+	<atomic>
+	<type_traits>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\parallel_for_each.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_exception.h"
+	"detail/_task.h"
+	"detail/_aligned_space.h"
+	"detail/_small_object_pool.h"
+	"detail/_utils.h"
+	"parallel_for.h"
+	"task_group.h"
+	<iterator>
+	<type_traits>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\parallel_invoke.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_exception.h"
+	"detail/_task.h"
+	"detail/_template_helpers.h"
+	"detail/_small_object_pool.h"
+	"task_group.h"
+	<tuple>
+	<atomic>
+	<utility>
+
+1721634640 f:\import\tbb\include\oneapi\tbb\parallel_pipeline.h
+	"detail/_pipeline_filters.h"
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"task_group.h"
+	<cstddef>
+	<atomic>
+	<type_traits>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\parallel_reduce.h
+	<new>
+	"detail/_namespace_injection.h"
+	"detail/_task.h"
+	"detail/_aligned_space.h"
+	"detail/_small_object_pool.h"
+	"detail/_range_common.h"
+	"task_group.h"
+	"partitioner.h"
+	"profiling.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\parallel_scan.h
+	<functional>
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_exception.h"
+	"detail/_task.h"
+	"profiling.h"
+	"partitioner.h"
+	"blocked_range.h"
+	"task_group.h"
+
+1721634638 f:\import\tbb\include\oneapi\tbb\parallel_sort.h
+	"detail/_namespace_injection.h"
+	"parallel_for.h"
+	"blocked_range.h"
+	"profiling.h"
+	<algorithm>
+	<iterator>
+	<functional>
+	<cstddef>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\queuing_mutex.h
+	"detail/_namespace_injection.h"
+	"detail/_assert.h"
+	"detail/_utils.h"
+	"detail/_mutex_common.h"
+	"profiling.h"
+	<atomic>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\queuing_rw_mutex.h
+	"detail/_config.h"
+	"detail/_namespace_injection.h"
+	"detail/_assert.h"
+	"detail/_mutex_common.h"
+	"profiling.h"
+	<cstring>
+	<atomic>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\mutex.h
+	"detail/_namespace_injection.h"
+	"detail/_utils.h"
+	"detail/_scoped_lock.h"
+	"detail/_waitable_atomic.h"
+	"detail/_mutex_common.h"
+	"profiling.h"
+
+1721634641 f:\import\tbb\include\oneapi\tbb\detail\_waitable_atomic.h
+	"_utils.h"
+
+1721634640 f:\import\tbb\include\oneapi\tbb\rw_mutex.h
+	"detail/_namespace_injection.h"
+	"detail/_utils.h"
+	"detail/_waitable_atomic.h"
+	"detail/_scoped_lock.h"
+	"detail/_mutex_common.h"
+	"profiling.h"
+
+1721634639 f:\import\tbb\include\oneapi\tbb\task_scheduler_observer.h
+	"detail/_namespace_injection.h"
+	"task_arena.h"
+	<atomic>
+
+1721634639 f:\import\tbb\include\oneapi\tbb\tick_count.h
+	<chrono>
+	"detail/_namespace_injection.h"
+
+1724746578 f:\code\io\network\url\url.h
+	"url.cpp"
+
+1724344715 f:\code\io\network\url\url.cpp
+
+1721705515 f:\code\io\network\netmode\netmode.h
+
+1721705773 f:\code\io\network\netmanip\netmanip_windows.h
+
+1727604357 f:\code\container\polymorphic\polymorphic_class\optional.cpp
+
+1727610583 f:\code\container\polymorphic\polymorphic_class\variant.cpp
+
+1723005531 f:\code\container\string\string_base\string_format.h
+	"string_format.cpp"
+
+1723005555 f:\code\container\string\string_base\string_format.cpp
+
+1725115395 f:\code\debug\interface.h
+	"../basic/interface.h"
+	"memory_debugger.h"
+
+1723013230 f:\code\debug\memory.h
+	"memory.cpp"
+
+1723767938 f:\code\debug\memory.cpp
+
+1721541200 f:\code\io\encode\wstring.h
+
+1721534886 f:\code\io\encode\u8string.h
+
+1721534892 f:\code\io\encode\u16string.h
+
+1721534889 f:\code\io\encode\u32string.h
+
+1722312163 f:\code\io\encode\wstring.cpp
+
+1722311905 f:\code\io\encode\u8string.cpp
+
+1722311865 f:\code\io\encode\u16string.cpp
+
+1722311884 f:\code\io\encode\u32string.cpp
+
+1727662100 f:\code\io\file\system\path.h
+	"path.cpp"
+
+1724989094 f:\code\io\file\system\path.cpp
+
+1727661850 f:\code\io\file\system\operation.h
+	"operation.cpp"
+
+1722342602 f:\code\io\file\read_write\file.h
+	"file.cpp"
+
+1722310736 f:\code\io\file\read_write\file_bmp.h
+
+1722310749 f:\code\io\file\read_write\file_csv.h
+
+1722310843 f:\code\io\file\read_write\file_html.h
+
+1722313098 f:\code\io\file\read_write\file_idx.h
+
+1722310828 f:\code\io\file\read_write\file_json.h
+
+1723106527 f:\code\io\file\read_write\file_txt.h
+	"file_txt.cpp"
+
+1722310763 f:\code\io\file\read_write\file_wav.h
+
+1727661875 f:\code\io\file\system\operation.cpp
+
+1722346018 f:\code\io\file\read_write\file.cpp
+
+1723107004 f:\code\io\file\read_write\file_txt.cpp
+
+1717214923 f:\code\container\chrono\chrono.h
+	"duration/duration.h"
+	"time_point/time_point.h"
+
+1722912116 f:\code\container\chrono\duration\duration.h
+	"duration.cpp"
+
+1722924086 f:\code\container\chrono\duration\duration.cpp
+
+1722913812 f:\code\container\chrono\time_point\time_point.h
+	"time_point.cpp"
+
+1722913899 f:\code\container\chrono\time_point\time_point.cpp
+
+1723444477 f:\code\io\console\console.h
+	"control/control.h"
+
+1722349853 f:\code\container\bitwise\bitwise.h
+	"bitwise_class/bit.h"
+	"bitwise_class/byte.h"
+	"bitwise_class/bitset.h"
+
+1722349777 f:\code\container\bitwise\bitwise_class\bit.h
+
+1722351045 f:\code\container\bitwise\bitwise_class\byte.h
+	"byte.cpp"
+
+1722350095 f:\code\container\bitwise\bitwise_class\byte.cpp
+
+1722349566 f:\code\container\bitwise\bitwise_class\bitset.h
+
+1723019683 f:\code\io\network\netstream\netmanip.h
+	"netmanip.cpp"
+
+1723019655 f:\code\io\network\netstream\netmanip.cpp
+
+1724991480 f:\code\container\array\array_view\array_flatten_view.cpp
+
+1722844781 f:\code\container\discrete\discrete_base\constexpr_index.h
+	"constexpr_index.cpp"
+
+1722844790 f:\code\container\discrete\discrete_base\constexpr_index.cpp
+
+1727573870 f:\code\container\chain\chain_class\deque.h
+	"deque.cpp"
+
+1723011732 f:\code\container\chain\chain_class\deque.cpp
+
+1727573570 f:\code\container\chain\chain_base\chain_global.h
+
+1727536006 f:\code\container\chain\chain_base\chain_global.cpp
+
+1727593738 f:\code\container\string\string_view\basic_string_range_view.h
+	"basic_string_range_view.cpp"
+
+1727593059 f:\code\container\string\string_view\basic_string_range_view.cpp
+
+1727623994 f:\code\container\utility\utility.h
+	"constexpr_index/constexpr_index.h"
+	"format/format.h"
+	"structured_binding/structured_binding.h"
+
+1723080571 f:\code\container\utility\constexpr_index\constexpr_index.h
+	"constexpr_index.cpp"
+
+1723080622 f:\code\container\utility\constexpr_index\constexpr_index.cpp
+
+1727594311 f:\code\container\utility\format\format.h
+	"format.cpp"
+
+1727594307 f:\code\container\utility\format\format.cpp
+
+1723514848 f:\code\container\utility\structured_binding\structured_binding.h
+	"structured_binding.cpp"
+
+1723514873 f:\code\container\utility\structured_binding\structured_binding.cpp
+
+1723602940 f:\code\io\file\read_write\file_stream\bstream.h
+	"bstream.cpp"
+
+1724514365 f:\code\io\file\read_write\file_stream\fstream.h
+	"fstream.cpp"
+
+1723685580 f:\code\io\file\read_write\file_stream\stream_view.h
+	"stream_view.cpp"
+
+1727622279 f:\code\io\file\read_write\file_class\file_bmp.h
+	"file_bmp.cpp"
+
+1727622308 f:\code\io\file\read_write\file_class\file_csv.h
+	"file_csv.cpp"
+
+1722310843 f:\code\io\file\read_write\file_class\file_html.h
+
+1727622587 f:\code\io\file\read_write\file_class\file_idx.h
+	"file_idx.cpp"
+
+1722310828 f:\code\io\file\read_write\file_class\file_json.h
+
+1727622602 f:\code\io\file\read_write\file_class\file_txt.h
+	"file_txt.cpp"
+
+1727622601 f:\code\io\file\read_write\file_class\file_txt.cpp
+
+1723619082 f:\code\io\file\read_write\file_class\file_wav.h
+
+1727088091 f:\code\io\file\read_write\file_base\file_base.h
+	"file_base.cpp"
+
+1726574311 f:\code\io\file\read_write\file_base\file_base.cpp
+
+1724514367 f:\code\io\file\read_write\file_stream\fstream.cpp
+
+1723603054 f:\code\io\file\read_write\file_stream\bstream.cpp
+
+1723537345 f:\code\io\file\read_write\file_stream\istream_view.h
+	"istream_view.cpp"
+
+1723537573 f:\code\io\file\read_write\file_stream\istream_view.cpp
+
+1723213170 f:\code\io\file\read_write\file_stream\ostream_view.h
+	"ostream_view.cpp"
+
+1723213174 f:\code\io\file\read_write\file_stream\ostream_view.cpp
+
+1727622517 f:\code\io\file\read_write\file_class\file_csv.cpp
+
+1724565125 f:\code\io\file\read_write\file_base\file.h
+	"file.cpp"
+
+1724565142 f:\code\io\file\read_write\file_base\file.cpp
+
+1723768403 f:\code\io\file\read_write\file_base\file_global.h
+	"file_global.cpp"
+
+1725896105 f:\code\io\file\read_write\file_base\file_global.cpp
+	"file_global.cpp"
+
+1723537643 f:\code\io\file\read_write\file_stream\ibstream.h
+	"ibstream.cpp"
+
+1723537652 f:\code\io\file\read_write\file_stream\obstream.h
+	"obstream.cpp"
+
+1723434849 f:\code\io\file\read_write\file_stream\ifstream.h
+	"ifstream.cpp"
+
+1723534890 f:\code\io\file\read_write\file_stream\ifstream.cpp
+
+1723434857 f:\code\io\file\read_write\file_stream\ofstream.h
+	"ofstream.cpp"
+
+1723434772 f:\code\io\file\read_write\file_stream\ofstream.cpp
+
+1723537630 f:\code\io\file\read_write\file_stream\ibstream.cpp
+
+1723537205 f:\code\io\file\read_write\file_stream\obstream.cpp
+
+1723446653 f:\code\io\console\control\control.h
+	"control.cpp"
+
+1723446664 f:\code\io\console\control\control.cpp
+
+1726317152 f:\code\io\utility\utility.h
+	"color/color.h"
+	"time/time.h"
+	"stream/stream.h"
+	"format/format.h"
+
+1723870203 f:\code\io\utility\color\color.h
+	"color.cpp"
+
+1726158838 f:\code\io\utility\color\color.cpp
+
+1727665773 f:\code\io\file\read_write\file_class\file_bmp.cpp
+
+1723686518 f:\code\io\file\read_write\file_stream\stream_view.cpp
+
+1723685660 f:\code\io\file\read_write\file_stream\stream_chunk_view.h
+	"stream_chunk_view.cpp"
+
+1723686504 f:\code\io\file\read_write\file_stream\stream_chunk_view.cpp
+
+1725959717 f:\code\math\arithmetic\complex\abs_norm.cpp
+
+1723694824 f:\code\math\arithmetic\complex\log_ln.cpp
+
+1723696466 f:\code\math\arithmetic\complex\pow_sqrt_exp.cpp
+
+1725961318 f:\code\math\arithmetic\float\abs.cpp
+
+1723695787 f:\code\math\arithmetic\float\log_ln.cpp
+
+1727615505 f:\code\math\arithmetic\float\mod.cpp
+
+1725460145 f:\code\math\arithmetic\float\pow_sqrt_exp.cpp
+
+1725959842 f:\code\math\arithmetic\int\abs.cpp
+
+1723695541 f:\code\math\arithmetic\int\log_ln.cpp
+
+1727615601 f:\code\math\arithmetic\int\mod.cpp
+
+1723695634 f:\code\math\arithmetic\int\pow_sqrt_exp.cpp
+
+1725959875 f:\code\math\arithmetic\polar\abs_norm.cpp
+
+1725961254 f:\code\math\arithmetic\polar\conj.cpp
+
+1723694853 f:\code\math\arithmetic\polar\log_ln.cpp
+
+1723696515 f:\code\math\arithmetic\polar\pow_sqrt_exp.cpp
+
+1725522006 f:\code\container\array\array_class\inplace_array.h
+	"inplace_array.cpp"
+
+1726667524 f:\code\container\array\array_class\inplace_array.cpp
+
+1723708615 f:\code\io\file\read_write\file_class\file_pcap.h
+	"file_pcap.cpp"
+
+1723710673 f:\code\io\file\read_write\file_class\file_pcap.cpp
+
+1723769269 f:\code\basic\utility.h
+	"concept.h"
+	"utility.cpp"
+
+1726723781 f:\code\basic\utility.cpp
+
+1724750819 f:\code\basic\abi.h
+	"abi.cpp"
+
+1724750903 f:\code\basic\abi.cpp
+
+1726393349 f:\code\io\utility\format\format.h
+	"format.cpp"
+
+1726393363 f:\code\io\utility\format\format.cpp
+
+1723185841 f:\code\io\network\netstream\netstream_base\netstream_base_linux.h
+
+1724426521 f:\code\io\network\netstream\netstream_base\netstream_base_windows.h
+	"netstream_base_windows.cpp"
+
+1723185825 f:\code\io\network\netstream\netstream_class\async_netstream.h
+
+1723019683 f:\code\io\network\netstream\netstream_options\netstream_options.h
+	"netmanip.cpp"
+
+1723185765 f:\code\io\network\netstream\netstream_class\netstream.h
+
+1724427046 f:\code\io\network\netstream\netstream_base\netstream_base_windows.cpp
+
+1723824379 f:\code\io\utility\chrono\chrono.h
+	"duration/duration.h"
+
+1723826444 f:\code\io\utility\chrono\duration\duration.h
+	"duration.cpp"
+
+1723826389 f:\code\io\utility\chrono\duration\duration.cpp
+
+1725111977 f:\code\io\utility\time\time.h
+	"duration/duration.h"
+	"time_point/time_point.h"
+
+1725424356 f:\code\io\utility\time\duration\duration.h
+	"duration.cpp"
+
+1727623675 f:\code\io\utility\time\duration\duration.cpp
+
+1725424375 f:\code\io\utility\time\time_point\time_point.h
+	"time_point.cpp"
+
+1725424400 f:\code\io\utility\time\time_point\time_point.cpp
+
+1724226237 f:\code\container\string\string_base\string_regex.h
+	"string_regex.cpp"
+
+1723950605 f:\code\container\string\string_base\string_regex.cpp
+
+1724428387 f:\code\io\network\send_receive\net_base\net_global.h
+
+1724433817 f:\code\io\network\send_receive\net_stream\netbuf\netbuf_api_windows.h
+	"netbuf_api_windows.cpp"
+
+1724433848 f:\code\io\network\send_receive\net_stream\netbuf\netbuf_api_windows.cpp
+
+1723185841 f:\code\io\network\send_receive\net_stream\netbuf\netbuf_api_linux.h
+
+1724432126 f:\code\io\network\send_receive\net_stream\netbuf\netbuf.h
+	"netbuf.cpp"
+
+1724428209 f:\code\io\network\send_receive\net_stream\netbuf\netbuf.cpp
+
+1724428430 f:\code\io\network\send_receive\net_stream\netstream\netstream.h
+
+1724428336 f:\code\io\network\send_receive\net_class\http.h
+
+1724428361 f:\code\io\network\send_receive\net_class\https.h
+
+1724513759 f:\code\io\network\send_receive\http_stream\hstream.h
+
+1726723436 f:\code\io\network\send_receive\http_class\http.h
+	"http.cpp"
+
+1724428361 f:\code\io\network\send_receive\http_class\https.h
+
+1724428387 f:\code\io\network\send_receive\http_base\http_global.h
+
+1727622955 f:\code\io\utility\stream\stream.h
+	"stream_view.h"
+	"binary_stream_view.h"
+	"chunked_binary_stream_view.h"
+
+1724579846 f:\code\io\utility\stream\binary_stream.h
+	"binary_stream.cpp"
+
+1724562001 f:\code\io\utility\stream\binary_stream.cpp
+
+1727623448 f:\code\io\utility\stream\stream_view.h
+	"stream_view.cpp"
+
+1727623733 f:\code\io\utility\stream\stream_view.cpp
+
+1724561585 f:\code\io\utility\stream\stream_chunk_view.h
+	"stream_chunk_view.cpp"
+
+1724561540 f:\code\io\utility\stream\stream_chunk_view.cpp
+
+1726566551 f:\code\io\file\read_write\file_base\file_stream.h
+	"file_stream.cpp"
+
+1727622266 f:\code\io\file\read_write\file_base\file_stream.cpp
+
+1726496450 f:\code\io\network\send_receive\http_base\http_buf.h
+	"http_buf.cpp"
+
+1724668686 f:\code\io\network\send_receive\http_base\http_buf_api_windows.h
+	"http_buf_api_windows.cpp"
+
+1724669370 f:\code\io\network\send_receive\http_base\http_buf_api_windows.cpp
+	"http_buf.h"
+
+1723185841 f:\code\io\network\send_receive\http_base\http_buf_api_linux.h
+
+1727622677 f:\code\io\network\send_receive\http_base\http_buf.cpp
+
+1726496148 f:\code\io\network\send_receive\http_base\http_stream.h
+	"http_stream.cpp"
+
+1726495542 f:\code\io\network\send_receive\http_base\http_stream.cpp
+
+1725937191 f:\code\debug\memory_debugger.h
+	"memory_debugger.cpp"
+
+1725937349 f:\code\debug\memory_debugger.cpp
+
+1724751663 f:\code\io\network\send_receive\http_base\http_handle_windows.h
+	"http_handle_windows.cpp"
+
+1724761701 f:\code\io\network\send_receive\http_base\http_handle_windows.cpp
+	"http_buf.h"
+
+1723185841 f:\code\io\network\send_receive\http_base\http_handle_linux.h
+
+1724763505 source:f:\code\runtime\async\async.cpp
+
+1724829756 f:\code\runtime\async\async.cpp
+
+1726723565 f:\code\io\network\send_receive\http_class\http.cpp
+
+1725521994 f:\code\container\array\array_class\fixed_array.h
+	"fixed_array.cpp"
+
+1725979257 f:\code\container\array\array_view\array_line.h
+	"array_line.cpp"
+
+1724990338 f:\code\container\array\array_view\array_line.cpp
+
+1724991951 f:\code\container\array\array_class\fixed_array.cpp
+
+1725115460 f:\code\stock\interface.h
+	"../basic/interface.h"
+	"../container/interface.h"
+	"../io/interface.h"
+	"database.h"
+
+1725171043 f:\code\stock\database.h
+	"database.cpp"
+
+1725935615 f:\code\stock\database.cpp
+
+1725168964 f:\code\container\collection\collection_view\collection_keys_view.h
+	"collection_keys_view.cpp"
+
+1725162518 f:\code\container\collection\collection_view\collection_keys_view.cpp
+
+1725168971 f:\code\container\collection\collection_view\collection_values_view.h
+	"collection_values_view.cpp"
+
+1723019186 f:\code\container\collection\collection_data\map_pair\map_pair.h
+	"map_pair.cpp"
+
+1723081113 f:\code\container\collection\collection_data\map_pair\map_pair.cpp
+
+1727593433 f:\code\container\collection\collection_data\flat\sorted_vector.h
+	"sorted_vector.cpp"
+
+1727593444 f:\code\container\collection\collection_data\flat\sorted_vector.cpp
+
+1710746786 f:\code\container\collection\collection_data\tree\tree.h
+	"binary_tree.h"
+	"binary_search_tree.h"
+	"redblack_tree.h"
+
+1727586061 f:\code\container\collection\collection_data\tree\binary_tree.h
+	"binary_tree.cpp"
+
+1727586051 f:\code\container\collection\collection_data\tree\binary_tree.cpp
+
+1727593467 f:\code\container\collection\collection_data\tree\binary_search_tree.h
+	"binary_search_tree.cpp"
+
+1727593466 f:\code\container\collection\collection_data\tree\binary_search_tree.cpp
+
+1727593483 f:\code\container\collection\collection_data\tree\redblack_tree.h
+	"redblack_tree.cpp"
+
+1727593489 f:\code\container\collection\collection_data\tree\redblack_tree.cpp
+
+1725023999 f:\code\container\collection\collection_view\collection_values_view.cpp
+
+1727573106 f:\code\container\collection\collection_base\collection_algo.h
+	"collection_algo.cpp"
+
+1727573115 f:\code\container\collection\collection_base\collection_algo.cpp
+
+1725114468 source:f:\code\basic\abi.cpp
+	"abi.h"
+
+1723424706 source:f:\code\basic\concept.cpp
+
+1723979334 source:f:\code\basic\range.cpp
+
+1725104185 source:f:\code\basic\utility.cpp
+
+1724750291 source:f:\code\basic\exception.cpp
+
+1725471486 source:f:\code - backup\2024.09.03.21.00\anonymous\main.cpp
+	"../basic/interface.h"
+	"../debug/interface.h"
+	"../container/interface.h"
+	"../math/interface.h"
+	"../io/interface.h"
+
+1725356008 f:\code - backup\2024.09.03.21.00\basic\interface.h
+	<algorithm>
+	<chrono>
+	<concepts>
+	<condition_variable>
+	<coroutine>
+	<execution>
+	<filesystem>
+	<format>
+	<fstream>
+	<functional>
+	<iostream>
+	<iomanip>
+	<locale>
+	<map>
+	<mutex>
+	<new>
+	<print>
+	<random>
+	<ranges>
+	<regex>
+	<stacktrace>
+	<string>
+	<thread>
+	<utility>
+	<stdexec/execution.hpp>
+	<exec/static_thread_pool.hpp>
+	<tbbexec/tbb_thread_pool.hpp>
+	<cxxabi.h>
+	<windows.h>
+	<winhttp.h>
+	<tbb/tbb.h>
+	<boost/date_time.hpp>
+	<boost/locale.hpp>
+	"abi.h"
+	"concept.h"
+	"exception.h"
+	"range.h"
+	"utility.h"
+
+1724750819 f:\code - backup\2024.09.03.21.00\basic\abi.h
+	"abi.cpp"
+
+1724750903 f:\code - backup\2024.09.03.21.00\basic\abi.cpp
+
+1723081737 f:\code - backup\2024.09.03.21.00\basic\concept.h
+	"concept.cpp"
+
+1723424706 f:\code - backup\2024.09.03.21.00\basic\concept.cpp
+
+1724750284 f:\code - backup\2024.09.03.21.00\basic\exception.h
+	"concept.h"
+	"abi.h"
+	"exception.cpp"
+
+1725186836 f:\code - backup\2024.09.03.21.00\basic\exception.cpp
+
+1724227643 f:\code - backup\2024.09.03.21.00\basic\range.h
+	"error.h"
+	"concept.h"
+	"range.cpp"
+
+1723979334 f:\code - backup\2024.09.03.21.00\basic\range.cpp
+
+1723769269 f:\code - backup\2024.09.03.21.00\basic\utility.h
+	"concept.h"
+	"utility.cpp"
+
+1725185574 f:\code - backup\2024.09.03.21.00\basic\utility.cpp
+
+1725115395 f:\code - backup\2024.09.03.21.00\debug\interface.h
+	"../basic/interface.h"
+	"memory_debugger.h"
+
+1724598096 f:\code - backup\2024.09.03.21.00\debug\memory_debugger.h
+	"memory_debugger.cpp"
+
+1723767938 f:\code - backup\2024.09.03.21.00\debug\memory_debugger.cpp
+
+1725115399 f:\code - backup\2024.09.03.21.00\container\interface.h
+	"../basic/interface.h"
+	"discrete/discrete.h"
+	"array/array.h"
+	"chain/chain.h"
+	"collection/collection.h"
+	"polymorphic/polymorphic.h"
+	"string/string.h"
+	"utility/utility.h"
+
+1723081027 f:\code - backup\2024.09.03.21.00\container\discrete\discrete.h
+	"discrete_base/discrete_global.h"
+	"discrete_class/pair.h"
+	"discrete_class/tuple.h"
+
+1723820419 f:\code - backup\2024.09.03.21.00\container\discrete\discrete_base\discrete_global.h
+	"discrete_global.cpp"
+
+1724338977 f:\code - backup\2024.09.03.21.00\container\discrete\discrete_base\discrete_global.cpp
+
+1722932763 f:\code - backup\2024.09.03.21.00\container\discrete\discrete_class\pair.h
+	"pair.cpp"
+
+1724256647 f:\code - backup\2024.09.03.21.00\container\discrete\discrete_class\pair.cpp
+
+1723514529 f:\code - backup\2024.09.03.21.00\container\discrete\discrete_class\tuple.h
+	"tuple.cpp"
+
+1724256608 f:\code - backup\2024.09.03.21.00\container\discrete\discrete_class\tuple.cpp
+
+1724990312 f:\code - backup\2024.09.03.21.00\container\array\array.h
+	"../chain/chain_class/queue.h"
+	"array_base/array_global.h"
+	"array_base/array_algo_1d.h"
+	"array_base/array_algo_nd.h"
+	"array_class/array_1d.h"
+	"array_class/array_-1d.h"
+	"array_class/array_nd.h"
+	"array_class/fixed_array.h"
+	"array_class/inplace_array.h"
+	"array_view/array_coordinate.h"
+	"array_view/array_axis_view.h"
+	"array_view/array_filter_view.h"
+	"array_view/array_flatten_view.h"
+	"array_view/array_line.h"
+	"array_view/array_range_view.h"
+	"array_view/array_reshape_view.h"
+	"array_view/array_span_view.h"
+	"array_view/array_type_view.h"
+	"array_view/array_view_iterator.h"
+
+1722933069 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\queue.h
+	"queue.cpp"
+
+1722921439 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\queue.cpp
+
+1724992133 f:\code - backup\2024.09.03.21.00\container\array\array_base\array_global.h
+	"array_global.cpp"
+
+1723997482 f:\code - backup\2024.09.03.21.00\container\array\array_base\array_global.cpp
+
+1725030933 f:\code - backup\2024.09.03.21.00\container\array\array_base\array_algo_1d.h
+	"array_algo_1d.cpp"
+
+1725030935 f:\code - backup\2024.09.03.21.00\container\array\array_base\array_algo_1d.cpp
+	"../array_class/array_1d.h"
+	"../array_class/inplace_array.h"
+
+1724994298 f:\code - backup\2024.09.03.21.00\container\array\array_class\array_1d.h
+	"array_1d.cpp"
+
+1724994747 f:\code - backup\2024.09.03.21.00\container\array\array_class\array_1d.cpp
+
+1725001894 f:\code - backup\2024.09.03.21.00\container\array\array_class\inplace_array.h
+	"inplace_array.cpp"
+
+1725001881 f:\code - backup\2024.09.03.21.00\container\array\array_class\inplace_array.cpp
+
+1725031017 f:\code - backup\2024.09.03.21.00\container\array\array_base\array_algo_nd.h
+	"array_algo_nd.cpp"
+
+1725031056 f:\code - backup\2024.09.03.21.00\container\array\array_base\array_algo_nd.cpp
+
+1724991311 f:\code - backup\2024.09.03.21.00\container\array\array_class\array_-1d.h
+	"array_-1d.cpp"
+
+1717573600 f:\code - backup\2024.09.03.21.00\container\array\array_class\array_-1d.cpp
+
+1724991330 f:\code - backup\2024.09.03.21.00\container\array\array_class\array_nd.h
+	"array_nd.cpp"
+
+1724990130 f:\code - backup\2024.09.03.21.00\container\array\array_class\array_nd.cpp
+
+1724992797 f:\code - backup\2024.09.03.21.00\container\array\array_class\fixed_array.h
+	"fixed_array.cpp"
+
+1724991951 f:\code - backup\2024.09.03.21.00\container\array\array_class\fixed_array.cpp
+
+1722834388 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_coordinate.h
+	"array_coordinate.cpp"
+
+1722834401 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_coordinate.cpp
+
+1724991403 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_axis_view.h
+	"array_axis_view.cpp"
+
+1724991387 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_axis_view.cpp
+
+1724991438 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_filter_view.h
+	"array_filter_view.cpp"
+
+1723527484 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_filter_view.cpp
+
+1723687829 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_flatten_view.h
+	"array_flatten_view.cpp"
+
+1724991480 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_flatten_view.cpp
+
+1724991751 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_line.h
+	"array_line.cpp"
+
+1724990338 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_line.cpp
+
+1724991517 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_range_view.h
+	"array_range_view.cpp"
+
+1724380534 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_range_view.cpp
+
+1724991572 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_reshape_view.h
+	"array_reshape_view.cpp"
+
+1724991582 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_reshape_view.cpp
+
+1724991621 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_span_view.h
+	"array_span_view.cpp"
+
+1724991627 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_span_view.cpp
+
+1721107655 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_type_view.h
+
+1723526667 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_view_iterator.h
+	"array_view_iterator.cpp"
+
+1723529236 f:\code - backup\2024.09.03.21.00\container\array\array_view\array_view_iterator.cpp
+
+1722922354 f:\code - backup\2024.09.03.21.00\container\chain\chain.h
+	"../array/array.h"
+	"../discrete/discrete.h"
+	"chain_base/chain_global.h"
+	"chain_class/deque.h"
+	"chain_class/list.h"
+	"chain_class/priority_queue.h"
+	"chain_class/queue.h"
+	"chain_class/stack.h"
+
+1722922522 f:\code - backup\2024.09.03.21.00\container\chain\chain_base\chain_global.h
+	"chain_global.cpp"
+
+1722922792 f:\code - backup\2024.09.03.21.00\container\chain\chain_base\chain_global.cpp
+
+1723011825 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\deque.h
+	"deque.cpp"
+
+1723011732 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\deque.cpp
+
+1725003297 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\list.h
+	"list.cpp"
+
+1725003301 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\list.cpp
+
+1722933080 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\priority_queue.h
+	"priority_queue.cpp"
+
+1709633408 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\priority_queue.cpp
+
+1722933088 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\stack.h
+	"stack.cpp"
+
+1722921517 f:\code - backup\2024.09.03.21.00\container\chain\chain_class\stack.cpp
+
+1725033771 f:\code - backup\2024.09.03.21.00\container\collection\collection.h
+	"../discrete/discrete.h"
+	"../array/array.h"
+	"collection_base/collection_global.h"
+	"collection_base/collection_algo.h"
+	"collection_class/set.h"
+	"collection_class/map.h"
+	"collection_data/map_pair/map_pair.h"
+	"collection_data/flat/sorted_vector.h"
+	"collection_data/tree/tree.h"
+	"collection_view/collection_keys_view.h"
+	"collection_view/collection_values_view.h"
+
+1723509461 f:\code - backup\2024.09.03.21.00\container\collection\collection_base\collection_global.h
+	"collection_global.cpp"
+
+1725033788 f:\code - backup\2024.09.03.21.00\container\collection\collection_base\collection_global.cpp
+
+1725032037 f:\code - backup\2024.09.03.21.00\container\collection\collection_base\collection_algo.h
+	"collection_algo.cpp"
+
+1725032364 f:\code - backup\2024.09.03.21.00\container\collection\collection_base\collection_algo.cpp
+
+1725032368 f:\code - backup\2024.09.03.21.00\container\collection\collection_class\set.h
+	"set.cpp"
+
+1725024584 f:\code - backup\2024.09.03.21.00\container\collection\collection_class\set.cpp
+
+1725169432 f:\code - backup\2024.09.03.21.00\container\collection\collection_class\map.h
+	"map.cpp"
+
+1725169478 f:\code - backup\2024.09.03.21.00\container\collection\collection_class\map.cpp
+
+1723019186 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\map_pair\map_pair.h
+	"map_pair.cpp"
+
+1723081113 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\map_pair\map_pair.cpp
+
+1725014331 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\flat\sorted_vector.h
+	"sorted_vector.cpp"
+
+1725014623 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\flat\sorted_vector.cpp
+
+1710746786 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\tree\tree.h
+	"binary_tree.h"
+	"binary_search_tree.h"
+	"redblack_tree.h"
+
+1724943977 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\tree\binary_tree.h
+	"binary_tree.cpp"
+
+1721797579 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\tree\binary_tree.cpp
+
+1725003378 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\tree\binary_search_tree.h
+	"binary_search_tree.cpp"
+
+1725003384 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\tree\binary_search_tree.cpp
+
+1722927697 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\tree\redblack_tree.h
+	"redblack_tree.cpp"
+
+1722930848 f:\code - backup\2024.09.03.21.00\container\collection\collection_data\tree\redblack_tree.cpp
+
+1725168964 f:\code - backup\2024.09.03.21.00\container\collection\collection_view\collection_keys_view.h
+	"collection_keys_view.cpp"
+
+1725162518 f:\code - backup\2024.09.03.21.00\container\collection\collection_view\collection_keys_view.cpp
+
+1725168971 f:\code - backup\2024.09.03.21.00\container\collection\collection_view\collection_values_view.h
+	"collection_values_view.cpp"
+
+1725023999 f:\code - backup\2024.09.03.21.00\container\collection\collection_view\collection_values_view.cpp
+
+1721957003 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic.h
+	"polymorphic_class/any.h"
+	"polymorphic_class/function.h"
+	"polymorphic_class/optional.h"
+	"polymorphic_class/variant.h"
+
+1723724681 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\any.h
+	"any.cpp"
+
+1723725400 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\any.cpp
+
+1722934014 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\function.h
+	"function.cpp"
+
+1722999783 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\function.cpp
+
+1723724662 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\optional.h
+	"optional.cpp"
+
+1723725169 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\optional.cpp
+
+1723724849 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\variant.h
+	"variant.cpp"
+
+1723725475 f:\code - backup\2024.09.03.21.00\container\polymorphic\polymorphic_class\variant.cpp
+
+1725113085 f:\code - backup\2024.09.03.21.00\container\string\string.h
+	"../array/array.h"
+	"string_base/string_global.h"
+	"string_base/string_algo.h"
+	"string_base/string_regex.h"
+	"string_class/basic_string.h"
+	"string_view/basic_string_range_view.h"
+	"string_view/basic_string_view.h"
+
+1723186356 f:\code - backup\2024.09.03.21.00\container\string\string_base\string_global.h
+	"string_global.cpp"
+
+1723910693 f:\code - backup\2024.09.03.21.00\container\string\string_base\string_global.cpp
+
+1725116472 f:\code - backup\2024.09.03.21.00\container\string\string_base\string_algo.h
+	"string_algo.cpp"
+
+1725190846 f:\code - backup\2024.09.03.21.00\container\string\string_base\string_algo.cpp
+	"../string_class/basic_string.h"
+
+1724427662 f:\code - backup\2024.09.03.21.00\container\string\string_class\basic_string.h
+	"basic_string.cpp"
+
+1725185634 f:\code - backup\2024.09.03.21.00\container\string\string_class\basic_string.cpp
+
+1724226237 f:\code - backup\2024.09.03.21.00\container\string\string_base\string_regex.h
+	"string_regex.cpp"
+
+1723950605 f:\code - backup\2024.09.03.21.00\container\string\string_base\string_regex.cpp
+
+1724427627 f:\code - backup\2024.09.03.21.00\container\string\string_view\basic_string_range_view.h
+	"basic_string_range_view.cpp"
+
+1724381040 f:\code - backup\2024.09.03.21.00\container\string\string_view\basic_string_range_view.cpp
+
+1724427634 f:\code - backup\2024.09.03.21.00\container\string\string_view\basic_string_view.h
+	"basic_string_view.cpp"
+
+1725103120 f:\code - backup\2024.09.03.21.00\container\string\string_view\basic_string_view.cpp
+
+1723081012 f:\code - backup\2024.09.03.21.00\container\utility\utility.h
+	"constexpr_index/constexpr_index.h"
+	"format/format.h"
+	"structured_binding/structured_binding.h"
+
+1723080571 f:\code - backup\2024.09.03.21.00\container\utility\constexpr_index\constexpr_index.h
+	"constexpr_index.cpp"
+
+1723080622 f:\code - backup\2024.09.03.21.00\container\utility\constexpr_index\constexpr_index.cpp
+
+1723428914 f:\code - backup\2024.09.03.21.00\container\utility\format\format.h
+	"format.cpp"
+
+1723772165 f:\code - backup\2024.09.03.21.00\container\utility\format\format.cpp
+
+1723514848 f:\code - backup\2024.09.03.21.00\container\utility\structured_binding\structured_binding.h
+	"structured_binding.cpp"
+
+1723514873 f:\code - backup\2024.09.03.21.00\container\utility\structured_binding\structured_binding.cpp
+
+1725115408 f:\code - backup\2024.09.03.21.00\math\interface.h
+	"../basic/interface.h"
+	"../container/interface.h"
+	"numeric/numeric.h"
+	"geometric/geometric.h"
+	"arithmetic/arithmetic.h"
+	"linear/linear.h"
+	"optimize/optimize.h"
+	"random/random.h"
+	"statistics/statistics.h"
+
+1719925199 f:\code - backup\2024.09.03.21.00\math\numeric\numeric.h
+	"fraction.cpp"
+
+1721291203 f:\code - backup\2024.09.03.21.00\math\numeric\fraction.cpp
+
+1723689926 f:\code - backup\2024.09.03.21.00\math\geometric\geometric.h
+	"degree.cpp"
+	"radian.cpp"
+	"complex.cpp"
+	"polar.cpp"
+
+1723693944 f:\code - backup\2024.09.03.21.00\math\geometric\degree.cpp
+
+1723690179 f:\code - backup\2024.09.03.21.00\math\geometric\radian.cpp
+
+1719927555 f:\code - backup\2024.09.03.21.00\math\geometric\complex.cpp
+
+1719927541 f:\code - backup\2024.09.03.21.00\math\geometric\polar.cpp
+
+1723696626 f:\code - backup\2024.09.03.21.00\math\arithmetic\arithmetic.h
+	"angle/sin_cos_tan_cot_sec_csc.cpp"
+	"angle/arcsin_arccos_arctan_arccot_arcsec_arccsc.cpp"
+	"complex/abs_norm.cpp"
+	"complex/conj.cpp"
+	"complex/log_ln.cpp"
+	"complex/pow_sqrt_exp.cpp"
+	"float/abs.cpp"
+	"float/floor_ceil_round.cpp"
+	"float/log_ln.cpp"
+	"float/mod.cpp"
+	"float/pow_sqrt_exp.cpp"
+	"int/abs.cpp"
+	"int/log_ln.cpp"
+	"int/mod.cpp"
+	"int/pow_sqrt_exp.cpp"
+	"polar/abs_norm.cpp"
+	"polar/conj.cpp"
+	"polar/log_ln.cpp"
+	"polar/pow_sqrt_exp.cpp"
+	"std/common_type.cpp"
+	"std/numeric_limits.cpp"
+
+1719925273 f:\code - backup\2024.09.03.21.00\math\arithmetic\angle\sin_cos_tan_cot_sec_csc.cpp
+
+1719925281 f:\code - backup\2024.09.03.21.00\math\arithmetic\angle\arcsin_arccos_arctan_arccot_arcsec_arccsc.cpp
+
+1723696541 f:\code - backup\2024.09.03.21.00\math\arithmetic\complex\abs_norm.cpp
+
+1723696379 f:\code - backup\2024.09.03.21.00\math\arithmetic\complex\conj.cpp
+
+1723694824 f:\code - backup\2024.09.03.21.00\math\arithmetic\complex\log_ln.cpp
+
+1723696466 f:\code - backup\2024.09.03.21.00\math\arithmetic\complex\pow_sqrt_exp.cpp
+
+1723695782 f:\code - backup\2024.09.03.21.00\math\arithmetic\float\abs.cpp
+
+1723695018 f:\code - backup\2024.09.03.21.00\math\arithmetic\float\floor_ceil_round.cpp
+
+1723695787 f:\code - backup\2024.09.03.21.00\math\arithmetic\float\log_ln.cpp
+
+1723695789 f:\code - backup\2024.09.03.21.00\math\arithmetic\float\mod.cpp
+
+1723695795 f:\code - backup\2024.09.03.21.00\math\arithmetic\float\pow_sqrt_exp.cpp
+
+1723695500 f:\code - backup\2024.09.03.21.00\math\arithmetic\int\abs.cpp
+
+1723695541 f:\code - backup\2024.09.03.21.00\math\arithmetic\int\log_ln.cpp
+
+1723695560 f:\code - backup\2024.09.03.21.00\math\arithmetic\int\mod.cpp
+
+1723695634 f:\code - backup\2024.09.03.21.00\math\arithmetic\int\pow_sqrt_exp.cpp
+
+1723696496 f:\code - backup\2024.09.03.21.00\math\arithmetic\polar\abs_norm.cpp
+
+1723696503 f:\code - backup\2024.09.03.21.00\math\arithmetic\polar\conj.cpp
+
+1723694853 f:\code - backup\2024.09.03.21.00\math\arithmetic\polar\log_ln.cpp
+
+1723696515 f:\code - backup\2024.09.03.21.00\math\arithmetic\polar\pow_sqrt_exp.cpp
+
+1719927620 f:\code - backup\2024.09.03.21.00\math\arithmetic\std\common_type.cpp
+
+1721110016 f:\code - backup\2024.09.03.21.00\math\arithmetic\std\numeric_limits.cpp
+
+1723450451 f:\code - backup\2024.09.03.21.00\math\linear\linear.h
+	"../numeric/numeric.h"
+	"1d/convolve.cpp"
+	"1d/dot.cpp"
+	"1d/operator.cpp"
+	"2d/det.cpp"
+	"2d/eigen.cpp"
+	"2d/inverse.cpp"
+	"2d/multiply.cpp"
+	"2d/rank.cpp"
+	"nd/operator.cpp"
+	"nd/swap.cpp"
+	"nd/transpose.cpp"
+
+1721110555 f:\code - backup\2024.09.03.21.00\math\linear\1d\convolve.cpp
+
+1718971696 f:\code - backup\2024.09.03.21.00\math\linear\1d\dot.cpp
+
+1718971700 f:\code - backup\2024.09.03.21.00\math\linear\1d\operator.cpp
+
+1721110567 f:\code - backup\2024.09.03.21.00\math\linear\2d\det.cpp
+
+1725365338 f:\code - backup\2024.09.03.21.00\math\linear\2d\eigen.cpp
+
+1721110622 f:\code - backup\2024.09.03.21.00\math\linear\2d\inverse.cpp
+
+1725356449 f:\code - backup\2024.09.03.21.00\math\linear\2d\multiply.cpp
+
+1721114769 f:\code - backup\2024.09.03.21.00\math\linear\2d\rank.cpp
+
+1725192197 f:\code - backup\2024.09.03.21.00\math\linear\nd\operator.cpp
+
+1721093503 f:\code - backup\2024.09.03.21.00\math\linear\nd\swap.cpp
+
+1723450456 f:\code - backup\2024.09.03.21.00\math\linear\nd\transpose.cpp
+
+1718519145 f:\code - backup\2024.09.03.21.00\math\optimize\optimize.h
+	"simplex/simplex.cpp"
+	"grg/grg.cpp"
+	"evolution/evolution.cpp"
+
+1722753549 f:\code - backup\2024.09.03.21.00\math\optimize\simplex\simplex.cpp
+
+1718519101 f:\code - backup\2024.09.03.21.00\math\optimize\grg\grg.cpp
+
+1718519115 f:\code - backup\2024.09.03.21.00\math\optimize\evolution\evolution.cpp
+
+1725191219 f:\code - backup\2024.09.03.21.00\math\random\random.h
+	"engine/random_engine_algo.cpp"
+	"engine/linear_congruential_engine.cpp"
+	"engine/mersenne_twister_engine.cpp"
+	"engine/subtract_with_carry_engine.cpp"
+	"engine/discard_block_engine.cpp"
+	"engine/shuffle_order_engine.cpp"
+	"engine/floating_point_engine.cpp"
+	"container/array.cpp"
+	"distribution/uniform_distribution.cpp"
+	"distribution/random.cpp"
+	"distribution/bernoulli_distribution.cpp"
+	"distribution/binomial_distribution.cpp"
+	"distribution/geometric_distribution.cpp"
+	"distribution/poisson_distribution.cpp"
+	"distribution/exponential_distribution.cpp"
+	"distribution/gamma_distribution.cpp"
+	"distribution/normal_distribution.cpp"
+	"distribution/chi_squared_distribution.cpp"
+	"distribution/fisher_f_distribution.cpp"
+	"distribution/student_t_distribution.cpp"
+
+1715747250 f:\code - backup\2024.09.03.21.00\math\random\engine\random_engine_algo.cpp
+
+1717429875 f:\code - backup\2024.09.03.21.00\math\random\engine\linear_congruential_engine.cpp
+
+1717429898 f:\code - backup\2024.09.03.21.00\math\random\engine\mersenne_twister_engine.cpp
+
+1717429935 f:\code - backup\2024.09.03.21.00\math\random\engine\subtract_with_carry_engine.cpp
+
+1717429854 f:\code - backup\2024.09.03.21.00\math\random\engine\discard_block_engine.cpp
+
+1717429924 f:\code - backup\2024.09.03.21.00\math\random\engine\shuffle_order_engine.cpp
+
+1717429867 f:\code - backup\2024.09.03.21.00\math\random\engine\floating_point_engine.cpp
+
+1725191311 f:\code - backup\2024.09.03.21.00\math\random\container\array.cpp
+
+1725191300 f:\code - backup\2024.09.03.21.00\math\random\distribution\uniform_distribution.cpp
+
+1725191295 f:\code - backup\2024.09.03.21.00\math\random\distribution\random.cpp
+
+1725191244 f:\code - backup\2024.09.03.21.00\math\random\distribution\bernoulli_distribution.cpp
+
+1725191254 f:\code - backup\2024.09.03.21.00\math\random\distribution\binomial_distribution.cpp
+
+1725191272 f:\code - backup\2024.09.03.21.00\math\random\distribution\geometric_distribution.cpp
+
+1725191291 f:\code - backup\2024.09.03.21.00\math\random\distribution\poisson_distribution.cpp
+
+1725191263 f:\code - backup\2024.09.03.21.00\math\random\distribution\exponential_distribution.cpp
+
+1725191269 f:\code - backup\2024.09.03.21.00\math\random\distribution\gamma_distribution.cpp
+
+1725191289 f:\code - backup\2024.09.03.21.00\math\random\distribution\normal_distribution.cpp
+
+1725191258 f:\code - backup\2024.09.03.21.00\math\random\distribution\chi_squared_distribution.cpp
+
+1725191266 f:\code - backup\2024.09.03.21.00\math\random\distribution\fisher_f_distribution.cpp
+
+1725191297 f:\code - backup\2024.09.03.21.00\math\random\distribution\student_t_distribution.cpp
+
+1717315942 f:\code - backup\2024.09.03.21.00\math\statistics\statistics.h
+	"data/population.cpp"
+	"data/sample.cpp"
+	"estimation/interval_estimation.cpp"
+	"estimation/maximum_likelihood_estimation.cpp"
+	"estimation/moment_estimation.cpp"
+	"estimation/structured_binding.cpp"
+
+1717748236 f:\code - backup\2024.09.03.21.00\math\statistics\data\population.cpp
+
+1717748222 f:\code - backup\2024.09.03.21.00\math\statistics\data\sample.cpp
+
+1717390905 f:\code - backup\2024.09.03.21.00\math\statistics\estimation\interval_estimation.cpp
+
+1717390723 f:\code - backup\2024.09.03.21.00\math\statistics\estimation\maximum_likelihood_estimation.cpp
+
+1717408385 f:\code - backup\2024.09.03.21.00\math\statistics\estimation\moment_estimation.cpp
+
+1721744180 f:\code - backup\2024.09.03.21.00\math\statistics\estimation\structured_binding.cpp
+
+1725172467 f:\code - backup\2024.09.03.21.00\io\interface.h
+	"../basic/interface.h"
+	"../container/interface.h"
+	"../math/interface.h"
+	"utility/utility.h"
+	"file/file.h"
+	"network/network.h"
+
+1724561736 f:\code - backup\2024.09.03.21.00\io\utility\utility.h
+	"color/color.h"
+	"time/time.h"
+	"format/format.h"
+	"stream/stream.h"
+
+1723870203 f:\code - backup\2024.09.03.21.00\io\utility\color\color.h
+	"color.cpp"
+
+1723870207 f:\code - backup\2024.09.03.21.00\io\utility\color\color.cpp
+
+1725111977 f:\code - backup\2024.09.03.21.00\io\utility\time\time.h
+	"duration/duration.h"
+	"time_point/time_point.h"
+
+1725112134 f:\code - backup\2024.09.03.21.00\io\utility\time\duration\duration.h
+	"duration.cpp"
+
+1725112068 f:\code - backup\2024.09.03.21.00\io\utility\time\duration\duration.cpp
+
+1723870978 f:\code - backup\2024.09.03.21.00\io\utility\time\time_point\time_point.h
+	"time_point.cpp"
+
+1725112100 f:\code - backup\2024.09.03.21.00\io\utility\time\time_point\time_point.cpp
+
+1723873176 f:\code - backup\2024.09.03.21.00\io\utility\format\format.h
+	"format.cpp"
+
+1723873274 f:\code - backup\2024.09.03.21.00\io\utility\format\format.cpp
+
+1724561730 f:\code - backup\2024.09.03.21.00\io\utility\stream\stream.h
+	"binary_stream.h"
+	"stream_view.h"
+	"stream_chunk_view.h"
+
+1724579846 f:\code - backup\2024.09.03.21.00\io\utility\stream\binary_stream.h
+	"binary_stream.cpp"
+
+1724562001 f:\code - backup\2024.09.03.21.00\io\utility\stream\binary_stream.cpp
+
+1723685580 f:\code - backup\2024.09.03.21.00\io\utility\stream\stream_view.h
+	"stream_view.cpp"
+
+1723686518 f:\code - backup\2024.09.03.21.00\io\utility\stream\stream_view.cpp
+
+1724561585 f:\code - backup\2024.09.03.21.00\io\utility\stream\stream_chunk_view.h
+	"stream_chunk_view.cpp"
+
+1724561540 f:\code - backup\2024.09.03.21.00\io\utility\stream\stream_chunk_view.cpp
+
+1725172459 f:\code - backup\2024.09.03.21.00\io\file\file.h
+	"system/path.h"
+	"system/operation.h"
+	"read_write/file_base/file_global.h"
+	"read_write/file_base/file_base.h"
+	"read_write/file_base/file_stream.h"
+	"read_write/file_class/file_bmp.h"
+	"read_write/file_class/file_csv.h"
+	"read_write/file_class/file_html.h"
+	"read_write/file_class/file_idx.h"
+	"read_write/file_class/file_json.h"
+	"read_write/file_class/file_txt.h"
+	"read_write/file_class/file_wav.h"
+
+1725172434 f:\code - backup\2024.09.03.21.00\io\file\system\path.h
+	"path.cpp"
+
+1724989094 f:\code - backup\2024.09.03.21.00\io\file\system\path.cpp
+
+1725172421 f:\code - backup\2024.09.03.21.00\io\file\system\operation.h
+	"operation.cpp"
+
+1725185541 f:\code - backup\2024.09.03.21.00\io\file\system\operation.cpp
+
+1723768403 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_base\file_global.h
+	"file_global.cpp"
+
+1723600318 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_base\file_global.cpp
+	"file_global.cpp"
+
+1724567046 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_base\file_base.h
+	"file_base.cpp"
+
+1724989040 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_base\file_base.cpp
+
+1724644767 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_base\file_stream.h
+	"file_stream.cpp"
+
+1724644915 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_base\file_stream.cpp
+
+1724567101 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_bmp.h
+	"file_bmp.cpp"
+
+1724568370 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_bmp.cpp
+
+1724567120 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_csv.h
+	"file_csv.cpp"
+
+1725361798 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_csv.cpp
+
+1722310843 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_html.h
+
+1722313098 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_idx.h
+
+1722310828 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_json.h
+
+1724567128 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_txt.h
+	"file_txt.cpp"
+
+1724568420 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_txt.cpp
+
+1723619082 f:\code - backup\2024.09.03.21.00\io\file\read_write\file_class\file_wav.h
+
+1724746478 f:\code - backup\2024.09.03.21.00\io\network\network.h
+	"url/url.h"
+	"send_receive/http_base/http_global.h"
+	"send_receive/http_base/http_handle_windows.h"
+	"send_receive/http_base/http_handle_linux.h"
+	"send_receive/http_base/http_buf.h"
+	"send_receive/http_base/http_stream.h"
+	"send_receive/http_class/http.h"
+	"send_receive/http_class/https.h"
+
+1724746578 f:\code - backup\2024.09.03.21.00\io\network\url\url.h
+	"url.cpp"
+
+1724344715 f:\code - backup\2024.09.03.21.00\io\network\url\url.cpp
+
+1724428387 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_global.h
+
+1724751663 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_handle_windows.h
+	"http_handle_windows.cpp"
+
+1724761701 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_handle_windows.cpp
+	"http_buf.h"
+
+1724759811 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_buf.h
+	"http_buf.cpp"
+
+1724906430 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_buf.cpp
+
+1723185841 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_handle_linux.h
+
+1724751630 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_stream.h
+	"http_stream.cpp"
+
+1724751634 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_base\http_stream.cpp
+
+1724906624 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_class\http.h
+	"http.cpp"
+
+1724906604 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_class\http.cpp
+
+1724428361 f:\code - backup\2024.09.03.21.00\io\network\send_receive\http_class\https.h
+
+1725959732 f:\code\math\arithmetic\complex\floor_ceil_round.cpp
+
+1727615053 f:\code\math\arithmetic\complex\log_log2_log10_ln.cpp
+
+1727615445 f:\code\math\arithmetic\float\log_log2_log10_ln.cpp
+
+1727615565 f:\code\math\arithmetic\int\log_log2_log10_ln.cpp
+
+1727615714 f:\code\math\arithmetic\polar\log_log2_log10_ln.cpp
+
+1725459554 f:\code\math\linear\eigen\eigen.cpp
+
+1726032068 f:\code\container\array\array_view\array_type_view.cpp
+
+1727619110 f:\code\math\linear\third-party\eigen.cpp
+
+1727619187 f:\code\math\linear\1d\fft.cpp
+
+1727617637 f:\code\math\linear\2d\evd.cpp
+
+1727617725 f:\code\math\linear\2d\lu.cpp
+
+1727617902 f:\code\math\linear\2d\qr.cpp
+
+1727618166 f:\code\math\linear\2d\svd.cpp
+
+1725552155 f:\code\math\linear\1d\multiply.cpp
+
+1727618165 f:\code\math\linear\2d\tr.cpp
+
+1727618134 f:\code\math\linear\2d\singular.cpp
+
+1727615636 f:\code\math\arithmetic\int\pow_sqrt_exp_exp2.cpp
+
+1727616029 f:\code\math\arithmetic\float\pow_sqrt_exp_exp2.cpp
+
+1725959629 f:\code\math\arithmetic\angle\abs.cpp
+
+1727615075 f:\code\math\arithmetic\complex\pow_sqrt_exp_exp2.cpp
+
+1727615717 f:\code\math\arithmetic\polar\pow_sqrt_exp_exp2.cpp
+
+1727616207 f:\code\math\linear\1d\cross.cpp
+
+1727616885 f:\code\math\linear\1d\tensor.cpp
+
+1727617860 f:\code\math\linear\2d\operator.cpp
+
+1727616765 f:\code\math\linear\1d\norm.cpp
+
+1727617725 f:\code\math\linear\2d\norm.cpp
+
+1726119977 f:\code\neuron\interface.h
+	"../container/interface.h"
+	"../math/interface.h"
+	"cnn/cnn.h"
+	"fcn/fcn.h"
+	"transformer/transformer.h"
+
+1725963858 f:\code\neuron\cnn\cnn.h
+
+1725945437 f:\code\neuron\cnn\cnn.cpp
+
+1725938203 f:\code\neuron\transformer\transformer.h
+
+1727619225 f:\code\math\linear\2d\convolve.cpp
+
+1727622585 f:\code\io\file\read_write\file_class\file_idx.cpp
+
+1726144373 f:\code\neuron\fcn\fcn.h
+	"fcn.cpp"
+
+1726150313 f:\code\neuron\fcn\fcn.cpp
+
+1726150111 f:\code\basic\typedef.h
+
+1727623481 f:\code\io\utility\stream\binary_stream_view.h
+	"binary_stream_view.cpp"
+
+1727623536 f:\code\io\utility\stream\binary_stream_view.cpp
+
+1727623088 f:\code\io\utility\stream\chunked_binary_stream_view.h
+	"chunked_binary_stream_view.cpp"
+
+1727665483 f:\code\io\utility\stream\chunked_binary_stream_view.cpp
+
+1726230160 source:f:\code\anonymous\math.cpp
+
+1726227180 f:\code\anonymous\math.cpp
+
+1726468191 f:\code\neural\utility\utility.h
+	"utility.cpp"
+
+1726468195 f:\code\neural\utility\utility.cpp
+
+1725963858 f:\code\neural\cnn\cnn.h
+
+1726479244 f:\code\neural\fcn\fcn.h
+	"fcn.cpp"
+
+1726479289 f:\code\neural\fcn\fcn.cpp
+
+1725938203 f:\code\neural\transformer\transformer.h
+
+1727059050 source:f:\code\basic\interface.cpp
+	<algorithm>
+	<chrono>
+	<concepts>
+	<csignal>
+	<filesystem>
+	<format>
+	<fstream>
+	<iostream>
+	<iomanip>
+	<map>
+	<new>
+	<ranges>
+	<regex>
+	<stacktrace>
+	<stdfloat>
+	<string>
+	<text_encoding>
+	<thread>
+	<utility>
+	<cxxabi.h>
+	<windows.h>
+	<winhttp.h>
+	<tbb/tbb.h>
+	<boost/date_time.hpp>
+	<boost/locale.hpp>
+	<eigen3/Eigen/Eigen>
+	<eigen3/unsupported/Eigen/FFT>
+	"abi.h"
+	"concept.h"
+	"exception.h"
+	"range.h"
+	"typedef.h"
+	"utility.h"
+
+1727622219 f:\code\io\file\read_write\file_base\file_interface.h
+	"file_interface.cpp"
+
+1727622230 f:\code\io\file\read_write\file_base\file_interface.cpp
+
+1727685830 f:\code\neural\model\model.h
+	"sequence/sequence_model.h"
+
+1727674592 f:\code\neural\layer\layer.h
+	"activate/relu_layer.h"
+	"activate/sigmoid_layer.h"
+	"activate/softmax_layer.h"
+	"linear/linear_layer.h"
+
+1727674557 f:\code\neural\layer\activate\relu_layer.h
+	"relu_layer.cpp"
+
+1727677841 f:\code\neural\layer\activate\relu_layer.cpp
+
+1727674609 f:\code\neural\layer\activate\sigmoid_layer.h
+	"sigmoid_layer.cpp"
+
+1727677538 f:\code\neural\layer\activate\sigmoid_layer.cpp
+
+1727674630 f:\code\neural\layer\activate\softmax_layer.h
+	"softmax_layer.cpp"
+
+1727677553 f:\code\neural\layer\activate\softmax_layer.cpp
+
+1727674731 f:\code\neural\layer\linear\linear_layer.h
+	"linear_layer.cpp"
+
+1727674792 f:\code\neural\layer\linear\linear_layer.cpp
+
+1727676520 f:\code\neural\optimizer\optimizer.h
+	"sgd/sgd_optimizer.h"
+
+1727677601 f:\code\neural\optimizer\sgd\sgd_optimizer.h
+	"sgd_optimizer.cpp"
+
+1727685854 f:\code\neural\optimizer\sgd\sgd_optimizer.cpp
+
+1727686006 f:\code\neural\model\sequence\sequence_model.h
+	"sequence_model.cpp"
+
+1727685854 f:\code\neural\model\sequence\sequence_model.cpp
+
+1732607515 f:\code\generic\basic\interface.h
+	<algorithm>
+	<chrono>
+	<concepts>
+	<csignal>
+	<filesystem>
+	<format>
+	<fstream>
+	<iostream>
+	<iomanip>
+	<map>
+	<new>
+	<ranges>
+	<regex>
+	<stacktrace>
+	<stdfloat>
+	<string>
+	<text_encoding>
+	<thread>
+	<utility>
+	<stdexec/execution.hpp>
+	<exec/static_thread_pool.hpp>
+	<exec/timed_scheduler.hpp>
+	<exec/when_any.hpp>
+	<execpools/tbb/tbb_thread_pool.hpp>
+	<cxxabi.h>
+	<winsock2.h>
+	<windows.h>
+	<tchar.h>
+	<tbb/tbb.h>
+	<boost/asio.hpp>
+	<boost/asio/ssl.hpp>
+	<boost/beast.hpp>
+	<boost/date_time.hpp>
+	<boost/gil.hpp>
+	<boost/gil/extension/io/bmp.hpp>
+	<boost/gil/extension/io/jpeg.hpp>
+	<boost/gil/extension/io/png.hpp>
+	<boost/gil/extension/io/pnm.hpp>
+	<boost/gil/extension/io/tiff.hpp>
+	<boost/gil/extension/io/targa.hpp>
+	<boost/iostreams/filtering_stream.hpp>
+	<boost/iostreams/filter/bzip2.hpp>
+	<boost/iostreams/filter/gzip.hpp>
+	<boost/iostreams/filter/zlib.hpp>
+	<boost/locale.hpp>
+	<boost/phoenix.hpp>
+	<boost/process/v2.hpp>
+	<boost/spirit/home/qi.hpp>
+	<boost/spirit/home/x3.hpp>
+	<eigen3/Eigen/Eigen>
+	<eigen3/unsupported/Eigen/FFT>
+	<mpg123.h>
+	<FLAC++/all.h>
+	"abi.h"
+	"concept.h"
+	"exception.h"
+	"range.h"
+	"typedef.h"
+	"utility.h"
+
+1730863773 f:\code\generic\basic\abi.h
+	"abi.cpp"
+
+1732611828 f:\code\generic\basic\abi.cpp
+
+1731296518 f:\code\generic\basic\concept.h
+	"concept.hpp"
+
+1727883740 f:\code\generic\basic\concept.cpp
+
+1732168514 f:\code\generic\basic\exception.h
+	"concept.h"
+	"abi.h"
+	"exception.hpp"
+	"exception.cpp"
+
+1732611828 f:\code\generic\basic\exception.cpp
+
+1730863288 f:\code\generic\basic\range.h
+	"error.h"
+	"concept.h"
+	"range.hpp"
+
+1727450459 f:\code\generic\basic\range.cpp
+
+1726150111 f:\code\generic\basic\typedef.h
+
+1730863503 f:\code\generic\basic\utility.h
+	"concept.h"
+	"utility.hpp"
+
+1730703767 f:\code\generic\basic\utility.cpp
+
+1729262404 f:\code\generic\container\interface.h
+	"../basic/interface.h"
+	"discrete/discrete.h"
+	"array/array.h"
+	"chain/chain.h"
+	"collection/collection.h"
+	"polymorphic/polymorphic.h"
+	"string/string.h"
+	"utility/utility.h"
+
+1729257288 f:\code\generic\container\discrete\discrete.h
+	"discrete_base/discrete_global.h"
+	"discrete_class/pair.h"
+	"discrete_class/tuple.h"
+
+1730864483 f:\code\generic\container\discrete\discrete_base\discrete_global.h
+	"discrete_global.hpp"
+
+1729257288 f:\code\generic\container\discrete\discrete_base\discrete_global.cpp
+
+1730864488 f:\code\generic\container\discrete\discrete_class\pair.h
+	"pair.hpp"
+
+1730823292 f:\code\generic\container\discrete\discrete_class\pair.cpp
+
+1730864492 f:\code\generic\container\discrete\discrete_class\tuple.h
+	"tuple.hpp"
+
+1729257288 f:\code\generic\container\discrete\discrete_class\tuple.cpp
+
+1729257288 f:\code\generic\container\array\array.h
+	"../chain/chain_class/queue.h"
+	"array_base/array_global.h"
+	"array_base/array_algo_1d.h"
+	"array_base/array_algo_nd.h"
+	"array_class/array_1d.h"
+	"array_class/array_-1d.h"
+	"array_class/array_nd.h"
+	"array_class/static_array.h"
+	"array_class/inplace_array.h"
+	"array_view/array_coordinate.h"
+	"array_view/array_axis_view.h"
+	"array_view/array_filter_view.h"
+	"array_view/array_flatten_view.h"
+	"array_view/array_line.h"
+	"array_view/array_range_view.h"
+	"array_view/array_reshape_view.h"
+	"array_view/array_span_view.h"
+	"array_view/array_type_view.h"
+	"array_view/array_view_iterator.h"
+
+1730864398 f:\code\generic\container\chain\chain_class\queue.h
+	"queue.hpp"
+
+1729257288 f:\code\generic\container\chain\chain_class\queue.cpp
+
+1730864230 f:\code\generic\container\array\array_base\array_global.h
+	"array_global.hpp"
+
+1729257288 f:\code\generic\container\array\array_base\array_global.cpp
+
+1730864368 f:\code\generic\container\array\array_base\array_algo_1d.h
+	"array_algo_1d.hpp"
+
+1729257288 f:\code\generic\container\array\array_base\array_algo_1d.cpp
+	"../array_class/array_1d.h"
+	"../array_class/inplace_array.h"
+
+1731605711 f:\code\generic\container\array\array_class\array_1d.h
+	"array_1d.hpp"
+
+1730187679 f:\code\generic\container\array\array_class\array_1d.cpp
+
+1731605738 f:\code\generic\container\array\array_class\inplace_array.h
+	"inplace_array.hpp"
+
+1730187683 f:\code\generic\container\array\array_class\inplace_array.cpp
+
+1730864208 f:\code\generic\container\array\array_base\array_algo_nd.h
+	"array_algo_nd.hpp"
+
+1729257288 f:\code\generic\container\array\array_base\array_algo_nd.cpp
+
+1732085066 f:\code\generic\container\array\array_class\array_-1d.h
+	"array_-1d.hpp"
+
+1729257288 f:\code\generic\container\array\array_class\array_-1d.cpp
+
+1732085056 f:\code\generic\container\array\array_class\array_nd.h
+	"array_nd.hpp"
+
+1729257288 f:\code\generic\container\array\array_class\array_nd.cpp
+
+1725521994 f:\code\generic\container\array\array_class\fixed_array.h
+	"fixed_array.cpp"
+
+1724991951 f:\code\generic\container\array\array_class\fixed_array.cpp
+
+1730864264 f:\code\generic\container\array\array_view\array_coordinate.h
+	"array_coordinate.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_coordinate.cpp
+
+1730864260 f:\code\generic\container\array\array_view\array_axis_view.h
+	"array_axis_view.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_axis_view.cpp
+
+1732605066 f:\code\generic\container\array\array_view\array_filter_view.h
+	"array_filter_view.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_filter_view.cpp
+
+1730864272 f:\code\generic\container\array\array_view\array_flatten_view.h
+	"array_flatten_view.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_flatten_view.cpp
+
+1732085095 f:\code\generic\container\array\array_view\array_line.h
+	"array_line.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_line.cpp
+
+1732605103 f:\code\generic\container\array\array_view\array_range_view.h
+	"array_range_view.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_range_view.cpp
+
+1730864285 f:\code\generic\container\array\array_view\array_reshape_view.h
+	"array_reshape_view.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_reshape_view.cpp
+
+1732085108 f:\code\generic\container\array\array_view\array_span_view.h
+	"array_span_view.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_span_view.cpp
+
+1730864295 f:\code\generic\container\array\array_view\array_type_view.h
+	"array_type_view.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_type_view.cpp
+
+1730864299 f:\code\generic\container\array\array_view\array_view_iterator.h
+	"array_view_iterator.hpp"
+
+1729257288 f:\code\generic\container\array\array_view\array_view_iterator.cpp
+
+1729257288 f:\code\generic\container\chain\chain.h
+	"../array/array.h"
+	"../discrete/discrete.h"
+	"chain_base/chain_global.h"
+	"chain_class/deque.h"
+	"chain_class/list.h"
+	"chain_class/priority_queue.h"
+	"chain_class/queue.h"
+	"chain_class/stack.h"
+
+1729262250 f:\code\generic\container\chain\chain_base\chain_global.h
+
+1731605075 f:\code\generic\container\chain\chain_class\deque.h
+	"deque.hpp"
+
+1729257288 f:\code\generic\container\chain\chain_class\deque.cpp
+
+1730864387 f:\code\generic\container\chain\chain_class\list.h
+	"list.hpp"
+
+1729257288 f:\code\generic\container\chain\chain_class\list.cpp
+
+1730864395 f:\code\generic\container\chain\chain_class\priority_queue.h
+	"priority_queue.hpp"
+
+1729257288 f:\code\generic\container\chain\chain_class\priority_queue.cpp
+
+1730864401 f:\code\generic\container\chain\chain_class\stack.h
+	"stack.hpp"
+
+1729257288 f:\code\generic\container\chain\chain_class\stack.cpp
+
+1730912554 f:\code\generic\container\collection\collection.h
+	"collection_base/collection_global.h"
+	"collection_base/collection_algo.h"
+	"collection_class/set.h"
+	"collection_class/map.h"
+	"collection_data/map_pair/map_pair.h"
+	"collection_data/flat/sorted_vector.h"
+	"collection_data/tree/tree.h"
+	"collection_view/collection_keys_view.h"
+	"collection_view/collection_values_view.h"
+
+1730864412 f:\code\generic\container\collection\collection_base\collection_global.h
+	"collection_global.hpp"
+
+1729257288 f:\code\generic\container\collection\collection_base\collection_global.cpp
+
+1730864408 f:\code\generic\container\collection\collection_base\collection_algo.h
+	"collection_algo.hpp"
+
+1729257288 f:\code\generic\container\collection\collection_base\collection_algo.cpp
+
+1731605820 f:\code\generic\container\collection\collection_class\set.h
+	"set.hpp"
+
+1730187542 f:\code\generic\container\collection\collection_class\set.cpp
+
+1731605643 f:\code\generic\container\collection\collection_class\map.h
+	"map.hpp"
+
+1730187546 f:\code\generic\container\collection\collection_class\map.cpp
+
+1730864447 f:\code\generic\container\collection\collection_data\map_pair\map_pair.h
+	"map_pair.hpp"
+
+1730823653 f:\code\generic\container\collection\collection_data\map_pair\map_pair.cpp
+
+1731605277 f:\code\generic\container\collection\collection_data\flat\sorted_vector.h
+	"sorted_vector.hpp"
+
+1729257288 f:\code\generic\container\collection\collection_data\flat\sorted_vector.cpp
+
+1730908644 f:\code\generic\container\collection\collection_data\tree\tree.h
+	"binary_node_interface.h"
+	"binary_tree.h"
+	"binary_search_tree.h"
+	"redblack_tree.h"
+
+1730910544 f:\code\generic\container\collection\collection_data\tree\binary_tree.h
+	"binary_tree.hpp"
+
+1729437004 f:\code\generic\container\collection\collection_data\tree\binary_tree.cpp
+
+1730909203 f:\code\generic\container\collection\collection_data\tree\binary_search_tree.h
+	"binary_search_tree.hpp"
+
+1729257288 f:\code\generic\container\collection\collection_data\tree\binary_search_tree.cpp
+
+1730911903 f:\code\generic\container\collection\collection_data\tree\redblack_tree.h
+	"redblack_tree.hpp"
+
+1729257288 f:\code\generic\container\collection\collection_data\tree\redblack_tree.cpp
+
+1730864469 f:\code\generic\container\collection\collection_view\collection_keys_view.h
+	"collection_keys_view.hpp"
+
+1729257288 f:\code\generic\container\collection\collection_view\collection_keys_view.cpp
+
+1730864473 f:\code\generic\container\collection\collection_view\collection_values_view.h
+	"collection_values_view.hpp"
+
+1729257288 f:\code\generic\container\collection\collection_view\collection_values_view.cpp
+
+1729257288 f:\code\generic\container\polymorphic\polymorphic.h
+	"polymorphic_class/any.h"
+	"polymorphic_class/function.h"
+	"polymorphic_class/optional.h"
+	"polymorphic_class/property_tree.h"
+	"polymorphic_class/variant.h"
+
+1731045149 f:\code\generic\container\polymorphic\polymorphic_class\any.h
+	"any.hpp"
+
+1730824175 f:\code\generic\container\polymorphic\polymorphic_class\any.cpp
+
+1730864626 f:\code\generic\container\polymorphic\polymorphic_class\function.h
+	"function.hpp"
+
+1729257288 f:\code\generic\container\polymorphic\polymorphic_class\function.cpp
+
+1731606167 f:\code\generic\container\polymorphic\polymorphic_class\optional.h
+	"optional.hpp"
+
+1730824146 f:\code\generic\container\polymorphic\polymorphic_class\optional.cpp
+
+1731606287 f:\code\generic\container\polymorphic\polymorphic_class\variant.h
+	"variant.hpp"
+
+1730824298 f:\code\generic\container\polymorphic\polymorphic_class\variant.cpp
+
+1729324713 f:\code\generic\container\string\string.h
+	"../array/array.h"
+	"string_base/string_global.h"
+	"string_base/string_algo.h"
+	"string_class/string.h"
+	"string_regex/regex.h"
+	"string_view/string_range_view.h"
+	"string_view/string_view.h"
+
+1730867371 f:\code\generic\container\string\string_base\string_global.h
+	"string_global.hpp"
+
+1729257288 f:\code\generic\container\string\string_base\string_global.cpp
+
+1730867366 f:\code\generic\container\string\string_base\string_algo.h
+	"string_algo.hpp"
+
+1730703389 f:\code\generic\container\string\string_base\string_algo.cpp
+	"../string_class/string.h"
+
+1729264807 f:\code\generic\container\string\string_class\basic_string.h
+	"basic_string.cpp"
+
+1729257288 f:\code\generic\container\string\string_class\basic_string.cpp
+
+1729257288 f:\code\generic\container\string\string_base\string_regex.h
+	"string_regex.cpp"
+
+1729257288 f:\code\generic\container\string\string_base\string_regex.cpp
+
+1729264814 f:\code\generic\container\string\string_view\basic_string_range_view.h
+	"basic_string_range_view.cpp"
+
+1729257288 f:\code\generic\container\string\string_view\basic_string_range_view.cpp
+
+1729264835 f:\code\generic\container\string\string_view\basic_string_view.h
+	"basic_string_view.cpp"
+
+1729257288 f:\code\generic\container\string\string_view\basic_string_view.cpp
+
+1729257288 f:\code\generic\container\utility\utility.h
+	"constexpr_index/constexpr_index.h"
+	"format/format.h"
+	"structured_binding/structured_binding.h"
+
+1730867413 f:\code\generic\container\utility\constexpr_index\constexpr_index.h
+	"constexpr_index.hpp"
+
+1729257288 f:\code\generic\container\utility\constexpr_index\constexpr_index.cpp
+
+1730867419 f:\code\generic\container\utility\format\format.h
+	"format.hpp"
+
+1729257288 f:\code\generic\container\utility\format\format.cpp
+
+1730867425 f:\code\generic\container\utility\structured_binding\structured_binding.h
+	"structured_binding.hpp"
+
+1729257288 f:\code\generic\container\utility\structured_binding\structured_binding.cpp
+
+1731824454 f:\code\generic\math\interface.h
+	"../container/interface.h"
+	"numeric/numeric.h"
+	"geometric/geometric.h"
+	"arithmetic/arithmetic.h"
+	"linear/linear.h"
+	"random/random.h"
+
+1730869778 f:\code\generic\math\numeric\numeric.h
+	"fraction.hpp"
+
+1729509408 f:\code\generic\math\numeric\fraction.cpp
+
+1730869766 f:\code\generic\math\geometric\geometric.h
+	"degree.hpp"
+	"radian.hpp"
+	"complex.hpp"
+	"polar.hpp"
+
+1729096031 f:\code\generic\math\geometric\degree.cpp
+
+1729096348 f:\code\generic\math\geometric\radian.cpp
+
+1729617356 f:\code\generic\math\geometric\complex.cpp
+
+1729531064 f:\code\generic\math\geometric\polar.cpp
+
+1730869759 f:\code\generic\math\arithmetic\arithmetic.h
+	"int/abs.hpp"
+	"int/log_log2_log10_ln.hpp"
+	"int/mod.hpp"
+	"int/pow_sqrt_exp_exp2.hpp"
+	"float/abs.hpp"
+	"float/floor_ceil_round.hpp"
+	"float/log_log2_log10_ln.hpp"
+	"float/mod.hpp"
+	"float/pow_sqrt_exp_exp2.hpp"
+	"angle/abs.hpp"
+	"angle/arcsin_arccos_arctan_arccot_arcsec_arccsc.hpp"
+	"angle/mod.hpp"
+	"angle/sin_cos_tan_cot_sec_csc.hpp"
+	"complex/abs_norm.hpp"
+	"complex/conj.hpp"
+	"complex/floor_ceil_round.hpp"
+	"complex/log_log2_log10_ln.hpp"
+	"complex/pow_sqrt_exp_exp2.hpp"
+	"polar/abs_norm.hpp"
+	"polar/conj.hpp"
+	"polar/log_log2_log10_ln.hpp"
+	"polar/pow_sqrt_exp_exp2.hpp"
+	"std/common_type.hpp"
+	"std/numeric_limits.hpp"
+
+1725959842 f:\code\generic\math\arithmetic\int\abs.cpp
+
+1729512216 f:\code\generic\math\arithmetic\int\log_log2_log10_ln.cpp
+
+1727615601 f:\code\generic\math\arithmetic\int\mod.cpp
+
+1727615636 f:\code\generic\math\arithmetic\int\pow_sqrt_exp_exp2.cpp
+
+1725961318 f:\code\generic\math\arithmetic\float\abs.cpp
+
+1727615305 f:\code\generic\math\arithmetic\float\floor_ceil_round.cpp
+
+1729512218 f:\code\generic\math\arithmetic\float\log_log2_log10_ln.cpp
+
+1727615505 f:\code\generic\math\arithmetic\float\mod.cpp
+
+1729132083 f:\code\generic\math\arithmetic\float\pow_sqrt_exp_exp2.cpp
+
+1725959629 f:\code\generic\math\arithmetic\angle\abs.cpp
+
+1729512154 f:\code\generic\math\arithmetic\angle\sin_cos_tan_cot_sec_csc.cpp
+
+1729512063 f:\code\generic\math\arithmetic\angle\arcsin_arccos_arctan_arccot_arcsec_arccsc.cpp
+
+1729097610 f:\code\generic\math\arithmetic\complex\abs_norm.cpp
+
+1725959728 f:\code\generic\math\arithmetic\complex\conj.cpp
+
+1725959732 f:\code\generic\math\arithmetic\complex\floor_ceil_round.cpp
+
+1727615053 f:\code\generic\math\arithmetic\complex\log_log2_log10_ln.cpp
+
+1727615075 f:\code\generic\math\arithmetic\complex\pow_sqrt_exp_exp2.cpp
+
+1725959875 f:\code\generic\math\arithmetic\polar\abs_norm.cpp
+
+1725961254 f:\code\generic\math\arithmetic\polar\conj.cpp
+
+1727615714 f:\code\generic\math\arithmetic\polar\log_log2_log10_ln.cpp
+
+1729136839 f:\code\generic\math\arithmetic\polar\pow_sqrt_exp_exp2.cpp
+
+1729068736 f:\code\generic\math\arithmetic\std\common_type.cpp
+
+1721110016 f:\code\generic\math\arithmetic\std\numeric_limits.cpp
+
+1731838734 f:\code\generic\math\linear\linear.h
+	"third_party/eigen.hpp"
+	"1d/convolve.hpp"
+	"1d/cross.hpp"
+	"1d/dct.hpp"
+	"1d/dot.hpp"
+	"1d/fft.hpp"
+	"1d/norm.hpp"
+	"1d/operator.hpp"
+	"1d/tensor.hpp"
+	"2d/convolve.hpp"
+	"2d/det.hpp"
+	"2d/eigen.hpp"
+	"2d/evd.hpp"
+	"2d/inverse.hpp"
+	"2d/lu.hpp"
+	"2d/norm.hpp"
+	"2d/operator.hpp"
+	"2d/qr.hpp"
+	"2d/rank.hpp"
+	"2d/singular.hpp"
+	"2d/svd.hpp"
+	"2d/tr.hpp"
+	"nd/operator.hpp"
+	"nd/swap.hpp"
+	"nd/transpose.hpp"
+
+1727619110 f:\code\generic\math\linear\third-party\eigen.cpp
+
+1727619150 f:\code\generic\math\linear\1d\convolve.cpp
+
+1729529668 f:\code\generic\math\linear\1d\cross.cpp
+
+1727616285 f:\code\generic\math\linear\1d\dot.cpp
+
+1727619187 f:\code\generic\math\linear\1d\fft.cpp
+
+1729531610 f:\code\generic\math\linear\1d\norm.cpp
+
+1727616857 f:\code\generic\math\linear\1d\operator.cpp
+
+1727616885 f:\code\generic\math\linear\1d\tensor.cpp
+
+1727619225 f:\code\generic\math\linear\2d\convolve.cpp
+
+1727617305 f:\code\generic\math\linear\2d\det.cpp
+
+1727617589 f:\code\generic\math\linear\2d\eigen.cpp
+
+1727617637 f:\code\generic\math\linear\2d\evd.cpp
+
+1727617663 f:\code\generic\math\linear\2d\inverse.cpp
+
+1727617725 f:\code\generic\math\linear\2d\lu.cpp
+
+1729531935 f:\code\generic\math\linear\2d\norm.cpp
+
+1727617860 f:\code\generic\math\linear\2d\operator.cpp
+
+1727617902 f:\code\generic\math\linear\2d\qr.cpp
+
+1727618007 f:\code\generic\math\linear\2d\rank.cpp
+
+1727618134 f:\code\generic\math\linear\2d\singular.cpp
+
+1727618166 f:\code\generic\math\linear\2d\svd.cpp
+
+1727618165 f:\code\generic\math\linear\2d\tr.cpp
+
+1728737769 f:\code\generic\math\linear\nd\operator.cpp
+
+1727618536 f:\code\generic\math\linear\nd\swap.cpp
+
+1727618565 f:\code\generic\math\linear\nd\transpose.cpp
+
+1730869784 f:\code\generic\math\random\random.h
+	"engine/random_engine_algo.hpp"
+	"engine/linear_congruential_engine.hpp"
+	"engine/mersenne_twister_engine.hpp"
+	"engine/subtract_with_carry_engine.hpp"
+	"engine/discard_block_engine.hpp"
+	"engine/shuffle_order_engine.hpp"
+	"engine/floating_point_engine.hpp"
+	"container/array.hpp"
+	"distribution/uniform_distribution.hpp"
+	"distribution/random.hpp"
+	"distribution/bernoulli_distribution.hpp"
+	"distribution/binomial_distribution.hpp"
+	"distribution/geometric_distribution.hpp"
+	"distribution/poisson_distribution.hpp"
+	"distribution/exponential_distribution.hpp"
+	"distribution/gamma_distribution.hpp"
+	"distribution/normal_distribution.hpp"
+	"distribution/chi_squared_distribution.hpp"
+	"distribution/fisher_f_distribution.hpp"
+	"distribution/student_t_distribution.hpp"
+
+1715747250 f:\code\generic\math\random\engine\random_engine_algo.cpp
+
+1727618669 f:\code\generic\math\random\engine\linear_congruential_engine.cpp
+
+1727618712 f:\code\generic\math\random\engine\mersenne_twister_engine.cpp
+
+1727618736 f:\code\generic\math\random\engine\subtract_with_carry_engine.cpp
+
+1725470438 f:\code\generic\math\random\engine\discard_block_engine.cpp
+
+1717429924 f:\code\generic\math\random\engine\shuffle_order_engine.cpp
+
+1725470432 f:\code\generic\math\random\engine\floating_point_engine.cpp
+
+1727423942 f:\code\generic\math\random\container\array.cpp
+
+1727618804 f:\code\generic\math\random\distribution\uniform_distribution.cpp
+
+1727663521 f:\code\generic\math\random\distribution\random.cpp
+
+1725958547 f:\code\generic\math\random\distribution\bernoulli_distribution.cpp
+
+1725959189 f:\code\generic\math\random\distribution\binomial_distribution.cpp
+
+1725957882 f:\code\generic\math\random\distribution\geometric_distribution.cpp
+
+1725959218 f:\code\generic\math\random\distribution\poisson_distribution.cpp
+
+1725958567 f:\code\generic\math\random\distribution\exponential_distribution.cpp
+
+1727618751 f:\code\generic\math\random\distribution\gamma_distribution.cpp
+
+1727618757 f:\code\generic\math\random\distribution\normal_distribution.cpp
+
+1725958890 f:\code\generic\math\random\distribution\chi_squared_distribution.cpp
+
+1725958969 f:\code\generic\math\random\distribution\fisher_f_distribution.cpp
+
+1725959094 f:\code\generic\math\random\distribution\student_t_distribution.cpp
+
+1727883691 f:\code\specific\expr\interface.h
+	"../../generic/container/interface.h"
+	"numeric/numeric.h"
+	"symbolic/symbolic.h"
+
+1727884509 f:\code\specific\expr\numeric\numeric.h
+	"numeric.cpp"
+
+1727888157 f:\code\specific\expr\numeric\numeric.cpp
+
+1727879306 f:\code\specific\expr\symbolic\symbolic.h
+
+1727614978 f:\code\generic\math\arithmetic\angle\mod.cpp
+
+1731601600 f:\code\specific\spirit\interface.h
+	"../../generic/math/interface.h"
+	"numeric/numeric.h"
+	"symbolic/symbolic.h"
+
+1730870074 f:\code\specific\spirit\numeric\numeric.h
+	"numeric.hpp"
+
+1729577114 f:\code\specific\spirit\numeric\numeric.cpp
+
+1727879306 f:\code\specific\spirit\symbolic\symbolic.h
+
+1732598747 f:\code\generic\io\interface.h
+	"../container/interface.h"
+	"../math/interface.h"
+	"utility/utility.h"
+	"file/file.h"
+	"http/http.h"
+	"pipe/pipe.h"
+	"tcp_udp_icmp/tcp_udp_icmp.h"
+	"serial_port/serial_port.h"
+	"usb/usb.h"
+	"websocket/websocket.h"
+
+1732168346 f:\code\generic\io\utility\utility.h
+	"color/color.h"
+	"ip/ipv4.h"
+	"ip/ipv6.h"
+	"ip/url.h"
+	"time/time.h"
+	"stream/stream.h"
+	"format/format.h"
+
+1731920377 f:\code\generic\io\utility\color\color.h
+	"color.hpp"
+
+1729311848 f:\code\generic\io\utility\color\color.cpp
+
+1729316139 f:\code\generic\io\utility\time\time.h
+	"duration/duration.h"
+	"time_point/time_point.h"
+
+1731339985 f:\code\generic\io\utility\time\duration\duration.h
+	"duration.hpp"
+
+1729397803 f:\code\generic\io\utility\time\duration\duration.cpp
+
+1731339979 f:\code\generic\io\utility\time\time_point\time_point.h
+	"time_point.hpp"
+
+1729397880 f:\code\generic\io\utility\time\time_point\time_point.cpp
+
+1729170004 f:\code\generic\io\utility\stream\stream.h
+	"stream_view.h"
+	"binary_stream_view.h"
+	"chunked_binary_stream_view.h"
+
+1730868967 f:\code\generic\io\utility\stream\stream_view.h
+	"stream_view.hpp"
+
+1729170004 f:\code\generic\io\utility\stream\stream_view.cpp
+
+1730868946 f:\code\generic\io\utility\stream\binary_stream_view.h
+	"binary_stream_view.hpp"
+
+1729170004 f:\code\generic\io\utility\stream\binary_stream_view.cpp
+
+1730868955 f:\code\generic\io\utility\stream\chunked_binary_stream_view.h
+	"chunked_binary_stream_view.hpp"
+
+1729170004 f:\code\generic\io\utility\stream\chunked_binary_stream_view.cpp
+
+1730868894 f:\code\generic\io\utility\format\format.h
+	"format.hpp"
+
+1729397623 f:\code\generic\io\utility\format\format.cpp
+
+1732599374 f:\code\generic\io\file\file.h
+	"path/path.h"
+	"system/system.h"
+	"file_base/file_stream.h"
+	"third_party/boost_gil.hpp"
+	"file_class/file_interface.h"
+	"file_class/file_bmp.h"
+	"file_class/file_csv.h"
+	"file_class/file_html.h"
+	"file_class/file_idx.h"
+	"file_class/file_json.h"
+	"file_class/file_jpg.h"
+	"file_class/file_pcap.h"
+	"file_class/file_png.h"
+	"file_class/file_pnm.h"
+	"file_class/file_tiff.h"
+	"file_class/file_tga.h"
+	"file_class/file_txt.h"
+	"file_class/file_wav.h"
+
+1728401841 f:\code\generic\io\file\system\path.h
+	"path.cpp"
+
+1724989094 f:\code\generic\io\file\system\path.cpp
+
+1728401828 f:\code\generic\io\file\system\operation.h
+	"operation.cpp"
+
+1727661875 f:\code\generic\io\file\system\operation.cpp
+
+1728401585 f:\code\generic\io\file\read_write\file_base\file_stream.h
+	"file_stream.cpp"
+
+1727622266 f:\code\generic\io\file\read_write\file_base\file_stream.cpp
+
+1727622219 f:\code\generic\io\file\read_write\file_base\file_interface.h
+	"file_interface.cpp"
+
+1727622230 f:\code\generic\io\file\read_write\file_base\file_interface.cpp
+
+1728402830 f:\code\generic\io\file\read_write\file_class\file_bmp.h
+	"file_bmp.cpp"
+
+1727665773 f:\code\generic\io\file\read_write\file_class\file_bmp.cpp
+
+1728402840 f:\code\generic\io\file\read_write\file_class\file_csv.h
+	"file_csv.cpp"
+
+1727622517 f:\code\generic\io\file\read_write\file_class\file_csv.cpp
+
+1722310843 f:\code\generic\io\file\read_write\file_class\file_html.h
+
+1728402850 f:\code\generic\io\file\read_write\file_class\file_idx.h
+	"file_idx.cpp"
+
+1727622585 f:\code\generic\io\file\read_write\file_class\file_idx.cpp
+
+1728358224 f:\code\generic\io\file\read_write\file_class\file_json.h
+
+1728402869 f:\code\generic\io\file\read_write\file_class\file_txt.h
+	"file_txt.cpp"
+
+1727622601 f:\code\generic\io\file\read_write\file_class\file_txt.cpp
+
+1723619082 f:\code\generic\io\file\read_write\file_class\file_wav.h
+
+1726316960 f:\code\generic\io\network\network.h
+	"url/url.h"
+	"send_receive/http_base/http_handle_windows.h"
+	"send_receive/http_base/http_handle_linux.h"
+	"send_receive/http_base/http_buf.h"
+	"send_receive/http_base/http_stream.h"
+	"send_receive/http_class/http.h"
+	"send_receive/http_class/https.h"
+
+1728402398 f:\code\generic\io\network\url\url.h
+	"url.cpp"
+
+1727955767 f:\code\generic\io\network\url\url.cpp
+
+1728401867 f:\code\generic\io\network\send_receive\http_base\http_handle_windows.h
+	"http_handle_windows.cpp"
+
+1724761701 f:\code\generic\io\network\send_receive\http_base\http_handle_windows.cpp
+	"http_buf.h"
+
+1728401856 f:\code\generic\io\network\send_receive\http_base\http_buf.h
+	"http_buf.cpp"
+
+1727622677 f:\code\generic\io\network\send_receive\http_base\http_buf.cpp
+
+1723185841 f:\code\generic\io\network\send_receive\http_base\http_handle_linux.h
+
+1728401875 f:\code\generic\io\network\send_receive\http_base\http_stream.h
+	"http_stream.cpp"
+
+1726495542 f:\code\generic\io\network\send_receive\http_base\http_stream.cpp
+
+1728401884 f:\code\generic\io\network\send_receive\http_class\http.h
+	"http.cpp"
+
+1726723565 f:\code\generic\io\network\send_receive\http_class\http.cpp
+
+1724428361 f:\code\generic\io\network\send_receive\http_class\https.h
+
+1727877440 f:\code\specific\stock\interface.h
+	"../../generic/io/interface.h"
+	"database.h"
+
+1728403013 f:\code\specific\stock\database.h
+	"database.cpp"
+
+1732611828 f:\code\specific\stock\database.cpp
+
+1728354363 f:\code\generic\math\calculus\calculus.h
+	"solve.cpp"
+
+1728357008 f:\code\generic\math\calculus\solve.cpp
+
+1731605747 f:\code\generic\container\array\array_class\static_array.h
+	"static_array.hpp"
+
+1729257288 f:\code\generic\container\array\array_class\static_array.cpp
+
+1731606218 f:\code\generic\container\polymorphic\polymorphic_class\property_tree.h
+	"variant.h"
+	"property_tree.hpp"
+
+1729257288 f:\code\generic\container\polymorphic\polymorphic_class\property_tree.cpp
+
+1729170215 f:\code\specific\neural\interface.h
+	"../../generic/math/interface.h"
+	"layer/layer.h"
+	"loss/loss.h"
+	"model/model.h"
+	"optimizer/optimizer.h"
+	"utility/initialize/initialize.h"
+
+1728980723 f:\code\specific\neural\layer\layer.h
+	"convolve_layer.h"
+	"linear_layer.h"
+	"max_pool_layer.h"
+	"relu_layer.h"
+	"sigmoid_layer.h"
+	"softmax_layer.h"
+
+1728540112 f:\code\specific\neural\layer\activate\relu_layer.h
+	"relu_layer.cpp"
+
+1728540136 f:\code\specific\neural\layer\activate\relu_layer.cpp
+
+1728541310 f:\code\specific\neural\layer\activate\sigmoid_layer.h
+	"sigmoid_layer.cpp"
+
+1728805783 f:\code\specific\neural\layer\activate\sigmoid_layer.cpp
+
+1728540536 f:\code\specific\neural\layer\activate\softmax_layer.h
+	"softmax_layer.cpp"
+
+1728879866 f:\code\specific\neural\layer\activate\softmax_layer.cpp
+
+1728541352 f:\code\specific\neural\layer\linear\linear_layer.h
+	"linear_layer.cpp"
+
+1728832336 f:\code\specific\neural\layer\linear\linear_layer.cpp
+
+1728914449 f:\code\specific\neural\model\model.h
+	"sequence_model.h"
+
+1728542218 f:\code\specific\neural\model\sequence\sequence_model.h
+	"sequence_model.cpp"
+
+1728737246 f:\code\specific\neural\model\sequence\sequence_model.cpp
+
+1728914470 f:\code\specific\neural\optimizer\optimizer.h
+	"adaptive_moment_estimation_optmizer.h"
+	"root_mean_square_propagation_optimizer.h"
+	"stochastic_gradient_descent_optimizer.h"
+
+1728833992 f:\code\specific\neural\optimizer\sgd\sgd.h
+	"sgd.cpp"
+
+1728548164 f:\code\specific\neural\optimizer\sgd\sgd.cpp
+
+1728881960 f:\code\specific\neural\layer\convolve_layer.h
+
+1730869840 f:\code\specific\neural\layer\linear_layer.h
+	"linear_layer.hpp"
+
+1729165130 f:\code\specific\neural\layer\linear_layer.cpp
+
+1728882000 f:\code\specific\neural\layer\max_pool_layer.h
+
+1730869845 f:\code\specific\neural\layer\relu_layer.h
+	"relu_layer.hpp"
+
+1729167643 f:\code\specific\neural\layer\relu_layer.cpp
+
+1730869848 f:\code\specific\neural\layer\sigmoid_layer.h
+	"sigmoid_layer.hpp"
+
+1729047362 f:\code\specific\neural\layer\sigmoid_layer.cpp
+
+1730869853 f:\code\specific\neural\layer\softmax_layer.h
+	"softmax_layer.hpp"
+
+1729145052 f:\code\specific\neural\layer\softmax_layer.cpp
+
+1730870036 f:\code\specific\neural\model\sequence_model.h
+	"sequence_model.hpp"
+
+1729164066 f:\code\specific\neural\model\sequence_model.cpp
+
+1728882474 f:\code\specific\neural\optimizer\adaptive_moment_estimation_optmizer.h
+
+1728882541 f:\code\specific\neural\optimizer\root_mean_square_propagation_optimizer.h
+
+1730870044 f:\code\specific\neural\optimizer\stochastic_gradient_descent_optimizer.h
+	"stochastic_gradient_descent_optimizer.hpp"
+
+1729166492 f:\code\specific\neural\optimizer\stochastic_gradient_descent_optimizer.cpp
+
+1730870056 f:\code\specific\neural\utility\initialize\initialize.h
+	"kaiming_normal_initialize.hpp"
+	"kaiming_uniform_initialize.hpp"
+	"normal_initialize.hpp"
+	"ones_initialize.hpp"
+	"orthogonal_initialize.hpp"
+	"sparse_initialize.hpp"
+	"uniform_initialize.hpp"
+	"xavier_normal_initialize.hpp"
+	"xavier_uniform_initialize.hpp"
+	"zeros_initialize.hpp"
+
+1729147793 f:\code\specific\neural\utility\initialize\kaiming_normal_initialize.cpp
+
+1729147814 f:\code\specific\neural\utility\initialize\kaiming_uniform_initialize.cpp
+
+1729148396 f:\code\specific\neural\utility\initialize\normal_initialize.cpp
+
+1729147829 f:\code\specific\neural\utility\initialize\ones_initialize.cpp
+
+1728911408 f:\code\specific\neural\utility\initialize\orthogonal_initialize.cpp
+
+1728912141 f:\code\specific\neural\utility\initialize\sparse_initialize.cpp
+
+1729147764 f:\code\specific\neural\utility\initialize\uniform_initialize.cpp
+
+1729147862 f:\code\specific\neural\utility\initialize\xavier_normal_initialize.cpp
+
+1729147866 f:\code\specific\neural\utility\initialize\xavier_uniform_initialize.cpp
+
+1729147841 f:\code\specific\neural\utility\initialize\zeros_initialize.cpp
+
+1728916673 f:\code\specific\neural\utility\loss\loss.h
+	"binary_cross_entropy_loss.cpp"
+	"cross_entropy_loss.cpp"
+	"mean_absolute_error_loss.cpp"
+	"mean_squared_error_loss.cpp"
+
+1728882306 f:\code\specific\neural\utility\loss\binary_cross_entropy_loss.cpp
+
+1728882295 f:\code\specific\neural\utility\loss\cross_entropy_loss.cpp
+
+1728972121 f:\code\specific\neural\utility\loss\mean_absolute_error_loss.cpp
+
+1728972170 f:\code\specific\neural\utility\loss\mean_squared_error_loss.cpp
+
+1730818607 f:\code\generic\io\file\path\path.h
+	"path.cpp"
+
+1732611828 f:\code\generic\io\file\path\path.cpp
+
+1728401828 f:\code\generic\io\file\operation\operation.h
+	"operation.cpp"
+
+1727661875 f:\code\generic\io\file\operation\operation.cpp
+
+1731345500 f:\code\generic\io\file\file_base\file_stream.h
+	"file_stream.hpp"
+	"file_stream.cpp"
+
+1732611828 f:\code\generic\io\file\file_base\file_stream.cpp
+
+1731838085 f:\code\generic\io\file\file_base\file_interface.h
+	"file_interface.hpp"
+
+1730862038 f:\code\generic\io\file\file_base\file_interface.cpp
+
+1731865544 f:\code\generic\io\file\file_class\file_bmp.h
+	"file_bmp.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_bmp.cpp
+
+1731477523 f:\code\generic\io\file\file_class\file_csv.h
+	"file_csv.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_csv.cpp
+
+1730818606 f:\code\generic\io\file\file_class\file_html.h
+
+1731911892 f:\code\generic\io\file\file_class\file_idx.h
+	"file_idx.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_idx.cpp
+
+1731476562 f:\code\generic\io\file\file_class\file_json.h
+
+1731477555 f:\code\generic\io\file\file_class\file_pcap.h
+	"file_pcap.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_pcap.cpp
+
+1731477604 f:\code\generic\io\file\file_class\file_txt.h
+	"file_txt.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_txt.cpp
+
+1732083317 f:\code\generic\io\file\file_class\file_wav.h
+	"file_wav.cpp"
+
+1729008155 f:\code\generic\io\plot\plot.h
+
+1729008222 f:\code\generic\io\window\window.h
+	"window_class/window.h"
+
+1728991173 f:\code\generic\io\window\window_class\window.h
+
+1729137672 f:\code\specific\spirit\numeric\ndarray.h
+
+1730869955 f:\code\specific\neural\loss\loss.h
+	"binary_cross_entropy_loss.h"
+	"cross_entropy_loss.h"
+	"mean_absolute_error_loss.h"
+	"mean_squared_error_loss.h"
+
+1729150999 f:\code\specific\neural\loss\binary_cross_entropy_loss.cpp
+
+1729151019 f:\code\specific\neural\loss\cross_entropy_loss.cpp
+
+1729167922 f:\code\specific\neural\loss\mean_absolute_error_loss.cpp
+
+1729166190 f:\code\specific\neural\loss\mean_squared_error_loss.cpp
+
+1731644663 f:\code\anonymous\neural.cpp
+
+1729169700 f:\code\specific\neural\loss\mean_cubed_error_loss.cpp
+
+1730818607 f:\code\generic\io\file\system\system.h
+	"system.cpp"
+
+1732693052 f:\code\generic\io\file\system\system.cpp
+
+1732599319 f:\code\generic\io\http\http.h
+	"http_base/http_buf.h"
+	"http_base/http_stream.h"
+	"http_class/http_interface.h"
+	"http_class/http_get.h"
+	"http_class/http_post.h"
+
+1731562952 f:\code\generic\io\http\ip\ipv4.h
+	"ipv4.cpp"
+
+1731563145 f:\code\generic\io\http\ip\ipv6.h
+	"ipv6.cpp"
+
+1730963373 f:\code\generic\io\http\ip\url.h
+	"url.cpp"
+
+1731562999 f:\code\generic\io\http\ip\ipv4.cpp
+
+1731563259 f:\code\generic\io\http\ip\ipv6.cpp
+
+1732166422 f:\code\generic\io\http\ip\url.cpp
+
+1729492224 f:\code\anonymous\homework.cpp
+
+1731606527 f:\code\generic\container\string\string_class\string.h
+	"string.hpp"
+
+1729257288 f:\code\generic\container\string\string_class\string.cpp
+
+1730950924 f:\code\generic\container\string\string_regex\regex.h
+	"regex.hpp"
+
+1729326649 f:\code\generic\container\string\string_regex\regex.cpp
+
+1730950929 f:\code\generic\container\string\string_view\string_range_view.h
+	"string_range_view.hpp"
+
+1729257288 f:\code\generic\container\string\string_view\string_range_view.cpp
+
+1730950933 f:\code\generic\container\string\string_view\string_view.h
+	"string_view.hpp"
+
+1729257288 f:\code\generic\container\string\string_view\string_view.cpp
+
+1732422735 f:\code\generic\io\http\http_base\http_buf.h
+	"http_buf.hpp"
+	"http_buf.cpp"
+
+1732611828 f:\code\generic\io\http\http_base\http_buf.cpp
+
+1731573050 f:\code\generic\io\http\http_base\http_stream.h
+	"http_stream.hpp"
+	"http_stream.cpp"
+
+1732611828 f:\code\generic\io\http\http_base\http_stream.cpp
+
+1731566912 f:\code\generic\io\http\http_base\http_interface.h
+	"http_interface.hpp"
+
+1729485615 f:\code\generic\io\http\http_base\http_interface.cpp
+
+1731477497 f:\code\generic\io\http\http_class\http_get.h
+	"http_get.hpp"
+
+1729685166 f:\code\generic\io\http\http_class\http_get.cpp
+
+1731477752 f:\code\generic\io\http\http_class\http_post.h
+	"http_post.hpp"
+
+1729523188 f:\code\generic\io\http\http_server\http_server.h
+	"http_server.cpp"
+
+1730952993 f:\code\generic\io\http\http_server\http_server.cpp
+
+1729685228 f:\code\generic\io\http\http_class\http_post.cpp
+
+1729616322 f:\code\anonymous\homework_real.cpp
+
+1729616272 f:\code\anonymous\homework_complex.cpp
+
+1729616294 f:\code\anonymous\homework_fraction.cpp
+
+1729616224 f:\code\anonymous\homework_array.cpp
+
+1732615767 f:\code\generic\basic\concept.hpp
+	"concept.ipp"
+
+1732615767 f:\code\generic\basic\exception.hpp
+	"concept.hpp"
+	"abi.hpp"
+	"exception.ipp"
+	"exception.cpp"
+
+1732615928 f:\code\generic\basic\range.hpp
+	"concept.hpp"
+	"range.ipp"
+
+1732615767 f:\code\generic\basic\utility.hpp
+	"concept.hpp"
+	"utility.ipp"
+
+1732615767 f:\code\generic\container\discrete\discrete_base\discrete_global.hpp
+	"discrete_global.ipp"
+
+1732615767 f:\code\generic\container\discrete\discrete_class\pair.hpp
+	"pair.ipp"
+
+1732615767 f:\code\generic\container\discrete\discrete_class\tuple.hpp
+	"tuple.ipp"
+
+1732615767 f:\code\generic\container\chain\chain_class\queue.hpp
+	"queue.ipp"
+
+1732615767 f:\code\generic\container\array\array_base\array_global.hpp
+	"array_global.ipp"
+
+1732615767 f:\code\generic\container\array\array_base\array_algo_1d.hpp
+	"array_algo_1d.ipp"
+
+1732615767 f:\code\generic\container\array\array_class\array_1d.hpp
+	"array_1d.ipp"
+
+1732615767 f:\code\generic\container\array\array_class\inplace_array.hpp
+	"inplace_array.ipp"
+
+1732615767 f:\code\generic\container\array\array_base\array_algo_nd.hpp
+	"array_algo_nd.ipp"
+
+1732615767 f:\code\generic\container\array\array_class\array_-1d.hpp
+	"array_-1d.ipp"
+
+1732615767 f:\code\generic\container\array\array_class\array_nd.hpp
+	"array_nd.ipp"
+
+1732615767 f:\code\generic\container\array\array_class\static_array.hpp
+	"static_array.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_coordinate.hpp
+	"array_coordinate.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_axis_view.hpp
+	"array_axis_view.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_filter_view.hpp
+	"array_filter_view.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_flatten_view.hpp
+	"array_flatten_view.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_line.hpp
+	"array_line.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_range_view.hpp
+	"array_range_view.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_reshape_view.hpp
+	"array_reshape_view.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_span_view.hpp
+	"array_span_view.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_type_view.hpp
+	"array_type_view.ipp"
+
+1732615767 f:\code\generic\container\array\array_view\array_view_iterator.hpp
+	"array_view_iterator.ipp"
+
+1732615767 f:\code\generic\container\chain\chain_class\deque.hpp
+	"deque.ipp"
+
+1732615767 f:\code\generic\container\chain\chain_class\list.hpp
+	"list.ipp"
+
+1732615767 f:\code\generic\container\chain\chain_class\priority_queue.hpp
+	"priority_queue.ipp"
+
+1732615767 f:\code\generic\container\chain\chain_class\stack.hpp
+	"stack.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_base\collection_global.hpp
+	"collection_global.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_base\collection_algo.hpp
+	"collection_algo.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_class\set.hpp
+	"set.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_class\map.hpp
+	"map.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_data\map_pair\map_pair.hpp
+	"map_pair.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_data\flat\sorted_vector.hpp
+	"sorted_vector.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\binary_tree.hpp
+	"binary_tree.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\binary_search_tree.hpp
+	"binary_search_tree.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\redblack_tree.hpp
+	"redblack_tree.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_view\collection_keys_view.hpp
+	"collection_keys_view.ipp"
+
+1732615767 f:\code\generic\container\collection\collection_view\collection_values_view.hpp
+	"collection_values_view.ipp"
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\any.hpp
+	"any.ipp"
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\function.hpp
+	"function.ipp"
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\optional.hpp
+	"optional.ipp"
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\variant.hpp
+	"variant.ipp"
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\property_tree.hpp
+	"variant.hpp"
+	"property_tree.ipp"
+
+1732615767 f:\code\generic\container\string\string_base\string_global.hpp
+	"string_global.ipp"
+
+1732615767 f:\code\generic\container\string\string_base\string_algo.hpp
+	"string_algo.ipp"
+
+1732615767 f:\code\generic\container\string\string_class\string.hpp
+	"string.ipp"
+
+1732615767 f:\code\generic\container\string\string_regex\regex.hpp
+	"regex.ipp"
+
+1732615767 f:\code\generic\container\string\string_view\string_range_view.hpp
+	"string_range_view.ipp"
+
+1732615767 f:\code\generic\container\string\string_view\string_view.hpp
+	"string_view.ipp"
+
+1732615767 f:\code\generic\container\utility\constexpr_index\constexpr_index.hpp
+	"constexpr_index.ipp"
+
+1732615767 f:\code\generic\container\utility\format\format.hpp
+	"format.ipp"
+
+1732615767 f:\code\generic\container\utility\structured_binding\structured_binding.hpp
+	"structured_binding.ipp"
+
+1732615767 f:\code\generic\io\utility\color\color.hpp
+	"color.ipp"
+
+1732615767 f:\code\generic\io\utility\stream\stream_view.hpp
+	"stream_view.ipp"
+
+1732615767 f:\code\generic\io\utility\stream\binary_stream_view.hpp
+	"binary_stream_view.ipp"
+
+1732615767 f:\code\generic\io\utility\stream\chunked_binary_stream_view.hpp
+	"chunked_binary_stream_view.ipp"
+
+1732615767 f:\code\generic\io\utility\format\format.hpp
+	"format.ipp"
+
+1732615767 f:\code\generic\io\file\file_base\file_stream.hpp
+	"file_stream.ipp"
+	"file_stream.cpp"
+
+1731899692 f:\code\generic\io\file\file_base\file_interface.hpp
+
+1732615767 f:\code\generic\io\http\http_base\http_buf.hpp
+	"http_buf.ipp"
+	"http_buf.cpp"
+
+1732615767 f:\code\generic\io\http\http_base\http_stream.hpp
+	"http_stream.ipp"
+	"http_stream.cpp"
+
+1732168733 f:\code\generic\io\http\http_base\http_interface.hpp
+
+1732615767 f:\code\generic\io\http\http_class\http_get.hpp
+	"http_get.ipp"
+
+1732615767 f:\code\generic\io\http\http_class\http_post.hpp
+	"http_post.ipp"
+
+1729509408 f:\code\generic\math\numeric\fraction.hpp
+
+1729096031 f:\code\generic\math\geometric\degree.hpp
+
+1729096348 f:\code\generic\math\geometric\radian.hpp
+
+1729617356 f:\code\generic\math\geometric\complex.hpp
+
+1729531064 f:\code\generic\math\geometric\polar.hpp
+
+1725959842 f:\code\generic\math\arithmetic\int\abs.hpp
+
+1729512216 f:\code\generic\math\arithmetic\int\log_log2_log10_ln.hpp
+
+1727615601 f:\code\generic\math\arithmetic\int\mod.hpp
+
+1727615636 f:\code\generic\math\arithmetic\int\pow_sqrt_exp_exp2.hpp
+
+1725961318 f:\code\generic\math\arithmetic\float\abs.hpp
+
+1727615305 f:\code\generic\math\arithmetic\float\floor_ceil_round.hpp
+
+1729512218 f:\code\generic\math\arithmetic\float\log_log2_log10_ln.hpp
+
+1727615505 f:\code\generic\math\arithmetic\float\mod.hpp
+
+1729132083 f:\code\generic\math\arithmetic\float\pow_sqrt_exp_exp2.hpp
+
+1725959629 f:\code\generic\math\arithmetic\angle\abs.hpp
+
+1729512063 f:\code\generic\math\arithmetic\angle\arcsin_arccos_arctan_arccot_arcsec_arccsc.hpp
+
+1727614978 f:\code\generic\math\arithmetic\angle\mod.hpp
+
+1729512154 f:\code\generic\math\arithmetic\angle\sin_cos_tan_cot_sec_csc.hpp
+
+1729097610 f:\code\generic\math\arithmetic\complex\abs_norm.hpp
+
+1725959728 f:\code\generic\math\arithmetic\complex\conj.hpp
+
+1725959732 f:\code\generic\math\arithmetic\complex\floor_ceil_round.hpp
+
+1727615053 f:\code\generic\math\arithmetic\complex\log_log2_log10_ln.hpp
+
+1727615075 f:\code\generic\math\arithmetic\complex\pow_sqrt_exp_exp2.hpp
+
+1725959875 f:\code\generic\math\arithmetic\polar\abs_norm.hpp
+
+1725961254 f:\code\generic\math\arithmetic\polar\conj.hpp
+
+1727615714 f:\code\generic\math\arithmetic\polar\log_log2_log10_ln.hpp
+
+1729136839 f:\code\generic\math\arithmetic\polar\pow_sqrt_exp_exp2.hpp
+
+1729068736 f:\code\generic\math\arithmetic\std\common_type.hpp
+
+1721110016 f:\code\generic\math\arithmetic\std\numeric_limits.hpp
+
+1727619110 f:\code\generic\math\linear\third-party\eigen.hpp
+
+1727619150 f:\code\generic\math\linear\1d\convolve.hpp
+
+1729529668 f:\code\generic\math\linear\1d\cross.hpp
+
+1727616285 f:\code\generic\math\linear\1d\dot.hpp
+
+1731774839 f:\code\generic\math\linear\1d\fft.hpp
+
+1729531610 f:\code\generic\math\linear\1d\norm.hpp
+
+1727616857 f:\code\generic\math\linear\1d\operator.hpp
+
+1727616885 f:\code\generic\math\linear\1d\tensor.hpp
+
+1727619225 f:\code\generic\math\linear\2d\convolve.hpp
+
+1730960899 f:\code\generic\math\linear\2d\det.hpp
+
+1730960930 f:\code\generic\math\linear\2d\eigen.hpp
+
+1727617637 f:\code\generic\math\linear\2d\evd.hpp
+
+1730960944 f:\code\generic\math\linear\2d\inverse.hpp
+
+1730960951 f:\code\generic\math\linear\2d\lu.hpp
+
+1729531935 f:\code\generic\math\linear\2d\norm.hpp
+
+1732100220 f:\code\generic\math\linear\2d\operator.hpp
+
+1730960981 f:\code\generic\math\linear\2d\qr.hpp
+
+1727618007 f:\code\generic\math\linear\2d\rank.hpp
+
+1730961003 f:\code\generic\math\linear\2d\singular.hpp
+
+1727618166 f:\code\generic\math\linear\2d\svd.hpp
+
+1727618165 f:\code\generic\math\linear\2d\tr.hpp
+
+1731824586 f:\code\generic\math\linear\nd\operator.hpp
+
+1727618536 f:\code\generic\math\linear\nd\swap.hpp
+
+1727618565 f:\code\generic\math\linear\nd\transpose.hpp
+
+1715747250 f:\code\generic\math\random\engine\random_engine_algo.hpp
+
+1727618669 f:\code\generic\math\random\engine\linear_congruential_engine.hpp
+
+1727618712 f:\code\generic\math\random\engine\mersenne_twister_engine.hpp
+
+1727618736 f:\code\generic\math\random\engine\subtract_with_carry_engine.hpp
+
+1725470438 f:\code\generic\math\random\engine\discard_block_engine.hpp
+
+1717429924 f:\code\generic\math\random\engine\shuffle_order_engine.hpp
+
+1725470432 f:\code\generic\math\random\engine\floating_point_engine.hpp
+
+1727423942 f:\code\generic\math\random\container\array.hpp
+
+1727618804 f:\code\generic\math\random\distribution\uniform_distribution.hpp
+
+1727663521 f:\code\generic\math\random\distribution\random.hpp
+
+1725958547 f:\code\generic\math\random\distribution\bernoulli_distribution.hpp
+
+1725959189 f:\code\generic\math\random\distribution\binomial_distribution.hpp
+
+1725957882 f:\code\generic\math\random\distribution\geometric_distribution.hpp
+
+1725959218 f:\code\generic\math\random\distribution\poisson_distribution.hpp
+
+1725958567 f:\code\generic\math\random\distribution\exponential_distribution.hpp
+
+1727618751 f:\code\generic\math\random\distribution\gamma_distribution.hpp
+
+1727618757 f:\code\generic\math\random\distribution\normal_distribution.hpp
+
+1725958890 f:\code\generic\math\random\distribution\chi_squared_distribution.hpp
+
+1725958969 f:\code\generic\math\random\distribution\fisher_f_distribution.hpp
+
+1725959094 f:\code\generic\math\random\distribution\student_t_distribution.hpp
+
+1732615767 f:\code\specific\neural\layer\linear_layer.hpp
+	"linear_layer.ipp"
+
+1732615767 f:\code\specific\neural\layer\relu_layer.hpp
+	"relu_layer.ipp"
+
+1732615767 f:\code\specific\neural\layer\sigmoid_layer.hpp
+	"sigmoid_layer.ipp"
+
+1732615767 f:\code\specific\neural\layer\softmax_layer.hpp
+	"softmax_layer.ipp"
+
+1730869968 f:\code\specific\neural\loss\binary_cross_entropy_loss.h
+	"binary_cross_entropy_loss.hpp"
+
+1732615767 f:\code\specific\neural\loss\binary_cross_entropy_loss.hpp
+	"binary_cross_entropy_loss.ipp"
+
+1730869983 f:\code\specific\neural\loss\cross_entropy_loss.h
+	"cross_entropy_loss.hpp"
+
+1732615767 f:\code\specific\neural\loss\cross_entropy_loss.hpp
+	"cross_entropy_loss.ipp"
+
+1730870011 f:\code\specific\neural\loss\mean_absolute_error_loss.h
+	"mean_absolute_error_loss.hpp"
+
+1732615767 f:\code\specific\neural\loss\mean_absolute_error_loss.hpp
+	"mean_absolute_error_loss.ipp"
+
+1730870026 f:\code\specific\neural\loss\mean_squared_error_loss.h
+	"mean_squared_error_loss.hpp"
+
+1732615767 f:\code\specific\neural\loss\mean_squared_error_loss.hpp
+	"mean_squared_error_loss.ipp"
+
+1732615767 f:\code\specific\neural\model\sequence_model.hpp
+	"sequence_model.ipp"
+
+1732615767 f:\code\specific\neural\optimizer\stochastic_gradient_descent_optimizer.hpp
+	"stochastic_gradient_descent_optimizer.ipp"
+
+1729147793 f:\code\specific\neural\utility\initialize\kaiming_normal_initialize.hpp
+
+1729147814 f:\code\specific\neural\utility\initialize\kaiming_uniform_initialize.hpp
+
+1729148396 f:\code\specific\neural\utility\initialize\normal_initialize.hpp
+
+1729147829 f:\code\specific\neural\utility\initialize\ones_initialize.hpp
+
+1728911408 f:\code\specific\neural\utility\initialize\orthogonal_initialize.hpp
+
+1728912141 f:\code\specific\neural\utility\initialize\sparse_initialize.hpp
+
+1729147764 f:\code\specific\neural\utility\initialize\uniform_initialize.hpp
+
+1729147862 f:\code\specific\neural\utility\initialize\xavier_normal_initialize.hpp
+
+1729147866 f:\code\specific\neural\utility\initialize\xavier_uniform_initialize.hpp
+
+1729147841 f:\code\specific\neural\utility\initialize\zeros_initialize.hpp
+
+1732615767 f:\code\specific\spirit\numeric\numeric.hpp
+	"numeric.ipp"
+
+1731605918 f:\code\generic\container\collection\collection_data\tree\binary_node_interface.h
+	"binary_node_interface.hpp"
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\binary_node_interface.hpp
+	"binary_node_interface.ipp"
+
+1732691992 f:\code\generic\io\utility\time\duration\duration.hpp
+	"duration.ipp"
+
+1732691930 f:\code\generic\io\utility\time\time_point\time_point.hpp
+	"time_point.ipp"
+
+1731865583 f:\code\generic\io\file\file_class\file_jpg.h
+	"file_jpg.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_jpg.cpp
+
+1731865545 f:\code\generic\io\file\file_class\file_png.h
+	"file_png.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_png.cpp
+
+1731865559 f:\code\generic\io\file\file_class\file_tiff.h
+	"file_tiff.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_tiff.cpp
+
+1731865571 f:\code\generic\io\file\file_class\file_tga.h
+	"file_tga.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_tga.cpp
+
+1731483005 f:\code\generic\io\pipe\pipe.h
+	"pipe_base/pipe_buf.h"
+	"pipe_base/pipe_stream.h"
+	"pipe_base/pipe_interface.h"
+	"pipe_class/pipe_command.h"
+	"pipe_class/pipe_process.h"
+
+1732416302 f:\code\generic\io\pipe\pipe_base\pipe_buf.h
+	"pipe_buf.hpp"
+	"pipe_buf.cpp"
+
+1731775824 f:\code\generic\io\pipe\pipe_base\pipe_stream.h
+	"pipe_stream.hpp"
+	"pipe_stream.cpp"
+
+1731478993 f:\code\generic\io\pipe\pipe_base\pipe_interface.h
+	"pipe_interface.hpp"
+
+1731319223 f:\code\generic\io\pipe\pipe_class\pipe_open.h
+
+1732615767 f:\code\generic\io\pipe\pipe_base\pipe_buf.hpp
+	"pipe_buf.ipp"
+	"pipe_buf.cpp"
+
+1732611828 f:\code\generic\io\pipe\pipe_base\pipe_buf.cpp
+
+1732615767 f:\code\generic\io\pipe\pipe_base\pipe_stream.hpp
+	"pipe_stream.ipp"
+	"pipe_stream.cpp"
+
+1732611828 f:\code\generic\io\pipe\pipe_base\pipe_stream.cpp
+
+1731483094 f:\code\generic\io\pipe\pipe_class\pipe_command.h
+	"pipe_command.hpp"
+
+1732615767 f:\code\generic\io\pipe\pipe_base\pipe_interface.hpp
+	"pipe_interface.ipp"
+
+1732615767 f:\code\generic\io\pipe\pipe_class\pipe_command.hpp
+	"pipe_command.ipp"
+
+1731479805 f:\code\generic\io\pipe\pipe_class\pipe_process.h
+	"pipe_process.hpp"
+
+1732615767 f:\code\generic\io\pipe\pipe_class\pipe_process.hpp
+	"pipe_process.ipp"
+
+1732609637 f:\code\specific\lipsync\interface.h
+	"../../generic/io/interface.h"
+	"../../generic/math/interface.h"
+	"audio/audio.h"
+	"listener/listener.h"
+	"animator/animator.h"
+	"vedio/vedio.h"
+
+1731827415 f:\code\generic\math\linear\1d\dct.hpp
+
+1731600571 f:\code\specific\lipsync\audio\audio.h
+
+1731645786 f:\code\specific\lipsync\listener\listener.h
+	"mfcc_listener.h"
+
+1732609659 f:\code\specific\lipsync\listener\mfcc_listener.h
+	"mfcc_listener.hpp"
+
+1732617209 f:\code\specific\lipsync\listener\mfcc_listener.hpp
+	"mfcc_listener.ipp"
+	"mfcc_listener.cpp"
+
+1731600563 f:\code\specific\lipsync\animator\animator.h
+
+1731600613 f:\code\specific\lipsync\vedio\vedio.h
+
+1727619110 f:\code\generic\math\linear\third_party\eigen.hpp
+
+1731931215 f:\code\generic\io\file\third_party\boost_gil.hpp
+
+1731899907 f:\code\generic\io\file\file_class\file_pnm.h
+	"file_pnm.cpp"
+
+1732611828 f:\code\generic\io\file\file_class\file_pnm.cpp
+
+1732682800 f:\code\generic\io\file\file_class\file_wav.cpp
+
+1732702929 f:\code\anonymous\lipsync.cpp
+
+1732165623 f:\code\generic\io\udp\udp.h
+	"udp_base/udp_stream.h"
+
+1732168089 f:\code\generic\io\udp\udp_base\udp_stream.h
+	"udp_stream.hpp"
+	"udp_stream.cpp"
+
+1732165957 f:\code\generic\io\udp\udp_base\udp_stream.hpp
+
+1732168047 f:\code\generic\io\udp\udp_base\udp_stream.cpp
+
+1731562952 f:\code\generic\io\utility\ip\ipv4.h
+	"ipv4.cpp"
+
+1732611828 f:\code\generic\io\utility\ip\ipv4.cpp
+
+1731563145 f:\code\generic\io\utility\ip\ipv6.h
+	"ipv6.cpp"
+
+1732611828 f:\code\generic\io\utility\ip\ipv6.cpp
+
+1732168406 f:\code\generic\io\utility\ip\url.h
+	"url.cpp"
+
+1732611828 f:\code\generic\io\utility\ip\url.cpp
+
+1732169351 f:\code\generic\io\socket\socket.h
+	"socket_base/socket_buf.h"
+	"socket_base/socket_stream.h"
+
+1732595175 f:\code\generic\io\socket\socket_base\socket_buf.h
+	"socket_buf.hpp"
+
+1732595322 f:\code\generic\io\socket\socket_base\socket_buf.hpp
+
+1732589420 f:\code\generic\io\socket\socket_base\socket_stream.h
+	"socket_stream.hpp"
+
+1732595188 f:\code\generic\io\socket\socket_base\socket_stream.hpp
+
+1732600640 f:\code\generic\io\file\file_class\file_interface.h
+	"file_interface.hpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_interface.hpp
+	"file_interface.ipp"
+
+1732600610 f:\code\generic\io\http\http_class\http_interface.h
+	"http_interface.hpp"
+
+1732615767 f:\code\generic\io\http\http_class\http_interface.hpp
+	"http_interface.ipp"
+
+1732602058 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp.h
+	"tcp_udp_icmp_base/basic_socket_buf.h"
+	"tcp_udp_icmp_base/basic_socket_stream.h"
+	"tcp_udp_icmp_class/basic_socket_interface.h"
+
+1732602374 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_base\basic_socket_buf.h
+	"basic_socket_buf.hpp"
+
+1732615767 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_base\basic_socket_buf.hpp
+	"basic_socket_buf.ipp"
+
+1732602384 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_base\basic_socket_stream.h
+	"basic_socket_stream.hpp"
+
+1732615767 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_base\basic_socket_stream.hpp
+	"basic_socket_stream.ipp"
+
+1732602408 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_class\basic_socket_interface.h
+	"basic_socket_interface.hpp"
+
+1732615767 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_class\basic_socket_interface.hpp
+	"basic_socket_interface.ipp"
+
+1732596476 f:\code\generic\io\serial_port\serial_port.h
+
+1732596464 f:\code\generic\io\usb\usb.h
+
+1732596457 f:\code\generic\io\websocket\websocket.h
+
+1732695594 f:\code\generic\basic\interface.hpp
+	<algorithm>
+	<chrono>
+	<concepts>
+	<csignal>
+	<filesystem>
+	<format>
+	<fstream>
+	<iostream>
+	<iomanip>
+	<map>
+	<new>
+	<ranges>
+	<regex>
+	<stacktrace>
+	<stdfloat>
+	<string>
+	<text_encoding>
+	<thread>
+	<utility>
+	<stdexec/execution.hpp>
+	<exec/static_thread_pool.hpp>
+	<exec/timed_scheduler.hpp>
+	<exec/when_any.hpp>
+	<execpools/tbb/tbb_thread_pool.hpp>
+	<cxxabi.h>
+	<winsock2.h>
+	<windows.h>
+	<tchar.h>
+	<tbb/tbb.h>
+	<boost/asio.hpp>
+	<boost/asio/ssl.hpp>
+	<boost/beast.hpp>
+	<boost/date_time.hpp>
+	<boost/gil.hpp>
+	<boost/gil/extension/io/bmp.hpp>
+	<boost/gil/extension/io/jpeg.hpp>
+	<boost/gil/extension/io/png.hpp>
+	<boost/gil/extension/io/pnm.hpp>
+	<boost/gil/extension/io/tiff.hpp>
+	<boost/gil/extension/io/targa.hpp>
+	<boost/iostreams/filtering_stream.hpp>
+	<boost/iostreams/filter/bzip2.hpp>
+	<boost/iostreams/filter/gzip.hpp>
+	<boost/iostreams/filter/zlib.hpp>
+	<boost/locale.hpp>
+	<boost/phoenix.hpp>
+	<boost/process/v2.hpp>
+	<boost/spirit/home/qi.hpp>
+	<boost/spirit/home/x3.hpp>
+	<eigen3/Eigen/Eigen>
+	<eigen3/unsupported/Eigen/FFT>
+	<mpg123.h>
+	<FLAC++/all.h>
+	"abi.hpp"
+	"concept.hpp"
+	"exception.hpp"
+	"range.hpp"
+	"typedef.hpp"
+	"utility.hpp"
+
+1732615767 f:\code\generic\basic\abi.hpp
+	"abi.cpp"
+
+1732616266 f:\code\generic\basic\concept.ipp
+
+1732615767 f:\code\generic\basic\exception.ipp
+
+1732615767 f:\code\generic\basic\range.ipp
+
+1732615767 f:\code\generic\basic\typedef.hpp
+
+1732615767 f:\code\generic\basic\utility.ipp
+
+1732615955 f:\code\generic\container\interface.hpp
+	"../basic/interface.hpp"
+	"discrete/discrete.hpp"
+	"array/array.hpp"
+	"chain/chain.hpp"
+	"collection/collection.hpp"
+	"polymorphic/polymorphic.hpp"
+	"string/string.hpp"
+	"utility/utility.hpp"
+
+1732616015 f:\code\generic\container\discrete\discrete.hpp
+	"discrete_base/discrete_global.hpp"
+	"discrete_class/pair.hpp"
+	"discrete_class/tuple.hpp"
+
+1732615767 f:\code\generic\container\discrete\discrete_base\discrete_global.ipp
+
+1732615767 f:\code\generic\container\discrete\discrete_class\pair.ipp
+
+1732615767 f:\code\generic\container\discrete\discrete_class\tuple.ipp
+
+1732616048 f:\code\generic\container\array\array.hpp
+	"../chain/chain_class/queue.hpp"
+	"array_base/array_global.hpp"
+	"array_base/array_algo_1d.hpp"
+	"array_base/array_algo_nd.hpp"
+	"array_class/array_1d.hpp"
+	"array_class/array_-1d.hpp"
+	"array_class/array_nd.hpp"
+	"array_class/static_array.hpp"
+	"array_class/inplace_array.hpp"
+	"array_view/array_coordinate.hpp"
+	"array_view/array_axis_view.hpp"
+	"array_view/array_filter_view.hpp"
+	"array_view/array_flatten_view.hpp"
+	"array_view/array_line.hpp"
+	"array_view/array_range_view.hpp"
+	"array_view/array_reshape_view.hpp"
+	"array_view/array_span_view.hpp"
+	"array_view/array_type_view.hpp"
+	"array_view/array_view_iterator.hpp"
+
+1732615767 f:\code\generic\container\chain\chain_class\queue.ipp
+
+1732615767 f:\code\generic\container\array\array_base\array_global.ipp
+
+1732615767 f:\code\generic\container\array\array_base\array_algo_1d.ipp
+	"../array_class/array_1d.hpp"
+	"../array_class/inplace_array.hpp"
+
+1732615767 f:\code\generic\container\array\array_class\array_1d.ipp
+
+1732615767 f:\code\generic\container\array\array_class\inplace_array.ipp
+
+1732615767 f:\code\generic\container\array\array_base\array_algo_nd.ipp
+
+1732615767 f:\code\generic\container\array\array_class\array_-1d.ipp
+
+1732615767 f:\code\generic\container\array\array_class\array_nd.ipp
+
+1732615767 f:\code\generic\container\array\array_class\static_array.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_coordinate.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_axis_view.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_filter_view.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_flatten_view.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_line.ipp
+
+1732617473 f:\code\generic\container\array\array_view\array_range_view.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_reshape_view.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_span_view.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_type_view.ipp
+
+1732615767 f:\code\generic\container\array\array_view\array_view_iterator.ipp
+
+1732615767 f:\code\generic\container\chain\chain.hpp
+	"../array/array.hpp"
+	"../discrete/discrete.hpp"
+	"chain_base/chain_global.hpp"
+	"chain_class/deque.hpp"
+	"chain_class/list.hpp"
+	"chain_class/priority_queue.hpp"
+	"chain_class/queue.hpp"
+	"chain_class/stack.hpp"
+
+1732615767 f:\code\generic\container\chain\chain_base\chain_global.hpp
+
+1732615767 f:\code\generic\container\chain\chain_class\deque.ipp
+
+1732615767 f:\code\generic\container\chain\chain_class\list.ipp
+
+1732615767 f:\code\generic\container\chain\chain_class\priority_queue.ipp
+
+1732615767 f:\code\generic\container\chain\chain_class\stack.ipp
+
+1732616055 f:\code\generic\container\collection\collection.hpp
+	"collection_base/collection_global.hpp"
+	"collection_base/collection_algo.hpp"
+	"collection_class/set.hpp"
+	"collection_class/map.hpp"
+	"collection_data/map_pair/map_pair.hpp"
+	"collection_data/flat/sorted_vector.hpp"
+	"collection_data/tree/tree.hpp"
+	"collection_view/collection_keys_view.hpp"
+	"collection_view/collection_values_view.hpp"
+
+1732615767 f:\code\generic\container\collection\collection_base\collection_global.ipp
+
+1732615767 f:\code\generic\container\collection\collection_base\collection_algo.ipp
+
+1732615767 f:\code\generic\container\collection\collection_class\set.ipp
+
+1732615767 f:\code\generic\container\collection\collection_class\map.ipp
+
+1732615767 f:\code\generic\container\collection\collection_data\map_pair\map_pair.ipp
+
+1732615767 f:\code\generic\container\collection\collection_data\flat\sorted_vector.ipp
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\tree.hpp
+	"binary_node_interface.hpp"
+	"binary_tree.hpp"
+	"binary_search_tree.hpp"
+	"redblack_tree.hpp"
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\binary_node_interface.ipp
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\binary_tree.ipp
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\binary_search_tree.ipp
+
+1732615767 f:\code\generic\container\collection\collection_data\tree\redblack_tree.ipp
+
+1732615767 f:\code\generic\container\collection\collection_view\collection_keys_view.ipp
+
+1732615767 f:\code\generic\container\collection\collection_view\collection_values_view.ipp
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic.hpp
+	"polymorphic_class/any.hpp"
+	"polymorphic_class/function.hpp"
+	"polymorphic_class/optional.hpp"
+	"polymorphic_class/property_tree.hpp"
+	"polymorphic_class/variant.hpp"
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\any.ipp
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\function.ipp
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\optional.ipp
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\variant.ipp
+
+1732615767 f:\code\generic\container\polymorphic\polymorphic_class\property_tree.ipp
+
+1732616062 f:\code\generic\container\string\string.hpp
+	"../array/array.hpp"
+	"string_base/string_global.hpp"
+	"string_base/string_algo.hpp"
+	"string_class/string.hpp"
+	"string_regex/regex.hpp"
+	"string_view/string_range_view.hpp"
+	"string_view/string_view.hpp"
+
+1732615767 f:\code\generic\container\string\string_base\string_global.ipp
+
+1732693307 f:\code\generic\container\string\string_base\string_algo.ipp
+	"../string_class/string.hpp"
+
+1732615767 f:\code\generic\container\string\string_class\string.ipp
+
+1732615767 f:\code\generic\container\string\string_regex\regex.ipp
+
+1732615767 f:\code\generic\container\string\string_view\string_range_view.ipp
+
+1732615767 f:\code\generic\container\string\string_view\string_view.ipp
+
+1732696166 f:\code\generic\container\utility\utility.hpp
+	"constexpr_index/constexpr_index.hpp"
+	"format/format.hpp"
+	"structured_binding/structured_binding.hpp"
+
+1732615767 f:\code\generic\container\utility\constexpr_index\constexpr_index.ipp
+
+1732615767 f:\code\generic\container\utility\format\format.ipp
+
+1732615767 f:\code\generic\container\utility\structured_binding\structured_binding.ipp
+
+1732695604 f:\code\generic\io\interface.hpp
+	"../container/interface.hpp"
+	"../math/interface.hpp"
+	"utility/utility.hpp"
+	"file/file.hpp"
+	"http/http.hpp"
+	"pipe/pipe.hpp"
+	"tcp_udp_icmp/tcp_udp_icmp.hpp"
+	"serial_port/serial_port.hpp"
+	"usb/usb.hpp"
+	"websocket/websocket.hpp"
+
+1732615982 f:\code\generic\math\interface.hpp
+	"../container/interface.hpp"
+	"numeric/numeric.hpp"
+	"geometric/geometric.hpp"
+	"arithmetic/arithmetic.hpp"
+	"linear/linear.hpp"
+	"random/random.hpp"
+
+1732615767 f:\code\generic\math\numeric\numeric.hpp
+	"fraction.ipp"
+
+1732615767 f:\code\generic\math\numeric\fraction.ipp
+
+1732615767 f:\code\generic\math\geometric\geometric.hpp
+	"degree.ipp"
+	"radian.ipp"
+	"complex.ipp"
+	"polar.ipp"
+
+1732615767 f:\code\generic\math\geometric\degree.ipp
+
+1732615767 f:\code\generic\math\geometric\radian.ipp
+
+1732615767 f:\code\generic\math\geometric\complex.ipp
+
+1732615767 f:\code\generic\math\geometric\polar.ipp
+
+1732615767 f:\code\generic\math\arithmetic\arithmetic.hpp
+	"int/abs.ipp"
+	"int/log_log2_log10_ln.ipp"
+	"int/mod.ipp"
+	"int/pow_sqrt_exp_exp2.ipp"
+	"float/abs.ipp"
+	"float/floor_ceil_round.ipp"
+	"float/log_log2_log10_ln.ipp"
+	"float/mod.ipp"
+	"float/pow_sqrt_exp_exp2.ipp"
+	"angle/abs.ipp"
+	"angle/arcsin_arccos_arctan_arccot_arcsec_arccsc.ipp"
+	"angle/mod.ipp"
+	"angle/sin_cos_tan_cot_sec_csc.ipp"
+	"complex/abs_norm.ipp"
+	"complex/conj.ipp"
+	"complex/floor_ceil_round.ipp"
+	"complex/log_log2_log10_ln.ipp"
+	"complex/pow_sqrt_exp_exp2.ipp"
+	"polar/abs_norm.ipp"
+	"polar/conj.ipp"
+	"polar/log_log2_log10_ln.ipp"
+	"polar/pow_sqrt_exp_exp2.ipp"
+	"std/common_type.ipp"
+	"std/numeric_limits.ipp"
+
+1732615767 f:\code\generic\math\arithmetic\int\abs.ipp
+
+1732615767 f:\code\generic\math\arithmetic\int\log_log2_log10_ln.ipp
+
+1732615767 f:\code\generic\math\arithmetic\int\mod.ipp
+
+1732615767 f:\code\generic\math\arithmetic\int\pow_sqrt_exp_exp2.ipp
+
+1732615767 f:\code\generic\math\arithmetic\float\abs.ipp
+
+1732615767 f:\code\generic\math\arithmetic\float\floor_ceil_round.ipp
+
+1732615767 f:\code\generic\math\arithmetic\float\log_log2_log10_ln.ipp
+
+1732615767 f:\code\generic\math\arithmetic\float\mod.ipp
+
+1732615767 f:\code\generic\math\arithmetic\float\pow_sqrt_exp_exp2.ipp
+
+1732615767 f:\code\generic\math\arithmetic\angle\abs.ipp
+
+1732615767 f:\code\generic\math\arithmetic\angle\arcsin_arccos_arctan_arccot_arcsec_arccsc.ipp
+
+1732615767 f:\code\generic\math\arithmetic\angle\mod.ipp
+
+1732615767 f:\code\generic\math\arithmetic\angle\sin_cos_tan_cot_sec_csc.ipp
+
+1732615767 f:\code\generic\math\arithmetic\complex\abs_norm.ipp
+
+1732615767 f:\code\generic\math\arithmetic\complex\conj.ipp
+
+1732615767 f:\code\generic\math\arithmetic\complex\floor_ceil_round.ipp
+
+1732615767 f:\code\generic\math\arithmetic\complex\log_log2_log10_ln.ipp
+
+1732615767 f:\code\generic\math\arithmetic\complex\pow_sqrt_exp_exp2.ipp
+
+1732615767 f:\code\generic\math\arithmetic\polar\abs_norm.ipp
+
+1732615767 f:\code\generic\math\arithmetic\polar\conj.ipp
+
+1732615767 f:\code\generic\math\arithmetic\polar\log_log2_log10_ln.ipp
+
+1732615767 f:\code\generic\math\arithmetic\polar\pow_sqrt_exp_exp2.ipp
+
+1732615767 f:\code\generic\math\arithmetic\std\common_type.ipp
+
+1732615767 f:\code\generic\math\arithmetic\std\numeric_limits.ipp
+
+1732615767 f:\code\generic\math\linear\linear.hpp
+	"third_party/eigen.ipp"
+	"1d/convolve.ipp"
+	"1d/cross.ipp"
+	"1d/dct.ipp"
+	"1d/dot.ipp"
+	"1d/fft.ipp"
+	"1d/norm.ipp"
+	"1d/operator.ipp"
+	"1d/tensor.ipp"
+	"2d/convolve.ipp"
+	"2d/det.ipp"
+	"2d/eigen.ipp"
+	"2d/evd.ipp"
+	"2d/inverse.ipp"
+	"2d/lu.ipp"
+	"2d/norm.ipp"
+	"2d/operator.ipp"
+	"2d/qr.ipp"
+	"2d/rank.ipp"
+	"2d/singular.ipp"
+	"2d/svd.ipp"
+	"2d/tr.ipp"
+	"nd/operator.ipp"
+	"nd/swap.ipp"
+	"nd/transpose.ipp"
+
+1732615767 f:\code\generic\math\linear\third_party\eigen.ipp
+
+1732615767 f:\code\generic\math\linear\1d\convolve.ipp
+
+1732615767 f:\code\generic\math\linear\1d\cross.ipp
+
+1732615767 f:\code\generic\math\linear\1d\dct.ipp
+
+1732615767 f:\code\generic\math\linear\1d\dot.ipp
+
+1732615767 f:\code\generic\math\linear\1d\fft.ipp
+
+1732615767 f:\code\generic\math\linear\1d\norm.ipp
+
+1732615767 f:\code\generic\math\linear\1d\operator.ipp
+
+1732615767 f:\code\generic\math\linear\1d\tensor.ipp
+
+1732615767 f:\code\generic\math\linear\2d\convolve.ipp
+
+1732615767 f:\code\generic\math\linear\2d\det.ipp
+
+1732615767 f:\code\generic\math\linear\2d\eigen.ipp
+
+1732615767 f:\code\generic\math\linear\2d\evd.ipp
+
+1732615767 f:\code\generic\math\linear\2d\inverse.ipp
+
+1732615767 f:\code\generic\math\linear\2d\lu.ipp
+
+1732615767 f:\code\generic\math\linear\2d\norm.ipp
+
+1732615767 f:\code\generic\math\linear\2d\operator.ipp
+
+1732615767 f:\code\generic\math\linear\2d\qr.ipp
+
+1732615767 f:\code\generic\math\linear\2d\rank.ipp
+
+1732615767 f:\code\generic\math\linear\2d\singular.ipp
+
+1732615767 f:\code\generic\math\linear\2d\svd.ipp
+
+1732615767 f:\code\generic\math\linear\2d\tr.ipp
+
+1732615767 f:\code\generic\math\linear\nd\operator.ipp
+
+1732615767 f:\code\generic\math\linear\nd\swap.ipp
+
+1732615767 f:\code\generic\math\linear\nd\transpose.ipp
+
+1732616074 f:\code\generic\math\random\random.hpp
+	"engine/random_engine_algo.ipp"
+	"engine/linear_congruential_engine.ipp"
+	"engine/mersenne_twister_engine.ipp"
+	"engine/subtract_with_carry_engine.ipp"
+	"engine/discard_block_engine.ipp"
+	"engine/shuffle_order_engine.ipp"
+	"engine/floating_point_engine.ipp"
+	"container/array.ipp"
+	"distribution/uniform_distribution.ipp"
+	"distribution/random.ipp"
+	"distribution/bernoulli_distribution.ipp"
+	"distribution/binomial_distribution.ipp"
+	"distribution/geometric_distribution.ipp"
+	"distribution/poisson_distribution.ipp"
+	"distribution/exponential_distribution.ipp"
+	"distribution/gamma_distribution.ipp"
+	"distribution/normal_distribution.ipp"
+	"distribution/chi_squared_distribution.ipp"
+	"distribution/fisher_f_distribution.ipp"
+	"distribution/student_t_distribution.ipp"
+
+1732615767 f:\code\generic\math\random\engine\random_engine_algo.ipp
+
+1732615767 f:\code\generic\math\random\engine\linear_congruential_engine.ipp
+
+1732615767 f:\code\generic\math\random\engine\mersenne_twister_engine.ipp
+
+1732615767 f:\code\generic\math\random\engine\subtract_with_carry_engine.ipp
+
+1732615767 f:\code\generic\math\random\engine\discard_block_engine.ipp
+
+1732615767 f:\code\generic\math\random\engine\shuffle_order_engine.ipp
+
+1732615767 f:\code\generic\math\random\engine\floating_point_engine.ipp
+
+1732615767 f:\code\generic\math\random\container\array.ipp
+
+1732615767 f:\code\generic\math\random\distribution\uniform_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\random.ipp
+
+1732615767 f:\code\generic\math\random\distribution\bernoulli_distribution.ipp
+
+1732616114 f:\code\generic\math\random\distribution\binomial_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\geometric_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\poisson_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\exponential_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\gamma_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\normal_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\chi_squared_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\fisher_f_distribution.ipp
+
+1732615767 f:\code\generic\math\random\distribution\student_t_distribution.ipp
+
+1732615767 f:\code\generic\io\utility\utility.hpp
+	"color/color.hpp"
+	"ip/ipv4.hpp"
+	"ip/ipv6.hpp"
+	"ip/url.hpp"
+	"time/time.hpp"
+	"stream/stream.hpp"
+	"format/format.hpp"
+
+1732615767 f:\code\generic\io\utility\color\color.ipp
+
+1732615767 f:\code\generic\io\utility\ip\ipv4.hpp
+	"ipv4.cpp"
+
+1732615767 f:\code\generic\io\utility\ip\ipv6.hpp
+	"ipv6.cpp"
+
+1732615767 f:\code\generic\io\utility\ip\url.hpp
+	"url.cpp"
+
+1732615767 f:\code\generic\io\utility\time\time.hpp
+	"duration/duration.hpp"
+	"time_point/time_point.hpp"
+
+1732691901 f:\code\generic\io\utility\time\duration\duration.ipp
+
+1732691974 f:\code\generic\io\utility\time\time_point\time_point.ipp
+
+1732615767 f:\code\generic\io\utility\stream\stream.hpp
+	"stream_view.hpp"
+	"binary_stream_view.hpp"
+	"chunked_binary_stream_view.hpp"
+
+1732615767 f:\code\generic\io\utility\stream\stream_view.ipp
+
+1732615767 f:\code\generic\io\utility\stream\binary_stream_view.ipp
+
+1732615767 f:\code\generic\io\utility\stream\chunked_binary_stream_view.ipp
+
+1732615767 f:\code\generic\io\utility\format\format.ipp
+
+1732615767 f:\code\generic\io\file\file.hpp
+	"path/path.hpp"
+	"system/system.hpp"
+	"file_base/file_stream.hpp"
+	"third_party/boost_gil.ipp"
+	"file_class/file_interface.hpp"
+	"file_class/file_bmp.hpp"
+	"file_class/file_csv.hpp"
+	"file_class/file_html.hpp"
+	"file_class/file_idx.hpp"
+	"file_class/file_json.hpp"
+	"file_class/file_jpg.hpp"
+	"file_class/file_pcap.hpp"
+	"file_class/file_png.hpp"
+	"file_class/file_pnm.hpp"
+	"file_class/file_tiff.hpp"
+	"file_class/file_tga.hpp"
+	"file_class/file_txt.hpp"
+	"file_class/file_wav.hpp"
+
+1732615767 f:\code\generic\io\file\path\path.hpp
+	"path.cpp"
+
+1732615767 f:\code\generic\io\file\system\system.hpp
+	"system.cpp"
+
+1732615767 f:\code\generic\io\file\file_base\file_stream.ipp
+
+1732615767 f:\code\generic\io\file\third_party\boost_gil.ipp
+
+1732615767 f:\code\generic\io\file\file_class\file_interface.ipp
+
+1732615767 f:\code\generic\io\file\file_class\file_bmp.hpp
+	"file_bmp.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_csv.hpp
+	"file_csv.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_html.hpp
+
+1732615767 f:\code\generic\io\file\file_class\file_idx.hpp
+	"file_idx.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_json.hpp
+
+1732615767 f:\code\generic\io\file\file_class\file_jpg.hpp
+	"file_jpg.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_pcap.hpp
+	"file_pcap.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_png.hpp
+	"file_png.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_pnm.hpp
+	"file_pnm.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_tiff.hpp
+	"file_tiff.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_tga.hpp
+	"file_tga.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_txt.hpp
+	"file_txt.cpp"
+
+1732615767 f:\code\generic\io\file\file_class\file_wav.hpp
+	"file_wav.cpp"
+
+1732615767 f:\code\generic\io\http\http.hpp
+	"http_base/http_buf.hpp"
+	"http_base/http_stream.hpp"
+	"http_class/http_interface.hpp"
+	"http_class/http_get.hpp"
+	"http_class/http_post.hpp"
+
+1732615767 f:\code\generic\io\http\http_base\http_buf.ipp
+
+1732615767 f:\code\generic\io\http\http_base\http_stream.ipp
+
+1732615767 f:\code\generic\io\http\http_class\http_interface.ipp
+
+1732615767 f:\code\generic\io\http\http_class\http_get.ipp
+
+1732615767 f:\code\generic\io\http\http_class\http_post.ipp
+
+1732615767 f:\code\generic\io\pipe\pipe.hpp
+	"pipe_base/pipe_buf.hpp"
+	"pipe_base/pipe_stream.hpp"
+	"pipe_base/pipe_interface.hpp"
+	"pipe_class/pipe_command.hpp"
+	"pipe_class/pipe_process.hpp"
+
+1732615767 f:\code\generic\io\pipe\pipe_base\pipe_buf.ipp
+
+1732615767 f:\code\generic\io\pipe\pipe_base\pipe_stream.ipp
+
+1732615767 f:\code\generic\io\pipe\pipe_base\pipe_interface.ipp
+
+1732615767 f:\code\generic\io\pipe\pipe_class\pipe_command.ipp
+
+1732615767 f:\code\generic\io\pipe\pipe_class\pipe_process.ipp
+
+1732615767 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp.hpp
+	"tcp_udp_icmp_base/basic_socket_buf.hpp"
+	"tcp_udp_icmp_base/basic_socket_stream.hpp"
+	"tcp_udp_icmp_class/basic_socket_interface.hpp"
+
+1732615767 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_base\basic_socket_buf.ipp
+
+1732615767 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_base\basic_socket_stream.ipp
+
+1732615767 f:\code\generic\io\tcp_udp_icmp\tcp_udp_icmp_class\basic_socket_interface.ipp
+
+1732615767 f:\code\generic\io\serial_port\serial_port.hpp
+
+1732615767 f:\code\generic\io\usb\usb.hpp
+
+1732615767 f:\code\generic\io\websocket\websocket.hpp
+
+1732615989 f:\code\specific\lipsync\interface.hpp
+	"../../generic/io/interface.hpp"
+	"../../generic/math/interface.hpp"
+	"audio/audio.hpp"
+	"listener/listener.hpp"
+	"animator/animator.hpp"
+	"vedio/vedio.hpp"
+
+1732615767 f:\code\specific\lipsync\audio\audio.hpp
+
+1732615767 f:\code\specific\lipsync\listener\listener.hpp
+	"mfcc_listener.hpp"
+
+1732617884 f:\code\specific\lipsync\listener\mfcc_listener.ipp
+
+1732611828 f:\code\specific\lipsync\listener\mfcc_listener.cpp
+
+1732615767 f:\code\specific\lipsync\animator\animator.hpp
+
+1732615767 f:\code\specific\lipsync\vedio\vedio.hpp
+
+1732615994 f:\code\specific\neural\interface.hpp
+	"../../generic/math/interface.hpp"
+	"layer/layer.hpp"
+	"loss/loss.hpp"
+	"model/model.hpp"
+	"optimizer/optimizer.hpp"
+	"utility/initialize/initialize.hpp"
+
+1732615767 f:\code\specific\neural\layer\layer.hpp
+	"convolve_layer.hpp"
+	"linear_layer.hpp"
+	"max_pool_layer.hpp"
+	"relu_layer.hpp"
+	"sigmoid_layer.hpp"
+	"softmax_layer.hpp"
+
+1732615767 f:\code\specific\neural\layer\convolve_layer.hpp
+
+1732615767 f:\code\specific\neural\layer\linear_layer.ipp
+
+1732615767 f:\code\specific\neural\layer\max_pool_layer.hpp
+
+1732615767 f:\code\specific\neural\layer\relu_layer.ipp
+
+1732615767 f:\code\specific\neural\layer\sigmoid_layer.ipp
+
+1732615767 f:\code\specific\neural\layer\softmax_layer.ipp
+
+1732615767 f:\code\specific\neural\loss\loss.hpp
+	"binary_cross_entropy_loss.hpp"
+	"cross_entropy_loss.hpp"
+	"mean_absolute_error_loss.hpp"
+	"mean_squared_error_loss.hpp"
+
+1732615767 f:\code\specific\neural\loss\binary_cross_entropy_loss.ipp
+
+1732615767 f:\code\specific\neural\loss\cross_entropy_loss.ipp
+
+1732615767 f:\code\specific\neural\loss\mean_absolute_error_loss.ipp
+
+1732615767 f:\code\specific\neural\loss\mean_squared_error_loss.ipp
+
+1732615767 f:\code\specific\neural\model\model.hpp
+	"sequence_model.hpp"
+
+1732615767 f:\code\specific\neural\model\sequence_model.ipp
+
+1732615767 f:\code\specific\neural\optimizer\optimizer.hpp
+	"adaptive_moment_estimation_optmizer.hpp"
+	"root_mean_square_propagation_optimizer.hpp"
+	"stochastic_gradient_descent_optimizer.hpp"
+
+1732615767 f:\code\specific\neural\optimizer\adaptive_moment_estimation_optmizer.hpp
+
+1732615767 f:\code\specific\neural\optimizer\root_mean_square_propagation_optimizer.hpp
+
+1732615767 f:\code\specific\neural\optimizer\stochastic_gradient_descent_optimizer.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\initialize.hpp
+	"kaiming_normal_initialize.ipp"
+	"kaiming_uniform_initialize.ipp"
+	"normal_initialize.ipp"
+	"ones_initialize.ipp"
+	"orthogonal_initialize.ipp"
+	"sparse_initialize.ipp"
+	"uniform_initialize.ipp"
+	"xavier_normal_initialize.ipp"
+	"xavier_uniform_initialize.ipp"
+	"zeros_initialize.ipp"
+
+1732615767 f:\code\specific\neural\utility\initialize\kaiming_normal_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\kaiming_uniform_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\normal_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\ones_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\orthogonal_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\sparse_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\uniform_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\xavier_normal_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\xavier_uniform_initialize.ipp
+
+1732615767 f:\code\specific\neural\utility\initialize\zeros_initialize.ipp
+
+1732615998 f:\code\specific\spirit\interface.hpp
+	"../../generic/math/interface.hpp"
+	"numeric/numeric.hpp"
+	"symbolic/symbolic.hpp"
+
+1732615767 f:\code\specific\spirit\numeric\numeric.ipp
+
+1732615767 f:\code\specific\spirit\symbolic\symbolic.hpp
+
+1732616006 f:\code\specific\stock\interface.hpp
+	"../../generic/io/interface.hpp"
+	"database.hpp"
+
+1732615767 f:\code\specific\stock\database.hpp
+	"database.cpp"
+
+1732619949 f:\code\specific\audio\interface.hpp
+	"../../generic/io/interface.hpp"
+	"../../generic/math/interface.hpp"
+	"extractor/extractor.h"
+
+1732620104 f:\code\specific\audio\extractor\extractor.h
+	"fourier_extractor.hpp"
+	"lpcc_extractor.hpp"
+	"mfcc_extractor.hpp"
+	"pitch_extractor.hpp"
+	"spectrum_extractor.hpp"
+
+1732619417 f:\code\specific\audio\extractor\fourier_extractor.hpp
+
+1732619665 f:\code\specific\audio\extractor\lpcc_extractor.hpp
+
+1732676657 f:\code\specific\audio\extractor\mfcc_extractor.hpp
+	"mfcc_extractor.ipp"
+	"mfcc_extractor.cpp"
+
+1732683287 f:\code\specific\audio\extractor\mfcc_extractor.ipp
+
+1732675877 f:\code\specific\audio\extractor\mfcc_extractor.cpp
+
+1732619597 f:\code\specific\audio\extractor\pitch_extractor.hpp
+
+1732619538 f:\code\specific\audio\extractor\spectrum_extractor.hpp
+

@@ -7,7 +7,6 @@
 #include "../specific/spirit/interface.hpp"
 #include "../specific/stock/interface.hpp"
 #include "example.cpp"
-#include <any>
 using namespace ap;
 
 int main ( )

@@ -65,6 +65,8 @@
 // Include [[hardware.cpu.intel.tbb]]
 #include <tbb/tbb.h>
 
+// Include [[hardward.cpu.apple]]
+
 // Include [[hardware.gpu.nvidia.cuda]]
 // #include <thrust/thrust>
 

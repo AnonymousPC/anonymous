@@ -25,10 +25,7 @@ std::string abi::demangle ( const char* mangled_name )
 #if __cpp_lib_stacktrace
     std::string abi::demangle ( const std::stacktrace& trace )
     {
-        return trace | std::views::drop_while([ ] (const auto& e) { return e.description().contains("::stacktrace"); })
-                     | std::views::drop_while([ ] (const auto& e) { return e.description().contains("::exception"); })
-                     | std::views::reverse
-                     | std::views::drop_while([ ] (const auto& e) { return e.description() != "main"; })
+        return trace | std::views::reverse
                      | std::views::transform ([&] (const auto& e)
                          {
                              return std::format("    {}at {}{} {}in {}{}:{}{}",

@@ -8,8 +8,20 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-int main (int argc, char** argv)
+void test ( int t )
 {
-    pipe_command("gcc-1)
+    if ( t == 0 )
+        throw exception("Oh NO {}", std::this_thread::get_id());
+    else
+        test(t-1);
+}
+
+int main ( )
+{
+    let task = std::execution::schedule(global_cpu_context.get_scheduler())
+             | std::execution::then([] { test(10); });
+        
+    std::execution::sync_wait(task);
+
     
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include "concept.hpp"
 #include "abi.hpp"
+#include "concept.hpp"
 
 /// Exceptions list
 
@@ -41,8 +41,12 @@ class exception
         template < class... arg_types > class format_string;
 
     private: // Data
-        mutable std::string     msg   = std::string();
-        mutable std::stacktrace trace = std::stacktrace();
+        mutable std::string                   msg   = std::string();
+        #if __cpp_lib_stacktrace
+        mutable std::stacktrace               trace = std::stacktrace();
+        #else
+        mutable boost::stacktrace::stacktrace trace = boost::stacktrace::stacktrace();
+        #endif
 
     public: // Core
                  exception ( );

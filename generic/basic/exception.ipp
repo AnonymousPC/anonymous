@@ -164,7 +164,11 @@ template < class... arg_types >
 exception::exception ( format_string<std::type_identity_t<arg_types>...> str, arg_types&&... args )
 {
     msg   = exception::format ( str, std::forward<decltype(args)>(args)... );
+    #if __cpp_lib_stacktrace
     trace = std::stacktrace::current();
+    #else
+    trace = boost::stacktrace::stacktrace();
+    #endif
 }
 
 
@@ -257,7 +261,7 @@ consteval exception::format_string<arg_types...>::format_string ( const char* in
 
         if ( p == e )
             m = mode::default_mode;
-        else if ( std::isdigit(*(p+1)) )
+        else if ( *(p+1) >= '0' and *(p+1) <= '9' )
             m = mode::explicit_mode;
         else if ( p+1 < e and *(p+1) != '{' )
             m = mode::implicit_mode;

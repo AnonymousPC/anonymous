@@ -16,7 +16,7 @@
 #endif
 
 // Include [[std]]
-#define __cpp_lib_text_encoding 202306L
+#define __cpp_lib_text_encoding 202412L
 #include <algorithm>
 #include <chrono>
 #include <concepts>
@@ -47,7 +47,6 @@
     #include <exec/static_thread_pool.hpp>
     #include <exec/timed_scheduler.hpp>
     #include <exec/when_any.hpp>
-    #include <execpools/tbb/tbb_thread_pool.hpp>
 #pragma GCC diagnostic pop
 
 // Include [[compiler.gcc, compiler.clang]]
@@ -63,14 +62,21 @@
 #endif
 
 // Include [[hardware.cpu.intel.tbb]]
-#include <tbb/tbb.h>
+#ifdef __INTEL__
+    #include <tbb/tbb.h>
+#endif
 
 // Include [[hardward.cpu.apple]]
+#ifdef __APPLE__
+#endif
 
-// Include [[hardware.gpu.nvidia.cuda]]
-// #include <thrust/thrust>
+// Include [[hardware.gpu.nvidia]]
+#ifdef __CUDACC__
+   #include <thrust/thrust>
+#endif
 
 // Include [[third-party.boost]]
+#define _GNU_SOURCE
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
@@ -91,11 +97,15 @@
 #include <boost/process/v2.hpp>
 #include <boost/spirit/home/qi.hpp>
 #include <boost/spirit/home/x3.hpp>
+#include <boost/stacktrace.hpp>
 
 // Include [[third-party.eigen]]
-#define eigen_assert(x) do { if ( not Eigen::internal::copy_bool(x) ) throw std::runtime_error(EIGEN_MAKESTRING(x)); } while ( false )
-#include <eigen3/Eigen/Eigen>
-#include <eigen3/unsupported/Eigen/FFT>
+#pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wclass-memaccess"
+    #define eigen_assert(x) do { if ( not Eigen::internal::copy_bool(x) ) throw std::runtime_error(EIGEN_MAKESTRING(x)); } while ( false )
+    #include <eigen3/Eigen/Eigen>
+    #include <eigen3/unsupported/Eigen/FFT>
+#pragma GCC diagnostic pop
 
 // Include [[third-party.mpg123]]
 #include <mpg123.h>
@@ -147,7 +157,6 @@ namespace std
     {
         using namespace ::stdexec;
         using namespace ::exec;
-        using namespace ::execpools;
     }
 
     // [[std.experimental.text_encoding]]
@@ -190,7 +199,11 @@ namespace ap
     namespace abi
     {
         std::string demangle ( const char* );
+        #if __cpp_lib_stacktrace
         std::string demangle ( const std::stacktrace& );
+        #else
+        std::string demangle ( const boost::stacktrace::stacktrace& );
+        #endif
     }
 
     /// Exception
@@ -222,9 +235,9 @@ namespace ap
     /* lambda function */ // auto input ( const printable auto&... );
 
     /// Global
-    extern std::execution::tbb_thread_pool  global_cpu_context;
-    extern std::execution::tbb_thread_pool& global_gpu_context;
-    extern boost::asio::io_context          global_io_context;
+    extern std::execution::static_thread_pool  global_cpu_context;
+    extern std::execution::static_thread_pool& global_gpu_context;
+    extern boost::asio::io_context             global_io_context;
 
     /// Include
     #include "abi.hpp"
@@ -236,9 +249,9 @@ namespace ap
 
     /// DLL.Global
     #if dll
-        std::execution::tbb_thread_pool  global_cpu_context = std::execution::tbb_thread_pool(16);
-        std::execution::tbb_thread_pool& global_gpu_context = global_cpu_context;
-        boost::asio::io_context          global_io_context  = boost::asio::io_context(2);
+        std::execution::static_thread_pool  global_cpu_context = std::execution::static_thread_pool(int(std::thread::hardware_concurrency() * 0.8));
+        std::execution::static_thread_pool& global_gpu_context = global_cpu_context;
+        boost::asio::io_context             global_io_context  = boost::asio::io_context(2);
     #endif
 
     /// DLL.Initialize
@@ -246,7 +259,7 @@ namespace ap
         class global_basic_initializer_t
         {
             private: // Constructor
-                global_basic_initializer_type ( )
+                global_basic_initializer_t ( )
                 {
                     // Standard.print
                     std::cout << std::boolalpha;

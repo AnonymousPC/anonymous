@@ -78,6 +78,11 @@
         "stdfloat": "cpp",
         "stop_token": "cpp",
         "text_encoding": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "cwctype": "cpp",
+        "unordered_map": "cpp",
+        "numbers": "cpp",
+        "__hash_table": "cpp",
+        "execution": "cpp"
     }
 }

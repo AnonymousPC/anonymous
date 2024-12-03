@@ -255,37 +255,41 @@ namespace ap
         boost::asio::io_context             global_io_context  = boost::asio::io_context(2);
     #endif
 
-    /// DLL.Initialize
-    #if dll
-        class global_basic_initializer_t
-        {
-            private: // Constructor
-                global_basic_initializer_t ( )
-                {
-                    // Standard.print
-                    std::cout << std::boolalpha;
+    /// Initialize
+    class global_basic_initializer_t
+    {
+        private: // Constructor
+            global_basic_initializer_t ( )
+            {
+                // Standard.print
+                std::cout << std::boolalpha;
 
-                    // Standard.signal
-                    std::signal(SIGABRT, abort_signal);
-                    std::signal(SIGFPE,  floating_point_exception_signal);
-                    std::signal(SIGILL,  illegal_instruction_signal);
-                    std::signal(SIGINT,  interrupt_signal);
-                    std::signal(SIGSEGV, segmentation_violation_signal);
-                    std::signal(SIGTERM, terminate_signal);
-                }
+                // Windows.print
+                #ifdef _WIN32
+                    SetConsoleCP(CP_UTF8);
+                    SetConsoleOutputCP(CP_UTF8);
+                #endif
 
-            private: // Functions
-                static void abort_signal                    ( int ) { throw ap::abort_signal();                    };
-                static void floating_point_exception_signal ( int ) { throw ap::floating_point_exception_signal(); };
-                static void illegal_instruction_signal      ( int ) { throw ap::illegal_instruction_signal();      };
-                static void interrupt_signal                ( int ) { throw ap::interrupt_signal();                };
-                static void segmentation_violation_signal   ( int ) { throw ap::segmentation_violation_signal();   };
-                static void terminate_signal                ( int ) { throw ap::terminate_signal();                };
+                // Standard.signal
+                std::signal(SIGABRT, abort_signal);
+                std::signal(SIGFPE,  floating_point_exception_signal);
+                std::signal(SIGILL,  illegal_instruction_signal);
+                std::signal(SIGINT,  interrupt_signal);
+                std::signal(SIGSEGV, segmentation_violation_signal);
+                std::signal(SIGTERM, terminate_signal);
+            }
 
-            private: // Instance
-                static thread_local global_basic_initializer_t global_basic_initializer;
-        };
-        thread_local global_basic_initializer_t global_basic_initializer_t::global_basic_initializer;
-    #endif
+        private: // Functions
+            static void abort_signal                    ( int ) { throw ap::abort_signal();                    };
+            static void floating_point_exception_signal ( int ) { throw ap::floating_point_exception_signal(); };
+            static void illegal_instruction_signal      ( int ) { throw ap::illegal_instruction_signal();      };
+            static void interrupt_signal                ( int ) { throw ap::interrupt_signal();                };
+            static void segmentation_violation_signal   ( int ) { throw ap::segmentation_violation_signal();   };
+            static void terminate_signal                ( int ) { throw ap::terminate_signal();                };
+
+        private: // Instance
+            static global_basic_initializer_t global_basic_initializer;
+    };
+    global_basic_initializer_t global_basic_initializer_t::global_basic_initializer;
 
 } // namespace ap

@@ -63,17 +63,17 @@
         },
         {
             "label": "windows.debug.run",
-            "type": "process",
-            "command": "bin/debug/main.exe",
+            "type": "shell",
+            "command": "start cmd /k bin\\debug\\main.exe",
             "group": "test",
             "detail": "windows.debug.run"
         },
         {
             "label": "windows.debug",
-            "type": "process",
+            "type": "shell",
             "dependsOn": ["windows.debug.compile", "windows.debug.link"],
             "dependsOrder": "sequence",
-            "command": "bin/debug/main.exe",
+            "command": "start cmd /k bin\\debug\\main.exe",
             "group": "build",
             "detail": "windows.debug"
         },
@@ -140,17 +140,17 @@
         },
         {
             "label": "windows.release.run",
-            "type": "process",
-            "command": "bin/release/main.exe",
+            "type": "shell",
+            "command": "start cmd /k bin\\release\\main.exe",
             "group": "test",
             "detail": "windows.release.run"
         },
         {
             "label": "windows.release",
-            "type": "process",
+            "type": "shell",
             "dependsOn": ["windows.release.compile", "windows.release.link"],
             "dependsOrder": "sequence",
-            "command": "bin/release/main.exe",
+            "command": "start cmd /k bin\\release\\main.exe",
             "group": "build",
             "detail": "windows.release"
         },

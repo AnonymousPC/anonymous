@@ -6,7 +6,7 @@
             "type": "process",
             "command": "g++-14",
             "args": [
-                "-Ddebug=1"
+                "-Ddebug=1",
                 "-std=c++26",
              // "-Wa,-mbig-obj",
                 "-I/opt/homebrew/include",
@@ -40,7 +40,7 @@
                 "/opt/homebrew/lib/libboost_iostreams.dylib",
                 "/opt/homebrew/lib/libboost_locale-mt.dylib",
                 "/opt/homebrew/lib/libboost_process-mt.dylib",
-                "/opt/homebrew/lib/libboost_stacktrace",
+                "/opt/homebrew/lib/libboost_stacktrace_basic-mt.dylib",
                 "/opt/homebrew/lib/libboost_system-mt.dylib",
                 "/opt/homebrew/lib/libssl.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
@@ -115,6 +115,7 @@
                 "/opt/homebrew/lib/libboost_iostreams.dylib",
                 "/opt/homebrew/lib/libboost_locale-mt.dylib",
                 "/opt/homebrew/lib/libboost_process-mt.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_basic-mt.dylib",
                 "/opt/homebrew/lib/libboost_system-mt.dylib",
                 "/opt/homebrew/lib/libssl.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
@@ -193,6 +194,7 @@
                 "/opt/homebrew/lib/libboost_iostreams.dylib",
                 "/opt/homebrew/lib/libboost_locale-mt.dylib",
                 "/opt/homebrew/lib/libboost_process-mt.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_basic-mt.dylib",
                 "/opt/homebrew/lib/libboost_system-mt.dylib",
                 "/opt/homebrew/lib/libssl.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",

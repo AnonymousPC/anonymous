@@ -129,6 +129,7 @@
 
 // Compiler
 #ifdef __GNUC__
+    #pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
     #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is kept for further standarlization.
     #pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
     #pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
@@ -271,12 +272,6 @@ namespace ap
                     std::signal(SIGINT,  interrupt_signal);
                     std::signal(SIGSEGV, segmentation_violation_signal);
                     std::signal(SIGTERM, terminate_signal);
-
-                    // Windows
-                    #ifdef _WIN32
-                        SetConsoleCP      (CP_UTF8);
-                        SetConsoleOutputCP(CP_UTF8);
-                    #endif
                 }
 
             private: // Functions

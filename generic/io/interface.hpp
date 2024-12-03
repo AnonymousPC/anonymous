@@ -149,15 +149,15 @@ namespace ap
     #if dll
         boost::asio::ssl::context  global_ssl_client_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_client);
         boost::asio::ssl::context  global_ssl_server_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_server);
-        string                     global_http_user_agent    = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0"s;
+        string                     global_http_user_agent    = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0"s; // Firefox.
     #endif
 
     /// DLL.Initialize
     #if dll
-        class global_io_initializer_type
+        class global_io_initializer_t
         {
             private: // Constructor
-                global_io_initializer_type ( )
+                global_io_initializer_t ( )
                 {
                     try
                     {
@@ -165,9 +165,11 @@ namespace ap
                         global_ssl_server_context.set_options(boost::asio::ssl::context::default_workarounds
                                                              |boost::asio::ssl::context::no_sslv2
                                                              |boost::asio::ssl::context::single_dh_use);
+                        #ifdef _WIN32
                         global_ssl_server_context.use_certificate_chain_file("C:/Server/cert.pem");
                         global_ssl_server_context.use_private_key_file      ("C:/Server/key.pem", boost::asio::ssl::context::file_format::pem);
                         global_ssl_server_context.use_tmp_dh_file           ("C:/Server/dh.pem");
+                        #endif
                     }
                     catch ( const boost::system::system_error& e )
                     {

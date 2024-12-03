@@ -120,25 +120,26 @@ templates
 constexpr string_type& string_algo::encode ( encode_type from, encode_type to )
     requires ( not is_view ) and std::same_as<char_type,char>
 {
-    if ( from != to )
-        try
-        {
-            return derive_of_self = string_type(boost::locale::conv::between(std::basic_string<char_type>(derive_of_self),
-                                                                             to.name(),
-                                                                             from.name(),
-                                                                             boost::locale::conv::stop));
-        }
-        catch ( const boost::locale::conv::conversion_error& e )
-        {
-            throw encode_error("cannot encode string {} from {} into {} [[caused by {}: {}]]", const_derive_of_self, from.name(), to.name(), typeid(e), e.what());
-        }
-        catch ( const boost::locale::conv::invalid_charset_error& e )
-        {
-            throw encode_error("cannot encode string {} from {} into {} [[caused by {}: {}]]", const_derive_of_self, from.name(), to.name(), typeid(e), e.what());
-        }
+    #ifdef _WIN32
+        if ( from != to )
+            try
+            {
+                return derive_of_self = string_type(boost::locale::conv::between(std::basic_string<char_type>(derive_of_self), to.name(), from.name(), boost::locale::conv::stop));
+            }
+            catch ( const boost::locale::conv::conversion_error& e )
+            {
+                throw encode_error("cannot encode string {} from {} into {} [[caused by {}: {}]]", const_derive_of_self, from.name(), to.name(), typeid(e), e.what());
+            }
+            catch ( const boost::locale::conv::invalid_charset_error& e )
+            {
+                throw encode_error("cannot encode string {} from {} into {} [[caused by {}: {}]]", const_derive_of_self, from.name(), to.name(), typeid(e), e.what());
+            }
 
-    else
+        else
+            return derive_of_self;
+    #else
         return derive_of_self;
+    #endif
 }
 
 templates

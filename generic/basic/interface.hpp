@@ -16,7 +16,6 @@
 #endif
 
 // Include [[std]]
-#define __cpp_lib_text_encoding 202412L
 #include <algorithm>
 #include <chrono>
 #include <concepts>
@@ -30,12 +29,27 @@
 #include <new>
 #include <ranges>
 #include <regex>
-#include <stacktrace>
-#include <stdfloat>
 #include <string>
-#include <text_encoding>
 #include <thread>
 #include <utility>
+
+#if __cpp_lib_stacktrace
+    #include <stacktrace>
+#endif
+#if defined(__CPP_FLOAT16_T__) and defined(__STDCPP_FLOAT32_T__)
+    #include <stdfloat>
+#endif
+#if __cpp_lib_text_encoding
+    #undef __cpp_lib_text_encoding
+    #define __cpp_lib_text_encoding 202412L
+    #include <text_encoding>
+#endif
+
+namespace std
+{
+    #include "text_encoding.ipp"
+    #include "ranges_join_with.ipp"
+}
 
 // Include [[std.experimental.execution]]
 #pragma GCC diagnostic push
@@ -102,6 +116,7 @@
 // Include [[third-party.eigen]]
 #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wclass-memaccess"
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     #define eigen_assert(x) do { if ( not Eigen::internal::copy_bool(x) ) throw std::runtime_error(EIGEN_MAKESTRING(x)); } while ( false )
     #include <eigen3/Eigen/Eigen>
     #include <eigen3/unsupported/Eigen/FFT>
@@ -159,16 +174,6 @@ namespace std
         using namespace ::stdexec;
         using namespace ::exec;
     }
-
-    // [[std.experimental.text_encoding]]
-    std::text_encoding std::text_encoding::environment()
-    {
-        #ifdef _WIN32
-            return std::text_encoding::GBK;
-        #else
-            return std::text_encoding::UTF8;
-        #endif
-    };
 }
 
 

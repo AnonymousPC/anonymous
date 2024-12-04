@@ -10,5 +10,5 @@ using namespace ap;
 
 int main ( )
 {
-  
+    http_get("https://60.204.226.196").each(print);
 }

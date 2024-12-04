@@ -161,7 +161,14 @@ namespace std
     }
 
     // [[std.experimental.text_encoding]]
-    std::text_encoding std::text_encoding::environment() { return std::text_encoding::UTF8; };
+    std::text_encoding std::text_encoding::environment()
+    {
+        #ifdef _WIN32
+            return std::text_encoding::GBK;
+        #else
+            return std::text_encoding::UTF8;
+        #endif
+    };
 }
 
 

@@ -17,7 +17,7 @@ class basic_initializer_t
         basic_initializer_t ( );
 
     private: // Functions
-        static void abort_signal                    ( int );
+        void ok ( );
         static void floating_point_exception_signal ( int );
         static void illegal_instruction_signal      ( int );
         static void interrupt_signal                ( int );
@@ -28,23 +28,21 @@ class basic_initializer_t
 #if dll
     basic_initializer_t::basic_initializer_t ( )
     {
-        // Standard.print
+        // Stdio
         std::cout << std::boolalpha;
 
-        // Standard.signal
-        std::signal(SIGABRT, abort_signal);
+        // Stdio.windows
+        #ifdef _WIN32
+            SetConsoleOutputCP(CP_UTF8);
+            SetConsoleOutputCP(CP_UTF8);
+        #endif
+
+        // Signal
         std::signal(SIGFPE,  floating_point_exception_signal);
         std::signal(SIGILL,  illegal_instruction_signal);
         std::signal(SIGINT,  interrupt_signal);
         std::signal(SIGSEGV, segmentation_violation_signal);
         std::signal(SIGTERM, terminate_signal);
-    }
-
-    void basic_initializer_t::abort_signal ( int )
-    {
-        std::cerr << "terminate called after throwing an instance of '" << abi::demangle(typeid(ap::abort_signal).name()) << "'\n"
-                << "  what(): " << ap::abort_signal().what();
-        std::exit(-1);
     }
 
     void basic_initializer_t::floating_point_exception_signal ( int )

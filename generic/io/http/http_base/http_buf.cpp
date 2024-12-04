@@ -161,7 +161,7 @@ http_buf::resolve_type http_buf::resolve ( const url& website )
 {
     try
     {
-        return boost::asio::ip::tcp::resolver(global_io_context).resolve(
+        return boost::asio::ip::tcp::resolver(io_context).resolve(
                    website.host().c_str(),
                    (website.port() != ""  ? website.port()             otherwise
                    not modes_port.empty() ? string(modes_port.value()) otherwise
@@ -201,7 +201,7 @@ void http_buf::connect_without_proxy ( const url& website )
     if ( website.scheme() == "https" )
     {
         // Create SSL handle.
-        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, global_ssl_client_context);
+        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_client_context);
 
         // SSL server name indication.
         let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
@@ -355,7 +355,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
 
             // Create SSL handle (might have been created in connect(proxy_website)).
             if ( https_handle == nullptr )
-                https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, global_ssl_client_context);
+                https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_client_context);
 
             // SSL server name indication.
             let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
@@ -389,7 +389,7 @@ void http_buf::listen_to_port ( const url& portal )
         {
             try
             {
-                boost::asio::ip::tcp::acceptor(global_io_context, ip).accept(http_handle->socket());
+                boost::asio::ip::tcp::acceptor(io_context, ip).accept(http_handle->socket());
             }
             catch ( const boost::system::system_error& e )
             {
@@ -407,7 +407,7 @@ void http_buf::listen_to_port ( const url& portal )
     if ( portal.scheme() == "https" )
     {
         // Create SSL handle.
-        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, global_ssl_server_context);
+        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_server_context);
 
         // SSL handshake.
         try
@@ -576,7 +576,7 @@ void http_buf::receive_begin ( auto& parser )
 
 void http_buf::initialize_as ( open_type open_mode )
 {
-    http_handle = std::make_unique<boost::beast::tcp_stream>(global_io_context);
+    http_handle = std::make_unique<boost::beast::tcp_stream>(io_context);
 
     if ( open_mode == open_type::client )
     {

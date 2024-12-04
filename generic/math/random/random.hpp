@@ -10,8 +10,6 @@
 #include "engine/shuffle_order_engine.ipp"
 #include "engine/floating_point_engine.ipp"
 
-extern thread_local mt19937 global_random_engine;
-
 #include "container/array.ipp"
 #include "distribution/uniform_distribution.ipp"
 #include "distribution/random.ipp"

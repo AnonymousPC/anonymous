@@ -2,7 +2,7 @@
 
 constexpr float_type auto student_t_distribution ( float_type auto n )
 {
-    return student_t_distribution ( n, global_random_engine );
+    return student_t_distribution ( n, random_engine );
 }
 
 constexpr float_type auto student_t_distribution ( float_type auto n, random_engine_type auto& e )

@@ -120,8 +120,8 @@ templates
 constexpr string_type& string_algo::encode ( encode_type from, encode_type to )
     requires ( not is_view ) and std::same_as<char_type,char>
 {
-    #ifdef _WIN32
-        if ( from != to )
+    if ( from != to )
+        #ifdef _WIN32
             try
             {
                 return derive_of_self = string_type(boost::locale::conv::between(std::basic_string<char_type>(derive_of_self), to.name(), from.name(), boost::locale::conv::stop));
@@ -134,12 +134,11 @@ constexpr string_type& string_algo::encode ( encode_type from, encode_type to )
             {
                 throw encode_error("cannot encode string {} from {} into {} [[caused by {}: {}]]", const_derive_of_self, from.name(), to.name(), typeid(e), e.what());
             }
-
-        else
-            return derive_of_self;
-    #else
+        #else
+            throw encode_error("cannot encode string {} from {} into {}: string.encode currently not supported on this platform until boost.locale is built", const_derive_of_self, from.name(), to.name());
+        #endif
+    else
         return derive_of_self;
-    #endif
 }
 
 templates

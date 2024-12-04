@@ -49,7 +49,7 @@
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_iostreams-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_locale-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_process-mt.a",
-                "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_basic-mt.dll.a",
+                "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_windbg-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libcrypto.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libFLAC++.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libjpeg.dll.a",
@@ -77,7 +77,6 @@
             "group": "build",
             "detail": "windows.debug"
         },
-
 
         {
             "label": "windows.release.compile",
@@ -126,7 +125,7 @@
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_iostreams-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_locale-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_process-mt.a",
-                "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_basic-mt.dll.a",
+                "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_windbg-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libcrypto.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libFLAC++.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libjpeg.dll.a",
@@ -206,7 +205,7 @@
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_iostreams-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_locale-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_process-mt.a",
-                "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_basic-mt.dll.a",
+                "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_windbg-mt.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libcrypto.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libFLAC++.dll.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libjpeg.dll.a",
@@ -278,10 +277,10 @@
                 "/opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/current/libstdc++exp.a",
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
-                "/opt/homebrew/lib/libboost_iostreams.dylib",
+                "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
                 "/opt/homebrew/lib/libboost_locale-mt.dylib",
                 "/opt/homebrew/lib/libboost_process-mt.dylib",
-                "/opt/homebrew/lib/libboost_stacktrace_basic-mt.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_addr2line-mt.dylib",
                 "/opt/homebrew/lib/libboost_system-mt.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
                 "/opt/homebrew/lib/libFLAC++.dylib",
@@ -289,7 +288,7 @@
                 "/opt/homebrew/lib/libmpg123.dylib",
                 "/opt/homebrew/lib/libpng.dylib",
                 "/opt/homebrew/lib/libssl.dylib",
-                "/opt/homebrew/lib/libtiff.dylib"
+                "/opt/homebrew/lib/libtiff.dylib",
             ],
             "group": "none",
             "detail": "mac.debug.link"
@@ -345,10 +344,10 @@
                 "/opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/current/libstdc++exp.a",
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
-                "/opt/homebrew/lib/libboost_iostreams.dylib",
+                "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
                 "/opt/homebrew/lib/libboost_locale-mt.dylib",
                 "/opt/homebrew/lib/libboost_process-mt.dylib",
-                "/opt/homebrew/lib/libboost_stacktrace_basic-mt.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_addr2line-mt.dylib",
                 "/opt/homebrew/lib/libboost_system-mt.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
                 "/opt/homebrew/lib/libFLAC++.dylib",
@@ -356,7 +355,8 @@
                 "/opt/homebrew/lib/libmpg123.dylib",
                 "/opt/homebrew/lib/libpng.dylib",
                 "/opt/homebrew/lib/libssl.dylib",
-                "/opt/homebrew/lib/libtiff.dylib"
+                "/opt/homebrew/lib/libtiff.dylib",
+                "/opt/homebrew/lib/libzstd.dylib"
             ],
             "group": "none",
             "detail": "mac.release.link"
@@ -413,18 +413,20 @@
                 "/opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/current/libstdc++exp.a",
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
-                "/opt/homebrew/lib/libboost_iostreams.dylib",
+                "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
                 "/opt/homebrew/lib/libboost_locale-mt.dylib",
                 "/opt/homebrew/lib/libboost_process-mt.dylib",
-                "/opt/homebrew/lib/libboost_stacktrace_basic-mt.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_addr2line-mt.dylib",
                 "/opt/homebrew/lib/libboost_system-mt.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
                 "/opt/homebrew/lib/libFLAC++.dylib",
                 "/opt/homebrew/lib/libjpeg.dylib",
+                "/opt/homebrew/lib/liblzma.dylib",
                 "/opt/homebrew/lib/libmpg123.dylib",
                 "/opt/homebrew/lib/libpng.dylib",
                 "/opt/homebrew/lib/libssl.dylib",
-                "/opt/homebrew/lib/libtiff.dylib"
+                "/opt/homebrew/lib/libtiff.dylib",
+                "/opt/homebrew/lib/libzstd.dylib"
             ],
             "group": "none",
             "detail": "mac.dll.link"

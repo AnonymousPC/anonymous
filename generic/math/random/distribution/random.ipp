@@ -2,7 +2,7 @@
 
 constexpr int_type auto random ( int_type auto a, int_type auto b )
 {
-    return random ( a, b, global_random_engine );
+    return random ( a, b, random_engine );
 }
 
 constexpr int_type auto random ( int_type auto a, int_type auto b, random_engine_type auto& e )
@@ -12,7 +12,7 @@ constexpr int_type auto random ( int_type auto a, int_type auto b, random_engine
 
 constexpr char_type auto random ( char_type auto a, char_type auto b )
 {
-    return random ( a, b, global_random_engine );
+    return random ( a, b, random_engine );
 }
 
 constexpr char_type auto random ( char_type auto a, char_type auto b, random_engine_type auto& e )

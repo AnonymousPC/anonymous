@@ -174,11 +174,11 @@ namespace ap
     inline namespace constants { }
     inline namespace literals  { }
 
-    namespace abi       { }
-    namespace audio     { }
-    namespace neural    { }
-    namespace spirit    { }
-    namespace stock     { }
+    namespace abi    { }
+    namespace audio  { }
+    namespace neural { }
+    namespace spirit { }
+    namespace stock  { }
 
     /// Class
     template < class type, bool continuous > class range;
@@ -236,9 +236,8 @@ namespace ap
     /* lambda function */ // auto input ( const printable auto&... );
 
     /// Global
-    extern std::execution::static_thread_pool  global_cpu_context;
-    extern std::execution::static_thread_pool& global_gpu_context;
-    extern boost::asio::io_context             global_io_context;
+    extern std::execution::static_thread_pool  cpu_context;
+    extern std::execution::static_thread_pool& gpu_context;
 
     /// Include
     #include "abi.hpp"
@@ -247,49 +246,6 @@ namespace ap
     #include "range.hpp"
     #include "typedef.hpp"
     #include "utility.hpp"
-
-    /// DLL.Global
-    #if dll
-        std::execution::static_thread_pool  global_cpu_context = std::execution::static_thread_pool(int(std::thread::hardware_concurrency() * 0.8));
-        std::execution::static_thread_pool& global_gpu_context = global_cpu_context;
-        boost::asio::io_context             global_io_context  = boost::asio::io_context(2);
-    #endif
-
-    /// Initialize
-    class global_basic_initializer_t
-    {
-        private: // Constructor
-            global_basic_initializer_t ( )
-            {
-                // Standard.print
-                std::cout << std::boolalpha;
-
-                // Windows.print
-                #ifdef _WIN32
-                    SetConsoleCP(CP_UTF8);
-                    SetConsoleOutputCP(CP_UTF8);
-                #endif
-
-                // Standard.signal
-                std::signal(SIGABRT, abort_signal);
-                std::signal(SIGFPE,  floating_point_exception_signal);
-                std::signal(SIGILL,  illegal_instruction_signal);
-                std::signal(SIGINT,  interrupt_signal);
-                std::signal(SIGSEGV, segmentation_violation_signal);
-                std::signal(SIGTERM, terminate_signal);
-            }
-
-        private: // Functions
-            static void abort_signal                    ( int ) { throw ap::abort_signal();                    };
-            static void floating_point_exception_signal ( int ) { throw ap::floating_point_exception_signal(); };
-            static void illegal_instruction_signal      ( int ) { throw ap::illegal_instruction_signal();      };
-            static void interrupt_signal                ( int ) { throw ap::interrupt_signal();                };
-            static void segmentation_violation_signal   ( int ) { throw ap::segmentation_violation_signal();   };
-            static void terminate_signal                ( int ) { throw ap::terminate_signal();                };
-
-        private: // Instance
-            static global_basic_initializer_t global_basic_initializer;
-    };
-    global_basic_initializer_t global_basic_initializer_t::global_basic_initializer;
+    #include "global.hpp"
 
 } // namespace ap

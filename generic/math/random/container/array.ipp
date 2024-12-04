@@ -15,7 +15,7 @@ constexpr array_type& array_algo<array_type,value_type,iterate_type,dim>::sample
 
     array_type arr = array_type().resize(n); // As string_type conflicts in array_type(n).
 
-    std::sample ( begin(), end(), arr.begin(), n, global_random_engine );
+    std::sample ( begin(), end(), arr.begin(), n, random_engine );
 
     return static_cast<array_type&>(self) = arr;
 }
@@ -24,7 +24,7 @@ template < class array_type, class value_type, class iterate_type, int dim >
     requires ( dim == 1 )
 constexpr array_type& array_algo<array_type,value_type,iterate_type,dim>::shuffle ( )
 {
-    std::shuffle ( begin(), end(), global_random_engine );
+    std::shuffle ( begin(), end(), random_engine );
 
     return static_cast<array_type&>(self);
 }

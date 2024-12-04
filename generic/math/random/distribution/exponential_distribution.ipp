@@ -2,7 +2,7 @@
 
 constexpr float_type auto exponential_distribution ( float_type auto l )
 {
-    return exponential_distribution ( l, global_random_engine );
+    return exponential_distribution ( l, random_engine );
 }
 
 constexpr float_type auto exponential_distribution ( float_type auto l, random_engine_type auto& e )

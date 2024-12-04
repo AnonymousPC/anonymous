@@ -59,7 +59,7 @@ void pipe_buf::open ( path pth, pipe_mode auto... args )
 auto pipe_buf::run_with_args ( const auto& inputs, boost::filesystem::path pth, std::vector<std::string> params, auto... args )
 {
     if constexpr ( inputs.size == 0 )
-        return std::make_unique<boost::process::v2::process>(global_io_context,
+        return std::make_unique<boost::process::v2::process>(io_context,
                                                              std::forward<decltype(pth   )>(pth   ),
                                                              std::forward<decltype(params)>(params),
                                                              std::forward<decltype(args  )>(args  )...,

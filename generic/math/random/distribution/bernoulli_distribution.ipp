@@ -2,7 +2,7 @@
 
 constexpr bool bernoulli_distribution ( float_type auto p )
 {
-    return bernoulli_distribution ( p, global_random_engine );
+    return bernoulli_distribution ( p, random_engine );
 }
 
 constexpr bool bernoulli_distribution ( float_type auto p, random_engine_type auto& e )

@@ -2,7 +2,7 @@
 
 constexpr int_type auto binomial_distribution ( int_type auto n, float_type auto p )
 {
-    return binomial_distribution ( n, p, global_random_engine );
+    return binomial_distribution ( n, p, random_engine );
 }
 
 constexpr int_type auto binomial_distribution ( int_type auto n, float_type auto p, random_engine_type auto& e )

@@ -2,7 +2,7 @@
 
 constexpr float_type auto fisher_f_distribution ( float_type auto m, float_type auto n )
 {
-    return fisher_f_distribution ( m, n, global_random_engine );
+    return fisher_f_distribution ( m, n, random_engine );
 }
 
 constexpr float_type auto fisher_f_distribution ( float_type auto m, float_type auto n, random_engine_type auto& e )

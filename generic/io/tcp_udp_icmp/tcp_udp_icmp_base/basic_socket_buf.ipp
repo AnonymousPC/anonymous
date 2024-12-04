@@ -69,7 +69,7 @@ void basic_socket_buf<protocol>::listen ( url portal )
             {
                 if constexpr ( aux::connection_oriented<protocol> )
                     // Accept a connection.
-                    boost::asio::basic_socket_acceptor<protocol>(global_io_context, ip).accept(socket);
+                    boost::asio::basic_socket_acceptor<protocol>(io_context, ip).accept(socket);
 
                 else if constexpr ( aux::connectionless<protocol> )
                 {
@@ -341,7 +341,7 @@ auto basic_socket_buf<protocol>::resolve ( const url& website )
 {
     try
     {
-        return boost::asio::ip::basic_resolver<protocol>(global_io_context).resolve(
+        return boost::asio::ip::basic_resolver<protocol>(io_context).resolve(
                    website.host().c_str(),
                    website.port().c_str());
     }

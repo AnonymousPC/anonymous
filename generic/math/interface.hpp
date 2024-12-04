@@ -271,12 +271,12 @@ namespace ap
     constexpr float_type auto uniform_distribution     ( float_type auto, float_type auto );
     constexpr float_type auto uniform_distribution     ( float_type auto, float_type auto, random_engine_type auto& );
 
-    /// Random.variable
-    extern thread_local mt19937 global_random_engine;
-
     /// Utility
     template < int_type   value_type > using int_to_float_type   = typename std::conditional<sizeof(value_type)<=16/8,float16_t,typename std::conditional<sizeof(value_type)==32/8,float32_t,typename std::conditional<sizeof(value_type)==64/8,float64_t,float128_t>::type>::type>::type;
     template < float_type value_type > using float_to_float_type = typename std::conditional<sizeof(value_type)<=16/8,float16_t,typename std::conditional<sizeof(value_type)==32/8,float32_t,typename std::conditional<sizeof(value_type)==64/8,float64_t,float128_t>::type>::type>::type;
+
+    /// Global
+    extern thread_local mt19937 random_engine;
 
     /// Include
     #include "numeric/numeric.hpp"
@@ -284,9 +284,7 @@ namespace ap
     #include "arithmetic/arithmetic.hpp"
     #include "linear/linear.hpp"
     #include "random/random.hpp"
-
-    /// Global
-    thread_local mt19937 global_random_engine = mt19937 ( std::random_device()() );
+    #include "global.hpp"
 
     /// Literal
     namespace literals

@@ -29,9 +29,9 @@ class pipe_buf
     public: // Data
         /* boost::process::v2::process will immediate start once been constructed */
         std::unique_ptr<boost::process::v2::process> process_handle = nullptr;
-        boost::asio::writable_pipe                   stdin_pipe     = boost::asio::writable_pipe(global_io_context);
-        boost::asio::readable_pipe                   stdout_pipe    = boost::asio::readable_pipe(global_io_context);
-        boost::asio::readable_pipe                   stderr_pipe    = boost::asio::readable_pipe(global_io_context);
+        boost::asio::writable_pipe                   stdin_pipe     = boost::asio::writable_pipe(io_context);
+        boost::asio::readable_pipe                   stdout_pipe    = boost::asio::readable_pipe(io_context);
+        boost::asio::readable_pipe                   stderr_pipe    = boost::asio::readable_pipe(io_context);
         string                                       stdin_buff     = "";
         string                                       stdout_buff    = "";
         string                                       stderr_buff    = "";

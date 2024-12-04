@@ -83,6 +83,7 @@
         "unordered_map": "cpp",
         "numbers": "cpp",
         "__hash_table": "cpp",
-        "execution": "cpp"
+        "execution": "cpp",
+        "strstream": "cpp"
     }
 }

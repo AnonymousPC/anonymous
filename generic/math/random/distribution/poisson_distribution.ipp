@@ -2,7 +2,7 @@
 
 constexpr int poisson_distribution ( float_type auto l )
 {
-    return poisson_distribution ( l, global_random_engine );
+    return poisson_distribution ( l, random_engine );
 }
 
 constexpr int poisson_distribution ( float_type auto l, random_engine_type auto& e )

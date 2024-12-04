@@ -113,10 +113,10 @@ namespace ap
     constexpr void       sleep_until ( time_point );
     constexpr int        time_zone   ( );
 
-    /// Global
-    extern boost::asio::ssl::context  global_ssl_client_context;
-    extern boost::asio::ssl::context  global_ssl_server_context;
-    extern string                     global_http_user_agent;
+    /// 
+    extern boost::asio::io_context   io_context;
+    extern boost::asio::ssl::context ssl_client_context;
+    extern boost::asio::ssl::context ssl_server_context;
 
     /// Include
     #include "utility/utility.hpp" // First.
@@ -127,6 +127,7 @@ namespace ap
     #include "serial_port/serial_port.hpp"
     #include "usb/usb.hpp"
     #include "websocket/websocket.hpp"
+    #include "global.hpp"
 
     /// Literal
     namespace literals
@@ -144,43 +145,4 @@ namespace ap
         constexpr duration operator ""ns  ( unsigned long long val ) { return nanosecond  ( static_cast<long long>(val) ); }
         constexpr duration operator ""ns  ( long double        val ) { return nanosecond  ( val ); }
     }
-
-    /// DLL.Global
-    #if dll
-        boost::asio::ssl::context  global_ssl_client_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_client);
-        boost::asio::ssl::context  global_ssl_server_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_server);
-        string                     global_http_user_agent    = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0"s; // Firefox.
-    #endif
-
-    /// DLL.Initialize
-    #if dll
-        class global_io_initializer_t
-        {
-            private: // Constructor
-                global_io_initializer_t ( )
-                {
-                    try
-                    {
-                        global_ssl_client_context.set_default_verify_paths();
-                        global_ssl_server_context.set_options(boost::asio::ssl::context::default_workarounds
-                                                             |boost::asio::ssl::context::no_sslv2
-                                                             |boost::asio::ssl::context::single_dh_use);
-                        #ifdef _WIN32
-                        global_ssl_server_context.use_certificate_chain_file("C:/Server/cert.pem");
-                        global_ssl_server_context.use_private_key_file      ("C:/Server/key.pem", boost::asio::ssl::context::file_format::pem);
-                        global_ssl_server_context.use_tmp_dh_file           ("C:/Server/dh.pem");
-                        #endif
-                    }
-                    catch ( const boost::system::system_error& e )
-                    {
-                        throw network_error("ssl server context failed to initialize [[caused by {}: {}]]",
-                                            typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
-                    }
-                }
-
-            private: // Instance.
-                static global_io_initializer_t global_io_initializer;
-        };
-        global_io_initializer_t global_io_initializer_t::global_io_initializer;
-    #endif
 }

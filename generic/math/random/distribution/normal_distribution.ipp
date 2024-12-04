@@ -2,7 +2,7 @@
 
 constexpr float_type auto normal_distribution ( float_type auto ex, float_type auto dx2 )
 {
-    return normal_distribution ( ex, dx2, global_random_engine );
+    return normal_distribution ( ex, dx2, random_engine );
 }
 
 constexpr float_type auto normal_distribution ( float_type auto ex, float_type auto dx2, random_engine_type auto& e )

@@ -2,7 +2,7 @@
 
 constexpr float_type auto gamma_distribution ( float_type auto a, float_type auto b )
 {
-    return gamma_distribution ( a, b, global_random_engine );
+    return gamma_distribution ( a, b, random_engine );
 }
 
 constexpr float_type auto gamma_distribution ( float_type auto a, float_type auto b, random_engine_type auto& e )

@@ -19,7 +19,7 @@ class file_jpg
         const int& depth ( ) const;
 
     private: // Data
-        int image_depth = 32;
+        int image_depth = 24;
 };
 
 

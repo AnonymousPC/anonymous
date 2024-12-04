@@ -74,7 +74,7 @@ database& database::open ( path source )
     self.data().resize(files.size());
 
     // Read the first 1 line of each file.
-    let tasks = std::execution::schedule(global_cpu_context.get_scheduler())
+    let tasks = std::execution::schedule(cpu_context.get_scheduler())
               | std::execution::bulk(files.size(), [&] (int i)
                   {
                       i++;

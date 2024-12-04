@@ -2,7 +2,7 @@
 
 constexpr float_type auto chi_squared_distribution ( float_type auto n )
 {
-    return chi_squared_distribution ( n, global_random_engine );
+    return chi_squared_distribution ( n, random_engine );
 }
 
 constexpr float_type auto chi_squared_distribution ( float_type auto n, random_engine_type auto& e )

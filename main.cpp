@@ -10,11 +10,5 @@ using namespace ap;
 
 int main ( )
 {
-    print("中文");
-    print(true);
-    char ch = *static_cast<char*>(nullptr);
-    print(ch);
-    raise(SIGINT);
-
-    
+  
 }

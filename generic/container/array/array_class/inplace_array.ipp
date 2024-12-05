@@ -82,7 +82,12 @@ constexpr inplace_array<type,len>::inplace_array ( std::from_range_t, std::range
     if constexpr ( requires { std::ranges::size(r); self[1] = *std::ranges::begin(r); } )
     {
         resize ( std::ranges::size(r) );
-        std::move ( std::ranges::begin(r), std::ranges::end(r), begin() );
+        [[maybe_unused]] let [i,o] = std::ranges::move ( r, begin() );
+
+        #if debug
+            if ( o != end() )
+                throw value_error("cannot move range into array (with std::ranges::size(range) = {}, [[real-moved-size]] = {}): size mismatches", std::ranges::size(r), o-begin());
+        #endif
     }
 
     else
@@ -91,25 +96,15 @@ constexpr inplace_array<type,len>::inplace_array ( std::from_range_t, std::range
 }
 
 template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( std::from_range_t, std::ranges::input_range auto&& r, int init_size )
-    requires ( requires { std::declval<inplace_array>().push(*std::ranges::begin(r)); } )
-    extends inplace_array ( init_size )
+constexpr inplace_array<type,len>::inplace_array ( std::from_range_t, std::ranges::input_range auto&& r, int s )
+    requires requires { std::declval<inplace_array>().push(*std::ranges::begin(r)); }
 {
-    int i = 0;
-    for ( auto&& v in r )
-    {
-        i++;
-
-        #if debug
-            if ( i > size() )
-                throw value_error("cannot move range of size >= {} into inplace_array of size {}", i, size());
-        #endif
-        self[i] = std::forward<decltype(v)>(v);
-    }
+    resize(s);
+    [[maybe_unused]] let [i,o] = std::ranges::move ( r, begin() );
 
     #if debug
-        if ( i < size() )
-            throw value_error("cannot move range of size {} into inplace_array of size {}", i, size());
+        if ( o != end() )
+            throw value_error("cannot move range into array (with std::ranges::size(range) = {}, [[real-moved-size]] = {}): size mismatches", std::ranges::size(r), o-begin());
     #endif
 }
 

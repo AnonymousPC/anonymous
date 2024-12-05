@@ -20,7 +20,7 @@ constexpr const container_type& array_range_view<container_type,continuous>::hos
 
 template < class container_type, bool continuous >
 constexpr array_range_view<container_type,continuous>::array_range_view ( container_type& init_arr, int from, int to )
-    requires ( continuous )
+    requires continuous
     extends arr ( init_arr )
 {
     let row = [&] { if constexpr ( container_type::dimension() == 1 ) return host().size(); else return host().row(); } ();

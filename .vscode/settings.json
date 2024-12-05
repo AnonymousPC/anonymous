@@ -88,6 +88,9 @@
         "any": "cpp",
         "numeric": "cpp",
         "valarray": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "list": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp"
     }
 }

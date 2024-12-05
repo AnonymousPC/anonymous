@@ -12,8 +12,8 @@ class array_range_view
         range<int,continuous> idx = range<int,continuous>();
 
     private: // Typedef
-        class iterator_base;
-        class const_iterator_base;
+        struct iterator_base;
+        struct const_iterator_base;
 
     public: // Typedef
         using  value_type     = container_type::value_type;

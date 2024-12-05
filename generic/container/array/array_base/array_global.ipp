@@ -25,7 +25,7 @@ constexpr std::ostream& operator << ( std::ostream& left, const array_type auto&
 
 auto aux::stringalize_array ( auto& left, const auto& right )
 {
-    return stringalize_array ( left, right, [&] ( const auto& item ) { let stream = std::stringstream(); stream.copyfmt(left); stream.setf(left.flags()); stream << item; return string(stream.view()); } );
+    return stringalize_array ( left, right, [&] ( const auto& item ) { let stream = std::stringstream(); stream.copyfmt(left); stream.setf(left.flags()); stream << item; return std::string(stream.view()); } );
 }
 
 auto aux::stringalize_array ( auto& left, const auto& right, const auto& stringalizer )
@@ -41,12 +41,12 @@ void aux::align_array ( auto& right )
     if constexpr ( right.dimension() == 1 or right.dimension() == -1 )
     {
         let align = right.empty() ? 0 otherwise right.max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
-        right.each([&] (auto& str) { str.left_justify(align); });
+        right.each([&] (auto& str) { str.resize(align, ' '); });
     }
     else
     {
         let align = right.empty() ? 0 otherwise right.flatten().max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
-        right.flatten().each([&] (auto& str) { str.left_justify(align); });
+        right.flatten().each([&] (auto& str) { str.resize(align, ' '); });
     }
 }
 

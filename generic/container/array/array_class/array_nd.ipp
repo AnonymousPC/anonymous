@@ -300,7 +300,7 @@ constexpr array<type,dim>& array<type,dim>::resize ( const array_type<int,1> aut
             if constexpr ( dim == 2 )
                 line.resize ( new_shape[-1] );
             else
-                line.template resize ( new_shape[2,-1] );
+                line.resize ( new_shape[2,-1] );
     }
 
     return self;

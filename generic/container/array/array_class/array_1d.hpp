@@ -73,20 +73,48 @@ class array<type>
 
 /// Template deduction
 
+namespace aux
+{
+    template < class... types >
+    struct array_deduction_guide;
+
+    template < class... types > 
+        requires ( sizeof...(types) >= 2 ) and
+                 aux::ints_until_last_type<void,types...> and
+                 ( not std::convertible_to<last_type_of<types...>,int> ) // As last_type == int is ambiguous.
+    struct array_deduction_guide<types...>
+    {
+        using type = array<last_type_of<types...>,sizeof...(types)-1>;
+    };
+
+    template < class... types >
+        requires ( sizeof...(types) >= 2 ) and
+                 aux::ints_until_last_func<void,types...>
+    struct array_deduction_guide<types...>
+    {
+        using type = array<invoke_result<last_type_of<types...>>,sizeof...(types)-1>;
+    };
+
+    template < class... types >
+        requires ( sizeof...(types) >= 2 ) and
+                 aux::ints_until_last_func_ints<void,types...>
+    struct array_deduction_guide<types...>
+    {
+        using type = array<aux::invoke_result_by_n_ints<last_type_of<types...>,sizeof...(types)-1>,sizeof...(types)-1>;
+    };
+
+    template < class... types >
+    using array_deduction_value_type = array_deduction_guide<types...>::type::value_type;
+
+    template < class... types >
+    constexpr const int array_deduction_dimension = array_deduction_guide<types...>::type::dimension();
+
+} // namespace aux
+
+
 array ( array_type auto arr )                                -> array<typename decltype(arr)::value_type,decltype(arr)::dimension()>;
 
-array ( auto... args )                                       -> array<last_type_of<decltype(args)...>,sizeof...(args)-1>
-                                                                    requires ( sizeof...(args) >= 2 ) and
-                                                                             aux::ints_until_last_type<void,decltype(args)...> and
-                                                                             ( not std::convertible_to<last_type_of<decltype(args)...>,int> ); // Last_type = int is ambiguous.
-
-array ( auto... args )                                       -> array<invoke_result<last_type_of<decltype(args)...>>,sizeof...(args)-1>
-                                                                    requires ( sizeof...(args) >= 2 ) and
-                                                                             aux::ints_until_last_func<void,decltype(args)...>;
-
-array ( auto... args )                                       -> array<aux::invoke_result_by_n_ints<last_type_of<decltype(args)...>,sizeof...(args)-1>,sizeof...(args)-1>
-                                                                    requires ( sizeof...(args) >= 2 ) and
-                                                                             aux::ints_until_last_func_ints<void,decltype(args)...>;
+array ( auto... args )                                       -> array<aux::array_deduction_value_type<decltype(args)...>,aux::array_deduction_dimension<decltype(args)...>>;
 
 template < class type >
 array ( std::initializer_list<type> )                        -> array<type>;

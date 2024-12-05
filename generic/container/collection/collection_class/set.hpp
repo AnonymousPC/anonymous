@@ -46,12 +46,10 @@ class basic_set
 
 /// Template deduction
 
-basic_set ( set_type auto s ) -> basic_set<typename decltype(s)::value_type,typename decltype(s)::compare_type,typename decltype(s)::container_type>;
-
 template < class type >
-basic_set ( std::initializer_list<type> ) -> set<type>;
+basic_set ( std::initializer_list<type> ) -> basic_set<type,std::less<>,rb_tree<type,as_compares<type,std::less<>>>>;
 
 template < std::ranges::input_range type >
-basic_set ( std::from_range_t, type ) -> set<decay<decltype(*std::ranges::begin(std::declval<type>()))>>;
+basic_set ( std::from_range_t, type ) -> basic_set<decay<decltype(*std::ranges::begin(std::declval<type>()))>,std::less<>,rb_tree<decay<decltype(*std::ranges::begin(std::declval<type>()))>,std::less<>>>;
 
 #include "set.ipp"

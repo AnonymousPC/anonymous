@@ -113,16 +113,6 @@ template < class type1,
     requires function_type<key_less,bool(type1,type1)>
 using map = basic_map<type1,type2,key_less,rb_tree<map_pair<type1,type2>,as_key_compares<type1,type2,key_less>>>;
 
-template < class type1,
-           class type2,
-           class key_less = std::less<>,
-           class value_less = std::less<> >
-    requires function_type<key_less,  bool(type1,type1)> and
-             function_type<value_less,bool(type2,type2)>
-using bimap = basic_bimap<type1,type2,key_less,value_less,
-                          rb_tree<map_pair<type1, type2 >,as_key_compares          <type1,type2,key_less  >>,
-                          rb_tree<map_pair<type1*,type2*>,as_value_pointer_compares<type1,type2,value_less>>>;
-
 template < class type,
            class less = std::less<> >
     requires function_type<less,bool(type,type)>

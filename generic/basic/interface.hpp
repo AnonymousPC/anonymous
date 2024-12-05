@@ -1,5 +1,49 @@
 #pragma once
 
+// Config.compiler
+#if defined(__GNUC__) and not defined(__clang__)
+    #define compiler_gcc
+#elif defined(__clang__) and not defined(_MSC_VER)
+    #define compiler_clang
+#elifdef _MSC_VER
+    #define compiler_msvc
+#elifdef __CUDACC__
+    #define compiler_nvcc
+#endif
+
+// Config.system
+#ifdef _WIN32
+    #define system_windows
+#elifdef __linux__
+    #define system_linux
+#elifdef __MACH__
+    #define system_mac
+#elifdef __ANDROID__
+    #define system_android
+#elifdef __APPLE__
+    #define system_ios
+#endif
+    
+// Config.architecture
+#ifdef __x86_64__
+    #define architecture_x86_64
+#elifdef __i386__
+    #define architecture_x86_32
+#elifdef __aarch64__
+    #define architecture_arm_64
+#elifdef __arm__
+    #define architecture_arm_32
+#elifdef __powerpc64__
+    #define architecture_power_pc_64
+#elifdef __powerpc__
+    #define architecture_power_pc_32
+#elifdef __riscv64
+    #define architecture_riscv_64
+#elifdef __riscv
+    #define architecture_riscv_32
+#endif
+
+
 // Macro.begin
 #ifdef debug
     #if debug
@@ -16,110 +60,96 @@
 #endif
 
 // Include [[std]]
-#ifdef _WIN32
-    #include <algorithm>
-    #include <charconv>
-    #include <chrono>
-    #include <concepts>
-    #include <csignal>
-    #include <filesystem>
-    #include <format>
-    #include <fstream>
-    #include <iostream>
-    #include <iomanip>
-    #include <map>
-    #include <new>
-    #include <numbers>
-    #include <print>
-    #include <ranges>
-    #include <regex>
+#include <algorithm>
+#include <charconv>
+#include <chrono>
+#include <concepts>
+#include <csignal>
+#include <filesystem>
+#include <format>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <map>
+#include <new>
+#include <numbers>
+#include <print>
+#include <ranges>
+#include <regex>
+#include <string>
+#include <thread>
+#include <utility>
+
+#ifdef compiler_gcc
     #include <stacktrace>
     #include <stdfloat>
-    #include <string>
     #include <text_encoding>
-    #include <thread>
-    #include <utility>
-    std::text_encoding std::text_encoding::environment ( ) { return std::text_encoding::GBK; };
-#elifdef __APPLE__
-    #pragma GCC diagnostic push 
-        #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
-        #pragma GCC diagnostic ignored "-Wstringop-overflow="
-
-        #include <algorithm>
-        #include <charconv>
-        #include <chrono>
-        #include <concepts>
-        #include <csignal>
-        #include <filesystem>
-        #include <format>
-        #include <fstream>
-        #include <iostream>
-        #include <iomanip>
-        #include <map>
-        #include <new>
-        #include <numbers>
-     // #include <print>
-        #include <ranges>
-        #include <regex>
-        #include <string>
-        #include <thread>
-        #include <utility>
-        #include "libc++/ranges_chunk.ipp"
-        #include "libc++/ranges_join_with.ipp"
-        #include "libc++/ranges_stride.ipp"
-        #include "libc++/text_encoding.ipp"
-    #pragma GCC diagnostic pop
+    #include  "libstdc++/text_encoding.ipp"
+#elifdef compiler_clang
+    #include "libc++/ranges_chunk.ipp"
+    #include "libc++/ranges_join_with.ipp"
+    #include "libc++/ranges_stride.ipp"
+    #include "libc++/text_encoding.ipp"
 #endif
 
 // Include [[std.experimental.execution]]
-#pragma GCC diagnostic push
+#ifdef compiler_gcc
+    #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wshadow"
     #pragma GCC diagnostic ignored "-Wswitch-default"
     #pragma GCC diagnostic ignored "-Wundef"
     #pragma GCC diagnostic ignored "-Wunused-parameter"
-    
-    #include <stdexec/execution.hpp>
-    #include <exec/static_thread_pool.hpp>
-    #include <exec/timed_scheduler.hpp>
-    #include <exec/when_any.hpp>
-    namespace std
+#endif
+#include <stdexec/execution.hpp>
+#include <exec/static_thread_pool.hpp>
+#include <exec/timed_scheduler.hpp>
+#include <exec/when_any.hpp>
+namespace std
+{
+    namespace execution
     {
-        namespace execution
-        {
-            using namespace ::stdexec;
-            using namespace ::exec;
-        }
+        using namespace ::stdexec;
+        using namespace ::exec;
     }
-#pragma GCC diagnostic pop
+}
+#ifdef compiler_gcc
+    #pragma GCC diagnostic pop
+#endif
 
 // Include [[compiler.gcc, compiler.clang]]
-#if defined(__GNUC__) or defined(__clang__)
+#if defined(compiler_gcc) or defined(compiler_clang)
     #include <cxxabi.h>
 #endif
 
 // Include [[system.windows]]
-#ifdef _WIN32
+#ifdef system_windows
     #include <winsock2.h>
     #include <windows.h>
     #include <tchar.h>
 #endif
 
 // Include [[hardware.cpu.intel.tbb]]
-#ifdef __INTEL__
+#ifdef architecture_x86_64
     #include <tbb/tbb.h>
 #endif
 
 // Include [[hardward.cpu.apple]]
-#ifdef __APPLE__
+#ifdef system_mac
 #endif
 
 // Include [[hardware.gpu.nvidia]]
-#ifdef __CUDACC__
+#ifdef compiler_nvcc
    #include <thrust/thrust>
 #endif
 
 // Include [[third-party.boost]]
-#define _GNU_SOURCE
+#if (defined(compiler_gcc) or defined(compiler_clang)) and not defined(_GNU_SOURCE)
+    #define _GNU_SOURCE
+#endif
+#ifdef compiler_clang
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
@@ -141,15 +171,28 @@
 #include <boost/spirit/home/qi.hpp>
 #include <boost/spirit/home/x3.hpp>
 #include <boost/stacktrace.hpp>
+#ifdef compiler_clang
+    #pragma clang diagnostic pop
+#endif
 
 // Include [[third-party.eigen]]
-#pragma GCC diagnostic push
+#ifdef compiler_gcc
+    #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wclass-memaccess"
     #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    #define eigen_assert(x) do { if ( not Eigen::internal::copy_bool(x) ) throw std::runtime_error(EIGEN_MAKESTRING(x)); } while ( false )
-    #include <eigen3/Eigen/Eigen>
-    #include <eigen3/unsupported/Eigen/FFT>
-#pragma GCC diagnostic pop
+#elifdef compiler_clang
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    #pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#define eigen_assert(x) do { if ( not Eigen::internal::copy_bool(x) ) throw std::runtime_error(EIGEN_MAKESTRING(x)); } while ( false )
+#include <eigen3/Eigen/Eigen>
+#include <eigen3/unsupported/Eigen/FFT>
+#ifdef compiler_gcc
+    #pragma GCC diagnostic pop
+#elifdef compiler_clang
+    #pragma clang diagnostic pop
+#endif
 
 // Include [[third-party.mpg123]]
 #include <mpg123.h>
@@ -172,12 +215,14 @@
 
 
 // Compiler
-#ifdef __GNUC__
+#ifdef compiler_gcc
     #pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
     #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is kept for further standarlization.
     #pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
     #pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
     #pragma GCC diagnostic ignored "-Wunused-result"   // Allowing ignore result of std::ranges::to.
+#elifdef compiler_clang
+    #pragma clang diagnostic ignored "-Wunused-variable" // Allowing use variable '_' as unused
 #endif
 
 // Logic

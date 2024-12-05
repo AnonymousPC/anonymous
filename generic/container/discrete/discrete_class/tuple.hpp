@@ -62,11 +62,6 @@ class tuple<type,types...>
         struct tuple_tag { };
 };
 
-/// Template deduction
-
-template < class    type  > tuple ( type )            -> tuple<type>     requires ( not tuple_type<type> );
-template < class... types > tuple ( tuple<types...> ) -> tuple<types...>;
-template < class... types > tuple ( types... )        -> tuple<types...> requires ( sizeof...(types) >= 2 );
 
 
 

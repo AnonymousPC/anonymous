@@ -264,21 +264,17 @@
         {
             "label": "mac.debug.compile",
             "type": "process",
-            "command": "g++-14",
+            "command": "/opt/homebrew/opt/llvm/bin/clang++",
             "args": [
                 "-std=c++26",
-
-                "-stdlib=libc++",
-                "-I/opt/homebrew/opt/llvm/include/c++/v1",
 
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
-                "-flarge-source-files", 
                 "-Ddebug=1",
 
-                "-O1",
+                "-Og",
 
                 "-I/opt/homebrew/include",
 
@@ -294,20 +290,13 @@
         {
             "label": "mac.debug.link",
             "type": "process",
-            "command": "g++-14",
+            "command": "/opt/homebrew/opt/llvm/bin/clang++",
             "args": [
-                "-fuse-ld=lld",
-                
                 "-o",
                 "bin/debug/main",
 
                 "bin/debug/main.o",
                 "bin/dll/main.dylib",
-                
-                "-stdlib=libc++",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
 
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
@@ -347,18 +336,14 @@
         {
             "label": "mac.release.compile",
             "type": "process",
-            "command": "g++-14",
+            "command": "/opt/homebrew/opt/llvm/bin/clang++",
             "args": [
                 "-std=c++26",
-
-                "-stdlib=libc++",
-                "-I/opt/homebrew/opt/llvm/include/c++/v1",
         
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
-                "-flarge-source-files",
 
                 "-O3",
 
@@ -376,20 +361,13 @@
         {
             "label": "mac.release.link",
             "type": "process",
-            "command": "g++-14",
+            "command": "/opt/homebrew/opt/llvm/bin/clang++",
             "args": [
-                "-fuse-ld=lld",
-
                 "-o",
                 "bin/release/main",
 
                 "bin/release/main.o",
                 "bin/dll/main.dylib",
-
-                "-stdlib=libc++",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
 
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
@@ -430,18 +408,14 @@
         {
             "label": "mac.dll.compile",
             "type": "process",
-            "command": "g++-14",
+            "command": "/opt/homebrew/opt/llvm/bin/clang++",
             "args": [
                 "-std=c++26",
-
-                "-stdlib=libc++",
-                "-I/opt/homebrew/opt/llvm/include/c++/v1",
 
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
-                "-flarge-source-files",
 
                 "-O3",
                 "-Ddll=1",
@@ -460,20 +434,14 @@
         {
             "label": "mac.dll.link",
             "type": "process",
-            "command": "g++-14",
+            "command": "/opt/homebrew/opt/llvm/bin/clang++",
             "args": [
-                "-fuse-ld=lld",
                 "-shared",
 
                 "-o",
                 "bin/dll/main.dylib",
 
                 "bin/dll/main.o",
-
-                "-stdlib=libc++",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
                 
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",

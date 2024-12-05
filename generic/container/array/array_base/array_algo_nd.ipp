@@ -438,14 +438,14 @@ template_int_axis
 constexpr int array_algo::adjacent_find ( ) const
     requires equalable<value_type>
 {
-    return self.view_by_axis<axis>().adjacent_find();
+    return self.template view_by_axis<axis>().adjacent_find();
 }
 
 templates
 template_int_axis
 constexpr int array_algo::adjacent_find ( binary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().adjacent_find(pred);
+    return self.template view_by_axis<axis>().adjacent_find(pred);
 }
 
 templates
@@ -453,91 +453,91 @@ template_int_axis
 constexpr array<int> array_algo::adjacent_where ( ) const
     requires equalable<value_type>
 {
-    return self.view_by_axis<axis>().adjacent_where();
+    return self.template view_by_axis<axis>().adjacent_where();
 }
 
 templates
 template_int_axis
 constexpr array<int> array_algo::adjacent_where ( binary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().adjacent_where(pred);
+    return self.template view_by_axis<axis>().adjacent_where(pred);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::all ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().all(val);
+    return self.template view_by_axis<axis>().all(val);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::all ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().all(pred);
+    return self.template view_by_axis<axis>().all(pred);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::contains ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().contains(val);
+    return self.template view_by_axis<axis>().contains(val);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::contains ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().contains(pred);
+    return self.template view_by_axis<axis>().contains(pred);
 }
 
 templates
 template_int_axis
 constexpr int array_algo::count ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().count(val);
+    return self.template view_by_axis<axis>().count(val);
 }
 
 templates
 template_int_axis
 constexpr int array_algo::count ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().count(pred);
+    return self.template view_by_axis<axis>().count(pred);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::exist ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().exist(val);
+    return self.template view_by_axis<axis>().exist(val);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::exist ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().exist(pred);
+    return self.template view_by_axis<axis>().exist(pred);
 }
 
 templates
 template_int_axis
 constexpr int array_algo::find ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().find(val);
+    return self.template view_by_axis<axis>().find(val);
 }
 
 templates
 template_int_axis
 constexpr int array_algo::find ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().find(pred);
+    return self.template view_by_axis<axis>().find(pred);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::is_partitioned ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().is_partitioned(pred);
+    return self.template view_by_axis<axis>().is_partitioned(pred);
 }
 
 templates
@@ -545,14 +545,14 @@ template_int_axis
 constexpr bool array_algo::is_sorted ( ) const
     requires comparable<value_type>
 {
-    return self.view_by_axis<axis>().is_sorted();
+    return self.template view_by_axis<axis>().is_sorted();
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::is_sorted ( binary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().is_sorted(pred);
+    return self.template view_by_axis<axis>().is_sorted(pred);
 }
 
 templates
@@ -561,10 +561,10 @@ constexpr decltype(auto) array_algo::max ( ) const
     requires comparable<value_type>
 {
     if constexpr ( axis == 1 or axis == -dimension() )
-        return self.view_by_axis<axis>().max();
+        return self.template view_by_axis<axis>().max();
     else
     {
-        let view = self.view_by_axis<axis>();
+        let view = self.template view_by_axis<axis>();
         return *std::max_element ( view.begin(), view.end() );
     }
 }
@@ -574,10 +574,10 @@ template_int_axis
 constexpr decltype(auto) array_algo::max ( binary_pred<iterate_type> auto pred ) const
 {
     if constexpr ( axis == 1 or axis == -dimension() )
-        return self.view_by_axis<axis>().max(pred);
+        return self.template view_by_axis<axis>().max(pred);
     else
     {
-        let view = self.view_by_axis<axis>();
+        let view = self.template view_by_axis<axis>();
         return *std::max_element ( view.begin(), view.end(), pred );
     }
 }
@@ -588,10 +588,10 @@ constexpr decltype(auto) array_algo::min ( ) const
     requires comparable<value_type>
 {
     if constexpr ( axis == 1 or axis == -dimension() )
-        return self.view_by_axis<axis>().min();
+        return self.template view_by_axis<axis>().min();
     else
     {
-        let view = self.view_by_axis<axis>();
+        let view = self.template view_by_axis<axis>();
         return *std::min_element ( view.begin(), view.end() );
     }
 }
@@ -601,10 +601,10 @@ template_int_axis
 constexpr decltype(auto) array_algo::min ( binary_pred<iterate_type> auto pred ) const
 {
     if constexpr ( axis == 1 or axis == -dimension() )
-        return self.view_by_axis<axis>().min(pred);
+        return self.template view_by_axis<axis>().min(pred);
     else
     {
-        let view = self.view_by_axis<axis>();
+        let view = self.template view_by_axis<axis>();
         return *std::min_element ( view.begin(), view.end(), pred );
     }
 }
@@ -614,7 +614,7 @@ template_int_axis
 constexpr array_type& array_algo::next_permutation ( )
     requires comparable<value_type>
 {
-    self.view_by_axis<axis>().next_permutation();
+    self.template view_by_axis<axis>().next_permutation();
     return derive_of_self;
 }
 
@@ -622,7 +622,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::next_permutation ( binary_pred<iterate_type> auto pred )
 {
-    self.view_by_axis<axis>().next_permutation(pred);
+    self.template view_by_axis<axis>().next_permutation(pred);
     return derive_of_self;
 }
 
@@ -630,14 +630,14 @@ templates
 template_int_axis
 constexpr bool array_algo::none ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().none(val);
+    return self.template view_by_axis<axis>().none(val);
 }
 
 templates
 template_int_axis
 constexpr bool array_algo::none ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().none(pred);
+    return self.template view_by_axis<axis>().none(pred);
 }
 
 templates
@@ -645,7 +645,7 @@ template_int_axis
 constexpr array_type& array_algo::partial_sort ( int len )
     requires comparable<value_type>
 {
-    self.view_by_axis<axis>().partial_sort(len);
+    self.template view_by_axis<axis>().partial_sort(len);
     return derive_of_self;
 }
 
@@ -653,7 +653,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::partial_sort ( int len, binary_pred<iterate_type> auto pred )
 {
-    self.view_by_axis<axis>().partial_sort(len,pred);
+    self.template view_by_axis<axis>().partial_sort(len,pred);
     return derive_of_self;
 }
 
@@ -661,7 +661,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::partition ( unary_pred<iterate_type> auto pred )
 {
-    self.view_by_axis<axis>().partition(pred);
+    self.template view_by_axis<axis>().partition(pred);
     return derive_of_self;
 }
 
@@ -670,7 +670,7 @@ template_int_axis
 constexpr array_type& array_algo::prev_permutation ( )
     requires comparable<value_type>
 {
-    self.view_by_axis<axis>().prev_permutation();
+    self.template view_by_axis<axis>().prev_permutation();
     return derive_of_self;
 }
 
@@ -678,7 +678,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::prev_permutation ( binary_pred<iterate_type> auto pred )
 {
-    self.view_by_axis<axis>().prev_permutation(pred);
+    self.template view_by_axis<axis>().prev_permutation(pred);
     return derive_of_self;
 }
 
@@ -687,7 +687,7 @@ template_int_axis
 constexpr array_type& array_algo::remove ( const equalable_to<iterate_type> auto& val )
     requires ( not is_view )
 {
-    let view = self.view_by_axis<axis>();
+    let view = self.template view_by_axis<axis>();
     self.erase<axis> ( std::remove ( view.begin(), view.end(), val ) - view.begin() + 1, -1 );
 
     return derive_of_self;
@@ -698,7 +698,7 @@ template_int_axis
 constexpr array_type& array_algo::remove ( unary_pred<iterate_type> auto pred )
     requires ( not is_view )
 {
-    let view = self.view_by_axis<axis>();
+    let view = self.template view_by_axis<axis>();
     self.erase<axis> ( std::remove_if ( view.begin(), view.end(), pred ) - view.begin() + 1, -1 );
 
     return derive_of_self;
@@ -708,7 +708,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::reverse ( )
 {
-    self.view_by_axis<axis>().reverse();
+    self.template view_by_axis<axis>().reverse();
     return derive_of_self;
 }
 
@@ -717,35 +717,35 @@ template_int_axis
 constexpr int array_algo::right_adjacent_find ( ) const
     requires equalable<value_type>
 {
-    return self.view_by_axis<axis>().right_adjacent_find();
+    return self.template view_by_axis<axis>().right_adjacent_find();
 }
 
 templates
 template_int_axis
 constexpr int array_algo::right_adjacent_find ( binary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().right_adjacent_find(pred);
+    return self.template view_by_axis<axis>().right_adjacent_find(pred);
 }
 
 templates
 template_int_axis
 constexpr int array_algo::right_find ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().right_find(val);
+    return self.template view_by_axis<axis>().right_find(val);
 }
 
 templates
 template_int_axis
 constexpr int array_algo::right_find ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().right_find(pred);
+    return self.template view_by_axis<axis>().right_find(pred);
 }
 
 templates
 template_int_axis
 constexpr array_type& array_algo::rotate ( int step )
 {
-    self.view_by_axis<axis>().rotate(step);
+    self.template view_by_axis<axis>().rotate(step);
     return derive_of_self;
 }
 
@@ -754,7 +754,7 @@ template_int_axis
 constexpr array_type& array_algo::stable_partition ( const equalable_to<iterate_type> auto& val )
     requires comparable<value_type>
 {
-    self.view_by_axis<axis>().stable_partition(val);
+    self.template view_by_axis<axis>().stable_partition(val);
     return derive_of_self;
 }
 
@@ -762,7 +762,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::stable_partition ( unary_pred<iterate_type> auto pred )
 {
-    self.view_by_axis<axis>().stable_partition(pred);
+    self.template view_by_axis<axis>().stable_partition(pred);
     return derive_of_self;
 }
 
@@ -771,7 +771,7 @@ template_int_axis
 constexpr array_type& array_algo::stable_sort ( )
     requires comparable<value_type>
 {
-    self.view_by_axis<axis>().stable_sort();
+    self.template view_by_axis<axis>().stable_sort();
     return derive_of_self;
 }
 
@@ -779,7 +779,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::stable_sort ( binary_pred<iterate_type> auto pred )
 {
-    self.view_by_axis<axis>().stable_sort(pred);
+    self.template view_by_axis<axis>().stable_sort(pred);
     return derive_of_self;
 }
 
@@ -788,10 +788,10 @@ template_int_axis
 constexpr array_type& array_algo::sort ( )
     requires comparable<value_type>
 {
-    if ( self.view_by_axis<axis>().is_sorted() )
+    if ( self.template view_by_axis<axis>().is_sorted() )
         return derive_of_self; // For unknown reason its essential.
 
-    self.view_by_axis<axis>().sort();
+    self.template view_by_axis<axis>().sort();
     return derive_of_self;
 }
 
@@ -799,10 +799,10 @@ templates
 template_int_axis
 constexpr array_type& array_algo::sort ( binary_pred<iterate_type> auto pred )
 {
-    if ( self.view_by_axis<axis>().is_sorted(pred) )
+    if ( self.template view_by_axis<axis>().is_sorted(pred) )
         return derive_of_self; // For unknown reason its essential.
 
-    self.view_by_axis<axis>().sort(pred);
+    self.template view_by_axis<axis>().sort(pred);
     return derive_of_self;
 }
 
@@ -811,7 +811,7 @@ template_int_axis
 constexpr array_type& array_algo::unique ( )
     requires ( not is_view ) and equalable<value_type>
 {
-    let view = self.view_by_axis<axis>();
+    let view = self.template view_by_axis<axis>();
     self.erase<axis> ( std::unique ( view.begin(), view.end() ) - view.begin() + 1, -1 );
     return derive_of_self;
 }
@@ -821,7 +821,7 @@ template_int_axis
 constexpr array_type& array_algo::unique ( binary_pred<iterate_type> auto pred )
     requires ( not is_view )
 {
-    let view = self.view_by_axis<axis>();
+    let view = self.template view_by_axis<axis>();
     self.erase<axis> ( std::unique ( view.begin(), view.end(), pred ) - view.begin() + 1, -1 );
     return derive_of_self;
 }
@@ -830,14 +830,14 @@ templates
 template_int_axis
 constexpr array<int> array_algo::where ( const equalable_to<iterate_type> auto& val ) const
 {
-    return self.view_by_axis<axis>().where(val);
+    return self.template view_by_axis<axis>().where(val);
 }
 
 templates
 template_int_axis
 constexpr array<int> array_algo::where ( unary_pred<iterate_type> auto pred ) const
 {
-    return self.view_by_axis<axis>().where(pred);
+    return self.template view_by_axis<axis>().where(pred);
 }
 
 templates
@@ -861,7 +861,7 @@ template_int_axis
 constexpr auto array_algo::sum ( ) const
     requires std::default_initializable<value_type> and addable<value_type>
 {
-    let view = self.view_by_axis<axis>();
+    let view = self.template view_by_axis<axis>();
 
     if constexpr ( dimension() == 2 )
         if constexpr ( axis == 1 or axis == -2 )
@@ -877,7 +877,7 @@ template_int_axis
 constexpr auto array_algo::sum ( std::invocable<iterate_type> auto op ) const
     requires std::default_initializable<result_type> and addable<result_type>
 {
-    let view = self.view_by_axis<axis>();
+    let view = self.template view_by_axis<axis>();
     return std::accumulate ( view.begin(), view.end(), result_type(), [&] ( const auto& a, const auto& b ) { return a + op(b); } );
 }
 
@@ -886,7 +886,7 @@ template_int_axis
 constexpr auto array_algo::product ( std::invocable<iterate_type> auto op ) const
     requires std::convertible_to<int,result_type> and multipliable<result_type>
 {
-    let view = self.view_by_axis<axis>();
+    let view = self.template view_by_axis<axis>();
     return std::accumulate ( view.begin(), view.end(), result_type(1), [&] ( const auto& a, const auto& b ) { return a * op(b); } );
 }
 
@@ -894,7 +894,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::each ( std::invocable<iterate_type&> auto op )
 {
-    self.view_by_axis<axis>().each ( op );
+    self.template view_by_axis<axis>().each ( op );
     return derive_of_self;
 }
 
@@ -902,7 +902,7 @@ templates
 template_int_axis
 constexpr const array_type& array_algo::each ( std::invocable<iterate_type> auto op ) const
 {
-    self.view_by_axis<axis>().each ( op );
+    self.template view_by_axis<axis>().each ( op );
     return derive_of_self;
 }
 
@@ -910,7 +910,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::fill ( const std::convertible_to<iterate_type> auto& val )
 {
-    self.view_by_axis<axis>().fill ( val );
+    self.template view_by_axis<axis>().fill ( val );
     return derive_of_self;
 }
 
@@ -918,7 +918,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::generate ( function_type<iterate_type()> auto gen )
 {
-    self.view_by_axis<axis>().generate ( gen );
+    self.template view_by_axis<axis>().generate ( gen );
     #if debug // generate() in axis 1 can change it's shape, which will cause potential inalignment.
         if constexpr ( axis == 1 )
             if ( not empty() )
@@ -933,7 +933,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::transform ( unary_op<iterate_type> auto op )
 {
-    self.view_by_axis<axis>().transform ( op );
+    self.template view_by_axis<axis>().transform ( op );
     return derive_of_self;
 }
 
@@ -941,7 +941,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::replace ( const equalable_to<iterate_type> auto& val1, const std::convertible_to<iterate_type> auto& val2 )
 {
-    self.view_by_axis<axis>().replace ( val1, val2 );
+    self.template view_by_axis<axis>().replace ( val1, val2 );
     return derive_of_self;
 }
 
@@ -949,7 +949,7 @@ templates
 template_int_axis
 constexpr array_type& array_algo::replace ( unary_pred<iterate_type> auto pred, const std::convertible_to<iterate_type> auto& val )
 {
-    self.view_by_axis<axis>().replace ( pred, val );
+    self.template view_by_axis<axis>().replace ( pred, val );
     return derive_of_self;
 }
 

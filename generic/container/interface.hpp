@@ -212,7 +212,7 @@ namespace ap
     {
         if constexpr ( requires { typename input_type::tuple_tag; } )
         {
-            static_assert ( requires { typename input_type::value_type<1>; typename input_type::value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+            static_assert ( requires { std::tuple_size<input_type>::value; typename std::tuple_element<0,input_type>::type; }, "class provides tuple_tag but not specialize std::tuple_size and std::tuple_element" );
             if constexpr ( sizeof...(types) != 0 )
                 return aux::tuplewise_convertible<input_type,tuple<types...>>;
             else

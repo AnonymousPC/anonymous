@@ -86,12 +86,11 @@ constexpr array<type>::array ( std::from_range_t, std::ranges::input_range auto&
     if constexpr ( requires { std::ranges::size(r); self[1] = *std::ranges::begin(r); } )
     {
         resize ( std::ranges::size(r) );
-        [[maybe_unused]]
-        let [i,o] = std::ranges::move ( r, begin() );
+        [[maybe_unused]] let [i,o] = std::ranges::move ( r, begin() );
 
         #if debug
             if ( o != end() )
-                throw value_error("cannot move range into array: the range.begin() steps range.size() times ++iterator, but does not arrives range.end()");
+                throw value_error("cannot move range into array (with std::ranges::size(range) = {}, [[real-moved-size]] = {}): size mismatches", std::ranges::size(r), o-begin());
         #endif
     }
 
@@ -101,25 +100,15 @@ constexpr array<type>::array ( std::from_range_t, std::ranges::input_range auto&
 }
 
 template < class type >
-constexpr array<type>::array ( std::from_range_t, std::ranges::input_range auto&& r, int init_size )
-    requires ( requires { std::declval<array>().push(*std::ranges::begin(r)); } )
-    extends array ( init_size )
+constexpr array<type>::array ( std::from_range_t, std::ranges::input_range auto&& r, int s )
+    requires requires { std::declval<array>().push(*std::ranges::begin(r)); }
 {
-    int i = 0;
-    for ( auto&& v in r )
-    {
-        i++;
-
-        #if debug
-            if ( i > size() )
-                throw value_error("cannot move range of size >= {} into array of size {}", i, size());
-        #endif
-        self[i] = std::forward<decltype(v)>(v);
-    }
+    resize(s);
+    [[maybe_unused]] let [i,o] = std::ranges::move ( r, begin() );
 
     #if debug
-        if ( i < size() )
-            throw value_error("cannot move range of size {} into array of size {}", i, size());
+        if ( o != end() )
+            throw value_error("cannot move range into array (with std::ranges::size(range) = {}, [[real-moved-size]] = {}): size mismatches", std::ranges::size(r), o-begin());
     #endif
 }
 

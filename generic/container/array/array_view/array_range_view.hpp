@@ -36,7 +36,7 @@ class array_range_view
         constexpr const container_type& host ( ) const;
 
     private: // Constructor
-        constexpr array_range_view ( container_type&, int, int )      requires continuous;
+        constexpr array_range_view ( container_type&, int, int )      requires ( continuous );
         constexpr array_range_view ( container_type&, int, int, int ) requires ( not continuous );
 
     public: // Core

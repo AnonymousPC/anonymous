@@ -81,6 +81,7 @@
 #include <utility>
 
 #ifdef compiler_gcc
+    #define __cpp_lib_text_encoding 202412L
     #include <stacktrace>
     #include <stdfloat>
     #include <text_encoding>

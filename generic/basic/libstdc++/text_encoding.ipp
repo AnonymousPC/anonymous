@@ -9,4 +9,5 @@ std::text_encoding std::text_encoding::environment ( )
         return std::text_encoding::UTF8;
     #else
         return std::text_encoding::unknown;
+    #endif
 };

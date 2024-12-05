@@ -87,6 +87,7 @@
         "strstream": "cpp",
         "any": "cpp",
         "numeric": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "complex": "cpp"
     }
 }

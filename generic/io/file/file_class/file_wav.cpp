@@ -686,7 +686,12 @@ void file_wav::write ( file_stream& stream, const chunk_header& head )
 
 constexpr uint32_t file_wav::from_string ( const string& str )
 {
-    return std::ranges::fold_right_last(str, [] (uint8_t a, uint32_t b) { return a + (b << 8); }).value();
+    let val = uint32_t(0);
+    val |= uint32_t(uint8_t(str[1]));
+    val |= uint32_t(uint8_t(str[2])) << 8;
+    val |= uint32_t(uint8_t(str[3])) << 16;
+    val |= uint32_t(uint8_t(str[4])) << 24;
+    return val;
 }
 
 constexpr string file_wav::to_string ( const uint32_t& val )

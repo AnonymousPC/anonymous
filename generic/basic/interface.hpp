@@ -16,52 +16,59 @@
 #endif
 
 // Include [[std]]
-#include <algorithm>
-#include <charconv>
-#include <chrono>
-#include <concepts>
-#include <csignal>
-#include <filesystem>
-#include <format>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <map>
-#include <new>
-#include <regex>
-#include <string>
-#include <thread>
-#include <utility>
-
 #ifdef _WIN32
+    #include <algorithm>
+    #include <charconv>
+    #include <chrono>
+    #include <concepts>
+    #include <csignal>
+    #include <filesystem>
+    #include <format>
+    #include <fstream>
+    #include <iostream>
+    #include <iomanip>
+    #include <map>
+    #include <new>
+    #include <numbers>
+    #include <print>
     #include <ranges>
+    #include <regex>
     #include <stacktrace>
     #include <stdfloat>
+    #include <string>
     #include <text_encoding>
+    #include <thread>
+    #include <utility>
     std::text_encoding std::text_encoding::environment ( ) { return std::text_encoding::GBK; };
 #elifdef __APPLE__
-    #define _LIBCPP_RANGES // avoid include libcpp.<ranges>
-    #include "text_encoding.ipp"
-#endif
+    #pragma GCC diagnostic push 
+        #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+        #pragma GCC diagnostic ignored "-Wstringop-overflow="
 
-// Include [[std.experimental.range]]
-#ifdef __APPLE__
-    #include <range/v3/all.hpp>
-    namespace std
-    {
-        namespace ranges
-        {
-            using namespace ::ranges;
-            inline namespace views
-            {
-                using namespace ::ranges::views;
-            }           
-        }
-        namespace views
-        {
-            using namespace ::ranges::views;
-        }
-    } // namespace std
+        #include <algorithm>
+        #include <charconv>
+        #include <chrono>
+        #include <concepts>
+        #include <csignal>
+        #include <filesystem>
+        #include <format>
+        #include <fstream>
+        #include <iostream>
+        #include <iomanip>
+        #include <map>
+        #include <new>
+        #include <numbers>
+     // #include <print>
+        #include <ranges>
+        #include <regex>
+        #include <string>
+        #include <thread>
+        #include <utility>
+        #include "libc++/ranges_chunk.ipp"
+        #include "libc++/ranges_join_with.ipp"
+        #include "libc++/ranges_stride.ipp"
+        #include "libc++/text_encoding.ipp"
+    #pragma GCC diagnostic pop
 #endif
 
 // Include [[std.experimental.execution]]
@@ -70,6 +77,7 @@
     #pragma GCC diagnostic ignored "-Wswitch-default"
     #pragma GCC diagnostic ignored "-Wundef"
     #pragma GCC diagnostic ignored "-Wunused-parameter"
+    
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
     #include <exec/timed_scheduler.hpp>
@@ -169,6 +177,7 @@
     #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is kept for further standarlization.
     #pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
     #pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
+    #pragma GCC diagnostic ignored "-Wunused-result"   // Allowing ignore result of std::ranges::to.
 #endif
 
 // Logic

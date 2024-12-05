@@ -84,6 +84,9 @@
         "numbers": "cpp",
         "__hash_table": "cpp",
         "execution": "cpp",
-        "strstream": "cpp"
+        "strstream": "cpp",
+        "any": "cpp",
+        "numeric": "cpp",
+        "valarray": "cpp"
     }
 }

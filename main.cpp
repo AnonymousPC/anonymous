@@ -8,7 +8,13 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+void test ( int t )
+{
+    return t == 0 ? throw 1 otherwise test(t-1);
+}
+
+
 int main ( )
 {
-    
+    test(10);
 }

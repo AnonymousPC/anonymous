@@ -1,11 +1,13 @@
 #pragma once
 
-#ifndef __cpp_lib_text_encoding
+namespace std {
+inline namespace __1 {
+
     class text_encoding
     {
         public:
             enum class id
-                extends int_least32_t
+                : int_least32_t
             {
                 other = 1,
                 unknown = 2,
@@ -275,18 +277,21 @@
             
         public:
             consteval static text_encoding literal     ( ) noexcept;
-                        static text_encoding environment ( );
+                      static text_encoding environment ( );
+
+        public: 
+            constexpr friend bool operator == ( const std::text_encoding&, const std::text_encoding& ) = default;
 
         private:
             id encoding = id::unknown;
 
         private:
-            constexpr static const size_t                        max_name_length = 63;
-                        static const std::multimap<id,const char*> finder;
+            constexpr static const size_t                                     max_name_length = 63;
+                        static const std::multimap<int_least32_t,const char*> finder;
                         
     };
 
-    const std::multimap<text_encoding::id,const char*> text_encoding::finder = std::vector<std::pair<int_least32_t,const char*>>
+    const std::multimap<int_least32_t,const char*> text_encoding::finder =
     {
         {    1, "" },
         {    2, "" },
@@ -1110,31 +1115,30 @@
         { 2097, "ebcdic-gb-285+euro" },
         { 2097, "csIBM01146" },
         { 2098, "IBM01147" }
-    } | std::ranges::to<std::multimap<text_encoding::id,const char*>>();
+    };
 
     constexpr text_encoding::text_encoding ( text_encoding::id init_encoding ) noexcept
-        extends encoding ( init_encoding )
+        : encoding ( init_encoding )
     {
 
     }
 
     constexpr const char* text_encoding::name ( ) const noexcept
     {
-        return finder.lower_bound(encoding)->second;
+        return finder.lower_bound(static_cast<int_least32_t>(encoding))->second;
     }
 
     consteval text_encoding text_encoding::literal ( ) noexcept
     {
         return std::text_encoding::UTF8;
     }
-#endif
 
-text_encoding text_encoding::environment ( )
-{
-    #ifdef _WIN32
-        return text_encoding::GBK;
-    #else
+    text_encoding text_encoding::environment ( )
+    {
         return text_encoding::UTF8;
-    #endif
-};
+    };
 
+
+
+} // namespace __1
+} // namspace std

@@ -17,6 +17,7 @@
 
 // Include [[std]]
 #include <algorithm>
+#include <charconv>
 #include <chrono>
 #include <concepts>
 #include <csignal>
@@ -27,29 +28,41 @@
 #include <iomanip>
 #include <map>
 #include <new>
-#include <ranges>
 #include <regex>
 #include <string>
 #include <thread>
 #include <utility>
 
-#if __cpp_lib_stacktrace
+#ifdef _WIN32
+    #include <ranges>
     #include <stacktrace>
-#endif
-#if defined(__CPP_FLOAT16_T__) and defined(__STDCPP_FLOAT32_T__)
     #include <stdfloat>
-#endif
-#if __cpp_lib_text_encoding
-    #undef __cpp_lib_text_encoding
-    #define __cpp_lib_text_encoding 202412L
     #include <text_encoding>
+    std::text_encoding std::text_encoding::environment ( ) { return std::text_encoding::GBK; };
+#elifdef __APPLE__
+    #define _LIBCPP_RANGES // avoid include libcpp.<ranges>
+    #include "text_encoding.ipp"
 #endif
 
-namespace std
-{
-    #include "text_encoding.ipp"
-    #include "ranges_join_with.ipp"
-}
+// Include [[std.experimental.range]]
+#ifdef __APPLE__
+    #include <range/v3/all.hpp>
+    namespace std
+    {
+        namespace ranges
+        {
+            using namespace ::ranges;
+            inline namespace views
+            {
+                using namespace ::ranges::views;
+            }           
+        }
+        namespace views
+        {
+            using namespace ::ranges::views;
+        }
+    } // namespace std
+#endif
 
 // Include [[std.experimental.execution]]
 #pragma GCC diagnostic push
@@ -61,6 +74,14 @@ namespace std
     #include <exec/static_thread_pool.hpp>
     #include <exec/timed_scheduler.hpp>
     #include <exec/when_any.hpp>
+    namespace std
+    {
+        namespace execution
+        {
+            using namespace ::stdexec;
+            using namespace ::exec;
+        }
+    }
 #pragma GCC diagnostic pop
 
 // Include [[compiler.gcc, compiler.clang]]
@@ -161,20 +182,6 @@ namespace std
 
 
 
-
-
-
-
-// Standard experimental
-namespace std
-{
-    // [[std.experimental.execution]]
-    namespace execution
-    {
-        using namespace ::stdexec;
-        using namespace ::exec;
-    }
-}
 
 
 

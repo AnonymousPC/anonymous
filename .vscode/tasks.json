@@ -6,18 +6,20 @@
             "type": "process",
             "command": "g++",
             "args": [
-                "-Ddebug=1",
                 "-std=c++26",
-                "-Wa,-mbig-obj",
-                "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
-                "-finput-charset=utf-8",
-                "-fexec-charset=utf-8",
+
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
                 "-flarge-source-files",
                 "-fno-inline",
+                "-Ddebug=1",
+
+                "-Og",
+
+                "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
+
                 "-c",
                 "main.cpp",
                 "-o",
@@ -32,10 +34,14 @@
             "type": "process",
             "command": "g++",
             "args": [
+                "-fuse-ld=lld",
+
                 "-o",
                 "bin/debug/main.exe",
+
                 "bin/debug/main.o",
                 "bin/dll/main.dll",
+    
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
@@ -86,16 +92,17 @@
             "command": "g++",
             "args": [
                 "-std=c++26",
-                "-O3",
-                "-Wa,-mbig-obj",
-                "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
-                "-finput-charset=utf-8",
-                "-fexec-charset=utf-8",
+
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
                 "-flarge-source-files",
+
+                "-O3",
+
+                "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
+
                 "-c",
                 "main.cpp",
                 "-o",
@@ -110,10 +117,14 @@
             "type": "process",
             "command": "g++",
             "args": [
+                "-fuse-ld=lld",
+
                 "-o",
                 "bin/release/main.exe",
+
                 "bin/release/main.o",
                 "bin/dll/main.dll",
+
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
@@ -163,18 +174,19 @@
             "type": "process",
             "command": "g++",
             "args": [
-                "-Ddll=1",
                 "-std=c++26",
-                "-O3",
-                "-Wa,-mbig-obj",
-                "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
-                "-finput-charset=utf-8",
-                "-fexec-charset=utf-8",
+
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
                 "-flarge-source-files",
+
+                "-O3",
+                "-Ddll=1",
+
+                "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
+
                 "-c",
                 "main.cpp",
                 "-o",
@@ -189,13 +201,14 @@
             "type": "process",
             "command": "g++",
             "args": [
-                "-shared",
-                "-fPIC",
                 "-fuse-ld=lld",
-                "-Wl,--dll",
+                "-shared",
+
                 "-o",
                 "bin/dll/main.dll",
+
                 "bin/dll/main.o",
+
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
@@ -253,17 +266,22 @@
             "type": "process",
             "command": "g++-14",
             "args": [
-                "-Ddebug=1",
                 "-std=c++26",
+
                 "-stdlib=libc++",
                 "-I/opt/homebrew/opt/llvm/include/c++/v1",
-                "-I/opt/homebrew/include",
+
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
-                "-flarge-source-files",
-                "-fno-inline",
+                "-flarge-source-files", 
+                "-Ddebug=1",
+
+                "-O1",
+
+                "-I/opt/homebrew/include",
+
                 "-c",
                 "main.cpp",
                 "-o",
@@ -278,11 +296,19 @@
             "type": "process",
             "command": "g++-14",
             "args": [
+                "-fuse-ld=lld",
+                
                 "-o",
                 "bin/debug/main",
+
                 "bin/debug/main.o",
                 "bin/dll/main.dylib",
-                "/opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/current/libstdc++exp.a",
+                
+                "-stdlib=libc++",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
+
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
                 "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
@@ -324,15 +350,20 @@
             "command": "g++-14",
             "args": [
                 "-std=c++26",
-                "-O3",
+
                 "-stdlib=libc++",
                 "-I/opt/homebrew/opt/llvm/include/c++/v1",
-                "-I/opt/homebrew/include",
+        
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
                 "-flarge-source-files",
+
+                "-O3",
+
+                "-I/opt/homebrew/include",
+
                 "-c",
                 "main.cpp",
                 "-o",
@@ -347,11 +378,19 @@
             "type": "process",
             "command": "g++-14",
             "args": [
+                "-fuse-ld=lld",
+
                 "-o",
                 "bin/release/main",
+
                 "bin/release/main.o",
                 "bin/dll/main.dylib",
-                "/opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/current/libstdc++exp.a",
+
+                "-stdlib=libc++",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
+
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
                 "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
@@ -393,17 +432,22 @@
             "type": "process",
             "command": "g++-14",
             "args": [
-                "-Ddll=1",
                 "-std=c++26",
-                "-O3",
+
                 "-stdlib=libc++",
                 "-I/opt/homebrew/opt/llvm/include/c++/v1",
-                "-I/opt/homebrew/include",
+
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
                 "-flarge-source-files",
+
+                "-O3",
+                "-Ddll=1",
+
+                "-I/opt/homebrew/include",
+
                 "-c",
                 "main.cpp",
                 "-o",
@@ -418,11 +462,19 @@
             "type": "process",
             "command": "g++-14",
             "args": [
+                "-fuse-ld=lld",
                 "-shared",
+
                 "-o",
                 "bin/dll/main.dylib",
+
                 "bin/dll/main.o",
-                "/opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/current/libstdc++exp.a",
+
+                "-stdlib=libc++",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
+                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
+                
                 "/opt/homebrew/lib/libboost_date_time-mt.dylib",
                 "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
                 "/opt/homebrew/lib/libboost_iostreams-mt.dylib",

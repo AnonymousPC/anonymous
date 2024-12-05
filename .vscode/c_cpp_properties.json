@@ -18,6 +18,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
+                "/opt/homebrew/opt/llvm/include/c++/v1",
                 "/opt/homebrew/include"
             ],
             "macFrameworkPath": [

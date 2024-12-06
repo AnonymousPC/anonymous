@@ -16,6 +16,32 @@
 #endif
 
 // Include [[std]]
+#ifdef _WIN32
+    #define __cpp_lib_text_encoding 202412L
+    #include <algorithm>
+    #include <charconv>
+    #include <chrono>
+    #include <concepts>
+    #include <csignal>
+    #include <filesystem>
+    #include <format>
+    #include <fstream>
+    #include <iostream>
+    #include <iomanip>
+    #include <map>
+    #include <new>
+    #include <numbers>
+    #include <print>
+    #include <ranges>
+    #include <regex>
+    #include <stacktrace>
+    #include <stdfloat>
+    #include <string>
+    #include <text_encoding>
+    #include <thread>
+    #include <utility>
+    #include "libstdc++/text_encoding.ipp"
+#elifdef __APPLE__
     #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
     #include <algorithm>
     #include <charconv>
@@ -36,14 +62,6 @@
     #include <string>
     #include <thread>
     #include <utility>
-
-#ifdef _WIN32
-    #define __cpp_lib_text_encoding 202412L
-    #include <stacktrace>
-    #include <stdfloat>
-    #include <text_encoding>
-    #include  "libstdc++/text_encoding.ipp"
-#elifdef __APPLE__
     #include "libc++/ranges_chunk.ipp"
     #include "libc++/ranges_join_with.ipp"
     #include "libc++/ranges_stride.ipp"
@@ -86,7 +104,6 @@
 #endif
 
 // Include [[third-party.boost]]
-#define _GNU_SOURCE
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
@@ -104,10 +121,13 @@
 #include <boost/iostreams/filter/zlib.hpp>
 #include <boost/locale.hpp>
 #include <boost/phoenix.hpp>
-#include <boost/process/v2.hpp>
+// #include <boost/process/v2.hpp> 
 #include <boost/spirit/home/qi.hpp>
 #include <boost/spirit/home/x3.hpp>
-#include <boost/stacktrace.hpp>
+#ifdef __APPLE__
+    #define _GNU_SOURCE
+    #include <boost/stacktrace.hpp>
+#endif
 
 // Include [[third-party.eigen]]
 #pragma GCC diagnostic push

@@ -88,6 +88,9 @@
         "any": "cpp",
         "numeric": "cpp",
         "valarray": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "filesystem": "cpp",
+        "semaphore": "cpp",
+        "cinttypes": "cpp"
     }
 }

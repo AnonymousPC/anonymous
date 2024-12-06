@@ -16,28 +16,26 @@
 #endif
 
 // Include [[std]]
-#include <algorithm>
-#include <charconv>
-#include <chrono>
-#include <concepts>
-#include <csignal>
-#include <filesystem>
-#include <format>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <map>
-#include <new>
-#include <numbers>
-#include <print>
-#include <ranges>
-#include <regex>
-#include <stacktrace>
-#include <stdfloat>
-#include <string>
-#include <text_encoding>
-#include <thread>
-#include <utility>
+    #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+    #include <algorithm>
+    #include <charconv>
+    #include <chrono>
+    #include <concepts>
+    #include <csignal>
+    #include <filesystem>
+    #include <format>
+    #include <fstream>
+    #include <iostream>
+    #include <iomanip>
+    #include <map>
+    #include <new>
+    #include <numbers>
+    #include <print>
+    #include <ranges>
+    #include <regex>
+    #include <string>
+    #include <thread>
+    #include <utility>
 
 #ifdef _WIN32
     #define __cpp_lib_text_encoding 202412L

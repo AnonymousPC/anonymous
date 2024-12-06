@@ -1,11 +1,9 @@
 
 std::text_encoding std::text_encoding::environment ( )
 {
-    #ifdef system_windows
+    #ifdef _WIN32
         return std::text_encoding::GBK;
-    #elifdef system_linux
-        return std::text_encoding::UTF8;
-    #elifdef system_mac
+    #elifdef __APPLE__
         return std::text_encoding::UTF8;
     #else
         return std::text_encoding::unknown;

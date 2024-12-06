@@ -9,12 +9,5 @@
 using namespace ap;
 int main ( )
 {
-    file_csv f;
-    matrix<string> m = matrix<string>(10, 10, [] (int i, int j) { return string(i*10+j); });
-    f = m;
-    f.save_as("test.csv");
-
-    file_csv f2 = "test.csv";
-    f2.flatten().each([] (auto& val) { val = '[' + val + ']'; });
-    f2.save();
+    ok;
 }

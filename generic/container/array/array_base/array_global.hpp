@@ -4,10 +4,11 @@
 #define right_value_type typename decay<decltype(right)>::value_type
 
 
-/// Global ( For linear math, see "root/math/linear". )
+/// Global 
+// For linear algebra,            see "root/generic/math/linear".
+// For "operator<<" implemention, see "root/generic/container/utility/print".
 
 constexpr std::ostream& operator << ( std::ostream& left, const array_type auto& right ) requires printable<right_value_type>;
-
 
 
 
@@ -35,9 +36,9 @@ namespace aux
     constexpr bool ints_until_last_func = []
     {
         if constexpr ( std::is_void<type>::value )
-            return ap::convertible_until<int,-2,types...> and std::invocable<ap::last_type_of<types...>>;
+            return convertible_until<int,-2,types...> and std::invocable<last_type_of<types...>>;
         else
-            return ap::convertible_until<int,-2,types...> and ap::function_type<ap::last_type_of<types...>,type()>;
+            return convertible_until<int,-2,types...> and function_type<last_type_of<types...>,type()>;
     } ();
 
     template < class result_type, class input_type, int count, class... types >
@@ -49,22 +50,22 @@ namespace aux
             if constexpr ( std::is_void<result_type>::value )
                 return std::invocable<input_type,types...>;
             else
-                return ap::function_type<input_type,result_type(types...)>;
+                return function_type<input_type,result_type(types...)>;
     } ();
 
     template < class result_type, class input_type, int count >
     constexpr bool invocable_r_by_n_ints = invocable_r_by_n_ints_helper<result_type,input_type,count>;
 
     template < class type, class... types >
-    constexpr bool ints_until_last_func_ints = ap::convertible_until<int,-2,types...> and invocable_r_by_n_ints<type,ap::last_type_of<types...>,sizeof...(types)-1>; // No need to check <void,...>, as it forwards to is_invocable_r_by_n_ints.
+    constexpr bool ints_until_last_func_ints = convertible_until<int,-2,types...> and invocable_r_by_n_ints<type,last_type_of<types...>,sizeof...(types)-1>; // No need to check <void,...>, as it forwards to is_invocable_r_by_n_ints.
 
     template < class type, class... types >
-    constexpr bool ints_until_last_type = ap::convertible_until<int,-2,types...> and []
+    constexpr bool ints_until_last_type = convertible_until<int,-2,types...> and []
     {
         if constexpr ( std::is_void<type>::value )
             return not ints_until_last_func<type,types...> and not ints_until_last_func_ints<type,types...>;
         else
-            return std::convertible_to<ap::last_type_of<types...>,type>;
+            return std::convertible_to<last_type_of<types...>,type>;
     } ();
 
     template < class input_type, int count, class... types >

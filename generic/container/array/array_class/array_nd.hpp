@@ -58,8 +58,7 @@ class array<type,dim>
         template < int axis = 0 > constexpr array& resize ( int )                           requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
 
     public: // Views
-        using array_algo::operator[],
-              array_algo::reshape,
+        using array_algo::reshape,
               array_algo::flatten,
               array_algo::as_type;
 

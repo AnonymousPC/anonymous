@@ -58,8 +58,8 @@ class array_reshape_view
         constexpr const auto           operator [] ( int ) const requires ( dimension() >= 2 );
 
     public: // Views
-        using array_algo::operator[],
-              array_algo::flatten;
+        using array_algo::flatten,
+              array_algo::as_type
 
     private: // Auxiliary
                                constexpr decltype(auto) at            ( const auto& );

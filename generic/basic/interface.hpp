@@ -218,12 +218,14 @@ namespace std
 // Compiler
 #ifdef compiler_gcc
     #pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
-    #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is kept for further standarlization.
+    #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is reserved for further standarlization.
     #pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
     #pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
     #pragma GCC diagnostic ignored "-Wunused-result"   // Allowing ignore result of std::ranges::to.
 #elifdef compiler_clang
-    #pragma clang diagnostic ignored "-Wunused-variable" // Allowing use variable '_' as unused
+    #pragma clang diagnostic ignored "-Wdtor-name"             // Has bug with template class destructor.
+    #pragma clang diagnostic ignored "-Wunused-variable"       // Allowing use variable name '_' as unused.
+    #pragma clang diagnostic ignored "-Wuser-defined-literals" // Allowing user-defined literal without being warned that literal not begins with '_' is reserved for further standarlization.
 #endif
 
 // Logic
@@ -317,9 +319,9 @@ namespace ap
     #include "abi.hpp"
     #include "concept.hpp"
     #include "exception.hpp"
+    #include "print.hpp"
     #include "range.hpp"
     #include "typedef.hpp"
-    #include "utility.hpp"
     #include "global.hpp"
 
 } // namespace ap

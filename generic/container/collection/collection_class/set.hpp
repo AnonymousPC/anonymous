@@ -46,10 +46,17 @@ class basic_set
 
 /// Template deduction
 
+namespace aux
+{
+    template < std::ranges::input_range type >
+    using set_deduction_value_type = decay<decltype(*std::ranges::begin(std::declval<type>()))>;
+}
+
 template < class type >
 basic_set ( std::initializer_list<type> ) -> basic_set<type,std::less<>,rb_tree<type,as_compares<type,std::less<>>>>;
 
 template < std::ranges::input_range type >
-basic_set ( std::from_range_t, type ) -> basic_set<decay<decltype(*std::ranges::begin(std::declval<type>()))>,std::less<>,rb_tree<decay<decltype(*std::ranges::begin(std::declval<type>()))>,std::less<>>>;
+basic_set ( std::from_range_t, type ) -> basic_set<aux::set_deduction_value_type<type>,std::less<>,
+                                                   rb_tree<aux::set_deduction_value_type<type>,std::less<>>>;
 
 #include "set.ipp"

@@ -57,8 +57,7 @@ class array_range_view
         constexpr decltype(auto) operator [] ( int ) const;
 
     public: // Views
-        using array_algo::operator[],
-              array_algo::reshape,
+        using array_algo::reshape,
               array_algo::flatten,
               array_algo::as_type;
         constexpr       auto operator [] ( int, int );

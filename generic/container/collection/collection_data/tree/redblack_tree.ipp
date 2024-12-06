@@ -162,8 +162,8 @@ constexpr void redblack_tree<type,compares,node>::right_rotate ( const_iterator 
 template < class type >
 constexpr redblack_tree_node<type>::redblack_tree_node ( tuple<type,bool> init_data )
     requires std::copyable<type>
-    extends binary_node_interface<type,redblack_tree_node<type>> ( std::move(init_data[constexpr_index<1>()]) ),
-            flag                                                 ( std::move(init_data[constexpr_index<2>()]) )
+    extends binary_node_interface<type,redblack_tree_node<type>> ( std::move(init_data.template value<1>()) ),
+            flag                                                 ( std::move(init_data.template value<2>()) )
 {
 
 }

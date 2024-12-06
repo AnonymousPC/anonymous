@@ -51,6 +51,18 @@ constexpr decltype(auto) array_algo::end ( ) const
     return const_derive_of_self.end();
 }
 
+templates
+constexpr decltype(auto) array_algo::operator [] ( int pos )
+{
+    return derive_of_self [pos];
+}
+
+templates
+constexpr decltype(auto) array_algo::operator [] ( int pos ) const
+{
+    return const_derive_of_self [pos];
+}
+
 // N-dimension
 
 templates
@@ -78,18 +90,6 @@ constexpr auto array_algo::tuple_shape ( ) const
 }
 
 // Views
-
-templates
-constexpr decltype(auto) array_algo::operator [] ( int pos )
-{
-    return derive_of_self [pos];
-}
-
-templates
-constexpr decltype(auto) array_algo::operator [] ( int pos ) const
-{
-    return const_derive_of_self [pos];
-}
 
 templates
 constexpr auto array_algo::operator [] ( int from, int to )
@@ -258,7 +258,7 @@ constexpr array_type& array_algo::erase ( int from, int to )
 
     else
         for ( int i in range ( row() ) )
-            if constexpr ( derive_of_self.dimension() == 2 )
+            if constexpr ( array_type::dimension() == 2 )
                 derive_of_self.base::operator[](i).erase ( from, to );
             else
                 if constexpr ( axis > 0 )
@@ -295,7 +295,7 @@ constexpr array_type& array_algo::insert ( aux::array_type_dim_range<int,0,1> au
                 throw index_error("index {} is not unique", pos);
         }
 
-        if constexpr ( arr.dimension() == dim - 1 )
+        if constexpr ( decay<decltype(arr)>::dimension() == dim - 1 )
         {
             if ( not empty() and shape().pop(axis) != arr.shape() )
                 throw value_error("cannot insert array of shape {} into array of shape {} axis {}", arr.shape(), shape(), axis);
@@ -305,8 +305,8 @@ constexpr array_type& array_algo::insert ( aux::array_type_dim_range<int,0,1> au
                 throw value_error("cannot insert array of shape {} into array of shape {} axis {}", arr.shape(), shape(), axis);
     #endif
 
-    [[maybe_unused]] int step = [&] { if constexpr ( arr.dimension() == dim - 1 ) return 1; else return arr.shape()[axis]; } ();
-    [[maybe_unused]] let base = []  ( auto& a )        -> decltype(auto) { if constexpr ( a.dimension() == dim - 1 ) return a; else return static_cast<typename std::decay<decltype(a)>::type::base&>(a); };
+    [[maybe_unused]] int step = [&] { if constexpr ( decay<decltype(arr)>::dimension() == dim - 1 ) return 1; else return arr.shape()[axis]; } ();
+    [[maybe_unused]] let base = []  ( auto& a )        -> decltype(auto) { if constexpr ( decay<decltype(a)>::dimension() == dim - 1 ) return a; else return static_cast<typename std::decay<decltype(a)>::type::base&>(a); };
     [[maybe_unused]] let get  = []  ( auto& a, int i ) -> decltype(auto) { return a[i]; };
 
     if constexpr ( axis == 1 or axis == -dim )
@@ -316,14 +316,14 @@ constexpr array_type& array_algo::insert ( aux::array_type_dim_range<int,0,1> au
     {
         if ( empty() )
         {
-            if constexpr ( arr.dimension() == 1 )
+            if constexpr ( decay<decltype(arr)>::dimension() == 1 )
                 derive_of_self.base::resize ( arr.size() );
             else
                 derive_of_self.base::resize ( arr.row() );
         }
 
         for ( int i in range ( row() ) )
-            if constexpr ( derive_of_self.dimension() == 2 )
+            if constexpr ( array_type::dimension() == 2 )
                 derive_of_self.base::operator[](i).insert ( pos, std::move(arr[i]), std::forward<decltype(get(args,i))>(get(args,i))... );
             else
                 if constexpr ( axis > 0 )
@@ -341,7 +341,7 @@ constexpr array_type& array_algo::push ( aux::array_type_dim_range<value_type,di
     requires ( not is_view )
 {
     #if debug
-        if constexpr ( arr.dimension() == dim - 1 )
+        if constexpr ( decay<decltype(arr)>::dimension() == dim - 1 )
         {
             if ( not empty() and shape().pop(axis) != arr.shape() )
                 throw value_error("cannot push array of shape {} into array of shape {} axis {}", arr.shape(), shape(), axis);
@@ -351,7 +351,7 @@ constexpr array_type& array_algo::push ( aux::array_type_dim_range<value_type,di
                 throw value_error("cannot push array of shape {} into array of shape {} axis {}", arr.shape(), shape(), axis);
     #endif
 
-    [[maybe_unused]] let base = [] ( auto& a )        -> decltype(auto) { if constexpr ( a.dimension() == dim - 1 ) return a; else return static_cast<typename std::decay<decltype(a)>::type::base&>(a); };
+    [[maybe_unused]] let base = [] ( auto& a )        -> decltype(auto) { if constexpr ( decay<decltype(a)>::dimension() == dim - 1 ) return a; else return static_cast<typename std::decay<decltype(a)>::type::base&>(a); };
     [[maybe_unused]] let get  = [] ( auto& a, int i ) -> decltype(auto) { return a[i]; };
 
     if constexpr ( axis == 1 or axis == -dim )
@@ -361,14 +361,14 @@ constexpr array_type& array_algo::push ( aux::array_type_dim_range<value_type,di
     {
         if ( empty() )
         {
-            if constexpr ( arr.dimension() == 1 )
+            if constexpr ( decay<decltype(arr)>::dimension() == 1 )
                 derive_of_self.base::resize ( arr.size() );
             else
                 derive_of_self.base::resize ( arr.row() );
         }
 
         for ( int i in range ( row() ) )
-            if constexpr ( derive_of_self.dimension() == 2 )
+            if constexpr ( array_type::dimension() == 2 )
                 derive_of_self.base::operator[](i).push ( std::move(arr[i]), std::forward<decltype(get(args,i))>(get(args,i))... );
             else
                 if constexpr ( axis > 0 )
@@ -417,7 +417,7 @@ constexpr array_type& array_algo::pop ( aux::array_type_dim_range<int,0,1> auto 
 
     else
         for ( int i in range ( row() ) )
-            if constexpr ( derive_of_self.dimension() == 2 )
+            if constexpr ( array_type::dimension() == 2 )
                 derive_of_self.base::operator[](i).pop ( pos, args... );
             else
                 if constexpr ( axis > 0 )
@@ -959,12 +959,12 @@ constexpr array_type& array_algo::replace ( unary_pred<iterate_type> auto pred, 
 templates
 constexpr void array_algo::tuple_shape_aux ( auto& shp, const auto& arr )
 {
-    if constexpr ( arr.dimension() == 1 )
+    if constexpr ( decay<decltype(arr)>::dimension() == 1 )
         shp.template get<1>() = arr.size();
     else
         shp.template get<1>() = arr.row();
 
-    if constexpr ( arr.dimension() >= 2 )
+    if constexpr ( decay<decltype(arr)>::dimension() >= 2 )
         if ( not arr.empty() )
             tuple_shape_aux ( shp.template get<2,-1>(), arr[1] );
 }

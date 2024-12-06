@@ -59,8 +59,7 @@ class array<type>
         constexpr const type&  operator [] ( int )  const;
 
     public: // Views
-        using array_algo::operator[],
-              array_algo::reshape,
+        using array_algo::reshape,
               array_algo::flatten;
 
     private: // Auxiliary

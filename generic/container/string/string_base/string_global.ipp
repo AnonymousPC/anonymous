@@ -4,9 +4,9 @@
 
 constexpr std::istream& operator >> ( std::istream& left, string_type auto& right )
 {
-    std::string buff;
+    let buff = std::basic_string<typename decay<decltype(right)>::char_type>();
     left >> buff;
-    right = string(buff);
+    right = decay<decltype(right)>(buff);
 
     return left;
 }

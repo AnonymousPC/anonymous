@@ -58,7 +58,7 @@ constexpr property_tree<types...>::operator result_type& ( )
     catch ( const type_error& e )
     {
         throw type_error("bad property_tree access: cannot get {} from {} (in which type == {}, index == {})",
-                         typeid(result_type), typeid(self), type() == 0 ? string(typeid(void)) otherwise string(*array{&(typeid(types))...}[self.type()]), self.type());
+                         typeid(result_type), typeid(self), type() == 0 ? typeid(void) otherwise string(*array{&(typeid(types))...}[self.type()]), self.type());
     }
 }
 
@@ -74,7 +74,7 @@ constexpr property_tree<types...>::operator const result_type& ( ) const
     catch ( const type_error& e )
     {
         throw type_error("bad property_tree access: cannot get {} from {} (in which type == {}, index == {})",
-                         typeid(result_type), typeid(self), type() == 0 ? string(typeid(void)) otherwise string(*array{&(typeid(types))...}[self.type()]), self.type());
+                         typeid(result_type), typeid(self), type() == 0 ? typeid(void) otherwise string(*array{&(typeid(types))...}[self.type()]), self.type());
     }
 }
 

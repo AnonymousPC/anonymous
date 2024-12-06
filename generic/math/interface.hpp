@@ -4,7 +4,7 @@
 namespace ap
 {
     /// Constant
-    namespace constants
+    inline namespace constants
     {
         constexpr const long double e   = std::numbers::e_v <long double>;
         constexpr const long double pi  = std::numbers::pi_v<long double>;
@@ -140,56 +140,61 @@ namespace ap
     #define left_type                         decay<decltype(left)>
     #define left_value_type          typename decay<decltype(left)>::value_type
     #define left_iterate_type        typename decay<decltype(left)>::iterate_type
+    #define left_dimension                    decay<decltype(left)>::dimension()
     #define right_type                        decay<decltype(right)>
     #define right_value_type         typename decay<decltype(right)>::value_type
     #define right_iterate_type       typename decay<decltype(right)>::iterate_type
+    #define right_dimension                   decay<decltype(right)>::dimension()
     #define vector_type                       decay<decltype(vector)>
     #define vector_value_type        typename decay<decltype(vector)>::value_type
     #define vector_iterate_type      typename decay<decltype(vector)>::iterate_type
+    #define vector_dimension                  decay<decltype(vector)>::dimension()
     #define matrix_type                       decay<decltype(matrix)>
     #define matrix_value_type        typename decay<decltype(matrix)>::value_type
     #define matrix_iterate_type      typename decay<decltype(matrix)>::iterate_type
+    #define matrix_dimension                  decay<decltype(matrix)>::dimension()
     #define ndarray_type                      decay<decltype(ndarray)>
     #define ndarray_value_type       typename decay<decltype(ndarray)>::value_type
     #define ndarray_iterate_type     typename decay<decltype(ndarray)>::iterate_type
+    #define ndarray_dimension                 decay<decltype(ndarray)>::dimension()
 
-    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> ) ;
-    constexpr array_type     auto   cross           ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and   number_type<left_value_type>                                        and ( right.dimension() ==  1 ) and   number_type<right_value_type>; // Here complex-version is undefined.
-    constexpr /*value_type*/ auto   dot             ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   fft             ( const array_type auto&  vector )                              requires ( vector.dimension() ==  1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> );
-    constexpr array_type     auto   ifft            ( const array_type auto&  vector )                              requires ( vector.dimension() ==  1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> );
-    constexpr /*value_type*/ auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() == -1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() == -1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   tensor          ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() == -1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr /*value_type*/ auto   det             ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr pair_type      auto   eigen           ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr array_type     auto   eigen_value     ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr array_type     auto   eigen_vector    ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr tuple_type     auto   evd             ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr array_type     auto   inverse         ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr tuple_type     auto   lu              ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() == -1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    constexpr pair_type      auto   qr              ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr int                   rank            ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr tuple_type     auto   singular        ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr array_type     auto   singular_value  ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr pair_type      auto   singular_vector ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr tuple_type     auto   svd             ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr /*value_type*/ auto   tr              ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
-    constexpr                bool   operator ==     ( const array_type auto&  left, const array_type auto&  right ) requires ( left.dimension() == right.dimension() ) and equalable_to <left_value_type,right_value_type>;
-    constexpr                auto   operator <=>    ( const array_type auto&  left, const array_type auto&  right ) requires ( left.dimension() == right.dimension() ) and comparable_to<left_value_type,right_value_type>;
+    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> ) ;
+    constexpr array_type     auto   cross           ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  1 ) and   number_type<left_value_type>                                        and ( right_dimension ==  1 ) and   number_type<right_value_type>; // Here complex-version is undefined.
+    constexpr /*value_type*/ auto   dot             ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   fft             ( const array_type auto&  vector )                              requires ( vector_dimension ==  1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> );
+    constexpr array_type     auto   ifft            ( const array_type auto&  vector )                              requires ( vector_dimension ==  1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> );
+    constexpr /*value_type*/ auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   == -1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension == -1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   tensor          ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   == -1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr /*value_type*/ auto   det             ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr pair_type      auto   eigen           ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr array_type     auto   eigen_value     ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr array_type     auto   eigen_vector    ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr tuple_type     auto   evd             ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr array_type     auto   inverse         ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr tuple_type     auto   lu              ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr array_type     auto   operator *      ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension   == -1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right_dimension ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+    constexpr pair_type      auto   qr              ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr int                   rank            ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr tuple_type     auto   singular        ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr array_type     auto   singular_value  ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr pair_type      auto   singular_vector ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr tuple_type     auto   svd             ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr /*value_type*/ auto   tr              ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr                bool   operator ==     ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension == right_dimension   ) and equalable_to <left_value_type,right_value_type>;
+    constexpr                auto   operator <=>    ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension == right_dimension   ) and comparable_to<left_value_type,right_value_type>;
     constexpr array_type     auto   operator  +     (                               const array_type auto&  right ) requires requires { + std::declval<right_value_type>(); };
     constexpr array_type     auto   operator  -     (                               const array_type auto&  right ) requires requires { - std::declval<right_value_type>(); };
-    constexpr array_type     auto   operator  +     ( const array_type auto&  left, const array_type auto&  right ) requires ( left.dimension() == right.dimension() ) and addable_to     <left_value_type,right_value_type>;
-    constexpr array_type     auto   operator  -     ( const array_type auto&  left, const array_type auto&  right ) requires ( left.dimension() == right.dimension() ) and minusable_to   <left_value_type,right_value_type>;
-    constexpr array_type     auto   operator  *     ( const array_type auto&  left, const            auto&  right ) requires ( not array_type<right_type> )            and multipliable_to<left_value_type,right_type>;
-    constexpr array_type     auto   operator  *     ( const            auto&  left, const array_type auto&  right ) requires ( not array_type<left_type>  )            and multipliable_to<left_type,right_value_type>;
-    constexpr array_type     auto   operator  /     ( const array_type auto&  left, const            auto&  right ) requires ( not array_type<right_type> )            and dividable_to   <left_value_type,right_type>;
+    constexpr array_type     auto   operator  +     ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension() == right_dimension ) and addable_to     <left_value_type,right_value_type>;
+    constexpr array_type     auto   operator  -     ( const array_type auto&  left, const array_type auto&  right ) requires ( left_dimension() == right_dimension ) and minusable_to   <left_value_type,right_value_type>;
+    constexpr array_type     auto   operator  *     ( const array_type auto&  left, const            auto&  right ) requires ( not array_type<right_type> )          and multipliable_to<left_value_type,right_type>;
+    constexpr array_type     auto   operator  *     ( const            auto&  left, const array_type auto&  right ) requires ( not array_type<left_type>  )          and multipliable_to<left_type,right_value_type>;
+    constexpr array_type     auto   operator  /     ( const array_type auto&  left, const            auto&  right ) requires ( not array_type<right_type> )          and dividable_to   <left_value_type,right_type>;
     constexpr array_type     auto&  operator  +=    (       array_type auto&  left, const array_type auto&  right ) requires requires { left = left + right; };
     constexpr array_type     auto&& operator  +=    (       array_type auto&& left, const array_type auto&  right ) requires requires { left = left + right; };
     constexpr array_type     auto&  operator  -=    (       array_type auto&  left, const array_type auto&  right ) requires requires { left = left - right; };
@@ -198,32 +203,37 @@ namespace ap
     constexpr array_type     auto&& operator  *=    (       array_type auto&& left, const            auto&  right ) requires requires { left = left * right; };
     constexpr array_type     auto&  operator  /=    (       array_type auto&  left, const            auto&  right ) requires requires { left = left / right; };
     constexpr array_type     auto&& operator  /=    (       array_type auto&& left, const            auto&  right ) requires requires { left = left / right; };
-    constexpr void                 swap             (       array_type auto&& left,       array_type auto&& right ) requires ( left.dimension() == right.dimension() ) and std::same_as<left_value_type,right_value_type> and std::swappable_with<left_value_type,right_value_type>;
+    constexpr void                 swap             (       array_type auto&& left,       array_type auto&& right ) requires ( left_dimension() == right_dimension ) and std::same_as<left_value_type,right_value_type> and std::swappable_with<left_value_type,right_value_type>;
     constexpr array_type     auto  transpose        ( const array_type auto&  ndarray )                             requires std::copyable<ndarray_value_type>;
     constexpr array_type     auto  hermitian        ( const array_type auto&  ndarray )                             requires complex_type<ndarray_value_type>;
 
     template < int_type auto version = 2 >
-    constexpr array_type     auto  dct              ( const array_type auto&  vector )                              requires ( vector.dimension() ==  1 ) and   number_type<vector_value_type>;
+    constexpr array_type     auto  dct              ( const array_type auto&  vector )                              requires ( vector_dimension ==  1 ) and   number_type<vector_value_type>;
     template < number_type auto num = 1 >
-    constexpr /*value_type*/ auto  norm             ( const array_type auto&  vector )                              requires ( vector.dimension() ==  1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> );
+    constexpr /*value_type*/ auto  norm             ( const array_type auto&  vector )                              requires ( vector_dimension ==  1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> );
     template < number_type auto num = 1 >
-    constexpr /*value_type*/ auto  norm             ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
+    constexpr /*value_type*/ auto  norm             ( const array_type auto&  matrix )                              requires ( matrix_dimension ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
 
     #undef left_type
     #undef left_value_type
     #undef left_iterate_type
+    #undef left_dimension
     #undef right_type
     #undef right_value_type
     #undef right_iterate_type
+    #undef right_dimension
     #undef vector_type
     #undef vector_value_type
     #undef vector_iterate_type
+    #undef vector_dimension
     #undef matrix_type
     #undef matrix_value_type
     #undef matrix_iterate_type
+    #undef matrix_dimension
     #undef ndarray_type
     #undef ndarray_value_type
     #undef ndarray_iterate_type
+    #undef ndarray_dimension
 
     /// Random.concept
     template < class type > concept random_engine_type = requires { typename type::random_engine_tag; };
@@ -287,15 +297,10 @@ namespace ap
     #include "global.hpp"
 
     /// Literal
-    namespace literals
+    inline namespace literals
     {
-        constexpr degree  <double> operator ""deg ( unsigned long long num ) { return degree  <double>( num ); }
-        constexpr degree  <double> operator ""deg ( long double        num ) { return degree  <double>( num ); }
-        constexpr fraction<int>    operator ""f   ( unsigned long long num ) { return fraction<int>   ( num ); }
         constexpr complex <int>    operator ""i   ( unsigned long long num ) { return complex <int>   (0,num); }
         constexpr complex <double> operator ""i   ( long double        num ) { return complex <double>(0,num); }
-        constexpr radian  <double> operator ""rad ( unsigned long long num ) { return radian  <double>( num ); }
-        constexpr radian  <double> operator ""rad ( long double        num ) { return radian  <double>( num ); }
     }
 
 }

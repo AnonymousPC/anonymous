@@ -129,11 +129,18 @@ class basic_map<type1,type2,key_less,container>::const_iterator
 
 /// Template deduction
 
-basic_map ( map_type auto m ) -> basic_map<typename decltype(m)::key_type,typename decltype(m)::value_type,typename decltype(m)::key_compare_type,typename decltype(m)::container_type>;
+namespace aux
+{
+    template < std::ranges::input_range type >
+    using map_deduction_key_type = decay<decltype(*std::ranges::begin(std::declval<type>()))>::key_type;
+
+    template < std::ranges::input_range type >
+    using map_deduction_value_type = decay<decltype(*std::ranges::begin(std::declval<type>()))>::value_type;
+}
 
 template < std::ranges::input_range type >
     requires ( pair_type<decay<decltype(*std::ranges::begin(std::declval<type>()))>> )
-basic_map ( std::from_range_t, type ) -> map<typename decay<decltype(*std::ranges::begin(std::declval<type>()))>::key_type,
-                                             typename decay<decltype(*std::ranges::begin(std::declval<type>()))>::value_type>;
+basic_map ( std::from_range_t, type ) -> basic_map<aux::map_deduction_key_type<type>,aux::map_deduction_value_type<type>,std::less<>,
+                                                   rb_tree<map_pair<aux::map_deduction_key_type<type>,aux::map_deduction_value_type<type>>,as_key_compares<aux::map_deduction_key_type<type>,aux::map_deduction_value_type<type>,std::less<>>>>;
 
 #include "map.ipp"

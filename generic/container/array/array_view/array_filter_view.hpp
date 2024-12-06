@@ -52,8 +52,7 @@ class array_filter_view
         constexpr decltype(auto) operator [] ( int ) const;                                               // O(N).
 
     public: // Views
-        using array_algo::operator[],
-              array_algo::reshape,
+        using array_algo::reshape,
               array_algo::flatten,
               array_algo::as_type;
         constexpr       auto           operator [] ( unary_pred<iterate_type> auto );        // Lazy.

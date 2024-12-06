@@ -47,6 +47,18 @@ constexpr decltype(auto) array_algo::end ( ) const
     return const_derive_of_self.end();
 }
 
+templates
+constexpr decltype(auto) array_algo::operator [] ( int pos )
+{
+    return derive_of_self [pos];
+}
+
+templates
+constexpr decltype(auto) array_algo::operator [] ( int pos ) const
+{
+    return const_derive_of_self [pos];
+}
+
 // N-dimension
 
 templates
@@ -69,18 +81,6 @@ constexpr auto array_algo::tuple_shape ( ) const
 }
 
 // Views
-
-templates
-constexpr decltype(auto) array_algo::operator [] ( int pos )
-{
-    return derive_of_self [pos];
-}
-
-templates
-constexpr decltype(auto) array_algo::operator [] ( int pos ) const
-{
-    return const_derive_of_self [pos];
-}
 
 templates
 constexpr auto array_algo::operator [] ( int from, int to )

@@ -57,8 +57,7 @@ class array_span_view
         constexpr const auto           operator [] ( int ) const requires ( container_type::dimension() >= 2 );
 
     public: // Views
-        using array_algo::operator[],
-              array_algo::reshape,
+        using array_algo::reshape,
               array_algo::flatten,
               array_algo::as_type;
         constexpr       auto operator [] ( pair<int>, pair<int> )       requires ( container_type::dimension() == 2 );

@@ -158,7 +158,7 @@ constexpr const output_type& variant<types...>::value ( ) const
 
 template < class... types >
 template < int output_index >
-constexpr typename variant<types...>::value_type<output_index>& variant<types...>::value ( )
+constexpr typename variant<types...>::template value_type<output_index>& variant<types...>::value ( )
     requires ( ( output_index >= -sizeof...(types) and output_index <= -1 ) or ( output_index >= 1 and output_index <= sizeof...(types) ) )
 {
     return value<value_type<output_index>>();
@@ -166,7 +166,7 @@ constexpr typename variant<types...>::value_type<output_index>& variant<types...
 
 template < class... types >
 template < int output_index >
-constexpr const typename variant<types...>::value_type<output_index>& variant<types...>::value ( ) const
+constexpr const typename variant<types...>::template value_type<output_index>& variant<types...>::value ( ) const
     requires ( ( output_index >= -sizeof...(types) and output_index <= -1 ) or ( output_index >= 1 and output_index <= sizeof...(types) ) )
 {
     return value<value_type<output_index>>();

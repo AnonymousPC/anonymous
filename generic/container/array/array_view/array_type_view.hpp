@@ -63,8 +63,7 @@ class array_type_view
         constexpr const auto     operator [] ( int ) const;
 
     public: // Views
-        using array_algo::operator[],
-              array_algo::reshape,
+        using array_algo::reshape,
               array_algo::flatten;
 };
 

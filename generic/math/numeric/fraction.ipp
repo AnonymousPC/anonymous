@@ -22,10 +22,10 @@ class fraction
         constexpr const type& den ( ) const;
 
     public: // Conversion
-        template < fraction_type type2 > constexpr fraction ( type2 )                        requires ( not std::same_as<fraction,type2> );
+        template < fraction_type type2 > constexpr fraction ( type2 )         requires ( not std::same_as<fraction,type2> );
         template < int_type      type2 > constexpr fraction ( type2 );
-        template < float_type    type2 > constexpr fraction ( type2 )         [[deprecated]] requires ( not fraction_type<type2> );
-        template < number_type   type2 > constexpr operator   type2 ( ) const                requires ( not fraction_type<type2> );
+        template < float_type    type2 > constexpr fraction ( type2 )         requires ( not fraction_type<type2> );
+        template < number_type   type2 > constexpr operator   type2 ( ) const requires ( not fraction_type<type2> );
 
     public: // Operator
         constexpr bool operator == ( const fraction& ) const = default;
@@ -98,7 +98,6 @@ constexpr fraction<type>::fraction ( type2 cvt )
 template < int_type   type  >
 template < float_type type2 >
 constexpr fraction<type>::fraction ( type2 cvt )
-[[deprecated]]
     requires ( not fraction_type<type2> )
 {
     expand ( x, y, cvt );

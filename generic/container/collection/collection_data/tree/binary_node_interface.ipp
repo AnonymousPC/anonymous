@@ -21,7 +21,7 @@ constexpr binary_node_interface<type,node>::~binary_node_interface ( )
 template < class type, class node >
 constexpr binary_node_interface<type,node>::binary_node_interface ( tuple<type> init_val )
     requires std::copyable<type>
-    extends binary_node_interface ( std::move(init_val[constexpr_index<1>()]) )
+    extends binary_node_interface ( std::move(init_val.template value<1>()) )
 {
 
 }

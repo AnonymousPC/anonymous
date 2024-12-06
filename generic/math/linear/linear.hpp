@@ -5,18 +5,23 @@
 #define left_type                         decay<decltype(left)>
 #define left_value_type          typename decay<decltype(left)>::value_type
 #define left_iterate_type        typename decay<decltype(left)>::iterate_type
+#define left_dimension                    decay<decltype(left)>::dimension()
 #define right_type                        decay<decltype(right)>
 #define right_value_type         typename decay<decltype(right)>::value_type
 #define right_iterate_type       typename decay<decltype(right)>::iterate_type
+#define right_dimension                   decay<decltype(right)>::dimension()
 #define vector_type                       decay<decltype(vector)>
 #define vector_value_type        typename decay<decltype(vector)>::value_type
 #define vector_iterate_type      typename decay<decltype(vector)>::iterate_type
+#define vector_dimension                  decay<decltype(vector)>::dimension()
 #define matrix_type                       decay<decltype(matrix)>
 #define matrix_value_type        typename decay<decltype(matrix)>::value_type
 #define matrix_iterate_type      typename decay<decltype(matrix)>::iterate_type
+#define matrix_dimension                  decay<decltype(matrix)>::dimension()
 #define ndarray_type                      decay<decltype(ndarray)>
 #define ndarray_value_type       typename decay<decltype(ndarray)>::value_type
 #define ndarray_iterate_type     typename decay<decltype(ndarray)>::iterate_type
+#define ndarray_dimension                 decay<decltype(ndarray)>::dimension()
 
 /// Include
 
@@ -52,15 +57,20 @@
 #undef left_type
 #undef left_value_type
 #undef left_iterate_type
+#undef left_dimension
 #undef right_type
 #undef right_value_type
 #undef right_iterate_type
+#undef right_dimension
 #undef vector_type
 #undef vector_value_type
 #undef vector_iterate_type
+#undef vector_dimension
 #undef matrix_type
 #undef matrix_value_type
 #undef matrix_iterate_type
+#undef matrix_dimension
 #undef ndarray_type
 #undef ndarray_value_type
 #undef ndarray_iterate_type
+#undef ndarray_dimension

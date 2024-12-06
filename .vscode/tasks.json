@@ -272,6 +272,7 @@
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
+                "-fno-inline",
                 "-Ddebug=1",
 
                 "-Og",
@@ -344,6 +345,7 @@
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
+                "-fno-inline",
 
                 "-O3",
 
@@ -416,6 +418,7 @@
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
+                "-fno-inline",
 
                 "-O3",
                 "-Ddll=1",

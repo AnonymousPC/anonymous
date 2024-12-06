@@ -21,6 +21,8 @@ class array_algo<array_type,value_type,iterate_type,dim>
         constexpr decltype(auto) begin ( ) const;
         constexpr decltype(auto) end   ( );
         constexpr decltype(auto) end   ( ) const;
+        constexpr decltype(auto) operator [] ( int );
+        constexpr decltype(auto) operator [] ( int ) const;
 
     public: // N-dimension
         constexpr static int        dimension     ( );
@@ -30,8 +32,6 @@ class array_algo<array_type,value_type,iterate_type,dim>
         constexpr        auto       tuple_shape   ( ) const;
 
     public: // Views
-                                 constexpr decltype(auto) operator [] ( int );
-                                 constexpr decltype(auto) operator [] ( int ) const;
                                  constexpr       auto     operator [] ( int, int );
                                  constexpr const auto     operator [] ( int, int )                    const;
                                  constexpr       auto     operator [] ( int, int, int );

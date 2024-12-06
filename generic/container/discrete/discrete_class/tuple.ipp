@@ -29,15 +29,17 @@ constexpr int tuple<type>::size ( )
 }
 
 template < class type >
-constexpr decltype(auto) tuple<type>::operator [] ( auto index )
-    requires ( index.value == 1 or index.value == -1 )
+template < int index >
+constexpr decltype(auto) tuple<type>::value ( )
+    requires ( index == 1 or index == -1 )
 {
     return static_cast<type&> ( first );
 }
 
 template < class type >
-constexpr decltype(auto) tuple<type>::operator [] ( auto index ) const
-    requires ( index.value == 1 or index.value == -1 )
+template < int index >
+constexpr decltype(auto) tuple<type>::value ( ) const
+    requires ( index == 1 or index == -1 )
 {
     return static_cast<const type&> ( first );
 }
@@ -64,29 +66,31 @@ constexpr int tuple<type,types...>::size ( )
 }
 
 template < class type, class... types >
-constexpr decltype(auto) tuple<type,types...>::operator [] ( auto index )
-    requires ( ( index.value >= -size() and index.value <= -1 ) or ( index.value >= 1 and index.value <= size() ) )
+template < int index >
+constexpr decltype(auto) tuple<type,types...>::value ( )
+    requires ( ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() ) )
 {
-    if constexpr ( index.value == 1 or index.value == -size() )
+    if constexpr ( index == 1 or index == -size() )
         return static_cast<type&> ( first );
 
-    else if constexpr ( index.value > 0 )
-        return other [ constexpr_index<index.value-1> () ];
+    else if constexpr ( index > 0 )
+        return other.template value<index-1>();
 
     else
-        return other [ constexpr_index<index.value>   () ];
+        return other.template value<index>();
 }
 
 template < class type, class... types >
-constexpr decltype(auto) tuple<type,types...>::operator [] ( auto index ) const
-    requires ( ( index.value >= -size() and index.value <= -1 ) or ( index.value >= 1 and index.value <= size() ) )
+template < int index >
+constexpr decltype(auto) tuple<type,types...>::value ( ) const
+    requires ( ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() ) )
 {
-    if constexpr ( index.value == 1 or index.value == -size() )
+    if constexpr ( index == 1 or index == -size() )
         return static_cast<const type&> ( first );
 
-    else if constexpr ( index.value > 0 )
-        return other [ constexpr_index<index.value-1> () ];
+    else if constexpr ( index > 0 )
+        return other.template value<index-1>();
 
     else
-        return other [ constexpr_index<index.value>   () ];
+        return other.template value<index>();
 }

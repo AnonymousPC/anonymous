@@ -123,7 +123,7 @@ constexpr decltype(auto) array_flatten_view<container_type>::operator [] ( int p
 template < class container_type >
 constexpr decltype(auto) array_flatten_view<container_type>::locate ( auto& target, const auto& idx )
 {
-    if constexpr ( target.dimension() == 1 )
+    if constexpr ( decay<decltype(target)>::dimension() == 1 )
         return target[idx.template get<1>()];
     else
         return locate ( target[idx.template get<1>()], idx.template get<2,-1>() );
@@ -132,7 +132,7 @@ constexpr decltype(auto) array_flatten_view<container_type>::locate ( auto& targ
 template < class container_type >
 constexpr decltype(auto) array_flatten_view<container_type>::locate ( const auto& target, const auto& idx )
 {
-    if constexpr ( target.dimension() == 1 )
+    if constexpr ( decay<decltype(target)>::dimension() == 1 )
         return target[idx.template get<1>()];
     else
         return locate ( target[idx.template get<1>()], idx.template get<2,-1>() );
@@ -141,7 +141,7 @@ constexpr decltype(auto) array_flatten_view<container_type>::locate ( const auto
 template < class container_type >
 constexpr auto array_flatten_view<container_type>::decompose ( const auto& shp, int s )
 {
-    return decompose_aux<1> ( array_coordinate<shp.size()>(), shp, s-1, shp.template get<2,-1>().product() );
+    return decompose_aux<1> ( array_coordinate<decay<decltype(shp)>::size()>(), shp, s-1, shp.template get<2,-1>().product() );
 }
 
 template < class container_type >
@@ -152,7 +152,7 @@ constexpr auto array_flatten_view<container_type>::decompose_aux ( auto&& idx, c
     s -= r * p; // s %= p.
     idx.template get<index>() = r + 1;
 
-    if constexpr ( index != idx.size() )
+    if constexpr ( index != decay<decltype(idx)>::size() )
         return decompose_aux<index+1> ( idx, shp, s, p / shp.template get<index+1>() );
     else
         return idx;

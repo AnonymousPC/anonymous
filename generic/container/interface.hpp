@@ -47,9 +47,6 @@ namespace ap
                                                                                 using wregex      = basic_regex<wchar_t>;
 
 
-    template < auto... digits >                                                 class constexpr_index;
-
-
 
     /// Concept
     template < class input_type, class value_type = void, int dim = 0 >
@@ -212,7 +209,7 @@ namespace ap
     {
         if constexpr ( requires { typename input_type::tuple_tag; } )
         {
-            static_assert ( requires { std::tuple_size<input_type>::value; typename std::tuple_element<0,input_type>::type; }, "class provides tuple_tag but not specialize std::tuple_size and std::tuple_element" );
+            static_assert ( requires { input_type::size(); typename input_type::template value_type<1>; }, "class provides tuple_tag but not provides size() and value_type" );
             if constexpr ( sizeof...(types) != 0 )
                 return aux::tuplewise_convertible<input_type,tuple<types...>>;
             else
@@ -266,10 +263,8 @@ namespace ap
     #include "utility/utility.hpp"
 
     /// Literal
-    namespace literals
+    inline namespace literals
     {
-        template < char... index >
-        constexpr auto           operator ""c   ( )                                { return constexpr_index<index...>();  }
         constexpr string         operator ""s   ( const char*     ptr, size_t    ) { return string         ( ptr     );   }
         constexpr wstring        operator ""s   ( const wchar_t*  ptr, size_t    ) { return wstring        ( ptr     );   }
         constexpr u8string       operator ""s   ( const char8_t*  ptr, size_t    ) { return u8string       ( ptr     );   }
@@ -280,8 +275,6 @@ namespace ap
         constexpr u8string_view  operator ""sv  ( const char8_t*  ptr, size_t sz ) { return u8string_view  ( ptr, sz );   }
         constexpr u16string_view operator ""sv  ( const char16_t* ptr, size_t sz ) { return u16string_view ( ptr, sz );   }
         constexpr u32string_view operator ""sv  ( const char32_t* ptr, size_t sz ) { return u32string_view ( ptr, sz );   }
-        constexpr regex          operator ""rgx ( const char*     ptr, size_t sz ) { return regex (string_view (ptr,sz)); }
-        constexpr wregex         operator ""rgx ( const wchar_t*  ptr, size_t sz ) { return wregex(wstring_view(ptr,sz)); }
     }
 
 } // namespace ap

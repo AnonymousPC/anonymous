@@ -51,7 +51,6 @@ std::string abi::demangle ( const char* mangled_name )
                                                 grey,   e.source_file(), e.source_line(),
                                                 white);
                          })
-                     | std::ranges::to<std::vector<std::string>>()
                      | std::views::join_with('\n')
                      | std::ranges::to<std::string>();
     }

@@ -1,5 +1,6 @@
-/* This file is included outside namespace ap */
 #pragma once
+
+} // Out from namespace ap
 
 
 /// Declaration
@@ -58,3 +59,5 @@ constexpr decltype(auto) ap::get ( tuple&& );
 
 
 #include "structured_binding.ipp"
+
+namespace ap { // Back into namespace ap

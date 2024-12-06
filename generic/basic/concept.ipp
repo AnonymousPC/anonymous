@@ -31,10 +31,10 @@ template < class type, class value_type > concept binary_op     = function_type<
 namespace aux
 {
     template < class... types >
-    struct first_type_of;
+    struct first_type_of_helper;
 
     template < class type1, class... types >
-    struct first_type_of<type1,types...>
+    struct first_type_of_helper<type1,types...>
     {
         using type = type1;
     };
@@ -42,51 +42,51 @@ namespace aux
 
 
     template < class... types >
-    struct last_type_of;
+    struct last_type_of_helper;
 
     template < class type1 >
-    struct last_type_of<type1>
+    struct last_type_of_helper<type1>
     {
         using type = type1;
     };
 
     template < class type1, class... types >
         requires ( size() >= 2 )
-    struct last_type_of<type1,types...>
+    struct last_type_of_helper<type1,types...>
     {
-        using type = typename last_type_of<types...>::type;
+        using type = last_type_of_helper<types...>::type;
     };
 
 
 
     template < int index, class... types >
-    struct index_type_of;
+    struct index_type_of_helper;
 
     template < int index, class type1, class... types >
         requires ( index == 1 or index == -size() )
-    struct index_type_of<index,type1,types...>
+    struct index_type_of_helper<index,type1,types...>
     {
         using type = type1;
     };
 
     template < int index, class type1, class... types >
         requires ( index >= 2 and index <= size() )
-    struct index_type_of<index,type1,types...>
+    struct index_type_of_helper<index,type1,types...>
     {
-        using type = typename index_type_of<index-1,types...>::type;
+        using type = index_type_of_helper<index-1,types...>::type;
     };
 
     template < int index, class type1, class... types >
         requires ( index >= -size() + 1 and index <= -1 )
-    struct index_type_of<index,type1,types...>
+    struct index_type_of_helper<index,type1,types...>
     {
-        using type = typename index_type_of<index,types...>::type;
+        using type = index_type_of_helper<index,types...>::type;
     };
 }
 
-template <            class... types > using first_type_of = aux::first_type_of<types...>::type;
-template <            class... types > using last_type_of  = aux::last_type_of<types...>::type;
-template < int index, class... types > using index_type_of = aux::index_type_of<index,types...>::type;
+template <            class... types > using first_type_of = aux::first_type_of_helper<types...>::type;
+template <            class... types > using last_type_of  = aux::last_type_of_helper<types...>::type;
+template < int index, class... types > using index_type_of = aux::index_type_of_helper<index,types...>::type;
 
 
 
@@ -126,73 +126,73 @@ constexpr const auto& index_value_of ( const auto& first, const auto&... other )
 namespace aux
 {
     template < class result_type, int index, class... types >
-    struct convertible_since;
+    struct convertible_since_helper;
 
     template < class result_type, int index, class type1 >
         requires ( index == 1 or index == -1 )
-    struct convertible_since<result_type,index,type1>
+    struct convertible_since_helper<result_type,index,type1>
     {
-        constexpr static const bool value = std::is_convertible<type1,result_type>::value;
+        constexpr static const bool value = std::convertible_to<type1,result_type>;
     };
 
     template < class result_type, int index, class type1, class... types >
         requires ( index == 1 and size() >= 2 )
-    struct convertible_since<result_type,index,type1,types...>
+    struct convertible_since_helper<result_type,index,type1,types...>
     {
-        constexpr static const bool value = std::is_convertible<type1,result_type>::value and convertible_since<result_type,index,types...>::value;
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_since_helper<result_type,index,types...>::value;
     };
 
     template < class result_type, int index, class type1, class... types >
         requires ( index >= 2 and index <= size() and size() >= 2 )
-    struct convertible_since<result_type,index,type1,types...>
+    struct convertible_since_helper<result_type,index,type1,types...>
     {
-        constexpr static const bool value = convertible_since<result_type,index-1,types...>::value;
+        constexpr static const bool value = convertible_since_helper<result_type,index-1,types...>::value;
     };
 
     template < class result_type, int index, class type1, class... types >
         requires ( index == -size() and size() >= 2 )
-    struct convertible_since<result_type,index,type1,types...>
+    struct convertible_since_helper<result_type,index,type1,types...>
     {
-        constexpr static const bool value = std::is_convertible<type1,result_type>::value and convertible_since<result_type,index+1,types...>::value;
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_since_helper<result_type,index+1,types...>::value;
     };
 
     template < class result_type, int index, class type1, class... types >
         requires ( index >= -size() + 1 and index <= -1 and size() >= 2 )
-    struct convertible_since<result_type,index,type1,types...>
+    struct convertible_since_helper<result_type,index,type1,types...>
     {
-        constexpr static const bool value = convertible_since<result_type,index,types...>::value;
+        constexpr static const bool value = convertible_since_helper<result_type,index,types...>::value;
     };
 
 
 
     template < class result_type, int index, class... types >
-    struct convertible_until;
+    struct convertible_until_helper;
 
     template < class result_type, int index, class type1, class... types >
         requires ( index == 1 or index == -size() )
-    struct convertible_until<result_type,index,type1,types...>
+    struct convertible_until_helper<result_type,index,type1,types...>
     {
-        constexpr static const bool value = std::is_convertible<type1,result_type>::value;
+        constexpr static const bool value = std::convertible_to<type1,result_type>;
     };
 
     template < class result_type, int index, class type1, class... types >
         requires ( index >= 2 and index <= size() )
-    struct convertible_until<result_type,index,type1,types...>
+    struct convertible_until_helper<result_type,index,type1,types...>
     {
-        constexpr static const bool value = std::is_convertible<type1,result_type>::value and convertible_until<result_type,index-1,types...>::value;
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_until_helper<result_type,index-1,types...>::value;
     };
 
     template < class result_type, int index, class type1, class... types >
         requires ( index >= -size() + 1 and index <= -1 )
-    struct convertible_until<result_type,index,type1,types...>
+    struct convertible_until_helper<result_type,index,type1,types...>
     {
-        constexpr static const bool value = std::is_convertible<type1,result_type>::value and convertible_until<result_type,index,types...>::value;
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_until_helper<result_type,index,types...>::value;
     };
 }
 
 
-template < class result_type, int index, class... types > constexpr bool convertible_since = aux::convertible_since<result_type,index,types...>::value;
-template < class result_type, int index, class... types > constexpr bool convertible_until = aux::convertible_until<result_type,index,types...>::value;
+template < class result_type, int index, class... types > constexpr bool convertible_since = aux::convertible_since_helper<result_type,index,types...>::value;
+template < class result_type, int index, class... types > constexpr bool convertible_until = aux::convertible_until_helper<result_type,index,types...>::value;
 
 
 #undef size

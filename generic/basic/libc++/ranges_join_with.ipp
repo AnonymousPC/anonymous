@@ -185,7 +185,7 @@ namespace ranges {
       && input_range<range_reference_t<_Vp>>
       && __compatible_joinable_ranges<range_reference_t<_Vp>, _Pattern>
   template<bool _Const>
-  class join_with_view<_Vp, _Pattern>::_Iterator : public __iter_cat<_Const>
+  struct join_with_view<_Vp, _Pattern>::_Iterator : public __iter_cat<_Const>
   {
     using _Parent = __maybe_const<_Const, join_with_view>;
     using _Base = join_with_view::_Base<_Const>;
@@ -473,7 +473,7 @@ namespace ranges {
       && input_range<range_reference_t<_Vp>>
       && __compatible_joinable_ranges<range_reference_t<_Vp>, _Pattern>
   template<bool _Const>
-  class join_with_view<_Vp, _Pattern>::_Sentinel
+  struct join_with_view<_Vp, _Pattern>::_Sentinel
   {
     using _Parent = __maybe_const<_Const, join_with_view>;
     using _Base = join_with_view::_Base<_Const>;

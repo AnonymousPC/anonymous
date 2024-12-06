@@ -16,68 +16,48 @@
 #endif
 
 // Include [[std]]
+#include <algorithm>
+#include <charconv>
+#include <chrono>
+#include <concepts>
+#include <csignal>
+#include <filesystem>
+#include <format>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <map>
+#include <new>
+#include <numbers>
+#include <print>
+#include <ranges>
+#include <regex>
+#include <stacktrace>
+#include <stdfloat>
+#include <string>
+#include <text_encoding>
+#include <thread>
+#include <utility>
+
 #ifdef _WIN32
-    #include <algorithm>
-    #include <charconv>
-    #include <chrono>
-    #include <concepts>
-    #include <csignal>
-    #include <filesystem>
-    #include <format>
-    #include <fstream>
-    #include <iostream>
-    #include <iomanip>
-    #include <map>
-    #include <new>
-    #include <numbers>
-    #include <print>
-    #include <ranges>
-    #include <regex>
+    #define __cpp_lib_text_encoding 202412L
     #include <stacktrace>
     #include <stdfloat>
-    #include <string>
     #include <text_encoding>
-    #include <thread>
-    #include <utility>
-    std::text_encoding std::text_encoding::environment ( ) { return std::text_encoding::GBK; };
+    #include  "libstdc++/text_encoding.ipp"
 #elifdef __APPLE__
-    #pragma GCC diagnostic push 
-        #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
-        #pragma GCC diagnostic ignored "-Wstringop-overflow="
-
-        #include <algorithm>
-        #include <charconv>
-        #include <chrono>
-        #include <concepts>
-        #include <csignal>
-        #include <filesystem>
-        #include <format>
-        #include <fstream>
-        #include <iostream>
-        #include <iomanip>
-        #include <map>
-        #include <new>
-        #include <numbers>
-     // #include <print>
-        #include <ranges>
-        #include <regex>
-        #include <string>
-        #include <thread>
-        #include <utility>
-        #include "libc++/ranges_chunk.ipp"
-        #include "libc++/ranges_join_with.ipp"
-        #include "libc++/ranges_stride.ipp"
-        #include "libc++/text_encoding.ipp"
-    #pragma GCC diagnostic pop
+    #include "libc++/ranges_chunk.ipp"
+    #include "libc++/ranges_join_with.ipp"
+    #include "libc++/ranges_stride.ipp"
+    #include "libc++/text_encoding.ipp"
 #endif
 
 // Include [[std.experimental.execution]]
 #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wshadow"
-    #pragma GCC diagnostic ignored "-Wswitch-default"
-    #pragma GCC diagnostic ignored "-Wundef"
-    #pragma GCC diagnostic ignored "-Wunused-parameter"
-    
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
     #include <exec/timed_scheduler.hpp>
@@ -92,10 +72,8 @@
     }
 #pragma GCC diagnostic pop
 
-// Include [[compiler.gcc, compiler.clang]]
-#if defined(__GNUC__) or defined(__clang__)
-    #include <cxxabi.h>
-#endif
+// Include [[compiler]]
+#include <cxxabi.h>
 
 // Include [[system.windows]]
 #ifdef _WIN32
@@ -105,17 +83,8 @@
 #endif
 
 // Include [[hardware.cpu.intel.tbb]]
-#ifdef __INTEL__
+#ifdef _WIN32
     #include <tbb/tbb.h>
-#endif
-
-// Include [[hardward.cpu.apple]]
-#ifdef __APPLE__
-#endif
-
-// Include [[hardware.gpu.nvidia]]
-#ifdef __CUDACC__
-   #include <thrust/thrust>
 #endif
 
 // Include [[third-party.boost]]
@@ -144,8 +113,8 @@
 
 // Include [[third-party.eigen]]
 #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wclass-memaccess"
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     #define eigen_assert(x) do { if ( not Eigen::internal::copy_bool(x) ) throw std::runtime_error(EIGEN_MAKESTRING(x)); } while ( false )
     #include <eigen3/Eigen/Eigen>
     #include <eigen3/unsupported/Eigen/FFT>
@@ -172,13 +141,11 @@
 
 
 // Compiler
-#ifdef __GNUC__
-    #pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
-    #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is kept for further standarlization.
-    #pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
-    #pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
-    #pragma GCC diagnostic ignored "-Wunused-result"   // Allowing ignore result of std::ranges::to.
-#endif
+#pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
+#pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is reserved for further standarlization.
+#pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
+#pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
+#pragma GCC diagnostic ignored "-Wunused-result"   // Allowing ignore result of std::ranges::to.
 
 // Logic
 #define abstract 0    // Usage: virtual int func() = abstract;
@@ -271,9 +238,9 @@ namespace ap
     #include "abi.hpp"
     #include "concept.hpp"
     #include "exception.hpp"
+    #include "print.hpp"
     #include "range.hpp"
     #include "typedef.hpp"
-    #include "utility.hpp"
     #include "global.hpp"
 
 } // namespace ap

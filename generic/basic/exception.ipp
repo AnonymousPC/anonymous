@@ -253,7 +253,9 @@ consteval exception::format_string<arg_types...>::format_string ( const char* in
 
     // Set mode. [[std::string is not always consteval]]
     let b = data;
-    let e = data + strlen(data);
+    let e = data;
+    while ( *e != '\0' )
+        e++;
 
     while ( true )
     {

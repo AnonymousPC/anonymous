@@ -9,5 +9,15 @@
 using namespace ap;
 int main ( )
 {
-    print("中文");
+    let stream = std::ifstream("okk.txt");
+
+    let content = std::views::istream<char>(stream)
+        | std::views::lazy_split('\n')
+        | std::views::transform ([] (const auto& stream_line)
+            {
+                return stream_line | std::ranges::to<std::string>();
+            })
+        | std::ranges::to<std::vector<std::string>>();
+
+    std::ranges::for_each(content, [] (const auto& line) { std::cout << line << '\n'; });
 }

@@ -1,4 +1,3 @@
-#define dll 1
 #include "generic/basic/interface.hpp"
 // #include "generic/container/interface.hpp"
 // #include "generic/io/interface.hpp"

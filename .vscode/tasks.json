@@ -202,8 +202,6 @@
             "command": "g++",
             "args": [
                 "-fuse-ld=lld",
-                "-fPIC",
-                "-Wl,--dll",
                 "-shared",
 
                 "-o",
@@ -270,17 +268,15 @@
             "args": [
                 "-std=c++26",
 
-                "-stdlib=libc++",
-                "-I/opt/homebrew/opt/llvm/include/c++/v1",
-
                 "-g",
                 "-Wall",
                 "-pedantic",
                 "-fdiagnostics-color=always",
                 "-flarge-source-files", 
+                "-fno-inline",
                 "-Ddebug=1",
 
-                "-O1", // Allow [[always_inline]]
+                "-Og",
 
                 "-I/opt/homebrew/include",
 
@@ -305,19 +301,15 @@
 
                 "bin/debug/main.o",
                 "bin/dll/main.dylib",
-                
-                "-stdlib=libc++",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
 
-                "/opt/homebrew/lib/libboost_date_time-mt.dylib",
-                "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
-                "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
-                "/opt/homebrew/lib/libboost_locale-mt.dylib",
-                "/opt/homebrew/lib/libboost_process-mt.dylib",
-                "/opt/homebrew/lib/libboost_stacktrace_addr2line-mt.dylib",
-                "/opt/homebrew/lib/libboost_system-mt.dylib",
+                "/opt/homebrew/lib/gcc/current/libstdc++exp.a",
+                "/opt/homebrew/lib/libboost_date_time.dylib",
+                "/opt/homebrew/lib/libboost_filesystem.dylib",
+                "/opt/homebrew/lib/libboost_iostreams.dylib",
+                "/opt/homebrew/lib/libboost_locale.dylib",
+                "/opt/homebrew/lib/libboost_process.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_basic.dylib",
+                "/opt/homebrew/lib/libboost_system.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
                 "/opt/homebrew/lib/libFLAC++.dylib",
                 "/opt/homebrew/lib/libjpeg.dylib",
@@ -352,9 +344,6 @@
             "command": "g++-14",
             "args": [
                 "-std=c++26",
-
-                "-stdlib=libc++",
-                "-I/opt/homebrew/opt/llvm/include/c++/v1",
         
                 "-g",
                 "-Wall",
@@ -388,18 +377,14 @@
                 "bin/release/main.o",
                 "bin/dll/main.dylib",
 
-                "-stdlib=libc++",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
-
-                "/opt/homebrew/lib/libboost_date_time-mt.dylib",
-                "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
-                "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
-                "/opt/homebrew/lib/libboost_locale-mt.dylib",
-                "/opt/homebrew/lib/libboost_process-mt.dylib",
-                "/opt/homebrew/lib/libboost_stacktrace_addr2line-mt.dylib",
-                "/opt/homebrew/lib/libboost_system-mt.dylib",
+                "/opt/homebrew/lib/gcc/current/libstdc++exp.a",
+                "/opt/homebrew/lib/libboost_date_time.dylib",
+                "/opt/homebrew/lib/libboost_filesystem.dylib",
+                "/opt/homebrew/lib/libboost_iostreams.dylib",
+                "/opt/homebrew/lib/libboost_locale.dylib",
+                "/opt/homebrew/lib/libboost_process.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_addr2line.dylib",
+                "/opt/homebrew/lib/libboost_system.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
                 "/opt/homebrew/lib/libFLAC++.dylib",
                 "/opt/homebrew/lib/libjpeg.dylib",
@@ -436,9 +421,6 @@
             "args": [
                 "-std=c++26",
 
-                "-stdlib=libc++",
-                "-I/opt/homebrew/opt/llvm/include/c++/v1",
-
                 "-g",
                 "-Wall",
                 "-pedantic",
@@ -471,19 +453,14 @@
                 "bin/dll/main.dylib",
 
                 "bin/dll/main.o",
-
-                "-stdlib=libc++",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++abi.dylib",
-                "/opt/homebrew/opt/llvm/lib/c++/libc++experimental.a",
                 
-                "/opt/homebrew/lib/libboost_date_time-mt.dylib",
-                "/opt/homebrew/lib/libboost_filesystem-mt.dylib",
-                "/opt/homebrew/lib/libboost_iostreams-mt.dylib",
-                "/opt/homebrew/lib/libboost_locale-mt.dylib",
-                "/opt/homebrew/lib/libboost_process-mt.dylib",
-                "/opt/homebrew/lib/libboost_stacktrace_addr2line-mt.dylib",
-                "/opt/homebrew/lib/libboost_system-mt.dylib",
+                "/opt/homebrew/lib/libboost_date_time.dylib",
+                "/opt/homebrew/lib/libboost_filesystem.dylib",
+                "/opt/homebrew/lib/libboost_iostreams.dylib",
+                "/opt/homebrew/lib/libboost_locale.dylib",
+                "/opt/homebrew/lib/libboost_process.dylib",
+                "/opt/homebrew/lib/libboost_stacktrace_addr2line.dylib",
+                "/opt/homebrew/lib/libboost_system.dylib",
                 "/opt/homebrew/lib/libcrypto.dylib",
                 "/opt/homebrew/lib/libFLAC++.dylib",
                 "/opt/homebrew/lib/libjpeg.dylib",

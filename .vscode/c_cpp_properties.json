@@ -21,9 +21,6 @@
                 "/opt/homebrew/opt/llvm/include/c++/v1",
                 "/opt/homebrew/include"
             ],
-            "macFrameworkPath": [
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
-            ],
             "compilerPath": "/opt/homebrew/bin/g++-14",
             "compilerArgs": [
                 "-std=c++23",

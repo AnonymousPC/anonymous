@@ -16,63 +16,31 @@
 #endif
 
 // Include [[std]]
-#ifdef _WIN32
-    #define __cpp_lib_text_encoding 202412L
-    #include <algorithm>
-    #include <cassert>
-    #include <charconv>
-    #include <chrono>
-    #include <concepts>
-    #include <csignal>
-    #include <filesystem>
-    #include <format>
-    #include <fstream>
-    #include <iostream>
-    #include <iomanip>
-    #include <map>
-    #include <new>
-    #include <numbers>
-    #include <print>
-    #include <ranges>
-    #include <regex>
-    #include <stacktrace>
-    #include <stdfloat>
-    #include <string>
-    #include <text_encoding>
-    #include <thread>
-    #include <utility>
-    #include "libstdc++/text_encoding.ipp"
-#elifdef __APPLE__
-    #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
-    #pragma GCC diagnostic ignored "-Warray-bounds="
-    #pragma GCC diagnostic ignored "-Wrestrict"
-    #pragma GCC diagnostic ignored "-Wstringop-overflow="
-    #pragma GCC diagnostic ignored "-Wstringop-overread"
-    #include <algorithm>
-    #include <cassert>
-    #include <charconv>
-    #include <chrono>
-    #include <concepts>
-    #include <csignal>
-    #include <filesystem>
-    #include <format>
-    #include <fstream>
-    #include <iostream>
-    #include <iomanip>
-    #include <map>
-    #include <new>
-    #include <numbers>
-    #include <print>
-    #include <ranges>
-    #include <regex>
-    #include <string>
-    #include <thread>
-    #include <utility>
-    #include "libc++/ranges_chunk.ipp"
-    #include "libc++/ranges_join_with.ipp"
-    #include "libc++/ranges_stride.ipp"
-    #include "libc++/text_encoding.ipp"
-#endif
+#define __cpp_lib_text_encoding 202412L
+#include <algorithm>
+#include <cassert>
+#include <charconv>
+#include <chrono>
+#include <concepts>
+#include <csignal>
+#include <filesystem>
+#include <format>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <map>
+#include <new>
+#include <numbers>
+#include <print>
+#include <ranges>
+#include <regex>
+#include <stacktrace>
+#include <stdfloat>
+#include <string>
+#include <text_encoding>
+#include <thread>
+#include <utility>
+#include "libstdc++/text_encoding.ipp"
 
 // Include [[std.experimental.execution]]
 #pragma GCC diagnostic push
@@ -111,9 +79,6 @@
 
 // Include [[third-party.boost]]
 #define _GNU_SOURCE
-#if dll
-    #define BOOST_PROCESS_V2_SEPARATE_COMPILATION
-#endif
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
@@ -141,7 +106,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    #define eigen_assert(x) do { if ( not Eigen::internal::copy_bool(x) ) throw std::runtime_error(EIGEN_MAKESTRING(x)); } while ( false )
+    #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
     #include <eigen3/Eigen/Eigen>
     #include <eigen3/unsupported/Eigen/FFT>
 #pragma GCC diagnostic pop

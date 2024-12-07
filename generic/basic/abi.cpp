@@ -19,37 +19,39 @@ std::string abi::demangle ( const char* mangled_name )
 } 
 
 
-std::string abi::demangle ( const std::stacktrace& trace )
-{
-    return trace | std::views::reverse
-                    | std::views::transform ([&] (const auto& e)
-                        {
-                            return std::format("    {}at {}{} {}in {}{}:{}{}",
-                                            yellow, /*at*/
-                                            white,  aux::paint(e.description(), grey_scale),
-                                            green,  /*in*/
-                                            grey,   e.source_file(), e.source_line(),
-                                            white);
-                        })
-                    | std::views::join_with('\n')
-                    | std::ranges::to<std::string>();
-}
-
-std::string abi::demangle ( const boost::stacktrace::stacktrace& trace )
-{
-    return trace | std::views::reverse
-                    | std::views::transform([&] (const auto& e)
-                        {
-                            return std::format("    {}at {}{} {}in {}{}:{}{}",
-                                            yellow, /*at*/
-                                            white,  aux::paint(e.name(), grey_scale),
-                                            green,  /*in*/
-                                            grey,   e.source_file(), e.source_line(),
-                                            white);
-                        })
-                    | std::views::join_with('\n')
-                    | std::ranges::to<std::string>();
-}
+#if __cpp_lib_stacktrace
+    std::string abi::demangle ( const std::stacktrace& trace )
+    {
+        return trace | std::views::reverse
+                        | std::views::transform ([&] (const auto& e)
+                            {
+                                return std::format("    {}at {}{} {}in {}{}:{}{}",
+                                                yellow, /*at*/
+                                                white,  aux::paint(e.description(), grey_scale),
+                                                green,  /*in*/
+                                                grey,   e.source_file(), e.source_line(),
+                                                white);
+                            })
+                        | std::views::join_with('\n')
+                        | std::ranges::to<std::string>();
+    }
+#else
+    std::string abi::demangle ( const boost::stacktrace::stacktrace& trace )
+    {
+        return trace | std::views::reverse
+                        | std::views::transform([&] (const auto& e)
+                            {
+                                return std::format("    {}at {}{} {}in {}{}:{}{}",
+                                                yellow, /*at*/
+                                                white,  aux::paint(e.name(), grey_scale),
+                                                green,  /*in*/
+                                                grey,   e.source_file(), e.source_line(),
+                                                white);
+                            })
+                        | std::views::join_with('\n')
+                        | std::ranges::to<std::string>();
+    }
+#endif
 
 
 

@@ -40,7 +40,6 @@
 #include <text_encoding>
 #include <thread>
 #include <utility>
-#include "libstdc++/text_encoding.ipp"
 
 // Include [[std.experimental.execution]]
 #pragma GCC diagnostic push
@@ -199,8 +198,11 @@ namespace ap
     namespace abi
     {
         std::string demangle ( const char* );
-        std::string demangle ( const std::stacktrace& );
-        std::string demangle ( const boost::stacktrace::stacktrace& );
+        #if __cpp_lib_stacktrace
+            std::string demangle ( const std::stacktrace& );
+        #else
+            std::string demangle ( const boost::stacktrace::stacktrace& );
+        #endif
     }
 
     /// Exception

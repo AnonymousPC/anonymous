@@ -11,6 +11,7 @@ using namespace ap;
 int main ( )
 {
     int a = 1;
+    int b = 2;
     print("中文");
     std::cout << "GOOD" << std::endl;
     // std::print("good");

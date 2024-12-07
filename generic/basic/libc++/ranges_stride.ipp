@@ -41,7 +41,7 @@ template<input_range _Vp>
     constexpr explicit
     stride_view(_Vp __base, range_difference_t<_Vp> __stride)
     : _M_base(std::move(__base)), _M_stride(__stride)
-    { }
+    { assert(__stride > 0); }
 
     constexpr _Vp
     base() const& requires copy_constructible<_Vp>
@@ -181,6 +181,7 @@ template<input_range _Vp>
     constexpr _Iterator&
     operator++()
     {
+      assert(_M_current != _M_end);
       _M_missing = ranges::advance(_M_current, _M_stride, _M_end);
       return *this;
     }
@@ -218,6 +219,7 @@ template<input_range _Vp>
     {
       if (__n > 0)
 	{
+    assert(ranges::distance(_M_current, _M_end) > _M_stride * (__n - 1));
 	  _M_missing = ranges::advance(_M_current, _M_stride * __n, _M_end);
 	}
       else if (__n < 0)

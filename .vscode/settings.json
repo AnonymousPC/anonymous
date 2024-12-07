@@ -91,6 +91,8 @@
         "complex": "cpp",
         "filesystem": "cpp",
         "semaphore": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "list": "cpp",
+        "unordered_set": "cpp"
     }
 }

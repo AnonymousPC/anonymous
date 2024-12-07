@@ -39,7 +39,7 @@ namespace ranges {
     constexpr explicit
     chunk_view(_Vp __base, range_difference_t<_Vp> __n)
       : _M_base(std::move(__base)), _M_n(__n)
-    { }
+    { assert(__n >= 0); }
 
     constexpr _Vp
     base() const & requires copy_constructible<_Vp>
@@ -104,12 +104,14 @@ namespace ranges {
     constexpr value_type
     operator*() const
     {
+      assert(*this != default_sentinel);
       return value_type(*_M_parent);
     }
 
     constexpr _OuterIter&
     operator++()
     {
+      assert(*this != default_sentinel);
       ranges::advance(*_M_parent->_M_current, _M_parent->_M_remainder,
 		      ranges::end(_M_parent->_M_base));
       _M_parent->_M_remainder = _M_parent->_M_n;
@@ -207,12 +209,14 @@ namespace ranges {
     constexpr range_reference_t<_Vp>
     operator*() const
     {
+      assert(*this != default_sentinel);
       return **_M_parent->_M_current;
     }
 
     constexpr _InnerIter&
     operator++()
     {
+      assert(*this != default_sentinel);
       ++*_M_parent->_M_current;
       if (*_M_parent->_M_current == ranges::end(_M_parent->_M_base))
 	_M_parent->_M_remainder = 0;
@@ -255,7 +259,7 @@ namespace ranges {
     constexpr explicit
     chunk_view(_Vp __base, range_difference_t<_Vp> __n)
     : _M_base(std::move(__base)), _M_n(__n)
-    { }
+    { assert(__n > 0); }
 
     constexpr _Vp
     base() const & requires copy_constructible<_Vp>
@@ -376,12 +380,14 @@ namespace ranges {
     constexpr value_type
     operator*() const
     {
+      assert(_M_current != _M_end);
       return views::take(subrange(_M_current, _M_end), _M_n);
     }
 
     constexpr _Iterator&
     operator++()
     {
+      assert(_M_current != _M_end);
       _M_missing = ranges::advance(_M_current, _M_n, _M_end);
       return *this;
     }
@@ -416,6 +422,7 @@ namespace ranges {
     {
       if (__x > 0)
 	{
+    assert(ranges::distance(_M_current, _M_end) > _M_n * (__x - 1));
 	  _M_missing = ranges::advance(_M_current, _M_n * __x, _M_end);
 	}
       else if (__x < 0)

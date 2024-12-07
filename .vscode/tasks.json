@@ -280,7 +280,7 @@
                 "-flarge-source-files", 
                 "-Ddebug=1",
 
-                "-O1",
+                "-O1", // Allow [[always_inline]]
 
                 "-I/opt/homebrew/include",
 

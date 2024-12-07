@@ -19,6 +19,7 @@
 #ifdef _WIN32
     #define __cpp_lib_text_encoding 202412L
     #include <algorithm>
+    #include <cassert>
     #include <charconv>
     #include <chrono>
     #include <concepts>
@@ -44,6 +45,7 @@
 #elifdef __APPLE__
     #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
     #include <algorithm>
+    #include <cassert>
     #include <charconv>
     #include <chrono>
     #include <concepts>

@@ -10,6 +10,7 @@ using namespace ap;
 
 int main ( )
 {
+    int a = 1;
     print("中文");
     std::cout << "GOOD" << std::endl;
     // std::print("good");

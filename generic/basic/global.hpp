@@ -1,6 +1,13 @@
 #pragma once
 
-/// Declaration
+/// Global
+
+std::execution::static_thread_pool  cpu_context = std::execution::static_thread_pool(int(std::thread::hardware_concurrency() * 0.8));
+std::execution::static_thread_pool& gpu_context = cpu_context;
+
+
+
+/// Initiialize
 
 namespace aux
 {
@@ -61,21 +68,6 @@ namespace aux
             throw ap::terminate_signal();
         }
     #endif
-    
-    extern basic_initializer_t basic_initializer;
+
+    basic_initializer_t basic_initializer;
 }
-
-
-
-
-/// Implemention
-
-#if not dll
-    std::execution::static_thread_pool  cpu_context            = std::execution::static_thread_pool(int(std::thread::hardware_concurrency() * 0.8));
-    std::execution::static_thread_pool& gpu_context            = cpu_context;
-    aux::basic_initializer_t            aux::basic_initializer = aux::basic_initializer_t();
-#else
-    extern std::execution::static_thread_pool  cpu_context;
-    extern std::execution::static_thread_pool& gpu_context;
-    extern aux::basic_initializer_t            aux::basic_initializer;
-#endif

@@ -202,6 +202,8 @@
             "command": "g++",
             "args": [
                 "-fuse-ld=lld",
+                "-fPIC",
+                "-Wl,--dll",
                 "-shared",
 
                 "-o",

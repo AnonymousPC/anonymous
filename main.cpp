@@ -9,6 +9,12 @@
 using namespace ap;
 int main ( )
 {
+    let task = std::execution::schedule(cpu_context.get_scheduler())
+             | std::execution::then([] { print("中文"); });
+    std::execution::sync_wait(task);
+
+    print("good");
+    std::cout << "Good" << std::endl;
     let stream = std::ifstream("okk.txt");
 
     let content = std::views::istream<char>(stream)

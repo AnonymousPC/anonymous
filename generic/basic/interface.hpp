@@ -44,6 +44,10 @@
     #include "libstdc++/text_encoding.ipp"
 #elifdef __APPLE__
     #pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+    #pragma GCC diagnostic ignored "-Warray-bounds="
+    #pragma GCC diagnostic ignored "-Wrestrict"
+    #pragma GCC diagnostic ignored "-Wstringop-overflow="
+    #pragma GCC diagnostic ignored "-Wstringop-overread"
     #include <algorithm>
     #include <cassert>
     #include <charconv>

@@ -284,7 +284,9 @@ namespace ap
     #include "arithmetic/arithmetic.hpp"
     #include "linear/linear.hpp"
     #include "random/random.hpp"
-    #include "global.hpp"
+
+    /// Global
+    thread_local mt19937 random_engine = mt19937(std::random_device()());
 
     /// Literal
     namespace literals

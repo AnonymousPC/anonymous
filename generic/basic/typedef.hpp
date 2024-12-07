@@ -18,11 +18,11 @@ using float32_t = typename std::conditional<sizeof(float)      ==32/8,float,
                   typename std::conditional<sizeof(double)     ==32/8,double,
                   typename std::conditional<sizeof(long double)==32/8,long double,
                                                                       #if __STDCPP_FLOAT32_T__
-                                                                          #ifdef _GILBCXX_STDFLOAT
+                                                                          #ifdef _GLIBCXX_STDFLOAT
                                                                               std::float32_t
                                                                           #else
                                                                               ::float32_t
-                                                                            #endif
+                                                                          #endif
                                                                       #else
                                                                           void
                                                                       #endif

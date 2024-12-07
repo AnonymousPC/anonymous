@@ -110,6 +110,10 @@
 #endif
 
 // Include [[third-party.boost]]
+#define _GNU_SOURCE
+#if dll
+    #define BOOST_PROCESS_V2_SEPARATE_COMPILATION
+#endif
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
@@ -130,10 +134,8 @@
 #include <boost/process/v2.hpp> 
 #include <boost/spirit/home/qi.hpp>
 #include <boost/spirit/home/x3.hpp>
-#ifdef __APPLE__
-    #define _GNU_SOURCE
-    #include <boost/stacktrace.hpp>
-#endif
+#include <boost/stacktrace.hpp>
+
 
 // Include [[third-party.eigen]]
 #pragma GCC diagnostic push
@@ -220,9 +222,9 @@ namespace ap
     {
         std::string demangle ( const char* );
         #if __cpp_lib_stacktrace
-        std::string demangle ( const std::stacktrace& );
+            std::string demangle ( const std::stacktrace& );
         #else
-        std::string demangle ( const boost::stacktrace::stacktrace& );
+            std::string demangle ( const boost::stacktrace::stacktrace& );
         #endif
     }
 
@@ -255,8 +257,8 @@ namespace ap
     /* lambda function */ // auto input ( const printable auto&... );
 
     /// Global
-    extern std::execution::static_thread_pool  cpu_context;
-    extern std::execution::static_thread_pool& gpu_context;
+    std::execution::static_thread_pool  cpu_context = std::execution::static_thread_pool(1);
+    std::execution::static_thread_pool& gpu_context = cpu_context;
 
     /// Include
     #include "abi.hpp"
@@ -265,6 +267,6 @@ namespace ap
     #include "print.hpp"
     #include "range.hpp"
     #include "typedef.hpp"
-    #include "global.hpp"
+    #include "initialize.hpp"
 
 } // namespace ap

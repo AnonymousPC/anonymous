@@ -466,7 +466,6 @@
             "args": [
                 "-fuse-ld=lld",
                 "-shared",
-                "-fPIC",
 
                 "-o",
                 "bin/dll/main.dylib",

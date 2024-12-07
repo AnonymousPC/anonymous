@@ -10,5 +10,5 @@ using namespace ap;
 
 int main ( )
 {
-
+    pipe_command("dir").each(print);
 }

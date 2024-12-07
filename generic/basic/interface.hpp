@@ -68,7 +68,7 @@ std::text_encoding std::text_encoding::environment ( )
         return std::text_encoding::GBK;
     #elifdef __linux__
         return std::text_encoding::UTF8;
-    #elifdef __MACH__
+    #elifdef __APPLE__
         return std::text_encoding::UTF8;
     #else
         return std::text_encoding::unknown;

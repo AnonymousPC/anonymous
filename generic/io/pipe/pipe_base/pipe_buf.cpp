@@ -74,9 +74,12 @@ int pipe_buf::underflow ( )
     }
     catch ( const boost::system::system_error& e )
     {
-        // As pipe_buf::eof is always not explicitly marked, attempting to
-        // read all data will inevitably meet boost::asio::error::broken_pipe.
-        if ( e.code() == boost::asio::error::broken_pipe )
+        // As pipe_buf::eof is always not explicitly marked,
+        // attempting to read all data will inevitably meet
+        // boost::asio::error::broken_pipe (on Windows) or
+        // boost::asio::error::eof (on MacOS).
+        if ( e.code() == boost::asio::error::broken_pipe or
+             e.code() == boost::asio::error::eof )
             return traits_type::eof();
         else
             throw pipe_error("failed to read from pipe.stdout (with process-id = {}) [[caused by {}: {}]]",

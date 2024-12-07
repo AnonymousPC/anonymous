@@ -23,7 +23,7 @@ pipe_command& pipe_command::execute ( const string& command, pipe_mode auto... a
         string terminal = "cmd";
     #elifdef __linux__
         string terminal = "bash";
-    #elidef __MACH__
+    #elifdef __APPLE__
         string terminal = "zsh";
     #else
         string terminal = "terminal";

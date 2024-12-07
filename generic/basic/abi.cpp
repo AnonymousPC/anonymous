@@ -9,52 +9,47 @@ namespace aux
 
 std::string abi::demangle ( const char* mangled_name )
 {
-    #if defined(__GNUC__) or defined(__clang__)
-        let ok             = 0;
-        let damangled_name = ::abi::__cxa_demangle ( mangled_name, nullptr, nullptr, &ok );
+    let ok             = 0;
+    let damangled_name = ::abi::__cxa_demangle ( mangled_name, nullptr, nullptr, &ok );
 
-        let demangled_str  = ok == 0 ? std::string(damangled_name) otherwise
-                                       std::format("demangle failed {}: {}", ok, std::string(mangled_name));
-        free ( damangled_name );
-        return demangled_str;
-    #else
-        return demangled_str;
-    #endif
+    let demangled_str  = ok == 0 ? std::string(damangled_name) otherwise
+                                    std::format("demangle failed {}: {}", ok, std::string(mangled_name));
+    free ( damangled_name );
+    return demangled_str;
 } 
 
-#if __cpp_lib_stacktrace
-    std::string abi::demangle ( const std::stacktrace& trace )
-    {
-        return trace | std::views::reverse
-                     | std::views::transform ([&] (const auto& e)
-                         {
-                             return std::format("    {}at {}{} {}in {}{}:{}{}",
-                                                yellow, /*at*/
-                                                white,  aux::paint(e.description(), grey_scale),
-                                                green,  /*in*/
-                                                grey,   e.source_file(), e.source_line(),
-                                                white);
-                         })
-                     | std::views::join_with('\n')
-                     | std::ranges::to<std::string>();
-    }
-#else
-    std::string abi::demangle ( const boost::stacktrace::stacktrace& trace )
-    {
-        return trace | std::views::reverse
-                     | std::views::transform([&] (const auto& e)
-                         {
-                             return std::format("    {}at {}{} {}in {}{}:{}{}",
-                                                yellow, /*at*/
-                                                white,  aux::paint(e.name(), grey_scale),
-                                                green,  /*in*/
-                                                grey,   e.source_file(), e.source_line(),
-                                                white);
-                         })
-                     | std::views::join_with('\n')
-                     | std::ranges::to<std::string>();
-    }
-#endif
+
+std::string abi::demangle ( const std::stacktrace& trace )
+{
+    return trace | std::views::reverse
+                    | std::views::transform ([&] (const auto& e)
+                        {
+                            return std::format("    {}at {}{} {}in {}{}:{}{}",
+                                            yellow, /*at*/
+                                            white,  aux::paint(e.description(), grey_scale),
+                                            green,  /*in*/
+                                            grey,   e.source_file(), e.source_line(),
+                                            white);
+                        })
+                    | std::views::join_with('\n')
+                    | std::ranges::to<std::string>();
+}
+
+std::string abi::demangle ( const boost::stacktrace::stacktrace& trace )
+{
+    return trace | std::views::reverse
+                    | std::views::transform([&] (const auto& e)
+                        {
+                            return std::format("    {}at {}{} {}in {}{}:{}{}",
+                                            yellow, /*at*/
+                                            white,  aux::paint(e.name(), grey_scale),
+                                            green,  /*in*/
+                                            grey,   e.source_file(), e.source_line(),
+                                            white);
+                        })
+                    | std::views::join_with('\n')
+                    | std::ranges::to<std::string>();
+}
 
 
 

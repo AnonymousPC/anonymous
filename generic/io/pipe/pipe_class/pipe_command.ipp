@@ -20,11 +20,13 @@ pipe_command& pipe_command::execute ( const string& command, pipe_mode auto... a
 {
     // Terminal.
     #ifdef _WIN32
-    string terminal = "cmd";
-    #elif defined(__linux__) or defined(__APPLE__)
-    string terminal = "bin/sh";
+        string terminal = "cmd";
+    #elifdef __linux__
+        string terminal = "bash";
+    #elidef __MACH__
+        string terminal = "zsh";
     #else
-    string terminal = "terminal";
+        string terminal = "terminal";
     #endif
 
     // Execute command.

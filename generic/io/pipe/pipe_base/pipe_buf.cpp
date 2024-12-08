@@ -55,6 +55,8 @@ bool pipe_buf::is_running ( ) const
     return process_handle != nullptr and process_handle->running();
 }
 
+stdio_type& pipe_buf::read_ (  );
+
 
 // Interface (virtual)
 
@@ -65,7 +67,7 @@ int pipe_buf::underflow ( )
         if ( stdout_buff == "" )
             stdout_buff.resize(default_buffer_size);
 
-        int bytes = stdout_pipe.read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()));
+        int bytes = stderr_pipe.read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()));
         setg(stdout_buff.begin(),
              stdout_buff.begin(),
              stdout_buff.begin() + bytes);

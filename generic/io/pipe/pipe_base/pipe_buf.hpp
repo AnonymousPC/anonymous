@@ -23,7 +23,6 @@ class pipe_buf
         struct start_directory;
 
     private: // Typedef
-        struct mode_type;
         constexpr static const int default_buffer_size = 4096;
 
     public: // Data
@@ -36,7 +35,12 @@ class pipe_buf
         string                                       stdout_buff    = "";
         string                                       stderr_buff    = "";
 
+    private: // Typedef
+        struct mode_type;
+
     private: // Auxiliary
+        // This is not similiar to http_buf.set_request(field_1, ...), http_buf.set_request(filed_2, ...),
+        // as all params must be forwarded at one time.
         auto run_with_args ( const auto&, boost::filesystem::path, std::vector<std::string>, auto... );
         template < class... types > struct tuple;
 };

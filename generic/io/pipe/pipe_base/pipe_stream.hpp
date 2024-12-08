@@ -3,8 +3,9 @@
 class pipe_stream
     extends public std::iostream
 {
-    /* Move contructor and operator= of std::iostream is protected */
-    /** HAS BUG ON MOVE CONSTRUCTOR AND MOVE ASSIGNMENT. SEE HTTP_STREAM **/
+    /* Move contructor and move assigner of std::iostream is protected */
+    /* Move contructor of std::iostream does not moves rdbuf(), and leaves constructed stream.rdbuf() == nullptr */
+    /* Move assigner   of std::iostream does not moves rdbuf(), and leaves constructed and moved stream.rdbuf() not changed */
 
     public: // Core
         pipe_stream  ( );

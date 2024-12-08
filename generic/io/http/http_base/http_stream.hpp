@@ -3,10 +3,6 @@
 class http_stream
     extends public std::iostream
 {
-    /* Move contructor and move assigner of std::iostream is protected */
-    /* Move contructor does not moves rdbuf(), and leaves constructed stream.rdbuf() == nullptr */
-    /* Move assigner   does not moves rdbuf(), and leaves constructed and moved stream.rdbuf() not changed */
-
     public: // Core
         http_stream  ( );
         http_stream  ( url, http_client_mode auto... );

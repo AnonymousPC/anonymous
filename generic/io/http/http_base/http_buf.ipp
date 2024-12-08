@@ -185,7 +185,7 @@ auto http_buf::make_client_mode ( const url& website, auto prm, auto... args )
     return make_client_mode(client_mode_type(), website, std::forward<decltype(prm)>(prm), std::forward<decltype(args)>(args)...);
 }
 
-auto http_buf::make_client_mode ( auto modes, const url& website, auto prm, auto... args )
+auto http_buf::make_client_mode ( client_mode_type modes, const url& website, auto prm, auto... args )
 {
     // Update modes parameters.
     if constexpr ( std::same_as<decltype(prm),authorization> )
@@ -296,7 +296,7 @@ auto http_buf::make_server_mode ( const url& portal, auto prm, auto... args )
     return make_server_mode(client_mode_type(), portal, std::forward<decltype(prm)>(prm), std::forward<decltype(args)>(args)...);
 }
 
-auto http_buf::make_server_mode ( auto modes, const url& portal, auto prm, auto... args )
+auto http_buf::make_server_mode ( server_mode_type modes, const url& portal, auto prm, auto... args )
 {
     // Update modes parameters.
 

@@ -36,6 +36,10 @@ void pipe_buf::open ( path pth, pipe_mode auto... args )
     // Open pipe.
     try
     {
+        let exe = boost::process::v2::environment::find_executable(pth.c_str());
+        if ( exe == "" )
+            return boost::filesystem::path(pth.c_str());
+
         // On windows.cmd, find_executable is always in higher priority than raw_path.
         process_handle = run_with_args(tuple<decltype(args)...>(args...),
                                        [&] { let exe = boost::process::v2::environment::find_executable(pth.c_str());

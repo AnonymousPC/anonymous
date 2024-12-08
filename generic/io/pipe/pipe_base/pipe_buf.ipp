@@ -52,9 +52,6 @@ void pipe_buf::open ( path pth, pipe_mode auto... args )
     // Set put area.
     setp(stdin_buff.begin(),
          stdin_buff.begin() + stdin_buff.size());
-
-    // Enable io_context.
-    context_handle = std::make_unique<boost::asio::io_context>(2);
 }
 
 

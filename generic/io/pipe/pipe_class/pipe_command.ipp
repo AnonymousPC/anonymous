@@ -45,6 +45,7 @@ pipe_command& pipe_command::execute ( const string& command, pipe_mode auto... a
             {
                 let line = stream_line
                          | std::ranges::to<string>();
+                print("[[pipe command]]", line);
                 return line.ends_with('\r') ? line.pop() otherwise line;
             })
         | std::ranges::to<vector<string>>();

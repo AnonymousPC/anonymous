@@ -8,7 +8,7 @@ pipe_stream::pipe_stream ( path pth, pipe_mode auto... args )
     extends std::iostream ( nullptr )
 {
     // Initialize.
-    rdbuf(&buff);
+    rdbuf(buff_ptr.get());
 
     // Set exception cases.
     exceptions(std::ios::badbit);

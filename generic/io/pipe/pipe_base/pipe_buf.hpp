@@ -27,11 +27,12 @@ class pipe_buf
 
     public: // Data
         /* boost::process::v2::process will immediate start once been constructed */
+        /* boost::asio::io_context is not movable */
         std::unique_ptr<boost::process::v2::process> process_handle = nullptr;
-        std::unique_ptr<boost::asio::io_context>     context_handle = nullptr;
-        boost::asio::writable_pipe                   stdin_pipe     = boost::asio::writable_pipe(io_context);
-        boost::asio::readable_pipe                   stdout_pipe    = boost::asio::readable_pipe(io_context);
-        boost::asio::readable_pipe                   stderr_pipe    = boost::asio::readable_pipe(io_context);
+        std::unique_ptr<boost::asio::io_context>     context_handle = std::make_unique<boost::asio::io_context>(2);
+        boost::asio::writable_pipe                   stdin_pipe     = boost::asio::writable_pipe(*context_handle);
+        boost::asio::readable_pipe                   stdout_pipe    = boost::asio::readable_pipe(*context_handle);
+        boost::asio::readable_pipe                   stderr_pipe    = boost::asio::readable_pipe(*context_handle);
         string                                       stdin_buff     = "";
         string                                       stdout_buff    = "";
         string                                       stderr_buff    = "";
@@ -85,6 +86,6 @@ struct pipe_buf::param           extends public pipe_buf::mode_base<array<string
 struct pipe_buf::start_directory extends public pipe_buf::mode_base<path>                      { using mode_base::mode_base; struct pipe_mode_tag{}; };
 
 #include "pipe_buf.ipp"
-#if dll
+//#if dll
     #include "pipe_buf.cpp"
-#endif // dll
+//#endif // dll

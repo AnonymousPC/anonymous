@@ -3,10 +3,6 @@
 class pipe_stream
     extends public std::iostream
 {
-    /* Move contructor and move assigner of std::iostream is protected */
-    /* Move contructor of std::iostream does not moves rdbuf(), and leaves constructed stream.rdbuf() == nullptr */
-    /* Move assigner   of std::iostream does not moves rdbuf(), and leaves constructed and moved stream.rdbuf() not changed */
-
     public: // Core
         pipe_stream  ( );
         pipe_stream  ( path, pipe_mode auto... );
@@ -29,7 +25,7 @@ class pipe_stream
         using start_directory = pipe_buf::start_directory;
 
     private: // Data
-        pipe_buf buff = pipe_buf();
+        std::unique_ptr<pipe_buf> buff_ptr = std::make_unique<pipe_buf>();
 };
 
 #include "pipe_stream.ipp"

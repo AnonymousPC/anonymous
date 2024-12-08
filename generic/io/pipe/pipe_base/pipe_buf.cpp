@@ -60,57 +60,51 @@ bool pipe_buf::is_running ( ) const
 
 int pipe_buf::underflow ( )
 {
+    // Reserve space.
     if ( stdout_buff == "" )
         stdout_buff.resize(default_buffer_size);
     if ( stderr_buff == "" )
         stderr_buff.resize(default_buffer_size);
 
+    // Post task.
     stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
+                                  //  print("stdout.pipe read {} bytes, error = {}"s.format(bytes, string(boost::system::system_error(error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal())));
                                     stderr_pipe.cancel();
-                                    if ( error == boost::system::error_code() )
-                                    {
+                                    if ( error == boost::system::error_code() or    // OK.
+                                         error == boost::asio::error::eof or        // Linux/MacOS: process exit.
+                                         error == boost::asio::error::broken_pipe ) // Windows:     process exit.
                                         setg(stdout_buff.begin(),
-                                                stdout_buff.begin(),
-                                                stdout_buff.begin() + bytes);
-                                        print("stdout read {} bytes"s.format(bytes));
-                                    }
-                                    else
-                                        throw boost::system::system_error(error);
+                                             stdout_buff.begin(),
+                                             stdout_buff.begin() + bytes);
+                                    else if ( error != boost::asio::error::operation_aborted )
+                                        throw pipe_error("failed to read from pipe.stdout (with process-id = {}) [[caused by {}: {}]]",
+                                                         process_handle->id(), typeid(boost::system::system_error), boost::system::system_error(error).what());
                                 });
-
     stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
+                                 //   print("stderr.pipe read {} bytes, error = {}"s.format(bytes, string(boost::system::system_error(error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal())));
                                     stdout_pipe.cancel();
-                                    if ( error == boost::system::error_code() )
-                                    {
+                                    if ( error == boost::system::error_code() or    // OK.
+                                         error == boost::asio::error::eof or        // Linux/MacOS: process exit.
+                                         error == boost::asio::error::broken_pipe ) // Windows:     process exit.
                                         setg(stderr_buff.begin(),
-                                                stderr_buff.begin(),
-                                                stderr_buff.begin() + bytes);
-                                        print("stderr read {} bytes"s.format(bytes));
-                                    }
-                                    else
-                                        throw boost::system::system_error(error);
+                                             stderr_buff.begin(),
+                                             stderr_buff.begin() + bytes);
+                                    else if ( error != boost::asio::error::operation_aborted )
+                                        throw pipe_error("failed to read from pipe.stderr (with process-id = {}) [[caused by {}: {}]]",
+                                                         process_handle->id(), typeid(boost::system::system_error), boost::system::system_error(error).what());
                                 });
-    io_context.run();
+
+    // Run task.
+    let task = std::execution::schedule(cpu_context.get_scheduler())
+             | std::execution::bulk(2, [&] (int) { context_handle->run(); });
+    std::execution::sync_wait(task);
+
+    // Return.
     return traits_type::to_int_type(*gptr());
-    }
-    catch ( const boost::system::system_error& e )
-    {
-        // As pipe_buf::eof is always not explicitly marked,
-        // attempting to read all data will inevitably meet
-        // boost::asio::error::broken_pipe (on Windows) or
-        // boost::asio::error::eof (on MacOS).
-        if ( e.code() == boost::asio::error::broken_pipe or
-             e.code() == boost::asio::error::eof )
-            return traits_type::eof();
-        else
-            throw pipe_error("failed to read from pipe.stdout (with process-id = {}) [[caused by {}: {}]]",
-                             process_handle->id(),
-                             typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
-    }
 }
 
 int pipe_buf::overflow ( int c )

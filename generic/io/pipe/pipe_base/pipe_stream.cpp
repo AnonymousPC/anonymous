@@ -8,17 +8,22 @@ pipe_stream::pipe_stream ( )
     extends std::iostream ( nullptr )
 {
     // Initialize
-    rdbuf(&buff);
+    rdbuf(buff_ptr.get()); // Buff is contructed after std::iostream, so "extends std::iostream(&buff)" will cause segfault.
 
     // Set exception cases.
     exceptions(std::ios::badbit);
 }
 
 pipe_stream::pipe_stream ( pipe_stream&& init )
-    extends std::iostream ( std::move(static_cast<std::iostream&>(init)) ),
-            buff          ( std::move(init.buff) )
+    extends std::iostream ( std::move(static_cast<std::iostream&>(init)) )
 {
+    self.rdbuf(buff_ptr.get());
 
+    std::swap(self.buff_ptr, init.buff_ptr);
+    let self_rdbuf = self.rdbuf();
+    let init_rdbuf = init.rdbuf();
+    self.rdbuf(init_rdbuf);
+    init.rdbuf(self_rdbuf);
 }
 
 pipe_stream::~pipe_stream ( )
@@ -30,7 +35,13 @@ pipe_stream::~pipe_stream ( )
 pipe_stream& pipe_stream::operator = ( pipe_stream&& right )
 {
     self.std::iostream::operator=(std::move(static_cast<std::iostream&>(right)));
-    self.buff = std::move(right.buff);
+
+    std::swap(self.buff_ptr, right.buff_ptr);
+    let self_rdbuf  = self .rdbuf();
+    let right_rdbuf = right.rdbuf();
+    self .rdbuf(right_rdbuf);
+    right.rdbuf(self_rdbuf );
+
     return self;
 }
 

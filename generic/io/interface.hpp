@@ -113,10 +113,10 @@ namespace ap
     constexpr void       sleep_until ( time_point );
     constexpr int        time_zone   ( );
 
-    /// 
-    extern boost::asio::io_context   io_context;
-    extern boost::asio::ssl::context ssl_client_context;
-    extern boost::asio::ssl::context ssl_server_context;
+    /// Global
+    boost::asio::io_context    io_context         = boost::asio::io_context(2);
+    boost::asio::ssl::context  ssl_client_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_client);
+    boost::asio::ssl::context  ssl_server_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_server);
 
     /// Include
     #include "utility/utility.hpp" // First.
@@ -127,7 +127,7 @@ namespace ap
     #include "serial_port/serial_port.hpp"
     #include "usb/usb.hpp"
     #include "websocket/websocket.hpp"
-    #include "global.hpp"
+    #include "initialize.hpp"
 
     /// Literal
     namespace literals

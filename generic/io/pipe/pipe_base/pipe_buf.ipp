@@ -30,43 +30,40 @@ void pipe_buf::open ( path pth, pipe_mode auto... args )
         static_assert(aux::all_different<decltype(args)...>, "modes must be unique");
 
     // Find executable.
-    let exe      = boost::filesystem::path(pth.c_str());
-    let find_exe = boost::process::v2::environment::find_executable(pth.c_str());
+    let path_executable = boost::filesystem::path(pth.c_str());
+    let find_executable = boost::process::v2::environment::find_executable(pth.c_str());
 
     // Open pipe.
     try
     {
-        let exe = boost::process::v2::environment::find_executable(pth.c_str());
-        if ( exe == "" )
-            return boost::filesystem::path(pth.c_str());
-
-        // On windows.cmd, find_executable is always in higher priority than raw_path.
-        process_handle = run_with_args(tuple<decltype(args)...>(args...),
-                                       [&] { let exe = boost::process::v2::environment::find_executable(pth.c_str());
-                                             return exe != "" ? exe otherwise boost::filesystem::path(pth.c_str()); } (),
-                                       {});
+        // Find_executable is always in higher priority than raw_path.
+        process_handle = run_with_args(find_executable != "" ? find_executable otherwise path_executable,
+                                       {}, tuple<decltype(args)...>(args...));
     }
     catch ( const boost::process::v2::system_error& e )
     {
-        throw pipe_error("failed to open pipe {} [[caused by {}: {}]]",
-                         pth, typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+        throw pipe_error("failed to open pipe {} (with path_executable = {}, find_executable = {}) [[caused by {}: {}]]",
+                         pth,
+                         boost::filesystem::is_regular_file(path_executable) ? path_executable otherwise "[[not exist]]",
+                         find_executable != ""                               ? find_executable otherwise "[[not found]]",
+                         typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
     }
 
     // Set put area.
     setp(stdin_buff.begin(),
          stdin_buff.begin() + stdin_buff.size());
+
+    // Enable io_context.
+    context_handle = std::make_unique<boost::asio::io_context>(2);
 }
 
 
 // Auxiliary
 
-auto pipe_buf::run_with_args ( const auto& inputs, boost::filesystem::path pth, std::vector<std::string> params, auto... args )
+auto pipe_buf::run_with_args ( boost::filesystem::path exe, std::vector<std::string> params, const auto& inputs, auto... outputs )
 {
     if constexpr ( inputs.size == 0 )
-        return std::make_unique<boost::process::v2::process>(io_context,
-                                                             std::forward<decltype(pth   )>(pth   ),
-                                                             std::forward<decltype(params)>(params),
-                                                             std::forward<decltype(args  )>(args  )...,
+        return std::make_unique<boost::process::v2::process>(io_context, exe, params, outputs...,
                                                              boost::process::v2::process_stdio(stdin_pipe, stdout_pipe, stderr_pipe));
 
     else if constexpr ( std::same_as<decltype(inputs.first),environment> )
@@ -81,11 +78,7 @@ auto pipe_buf::run_with_args ( const auto& inputs, boost::filesystem::path pth, 
                                             return std::pair(k, v);
                                         })
                 | std::ranges::to<std::map<std::string,std::string>>());
-        return run_with_args(inputs.other,
-                             std::forward<decltype(pth   )>(pth   ),
-                             std::forward<decltype(params)>(params),
-                             std::forward<decltype(env   )>(env   ),
-                             std::forward<decltype(args  )>(args  )...);
+        return run_with_args(exe, params, inputs.other, env, outputs...);
     }
 
     else if constexpr ( std::same_as<decltype(inputs.first),param> )
@@ -93,27 +86,17 @@ auto pipe_buf::run_with_args ( const auto& inputs, boost::filesystem::path pth, 
         params = inputs.first.value
                | std::views::transform([] (const auto& prm) { return std::string(prm); })
                | std::ranges::to<std::vector<std::string>>();
-        return run_with_args(inputs.other,
-                             std::forward<decltype(pth   )>(pth   ),
-                             std::forward<decltype(params)>(params),
-                             std::forward<decltype(args  )>(args  )...);
+        return run_with_args(exe, params, inputs.other, outputs...);
     }
 
     else if constexpr ( std::same_as<decltype(inputs.first),start_directory> )
     {
         let startdir = boost::process::v2::process_start_dir(inputs.first.value.c_str());
-        return run_with_args(inputs.other,
-                             std::forward<decltype(pth     )>(pth     ),
-                             std::forward<decltype(params  )>(params  ),
-                             std::forward<decltype(startdir)>(startdir),
-                             std::forward<decltype(args    )>(args    )...);
+        return run_with_args(exe, params, inputs.other, startdir, outputs...);
     }
 
     else
-        return run_with_args(inputs.other,
-                             std::forward<decltype(pth   )>(pth   ),
-                             std::forward<decltype(params)>(params),
-                             std::forward<decltype(args  )>(args  )...);
+        return run_with_args(exe, params, inputs.other, outputs...);
 }
 
 

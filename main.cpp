@@ -9,13 +9,23 @@
 #include "specific/vscode/interface.hpp"
 using namespace ap;
 
+void task1 ( )
+{
+    print("will execute");
+    sleep(100s);
+    print("will not execute");
+}
+
+void task2 ( )
+{
+    print("task2");
+    return;
+}
+
 int main ( )
 {
-    pipe_stream stream;
-    stream.open("ipconfig",
-                pipe_stream::start_directory);
-    stream.output() = stream.std_out;
-    stream2.input() = stream1.output();
-
-    setvbuf
+    print(std::thread::hardware_concurrency());
+    let a = std::execution::schedule(cpu_context.get_scheduler()) | std::execution::then(task1);
+    let b = std::execution::schedule(cpu_context.get_scheduler()) | std::execution::then(task2);
+    std::execution::start_detached(std::execution::when_any(a, b));
 }

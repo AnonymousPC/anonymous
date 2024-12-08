@@ -55,24 +55,47 @@ bool pipe_buf::is_running ( ) const
     return process_handle != nullptr and process_handle->running();
 }
 
-stdio_type& pipe_buf::read_ (  );
-
 
 // Interface (virtual)
 
 int pipe_buf::underflow ( )
 {
-    try
-    {
-        if ( stdout_buff == "" )
-            stdout_buff.resize(default_buffer_size);
+    if ( stdout_buff == "" )
+        stdout_buff.resize(default_buffer_size);
+    if ( stderr_buff == "" )
+        stderr_buff.resize(default_buffer_size);
 
-        int bytes = stderr_pipe.read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()));
-        setg(stdout_buff.begin(),
-             stdout_buff.begin(),
-             stdout_buff.begin() + bytes);
+    stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
+                                [&] (const boost::system::error_code& error, std::size_t bytes)
+                                {
+                                    stderr_pipe.cancel();
+                                    if ( error == boost::system::error_code() )
+                                    {
+                                        setg(stdout_buff.begin(),
+                                                stdout_buff.begin(),
+                                                stdout_buff.begin() + bytes);
+                                        print("stdout read {} bytes"s.format(bytes));
+                                    }
+                                    else
+                                        throw boost::system::system_error(error);
+                                });
 
-        return traits_type::to_int_type(*gptr());
+    stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
+                                [&] (const boost::system::error_code& error, std::size_t bytes)
+                                {
+                                    stdout_pipe.cancel();
+                                    if ( error == boost::system::error_code() )
+                                    {
+                                        setg(stderr_buff.begin(),
+                                                stderr_buff.begin(),
+                                                stderr_buff.begin() + bytes);
+                                        print("stderr read {} bytes"s.format(bytes));
+                                    }
+                                    else
+                                        throw boost::system::system_error(error);
+                                });
+    io_context.run();
+    return traits_type::to_int_type(*gptr());
     }
     catch ( const boost::system::system_error& e )
     {

@@ -28,6 +28,7 @@ class pipe_buf
     public: // Data
         /* boost::process::v2::process will immediate start once been constructed */
         std::unique_ptr<boost::process::v2::process> process_handle = nullptr;
+        std::unique_ptr<boost::asio::io_context>     context_handle = nullptr;
         boost::asio::writable_pipe                   stdin_pipe     = boost::asio::writable_pipe(io_context);
         boost::asio::readable_pipe                   stdout_pipe    = boost::asio::readable_pipe(io_context);
         boost::asio::readable_pipe                   stderr_pipe    = boost::asio::readable_pipe(io_context);
@@ -39,9 +40,9 @@ class pipe_buf
         struct mode_type;
 
     private: // Auxiliary
-        // This is not similiar to http_buf.set_request(field_1, ...), http_buf.set_request(filed_2, ...),
+        // This is not similiar to http_buf.set_request(field_1, ...), http_buf.set_request(field_2, ...),
         // as all params must be forwarded at one time.
-        auto run_with_args ( const auto&, boost::filesystem::path, std::vector<std::string>, auto... );
+        auto run_with_args ( boost::filesystem::path, std::vector<std::string>, const auto&, auto... );
         template < class... types > struct tuple;
 };
 

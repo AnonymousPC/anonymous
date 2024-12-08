@@ -234,7 +234,7 @@ namespace ap
     /* lambda function */ // auto input ( const printable auto&... );
 
     /// Global
-    std::execution::static_thread_pool  cpu_context = std::execution::static_thread_pool(1);
+    std::execution::static_thread_pool  cpu_context = std::execution::static_thread_pool(std::thread::hardware_concurrency() / 2);
     std::execution::static_thread_pool& gpu_context = cpu_context;
 
     /// Include

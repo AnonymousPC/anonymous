@@ -109,7 +109,9 @@ int pipe_buf::underflow ( )
     // Return.
     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
         return traits_type::to_int_type(*gptr());
-    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof ) // Both operation meets eof [[Linux, MacOS]]
+    else if ( stdout_error == boost::asio::error::broken_pipe and stderr_error == boost::asio::error::broken_pipe ) // Both operation meets eof [[Windows]].
+        return traits_type::eof();
+    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof ) // Both operation meets eof [[Linux, MacOS]].
         return traits_type::eof();
     else
         throw pipe_error("failed to read from pipe.stdout or pipe.stderr (with process-id = {}): [[try pipe.stdout with exception {}: {}]], [[try pipe.stderr with exception {}: {}]]",

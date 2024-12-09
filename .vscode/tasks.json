@@ -16,7 +16,7 @@
                 "-fno-inline",
                 "-Ddebug=1",
 
-                "-Og",
+                "-O0",
 
                 "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
 
@@ -276,7 +276,7 @@
                 "-fno-inline",
                 "-Ddebug=1",
 
-                "-Og",
+                "-O0",
 
                 "-I/opt/homebrew/include",
 

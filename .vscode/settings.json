@@ -96,6 +96,7 @@
         "unordered_set": "cpp",
         "future": "cpp",
         "set": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "__config": "cpp"
     }
 }

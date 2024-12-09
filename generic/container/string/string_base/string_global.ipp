@@ -71,6 +71,11 @@ constexpr string_type auto operator * ( const string_type auto& left, int_type a
 {
     using char_type = left_value_type;
 
+    #if debug
+        if ( right < 0 )
+            throw value_error("multiply string with negative times {}", right);
+    #endif
+
     basic_string<left_value_type> str ( left.size() * right, char_type('\0') );
     for ( auto i in range ( right ) )
         std::copy ( left.begin(), left.end(), str.begin() + left.size() * ( i - 1 ) );
@@ -82,6 +87,11 @@ constexpr string_type auto operator * ( int_type auto left, const string_type au
 {
     using char_type  = right_value_type;
 
+    #if debug
+        if ( left < 0 )
+            throw value_error("multiply string with negative times {}", left);
+    #endif
+
     basic_string<left_value_type> str ( left * right.size(), char_type('\0') );
     for ( auto i in range ( left ) )
         std::copy ( right.begin(), right.end(), str.begin() + right.size() * ( i - 1 ) );
@@ -90,7 +100,12 @@ constexpr string_type auto operator * ( int_type auto left, const string_type au
 }
 
 constexpr string_type auto& operator *= ( string_type auto& left, int_type auto right )
-{
+{    
+    #if debug
+        if ( right < 0 )
+            throw value_error("multiply string with negative times {}", right);
+    #endif
+
     int old_size = left.size();
     left.resize ( left.size() * right );
     for ( auto i in range ( 2, right ) )

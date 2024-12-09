@@ -152,12 +152,16 @@ templates
 constexpr string_type& string_algo::expand_tabs ( int tabs )
     requires ( not is_view )
 {
+    #if debug
+        if ( tabs < 0 )
+            throw value_error("expand-tab string with negative times {}", tabs);
+    #endif
     return derive_of_self.replace ( '\t', string_type(tabs, ' ') );
 }
 
 templates
-constexpr string_type& string_algo::format ( const aux::formattable_or_constructible_to_string<char> auto&... args )
-    requires ( not is_view )
+constexpr string_type& string_algo::format ( const auto&... args )
+    requires ( not is_view ) and ( ( std::formattable<decay<decltype(args)>,char> or std::constructible_from<string_type,decay<decltype(args)>> ) and ... )
 {
     try
     {
@@ -253,17 +257,17 @@ constexpr bool string_algo::is_upper ( ) const
 }
 
 templates
-constexpr string_type& string_algo::join ( const auto& targets )
-    requires ( not is_view ) and std::constructible_from<basic_string_view<char_type>,std::ranges::range_value_t<decay<decltype(targets)>>>
+constexpr string_type& string_algo::join ( const auto& args )
+    requires ( not is_view ) and requires { std::declval<string_type>().push(*std::ranges::begin(args)); }
 {
-    if constexpr ( requires { targets.size(); } )
-        return derive_of_self = targets
+    if constexpr ( requires { args.size(); } )
+        return derive_of_self = args
                               | std::views::transform([] (const auto& str) { return basic_string_view<char_type>(str); })
                               | std::views::join_with(derive_of_self)
-                              | std::ranges::to<string_type>(std::accumulate(targets.begin(), targets.end(), 0,
-                                                                             [] (const auto& result, const auto& target) { return result + basic_string_view<char_type>(target).size(); }) + (targets.size()-1) * size());
+                              | std::ranges::to<string_type>(std::accumulate(args.begin(), args.end(), 0,
+                                                                             [] (const auto& result, const auto& str) { return result + basic_string_view<char_type>(str).size(); }) + (args.size()-1) * size());
     else
-        return derive_of_self = targets
+        return derive_of_self = args
                               | std::views::transform([] (const auto& str) { return basic_string_view<char_type>(str); })
                               | std::views::join_with(derive_of_self)
                               | std::ranges::to<string_type>();
@@ -282,6 +286,13 @@ constexpr string_type& string_algo::left_justify ( int len, char_type ch )
         derive_of_self[old_size+1,-1].fill(ch);
         return derive_of_self;
     }
+}
+
+templates
+constexpr string_type& string_algo::left_strip ( )
+    requires ( not is_view )
+{
+    return left_strip(' ');
 }
 
 templates
@@ -351,9 +362,36 @@ constexpr string_type& string_algo::right_justify ( int len, char_type ch )
         derive_of_self.resize(len);
         derive_of_self[-old_size,-1] = derive_of_self[1,old_size];
         derive_of_self[1,-old_size-1].fill(ch);
-
         return derive_of_self;
     }
+}
+
+templates
+constexpr array<typename string_algo::string_view_type> string_algo::right_split ( )
+{
+    return const_cast<const string_algo&>(self).right_split();
+}
+
+templates
+constexpr const array<typename string_algo::string_view_type> string_algo::right_split ( ) const
+{
+    return right_split(' ');
+}
+
+templates
+constexpr array<typename string_algo::string_view_type> string_algo::right_split ( const general_string_type auto& str )
+{
+    return const_cast<const string_algo&>(self).right_split(str);
+}
+
+templates
+constexpr const array<typename string_algo::string_view_type> string_algo::right_split ( const general_string_type auto& str ) const
+{
+    let sv = basic_string_view<char_type>(str);
+
+    vector<int> edges = vector{1-sv.size()}.push ( where(sv) )
+                                           .push ( size() + 1 );
+    return array<string_view_type> ( edges.size() - 1, [&] ( int i ) { return const_derive_of_self[edges[i]+sv.size(), edges[i+1]-1]; } );
 }
 
 templates
@@ -365,15 +403,25 @@ constexpr array<typename string_algo::string_view_type> string_algo::right_split
 templates
 constexpr const array<typename string_algo::string_view_type> string_algo::right_split ( const general_string_type auto& str, int times ) const
 {
+    #if debug
+        if ( times < 0 )
+            throw value_error("right-split string with negative times {}", times);
+    #endif
+
     let sv = basic_string_view<char_type>(str);
 
     vector<int> edges = vector{1-sv.size()}.push ( where(sv) )
                                            .push ( size() + 1 );
-
-    if ( times >= 0 and times < edges.size() - 1 )
+    if ( times < edges.size() - 1 )
         edges.erase ( 2, edges.size() - times - 1 );
-
     return array<string_view_type> ( edges.size() - 1, [&] ( int i ) { return const_derive_of_self[edges[i]+sv.size(), edges[i+1]-1]; } );
+}
+
+templates
+constexpr string_type& string_algo::right_strip ( )
+    requires ( not is_view )
+{
+    return right_strip(' ');
 }
 
 templates
@@ -385,6 +433,34 @@ constexpr string_type& string_algo::right_strip ( const general_string_type auto
     int pos = derive_of_self.string_type::array_algo::right_find([&] (char_type ch) { return not sv.contains(ch); });
     return pos != 0 ? derive_of_self.erase ( pos+1, -1 ) otherwise
                       derive_of_self.clear(); // All match to chars.
+}
+
+templates
+constexpr array<typename string_algo::string_view_type> string_algo::split ( )
+{
+    return const_cast<const string_algo&>(self).split();
+}
+
+templates
+constexpr const array<typename string_algo::string_view_type> string_algo::split ( ) const
+{
+    return split(' ');
+}
+
+templates
+constexpr array<typename string_algo::string_view_type> string_algo::split ( const general_string_type auto& str )
+{
+    return const_cast<const string_algo&>(self).split(str);
+}
+
+templates
+constexpr const array<typename string_algo::string_view_type> string_algo::split ( const general_string_type auto& str ) const
+{
+    let sv = basic_string_view<char_type>(str);
+
+    vector<int> edges = vector{1-sv.size()}.push ( where(sv) )
+                                           .push ( size() + 1 );
+    return array<string_view_type> ( edges.size() - 1, [&] ( int i ) { return const_derive_of_self[edges[i]+sv.size(), edges[i+1]-1]; } );
 }
 
 templates
@@ -426,7 +502,7 @@ constexpr const array<typename string_algo::string_view_type> string_algo::split
     if ( self[-1] != '\n' )
         edges.push ( size() + 1 );
 
-    array<string_view_type> lines ( edges.size() - 1, [&] ( int i )
+    return array<string_view_type> ( edges.size() - 1, [&] ( int i )
     {
         return const_derive_of_self [ ( i != 1 and
                                         i != edges.size() and
@@ -434,8 +510,6 @@ constexpr const array<typename string_algo::string_view_type> string_algo::split
                                         self[edges[i]+1] == '\n' ) ?
                                       edges[i] + 2 otherwise edges[i] + 1, edges[i+1] - 1 ];
     } );
-
-    return lines;
 }
 
 templates
@@ -443,6 +517,13 @@ constexpr bool string_algo::starts_with ( const general_string_type auto& str ) 
 {
     let sv = basic_string_view<char_type>(str);
     return begins_with(sv);
+}
+
+templates
+constexpr string_type& string_algo::strip ( )
+    requires ( not is_view )
+{
+    return strip(' ');
 }
 
 templates
@@ -519,7 +600,6 @@ constexpr int string_algo::count ( const general_string_type auto& str ) const
         it = std::search ( it, end(), sv.begin(), sv.end() );
         times++;
     }
-
     return times - 1;
 }
 
@@ -546,6 +626,24 @@ constexpr bool string_algo::none ( const general_string_type auto& str ) const
 }
 
 templates
+constexpr string_type& string_algo::remove ( const general_string_type auto& str )
+    requires ( not is_view )
+{
+    let sv = basic_string_view<char_type>(str);
+
+    int p = 1;
+    while ( true )
+    {
+        int f = p + derive_of_self[p,-1].find(sv) - 1;
+        if ( f == p - 1 )
+            break;
+        else
+            derive_of_self.erase ( f, f + sv.size() - 1 );
+    }
+    return derive_of_self;
+}
+
+templates
 constexpr string_type& string_algo::replace ( const general_string_type auto& str1, const general_string_type auto& str2 )
     requires ( not is_view )
 {
@@ -564,24 +662,6 @@ constexpr string_type& string_algo::replace ( const general_string_type auto& st
                           .insert( f, sv2 );
             p = f + sv2.size();
         }
-    }
-    return derive_of_self;
-}
-
-templates
-constexpr string_type& string_algo::remove ( const general_string_type auto& str )
-    requires ( not is_view )
-{
-    let sv = basic_string_view<char_type>(str);
-
-    int p = 1;
-    while ( true )
-    {
-        int f = p + derive_of_self[p,-1].find(sv) - 1;
-        if ( f == p - 1 )
-            break;
-        else
-            derive_of_self.erase ( f, f + sv.size() - 1 );
     }
     return derive_of_self;
 }
@@ -646,13 +726,13 @@ constexpr bool string_algo::exist ( const regex& rgx ) const
 }
 
 templates
-constexpr string_algo::views string_algo::find ( const regex& rgx )
+constexpr string_algo::string_view_type string_algo::find ( const regex& rgx )
 {
-    return const_cast<views&&> ( const_cast<const string_algo&>(self).find(rgx) );
+    return const_cast<const string_algo&>(self).find(rgx);
 }
 
 templates
-constexpr const string_algo::views string_algo::find ( const regex& rgx ) const
+constexpr const string_algo::string_view_type string_algo::find ( const regex& rgx ) const
 {
     let mtc   = std::match_results<const char_type*>();
     let found = std::regex_search ( begin(), end(), mtc, std::basic_regex<char_type>(rgx) );
@@ -672,6 +752,13 @@ constexpr bool string_algo::none ( const regex& rgx ) const
 }
 
 templates
+constexpr string_type& string_algo::remove ( const regex& rgx )
+    requires ( not is_view )
+{
+    return derive_of_self = string_type ( std::regex_replace ( std::basic_string<char_type>(derive_of_self), std::basic_regex<char_type>(rgx), std::basic_string<char_type>() ) );
+}
+
+templates
 constexpr string_type& string_algo::replace ( const regex& rgx, const general_string_type auto& str )
     requires ( not is_view )
 {
@@ -679,20 +766,13 @@ constexpr string_type& string_algo::replace ( const regex& rgx, const general_st
 }
 
 templates
-constexpr string_type& string_algo::remove ( const regex& rgx )
-    requires ( not is_view )
+constexpr string_algo::string_view_type string_algo::right_find ( const regex& rgx )
 {
-    return derive_of_self = string_type ( std::regex_replace ( std::basic_string<char_type>(derive_of_self), std::basic_regex<char_type>(rgx), std::basic_string<char_type>(0, '\0') ) );
+    return const_cast<const string_algo&>(self).right_find(std::basic_regex<char_type>(rgx));
 }
 
 templates
-constexpr string_algo::views string_algo::right_find ( const regex& rgx )
-{
-    return const_cast<views&&> ( const_cast<const string_algo&>(self).right_find(std::basic_regex<char_type>(rgx)) );
-}
-
-templates
-constexpr const string_algo::views string_algo::right_find ( const regex& rgx ) const
+constexpr const string_algo::string_view_type string_algo::right_find ( const regex& rgx ) const
 {
     let mtc = std::match_results<const char_type*>();
     for ( let it = std::regex_iterator<const char_type*>(begin(), end(), std::basic_regex<char_type>(rgx)); it != std::regex_iterator<const char_type*>(); ++it )
@@ -702,13 +782,13 @@ constexpr const string_algo::views string_algo::right_find ( const regex& rgx ) 
 }
 
 templates
-constexpr string_algo::array_of_views string_algo::split ( const regex& rgx )
+constexpr array<typename string_algo::string_view_type> string_algo::split ( const regex& rgx )
 {
-    return const_cast<array_line<views>&&> ( const_cast<const string_algo&>(self).split(rgx) );
+    return const_cast<const string_algo&>(self).split(rgx);
 }
 
 templates
-constexpr const string_algo::array_of_views string_algo::split ( const regex& rgx ) const
+constexpr const array<typename string_algo::string_view_type> string_algo::split ( const regex& rgx ) const
 {
     if ( std::basic_regex<char_type>(rgx).mark_count() == 0 )
         throw regex_error("cannot split {} with regex {}: regex has not capture groups", const_derive_of_self, rgx);
@@ -721,22 +801,22 @@ constexpr const string_algo::array_of_views string_algo::split ( const regex& rg
 
     return mtc | std::views::drop     (1)
                | std::views::transform([this] (const auto& submtc) { return const_derive_of_self[submtc.first-self.begin()+1, submtc.second-self.begin()]; })
-               | std::ranges::to<array_line<views>>();
+               | std::ranges::to<array<string_view_type>>();
 }
 
 templates
-constexpr string_algo::array_of_views string_algo::where ( const regex& rgx )
+constexpr array<typename string_algo::string_view_type> string_algo::where ( const regex& rgx )
 {
-    return const_cast<array_line<views>&&> ( const_cast<const string_algo&>(self).where(rgx) );
+    return const_cast<const string_algo&>(self).where(rgx);
 }
 
 templates
-constexpr const string_algo::array_of_views string_algo::where ( const regex& rgx ) const
+constexpr const array<typename string_algo::string_view_type> string_algo::where ( const regex& rgx ) const
 {
     let std_regex = std::basic_regex<char_type>(rgx);
     return std::views::iota     (std::regex_iterator<const char_type*>(begin(), end(), std_regex), std::regex_iterator<const char_type*>())
          | std::views::transform([&] (const auto& mtc) { return const_derive_of_self[mtc->position()+1, mtc->position()+mtc->length()]; })
-         | std::ranges::to<array_line<views>>();
+         | std::ranges::to<array<string_view_type>>();
 }
 
 
@@ -845,67 +925,67 @@ constexpr auto upper ( char_type auto ch )
 
 constexpr bool is_alnum ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_alnum(ch); } );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_alnum(ch); } );
 }
 
 constexpr bool is_alpha ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_alpha(ch); } );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_alpha(ch); } );
 }
 
 constexpr bool is_ascii ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_ascii(ch); } );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_ascii(ch); } );
 }
 
 constexpr bool is_decimal ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_decimal(ch); } )
-                            and std::count  ( view.begin(), view.end(), '.' ) <= 1
-                            and std::count  ( view.begin(), view.end(), '-' ) <= 1;
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_decimal(ch); } )
+                          and std::count  ( sv.begin(), sv.end(), '.' ) <= 1
+                          and std::count  ( sv.begin(), sv.end(), '-' ) <= 1;
 }
 
 constexpr bool is_digit ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_digit(ch); } );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_digit(ch); } );
 }
 
 constexpr bool is_identifier ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_alnum(ch) or ch == '_'; } )
-                            and ( is_alpha ( view[1] ) or view[1] == '_' );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_alnum(ch) or ch == '_'; } )
+                          and ( is_alpha ( sv[1] ) or sv[1] == '_' );
 }
 
 constexpr bool is_lower ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_lower(ch); } );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_lower(ch); } );
 }
 
 constexpr bool is_space ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_space(ch); } );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_space(ch); } );
 }
 
 constexpr bool is_title ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
+    auto sv = basic_string_view ( str );
 
-    return not view.empty() and std::adjacent_find ( view.begin(), view.end(), [] ( auto ch1, auto ch2 ) { return not ap::is_alnum(ch1) and ap::is_lower(ch2); } ) == view.end()
-                            and std::any_of        ( view.begin(), view.end(), [] ( auto ch )            { return ap::is_upper(ch); } );
+    return not sv.empty() and std::adjacent_find ( sv.begin(), sv.end(), [] ( auto ch1, auto ch2 ) { return not ap::is_alnum(ch1) and ap::is_lower(ch2); } ) == sv.end()
+                          and std::any_of        ( sv.begin(), sv.end(), [] ( auto ch )            { return ap::is_upper(ch); } );
 }
 
 constexpr bool is_upper ( const string_type auto& str )
 {
-    auto view = basic_string_view ( str );
-    return not view.empty() and std::all_of ( view.begin(), view.end(), [] ( auto ch ) { return ap::is_upper(ch); } );
+    auto sv = basic_string_view ( str );
+    return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_upper(ch); } );
 }
 
 constexpr auto lower ( const string_type auto& str )

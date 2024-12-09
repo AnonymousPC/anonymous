@@ -62,6 +62,11 @@ template < class char_type >
 constexpr basic_string<char_type>::basic_string ( int init_size, std::same_as<char_type> auto init_data )
     extends m ( init_size )
 {
+    #if debug
+        if ( size() < 0 )
+            throw value_error("initialize string with negative size {}", size());
+    #endif
+
     if ( size() <= sso )
         std::fill_n ( internal, size(), init_data );
 

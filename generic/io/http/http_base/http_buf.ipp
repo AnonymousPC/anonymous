@@ -403,5 +403,5 @@ void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
     }
 
     if ( not success )
-        on_error(except | std::views::join_with(' ') | std::ranges::to<string>());
+        on_error(except | std::views::join_with(", "s) | std::ranges::to<string>());
 }

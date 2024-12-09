@@ -4,6 +4,9 @@ namespace aux
 {
     template < class input_type, class char_type >
     concept char_type_or_general_string_type = std::same_as<input_type,char_type> or general_string_type<input_type,char_type>;
+
+    template < class input_type, class char_type >
+    concept formattable_or_constructible_to_string = std::formattable<input_type,char_type> or std::constructible_from<basic_string<char_type>,input_type>;
 }
 
 
@@ -16,11 +19,9 @@ class string_algo
 {
     private: // Traits
         constexpr static const bool is_view = not requires { &string_type::resize; };
-        using views          = std::conditional<not aux::string_view_type<string_type>/*see string_global.cpp*/,basic_string_range_view<char_type>,basic_string_view<char_type>>::type;
-        using string_view    = basic_string_view<char_type>;
-        using regex          = basic_regex<char_type>;
-        using array_of_views = array_line<views>;
-        using encode_type    = std::text_encoding;
+        using string_view_type    = conditional<not aux::string_view_type<string_type>/*see string_global.ipp*/,basic_string_range_view<char_type>,basic_string_view<char_type>>;
+        using regex               = basic_regex<char_type>;
+        using encode_type         = std::text_encoding;
 
     public: // Abbreviation
         constexpr int            size        ( ) const;
@@ -33,79 +34,79 @@ class string_algo
         constexpr decltype(auto) operator [] ( int ) const;
 
     public: // Array algo
-        constexpr       string_type&   insert          ( aux::array_type_dim_range<int,0,1> auto, const aux::char_type_or_general_string_type<char_type> auto&, const aux::char_type_or_general_string_type<char_type> auto&... ) requires ( not is_view );
-        constexpr       string_type&   push            (                                          const aux::char_type_or_general_string_type<char_type> auto&, const aux::char_type_or_general_string_type<char_type> auto&... ) requires ( not is_view );
+        constexpr       string_type& insert ( aux::array_type_dim_range<int,0,1> auto, const aux::char_type_or_general_string_type<char_type> auto&, const aux::char_type_or_general_string_type<char_type> auto&... ) requires ( not is_view );
+        constexpr       string_type& push   (                                          const aux::char_type_or_general_string_type<char_type> auto&, const aux::char_type_or_general_string_type<char_type> auto&... ) requires ( not is_view );
 
     public: // String algo
-        constexpr       bool           begins_with     ( const string_view& )                     const;
-        constexpr       string_type&   capitalize      ( );
-        constexpr       string_type&   center          ( int,  char_type = ' ' )                        requires ( not is_view );
-        constexpr       string_type&   encode          ( encode_type, encode_type )                     requires ( not is_view ) and std::same_as<char_type,char>;
-        constexpr       bool           ends_with       ( const string_view& )                     const;
-        constexpr       string_type&   expand_tabs     ( int = 8 )                                      requires ( not is_view );
-        constexpr       string_type&   format          ( const auto&... args )                          requires ( not is_view ) and std::same_as<char_type,char> and ( ( std::formattable<decltype(args),char_type> or std::constructible_from<string_type,decltype(args)> ) and ... );
-        constexpr       bool           is_alnum        ( )                                        const;
-        constexpr       bool           is_alpha        ( )                                        const;
-        constexpr       bool           is_ascii        ( )                                        const;
-        constexpr       bool           is_decimal      ( )                                        const;
-        constexpr       bool           is_digit        ( )                                        const;
-        constexpr       bool           is_identifier   ( )                                        const;
-        constexpr       bool           is_lower        ( )                                        const;
-        constexpr       bool           is_space        ( )                                        const;
-        constexpr       bool           is_title        ( )                                        const;
-        constexpr       bool           is_upper        ( )                                        const;
-        constexpr       string_type&   join            ( const auto& cont )                             requires ( not is_view and requires { string_view(*cont.begin()); } );
-        constexpr       string_type&   left_justify    ( int,  const string_view& = ' ' )               requires ( not is_view );
-        constexpr       string_type&   left_strip      ( const string_view& = ' ' )                     requires ( not is_view );
-        constexpr       string_type&   lower           ( );
-        constexpr       array_of_views partition       ( const string_view& );
-        constexpr const array_of_views partition       ( const string_view& )                     const;
-        constexpr       string_type&   right_justify   ( int,  const string_view& = ' ' )               requires ( not is_view );
-        constexpr       array_of_views right_partition ( const string_view& );
-        constexpr const array_of_views right_partition ( const string_view& )                     const;
-        constexpr       array_of_views right_split     ( const string_view& = ' ', int = -1 );
-        constexpr const array_of_views right_split     ( const string_view& = ' ', int = -1 )     const;
-        constexpr       string_type&   right_strip     ( const string_view& = ' ' )                     requires ( not is_view );
-        constexpr       array_of_views split           ( const string_view& = ' ', int = -1 );
-        constexpr const array_of_views split           ( const string_view& = ' ', int = -1 )     const;
-        constexpr       array_of_views split_lines     ( );
-        constexpr const array_of_views split_lines     ( )                                        const;
-        constexpr       bool           starts_with     ( const string_view& )                     const;
-        constexpr       string_type&   strip           ( const string_view& = ' ' )                     requires ( not is_view );
-        constexpr       string_type&   swap_case       ( );
-        constexpr       string_type&   title           ( );
-        constexpr       string_type&   translate       ( const map_type<char,string_view> auto& )       requires ( not is_view );
-        constexpr       string_type&   upper           ( );
-        constexpr       string_type&   zero_fill       ( int )                                          requires ( not is_view );
+        constexpr       bool                    begins_with     ( const general_string_type auto& )                                  const;
+        constexpr       string_type&            capitalize      ( );
+        constexpr       string_type&            center          ( int,  char_type = ' ' )                                                  requires ( not is_view );
+        constexpr       string_type&            encode          ( std::text_encoding, std::text_encoding )                                 requires ( not is_view ) and std::same_as<char_type,char>;
+        constexpr       bool                    ends_with       ( const general_string_type auto& )                                  const;
+        constexpr       string_type&            expand_tabs     ( int = 8 )                                                                requires ( not is_view );
+        constexpr       string_type&            format          ( const aux::formattable_or_constructible_to_string<char> auto&... args )        requires ( not is_view );
+        constexpr       bool                    is_alnum        ( )                                                                  const;
+        constexpr       bool                    is_alpha        ( )                                                                  const;
+        constexpr       bool                    is_ascii        ( )                                                                  const;
+        constexpr       bool                    is_decimal      ( )                                                                  const;
+        constexpr       bool                    is_digit        ( )                                                                  const;
+        constexpr       bool                    is_identifier   ( )                                                                  const;
+        constexpr       bool                    is_lower        ( )                                                                  const;
+        constexpr       bool                    is_space        ( )                                                                  const;
+        constexpr       bool                    is_title        ( )                                                                  const;
+        constexpr       bool                    is_upper        ( )                                                                  const;
+        constexpr       string_type&            join            ( const std::ranges::input_range& targets )                                requires ( not is_view ) and std::constructible_from<basic_string_view<char_type>,std::ranges::range_value_t<decay<decltype(targets)>>>;
+        constexpr       string_type&            left_justify    ( int,        char_type = ' ' )                                            requires ( not is_view );
+        constexpr       string_type&            left_strip      (       const general_string_type auto& = ' ' )                            requires ( not is_view );
+        constexpr       string_type&            lower           ( );
+        constexpr       array<string_view_type> partition       (       const general_string_type auto& );
+        constexpr const array<string_view_type> partition       (       const general_string_type auto& )                            const;
+        constexpr       string_type&            right_justify   ( int,        char_type = ' ' )                                            requires ( not is_view );
+        constexpr       array<string_view_type> right_partition (       const general_string_type auto& );
+        constexpr const array<string_view_type> right_partition (       const general_string_type auto& )                            const;
+        constexpr       array<string_view_type> right_split     (       const general_string_type auto& = ' ', int = -1 );
+        constexpr const array<string_view_type> right_split     (       const general_string_type auto& = ' ', int = -1 )            const;
+        constexpr       string_type&            right_strip     (       const general_string_type auto& = ' ' )                            requires ( not is_view );
+        constexpr       array<string_view_type> split           (       const general_string_type auto& = ' ', int = -1 );
+        constexpr const array<string_view_type> split           (       const general_string_type auto& = ' ', int = -1 )            const;
+        constexpr       array<string_view_type> split_lines     ( );  
+        constexpr const array<string_view_type> split_lines     ( )                                                                  const;
+        constexpr       bool                    starts_with     (       const general_string_type auto& )                            const;
+        constexpr       string_type&            strip           (       const general_string_type auto& = ' ' )                            requires ( not is_view );
+        constexpr       string_type&            swap_case       ( );
+        constexpr       string_type&            title           ( );
+        constexpr       string_type&            translate       ( const map_type<char,general_string_type> auto& )                         requires ( not is_view );
+        constexpr       string_type&            upper           ( );
+        constexpr       string_type&            zero_fill       ( int )                                                                    requires ( not is_view );
 
     public: // Array algo (update)
-        constexpr       bool           contains        ( const string_view& )                     const;
-        constexpr       int            count           ( const string_view& )                     const;
-        constexpr       bool           exist           ( const string_view& )                     const;
-        constexpr       int            find            ( const string_view& )                     const;
-        constexpr       bool           none            ( const string_view& )                     const;
-        constexpr       string_type&   replace         ( const string_view&, const string_view& )       requires ( not is_view );
-        constexpr       string_type&   remove          ( const string_view& )                           requires ( not is_view );
-        constexpr       int            right_find      ( const string_view& )                     const;
-        constexpr       vector<int>    where           ( const string_view& )                     const;
+        constexpr       bool                    contains        ( const general_string_type auto& )                                  const;
+        constexpr       int                     count           ( const general_string_type auto& )                                  const;
+        constexpr       bool                    exist           ( const general_string_type auto& )                                  const;
+        constexpr       int                     find            ( const general_string_type auto& )                                  const;
+        constexpr       bool                    none            ( const general_string_type auto& )                                  const;
+        constexpr       string_type&            replace         ( const general_string_type auto&, const general_string_type auto& )       requires ( not is_view );
+        constexpr       string_type&            remove          ( const general_string_type auto& )                                        requires ( not is_view );
+        constexpr       int                     right_find      ( const general_string_type auto& )                                  const;
+        constexpr       array<int>              where           ( const general_string_type auto& )                                  const;
 
     public: // Regex
-        constexpr       bool           all             ( const regex& )                           const;
-        constexpr       bool           contains        ( const regex& )                           const;
-        constexpr       int            count           ( const regex& )                           const;
-        constexpr       bool           exist           ( const regex& )                           const;
-        constexpr       views          find            ( const regex& );
-        constexpr const views          find            ( const regex& )                           const;
-        constexpr       bool           match           ( const regex& )                           const;
-        constexpr       bool           none            ( const regex& )                           const;
-        constexpr       string_type&   replace         ( const regex&, const string_view& )             requires ( not is_view );
-        constexpr       string_type&   remove          ( const regex& )                                 requires ( not is_view );
-        constexpr       views          right_find      ( const regex& );
-        constexpr const views          right_find      ( const regex& )                           const;
-        constexpr       array_of_views split           ( const regex& );
-        constexpr const array_of_views split           ( const regex& )                           const;
-        constexpr       array_of_views where           ( const regex& );
-        constexpr const array_of_views where           ( const regex& )                           const;
+        constexpr       bool                    all             ( const regex& )                                                     const;
+        constexpr       bool                    contains        ( const regex& )                                                     const;
+        constexpr       int                     count           ( const regex& )                                                     const;
+        constexpr       bool                    exist           ( const regex& )                                                     const;
+        constexpr       string_view_type        find            ( const regex& );
+        constexpr const string_view_type        find            ( const regex& )                                                     const;
+        constexpr       bool                    match           ( const regex& )                                                     const;
+        constexpr       bool                    none            ( const regex& )                                                     const;
+        constexpr       string_type&            replace         ( const regex&, const general_string_type auto& )                          requires ( not is_view );
+        constexpr       string_type&            remove          ( const regex& )                                                           requires ( not is_view );
+        constexpr       string_view_type        right_find      ( const regex& );
+        constexpr const string_view_type        right_find      ( const regex& )                                                     const;
+        constexpr       array<string_view_type> split           ( const regex& );
+        constexpr const array<string_view_type> split           ( const regex& )                                                     const;
+        constexpr       array<string_view_type> where           ( const regex& );
+        constexpr const array<string_view_type> where           ( const regex& )                                                     const;
 
     protected: // Strlen
         constexpr static int strlen ( const char_type* );

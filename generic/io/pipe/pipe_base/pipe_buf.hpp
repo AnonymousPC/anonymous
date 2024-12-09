@@ -86,6 +86,6 @@ struct pipe_buf::param           extends public pipe_buf::mode_base<array<string
 struct pipe_buf::start_directory extends public pipe_buf::mode_base<path>                      { using mode_base::mode_base; struct pipe_mode_tag{}; };
 
 #include "pipe_buf.ipp"
-//#if dll
+#if dll
     #include "pipe_buf.cpp"
-//#endif // dll
+#endif // dll

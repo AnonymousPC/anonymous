@@ -8,14 +8,15 @@
 #include "specific/stock/interface.hpp"
 #include "specific/vscode/interface.hpp"
 
-/// TODO: pipe_buf.underflow, actually 2 position will all setg().
-/// TODO: pipe_buf.move moves the context handle, so that the pipe.depend_context should also be moved.
-
 using namespace ap;
 
 int main ( )
 {
-    pipe_command("dir").each(print);
-    print("what");
-    sleep(10s);
+    let outputs = pipe_process("g++-14",
+                               pipe_process::param("-std=c++23", "-O3", "test.cpp", "test",
+                                                   "-Wall", "-fdiagnostics-color=always"));
+
+    let rgx = "([^:]*):([0-9]*):([0-9]*):(.*)"rgx;
+
+
 }

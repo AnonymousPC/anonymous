@@ -11,8 +11,13 @@ using namespace ap;
 
 int main ( )
 {
-    auto a = std::vector<int>();
-    auto b = a
-           | std::views::transform([] (const auto& v) { return v; })
-           | std::ranges::to<std::map<int,int>>();   
+    
 }
+
+
+// #include <iostream>
+// #include "test.cpp"
+// int main ( )
+// {
+//     std::cout << sdohfosdifhdisof << std::endl;
+// }

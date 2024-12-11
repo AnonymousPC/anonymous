@@ -791,13 +791,13 @@ templates
 constexpr const array<typename string_algo::string_view_type> string_algo::split ( const regex& rgx ) const
 {
     if ( std::basic_regex<char_type>(rgx).mark_count() == 0 )
-        throw regex_error("cannot split {} with regex {}: regex has not capture groups", const_derive_of_self, rgx);
+        throw regex_error("cannot split string \"{}\" with regex \"{}\": regex always capture none groups", const_derive_of_self, rgx);
 
     let mtc     = std::match_results<const char_type*>();
     let matched = std::regex_match ( begin(), end(), mtc, std::basic_regex<char_type>(rgx) );
 
     if ( not matched )
-        throw regex_error("cannot split {} with regex {}: string is not matched with regex", const_derive_of_self, rgx);
+        throw regex_error("cannot split string \"{}\" with regex \"{}\": string is not matched with regex", const_derive_of_self, rgx);
 
     return mtc | std::views::drop     (1)
                | std::views::transform([this] (const auto& submtc) { return const_derive_of_self[submtc.first-self.begin()+1, submtc.second-self.begin()]; })

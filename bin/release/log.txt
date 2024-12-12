@@ -1,0 +1,15 @@
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/ext/string_conversions.h:43,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/basic_string.h:4154,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/string:54,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/locale_classes.h:40,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:41,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/streambuf:43,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/streambuf_iterator.h:35,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/iterator:66,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/ranges:43,
+                 from test.cpp:16,
+                 from main.cpp:22:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/cstdlib:79:15: fatal error: stdlib.h: No such file or directory
+   79 | #include_next <stdlib.h>
+      |               ^~~~~~~~~~
+compilation terminated.

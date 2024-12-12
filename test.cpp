@@ -12,9 +12,16 @@
 // }
 
 #define great great
+#include <map>
+#include <ranges>
+#include <vector>
+
 
 void haha ( )
 {
-    std::cout << great << std::endl;
-    std;:cout << great << std::endl;
+    auto a = std::vector<int>();
+    a | std::views::reverse
+      | std::ranges::to<std::map<int,int>>();
+    great();
+    
 }

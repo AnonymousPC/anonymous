@@ -4,50 +4,22 @@
         {
             "label": "debug.compile",
             "group": "none",
-            "type": "process",
+            "type": "shell",
             "windows": {
-                "command": "g++",
-                "args": [
-                    "-std=c++26",
-    
-                    "-g",
-                    "-Wall",
-                    "-pedantic",
-                    "-flarge-source-files",
-                    "-fno-inline",
-                    "-Ddebug=1",
-    
-                    "-O0",
-    
-                    "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
-    
-                    "-c",
-                    "main.cpp",
-                    "-o",
-                    "bin/debug/main.o"
-                ],
+                "command": "g++ -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "options": {
+                    "env": {
+                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include",
+                    }
+                }
             },
             "osx": {
-                "command": "g++-14",
-                "args": [
-                    "-std=c++26",
-    
-                    "-g",
-                    "-Wall",
-                    "-pedantic",
-                    "-flarge-source-files", 
-                    "-fno-inline",
-                    "-Ddebug=1",
-    
-                    "-O0",
-    
-                    "-I/opt/homebrew/include",
-    
-                    "-c",
-                    "main.cpp",
-                    "-o",
-                    "bin/debug/main.o"
-                ],
+                "command": "g++-14 -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "options": {
+                    "env": {
+                        "CPLUS_INCLUDE_PATH": "/opt/homebrew/include",
+                    }
+                }
             }
         },
         {
@@ -57,14 +29,11 @@
             "windows": {
                 "command": "g++",
                 "args": [
-                    "-fuse-ld=lld",
-    
                     "-o",
                     "bin/debug/main.exe",
-    
+                    "-fuse-ld=lld",
                     "bin/debug/main.o",
                     "bin/dll/main.dll",
-        
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
@@ -93,14 +62,11 @@
             "osx": {
                 "command": "g++-14",
                 "args": [
-                    "-fuse-ld=lld",
-                    
                     "-o",
                     "bin/debug/main",
-    
+                    "-fuse-ld=lld",
                     "bin/debug/main.o",
                     "bin/dll/main.dylib",
-    
                     "/opt/homebrew/lib/gcc/current/libstdc++exp.a",
                     "/opt/homebrew/lib/libboost_date_time.dylib",
                     "/opt/homebrew/lib/libboost_filesystem.dylib",
@@ -116,6 +82,7 @@
                     "/opt/homebrew/lib/libpng.dylib",
                     "/opt/homebrew/lib/libssl.dylib",
                     "/opt/homebrew/lib/libtiff.dylib",
+                    "/opt/homebrew/lib/libzstd.dylib"
                 ],
             }
         },
@@ -154,46 +121,22 @@
         {
             "label": "release.compile",
             "group": "none",
-            "type": "process",
+            "type": "shell",
             "windows": {
-                "command": "g++",
-                "args": [
-                    "-std=c++26",
-    
-                    "-g",
-                    "-Wall",
-                    "-pedantic",
-                    "-flarge-source-files",
-    
-                    "-O3",
-    
-                    "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
-    
-                    "-c",
-                    "main.cpp",
-                    "-o",
-                    "bin/release/main.o"
-                ]
+                "command": "g++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "options": {
+                    "env": {
+                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include",
+                    }
+                }
             },
             "osx": {
-                "command": "g++-14",
-                "args": [
-                    "-std=c++26",
-            
-                    "-g",
-                    "-Wall",
-                    "-pedantic",
-                    "-flarge-source-files",
-
-                    "-O3",
-
-                    "-I/opt/homebrew/include",
-
-                    "-c",
-                    "main.cpp",
-                    "-o",
-                    "bin/release/main.o"
-                ],
+                "command": "g++-14 -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "options": {
+                    "env": {
+                        "CPLUS_INCLUDE_PATH": "/opt/homebrew/include",
+                    }
+                }
             }            
         },
         {
@@ -203,14 +146,11 @@
             "windows": {
                 "command": "g++",
                 "args": [
-                    "-fuse-ld=lld",
-    
                     "-o",
                     "bin/release/main.exe",
-    
+                    "-fuse-ld=lld",
                     "bin/release/main.o",
                     "bin/dll/main.dll",
-    
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
@@ -239,14 +179,11 @@
             "osx": {
                 "command": "g++-14",
                 "args": [
-                    "-fuse-ld=lld",
-    
                     "-o",
                     "bin/release/main",
-    
+                    "-fuse-ld=lld",
                     "bin/release/main.o",
                     "bin/dll/main.dylib",
-    
                     "/opt/homebrew/lib/gcc/current/libstdc++exp.a",
                     "/opt/homebrew/lib/libboost_date_time.dylib",
                     "/opt/homebrew/lib/libboost_filesystem.dylib",
@@ -304,48 +241,22 @@
         {
             "label": "dll.compile",
             "group": "none",
-            "type": "process",
+            "type": "shell",
             "windows": {
-                "command": "g++",
-                "args": [
-                    "-std=c++26",
-    
-                    "-g",
-                    "-Wall",
-                    "-pedantic",
-                    "-flarge-source-files",
-    
-                    "-O3",
-                    "-Ddll=1",
-    
-                    "-ID:/My Passport/My Passport - Application/MSYS/ucrt64/include",
-    
-                    "-c",
-                    "main.cpp",
-                    "-o",
-                    "bin/dll/main.o"
-                ]
+                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "options": {
+                    "env": {
+                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include",
+                    }
+                }
             },
             "osx": {
-                "command": "g++-14",
-                "args": [
-                    "-std=c++26",
-    
-                    "-g",
-                    "-Wall",
-                    "-pedantic",
-                    "-flarge-source-files",
-    
-                    "-O3",
-                    "-Ddll=1",
-    
-                    "-I/opt/homebrew/include",
-    
-                    "-c",
-                    "test.cpp",
-                    "-o",
-                    "bin/dll/main.o"
-                ],
+                "command": "g++-14 -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "options": {
+                    "env": {
+                        "CPLUS_INCLUDE_PATH": "/opt/homebrew/include",
+                    }
+                }
             }
         },
         {
@@ -355,14 +266,11 @@
             "windows": {
                 "command": "g++",
                 "args": [
-                    "-fuse-ld=lld",
                     "-shared",
-    
                     "-o",
                     "bin/dll/main.dll",
-    
+                    "-fuse-ld=lld",
                     "bin/dll/main.o",
-    
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
                     "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
@@ -391,14 +299,11 @@
             "osx": {
                 "command": "g++-14",
                 "args": [
-                    "-fuse-ld=lld",
                     "-shared",
-    
                     "-o",
                     "bin/dll/main.dylib",
-    
+                    "-fuse-ld=lld",
                     "bin/dll/main.o",
-                    
                     "/opt/homebrew/lib/libboost_date_time.dylib",
                     "/opt/homebrew/lib/libboost_filesystem.dylib",
                     "/opt/homebrew/lib/libboost_iostreams.dylib",

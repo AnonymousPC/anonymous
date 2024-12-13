@@ -1,7 +1,1472 @@
-In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil.hpp:51,
-                 from generic/basic/interface.hpp:99,
+In file included from generic/io/pipe/pipe_base/pipe_buf.hpp:90,
+                 from generic/io/pipe/pipe.hpp:5,
+                 from generic/io/interface.hpp:125,
+                 from main.cpp:3:
+generic/io/pipe/pipe_base/pipe_buf.cpp: In member function 'virtual int ap::pipe_buf::underflow()':
+generic/io/pipe/pipe_base/pipe_buf.cpp:109:21: error: expected primary-expression before '|' token
+  109 |                     | std::execution::upon_error([&] (const std::exception_ptr& e) { stderr_error = std::make_exception_ptr(e); });
+      |                     ^
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:23: error: no match for 'operator==' (operand types are 'std::__exception_ptr::exception_ptr' and 'boost::system::error_code')
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |          ~~~~~~~~~~~~ ^~                ~~~~~~~~~~~~
+      |          |                              |
+      |          |                              boost::system::error_code
+      |          std::__exception_ptr::exception_ptr
+In file included from generic/container/discrete/discrete_base/discrete_global.hpp:138,
+                 from generic/container/discrete/discrete.hpp:19,
+                 from generic/container/interface.hpp:260,
+                 from main.cpp:2:
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: candidate: 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+   36 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:121 = boost::system::error_code; auto:122 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/container/interface.hpp:181:13:   required for the satisfaction of 'pair_type<auto:121, void, void>' [with auto:121 = boost::system::error_code]
+generic/container/interface.hpp:194:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; type1 = void; type2 = void]' evaluated to 'false'
+  181 |     concept pair_type = []
+      |                         ~~
+  182 |     {
+      |     ~  
+  183 |         static_assert ( std::is_void<type1>::value == std::is_void<type2>::value, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  184 |         if constexpr ( requires { typename input_type::pair_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  185 |         {
+      |         ~
+  186 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  187 |             if constexpr ( not std::is_void<type1>::value and not std::is_void<type2>::value )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  188 |                 return std::convertible_to<typename input_type::key_type,type1> and std::convertible_to<typename input_type::value_type,type2>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  189 |             else
+      |             ~~~~
+  190 |                 return true;
+      |                 ~~~~~~~~~~~~
+  191 |         }
+      |         ~
+  192 |         else
+      |         ~~~~
+  193 |             return false;
+      |             ~~~~~~~~~~~~~
+  194 |     } ();
+      |     ~~^~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: candidate: 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1>' (reversed)
+   93 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1> [with auto:136 = boost::system::error_code; auto:137 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/container/interface.hpp:211:13:   required for the satisfaction of 'tuple_type<auto:136>' [with auto:136 = boost::system::error_code]
+generic/container/interface.hpp:223:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; types = {}]' evaluated to 'false'
+  211 |     concept tuple_type = []
+      |                          ~~
+  212 |     {
+      |     ~  
+  213 |         if constexpr ( requires { typename input_type::tuple_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  214 |         {
+      |         ~
+  215 |             static_assert ( requires { typename input_type::value_type<1>; typename input_type::value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  216 |             if constexpr ( sizeof...(types) != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  217 |                 return aux::tuplewise_convertible<input_type,tuple<types...>>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  218 |             else
+      |             ~~~~
+  219 |                 return true;
+      |                 ~~~~~~~~~~~~
+  220 |         }
+      |         ~
+  221 |         else
+      |         ~~~~
+  222 |             return false;
+      |             ~~~~~~~~~~~~~
+  223 |     } ();
+      |     ~~^~
+In file included from generic/container/collection/collection_base/collection_global.hpp:35,
+                 from generic/container/collection/collection.hpp:172,
+                 from generic/container/interface.hpp:263:
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: candidate: 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>' (reversed)
+   87 | constexpr bool operator == ( const set_type auto& left, const set_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:87:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type> [with auto:689 = boost::system::error_code; auto:690 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/container/interface.hpp:150:13:   required for the satisfaction of 'set_type<auto:689, void>' [with auto:689 = boost::system::error_code]
+generic/container/interface.hpp:162:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; value_type = void]' evaluated to 'false'
+  150 |     concept set_type = []
+      |                        ~~
+  151 |     {
+      |     ~  
+  152 |         if constexpr ( requires { typename input_type::set_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  153 |         {
+      |         ~
+  154 |             static_assert ( requires { typename input_type::value_type; }, "class provides set_tag but not provides value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  155 |             if constexpr ( is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  156 |                 return true;
+      |                 ~~~~~~~~~~~~
+  157 |             else
+      |             ~~~~
+  158 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  159 |         }
+      |         ~
+  160 |         else
+      |         ~~~~
+  161 |             return false;
+      |             ~~~~~~~~~~~~~
+  162 |     } ();
+      |     ~~^~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: candidate: 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+  240 | constexpr bool operator == ( const map_type auto& left, const map_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:718 = boost::system::error_code; auto:719 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/container/interface.hpp:165:13:   required for the satisfaction of 'map_type<auto:718, void, void>' [with auto:718 = boost::system::error_code]
+generic/container/interface.hpp:178:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; key_type = void; value_type = void]' evaluated to 'false'
+  165 |     concept map_type = []
+      |                        ~~
+  166 |     {
+      |     ~  
+  167 |         static_assert ( is_void<key_type> == is_void<value_type>, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  168 |         if constexpr ( requires { typename input_type::map_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  169 |         {
+      |         ~
+  170 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides map_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  171 |             if constexpr ( is_void<key_type> and is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  172 |                 return true;
+      |                 ~~~~~~~~~~~~
+  173 |             else
+      |             ~~~~
+  174 |                 return std::convertible_to<typename input_type::key_type,key_type> and std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  175 |         }
+      |         ~
+  176 |         else
+      |         ~~~~
+  177 |             return false;
+      |             ~~~~~~~~~~~~~
+  178 |     } ();
+      |     ~~^~
+In file included from generic/container/string/string_base/string_global.hpp:23,
+                 from generic/container/string/string.hpp:37,
+                 from generic/container/interface.hpp:265:
+generic/container/string/string_base/string_global.ipp:26:16: note: candidate: 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>)' (reversed)
+   26 | constexpr bool operator == ( const general_string_type auto& left, const general_string_type auto& right )
+      |                ^~~~~~~~
+generic/container/string/string_base/string_global.ipp:26:16: note:   template argument deduction/substitution failed:
+generic/container/string/string_base/string_global.ipp:26:16: note: constraints not satisfied
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>) [with auto:883 = boost::system::error_code; auto:884 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/container/interface.hpp:241:13:   required for the satisfaction of 'general_string_type<auto:883, void>' [with auto:883 = boost::system::error_code]
+generic/container/interface.hpp:243:73: note: no operand of the disjunction is satisfied
+  241 |     concept general_string_type = char_type<input_type> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~               
+  242 |                                   char_type<remove_extent<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  243 |                                   char_type<remove_pointer<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+  244 |                                   string_type<input_type>;
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~                
+cc1plus: note: set '-fconcepts-diagnostics-depth=' to at least 2 for more detail
+In file included from generic/io/../math/linear/linear.hpp:45,
+                 from generic/io/../math/interface.hpp:285,
+                 from generic/io/interface.hpp:3:
+generic/io/../math/linear/nd/operator.ipp:3:16: note: candidate: 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+    3 | constexpr bool operator == ( const array_type auto& left, const array_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/linear/nd/operator.ipp:3:16: note:   template argument deduction/substitution failed:
+generic/io/../math/linear/nd/operator.ipp:3:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:1211 = boost::system::error_code; auto:1212 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/container/interface.hpp:56:13:   required for the satisfaction of 'array_type<auto:1211, void, 0>' [with auto:1211 = boost::system::error_code]
+generic/container/interface.hpp:72:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; value_type = void; dim = 0]' evaluated to 'false'
+   56 |     concept array_type = []
+      |                          ~~
+   57 |     {
+      |     ~  
+   58 |         if constexpr ( requires { typename input_type::array_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   59 |         {
+      |         ~
+   60 |             static_assert ( requires { typename input_type::value_type; input_type::dimension(); }, "class provides array_tag but not provides value_type or dimension()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   61 |             if constexpr ( is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   62 |                 return true;
+      |                 ~~~~~~~~~~~~
+   63 |             else if constexpr ( is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   64 |                 static_assert ( false, "cannot only check dimension but not check value_type");
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   65 |             else if constexpr ( not is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   66 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   67 |             else if constexpr ( not is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |                 return std::convertible_to<typename input_type::value_type,value_type> and input_type::dimension() == dim;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   69 |         }
+      |         ~
+   70 |         else
+      |         ~~~~
+   71 |             return false;
+      |             ~~~~~~~~~~~~~
+   72 |     } ();
+      |     ~~^~
+In file included from generic/io/../math/numeric/numeric.hpp:5,
+                 from generic/io/../math/interface.hpp:282:
+generic/io/../math/numeric/fraction.ipp:181:16: note: candidate: 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&)' (reversed)
+  181 | constexpr auto operator == ( const fraction_type auto& left, const fraction_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/numeric/fraction.ipp:181:16: note:   template argument deduction/substitution failed:
+generic/io/../math/numeric/fraction.ipp:181:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&) [with auto:1314 = boost::system::error_code; auto:1315 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/io/../math/interface.hpp:15:37:   required for the satisfaction of 'fraction_type<auto:1314>' [with auto:1314 = boost::system::error_code]
+generic/io/../math/interface.hpp:15:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:15:73: note: the required type 'typename type::fraction_tag' is invalid
+   15 |     template < class type > concept fraction_type = requires { typename type::fraction_tag; } and float_type<type>;
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+In file included from generic/io/../math/geometric/geometric.hpp:7,
+                 from generic/io/../math/interface.hpp:283:
+generic/io/../math/geometric/complex.ipp:113:16: note: candidate: 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&)' (reversed)
+  113 | constexpr bool operator == ( const complex_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:113:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:113:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&) [with auto:1421 = boost::system::error_code; auto:1422 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1421>' [with auto:1421 = boost::system::error_code]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note: candidate: 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&)' (reversed)
+  118 | constexpr bool operator == ( const complex_type auto& left, const number_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:118:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&) [with auto:1423 = boost::system::error_code; auto:1424 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1423>' [with auto:1423 = boost::system::error_code]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note: candidate: 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&)' (reversed)
+  123 | constexpr bool operator == ( const number_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:123:16: note: constraints not satisfied
+In file included from generic/basic/interface.hpp:242,
                  from main.cpp:1:
-D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil/image_processing/adaptive_histogram_equalization.hpp: In function 'void boost::gil::detail::clip_and_redistribute(const SrcHist&, DstHist&, double)':
-D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil/image_processing/adaptive_histogram_equalization.hpp:103: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-  103 |     if (rem == 0)
-D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil/image_processing/adaptive_histogram_equalization.hpp:103: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&) [with auto:1425 = boost::system::error_code; auto:1426 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/basic/concept.hpp:72:33:   required for the satisfaction of 'number_type<auto:1425>' [with auto:1425 = boost::system::error_code]
+generic/basic/concept.hpp:72:106: note: no operand of the disjunction is satisfied
+   72 | template < class type > concept number_type = int_type<type> or float_type<type>                         or requires { typename type::number_tag; };
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from generic/io/../math/geometric/geometric.hpp:8:
+generic/io/../math/geometric/polar.ipp:103:16: note: candidate: 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&)' (reversed)
+  103 | constexpr bool operator == ( const polar_type auto& left, const polar_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/polar.ipp:103:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/polar.ipp:103:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&) [with auto:1476 = boost::system::error_code; auto:1477 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:52:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                    ^
+generic/io/../math/interface.hpp:20:37:   required for the satisfaction of 'polar_type<auto:1476>' [with auto:1476 = boost::system::error_code]
+generic/io/../math/interface.hpp:20:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:20:73: note: the required type 'typename type::polar_tag' is invalid
+   20 |     template < class type > concept polar_type    = requires { typename type::polar_tag;    };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~
+In file included from /opt/homebrew/include/boost/system/error_code.hpp:13,
+                 from /opt/homebrew/include/boost/asio/detail/throw_error.hpp:20,
+                 from /opt/homebrew/include/boost/asio/detail/impl/posix_event.ipp:23,
+                 from /opt/homebrew/include/boost/asio/detail/posix_event.hpp:172,
+                 from /opt/homebrew/include/boost/asio/detail/event.hpp:25,
+                 from /opt/homebrew/include/boost/asio/execution/blocking_adaptation.hpp:19,
+                 from /opt/homebrew/include/boost/asio/execution.hpp:22,
+                 from /opt/homebrew/include/boost/asio/any_completion_executor.hpp:22,
+                 from /opt/homebrew/include/boost/asio.hpp:20,
+                 from generic/basic/interface.hpp:95:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:451:47: note: candidate: 'template<class E, class N1, class N2> constexpr bool boost::system::operator==(E, const error_code&)' (reversed)
+  451 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( E lhs, error_code const & rhs ) noexcept
+      |                                               ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:451:47: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:450:40: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  450 |     template<class E, class N1 = void, class N2 = typename detail::enable_if<std::is_error_code_enum<E>::value>::type>
+      |                                        ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:445:47: note: candidate: 'template<class E, class N1, class N2> constexpr bool boost::system::operator==(const error_code&, E)' (reversed)
+  445 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( error_code const & lhs, E rhs ) noexcept
+      |                                               ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:445:47: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:444:40: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  444 |     template<class E, class N1 = void, class N2 = typename detail::enable_if<std::is_error_code_enum<E>::value>::type>
+      |                                        ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:425:24: note: candidate: 'template<class E, class N> bool boost::system::operator==(E, const error_code&)' (reversed)
+  425 |     inline friend bool operator==( E lhs, error_code const & rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:425:24: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:424:23: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  424 |     template<class E, class N = typename detail::enable_if<std::is_error_condition_enum<E>::value>::type>
+      |                       ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:419:24: note: candidate: 'template<class E, class N> bool boost::system::operator==(const error_code&, E)' (reversed)
+  419 |     inline friend bool operator==( error_code const & lhs, E rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:419:24: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:418:23: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  418 |     template<class E, class N = typename detail::enable_if<std::is_error_condition_enum<E>::value>::type>
+      |                       ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:591:13: note: candidate: 'bool boost::system::operator==(const error_code&, const error_condition&)' (reversed)
+  591 | inline bool operator==( const error_code & code, const error_condition & condition ) noexcept
+      |             ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:591:74: note:   no known conversion for argument 2 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_condition&'
+  591 | inline bool operator==( const error_code & code, const error_condition & condition ) noexcept
+      |                                                  ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:603:13: note: candidate: 'bool boost::system::operator==(const error_condition&, const error_code&)' (reversed)
+  603 | inline bool operator==( const error_condition & condition, const error_code & code ) noexcept
+      |             ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:603:49: note:   no known conversion for argument 1 from 'boost::system::error_code' to 'const boost::system::error_condition&'
+  603 | inline bool operator==( const error_condition & condition, const error_code & code ) noexcept
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:401:24: note: candidate: 'bool boost::system::operator==(const error_code&, const std::error_code&)' (reversed)
+  401 |     inline friend bool operator==( error_code const & lhs, std::error_code const & rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:401:84: note:   no known conversion for argument 2 from 'std::__exception_ptr::exception_ptr' to 'const std::error_code&'
+  401 |     inline friend bool operator==( error_code const & lhs, std::error_code const & rhs ) noexcept
+      |                                                            ~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:396:24: note: candidate: 'bool boost::system::operator==(const std::error_code&, const error_code&)' (reversed)
+  396 |     inline friend bool operator==( std::error_code const & lhs, error_code const & rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:396:84: note:   no known conversion for argument 2 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_code&'
+  396 |     inline friend bool operator==( std::error_code const & lhs, error_code const & rhs ) noexcept
+      |                                                                 ~~~~~~~~~~~~~~~~~~~^~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:23: note: candidate: 'operator==(int, int)' (built-in)
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |          ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:23: note:   no known conversion for argument 2 from 'boost::system::error_code' to 'int'
+In file included from generic/io/file/path/path.hpp:32,
+                 from generic/io/file/file.hpp:5,
+                 from generic/io/interface.hpp:123:
+generic/io/file/path/path.cpp:127:6: note: candidate: 'bool ap::operator==(const path&, const path&)'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |      ^~~~~~~~
+generic/io/file/path/path.cpp:127:32: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const ap::path&'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |                    ~~~~~~~~~~~~^~
+In file included from /opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/exception:166,
+                 from /opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/optional:42,
+                 from /opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/ranges_algo.h:36,
+                 from /opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/algorithm:63,
+                 from generic/basic/interface.hpp:20:
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:7: note: candidate: 'constexpr bool std::__exception_ptr::operator==(const exception_ptr&, const exception_ptr&)'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |       ^~~~~~~~
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:40: note:   no known conversion for argument 2 from 'boost::system::error_code' to 'const std::__exception_ptr::exception_ptr&'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |                                        ^~~~~~~~~~~~~~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:350:47: note: candidate: 'constexpr bool boost::system::operator==(const error_code&, const error_code&)'
+  350 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( const error_code & lhs, const error_code & rhs ) noexcept
+      |                                               ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:350:78: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_code&'
+  350 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( const error_code & lhs, const error_code & rhs ) noexcept
+      |                                                           ~~~~~~~~~~~~~~~~~~~^~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:70: error: no match for 'operator==' (operand types are 'std::__exception_ptr::exception_ptr' and 'boost::system::error_code')
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                         ~~~~~~~~~~~~ ^~                ~~~~~~~~~~~~
+      |                                                         |                              |
+      |                                                         |                              boost::system::error_code
+      |                                                         std::__exception_ptr::exception_ptr
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: candidate: 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+   36 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:121 = boost::system::error_code; auto:122 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/container/interface.hpp:181:13:   required for the satisfaction of 'pair_type<auto:121, void, void>' [with auto:121 = boost::system::error_code]
+generic/container/interface.hpp:194:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; type1 = void; type2 = void]' evaluated to 'false'
+  181 |     concept pair_type = []
+      |                         ~~
+  182 |     {
+      |     ~  
+  183 |         static_assert ( std::is_void<type1>::value == std::is_void<type2>::value, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  184 |         if constexpr ( requires { typename input_type::pair_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  185 |         {
+      |         ~
+  186 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  187 |             if constexpr ( not std::is_void<type1>::value and not std::is_void<type2>::value )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  188 |                 return std::convertible_to<typename input_type::key_type,type1> and std::convertible_to<typename input_type::value_type,type2>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  189 |             else
+      |             ~~~~
+  190 |                 return true;
+      |                 ~~~~~~~~~~~~
+  191 |         }
+      |         ~
+  192 |         else
+      |         ~~~~
+  193 |             return false;
+      |             ~~~~~~~~~~~~~
+  194 |     } ();
+      |     ~~^~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: candidate: 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1>' (reversed)
+   93 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1> [with auto:136 = boost::system::error_code; auto:137 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/container/interface.hpp:211:13:   required for the satisfaction of 'tuple_type<auto:136>' [with auto:136 = boost::system::error_code]
+generic/container/interface.hpp:223:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; types = {}]' evaluated to 'false'
+  211 |     concept tuple_type = []
+      |                          ~~
+  212 |     {
+      |     ~  
+  213 |         if constexpr ( requires { typename input_type::tuple_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  214 |         {
+      |         ~
+  215 |             static_assert ( requires { typename input_type::value_type<1>; typename input_type::value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  216 |             if constexpr ( sizeof...(types) != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  217 |                 return aux::tuplewise_convertible<input_type,tuple<types...>>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  218 |             else
+      |             ~~~~
+  219 |                 return true;
+      |                 ~~~~~~~~~~~~
+  220 |         }
+      |         ~
+  221 |         else
+      |         ~~~~
+  222 |             return false;
+      |             ~~~~~~~~~~~~~
+  223 |     } ();
+      |     ~~^~
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: candidate: 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>' (reversed)
+   87 | constexpr bool operator == ( const set_type auto& left, const set_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:87:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type> [with auto:689 = boost::system::error_code; auto:690 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/container/interface.hpp:150:13:   required for the satisfaction of 'set_type<auto:689, void>' [with auto:689 = boost::system::error_code]
+generic/container/interface.hpp:162:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; value_type = void]' evaluated to 'false'
+  150 |     concept set_type = []
+      |                        ~~
+  151 |     {
+      |     ~  
+  152 |         if constexpr ( requires { typename input_type::set_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  153 |         {
+      |         ~
+  154 |             static_assert ( requires { typename input_type::value_type; }, "class provides set_tag but not provides value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  155 |             if constexpr ( is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  156 |                 return true;
+      |                 ~~~~~~~~~~~~
+  157 |             else
+      |             ~~~~
+  158 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  159 |         }
+      |         ~
+  160 |         else
+      |         ~~~~
+  161 |             return false;
+      |             ~~~~~~~~~~~~~
+  162 |     } ();
+      |     ~~^~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: candidate: 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+  240 | constexpr bool operator == ( const map_type auto& left, const map_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:718 = boost::system::error_code; auto:719 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/container/interface.hpp:165:13:   required for the satisfaction of 'map_type<auto:718, void, void>' [with auto:718 = boost::system::error_code]
+generic/container/interface.hpp:178:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; key_type = void; value_type = void]' evaluated to 'false'
+  165 |     concept map_type = []
+      |                        ~~
+  166 |     {
+      |     ~  
+  167 |         static_assert ( is_void<key_type> == is_void<value_type>, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  168 |         if constexpr ( requires { typename input_type::map_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  169 |         {
+      |         ~
+  170 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides map_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  171 |             if constexpr ( is_void<key_type> and is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  172 |                 return true;
+      |                 ~~~~~~~~~~~~
+  173 |             else
+      |             ~~~~
+  174 |                 return std::convertible_to<typename input_type::key_type,key_type> and std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  175 |         }
+      |         ~
+  176 |         else
+      |         ~~~~
+  177 |             return false;
+      |             ~~~~~~~~~~~~~
+  178 |     } ();
+      |     ~~^~
+generic/container/string/string_base/string_global.ipp:26:16: note: candidate: 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>)' (reversed)
+   26 | constexpr bool operator == ( const general_string_type auto& left, const general_string_type auto& right )
+      |                ^~~~~~~~
+generic/container/string/string_base/string_global.ipp:26:16: note:   template argument deduction/substitution failed:
+generic/container/string/string_base/string_global.ipp:26:16: note: constraints not satisfied
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>) [with auto:883 = boost::system::error_code; auto:884 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/container/interface.hpp:241:13:   required for the satisfaction of 'general_string_type<auto:883, void>' [with auto:883 = boost::system::error_code]
+generic/container/interface.hpp:243:73: note: no operand of the disjunction is satisfied
+  241 |     concept general_string_type = char_type<input_type> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~               
+  242 |                                   char_type<remove_extent<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  243 |                                   char_type<remove_pointer<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+  244 |                                   string_type<input_type>;
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~                
+generic/io/../math/linear/nd/operator.ipp:3:16: note: candidate: 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+    3 | constexpr bool operator == ( const array_type auto& left, const array_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/linear/nd/operator.ipp:3:16: note:   template argument deduction/substitution failed:
+generic/io/../math/linear/nd/operator.ipp:3:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:1211 = boost::system::error_code; auto:1212 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/container/interface.hpp:56:13:   required for the satisfaction of 'array_type<auto:1211, void, 0>' [with auto:1211 = boost::system::error_code]
+generic/container/interface.hpp:72:7: note: the expression '(<lambda>)() [with input_type = boost::system::error_code; value_type = void; dim = 0]' evaluated to 'false'
+   56 |     concept array_type = []
+      |                          ~~
+   57 |     {
+      |     ~  
+   58 |         if constexpr ( requires { typename input_type::array_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   59 |         {
+      |         ~
+   60 |             static_assert ( requires { typename input_type::value_type; input_type::dimension(); }, "class provides array_tag but not provides value_type or dimension()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   61 |             if constexpr ( is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   62 |                 return true;
+      |                 ~~~~~~~~~~~~
+   63 |             else if constexpr ( is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   64 |                 static_assert ( false, "cannot only check dimension but not check value_type");
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   65 |             else if constexpr ( not is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   66 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   67 |             else if constexpr ( not is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |                 return std::convertible_to<typename input_type::value_type,value_type> and input_type::dimension() == dim;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   69 |         }
+      |         ~
+   70 |         else
+      |         ~~~~
+   71 |             return false;
+      |             ~~~~~~~~~~~~~
+   72 |     } ();
+      |     ~~^~
+generic/io/../math/numeric/fraction.ipp:181:16: note: candidate: 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&)' (reversed)
+  181 | constexpr auto operator == ( const fraction_type auto& left, const fraction_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/numeric/fraction.ipp:181:16: note:   template argument deduction/substitution failed:
+generic/io/../math/numeric/fraction.ipp:181:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&) [with auto:1314 = boost::system::error_code; auto:1315 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/io/../math/interface.hpp:15:37:   required for the satisfaction of 'fraction_type<auto:1314>' [with auto:1314 = boost::system::error_code]
+generic/io/../math/interface.hpp:15:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:15:73: note: the required type 'typename type::fraction_tag' is invalid
+   15 |     template < class type > concept fraction_type = requires { typename type::fraction_tag; } and float_type<type>;
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:113:16: note: candidate: 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&)' (reversed)
+  113 | constexpr bool operator == ( const complex_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:113:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:113:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&) [with auto:1421 = boost::system::error_code; auto:1422 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1421>' [with auto:1421 = boost::system::error_code]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note: candidate: 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&)' (reversed)
+  118 | constexpr bool operator == ( const complex_type auto& left, const number_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:118:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&) [with auto:1423 = boost::system::error_code; auto:1424 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1423>' [with auto:1423 = boost::system::error_code]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note: candidate: 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&)' (reversed)
+  123 | constexpr bool operator == ( const number_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:123:16: note: constraints not satisfied
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&) [with auto:1425 = boost::system::error_code; auto:1426 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/basic/concept.hpp:72:33:   required for the satisfaction of 'number_type<auto:1425>' [with auto:1425 = boost::system::error_code]
+generic/basic/concept.hpp:72:106: note: no operand of the disjunction is satisfied
+   72 | template < class type > concept number_type = int_type<type> or float_type<type>                         or requires { typename type::number_tag; };
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/polar.ipp:103:16: note: candidate: 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&)' (reversed)
+  103 | constexpr bool operator == ( const polar_type auto& left, const polar_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/polar.ipp:103:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/polar.ipp:103:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&) [with auto:1476 = boost::system::error_code; auto:1477 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:99:   required from here
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                                                                   ^
+generic/io/../math/interface.hpp:20:37:   required for the satisfaction of 'polar_type<auto:1476>' [with auto:1476 = boost::system::error_code]
+generic/io/../math/interface.hpp:20:53:   in requirements  [with type = boost::system::error_code]
+generic/io/../math/interface.hpp:20:73: note: the required type 'typename type::polar_tag' is invalid
+   20 |     template < class type > concept polar_type    = requires { typename type::polar_tag;    };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:451:47: note: candidate: 'template<class E, class N1, class N2> constexpr bool boost::system::operator==(E, const error_code&)' (reversed)
+  451 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( E lhs, error_code const & rhs ) noexcept
+      |                                               ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:451:47: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:450:40: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  450 |     template<class E, class N1 = void, class N2 = typename detail::enable_if<std::is_error_code_enum<E>::value>::type>
+      |                                        ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:445:47: note: candidate: 'template<class E, class N1, class N2> constexpr bool boost::system::operator==(const error_code&, E)' (reversed)
+  445 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( error_code const & lhs, E rhs ) noexcept
+      |                                               ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:445:47: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:444:40: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  444 |     template<class E, class N1 = void, class N2 = typename detail::enable_if<std::is_error_code_enum<E>::value>::type>
+      |                                        ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:425:24: note: candidate: 'template<class E, class N> bool boost::system::operator==(E, const error_code&)' (reversed)
+  425 |     inline friend bool operator==( E lhs, error_code const & rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:425:24: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:424:23: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  424 |     template<class E, class N = typename detail::enable_if<std::is_error_condition_enum<E>::value>::type>
+      |                       ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:419:24: note: candidate: 'template<class E, class N> bool boost::system::operator==(const error_code&, E)' (reversed)
+  419 |     inline friend bool operator==( error_code const & lhs, E rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:419:24: note:   template argument deduction/substitution failed:
+/opt/homebrew/include/boost/system/detail/error_code.hpp:418:23: error: no type named 'type' in 'struct std::enable_if<false, void>'
+  418 |     template<class E, class N = typename detail::enable_if<std::is_error_condition_enum<E>::value>::type>
+      |                       ^~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:591:13: note: candidate: 'bool boost::system::operator==(const error_code&, const error_condition&)' (reversed)
+  591 | inline bool operator==( const error_code & code, const error_condition & condition ) noexcept
+      |             ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:591:74: note:   no known conversion for argument 2 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_condition&'
+  591 | inline bool operator==( const error_code & code, const error_condition & condition ) noexcept
+      |                                                  ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:603:13: note: candidate: 'bool boost::system::operator==(const error_condition&, const error_code&)' (reversed)
+  603 | inline bool operator==( const error_condition & condition, const error_code & code ) noexcept
+      |             ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:603:49: note:   no known conversion for argument 1 from 'boost::system::error_code' to 'const boost::system::error_condition&'
+  603 | inline bool operator==( const error_condition & condition, const error_code & code ) noexcept
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:401:24: note: candidate: 'bool boost::system::operator==(const error_code&, const std::error_code&)' (reversed)
+  401 |     inline friend bool operator==( error_code const & lhs, std::error_code const & rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:401:84: note:   no known conversion for argument 2 from 'std::__exception_ptr::exception_ptr' to 'const std::error_code&'
+  401 |     inline friend bool operator==( error_code const & lhs, std::error_code const & rhs ) noexcept
+      |                                                            ~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:396:24: note: candidate: 'bool boost::system::operator==(const std::error_code&, const error_code&)' (reversed)
+  396 |     inline friend bool operator==( std::error_code const & lhs, error_code const & rhs ) noexcept
+      |                        ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:396:84: note:   no known conversion for argument 2 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_code&'
+  396 |     inline friend bool operator==( std::error_code const & lhs, error_code const & rhs ) noexcept
+      |                                                                 ~~~~~~~~~~~~~~~~~~~^~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:70: note: candidate: 'operator==(int, int)' (built-in)
+  121 |     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+      |                                                         ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:121:70: note:   no known conversion for argument 2 from 'boost::system::error_code' to 'int'
+generic/io/file/path/path.cpp:127:6: note: candidate: 'bool ap::operator==(const path&, const path&)'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |      ^~~~~~~~
+generic/io/file/path/path.cpp:127:32: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const ap::path&'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |                    ~~~~~~~~~~~~^~
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:7: note: candidate: 'constexpr bool std::__exception_ptr::operator==(const exception_ptr&, const exception_ptr&)'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |       ^~~~~~~~
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:40: note:   no known conversion for argument 2 from 'boost::system::error_code' to 'const std::__exception_ptr::exception_ptr&'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |                                        ^~~~~~~~~~~~~~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:350:47: note: candidate: 'constexpr bool boost::system::operator==(const error_code&, const error_code&)'
+  350 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( const error_code & lhs, const error_code & rhs ) noexcept
+      |                                               ^~~~~~~~
+/opt/homebrew/include/boost/system/detail/error_code.hpp:350:78: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_code&'
+  350 |     BOOST_SYSTEM_CONSTEXPR inline friend bool operator==( const error_code & lhs, const error_code & rhs ) noexcept
+      |                                                           ~~~~~~~~~~~~~~~~~~~^~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:28: error: no match for 'operator==' (operand types are 'std::__exception_ptr::exception_ptr' and 'boost::asio::error::misc_errors')
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |               ~~~~~~~~~~~~ ^~ ~~~
+      |               |               |
+      |               |               boost::asio::error::misc_errors
+      |               std::__exception_ptr::exception_ptr
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: candidate: 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+   36 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:121 = boost::asio::error::misc_errors; auto:122 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/container/interface.hpp:181:13:   required for the satisfaction of 'pair_type<auto:121, void, void>' [with auto:121 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:194:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; type1 = void; type2 = void]' evaluated to 'false'
+  181 |     concept pair_type = []
+      |                         ~~
+  182 |     {
+      |     ~  
+  183 |         static_assert ( std::is_void<type1>::value == std::is_void<type2>::value, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  184 |         if constexpr ( requires { typename input_type::pair_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  185 |         {
+      |         ~
+  186 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  187 |             if constexpr ( not std::is_void<type1>::value and not std::is_void<type2>::value )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  188 |                 return std::convertible_to<typename input_type::key_type,type1> and std::convertible_to<typename input_type::value_type,type2>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  189 |             else
+      |             ~~~~
+  190 |                 return true;
+      |                 ~~~~~~~~~~~~
+  191 |         }
+      |         ~
+  192 |         else
+      |         ~~~~
+  193 |             return false;
+      |             ~~~~~~~~~~~~~
+  194 |     } ();
+      |     ~~^~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: candidate: 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1>' (reversed)
+   93 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1> [with auto:136 = boost::asio::error::misc_errors; auto:137 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/container/interface.hpp:211:13:   required for the satisfaction of 'tuple_type<auto:136>' [with auto:136 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:223:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; types = {}]' evaluated to 'false'
+  211 |     concept tuple_type = []
+      |                          ~~
+  212 |     {
+      |     ~  
+  213 |         if constexpr ( requires { typename input_type::tuple_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  214 |         {
+      |         ~
+  215 |             static_assert ( requires { typename input_type::value_type<1>; typename input_type::value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  216 |             if constexpr ( sizeof...(types) != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  217 |                 return aux::tuplewise_convertible<input_type,tuple<types...>>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  218 |             else
+      |             ~~~~
+  219 |                 return true;
+      |                 ~~~~~~~~~~~~
+  220 |         }
+      |         ~
+  221 |         else
+      |         ~~~~
+  222 |             return false;
+      |             ~~~~~~~~~~~~~
+  223 |     } ();
+      |     ~~^~
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: candidate: 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>' (reversed)
+   87 | constexpr bool operator == ( const set_type auto& left, const set_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:87:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type> [with auto:689 = boost::asio::error::misc_errors; auto:690 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/container/interface.hpp:150:13:   required for the satisfaction of 'set_type<auto:689, void>' [with auto:689 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:162:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; value_type = void]' evaluated to 'false'
+  150 |     concept set_type = []
+      |                        ~~
+  151 |     {
+      |     ~  
+  152 |         if constexpr ( requires { typename input_type::set_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  153 |         {
+      |         ~
+  154 |             static_assert ( requires { typename input_type::value_type; }, "class provides set_tag but not provides value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  155 |             if constexpr ( is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  156 |                 return true;
+      |                 ~~~~~~~~~~~~
+  157 |             else
+      |             ~~~~
+  158 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  159 |         }
+      |         ~
+  160 |         else
+      |         ~~~~
+  161 |             return false;
+      |             ~~~~~~~~~~~~~
+  162 |     } ();
+      |     ~~^~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: candidate: 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+  240 | constexpr bool operator == ( const map_type auto& left, const map_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:718 = boost::asio::error::misc_errors; auto:719 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/container/interface.hpp:165:13:   required for the satisfaction of 'map_type<auto:718, void, void>' [with auto:718 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:178:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; key_type = void; value_type = void]' evaluated to 'false'
+  165 |     concept map_type = []
+      |                        ~~
+  166 |     {
+      |     ~  
+  167 |         static_assert ( is_void<key_type> == is_void<value_type>, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  168 |         if constexpr ( requires { typename input_type::map_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  169 |         {
+      |         ~
+  170 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides map_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  171 |             if constexpr ( is_void<key_type> and is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  172 |                 return true;
+      |                 ~~~~~~~~~~~~
+  173 |             else
+      |             ~~~~
+  174 |                 return std::convertible_to<typename input_type::key_type,key_type> and std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  175 |         }
+      |         ~
+  176 |         else
+      |         ~~~~
+  177 |             return false;
+      |             ~~~~~~~~~~~~~
+  178 |     } ();
+      |     ~~^~
+generic/container/string/string_base/string_global.ipp:26:16: note: candidate: 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>)' (reversed)
+   26 | constexpr bool operator == ( const general_string_type auto& left, const general_string_type auto& right )
+      |                ^~~~~~~~
+generic/container/string/string_base/string_global.ipp:26:16: note:   template argument deduction/substitution failed:
+generic/container/string/string_base/string_global.ipp:26:16: note: constraints not satisfied
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>) [with auto:883 = boost::asio::error::misc_errors; auto:884 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/container/interface.hpp:241:13:   required for the satisfaction of 'general_string_type<auto:883, void>' [with auto:883 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:243:73: note: no operand of the disjunction is satisfied
+  241 |     concept general_string_type = char_type<input_type> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~               
+  242 |                                   char_type<remove_extent<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  243 |                                   char_type<remove_pointer<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+  244 |                                   string_type<input_type>;
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~                
+generic/io/../math/linear/nd/operator.ipp:3:16: note: candidate: 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+    3 | constexpr bool operator == ( const array_type auto& left, const array_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/linear/nd/operator.ipp:3:16: note:   template argument deduction/substitution failed:
+generic/io/../math/linear/nd/operator.ipp:3:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:1211 = boost::asio::error::misc_errors; auto:1212 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/container/interface.hpp:56:13:   required for the satisfaction of 'array_type<auto:1211, void, 0>' [with auto:1211 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:72:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; value_type = void; dim = 0]' evaluated to 'false'
+   56 |     concept array_type = []
+      |                          ~~
+   57 |     {
+      |     ~  
+   58 |         if constexpr ( requires { typename input_type::array_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   59 |         {
+      |         ~
+   60 |             static_assert ( requires { typename input_type::value_type; input_type::dimension(); }, "class provides array_tag but not provides value_type or dimension()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   61 |             if constexpr ( is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   62 |                 return true;
+      |                 ~~~~~~~~~~~~
+   63 |             else if constexpr ( is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   64 |                 static_assert ( false, "cannot only check dimension but not check value_type");
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   65 |             else if constexpr ( not is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   66 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   67 |             else if constexpr ( not is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |                 return std::convertible_to<typename input_type::value_type,value_type> and input_type::dimension() == dim;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   69 |         }
+      |         ~
+   70 |         else
+      |         ~~~~
+   71 |             return false;
+      |             ~~~~~~~~~~~~~
+   72 |     } ();
+      |     ~~^~
+generic/io/../math/numeric/fraction.ipp:181:16: note: candidate: 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&)' (reversed)
+  181 | constexpr auto operator == ( const fraction_type auto& left, const fraction_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/numeric/fraction.ipp:181:16: note:   template argument deduction/substitution failed:
+generic/io/../math/numeric/fraction.ipp:181:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&) [with auto:1314 = boost::asio::error::misc_errors; auto:1315 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/io/../math/interface.hpp:15:37:   required for the satisfaction of 'fraction_type<auto:1314>' [with auto:1314 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:15:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:15:73: note: the required type 'typename type::fraction_tag' is invalid
+   15 |     template < class type > concept fraction_type = requires { typename type::fraction_tag; } and float_type<type>;
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:113:16: note: candidate: 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&)' (reversed)
+  113 | constexpr bool operator == ( const complex_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:113:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:113:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&) [with auto:1421 = boost::asio::error::misc_errors; auto:1422 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1421>' [with auto:1421 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note: candidate: 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&)' (reversed)
+  118 | constexpr bool operator == ( const complex_type auto& left, const number_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:118:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&) [with auto:1423 = boost::asio::error::misc_errors; auto:1424 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1423>' [with auto:1423 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note: candidate: 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&)' (reversed)
+  123 | constexpr bool operator == ( const number_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:123:16: note: constraints not satisfied
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&) [with auto:1425 = boost::asio::error::misc_errors; auto:1426 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/basic/concept.hpp:72:33:   required for the satisfaction of 'number_type<auto:1425>' [with auto:1425 = boost::asio::error::misc_errors]
+generic/basic/concept.hpp:72:106: note: no operand of the disjunction is satisfied
+   72 | template < class type > concept number_type = int_type<type> or float_type<type>                         or requires { typename type::number_tag; };
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/polar.ipp:103:16: note: candidate: 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&)' (reversed)
+  103 | constexpr bool operator == ( const polar_type auto& left, const polar_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/polar.ipp:103:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/polar.ipp:103:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&) [with auto:1476 = boost::asio::error::misc_errors; auto:1477 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:31:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                               ^~~
+generic/io/../math/interface.hpp:20:37:   required for the satisfaction of 'polar_type<auto:1476>' [with auto:1476 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:20:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:20:73: note: the required type 'typename type::polar_tag' is invalid
+   20 |     template < class type > concept polar_type    = requires { typename type::polar_tag;    };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:28: note: candidate: 'operator==(int, int)' (built-in)
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |               ~~~~~~~~~~~~~^~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:28: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'int'
+generic/io/file/path/path.cpp:127:6: note: candidate: 'bool ap::operator==(const path&, const path&)'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |      ^~~~~~~~
+generic/io/file/path/path.cpp:127:32: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const ap::path&'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |                    ~~~~~~~~~~~~^~
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:7: note: candidate: 'constexpr bool std::__exception_ptr::operator==(const exception_ptr&, const exception_ptr&)'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |       ^~~~~~~~
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:40: note:   no known conversion for argument 2 from 'boost::asio::error::misc_errors' to 'const std::__exception_ptr::exception_ptr&'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |                                        ^~~~~~~~~~~~~~~~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:52: error: no match for 'operator==' (operand types are 'std::__exception_ptr::exception_ptr' and 'boost::asio::error::misc_errors')
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                       ~~~~~~~~~~~~ ^~ ~~~
+      |                                       |               |
+      |                                       |               boost::asio::error::misc_errors
+      |                                       std::__exception_ptr::exception_ptr
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: candidate: 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+   36 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:36:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:121, class auto:122>  requires (pair_type<auto:121, void, void>) && (pair_type<auto:122, void, void>) constexpr bool ap::operator==(const auto:121&, const auto:122&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:121 = boost::asio::error::misc_errors; auto:122 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/container/interface.hpp:181:13:   required for the satisfaction of 'pair_type<auto:121, void, void>' [with auto:121 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:194:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; type1 = void; type2 = void]' evaluated to 'false'
+  181 |     concept pair_type = []
+      |                         ~~
+  182 |     {
+      |     ~  
+  183 |         static_assert ( std::is_void<type1>::value == std::is_void<type2>::value, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  184 |         if constexpr ( requires { typename input_type::pair_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  185 |         {
+      |         ~
+  186 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  187 |             if constexpr ( not std::is_void<type1>::value and not std::is_void<type2>::value )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  188 |                 return std::convertible_to<typename input_type::key_type,type1> and std::convertible_to<typename input_type::value_type,type2>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  189 |             else
+      |             ~~~~
+  190 |                 return true;
+      |                 ~~~~~~~~~~~~
+  191 |         }
+      |         ~
+  192 |         else
+      |         ~~~~
+  193 |             return false;
+      |             ~~~~~~~~~~~~~
+  194 |     } ();
+      |     ~~^~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: candidate: 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1>' (reversed)
+   93 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
+      |                ^~~~~~~~
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note:   template argument deduction/substitution failed:
+generic/container/discrete/discrete_base/discrete_global.ipp:93:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:136, class auto:137>  requires (tuple_type<auto:136>) && (tuple_type<auto:137>) constexpr bool ap::operator==(const auto:136&, const auto:137&) requires  tuplewise_equalable<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1> [with auto:136 = boost::asio::error::misc_errors; auto:137 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/container/interface.hpp:211:13:   required for the satisfaction of 'tuple_type<auto:136>' [with auto:136 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:223:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; types = {}]' evaluated to 'false'
+  211 |     concept tuple_type = []
+      |                          ~~
+  212 |     {
+      |     ~  
+  213 |         if constexpr ( requires { typename input_type::tuple_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  214 |         {
+      |         ~
+  215 |             static_assert ( requires { typename input_type::value_type<1>; typename input_type::value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  216 |             if constexpr ( sizeof...(types) != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  217 |                 return aux::tuplewise_convertible<input_type,tuple<types...>>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  218 |             else
+      |             ~~~~
+  219 |                 return true;
+      |                 ~~~~~~~~~~~~
+  220 |         }
+      |         ~
+  221 |         else
+      |         ~~~~
+  222 |             return false;
+      |             ~~~~~~~~~~~~~
+  223 |     } ();
+      |     ~~^~
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: candidate: 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>' (reversed)
+   87 | constexpr bool operator == ( const set_type auto& left, const set_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:87:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:87:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:689, class auto:690>  requires (set_type<auto:689, void>) && (set_type<auto:690, void>) constexpr bool ap::operator==(const auto:689&, const auto:690&) requires  equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type> [with auto:689 = boost::asio::error::misc_errors; auto:690 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/container/interface.hpp:150:13:   required for the satisfaction of 'set_type<auto:689, void>' [with auto:689 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:162:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; value_type = void]' evaluated to 'false'
+  150 |     concept set_type = []
+      |                        ~~
+  151 |     {
+      |     ~  
+  152 |         if constexpr ( requires { typename input_type::set_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  153 |         {
+      |         ~
+  154 |             static_assert ( requires { typename input_type::value_type; }, "class provides set_tag but not provides value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  155 |             if constexpr ( is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  156 |                 return true;
+      |                 ~~~~~~~~~~~~
+  157 |             else
+      |             ~~~~
+  158 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  159 |         }
+      |         ~
+  160 |         else
+      |         ~~~~
+  161 |             return false;
+      |             ~~~~~~~~~~~~~
+  162 |     } ();
+      |     ~~^~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: candidate: 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+  240 | constexpr bool operator == ( const map_type auto& left, const map_type auto& right )
+      |                ^~~~~~~~
+generic/container/collection/collection_base/collection_global.ipp:240:16: note:   template argument deduction/substitution failed:
+generic/container/collection/collection_base/collection_global.ipp:240:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:718, class auto:719>  requires (map_type<auto:718, void, void>) && (map_type<auto:719, void, void>) constexpr bool ap::operator==(const auto:718&, const auto:719&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:718 = boost::asio::error::misc_errors; auto:719 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/container/interface.hpp:165:13:   required for the satisfaction of 'map_type<auto:718, void, void>' [with auto:718 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:178:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; key_type = void; value_type = void]' evaluated to 'false'
+  165 |     concept map_type = []
+      |                        ~~
+  166 |     {
+      |     ~  
+  167 |         static_assert ( is_void<key_type> == is_void<value_type>, "must enable or disable both key/value type check at the same time" );
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  168 |         if constexpr ( requires { typename input_type::map_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  169 |         {
+      |         ~
+  170 |             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides map_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  171 |             if constexpr ( is_void<key_type> and is_void<value_type> )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  172 |                 return true;
+      |                 ~~~~~~~~~~~~
+  173 |             else
+      |             ~~~~
+  174 |                 return std::convertible_to<typename input_type::key_type,key_type> and std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  175 |         }
+      |         ~
+  176 |         else
+      |         ~~~~
+  177 |             return false;
+      |             ~~~~~~~~~~~~~
+  178 |     } ();
+      |     ~~^~
+generic/container/string/string_base/string_global.ipp:26:16: note: candidate: 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>)' (reversed)
+   26 | constexpr bool operator == ( const general_string_type auto& left, const general_string_type auto& right )
+      |                ^~~~~~~~
+generic/container/string/string_base/string_global.ipp:26:16: note:   template argument deduction/substitution failed:
+generic/container/string/string_base/string_global.ipp:26:16: note: constraints not satisfied
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:883, class auto:884>  requires (general_string_type<auto:883, void>) && (general_string_type<auto:884, void>) constexpr bool ap::operator==(const auto:883&, const auto:884&) requires ((string_type<typename std::decay<decltype(ap::operator==::left)>::type, void>) || (string_type<typename std::decay<decltype(ap::operator==::right)>::type, void>)) && (same_as<typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type, typename'decltype_type' not supported by pp_cxx_unqualified_id::value_type>) [with auto:883 = boost::asio::error::misc_errors; auto:884 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/container/interface.hpp:241:13:   required for the satisfaction of 'general_string_type<auto:883, void>' [with auto:883 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:243:73: note: no operand of the disjunction is satisfied
+  241 |     concept general_string_type = char_type<input_type> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~               
+  242 |                                   char_type<remove_extent<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  243 |                                   char_type<remove_pointer<input_type>> or
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+  244 |                                   string_type<input_type>;
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~                
+generic/io/../math/linear/nd/operator.ipp:3:16: note: candidate: 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+    3 | constexpr bool operator == ( const array_type auto& left, const array_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/linear/nd/operator.ipp:3:16: note:   template argument deduction/substitution failed:
+generic/io/../math/linear/nd/operator.ipp:3:16: note: constraints not satisfied
+generic/container/interface.hpp: In substitution of 'template<class auto:1211, class auto:1212>  requires (array_type<auto:1211, void, 0>) && (array_type<auto:1212, void, 0>) constexpr bool ap::operator==(const auto:1211&, const auto:1212&) requires  ap::operator==::left->dimension() == ap::operator==::right->dimension() && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:1211 = boost::asio::error::misc_errors; auto:1212 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/container/interface.hpp:56:13:   required for the satisfaction of 'array_type<auto:1211, void, 0>' [with auto:1211 = boost::asio::error::misc_errors]
+generic/container/interface.hpp:72:7: note: the expression '(<lambda>)() [with input_type = boost::asio::error::misc_errors; value_type = void; dim = 0]' evaluated to 'false'
+   56 |     concept array_type = []
+      |                          ~~
+   57 |     {
+      |     ~  
+   58 |         if constexpr ( requires { typename input_type::array_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   59 |         {
+      |         ~
+   60 |             static_assert ( requires { typename input_type::value_type; input_type::dimension(); }, "class provides array_tag but not provides value_type or dimension()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   61 |             if constexpr ( is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   62 |                 return true;
+      |                 ~~~~~~~~~~~~
+   63 |             else if constexpr ( is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   64 |                 static_assert ( false, "cannot only check dimension but not check value_type");
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   65 |             else if constexpr ( not is_void<value_type> and dim == 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   66 |                 return std::convertible_to<typename input_type::value_type,value_type>;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   67 |             else if constexpr ( not is_void<value_type> and dim != 0 )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   68 |                 return std::convertible_to<typename input_type::value_type,value_type> and input_type::dimension() == dim;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   69 |         }
+      |         ~
+   70 |         else
+      |         ~~~~
+   71 |             return false;
+      |             ~~~~~~~~~~~~~
+   72 |     } ();
+      |     ~~^~
+generic/io/../math/numeric/fraction.ipp:181:16: note: candidate: 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&)' (reversed)
+  181 | constexpr auto operator == ( const fraction_type auto& left, const fraction_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/numeric/fraction.ipp:181:16: note:   template argument deduction/substitution failed:
+generic/io/../math/numeric/fraction.ipp:181:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1314, class auto:1315>  requires (fraction_type<auto:1314>) && (fraction_type<auto:1315>) constexpr auto ap::operator==(const auto:1314&, const auto:1315&) [with auto:1314 = boost::asio::error::misc_errors; auto:1315 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/io/../math/interface.hpp:15:37:   required for the satisfaction of 'fraction_type<auto:1314>' [with auto:1314 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:15:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:15:73: note: the required type 'typename type::fraction_tag' is invalid
+   15 |     template < class type > concept fraction_type = requires { typename type::fraction_tag; } and float_type<type>;
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:113:16: note: candidate: 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&)' (reversed)
+  113 | constexpr bool operator == ( const complex_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:113:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:113:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1421, class auto:1422>  requires (complex_type<auto:1421>) && (complex_type<auto:1422>) constexpr bool ap::operator==(const auto:1421&, const auto:1422&) [with auto:1421 = boost::asio::error::misc_errors; auto:1422 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1421>' [with auto:1421 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note: candidate: 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&)' (reversed)
+  118 | constexpr bool operator == ( const complex_type auto& left, const number_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:118:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:118:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1423, class auto:1424>  requires (complex_type<auto:1423>) && (number_type<auto:1424>) constexpr bool ap::operator==(const auto:1423&, const auto:1424&) [with auto:1423 = boost::asio::error::misc_errors; auto:1424 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/io/../math/interface.hpp:19:37:   required for the satisfaction of 'complex_type<auto:1423>' [with auto:1423 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:19:73: note: the required type 'typename type::complex_tag' is invalid
+   19 |     template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note: candidate: 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&)' (reversed)
+  123 | constexpr bool operator == ( const number_type auto& left, const complex_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/complex.ipp:123:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/complex.ipp:123:16: note: constraints not satisfied
+generic/io/pipe/pipe_base/pipe_buf.cpp: In substitution of 'template<class auto:1425, class auto:1426>  requires (number_type<auto:1425>) && (complex_type<auto:1426>) constexpr bool ap::operator==(const auto:1425&, const auto:1426&) [with auto:1425 = boost::asio::error::misc_errors; auto:1426 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/basic/concept.hpp:72:33:   required for the satisfaction of 'number_type<auto:1425>' [with auto:1425 = boost::asio::error::misc_errors]
+generic/basic/concept.hpp:72:106: note: no operand of the disjunction is satisfied
+   72 | template < class type > concept number_type = int_type<type> or float_type<type>                         or requires { typename type::number_tag; };
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/io/../math/geometric/polar.ipp:103:16: note: candidate: 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&)' (reversed)
+  103 | constexpr bool operator == ( const polar_type auto& left, const polar_type auto& right )
+      |                ^~~~~~~~
+generic/io/../math/geometric/polar.ipp:103:16: note:   template argument deduction/substitution failed:
+generic/io/../math/geometric/polar.ipp:103:16: note: constraints not satisfied
+generic/io/../math/interface.hpp: In substitution of 'template<class auto:1476, class auto:1477>  requires (polar_type<auto:1476>) && (polar_type<auto:1477>) constexpr bool ap::operator==(const auto:1476&, const auto:1477&) [with auto:1476 = boost::asio::error::misc_errors; auto:1477 = std::__exception_ptr::exception_ptr]':
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:55:   required from here
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                                       ^~~
+generic/io/../math/interface.hpp:20:37:   required for the satisfaction of 'polar_type<auto:1476>' [with auto:1476 = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:20:53:   in requirements  [with type = boost::asio::error::misc_errors]
+generic/io/../math/interface.hpp:20:73: note: the required type 'typename type::polar_tag' is invalid
+   20 |     template < class type > concept polar_type    = requires { typename type::polar_tag;    };
+      |                                                                ~~~~~~~~~^~~~~~~~~~~~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:52: note: candidate: 'operator==(int, int)' (built-in)
+  123 |     else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
+      |                                       ~~~~~~~~~~~~~^~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:123:52: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'int'
+generic/io/file/path/path.cpp:127:6: note: candidate: 'bool ap::operator==(const path&, const path&)'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |      ^~~~~~~~
+generic/io/file/path/path.cpp:127:32: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const ap::path&'
+  127 | bool operator == ( const path& p1, const path& p2 )
+      |                    ~~~~~~~~~~~~^~
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:7: note: candidate: 'constexpr bool std::__exception_ptr::operator==(const exception_ptr&, const exception_ptr&)'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |       ^~~~~~~~
+/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/bits/exception_ptr.h:169:40: note:   no known conversion for argument 2 from 'boost::asio::error::misc_errors' to 'const std::__exception_ptr::exception_ptr&'
+  169 |       operator==(const exception_ptr&, const exception_ptr&) noexcept = default;
+      |                                        ^~~~~~~~~~~~~~~~~~~~
+generic/io/pipe/pipe_base/pipe_buf.cpp:129:110: error: no matching function for call to 'boost::system::system_error::system_error(std::__exception_ptr::exception_ptr&)'
+  129 |                          typeid(boost::system::system_error), string(boost::system::system_error(stderr_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+      |                                                                                                              ^
+In file included from /opt/homebrew/include/boost/asio/detail/impl/throw_error.ipp:20,
+                 from /opt/homebrew/include/boost/asio/detail/throw_error.hpp:61:
+/opt/homebrew/include/boost/system/system_error.hpp:43:5: note: candidate: 'boost::system::system_error::system_error(int, const boost::system::error_category&, const char*)'
+   43 |     system_error( int ev, error_category const & ecat, char const * prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:43:5: note:   candidate expects 3 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:40:5: note: candidate: 'boost::system::system_error::system_error(int, const boost::system::error_category&, const std::string&)'
+   40 |     system_error( int ev, error_category const & ecat, std::string const & prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:40:5: note:   candidate expects 3 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:37:5: note: candidate: 'boost::system::system_error::system_error(int, const boost::system::error_category&)'
+   37 |     system_error( int ev, error_category const & ecat ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:37:5: note:   candidate expects 2 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:34:5: note: candidate: 'boost::system::system_error::system_error(const boost::system::error_code&, const char*)'
+   34 |     system_error( error_code const & ec, char const * prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:34:5: note:   candidate expects 2 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:31:5: note: candidate: 'boost::system::system_error::system_error(const boost::system::error_code&, const std::string&)'
+   31 |     system_error( error_code const & ec, std::string const & prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:31:5: note:   candidate expects 2 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:28:14: note: candidate: 'boost::system::system_error::system_error(const boost::system::error_code&)'
+   28 |     explicit system_error( error_code const & ec ):
+      |              ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:28:47: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_code&'
+   28 |     explicit system_error( error_code const & ec ):
+      |                            ~~~~~~~~~~~~~~~~~~~^~
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note: candidate: 'boost::system::system_error::system_error(const boost::system::system_error&)'
+   20 | class BOOST_SYMBOL_VISIBLE system_error: public std::runtime_error
+      |                            ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::system_error&'
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note: candidate: 'boost::system::system_error::system_error(boost::system::system_error&&)'
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'boost::system::system_error&&'
+generic/io/pipe/pipe_base/pipe_buf.cpp:126:25: error: expected primary-expression before '(' token
+  126 |         throw pipe_error("failed to read from pipe (with process-id = {}): [[try 1 with exception {}: {}]], [[try 2 with exception {}: {}]]",
+      |                         ^
+generic/io/pipe/pipe_base/pipe_buf.cpp:128:26: error: expected primary-expression before ',' token
+  128 |                          ,
+      |                          ^
+generic/io/pipe/pipe_base/pipe_buf.cpp:129:110: error: no matching function for call to 'boost::system::system_error::system_error(std::__exception_ptr::exception_ptr&)'
+  129 |                          typeid(boost::system::system_error), string(boost::system::system_error(stderr_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+      |                                                                                                              ^
+/opt/homebrew/include/boost/system/system_error.hpp:43:5: note: candidate: 'boost::system::system_error::system_error(int, const boost::system::error_category&, const char*)'
+   43 |     system_error( int ev, error_category const & ecat, char const * prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:43:5: note:   candidate expects 3 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:40:5: note: candidate: 'boost::system::system_error::system_error(int, const boost::system::error_category&, const std::string&)'
+   40 |     system_error( int ev, error_category const & ecat, std::string const & prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:40:5: note:   candidate expects 3 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:37:5: note: candidate: 'boost::system::system_error::system_error(int, const boost::system::error_category&)'
+   37 |     system_error( int ev, error_category const & ecat ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:37:5: note:   candidate expects 2 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:34:5: note: candidate: 'boost::system::system_error::system_error(const boost::system::error_code&, const char*)'
+   34 |     system_error( error_code const & ec, char const * prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:34:5: note:   candidate expects 2 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:31:5: note: candidate: 'boost::system::system_error::system_error(const boost::system::error_code&, const std::string&)'
+   31 |     system_error( error_code const & ec, std::string const & prefix ):
+      |     ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:31:5: note:   candidate expects 2 arguments, 1 provided
+/opt/homebrew/include/boost/system/system_error.hpp:28:14: note: candidate: 'boost::system::system_error::system_error(const boost::system::error_code&)'
+   28 |     explicit system_error( error_code const & ec ):
+      |              ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:28:47: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::error_code&'
+   28 |     explicit system_error( error_code const & ec ):
+      |                            ~~~~~~~~~~~~~~~~~~~^~
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note: candidate: 'boost::system::system_error::system_error(const boost::system::system_error&)'
+   20 | class BOOST_SYMBOL_VISIBLE system_error: public std::runtime_error
+      |                            ^~~~~~~~~~~~
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'const boost::system::system_error&'
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note: candidate: 'boost::system::system_error::system_error(boost::system::system_error&&)'
+/opt/homebrew/include/boost/system/system_error.hpp:20:28: note:   no known conversion for argument 1 from 'std::__exception_ptr::exception_ptr' to 'boost::system::system_error&&'
+generic/io/pipe/pipe_base/pipe_buf.cpp:130:1: warning: control reaches end of non-void function [-Wreturn-type]
+  130 | }
+      | ^

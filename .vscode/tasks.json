@@ -6,24 +6,18 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -fno-inline -flarge-source-files -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
-                        ]
+                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
                     }
                 }
             },
             "osx": {
-                "command": "g++-14 -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "g++-14 -std=c++26 -g -Wall -fno-inline -flarge-source-files -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "/opt/homebrew/include/c++/14",
-                            "/opt/homebrew/include"
-                        ]
+                        "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
                     }
                 }
             }
@@ -86,24 +80,18 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
-                        ]
+                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
                     }
                 }
             },
             "osx": {
-                "command": "g++-14 -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "g++-14 -std=c++26 -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "/opt/homebrew/include/c++/14",
-                            "/opt/homebrew/include"
-                        ]
+                        "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
                     }
                 }
             }            
@@ -169,24 +157,18 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
-                        ]
+                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
                     }
                 }
             },
             "osx": {
-                "command": "g++-14 -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "g++-14 -std=c++26 -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "/opt/homebrew/include/c++/14",
-                            "/opt/homebrew/include"
-                        ]
+                        "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
                     }
                 }
             }

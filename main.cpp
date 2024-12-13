@@ -11,5 +11,5 @@ using namespace ap;
 
 int main ( )
 {
-    pipe_command("dir").each(print);
+    pipe_command("ls").each(print);
 }

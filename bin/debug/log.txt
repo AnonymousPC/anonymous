@@ -1,7 +1,0 @@
-In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil.hpp:51,
-                 from generic/basic/interface.hpp:99,
-                 from main.cpp:1:
-D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil/image_processing/adaptive_histogram_equalization.hpp: In function 'void boost::gil::detail::clip_and_redistribute(const SrcHist&, DstHist&, double)':
-D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil/image_processing/adaptive_histogram_equalization.hpp:103: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-  103 |     if (rem == 0)
-D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/gil/image_processing/adaptive_histogram_equalization.hpp:103: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory

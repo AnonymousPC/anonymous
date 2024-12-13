@@ -9,7 +9,10 @@
                 "command": "g++ -std=c++26 -g -Wall -fno-inline -flarge-source-files -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+                        "CPLUS_INCLUDE_PATH": [
+                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
+                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+                        ]
                     }
                 }
             },

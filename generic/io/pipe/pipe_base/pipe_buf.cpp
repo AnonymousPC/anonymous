@@ -81,7 +81,10 @@ int pipe_buf::underflow ( )
                                              stdout_buff.begin() + bytes);
                                     }
                                     else
+                                    {
                                         stdout_error = error;
+                                    }
+
                                 });
     let stderr_error = boost::system::error_code();
     stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
@@ -99,30 +102,41 @@ int pipe_buf::underflow ( )
                                 });
 
     // Run task.
-    let stdout_task = std::execution::just()
-                    | std::execution::then([&] { context_handle->run(); })
+    let stdout_task = std::execution::schedule(cpu_context.get_scheduler())
+                    | std::execution::then([&] { context_handle->run(); });
     let stderr_task = std::execution::schedule(cpu_context.get_scheduler()) 
                     | std::execution::then([&] { context_handle->run(); });
     std::execution::sync_wait(std::execution::when_all(stdout_task, stderr_task));
     context_handle->restart();
 
-    // // Define eof error-code.
-    // #ifdef _WIN32
-    //     let eof = boost::asio::error::broken_pipe;
-    // #elifdef __linux__
-    //     let eof = boost::asio::error::eof;
-    // #elifdef __APPLE__
-    //     let eof = boost::asio::error::eof;
-    // #endif
-
-    // // Return
-    // if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
-    //     return traits_type::to_int_type(*gptr());
-    // else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
-    //     return traits_type::eof();
-    // else
-    //     throw pipe_error("failed to read from pipe (with process-id = {}): [[try 1 with exception {}: {}]], [[try 2 with exception {}: {}]]",
-    //                      process_handle->id(), 1, 1, 1, 1);
+    // Return
+    if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
+        return traits_type::to_int_type(*gptr());
+    #ifdef _WIN32
+    else if ( stdout_error == boost::asio::error::broken_pipe and stderr_error == boost::asio::error::broken_pipe ) // Both meets eof.
+    #elifdef __linux__
+    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof ) // Both meets eof.
+    #elifdef __APPLE__
+    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof ) // Both meets eof.
+    #endif
+        return traits_type::eof();
+    else
+    {
+        aux::try_for_each(std::views::iota(1, 3),
+            [&] (int try_count)
+            {
+                try_count == 1 ? throw pipe_error("failed to read from pipe (with stream = stdout) [[caused by {}: {}]]",
+                                                  typeid(boost::system::system_error), string(boost::system::system_error(stdout_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal())) otherwise
+                                 throw pipe_error("failed to read from pipe (with stream = stderr) [[caused by {}: {}]]",
+                                                  typeid(boost::system::system_error), string(boost::system::system_error(stderr_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+            },
+            [&] (const auto& errors)
+            {
+                throw pipe_error("failed to read from pipe (with process-id = {}): {}", 
+                                 process_handle->id(), errors);
+            });
+        return traits_type::eof();
+    }
 }
 
 int pipe_buf::overflow ( int c )

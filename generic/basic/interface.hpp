@@ -113,6 +113,9 @@ std::text_encoding std::text_encoding::environment ( )
 #include <boost/spirit/home/qi.hpp>
 #include <boost/spirit/home/x3.hpp>
 #include <boost/stacktrace.hpp>
+#if not __cpp_lib_stacktrace
+    #include "libstdc++/stacktrace.hpp"
+#endif
 
 // Include [[third-party.eigen]]
 #pragma GCC diagnostic push
@@ -198,11 +201,7 @@ namespace ap
     namespace abi
     {
         std::string demangle ( const char* );
-        #if __cpp_lib_stacktrace
-            std::string demangle ( const std::stacktrace& );
-        #else
-            std::string demangle ( const boost::stacktrace::stacktrace& );
-        #endif
+        std::string demangle ( const std::stacktrace& );
     }
 
     /// Exception

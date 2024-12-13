@@ -384,10 +384,6 @@ void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
     let success = false;
     let except  = array<string>();
 
-    if constexpr ( requires { inputs.size(); } )
-        if ( inputs.size() == 0 )
-            on_error("input range is empty");
-
     for ( const auto& val in inputs )
     {
         try
@@ -398,10 +394,18 @@ void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
         }
         catch ( const std::exception& e )
         {
-            except.push("[[try {} with exception {}: {}]]"s.format(except.size()+1, typeid(e), e.what()));
+            except.push("try {} throws an exception {}: {}"s.format(except.size()+1, typeid(e), e.what()));
         }
     }
 
     if ( not success )
-        on_error(except | std::views::join_with(", "s) | std::ranges::to<string>());
+    {
+        let errors = '\n' +
+                   ( except
+                   | std::views::transform([] (const auto& error) { return "  " + error; ; })
+                   | std::views::join_with('\n')
+                   | std::ranges::to<string>()
+                   );
+        on_error(errors);
+    }
 }

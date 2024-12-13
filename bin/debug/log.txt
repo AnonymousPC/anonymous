@@ -1,0 +1,48 @@
+In file included from generic/basic/interface.hpp:117,
+                 from main.cpp:1:
+generic/basic/libstdc++/stacktrace.hpp: In static member function 'static std::stacktrace std::stacktrace::current()':
+generic/basic/libstdc++/stacktrace.hpp:21:48: error: invalid 'static_cast' from type 'boost::stacktrace::stacktrace' {aka 'boost::stacktrace::basic_stacktrace<>'} to type 'const std::stacktrace&'
+   21 |         static stacktrace current ( ) { return static_cast<const stacktrace&>(boost::stacktrace::stacktrace()); }
+      |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/basic/libstdc++/stacktrace.hpp: In member function 'std::stacktrace::const_iterator std::stacktrace::begin()':
+generic/basic/libstdc++/stacktrace.hpp:23:45: error: invalid 'static_cast' from type 'boost::stacktrace::basic_stacktrace<>::const_iterator' {aka 'std::vector<boost::stacktrace::frame, std::allocator<boost::stacktrace::frame> >::const_iterator'} to type 'const std::stacktrace::const_iterator&'
+   23 |         const_iterator begin   ( ) { return static_cast<const const_iterator&>(boost::stacktrace::stacktrace::begin());   }
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/basic/libstdc++/stacktrace.hpp: In member function 'std::stacktrace::const_iterator std::stacktrace::cbegin()':
+generic/basic/libstdc++/stacktrace.hpp:24:45: error: invalid 'static_cast' from type 'boost::stacktrace::basic_stacktrace<>::const_iterator' {aka 'std::vector<boost::stacktrace::frame, std::allocator<boost::stacktrace::frame> >::const_iterator'} to type 'const std::stacktrace::const_iterator&'
+   24 |         const_iterator cbegin  ( ) { return static_cast<const const_iterator&>(boost::stacktrace::stacktrace::cbegin());  }
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/basic/libstdc++/stacktrace.hpp: In member function 'std::stacktrace::const_iterator std::stacktrace::end()':
+generic/basic/libstdc++/stacktrace.hpp:25:45: error: invalid 'static_cast' from type 'boost::stacktrace::basic_stacktrace<>::const_iterator' {aka 'std::vector<boost::stacktrace::frame, std::allocator<boost::stacktrace::frame> >::const_iterator'} to type 'const std::stacktrace::const_iterator&'
+   25 |         const_iterator end     ( ) { return static_cast<const const_iterator&>(boost::stacktrace::stacktrace::end());     }
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+generic/basic/libstdc++/stacktrace.hpp: In member function 'std::stacktrace::const_iterator std::stacktrace::cend()':
+generic/basic/libstdc++/stacktrace.hpp:26:45: error: invalid 'static_cast' from type 'boost::stacktrace::basic_stacktrace<>::const_iterator' {aka 'std::vector<boost::stacktrace::frame, std::allocator<boost::stacktrace::frame> >::const_iterator'} to type 'const std::stacktrace::const_iterator&'
+   26 |         const_iterator cend    ( ) { return static_cast<const const_iterator&>(boost::stacktrace::stacktrace::cend());    }
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from generic/basic/interface.hpp:242:
+generic/basic/exception.hpp: At global scope:
+generic/basic/exception.hpp:61:57: error: 'std::stacktrace::stacktrace()' is private within this context
+   61 |                 std::stacktrace trace = std::stacktrace();
+      |                                                         ^
+generic/basic/libstdc++/stacktrace.hpp:20:9: note: declared private here
+   20 |         stacktrace ( ) : boost::stacktrace::stacktrace(0, 0) { };
+      |         ^~~~~~~~~~
+main.cpp:12:1: error: ISO C++ forbids declaration of 'test' with no type [-fpermissive]
+   12 | test(int i)
+      | ^~~~
+In file included from generic/basic/exception.hpp:75:
+generic/basic/exception.ipp: In instantiation of 'ap::exception::exception(format_string<typename std::type_identity<_Args>::type ...>, arg_types&& ...) [with arg_types = {}]':
+main.cpp:15:31:   required from here
+   15 |         throw exception("OHOH");
+      |                               ^
+generic/basic/exception.ipp:167:37: error: 'static std::stacktrace std::stacktrace::current()' is private within this context
+  167 |     trace = std::stacktrace::current();
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~^~
+generic/basic/libstdc++/stacktrace.hpp:21:27: note: declared private here
+   21 |         static stacktrace current ( ) { return static_cast<const stacktrace&>(boost::stacktrace::stacktrace()); }
+      |                           ^~~~~~~
+main.cpp: In function 'int test(int)':
+main.cpp:17:13: warning: control reaches end of non-void function [-Wreturn-type]
+   17 |         test(i-1);
+      |         ~~~~^~~~~

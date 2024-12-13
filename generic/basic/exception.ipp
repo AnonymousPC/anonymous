@@ -164,11 +164,7 @@ template < class... arg_types >
 exception::exception ( format_string<std::type_identity_t<arg_types>...> str, arg_types&&... args )
 {
     msg   = exception::format ( str, std::forward<decltype(args)>(args)... );
-    #if __cpp_lib_stacktrace
     trace = std::stacktrace::current();
-    #else
-    trace = boost::stacktrace::stacktrace();
-    #endif
 }
 
 

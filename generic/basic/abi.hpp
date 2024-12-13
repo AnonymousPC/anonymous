@@ -4,11 +4,7 @@
 namespace abi
 {
     std::string demangle ( const char* );
-    #if __cpp_lib_stacktrace
-        std::string demangle ( const std::stacktrace& );
-    #else
-        std::string demangle ( const boost::stacktrace::stacktrace& );
-    #endif
+    std::string demangle ( const std::stacktrace& );
 
     constexpr const char* red    = "\033[38;2;240;0;0m";
     constexpr const char* yellow = "\033[38;2;240;240;0m";

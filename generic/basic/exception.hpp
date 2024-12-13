@@ -40,14 +40,6 @@ class exception
     private: // Typedef
         template < class... arg_types > class format_string;
 
-    private: // Data
-        mutable std::string                   msg   = std::string();
-        #if __cpp_lib_stacktrace
-        mutable std::stacktrace               trace = std::stacktrace();
-        #else
-        mutable boost::stacktrace::stacktrace trace = boost::stacktrace::stacktrace();
-        #endif
-
     public: // Core
                  exception ( );
         virtual ~exception ( ) = default;
@@ -57,7 +49,16 @@ class exception
         exception ( format_string<std::type_identity_t<arg_types>...>, arg_types&&... );
 
     public: // Member
-        virtual const char* what ( ) const noexcept;
+        virtual const char*            what       ( ) const noexcept;
+        virtual       std::string&     message    ( );
+        virtual const std::string&     message    ( ) const;
+        virtual       std::stacktrace& stacktrace ( );
+        virtual const std::stacktrace& stacktrace ( ) const;
+
+    private: // Data
+        mutable std::string     wt    = std::string();
+                std::string     msg   = std::string();
+                std::stacktrace trace = std::stacktrace();
 
     private: // Auxiliary
         constexpr static std::string format ( auto&&, auto&&... );

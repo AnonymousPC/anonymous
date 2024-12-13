@@ -208,7 +208,7 @@ void http_buf::connect_without_proxy ( const url& website )
         if ( not sni_success )
             throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, remote-endpoint = {}, layer = https/ssl) [[caused by {}: {}]]",
                                 local_endpoint_noexcept(), website, remote_endpoint_noexcept(),
-                                "OpenSSL", boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category())).what());
+                                "openssl", boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category())).what());
 
         // SSL handshake.
         try
@@ -335,22 +335,30 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
             tunnel_request.set(boost::beast::http::field::proxy_connection, "keep-alive");
             tunnel_response.skip(true); // Skip the body. Most times the response to "CONNECT" request is empty-header and empty-body.
 
-            // Send "CONNECT" request and receive proxy response.
+            // Send request and receive response to/from proxy server..
+            try
+            {
+                https_handle == nullptr ? boost::beast::http::write(*http_handle,  tunnel_request ) otherwise
+                                          boost::beast::http::write(*https_handle, tunnel_request );
+            }
+            catch ( const boost::system::system_error& e )
+            {
+                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = http/tcp): cannot send request to proxy server [[caused by {}: {}]]",
+                                    ip.endpoint(), typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+            }
             try
             {
                 let buff = boost::beast::flat_buffer();
-                https_handle == nullptr ? boost::beast::http::write(*http_handle,        tunnel_request ) otherwise
-                                          boost::beast::http::write(*https_handle,       tunnel_request );
                 https_handle == nullptr ? boost::beast::http::read (*http_handle,  buff, tunnel_response) otherwise
                                           boost::beast::http::read (*https_handle, buff, tunnel_response);
             }
             catch ( const boost::system::system_error& e )
             {
-                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = http/tcp): cannot send request (with method = CONNECT) to proxy server [[caused by {}: {}]]",
+                throw network_error("establishment of proxy tunnel failed (with remote-enpdoint = {}, layer = http/tcp): cannot receive response from proxy server [[caused by {}: {}]]",
                                     ip.endpoint(), typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
             }
             if ( tunnel_response.get().result_int() >= 300 and tunnel_response.get().result_int() <= 599 )
-                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = http/tcp): proxy website sent response {} {}",
+                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = http/tcp): received \"{} {}\" from proxy server",
                                     ip.endpoint(), tunnel_response.get().result_int(), tunnel_response.get().reason());
 
             // Create SSL handle (might have been created in connect(proxy_website)).
@@ -360,8 +368,8 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
             // SSL server name indication.
             let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
             if ( not sni_success )
-                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = https/ssl): failed to set SSL server name indication [[caused by {}: {}]]",
-                                    ip.endpoint(), "OpenSSL", boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category())).what());
+                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = https/ssl): cannot set ssl server name indication to \"{}\" [[caused by {}: {}]]",
+                                    ip.endpoint(), website.host(), "openssl", boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category())).what());
 
             // SSL handshake.
             try
@@ -370,7 +378,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
             }
             catch ( const boost::system::system_error& e )
             {
-                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = https/ssl): failed to SSL handshake [[caused by {}: {}]]",
+                throw network_error("establishment of proxy tunnel failed (with remote-endpoint = {}, layer = https/ssl): ssl handshake failed [[caused by {}: {}]]",
                                     ip.endpoint(), typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
             }
         },

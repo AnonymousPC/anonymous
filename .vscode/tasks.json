@@ -86,7 +86,10 @@
                 "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+                        "CPLUS_INCLUDE_PATH": [
+                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
+                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+                        ]
                     }
                 }
             },
@@ -163,7 +166,10 @@
                 "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
-                        "CPLUS_INCLUDE_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+                        "CPLUS_INCLUDE_PATH": [
+                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
+                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+                        ]
                     }
                 }
             },

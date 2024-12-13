@@ -31,65 +31,22 @@
         {
             "label": "debug.link",
             "group": "none",
-            "type": "process",
+            "type": "shell",
             "windows": {
-                "command": "g++",
-                "args": [
-                    "-o",
-                    "bin/debug/main.exe",
-                    "-fuse-ld=lld",
-                    "bin/debug/main.o",
-                    "bin/dll/main.dll",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libkernel32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libmswsock.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libntdll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libshell32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libuser32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libws2_32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libtbb12.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_date_time-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_filesystem-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_iostreams-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_locale-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_process-mt.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_basic-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libcrypto.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libFLAC.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libjpeg.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libmpg123.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libpng.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libssl.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libtiff.dll.a",
-                ],
+                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "options": {
+                    "env": {
+                        "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
+                    }
+                }
             },
             "osx": {
-                "command": "g++-14",
-                "args": [
-                    "-o",
-                    "bin/debug/main",
-                    "-fuse-ld=lld",
-                    "bin/debug/main.o",
-                    "bin/dll/main.dylib",
-                    "/opt/homebrew/lib/gcc/current/libstdc++exp.a",
-                    "/opt/homebrew/lib/libboost_date_time.dylib",
-                    "/opt/homebrew/lib/libboost_filesystem.dylib",
-                    "/opt/homebrew/lib/libboost_iostreams.dylib",
-                    "/opt/homebrew/lib/libboost_locale.dylib",
-                    "/opt/homebrew/lib/libboost_process.dylib",
-                    "/opt/homebrew/lib/libboost_stacktrace_basic.dylib",
-                    "/opt/homebrew/lib/libboost_system.dylib",
-                    "/opt/homebrew/lib/libcrypto.dylib",
-                    "/opt/homebrew/lib/libFLAC.dylib",
-                    "/opt/homebrew/lib/libjpeg.dylib",
-                    "/opt/homebrew/lib/libmpg123.dylib",
-                    "/opt/homebrew/lib/libpng.dylib",
-                    "/opt/homebrew/lib/libssl.dylib",
-                    "/opt/homebrew/lib/libtiff.dylib",
-                    "/opt/homebrew/lib/libzstd.dylib"
-                ],
+                "command": "g++-14 -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lstdc++exp -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "options": {
+                    "env": {
+                        "LIBRARY_PATH": "/opt/homebrew/lib"
+                    }
+                }
             }
         },
         {
@@ -154,65 +111,22 @@
         {
             "label": "release.link",
             "group": "none",
-            "type": "process",
+            "type": "shell",
             "windows": {
-                "command": "g++",
-                "args": [
-                    "-o",
-                    "bin/release/main.exe",
-                    "-fuse-ld=lld",
-                    "bin/release/main.o",
-                    "bin/dll/main.dll",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libkernel32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libmswsock.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libntdll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libshell32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libuser32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libws2_32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libtbb12.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_date_time-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_filesystem-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_iostreams-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_locale-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_process-mt.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_basic-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libcrypto.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libFLAC.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libjpeg.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libmpg123.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libpng.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libssl.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libtiff.dll.a",
-                ],
+                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "options": {
+                    "env": {
+                        "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
+                    }
+                }
             },
             "osx": {
-                "command": "g++-14",
-                "args": [
-                    "-o",
-                    "bin/release/main",
-                    "-fuse-ld=lld",
-                    "bin/release/main.o",
-                    "bin/dll/main.dylib",
-                    "/opt/homebrew/lib/gcc/current/libstdc++exp.a",
-                    "/opt/homebrew/lib/libboost_date_time.dylib",
-                    "/opt/homebrew/lib/libboost_filesystem.dylib",
-                    "/opt/homebrew/lib/libboost_iostreams.dylib",
-                    "/opt/homebrew/lib/libboost_locale.dylib",
-                    "/opt/homebrew/lib/libboost_process.dylib",
-                    "/opt/homebrew/lib/libboost_stacktrace_basic.dylib",
-                    "/opt/homebrew/lib/libboost_system.dylib",
-                    "/opt/homebrew/lib/libcrypto.dylib",
-                    "/opt/homebrew/lib/libFLAC.dylib",
-                    "/opt/homebrew/lib/libjpeg.dylib",
-                    "/opt/homebrew/lib/libmpg123.dylib",
-                    "/opt/homebrew/lib/libpng.dylib",
-                    "/opt/homebrew/lib/libssl.dylib",
-                    "/opt/homebrew/lib/libtiff.dylib",
-                    "/opt/homebrew/lib/libzstd.dylib"
-                ],
+                "command": "g++-14 -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lstdc++exp -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "options": {
+                    "env": {
+                        "LIBRARY_PATH": "/opt/homebrew/lib"
+                    }
+                }
             }
         },
         {
@@ -280,65 +194,22 @@
         {
             "label": "dll.link",
             "group": "none",
-            "type": "process",
+            "type": "shell",
             "windows": {
-                "command": "g++",
-                "args": [
-                    "-shared",
-                    "-o",
-                    "bin/dll/main.dll",
-                    "-fuse-ld=lld",
-                    "bin/dll/main.o",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libstdc++exp.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libadvapi32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libbcrypt.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libkernel32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libmswsock.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libntdll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libshell32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libuser32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libws2_32.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libtbb12.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_date_time-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_filesystem-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_iostreams-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_locale-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_process-mt.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libboost_stacktrace_basic-mt.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libcrypto.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libFLAC.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libjpeg.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libmpg123.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libpng.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libssl.dll.a",
-                    "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib/libtiff.dll.a",
-                ],
+                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "options": {
+                    "env": {
+                        "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
+                    }
+                }
             },
             "osx": {
-                "command": "g++-14",
-                "args": [
-                    "-shared",
-                    "-o",
-                    "bin/dll/main.dylib",
-                    "-fuse-ld=lld",
-                    "bin/dll/main.o",
-                    "/opt/homebrew/lib/libboost_date_time.dylib",
-                    "/opt/homebrew/lib/libboost_filesystem.dylib",
-                    "/opt/homebrew/lib/libboost_iostreams.dylib",
-                    "/opt/homebrew/lib/libboost_locale.dylib",
-                    "/opt/homebrew/lib/libboost_process.dylib",
-                    "/opt/homebrew/lib/libboost_stacktrace_basic.dylib",
-                    "/opt/homebrew/lib/libboost_system.dylib",
-                    "/opt/homebrew/lib/libcrypto.dylib",
-                    "/opt/homebrew/lib/libFLAC.dylib",
-                    "/opt/homebrew/lib/libjpeg.dylib",
-                    "/opt/homebrew/lib/liblzma.dylib",
-                    "/opt/homebrew/lib/libmpg123.dylib",
-                    "/opt/homebrew/lib/libpng.dylib",
-                    "/opt/homebrew/lib/libssl.dylib",
-                    "/opt/homebrew/lib/libtiff.dylib",
-                    "/opt/homebrew/lib/libzstd.dylib"
-                ]
+                "command": "g++-14 -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lstdc++exp -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "options": {
+                    "env": {
+                        "LIBRARY_PATH": "/opt/homebrew/lib"
+                    }
+                }
             }
         },
         {

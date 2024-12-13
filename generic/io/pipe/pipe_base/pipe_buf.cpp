@@ -69,7 +69,7 @@ int pipe_buf::underflow ( )
     // Post task.
     stdout_pipe.cancel();
     stderr_pipe.cancel();
-    let stdout_error = boost::system::error_code();
+    let stdout_error = std::exception_ptr();
     stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
@@ -81,9 +81,10 @@ int pipe_buf::underflow ( )
                                              stdout_buff.begin() + bytes);
                                     }
                                     else
-                                        stdout_error = error;
+                                        throw pipe_error("failed to read from pipe (with stream = stdout) [[caused by {}: {}]]",
+                                                         typeid(boost::system::system_error), string(boost::system::system_error(error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
                                 });
-    let stderr_error = boost::system::error_code();
+    let stderr_error = std::exception_ptr();
     stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
@@ -95,28 +96,36 @@ int pipe_buf::underflow ( )
                                              stderr_buff.begin() + bytes);
                                     }
                                     else
-                                        stderr_error = error;
+                                        throw pipe_error("failed to read from pipe (with stream = stderr) [[caused by {}: {}]]",
+                                                         typeid(boost::system::system_error), string(boost::system::system_error(error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
                                 });
 
     // Run task.
     let stdout_task = std::execution::schedule(cpu_context.get_scheduler())
-                    | std::execution::then([&] { context_handle->run(); });
+                    | std::execution::then([&] { context_handle->run(); })
+                    | std::execution::upon_error([&] (const std::exception_ptr& e) { stdout_error = std::make_exception_ptr(e); });
     let stderr_task = std::execution::schedule(cpu_context.get_scheduler()) 
                     | std::execution::then([&] { context_handle->run(); });
+                    | std::execution::upon_error([&] (const std::exception_ptr& e) { stderr_error = std::make_exception_ptr(e); });
     std::execution::sync_wait(std::execution::when_all(stdout_task, stderr_task));
     context_handle->restart();
 
-    // Return.
+    // Define eof error-code.
+    #ifdef _WIN32
+        let eof = boost::asio::error::eof;
+    #elif defined(__linux__) or defined(__APPLE__)
+        let eof = boost::asio::error::eof;
+    #endif
+
+    // Return
     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
         return traits_type::to_int_type(*gptr());
-    else if ( stdout_error == boost::asio::error::broken_pipe and stderr_error == boost::asio::error::broken_pipe ) // Both operation meets eof [[Windows]].
-        return traits_type::eof();
-    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof ) // Both operation meets eof [[Linux, MacOS]].
+    else if ( stdout_error == eof and stderr_error == eof ) // Both meets eof.
         return traits_type::eof();
     else
-        throw pipe_error("failed to read from pipe.stdout or pipe.stderr (with process-id = {}): [[try pipe.stdout with exception {}: {}]], [[try pipe.stderr with exception {}: {}]]",
+        throw pipe_error("failed to read from pipe (with process-id = {}): [[try 1 with exception {}: {}]], [[try 2 with exception {}: {}]]",
                          process_handle->id(),
-                         typeid(boost::system::system_error), string(boost::system::system_error(stdout_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()),
+                         ,
                          typeid(boost::system::system_error), string(boost::system::system_error(stderr_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
 }
 

@@ -4,13 +4,15 @@ namespace std
 {
     struct stacktrace_entry : public boost::stacktrace::frame
     {
-        std::string description ( ) const { return name(); }
+        std::string description   ( ) const { return name(); }
+        auto        native_handle ( ) const { return address(); }
     };
 
     struct stacktrace : public boost::stacktrace::stacktrace
     {
         struct const_iterator : public boost::stacktrace::stacktrace::const_iterator
         {
+            const_iterator ( ) = default;
             const_iterator ( boost::stacktrace::stacktrace::const_iterator it ) : boost::stacktrace::stacktrace::const_iterator(it) { }
             const stacktrace_entry& operator *  ( ) const { return static_cast<const stacktrace_entry&>(boost::stacktrace::stacktrace::const_iterator::operator* ()); }
             const stacktrace_entry* operator -> ( ) const { return static_cast<const stacktrace_entry*>(boost::stacktrace::stacktrace::const_iterator::operator->()); } 

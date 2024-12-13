@@ -392,6 +392,11 @@ void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
             success = true;
             break;
         }
+        catch ( ap::exception& e )
+        {
+            e.stacktrace() = std::stacktrace();
+            except.push("try {} throws an exception {}: {}"s.format(except.size()+1, typeid(e), e.what()));
+        }
         catch ( const std::exception& e )
         {
             except.push("try {} throws an exception {}: {}"s.format(except.size()+1, typeid(e), e.what()));
@@ -402,7 +407,7 @@ void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
     {
         let errors = '\n' +
                    ( except
-                   | std::views::transform([] (const auto& error) { return "  " + error; ; })
+                   | std::views::transform([] (const auto& error) { return "  "s + abi::red + error + abi::white; })
                    | std::views::join_with('\n')
                    | std::ranges::to<string>()
                    );

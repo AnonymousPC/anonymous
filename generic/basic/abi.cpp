@@ -24,9 +24,10 @@ std::string abi::demangle ( const std::stacktrace& trace )
     return trace | std::views::reverse
                  | std::views::transform ([&] (const auto& e)
                      {
-                         return std::format("    {}{} {}{} {}{} {}{}:{}{}",
+                         return std::format("    {}{} {}{} {}{} {}{}:{} {}{} {}{}",
                                             yellow, "at", white,  aux::paint(e.description(), grey_scale),
                                             green,  "in", grey,   e.source_file(), e.source_line(),
+                                            blue,   "on", grey,   static_cast<const void*>(e.native_handle()),
                                             white);
                      })
                  | std::views::join_with('\n')

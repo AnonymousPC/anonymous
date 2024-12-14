@@ -14,7 +14,7 @@ class any
         constexpr  any ( )                    = default;
         constexpr  any ( const any&  );
         constexpr  any (       any&& );
-        constexpr  any ( std::copyable auto );
+        constexpr  any ( std::movable auto );
         constexpr ~any ( );
         constexpr  any& operator = ( const any&  );
         constexpr  any& operator = (       any&& );

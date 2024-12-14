@@ -187,7 +187,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff -Wl,-Bstatic -lboost_process-mt",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"

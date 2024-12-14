@@ -407,7 +407,7 @@ void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
     {
         let errors = '\n' +
                    ( except
-                   | std::views::transform([] (const auto& error) { return "  "s + abi::red + error + abi::white; })
+                   | std::views::transform([] (const auto& error) { return "    "s + abi::red + error + abi::white; })
                    | std::views::join_with('\n')
                    | std::ranges::to<string>()
                    );

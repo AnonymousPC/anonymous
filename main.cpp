@@ -7,9 +7,9 @@
 #include "specific/spirit/interface.hpp"
 #include "specific/stock/interface.hpp"
 
-// using namespace ap;
+using namespace ap;
 
 int main ( )
 {
-    http_get("https://www.google.com").each(print);
+    pipe_command("g++ --no-exist").each(print);
 }

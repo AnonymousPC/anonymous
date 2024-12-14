@@ -43,7 +43,11 @@ constexpr any::dynamic_obj<types>::dynamic_obj ( types init )
 template < class types >
 constexpr any::static_obj& any::dynamic_obj<types>::copy ( ) const
 {
-    return *new dynamic_obj ( self );
+    if constexpr ( std::copyable<types> )
+        return *new dynamic_obj ( self );
+    else
+        throw type_error("bad any access: cannot copy {} (whost type = {}, copyable = false)", 
+                         typeid(any), typeid(types));
 }
 
 
@@ -69,7 +73,7 @@ constexpr any::any ( any&& init )
 
 }
 
-constexpr any::any ( std::copyable auto init )
+constexpr any::any ( std::movable auto init )
     extends ptr  ( new dynamic_obj ( std::move ( init ) ) ),
             rtti ( &typeid ( init ) )
 {
@@ -119,8 +123,8 @@ constexpr output_type& any::value ( )
     if ( p != nullptr )
         return p->data;
     else
-        throw type_error("bad any access: cannot get {} from {} (whose type = {})",
-                         typeid(output_type), typeid(self), self.type());
+        throw type_error("bad-any-access: cannot get {} from {} (whose type = {})",
+                         typeid(output_type), typeid(any), self.type());
 }
 
 template < class output_type >
@@ -131,6 +135,6 @@ constexpr const output_type& any::value ( ) const
     if ( p != nullptr )
         return p->data;
     else
-        throw type_error("bad any access: cannot get {} from {} (whose type = {})",
-                         typeid(output_type), typeid(self), self.type());
+        throw type_error("bad-any-access: cannot get {} from {} (whose type = {})",
+                         typeid(output_type), typeid(any), self.type());
 }

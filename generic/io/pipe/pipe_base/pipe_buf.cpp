@@ -81,10 +81,7 @@ int pipe_buf::underflow ( )
                                              stdout_buff.begin() + bytes);
                                     }
                                     else
-                                    {
                                         stdout_error = error;
-                                    }
-
                                 });
     let stderr_error = boost::system::error_code();
     stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),

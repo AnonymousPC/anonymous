@@ -165,10 +165,6 @@ std::text_encoding std::text_encoding::environment ( )
 
 
 
-
-
-
-
 namespace ap
 {
     /// Subnamespace

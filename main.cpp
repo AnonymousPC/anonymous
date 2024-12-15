@@ -11,5 +11,5 @@ using namespace ap;
 
 int main ( )
 {
-    pipe_command("g++ --no-exist").each(print);
+
 }

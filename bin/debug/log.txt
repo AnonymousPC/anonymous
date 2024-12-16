@@ -1,0 +1,14 @@
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/system/cuda/config.h:48,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/system/cuda/detail/execution_policy.h:40,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/iterator/detail/device_system_tag.h:31,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/iterator/iterator_traits.h:74,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/detail/type_traits/pointer_traits.h:31,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/detail/allocator/allocator_traits.h:37,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/detail/contiguous_storage.h:29,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/detail/vector_base.h:34,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/thrust/device_vector.h:33,
+                 from main.cpp:9:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/cub/detail/detect_cuda_runtime.cuh:49:12: fatal error: cuda_runtime_api.h: No such file or directory
+   49 | #  include <cuda_runtime_api.h>
+      |            ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.

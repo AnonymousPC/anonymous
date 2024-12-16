@@ -98,6 +98,9 @@
         "set": "cpp",
         "shared_mutex": "cpp",
         "__config": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "core": "cpp",
+        "fft": "cpp",
+        "*.def": "cpp"
     }
 }

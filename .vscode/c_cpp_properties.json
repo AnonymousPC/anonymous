@@ -2,25 +2,21 @@
     "configurations": [
         {
             "name": "Windows",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
-            ],
             "compilerPath": "D:/My Passport/My Passport - Application/MSYS/ucrt64/bin/g++.exe",
             "compilerArgs": [
                 "-std=c++23"
             ],
             "cStandard": "c23",
             "cppStandard": "c++23",
+            "includePath": [
+                "${workspaceFolder}",
+                "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
+                "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+            ],
             "intelliSenseMode": "windows-gcc-x64"
         },
         {
             "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/opt/homebrew/opt/llvm/include/c++/v1",
-                "/opt/homebrew/include"
-            ],
             "compilerPath": "/opt/homebrew/bin/g++-14",
             "compilerArgs": [
                 "-std=c++23",
@@ -28,6 +24,11 @@
             ],
             "cStandard": "c23",
             "cppStandard": "c++23",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/homebrew/opt/llvm/include/c++/v1",
+                "/opt/homebrew/include"
+            ],
             "intelliSenseMode": "macos-gcc-arm64"
         }
     ],

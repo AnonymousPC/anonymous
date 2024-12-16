@@ -90,6 +90,11 @@ std::text_encoding std::text_encoding::environment ( )
     #include <tbb/tbb.h>
 #endif
 
+// Include [[hardward.gpu.nvidia.thrust]]
+#ifdef __NVCC__
+    #include <thrust/device_vector.h>
+#endif
+
 // Include [[third-party.boost]]
 #define _GNU_SOURCE
 #include <boost/asio.hpp>

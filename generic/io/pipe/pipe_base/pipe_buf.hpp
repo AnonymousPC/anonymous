@@ -78,7 +78,7 @@ struct pipe_buf::mode_base<type>
     constexpr mode_base ( pair<typename type::key_type,typename type::value_type::value_type> /*pair<string,string*/        );
     constexpr mode_base ( pair<typename type::key_type,typename type::value_type>             /*pair<string,array<string>>*/);
     constexpr mode_base ( map <typename type::key_type,typename type::value_type::value_type> /*map<string,string>*/        );
-    constexpr mode_base ( map <typename type::key_    type,typename type::value_type>             /*map<string,array<string>>*/ );
+    constexpr mode_base ( map <typename type::key_type,typename type::value_type>             /*map<string,array<string>>*/ );
 };
 
 struct pipe_buf::environment     extends public pipe_buf::mode_base<map<string,array<string>>> { using mode_base::mode_base; struct pipe_mode_tag{}; };

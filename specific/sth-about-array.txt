@@ -1,3 +1,12 @@
+0. 一票否定：
+    for (auto line in matrix)  
+        line[1] = ...;
+        print(line);
+    line不应该是引用。
+
+========================================================
+
+
 1. 关于取出一个view但是是引用的情况：
     首先，考察 const array_view& array::operator[](int, int, int) const;
     现在这个array是const的，所以const不可能新开辟空间去生成一个引用，否则你需要一个开销极大且mutable的同步队列。

@@ -101,6 +101,8 @@
         "source_location": "cpp",
         "core": "cpp",
         "fft": "cpp",
-        "*.def": "cpp"
+        "*.def": "cpp",
+        "mdspan": "cpp",
+        "__assert": "cpp"
     }
 }

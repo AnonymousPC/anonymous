@@ -6,7 +6,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -fno-inline -flarge-source-files -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -17,7 +17,7 @@
                 }
             },
             "osx": {
-                "command": "g++-14 -std=c++26 -g -Wall -fno-inline -flarge-source-files -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "clang++ -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
@@ -38,7 +38,7 @@
                 }
             },
             "osx": {
-                "command": "g++-14 -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lstdc++exp -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -83,7 +83,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -94,7 +94,7 @@
                 }
             },
             "osx": {
-                "command": "g++-14 -std=c++26 -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "clang++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
@@ -115,7 +115,7 @@
                 }
             },
             "osx": {
-                "command": "g++-14 -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lstdc++exp -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -163,7 +163,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -174,7 +174,7 @@
                 }
             },
             "osx": {
-                "command": "g++-14 -std=c++26 -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "clang++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
@@ -195,7 +195,7 @@
                 }
             },
             "osx": {
-                "command": "g++-14 -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lstdc++exp -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"

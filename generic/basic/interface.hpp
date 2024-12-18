@@ -16,37 +16,67 @@
 #endif
 
 // Include [[std]]
-#define __cpp_lib_text_encoding 202412L
-#include <algorithm>
-#include <cassert>
-#include <charconv>
-#include <chrono>
-#include <concepts>
-#include <csignal>
-#include <filesystem>
-#include <format>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <map>
-#include <new>
-#include <numbers>
-#include <print>
-#include <ranges>
-#include <regex>
-#include <stacktrace>
-#include <stdfloat>
-#include <string>
-#include <text_encoding>
-#include <thread>
-#include <utility>
+#if not defined(__GNUC__) and defined(__clang__)
+    #define __cpp_lib_text_encoding 202412L
+    #include <algorithm>
+    #include <cassert>
+    #include <charconv>
+    #include <chrono>
+    #include <concepts>
+    #include <csignal>
+    #include <filesystem>
+    #include <format>
+    #include <fstream>
+    #include <iostream>
+    #include <iomanip>
+    #include <map>
+    #include <new>
+    #include <numbers>
+    #include <print>
+    #include <ranges>
+    #include <regex>
+    #include <set>
+    #include <stacktrace>
+    #include <stdfloat>
+    #include <string>
+    #include <text_encoding>
+    #include <thread>
+    #include <utility>
+    #include "libstdc++/mdspan.hpp"
+    #include "libstdc++/text_encoding.hpp"
+#elifdef __clang__
+    #include <algorithm>
+    #include <cassert>
+    #include <charconv>
+    #include <chrono>
+    #include <concepts>
+    #include <csignal>
+    #include <filesystem>
+    #include <format>
+    #include <fstream>
+    #include <iostream>
+    #include <iomanip>
+    #include <map>
+    #include <new>
+    #include <numbers>
+    #include <print>
+    #include <ranges>
+    #include <regex>
+    #include <set>
+    #include <string>
+    #include <thread>
+    #include <utility>
+    #include "libc++/ranges.hpp"
+    #include "libc++/text_encoding.hpp"
+#endif
 
 // Include [[std.experimental.execution]]
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#pragma GCC diagnostic ignored "-Wswitch-default"
-#pragma GCC diagnostic ignored "-Wundef"
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+#if not defined(__GNUC__) and defined(__clang__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wshadow"
+    #pragma GCC diagnostic ignored "-Wswitch-default"
+    #pragma GCC diagnostic ignored "-Wundef"
+    #pragma GCC diagnostic ignored "-Wunused-parameter"
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
     #include <exec/timed_scheduler.hpp>
@@ -59,24 +89,27 @@
             using namespace ::exec;
         }
     }
-#pragma GCC diagnostic pop
+    #pragma GCC diagnostic pop
+#elifdef __clang__
+    #include <stdexec/execution.hpp>
+    #include <exec/static_thread_pool.hpp>
+    #include <exec/timed_scheduler.hpp>
+    #include <exec/when_any.hpp>
+    namespace std
+    {
+        namespace execution
+        {
+            using namespace ::stdexec;
+            using namespace ::exec;
+        }
+    }
+#endif
 
-// Include [[std.experimental.text_encoding]]
-std::text_encoding std::text_encoding::environment ( )
-{
-    #ifdef _WIN32
-        return std::text_encoding::GBK;
-    #elifdef __linux__
-        return std::text_encoding::UTF8;
-    #elifdef __APPLE__
-        return std::text_encoding::UTF8;
-    #else
-        return std::text_encoding::unknown;
-    #endif
-};
 
 // Include [[compiler]]
-#include <cxxabi.h>
+#if defined(__GNUC__) or defined(__clang__)
+    #include <cxxabi.h>
+#endif
 
 // Include [[system.windows]]
 #ifdef _WIN32
@@ -100,6 +133,8 @@ std::text_encoding std::text_encoding::environment ( )
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
+#include <boost/bimap.hpp>
+#include <boost/container/container_fwd.hpp>
 #include <boost/date_time.hpp>
 #include <boost/gil.hpp>
 #include <boost/gil/extension/io/bmp.hpp>
@@ -119,17 +154,23 @@ std::text_encoding std::text_encoding::environment ( )
 #include <boost/spirit/home/x3.hpp>
 #include <boost/stacktrace.hpp>
 #if not __cpp_lib_stacktrace
-    #include "libstdc++/stacktrace.hpp"
+    #include "std/stacktrace.hpp"
 #endif
 
 // Include [[third-party.eigen]]
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wclass-memaccess"
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#if not defined(__GNUC__) and defined(__clang__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wclass-memaccess"
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
     #include <eigen3/Eigen/Eigen>
     #include <eigen3/unsupported/Eigen/FFT>
-#pragma GCC diagnostic pop
+    #pragma GCC diagnostic pop
+#elifdef __clang__
+    #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
+    #include <eigen3/Eigen/Eigen>
+    #include <eigen3/unsupported/Eigen/FFT>
+#endif
 
 // Include [[third-party.mpg123]]
 #include <mpg123.h>
@@ -151,12 +192,19 @@ std::text_encoding std::text_encoding::environment ( )
 
 
 
-// Compiler
-#pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
-#pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is reserved for further standarlization.
-#pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
-#pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
-#pragma GCC diagnostic ignored "-Wunused-result"   // Allowing ignore result of std::ranges::to.
+// Compiler.g++
+#if not defined(__GNUC__) and defined(__clang__)
+    #pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
+    #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is reserved for further standarlization.
+    #pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.
+    #pragma GCC diagnostic ignored "-Wswitch-default"  // Has bug with co_yeild.
+    #pragma GCC diagnostic ignored "-Wunused-result"   // Allowing ignore result of std::ranges::to.
+#endif
+
+// Compiler.clang++
+#ifdef __clang__
+#endif
+
 
 // Logic
 #define abstract 0    // Usage: virtual int func() = abstract;
@@ -175,9 +223,9 @@ namespace ap
     /// Subnamespace
     inline namespace constants { }
     inline namespace literals  { }
+    inline namespace experimental { }
 
     namespace abi    { }
-    namespace audio  { }
     namespace neural { }
     namespace spirit { }
     namespace stock  { }

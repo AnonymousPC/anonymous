@@ -58,24 +58,24 @@ namespace ap::experimental
 
 
     /// Concept
-    // template < class input_type, class value_type = void, int dim = 0 >
-    // concept array_type = []
-    // {
-    //     if constexpr ( requires { typename input_type::array_tag; } )
-    //     {
-    //         static_assert ( requires { typename input_type::value_type; input_type::dimension(); }, "class provides array_tag but not provides value_type or dimension()" );
-    //         if constexpr ( is_void<value_type> and dim == 0 )
-    //             return true;
-    //         else if constexpr ( is_void<value_type> and dim != 0 )
-    //             static_assert ( false, "cannot only check dimension but not check value_type");
-    //         else if constexpr ( not is_void<value_type> and dim == 0 )
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
-    //         else if constexpr ( not is_void<value_type> and dim != 0 )
-    //             return std::convertible_to<typename input_type::value_type,value_type> and input_type::dimension() == dim;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class input_type, class value_type = void, int dim = 0 >
+    concept array_type = []
+    {
+        if constexpr ( requires { typename input_type::array_tag; } )
+        {
+            static_assert ( requires { typename input_type::value_type; input_type::dimension(); }, "class provides array_tag but not provides value_type or dimension()" );
+            if constexpr ( is_void<value_type> and dim == 0 )
+                return true;
+            else if constexpr ( is_void<value_type> and dim != 0 )
+                static_assert ( false, "cannot only check dimension but not check value_type");
+            else if constexpr ( not is_void<value_type> and dim == 0 )
+                return std::convertible_to<typename input_type::value_type,value_type>;
+            else if constexpr ( not is_void<value_type> and dim != 0 )
+                return std::convertible_to<typename input_type::value_type,value_type> and input_type::dimension() == dim;
+        }
+        else
+            return false;
+    } ();
 
     // template < class input_type, class value_type = void >
     // concept deque_type = []
@@ -265,7 +265,7 @@ namespace ap::experimental
     // /// Include
     #include "third_party/device.hpp"
     #include "discrete/discrete.hpp" // First.
-    // #include "array/array.hpp"
+    #include "array/array.hpp"
     // #include "chain/chain.hpp"
     // #include "collection/collection.hpp"
     // #include "polymorphic/polymorphic.hpp"

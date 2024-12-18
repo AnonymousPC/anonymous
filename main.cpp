@@ -7,13 +7,13 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
+#include <execution>
 
 using namespace ap;
 
 int main () 
 {
-    let tup = experimental::tuple<int,double>(1, 2.0);
-    print(tup);
-    print(tup * 2);
+    let vct = std::vector<int> (10000);
+    print(std::ranges::all_of(vct, [] (auto val) { return val == 0; }));
     
 }

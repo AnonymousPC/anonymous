@@ -3,7 +3,7 @@ In file included from main.cpp:6:
     4 | namespace ap::experimental
       |               ^
       |             inline 
-./generic/basic/interface.hpp:222:22: note: previous definition is here
-  222 |     inline namespace experimental { }
+./generic/basic/interface.hpp:226:22: note: previous definition is here
+  226 |     inline namespace experimental { }
       |                      ^
 1 warning generated.

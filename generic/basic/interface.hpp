@@ -57,6 +57,7 @@
     #include <iostream>
     #include <iomanip>
     #include <map>
+    #include <mdspan>
     #include <new>
     #include <numbers>
     #include <print>

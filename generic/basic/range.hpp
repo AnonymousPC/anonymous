@@ -36,9 +36,9 @@ class range
         difference_type step = 1;
 
     public: // Constructor
-        constexpr range ( ) = default;
-        constexpr range ( value_type );
-        constexpr range ( value_type, value_type, difference_type = 1 );
+        constexpr          range ( ) = default;
+        constexpr explicit range ( value_type );
+        constexpr explicit range ( value_type, value_type, difference_type = 1 );
 
     public: // Member
         constexpr iterator begin ( ) const;

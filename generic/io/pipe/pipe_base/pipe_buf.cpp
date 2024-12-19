@@ -67,8 +67,6 @@ int pipe_buf::underflow ( )
         stderr_buff.resize(default_buffer_size);
 
     // Post task.
-    stdout_pipe.cancel();
-    stderr_pipe.cancel();
     let stdout_error = boost::system::error_code();
     stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)

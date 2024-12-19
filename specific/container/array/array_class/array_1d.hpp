@@ -2,12 +2,12 @@
 
 template < class type, class device >
 class array<type,1,device>
-    extends public device::template vector<type>
+    extends public device::template vector<type>,
+            public std::span
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
-        static_assert ( std::default_initializable<type> or requires { type(); } );                    // Sometimes default-constructor are only friend to array.
-        static_assert ( std::movable<type> or requires { type(std::move(std::declval<type&&>())); } ); // Sometimes move-assignor       are only friend to array.
+        static_assert ( std::default_initializable<type> and std::movable<type> );
 
     public: // Typedef
         using  value_type     = type;
@@ -38,8 +38,6 @@ class array<type,1,device>
         constexpr       int    column      ( )      const = delete;
         constexpr       int    size        ( )      const;
         constexpr       int    capacity    ( )      const;
-        constexpr       array<int> shape ( ) = delete;
-        constexpr       array<int> 
         constexpr       bool   empty       ( )      const;
         constexpr       type*  data        ( );
         constexpr const type*  data        ( )      const;

@@ -349,8 +349,8 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
             try
             {
                 let buff = boost::beast::flat_buffer();
-                https_handle == nullptr ? boost::beast::http::read (*http_handle,  buff, tunnel_response) otherwise
-                                          boost::beast::http::read (*https_handle, buff, tunnel_response);
+                https_handle == nullptr ? boost::beast::http::read(*http_handle,  buff, tunnel_response) otherwise
+                                          boost::beast::http::read(*https_handle, buff, tunnel_response);
             }
             catch ( const boost::system::system_error& e )
             {

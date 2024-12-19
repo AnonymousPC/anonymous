@@ -34,22 +34,22 @@ class array
         template < class type2 > constexpr explicit array ( const array_type<type2,dim,device> auto& ) requires std::constructible_from<type,type2> but ( not std::convertible_to<type2,type> );
 
     public: // Member
-        constexpr        int            row         ( )     const;
-        constexpr        int            column      ( )     const requires ( dim == 2 );
-        constexpr        int                size        ( )     const;
-        constexpr        int                capacity    ( )     const;
-        constexpr        array<int>         shape       ( )     const;
-        constexpr        inplace_array<int> inplace_shape ( ) const;
-        constexpr        static_array<int>  static_shape ( ) const;
-        constexpr        bool           empty       ( )     const;
-        constexpr        type*          data        ( )     const;
-        constexpr const  type*          data        ( )     const;
-        constexpr        iterator       begin       ( );
-        constexpr        const_iterator begin       ( )     const;
-        constexpr        iterator       end         ( );
-        constexpr        const_iterator end         ( )     const;
-        constexpr        iterate_type   operator [] ( int );
-        constexpr const  iterate_type   operator [] ( int ) const;
+        constexpr        int                row           ( )     const;
+        constexpr        int                column        ( )     const requires ( dim == 2 );
+        constexpr        int                size          ( )     const;
+        constexpr        int                capacity      ( )     const;
+        constexpr        array<int>         shape         ( )     const;
+        constexpr        inplace_array<int> inplace_shape ( )     const;
+        constexpr        static_array<int>  static_shape  ( )     const;
+        constexpr        bool               empty         ( )     const;
+        constexpr        type*              data          ( )     const;
+        constexpr const  type*              data          ( )     const;
+        constexpr        iterator           begin         ( );
+        constexpr        const_iterator     begin         ( )     const;
+        constexpr        iterator           end           ( );
+        constexpr        const_iterator     end           ( )     const;
+        constexpr        iterate_type       operator []   ( int );
+        constexpr const  iterate_type       operator []   ( int ) const;
 
     public: // Member
         template_int_axis constexpr array& resize ( int_type auto... extents ) requires ( sizeof...(extents) == dim );

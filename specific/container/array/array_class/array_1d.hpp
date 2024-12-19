@@ -11,35 +11,36 @@ class array<type,1,device>
 
     public: // Typedef
         using  value_type     = type;
+        using  device_type    = device;
         using  iterate_type   = type;
         using  iterator       = type*;
         using  const_iterator = const type*;
-     // using  array_algo     = array_algo<array<type>,type>;
-        using  device_type    = device;
         struct array_tag { };
 
     public: // Core
         constexpr          array ( ) = default;
         constexpr explicit array ( int );
-        constexpr          array ( int,  const type& )                                         requires std::copyable<type>;
+        constexpr          array ( int,  const type& )                                               requires std::copyable<type>;
         constexpr          array ( int,  function_type<type()   > auto );
         constexpr          array ( int,  function_type<type(int)> auto );
-        constexpr          array (       std::initializer_list<type>&& );
-        constexpr          array ( const array_type<type,1> auto& )                            requires std::copyable<type>;
-        constexpr          array ( const range_type<type>   auto& )                            requires std::copyable<type>;
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r )      requires requires { std::declval<array>().push(*std::ranges::begin(r)); };
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r, int ) requires requires { std::declval<array>().push(*std::ranges::begin(r)); };
-        constexpr         ~array ( );
+        constexpr          array ( const std::initializer_list<type>& )                              requires std::copyable<type>;
+        constexpr          array ( const range<type>& )                                              requires std::copyable<type>;
+        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r )            requires std::convertible_to<std::ranges::range_value_t<decltype(r)>,type>;
+        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r, int )       requires std::convertible_to<std::ranges::range_value_t<decltype(r)>,type>;
 
-    public: // Conversion
-        template < class type2 > constexpr          array ( const array<type2>& )              requires std::convertible_to<type2,type>     but ( not std::same_as<type,type2> );
-        template < class type2 > constexpr explicit array ( const array<type2>& )              requires std::constructible_from<type,type2> but ( not std::convertible_to<type2,type> );
+    public: // Conversion (type)
+                                 constexpr          array ( const array_type<type, 1,device> auto& ) requires std::copyable<type>;
+        template < class type2 > constexpr          array ( const array_type<type2,1,device> auto& ) requires std::convertible_to<type2,type>     but ( not std::same_as<type,type2>        );
+        template < class type2 > constexpr explicit array ( const array_type<type2,1,device> auto& ) requires std::constructible_from<type,type2> but ( not std::convertible_to<type2,type> );
 
-   public: // Interface
-        constexpr       void   row         ( )    = delete;
+    public: // Memebr
+        constexpr       int    row         ( )      const = delete;
+        constexpr       int    column      ( )      const = delete;
         constexpr       int    size        ( )      const;
+        constexpr       int    capacity    ( )      const;
+        constexpr       array<int> shape ( ) = delete;
+        constexpr       array<int> 
         constexpr       bool   empty       ( )      const;
-        constexpr       array& resize      ( int );
         constexpr       type*  data        ( );
         constexpr const type*  data        ( )      const;
         constexpr       type*  begin       ( );
@@ -49,8 +50,18 @@ class array<type,1,device>
         constexpr       type&  operator [] ( int );
         constexpr const type&  operator [] ( int )  const;
 
+    public: // Member
+        constexpr array& clear  ( );
+        constexpr array& resize ( int );
+        constexpr array& push   ( type );
+        constexpr array& pop    ( int );
+        constexpr array& insert ( int, type );
+        constexpr array& erase  ( int, int );
+
     public: // Views
         // using array_algo::operator[],
         //       array_algo::reshape,
         //       array_algo::flatten;
 };
+
+#include "array_1d.ipp"

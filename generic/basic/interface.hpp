@@ -231,20 +231,10 @@ namespace ap
     namespace stock  { }
 
     /// Class
-    template < class type, bool continuous > class range;
+    template < class type > class range;
 
     /// Concept
-    template < class input_type, class value_type = void > concept range_type = []
-    {
-        if constexpr ( requires { typename input_type::range_tag; } )
-            if constexpr ( std::is_void<value_type>::value )
-                return true;
-            else
-                return std::convertible_to<typename input_type::value_type,value_type>;
-        else
-            return false;
-    } ();
-    // More omitted... see concept.h.
+    // See concept.h.
 
     /// Abi
     namespace abi

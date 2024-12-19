@@ -58,20 +58,15 @@ namespace ap::experimental
 
 
     /// Concept
-    template < class input_type, class value_type = void, int dim = 0 >
+    template < class input_type, class value_type = void, int dim = 0, class device_type = void >
     concept array_type = []
     {
         if constexpr ( requires { typename input_type::array_tag; } )
         {
-            static_assert ( requires { typename input_type::value_type; input_type::dimension(); }, "class provides array_tag but not provides value_type or dimension()" );
-            if constexpr ( is_void<value_type> and dim == 0 )
-                return true;
-            else if constexpr ( is_void<value_type> and dim != 0 )
-                static_assert ( false, "cannot only check dimension but not check value_type");
-            else if constexpr ( not is_void<value_type> and dim == 0 )
-                return std::convertible_to<typename input_type::value_type,value_type>;
-            else if constexpr ( not is_void<value_type> and dim != 0 )
-                return std::convertible_to<typename input_type::value_type,value_type> and input_type::dimension() == dim;
+            static_assert ( requires { typename input_type::value_type; input_type::dimension(); typename input_type::device_type; }, "class provides array_tag but not provides value_type, dimension() and device_type" );
+            return ( std::convertible_to<typename input_type::value_type,value_type> or is_void<value_type> ) and
+                   ( input_type::dimension() == dim or dim == 0 ) and
+                   ( std::same_as<typename input_type::device_type,device_type> or is_void<device_type> );         
         }
         else
             return false;
@@ -186,14 +181,11 @@ namespace ap::experimental
     template < class input_type, class type1 = void, class type2 = void >
     concept pair_type = []
     {
-        static_assert ( std::is_void<type1>::value == std::is_void<type2>::value, "must enable or disable both key/value type check at the same time" );
         if constexpr ( requires { typename input_type::pair_tag; } )
         {
             static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
-            if constexpr ( not std::is_void<type1>::value and not std::is_void<type2>::value )
-                return std::convertible_to<typename input_type::key_type,type1> and std::convertible_to<typename input_type::value_type,type2>;
-            else
-                return true;
+            return ( std::convertible_to<typename input_type::key_type,  type1> or is_void<type1> ) and
+                   ( std::convertible_to<typename input_type::value_type,type2> or is_void<type2> );
         }
         else
             return false;
@@ -201,13 +193,19 @@ namespace ap::experimental
 
     namespace aux
     {
-        template < class type1, class type2, int count = 1 >
-        constexpr bool tuplewise_convertible =
-            tuple_size<type1> == tuple_size<type2> and
-            std::convertible_to<tuple_element<count,type1>,tuple_element<count,type2>> and []
+        template < class input_type, int count, class... types >
+        constexpr bool tuple_type_helper = true;
+
+        template < class input_type, int count >
+        constexpr bool tuple_type_helper<input_type,count> = true;
+
+        template < class input_type, int count, class type, class... types >
+        constexpr bool tuple_type_helper<input_type,count,type,types...> =
+            ( input_type::size() - count + 1 == 1 + sizeof...(types) ) and
+            ( std::convertible_to<typename input_type::template value_type<count>,type> or is_void<type> ) and []
             {
-                if constexpr ( count < tuple_size<type1> )
-                    return tuplewise_convertible<type1,type2,count+1>;
+                if constexpr ( count < input_type::size() )
+                    return tuple_type_helper<input_type,count+1,types...>;
                 else
                     return true;
             } ();
@@ -219,10 +217,7 @@ namespace ap::experimental
         if constexpr ( requires { typename input_type::tuple_tag; } )
         {
             static_assert ( requires { typename input_type::template value_type<1>; typename input_type::template value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
-            if constexpr ( sizeof...(types) != 0 )
-                return aux::tuplewise_convertible<input_type,tuple<types...>>;
-            else
-                return true;
+            return aux::tuple_type_helper<input_type,1,types...>;
         }
         else
             return false;

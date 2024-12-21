@@ -29,7 +29,7 @@
                 "/opt/homebrew/opt/llvm/include/c++/v1",
                 "/opt/homebrew/include"
             ],
-            "intelliSenseMode": "macos-gcc-arm64"
+            "intelliSenseMode": "macos-clang-arm64"
         }
     ],
     "version": 4

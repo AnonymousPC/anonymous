@@ -30,7 +30,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lOpenCL -lpng -lssl -ltiff",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
@@ -38,7 +38,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -107,7 +107,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lOpenCL -lpng -lssl -ltiff",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
@@ -115,7 +115,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -187,7 +187,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "g++ -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lkernel32 -lmswsock -lntdll -lshell32 -luser32 -lws2_32 -ltbb12 -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lmpg123 -lOpenCL -lpng -lssl -ltiff",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
@@ -195,7 +195,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff",
+                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"

@@ -2,8 +2,8 @@
 
 template < class type, class device >
 class array<type,1,device>
-    extends public device::template vector<type>,
-            public std::span
+    extends public device::template vector<type>,   
+            public std::mdspan<type,std::dextents<int,1>,std::layout_stride>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -17,8 +17,18 @@ class array<type,1,device>
         using  const_iterator = const type*;
         struct array_tag { };
 
+    private: // Typedef
+        using vector = device::template vector<type>;
+        using mdspan = std::mdspan<type,std::dextents<int,1>,std::layout_stride>;
+
     public: // Core
         constexpr          array ( ) = default;
+        constexpr          array ( const array&  )                                                   requires std::copyable<type>;
+        constexpr          array (       array&& );
+        constexpr          array& operator = ( const array&  )                                       requires std::copyable<type>;
+        constexpr          array& operator = (       array&& );
+
+    public: // Constructor
         constexpr explicit array ( int );
         constexpr          array ( int,  const type& )                                               requires std::copyable<type>;
         constexpr          array ( int,  function_type<type()   > auto );

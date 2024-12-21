@@ -19,26 +19,24 @@
 template < class type >
 class range
 {
-    private: // Precondition
-        static_assert ( minusable<type> );
-        static_assert ( std::convertible_to<int,minus_result<type,type>> );
+    private: // Precondition    
+        static_assert ( number_type<type> );
 
     public: // Typedef
-        using value_type      = type;
-        using difference_type = minus_result<type,type>;
+        using value_type     = type;
         class iterator;
-        using const_iterator  = iterator;
+        using const_iterator = iterator;
         struct range_tag { };
 
     private: // Range
-        value_type      low  = type();
-        value_type      high = type();
-        difference_type step = 1;
+        value_type low  = type();
+        value_type high = type();
+        value_type step = 1;
 
     public: // Constructor
         constexpr          range ( ) = default;
         constexpr explicit range ( value_type );
-        constexpr explicit range ( value_type, value_type, difference_type = 1 );
+        constexpr explicit range ( value_type, value_type, value_type = 1 );
 
     public: // Member
         constexpr iterator begin ( ) const;
@@ -47,9 +45,9 @@ class range
         constexpr bool     empty ( ) const;
 
         constexpr       value_type  operator [] ( int ) const;
-        constexpr const value_type&      min ( ) const;
-        constexpr const value_type&      max ( ) const;
-        constexpr const difference_type& sep ( ) const;
+        constexpr const value_type& min ( ) const;
+        constexpr const value_type& max ( ) const;
+        constexpr const value_type& sep ( ) const;
 };
 
 template < class type >
@@ -58,16 +56,15 @@ class range<type>::iterator
     public: // Typedef
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = range<type>::value_type;
-        using difference_type   = range<type>::difference_type;
         using pointer           = value_type*;
         using reference         = value_type&;
 
     private: // Data
-        value_type      val;
-        difference_type step;
+        value_type val;
+        value_type step;
 
     public: // Core
-        constexpr iterator ( value_type, difference_type );
+        constexpr iterator ( value_type, value_type );
         constexpr iterator ( const iterator& ) = default;
         constexpr type&     operator *  ( );
         constexpr type*     operator -> ( );
@@ -80,29 +77,5 @@ class range<type>::iterator
         constexpr iterator  operator -  ( int ) const;
         constexpr int       operator -  ( const iterator& ) const;
 };
-
-
-
-
-
-
-
-/// Template deduction
-
-template < class type > range ( type )                                -> range<type>;
-template < class type > range ( type, type )                          -> range<type>;
-template < class type > range ( type, type, minus_result<type,type> ) -> range<type>;
-
-                        range ( size_t                 ) -> range<int>; // 0
-                        range ( size_t, size_t         ) -> range<int>; // 00
-                        range ( size_t, int            ) -> range<int>; // 01
-                        range ( int,    size_t         ) -> range<int>; // 10
-                        range ( size_t, size_t, size_t ) -> range<int>; // 000
-                        range ( size_t, size_t, int    ) -> range<int>; // 001
-                        range ( size_t, int,    size_t ) -> range<int>; // 010
-                        range ( size_t, int,    int    ) -> range<int>; // 011
-                        range ( int,    size_t, size_t ) -> range<int>; // 100
-                        range ( int,    size_t, int    ) -> range<int>; // 101
-                        range ( int,    int,    size_t ) -> range<int>; // 111;
 
 #include "range.ipp"

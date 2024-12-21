@@ -131,10 +131,12 @@
 
 // Include [[third-party.boost]]
 #define _GNU_SOURCE
+#define BOOST_COMPUTE_USE_CPP11
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
 #include <boost/bimap.hpp>
+#include <boost/compute.hpp>
 #include <boost/container/container_fwd.hpp>
 #include <boost/date_time.hpp>
 #include <boost/gil.hpp>

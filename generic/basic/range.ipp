@@ -12,7 +12,7 @@ constexpr range<type>::range ( value_type init_high )
 }
 
 template < class type >
-constexpr range<type>::range ( value_type init_low, value_type init_high, difference_type init_step )
+constexpr range<type>::range ( value_type init_low, value_type init_high, value_type init_step )
     extends low  ( init_low  ),
             high ( init_high ),
             step ( init_step )
@@ -23,8 +23,8 @@ constexpr range<type>::range ( value_type init_low, value_type init_high, differ
                 throw value_error("range from {} to {} with step {} does not work", low, high, step);
 
         if constexpr ( requires { step <=> 0; low - high <=> step; } )
-            if ( ( step > 0 and low - high > step ) or
-                 ( step < 0 and low - high < step ) )
+            if ( ( step > 0 and low - high > 0 ) or
+                 ( step < 0 and low - high < 0 ) )
                 throw value_error("range from {} to {} with step {} does not work", low, high, step);
     #endif
 }
@@ -80,7 +80,7 @@ constexpr const typename range<type>::value_type& range<type>::max ( ) const
 }
 
 template < class type >
-constexpr const typename range<type>::difference_type& range<type>::sep ( ) const
+constexpr const typename range<type>::value_type& range<type>::sep ( ) const
 {
     return step;
 }
@@ -90,7 +90,7 @@ constexpr const typename range<type>::difference_type& range<type>::sep ( ) cons
 /// Iterator
 
 template < class type >
-constexpr range<type>::iterator::iterator ( value_type init_val, difference_type init_step )
+constexpr range<type>::iterator::iterator ( value_type init_val, value_type init_step )
     extends val  ( init_val  ),
             step ( init_step )
 {

@@ -1,8 +1,35 @@
 #pragma once
 
 template < class type, class device >
+constexpr array<type,1,device>::array ( const array& init )
+    requires std::copyable<type>
+{
+    copy_from(init);
+} 
+
+template < class type, class device >
+constexpr array<type,1,device>::array ( array&& init )
+{
+    move_from(init);
+}
+
+template < class type, class device >
+constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& right )
+    requires std::copyable<type>
+{
+    copy_from(right);
+}
+
+template < class type, class device >
+constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right )
+{
+    move_from(right);
+}
+
+
+template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size )
-    extends device::template vector<type> ( init_size )
+    extends device::template vector<type> ( init_size ),
 {
     #if debug
         if ( init_size < 0 )

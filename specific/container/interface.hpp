@@ -5,10 +5,11 @@ namespace ap::experimental
 {
     /// Class
     class cpu;
-    class tbb;
-    class cuda;
-    class hip;
-    class mps;
+    class boost_compute;
+    class amd_hip;
+    class apple_mps;
+    class intel_tbb;
+    class nvidia_cuda;
 
     template < class type, int dim = 1, class device = cpu >                    class array;
     template < class type,              class device = cpu >                    using vector = array<type>;

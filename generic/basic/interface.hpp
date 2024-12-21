@@ -16,7 +16,7 @@
 #endif
 
 // Include [[std]]
-#if not defined(__GNUC__) and defined(__clang__)
+#if defined(__GNUC__) and not defined(__clang__)
     #define __cpp_lib_text_encoding 202412L
     #include <algorithm>
     #include <cassert>
@@ -72,7 +72,7 @@
 #endif
 
 // Include [[std.experimental.execution]]
-#if not defined(__GNUC__) and defined(__clang__)
+#if defined(__GNUC__) and not defined(__clang__)
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wshadow"
     #pragma GCC diagnostic ignored "-Wswitch-default"
@@ -80,7 +80,6 @@
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
-    #include <exec/timed_scheduler.hpp>
     #include <exec/when_any.hpp>
     namespace std
     {
@@ -94,7 +93,6 @@
 #elifdef __clang__
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
-    #include <exec/timed_scheduler.hpp>
     #include <exec/when_any.hpp>
     namespace std
     {
@@ -132,6 +130,7 @@
 // Include [[third-party.boost]]
 #define _GNU_SOURCE
 #define BOOST_COMPUTE_USE_CPP11
+#define CL_TARGET_OPENCL_VERSION 300
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
@@ -161,7 +160,7 @@
 #endif
 
 // Include [[third-party.eigen]]
-#if not defined(__GNUC__) and defined(__clang__)
+#if defined(__GNUC__) and not defined(__clang__)
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wclass-memaccess"
     #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -196,7 +195,7 @@
 
 
 // Compiler.g++
-#if not defined(__GNUC__) and defined(__clang__)
+#if defined(__GNUC__) and not defined(__clang__)
     #pragma GCC diagnostic ignored "-Wchanges-meaning" // Allowing more class member typedef which abbr the extended classses.
     #pragma GCC diagnostic ignored "-Wliteral-suffix"  // Allowing user-defined literal without being warned that literal not begins with '_' is reserved for further standarlization.
     #pragma GCC diagnostic ignored "-Wredundant-decls" // Allowing declaration of non-template functions many times.

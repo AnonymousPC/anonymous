@@ -6,7 +6,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -17,7 +17,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -fno-inline -Ddebug=1 -O0 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "clang++ -std=c++26 -g -Wall -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
@@ -83,7 +83,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -163,7 +163,7 @@
             "group": "none",
             "type": "shell",
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [

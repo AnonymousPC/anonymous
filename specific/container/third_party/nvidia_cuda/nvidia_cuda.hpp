@@ -1,8 +1,11 @@
 #pragma once
 
-class cuda
+class nvidia_cuda
     extends public cpu
 {
+    public: // Layout
+        using layout_type = std::layout_left;
+
     public: // Allocator
         template < class type > using allocator = thrust::allocator<type>;
 

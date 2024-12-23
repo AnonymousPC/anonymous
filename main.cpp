@@ -9,81 +9,69 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-using my_array = std::pair<std::vector<float>,
-                           std::mdspan<float,std::dextents<int,1>,std::layout_stride>
-                          >;
+struct A
+{
+    int* ptr_a = new int(100);
+};
+
+struct B
+{
+    int* ptr_b = new int(200);  
+};
+
+struct C
+    extends public A,
+            public B
+{
+    int* ptr_c = new int(300);
+};
 
 int main ( )
 {
-    let scale = (10 * 60) * 44100;
-
-    let x = int(std::sqrt(float(scale)))*512;
-    let y = int(std::sqrt(float(scale)))/512;
-    print(x, y);
-
-    {
-        let t = std::chrono::system_clock::now();
-        std::vector<std::vector<float>> mat(x, std::vector<float>(y));
-        print("traditional", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now() - t).count());
-        
-        char ch;
-        std::cin >> ch;
-    }
-
-    {
-        let t = std::chrono::system_clock::now();
-        std::vector<float> vct(x * y);
-        let t2 = std::chrono::system_clock::now();
-        // std::vector<my_array> rows(x);
-        // for ( int i in range(x) )
-        //     rows[i-1].second = std::mdspan<float,std::dextents<int,1>,std::layout_stride>(const_cast<float*>(vct.data()) + (2*(i-1)), {std::array{y}, std::array{1}});
-        // std::vector<my_array> columns(y);
-        // for ( int i in range(y) )
-        //     columns[i-1].second = std::mdspan<float,std::dextents<int,1>,std::layout_stride>(const_cast<float*>(vct.data()) + (1*(i-1)), {std::array{x}, std::array{y}});
-        // print("new",   std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now() - t).count()); 
-        print("crazy", std::chrono::duration_cast<std::chrono::microseconds>(t2                               - t).count());
-
-        char ch;
-        std::cin >> ch;
-    }
+    B b;
+    C* c = static_cast<C*>(&b);
+    print(*c->ptr_b);
+    
 }
 
-// M*N + 4*M
-// M*N + 12*(M+N);
 
-// [1] transpose改变自身
-// [2] flatten类似于行列 加一个副本
-// [3] reshape加一个唯一副本。
+/*
 
-// int main ( )
-// {
-//     print(sizeof(test1), sizeof(test2));
+[[1, 2, 3],
+ [4, 5, 6]]
 
-//     let vct = std::vector<int>(24);
-//     for ( int i in range<int>(vct.size()) )
-//         vct[i-1] = i;
-    
-//     let ptr = const_cast<int*>(vct.data());
-//     let mds = std::mdspan<int,std::dextents<int,2>,std::layout_stride>(
-//         ptr,
-//         std::layout_stride::mapping<std::dextents<int,2>>(std::array{4, 6}, std::array{4, 1})
-//     );
-    
-//     for ( int i in range<int>(mds.extent(0)) )
-//     {
-//         for ( int j in range<int>(mds.extent(1)) )
-//             std::cout << mds[i-1, j-1] << ' ';
-//         print();
-//     }
-// }
+[1, 2, 3, 4, 5, 6]
+[1, 4, 2, 5, 3, 6]
+
+
+///////////////////////////
+
+[[[ 1,  2,  3,  4],
+  [ 5,  6,  7,  8],
+  [ 9, 10, 11, 12]],
+
+ [[13, 14, 15, 16],
+  [17, 18, 19, 20],
+  [21, 22, 23, 24]]]
+
+[ 1, 2, 3, 4, ..., 24]
+[ 1, 13,  5, 17,  9, 21,  2, 14,  6, 18, 10, 22,  3, 15,  7, 19, 11, 23,  4, 16,  8, 20, 12, 24 ]
 
 
 
-// row, column = optimize;
-// range_view = delete;
-// filter_view = delete;
-// flatten_view = optimize;
-// reshape_view = delete;
-// type_view = optimize;
+*/
+
+
+
+
+// array:
+// [[row]]      = optimize
+// as_flat      = optimize; 强行reinterpret_cast自己。
+// as_shape     = 备份法, 列举1-3;
+// as_type      = delete; 绝大部分linalg的as_type之后还要传递底层数组指针才能运算, 另外参考specific/audio/mfcc_extractor.cpp:35, 还要手动管理生命周期。
+// as_transpose = 备份法
+
+// map:
+// keys, values = 备份法
 
 // .reshape(1, 2, 3) = delete;

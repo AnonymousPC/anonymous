@@ -2,6 +2,9 @@
 
 class cpu
 {
+    public: // Layout
+        using layout_type = std::layout_right;
+
     public: // Allocator
         template < class type > using allocator = std::allocator<type>;
 

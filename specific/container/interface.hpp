@@ -5,19 +5,19 @@ namespace ap::experimental
 {
     /// Class
     class cpu;
-    class boost_compute;
-    class amd_hip;
-    class apple_mps;
-    class intel_tbb;
-    class nvidia_cuda;
+    class cuda;
+    class hip;
+    class mps;
+    class opencl;
+    class tbb;
 
     template < class type, int dim = 1, class device = cpu >                    class array;
     template < class type,              class device = cpu >                    using vector = array<type>;
     template < class type,              class device = cpu >                    using matrix = array<type,2>;
-    template < class type, int len >                                            class static_array;
-    template < class type, int len >                                            using static_vector  = static_array<type,len>;
-    template < class type, int len >                                            class inplace_array;
-    template < class type, int len >                                            using inplace_vector = inplace_array<type,len>;
+    template < class type, int len,     class device = cpu >                    class static_array;
+    template < class type, int len,     class device = cpu >                    using static_vector  = static_array<type,len>;
+    template < class type, int len,     class device = cpu >                    class inplace_array;
+    template < class type, int len,     class device = cpu >                    using inplace_vector = inplace_array<type,len>;
 
     // template < class type >                                                     class deque;
     // template < class type >                                                     class list;

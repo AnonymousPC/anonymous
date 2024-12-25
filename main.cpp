@@ -3,37 +3,24 @@
 // #include "generic/io/interface.hpp"
 // #include "generic/math/interface.hpp"
 // #include "specific/audio/interface.hpp"
-// #include "specific/container/interface.hpp"
+#include "specific/container/interface.hpp"
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
+
 using namespace ap;
-
-struct A
-{
-    int* ptr_a = new int(100);
-};
-
-struct B
-{
-    int* ptr_b = new int(200);  
-};
-
-struct C
-    extends public A,
-            public B
-{
-    int* ptr_c = new int(300);
-};
 
 int main ( )
 {
-    B b;
-    C* c = static_cast<C*>(&b);
-    print(*c->ptr_b);
+    boost::compute::vector<int> a (100000);
+    boost::compute::vector<int> b;
     
+    while(true)
+    {
+        a = b;
+        b = a;
+    }
 }
-
 
 /*
 
@@ -68,8 +55,9 @@ int main ( )
 // [[row]]      = optimize
 // as_flat      = optimize; 强行reinterpret_cast自己。
 // as_shape     = 备份法, 列举1-3;
-// as_type      = delete; 绝大部分linalg的as_type之后还要传递底层数组指针才能运算, 另外参考specific/audio/mfcc_extractor.cpp:35, 还要手动管理生命周期。
 // as_transpose = 备份法
+// as_type      = delete; 绝大部分linalg的as_type之后还要传递底层数组指针才能运算, 另外参考specific/audio/mfcc_extractor.cpp:35, 还要手动管理生命周期。
+
 
 // map:
 // keys, values = 备份法

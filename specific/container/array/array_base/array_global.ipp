@@ -3,28 +3,60 @@
 namespace aux
 {
     template < class type >
-    class maybe_mdspan_of;
+    struct maybe_array_view;
 
     template < class type, class device >
-    class maybe_mdspan_of<array<type,2,device>>
+    struct maybe_array_view<array<type,1,device>>
     {
-        protected:
-            void* ptr = nullptr;
+        private:
+            array<type,2,device>* host_ptr = nullptr; // matrix.operator[], matrix.as_flat(), matrix.as_shape(1-dim).
+    
+        public:
+            constexpr maybe_array_view ( ) = default;
+            constexpr maybe_array_view ( array<type,2,device>* ptr ) extends host_ptr ( ptr ) { }
 
         public:
-            constexpr       type* pointer ( )       { return static_cast<      array<type,2,device>*>(ptr); }
-            constexpr const type* pointer ( ) const { return static_cast<const array<type,2,device>*>(ptr); }
+            constexpr       array<type,2,device>& from_host ( )       { return *host_ptr; }
+            constexpr const array<type,2,device>& from_host ( ) const { return *host_ptr; }
+
+        public: 
+            constexpr bool is_view ( ) const { return host_ptr != nullptr; }
     };
+    
 
     template < class type, int dim, class device >
-        requires ( dim >= 3 )
-    class maybe_mdspan_of<array<type,dim,device>>
-        extends public maybe_mdspan_of<array<type,dim-1,device>>
+    struct maybe_array_view<array<type,dim,device>>
     {
+        private:
+            array<type,dim+1,device>* host_ptr      = nullptr;
+            array<type,dim,  device>* transpose_ptr = nullptr;
+
+        public: 
+            constexpr maybe_array_view ( ) = default;
+            constexpr maybe_array_view ( array<type,dim+1,device>* ptr_1, array<type,dim,device>* ptr_2 ) extends host_ptr ( ptr_1 ), transpose_ptr ( ptr_2 ) { }
+
         public:
-            constexpr       type* pointer ( )       { return static_cast<      array<type,dim,device>*>(maybe_mdspan_of<array<type,dim-1,device>>::ptr); }
-            constexpr const type* pointer ( ) const { return static_cast<const array<type,dim,device>*>(maybe_mdspan_of<array<type,dim-1,device>>::ptr); }
+            constexpr       array<type,dim+1,device>& from_host      ( )       { return *host_ptr; }
+            constexpr const array<type,dim+1,device>& from_host      ( ) const { return *host_ptr; }
+            constexpr       array<type,dim,  device>& from_transpose ( )       { return *transpose_ptr; }
+            constexpr const array<type,dim,  device>& from_trnspose  ( ) const { return *transpose_ptr; }
+
+        public:
+            constexpr bool is_view ( ) const { return host_ptr != nullptr or transpose_ptr != nullptr; }
     };
+
+    /* ABI of array (dim == 1)
+    * device::vector   (sizeof = ...)
+    * maybe_array_view
+    *   - host_ptr     (sizeof = sizeof(nullptr))
+    */
+
+    /* ABI of array (dim >= 2)
+    * device::vector   (sizeof = ...)
+    * maybe_array_view
+    *   - host_ptr      (sizeof = sizeof(nullptr))
+    *   - transpose_ptr (sizeof = sizeof(nullptr))
+    */
 
     template < class type, class... types >
     constexpr bool ints_until_last_func = []

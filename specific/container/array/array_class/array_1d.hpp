@@ -3,15 +3,15 @@
 template < class type, class device >
 class array<type,1,device>
     extends public  device::template vector<type>,
-            private aux::maybe_mdspan_of<array<type,2,device>>
+            private aux::maybe_array_view<array<type,1,device>>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( std::default_initializable<type> and std::movable<type> );
 
     private: // Typedef
-        using vector = device::template vector<type>;
-        using mdspan = aux::maybe_mdspan_of<array<type,2,device>>;
+        using base = device::template vector<type>;
+        using span = aux::maybe_array_view<array<type,1,device>>;
 
     public: // Typedef
         using  value_type     = type;
@@ -43,20 +43,22 @@ class array<type,1,device>
         template < class type2 > constexpr explicit array ( const array<type2,1,device>& ) requires std::constructible_from<type,type2> but ( not std::convertible_to<type2,type> );
 
     public: // Memebr
-        constexpr static int        dimension   ( );
-        constexpr        int        size        ( )                const;
-        constexpr        array<int> shape       ( )                const;
-        constexpr        int        row         ( )                const = delete;
-        constexpr        int        column      ( )                const = delete;
-        constexpr        bool       empty       ( )                const;
-        constexpr        type*      data        ( );
-        constexpr const  type*      data        ( )                const;
-        constexpr        type*      begin       ( );
-        constexpr const  type*      begin       ( )                const;
-        constexpr        type*      end         ( );
-        constexpr const  type*      end         ( )                const;
-        constexpr        type&      operator [] ( int_type auto );
-        constexpr const  type&      operator [] ( int_type auto )  const;
+        constexpr static int                  dimension     ( );
+        constexpr        int                  size          ( )               const;
+        constexpr        array<int>           shape         ( )               const;
+        constexpr        static_array<int,1>  static_shape  ( )               const;
+        constexpr        inplace_array<int,1> inplace_shape ( )               const;
+        constexpr        int                  row           ( )               const = delete;
+        constexpr        int                  column        ( )               const = delete;
+        constexpr        bool                 empty         ( )               const;
+        constexpr        type*                data          ( );
+        constexpr const  type*                data          ( )               const;
+        constexpr        iterator             begin         ( );
+        constexpr        const_iterator       begin         ( )               const;
+        constexpr        iterator             end           ( );
+        constexpr        const_iterator       end           ( )               const;
+        constexpr        type&                operator []   ( int_type auto );
+        constexpr const  type&                operator []   ( int_type auto ) const;
 
     public: // Member
         constexpr array& clear  ( );

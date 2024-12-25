@@ -3,18 +3,18 @@
 template < class type, class device >
 constexpr array<type,1,device>::array ( const array& init )
     requires std::copyable<type>
-    extends vector ( not init.is_view() ? static_cast<const vector&>(init) otherwise vector(init.size()) )
+    extends base ( not init.is_view() ? static_cast<const base&>(init) otherwise base(init.size()) )
 {
     if ( init.is_view() ) [[unlikely]]
-        device::copy(init.begin(), init.end(), vector::begin());
+        device::copy(init.begin(), init.end(), base::begin());
 } 
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( array&& init )
-    extends vector ( not init.is_view() ? static_cast<vector&&>(init) otherwise vector(init.size()) )
+    extends base ( not init.is_view() ? static_cast<base&&>(init) otherwise base(init.size()) )
 {
     if ( init.is_view() ) [[unlikely]]
-        device::move(init.begin(), init.end(), vector::begin());
+        device::move(init.begin(), init.end(), base::begin());
 }
 
 template < class type, class device >
@@ -22,11 +22,11 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
     requires std::copyable<type>
 {
     if ( not right.is_view() ) [[likely]]
-        vector::operator=(static_cast<const vector&>(right));
+        base::operator=(static_cast<const base&>(right));
     else [[unlikely]]
     {
-        vector::resize(right.size());
-        device::copy(right.begin(), right.end(), vector::begin());
+        base::resize(right.size());
+        device::copy(right.begin(), right.end(), base::begin());
     }
 }
 
@@ -34,18 +34,18 @@ template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right )
 {
     if ( not right.is_view() ) [[likely]]
-        vector::operator=(static_cast<vector&&>(right));
+        base::operator=(static_cast<base&&>(right));
     else [[unlikely]]
     {
-        vector::resize(right.size());
-        device::move(right.begin(), right.end(), vector::begin());
+        base::resize(right.size());
+        device::move(right.begin(), right.end(), base::begin());
     }
 }
 
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size )
-    extends vector ( init_size )
+    extends base ( init_size )
 {
     #if debug
         if ( init_size < 0 )
@@ -56,7 +56,7 @@ constexpr array<type,1,device>::array ( int init_size )
 template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size, const type& init_value )
     requires std::copyable<type>
-    extends vector ( init_size, init_value )
+    extends base ( init_size, init_value )
 {
     #if debug
         if ( init_size < 0 )
@@ -67,7 +67,7 @@ constexpr array<type,1,device>::array ( int init_size, const type& init_value )
 template < class type, class device >
 constexpr array<type,1,device>::array ( const std::initializer_list<type>& init )
     requires std::copyable<type>
-    extends vector ( init )
+    extends base ( init )
 {
 
 }
@@ -76,7 +76,7 @@ template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size, const function_type<type()> auto init_value )
     extends array ( init_size )
 {
-    device::generate(vector::begin(), vector::end(), init_value);
+    device::generate(base::begin(), base::end(), init_value);
 }
 
 template < class type, class device >
@@ -92,7 +92,7 @@ constexpr array<type,1,device>::array ( const range<type>& init )
     requires std::copyable<type>
     extends array ( init.size() )
 {
-    device::copy(init.begin(), init.end(), vector::begin());
+    device::copy(init.begin(), init.end(), base::begin());
 }
 
 template < class type, class device >
@@ -103,18 +103,18 @@ constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_ra
     {
         #if debug
             if ( r.size() < 0 )
-                throw value_error("construct array with negative size {}", r.size());
+                throw value_error("initialize array with negative size {}", r.size());
         #endif
 
-        vector::resize(r.size());
-        if constexpr ( requires { device::move(r.begin(), r.end(), vector::begin()); } )
-            device::move(r.begin(), r.end(), vector::begin());
+        base::resize(r.size());
+        if constexpr ( requires { device::move(r.begin(), r.end(), base::begin()); } )
+            device::move(r.begin(), r.end(), base::begin());
         else
-            std::ranges::move(r, vector::begin());
+            std::ranges::move(r, base::begin());
     }
     else
         for ( auto&& val in r )
-            self.vector::push_back(std::forward<decltype(val)>(val));
+            self.base::push_back(std::forward<decltype(val)>(val));
 }
 
 template < class type, class device >
@@ -125,13 +125,13 @@ constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_ra
     #if debug
         if constexpr ( requires { r.size(); } )
             if ( r.size() != init_size )
-                throw value_error("construct array with ambiguous size (with range-size = {}, explicit-size = {})", r.size(), r);
+                throw value_error("initialize array with ambiguous size (with range-size = {}, explicit-size = {})", r.size(), r);
     #endif
 
-    if constexpr ( requires { device::move(r.begin(), r.end(), vector::begin()); } )
-        device::move(r.begin(), r.end(), vector::begin());
+    if constexpr ( requires { device::move(r.begin(), r.end(), base::begin()); } )
+        device::move(r.begin(), r.end(), base::begin());
     else
-        std::ranges::move(r, vector::begin());
+        std::ranges::move(r, base::begin());
 }
 
 template < class type, class device >
@@ -141,9 +141,9 @@ constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
     extends array ( cvt.size() )
 {
     if ( not cvt.is_view() ) [[likely]]
-        device::transform(cvt.vector::begin(), cvt.vector::end(), vector::begin(), [] (const auto& val) { return type(val); });
+        device::transform(cvt.base::begin(), cvt.base::end(), base::begin(), [] (const auto& val) { return type(val); });
     else [[unlikely]]
-        device::transform(cvt.begin(), cvt.end(), vector::begin(), [] (const auto& val) { return type(val); });
+        device::transform(cvt.begin(), cvt.end(), base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
@@ -153,9 +153,9 @@ constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
     extends array ( cvt.size() )
 {
     if ( not cvt.is_view() ) [[likely]]
-        device::transform(cvt.vector::begin(), cvt.vector::end(), vector::begin(), [] (const auto& val) { return type(val); });
+        device::transform(cvt.base::begin(), cvt.base::end(), base::begin(), [] (const auto& val) { return type(val); });
     else [[unlikely]]
-        device::transform(cvt.begin(), cvt.end(), vector::begin(), [] (const auto& val) { return type(val); });
+        device::transform(cvt.begin(), cvt.end(), base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
@@ -168,9 +168,10 @@ template < class type, class device >
 constexpr int array<type,1,device>::size ( ) const
 {
     if ( not is_view() ) [[likely]]
-        return vector::size();
+        return base::size();
     else [[unlikely]]
-        return mdspan::pointer()->column();
+        return 1;
+        //return span::from_host().column();
 }
 
 template < class type, class device >
@@ -179,84 +180,89 @@ constexpr array<int> array<type,1,device>::shape ( ) const
     return {1};
 }
 
+// template < class type, class device >
+// constexpr static_array<int,1> array<type,1,device>::static_shape ( ) const
+// {
+//     return {1};
+// }
+
+// template < class type, class device >
+// constexpr inplace_array<int,1> array<type,1,device>::inplace_shape ( ) const
+// {
+//     return {1};
+// }
+
 template < class type, class device >
 constexpr bool array<type,1,device>::empty ( ) const
 {
     if ( not is_view() ) [[likely]]
-        return vector::empty();
+        return base::empty();
     else [[unlikely]]
-        return mdspan::pointer()->column() == 0;
+        return span::from_host().column() == 0;
 }
 
 template < class type, class device >
 constexpr type* array<type,1,device>::data ( )
 {
-    if ( not is_view() ) [[likely]]
-        return const_cast<type*>(vector::data());
-    else [[unlikely]]
-        throw value_error("cannot get contiguous native data from array: it does not own its data and the borrowed data might sometimes be not contiguous");
+    if constexpr ( requires { { base::data() } -> std::convertible_to<const type*>; } )
+        if ( not is_view() ) [[likely]]
+            return const_cast<type*>(base::data());
+        else [[unlikely]]
+            throw value_error("cannot get contiguous native data from array: it does not own its data and the borrowed data might sometimes be not contiguous");
+    else
+        static_assert(false, "cannot get contiguous native data from array: not supported on this device");
 }
 
 template < class type, class device >
 constexpr const type* array<type,1,device>::data ( ) const
 {
-    if ( not is_view() ) [[likely]]
-        return vector::data();
-    else [[unlikely]]
-        throw value_error("cannot get contiguous native data from array: it does not own its data and the borrowed data might sometimes be not contiguous");
+    if constexpr ( requires { { base::data() } -> std::convertible_to<const type*>; } )
+        if ( not is_view() ) [[likely]]
+            return base::data();
+        else [[unlikely]]
+            throw value_error("cannot get contiguous native data from array: it does not own its data and the borrowed data might sometimes be not contiguous");
+    else
+        static_assert(false, "cannot get contiguous native data from array: not supported on this device");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::begin ( )
 {
     if ( not is_view() ) [[likely]]
-        return iterator(const_cast<type*>(vector::data()));
+        return iterator(base::begin());
     else [[unlikely]]
+        throw value_error("not coded yet");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::begin ( ) const
 {
     if ( not is_view() ) [[likely]]
-        return iterator(const_cast<type*>(vector::data()));
+        return iterator(base::begin());
     else [[unlikely]]
-
+        throw value_error("not coded yet");
 }
 
 template < class type, class device >
-constexpr type* array<type,1,device>::end ( )
-    if ( not is_view() ) [[likely]]
-        return iterator(const_cast<type*>(vector::data()));
-    else [[unlikely]]
-
-}
-
-template < class type, class device >
-constexpr const type* array<type,1,device>::end ( ) const
+constexpr array<type,1,device>::iterator array<type,1,device>::end ( )
 {
     if ( not is_view() ) [[likely]]
-        return iterator(const_cast<type*>(vector::data()));
+        return iterator(base::end());
     else [[unlikely]]
-
+        throw value_error("not coded yet");
 }
 
 template < class type, class device >
-constexpr type& array<type,1,device>::operator [] ( int pos )
+constexpr array<type,1,device>::const_iterator array<type,1,device>::end ( ) const
 {
-    #if debug
-        if ( pos < -size() or pos == 0 or pos > size() )
-            throw index_error("index {} is out of range with size {}", pos, size());
-    #endif
-    
     if ( not is_view() ) [[likely]]
-        return pos >= 0 ? vector::operator[](pos-1) otherwise
-                          vector::operator[](pos+size());
+        return iterator(base::end());
     else [[unlikely]]
-        return mdspan::pointer()->operator[](&self - mdspan::pointer()->views().data() + 1, pos);
+        throw value_error("not coded yet");
 }
 
 template < class type, class device >
-constexpr const type& array<type,1,device>::operator [] ( int pos ) const
+constexpr type& array<type,1,device>::operator [] ( int_type auto pos )
 {
     #if debug
         if ( pos < -size() or pos == 0 or pos > size() )
@@ -264,20 +270,35 @@ constexpr const type& array<type,1,device>::operator [] ( int pos ) const
     #endif
     
     if ( not is_view() ) [[likely]]
-        return pos >= 0 ? vector::operator[](pos-1) otherwise
-                          vector::operator[](pos+size());
+        return pos >= 0 ? base::operator[](pos-1) otherwise
+                          base::operator[](pos+size());
     else [[unlikely]]
-        return mdspan::pointer()->operator[](&self - mdspan::pointer()->views().data() + 1, pos);
+        return span::from_host()[&self - span::from_host().to_views().data() + 1, pos];
+}
+
+template < class type, class device >
+constexpr const type& array<type,1,device>::operator [] ( int_type auto pos ) const
+{
+    #if debug
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
+    #endif
+    
+    if ( not is_view() ) [[likely]]
+        return pos >= 0 ? base::operator[](pos-1) otherwise
+                          base::operator[](pos+size());
+    else [[unlikely]]
+        return span::from_host()[&self - span::from_host().to_views().data() + 1, pos];
 }
 
 template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::clear ( )
 {
     if ( is_view() )
-        throw value_error("cannot call array.clear(): )
+        throw value_error("cannot clear array: it does not own its data");
 
-    vector::clear();
-    vector::shrink_to_fit();
+    base::clear();
+    base::shrink_to_fit();
     return self;
 }
 
@@ -289,14 +310,14 @@ constexpr array<type,1,device>& array<type,1,device>::resize ( int new_size )
             throw value_error("resize array with negative size {}", new_size);
     #endif
 
-    vector::resize(new_size);
+    base::resize(new_size);
     return self;
 }
 
 template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::push ( type new_value )
 {
-    vector::push_back(std::move(new_value));
+    base::push_back(std::move(new_value));
     return self;
 }
 
@@ -308,7 +329,7 @@ constexpr array<type,1,device>& array<type,1,device>::pop ( int pos )
             throw index_error("index {} is out of range with size {}", pos, size());
     #endif
 
-    vector::erase(pos >= 0 ? vector::begin() + pos - 1 otherwise vector::begin() + pos + size());
+    base::erase(pos >= 0 ? base::begin() + pos - 1 otherwise base::begin() + pos + size());
 }
 
 template < class type, class device >
@@ -319,7 +340,7 @@ constexpr array<type,1,device>& array<type,1,device>::insert ( int pos, type new
             throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    vector::insert(pos >= 0 ? vector::begin() + pos - 1 otherwise vector::begin() + pos + size(), std::move(new_value));
+    base::insert(pos >= 0 ? base::begin() + pos - 1 otherwise base::begin() + pos + size(), std::move(new_value));
 }
 
 template < class type, class device >
@@ -336,22 +357,24 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int pos_1, int pos
             throw index_error("index [{},{}] is out of range with size {}", pos_1, pos_2, size());
     #endif
 
-    vector::erase(vector::begin() + p1 - 1, vector::begin() + p2 - 1);
+    base::erase(base::begin() + p1 - 1, base::begin() + p2 - 1);
 }
 
 template < class type, class device >
 constexpr bool array<type,1,device>::is_view ( ) const
 {
-    return mdspan::pointer() != nullptr;
+    return span::is_view();
 }
 
 template < class type, class device >
-    requires std::same_as<typename device::layout_type,std::layout_left>
-class iterator
+class array<type,1,device>::iterator
+    extends public device::template vector<type>::iterator
 {
     private: // Data
-        type* ptr = nullptr;
-        int   stp = 1;
+        int stp = 1;
+    
+    private: // Typedef
+        using base = device::template vector<type>::iterator;
 
     public: // Typedef
         using  value_type      = type;
@@ -362,24 +385,65 @@ class iterator
 
     public: // Core
         constexpr iterator ( ) = default;
-        constexpr iterator ( type* init_ptr )               extends ptr ( init_ptr )                   { };
-        constexpr iterator ( type* init_ptr, int init_stp ) extends ptr ( init_ptr ), stp ( init_stp ) { }; 
+        constexpr iterator ( base init_iter )               extends base ( init_iter )                   { };
+        constexpr iterator ( base init_iter, int init_stp ) extends base ( init_iter ), stp ( init_stp ) { }; 
 
     public: // Member
-        constexpr type&           operator *  ( )             const { return *ptr; }
-        constexpr type*           operator -> ( )             const { return ptr; }
-        constexpr type&           operator [] ( int t )       const { return ptr[t]; }
-        constexpr iterator        operator +  ( int t )       const { return iterator(ptr + t * stp, stp); }
-        constexpr iterator        operator -  ( int t )       const { return iterator(ptr - t * stp, stp); }
-        constexpr difference_type operator -  ( iterator it ) const { return (ptr - it.ptr) / stp; }
-        constexpr iterator&       operator ++ ( )                   { ptr += stp; return self; }
-        constexpr iterator        operator ++ ( int )               { let it = self; ++self; return it; }
-        constexpr iterator&       operator += ( int t )             { ptr += t * stp; return self; }
-        constexpr iterator&       operator -- ( )                   { ptr -= stp; return self; }
-        constexpr iterator        operator -- ( int )               { let it = self; --self; return it; }
-        constexpr iterator&       operator -= ( int t )             { ptr -= t * stp; return self; }
+        constexpr type&           operator *  ( )             const { return base::operator*(); }
+        constexpr type*           operator -> ( )             const { return base::operator->(); }
+        constexpr type&           operator [] ( int t )       const { return base::operator[](t); }
+        constexpr iterator        operator +  ( int t )       const { return iterator(static_cast<const base&>(self) + t * stp, stp); }
+        constexpr iterator        operator -  ( int t )       const { return iterator(static_cast<const base&>(self) - t * stp, stp); }
+        constexpr difference_type operator -  ( iterator it ) const { return (static_cast<const base&>(self) - static_cast<const base&>(it)) / stp; }
+        constexpr iterator&       operator ++ ( )                   { static_cast<base&>(self) += stp;     return self; }
+        constexpr iterator        operator ++ ( int )               { let it = self; ++self;               return it;   }
+        constexpr iterator&       operator += ( int t )             { static_cast<base&>(self) += t * stp; return self; }
+        constexpr iterator&       operator -- ( )                   { static_cast<base&>(self) -= stp;     return self; }
+        constexpr iterator        operator -- ( int )               { let it = self; --self;               return it;   }
+        constexpr iterator&       operator -= ( int t )             { static_cast<base&>(self) -= t * stp; return self; }
 
     public: // Operator
-        friend constexpr bool operator ==  ( const iterator& left, const iterator& right ) { return left.ptr ==  right.ptr; }
-        friend constexpr auto operator <=> ( const iterator& left, const iterator& right ) { return left.ptr <=> right.ptr; }
+        friend constexpr bool operator ==  ( const iterator& left, const iterator& right ) { return static_cast<const base&>(left) ==  static_cast<const base&>(right); }
+        friend constexpr auto operator <=> ( const iterator& left, const iterator& right ) { return static_cast<const base&>(left) <=> static_cast<const base&>(right); }
+};
+
+template < class type, class device >
+class array<type,1,device>::const_iterator
+    extends public device::template vector<type>::const_iterator
+{
+    private: // Data
+        int stp = 1;
+    
+    private: // Typedef
+        using base = device::template vector<type>::const_iterator;
+
+    public: // Typedef
+        using  value_type      = type;
+        using  pointer         = type*;
+        using  reference       = type&;
+        using  difference_type = std::ptrdiff_t;
+        struct random_access_iterator_tag { };
+
+    public: // Core
+        constexpr const_iterator ( ) = default;
+        constexpr const_iterator ( base init_iter )               extends base ( init_iter )                   { };
+        constexpr const_iterator ( base init_iter, int init_stp ) extends base ( init_iter ), stp ( init_stp ) { }; 
+
+    public: // Member
+        constexpr const type&           operator *  ( )                   const { return base::operator*(); }
+        constexpr const type*           operator -> ( )                   const { return base::operator->(); }
+        constexpr const type&           operator [] ( int t )             const { return base::operator[](t); }
+        constexpr const_iterator        operator +  ( int t )             const { return const_iterator(static_cast<const base&>(self) + t * stp, stp); }
+        constexpr const_iterator        operator -  ( int t )             const { return const_iterator(static_cast<const base&>(self) - t * stp, stp); }
+        constexpr difference_type       operator -  ( const_iterator it ) const { return (static_cast<const base&>(self) - static_cast<const base&>(it)) / stp; }
+        constexpr const_iterator&       operator ++ ( )                         { static_cast<base&>(self) += stp;     return self; }
+        constexpr const_iterator        operator ++ ( int )                     { let it = self; ++self;               return it;   }
+        constexpr const_iterator&       operator += ( int t )                   { static_cast<base&>(self) += t * stp; return self; }
+        constexpr const_iterator&       operator -- ( )                         { static_cast<base&>(self) -= stp;     return self; }
+        constexpr const_iterator        operator -- ( int )                     { let it = self; --self;               return it;   }
+        constexpr const_iterator&       operator -= ( int t )                   { static_cast<base&>(self) -= t * stp; return self; }
+
+    public: // Operator
+        friend constexpr bool operator ==  ( const const_iterator& left, const const_iterator& right ) { return static_cast<const base&>(left) ==  static_cast<const base&>(right); }
+        friend constexpr auto operator <=> ( const const_iterator& left, const const_iterator& right ) { return static_cast<const base&>(left) <=> static_cast<const base&>(right); }
 };

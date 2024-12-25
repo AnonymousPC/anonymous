@@ -97,7 +97,7 @@ constexpr array<type,1,device>::array ( const range<type>& init )
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires std::convertible_to<std::ranges::range_value_t<decltype(r)>,type>
+    requires std::convertible_to<decltype(*r.begin()),type>
 {
     if constexpr ( requires { r.size(); } )
     {
@@ -119,7 +119,7 @@ constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_ra
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_range auto&& r, int init_size )
-    requires std::convertible_to<std::ranges::range_value_t<decltype(r)>,type>
+    requires std::convertible_to<decltype(*r.begin()),type>
     extends array ( init_size )
 {
     #if debug
@@ -238,7 +238,7 @@ template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::begin ( ) const
 {
     if ( not is_view() ) [[likely]]
-        return iterator(base::begin());
+        return const_iterator(base::begin());
     else [[unlikely]]
         throw value_error("not coded yet");
 }
@@ -256,7 +256,7 @@ template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::end ( ) const
 {
     if ( not is_view() ) [[likely]]
-        return iterator(base::end());
+        return const_iterator(base::end());
     else [[unlikely]]
         throw value_error("not coded yet");
 }

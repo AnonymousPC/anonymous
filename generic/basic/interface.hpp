@@ -41,6 +41,8 @@
     #include <string>
     #include <text_encoding>
     #include <thread>
+    #include <unordered_map>
+    #include <unordered_set>
     #include <utility>
     #include "libstdc++/mdspan.hpp"
     #include "libstdc++/text_encoding.hpp"
@@ -66,6 +68,8 @@
     #include <set>
     #include <string>
     #include <thread>
+    #include <unordered_map>
+    #include <unordered_set>
     #include <utility>
     #include "libc++/ranges.hpp"
     #include "libc++/text_encoding.hpp"
@@ -118,7 +122,7 @@
 #endif
 
 // Include [[hardware.cpu.intel.tbb]]
-#ifdef _WIN32
+#ifdef __x86_64__
     #include <tbb/tbb.h>
 #endif
 

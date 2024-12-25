@@ -23,20 +23,20 @@ class array<type,1,device>
 
     public: // Core
         constexpr          array ( ) = default;
-        constexpr          array ( const array&  )                                                   requires std::copyable<type>;
+        constexpr          array ( const array&  )                                             requires std::copyable<type>;
         constexpr          array (       array&& );
-        constexpr          array& operator = ( const array&  )                                       requires std::copyable<type>;
+        constexpr          array& operator = ( const array&  )                                 requires std::copyable<type>;
         constexpr          array& operator = (       array&& );
 
     public: // Constructor
         constexpr explicit array ( int );
-        constexpr          array ( int,  const type& )                                               requires std::copyable<type>;
+        constexpr          array ( int,  const type& )                                         requires std::copyable<type>;
         constexpr          array ( int,  function_type<type()   > auto );
         constexpr          array ( int,  function_type<type(int)> auto );
-        constexpr          array ( const std::initializer_list<type>& )                              requires std::copyable<type>;
-        constexpr          array ( const range<type>& )                                              requires std::copyable<type>;
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r )            requires std::convertible_to<std::ranges::range_value_t<decltype(r)>,type>;
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r, int )       requires std::convertible_to<std::ranges::range_value_t<decltype(r)>,type>;
+        constexpr          array ( const std::initializer_list<type>& )                        requires std::copyable<type>;
+        constexpr          array ( const range<type>& )                                        requires std::copyable<type>;
+        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r )      requires std::convertible_to<decltype(*r.begin()),type>;
+        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r, int ) requires std::convertible_to<decltype(*r.begin()),type>;
 
     public: // Conversion (type)
         template < class type2 > constexpr          array ( const array<type2,1,device>& ) requires std::convertible_to<type2,type>     but ( not std::same_as<type,type2>        );

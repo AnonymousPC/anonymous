@@ -12,14 +12,11 @@ using namespace ap;
 
 int main ( )
 {
-    boost::compute::vector<int> a (100000);
-    boost::compute::vector<int> b;
-    
-    while(true)
-    {
-        a = b;
-        b = a;
-    }
+    array<int,1,ap::tbb> arr = range(10000);
+    array<int,1,ap::tbb> b = arr;
+    let it = b.end();
+    it--;
+    print(*it);
 }
 
 /*

@@ -1,7 +1,7 @@
 #pragma once
 #include "../../generic/basic/interface.hpp"
 
-namespace ap::experimental
+namespace ap
 {
     template < class type, int dim = 1, class device = cpu >                    class array;
     template < class type,              class device = cpu >                    using vector = array<type>;

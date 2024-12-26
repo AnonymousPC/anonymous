@@ -1,6 +1,6 @@
-In file included from generic/basic/device/device.hpp:7,
-                 from generic/basic/interface.hpp:306,
-                 from main.cpp:1:
-generic/basic/device/opencl/opencl.hpp:155:43: error: invalid use of qualified-name 'ap::opencl::execution_context_type::thread_local_command_queue'
-  155 |             boost::compute::command_queue execution_context_type::thread_local_command_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~
+main.cpp:24:5: error: non-thread-local declaration of 'int B::b_key' follows thread-local declaration
+   24 | int B::b_key = 12;
+      |     ^
+main.cpp:18:29: note: 'int B::b_key' previously declared here
+   18 |     thread_local static int b_key;
+      |                             ^~~~~

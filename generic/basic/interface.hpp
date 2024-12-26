@@ -3,14 +3,14 @@
 // Macro.begin
 #ifdef debug
     #if debug
-        #define debug_symbol
+        #define debug_symbol true
     #endif
     #undef debug
 #endif
 
 #ifdef dll
     #if dll
-        #define dll_symbol
+        #define dll_symbol true
     #endif
     #undef dll
 #endif
@@ -199,6 +199,7 @@
 
 // Macro.end
 #ifdef debug_symbol
+
     #undef debug_symbol
     #define debug true
 #endif
@@ -242,7 +243,6 @@ namespace ap
     /// Subnamespace
     inline namespace constants { }
     inline namespace literals  { }
-    inline namespace experimental { }
 
     namespace abi    { }
     namespace neural { }

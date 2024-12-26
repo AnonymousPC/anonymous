@@ -5,6 +5,9 @@ class cpu
     public: // Available
         constexpr static bool is_available ( ) { return true; }
 
+    public: // Context
+        static std::execution::static_thread_pool context =
+
     public: // Layout
         using layout_type = std::layout_right;
 

@@ -192,7 +192,7 @@ namespace ap::experimental
             return false;
     } ();
 
-    namespace aux
+    namespace detail
     {
         template < class input_type, int count, class... types >
         constexpr bool tuple_type_helper = true;
@@ -218,7 +218,7 @@ namespace ap::experimental
         if constexpr ( requires { typename input_type::tuple_tag; } )
         {
             static_assert ( requires { typename input_type::template value_type<1>; typename input_type::template value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
-            return aux::tuple_type_helper<input_type,1,types...>;
+            return detail::tuple_type_helper<input_type,1,types...>;
         }
         else
             return false;

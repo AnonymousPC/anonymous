@@ -2,7 +2,7 @@
 
 // Print and input.
 
-namespace aux
+namespace detail
 {
     struct print_t
     {
@@ -30,4 +30,4 @@ namespace aux
     }
 }
 
-aux::print_t print;
+detail::print_t print;

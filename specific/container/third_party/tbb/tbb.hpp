@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __x86_64__
+#ifdef __TBB_tbb_H
     class tbb
         extends public cpu
     {
@@ -23,6 +23,6 @@
         extends public cpu
     {
         public: // Available
-            constexpr static bool is_available ( ) { return false; }
+            constexpr static bool is_available ( ) { return false; }  
     };
 #endif

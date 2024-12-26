@@ -5,7 +5,7 @@
 
 /// Function
 
-namespace aux
+namespace detail
 {
     template < class type, class func_type >
     struct function_type_helper;
@@ -17,7 +17,7 @@ namespace aux
     };
 }
 
-template < class type, class func_type >  concept function_type = aux::function_type_helper<type,func_type>::value;
+template < class type, class func_type >  concept function_type = detail::function_type_helper<type,func_type>::value;
 template < class type, class value_type > concept unary_pred    = function_type<type,bool(value_type)>;
 template < class type, class value_type > concept unary_op      = function_type<type,value_type(value_type)>;
 template < class type, class value_type > concept binary_pred   = function_type<type,bool(value_type,value_type)>;
@@ -28,7 +28,7 @@ template < class type, class value_type > concept binary_op     = function_type<
 
 #define size() (int(1+sizeof...(types))) // Warning: sizeof...(types) returns an unsigned int, which cause error without static_cast<int>
 
-namespace aux
+namespace detail
 {
     template < class... types >
     struct first_type_of_helper;
@@ -84,9 +84,9 @@ namespace aux
     };
 }
 
-template <            class... types > using first_type_of = aux::first_type_of_helper<types...>::type;
-template <            class... types > using last_type_of  = aux::last_type_of_helper<types...>::type;
-template < int index, class... types > using index_type_of = aux::index_type_of_helper<index,types...>::type;
+template <            class... types > using first_type_of = detail::first_type_of_helper<types...>::type;
+template <            class... types > using last_type_of  = detail::last_type_of_helper<types...>::type;
+template < int index, class... types > using index_type_of = detail::index_type_of_helper<index,types...>::type;
 
 
 
@@ -123,7 +123,7 @@ constexpr const auto& index_value_of ( const auto& first, const auto&... other )
 
 
 
-namespace aux
+namespace detail
 {
     template < class result_type, int index, class... types >
     struct convertible_since_helper;
@@ -191,8 +191,8 @@ namespace aux
 }
 
 
-template < class result_type, int index, class... types > constexpr bool convertible_since = aux::convertible_since_helper<result_type,index,types...>::value;
-template < class result_type, int index, class... types > constexpr bool convertible_until = aux::convertible_until_helper<result_type,index,types...>::value;
+template < class result_type, int index, class... types > constexpr bool convertible_since = detail::convertible_since_helper<result_type,index,types...>::value;
+template < class result_type, int index, class... types > constexpr bool convertible_until = detail::convertible_until_helper<result_type,index,types...>::value;
 
 
 #undef size

@@ -3,14 +3,14 @@
 // Macro.begin
 #ifdef debug
     #if debug
-        #define tmp_debug_symbol
+        #define debug_symbol
     #endif
     #undef debug
 #endif
 
 #ifdef dll
     #if dll
-        #define tmp_dll_symbol
+        #define dll_symbol
     #endif
     #undef dll
 #endif
@@ -111,6 +111,7 @@
 
 // Include [[compiler]]
 #if defined(__GNUC__) or defined(__clang__)
+    #define _GNU_SOURCE
     #include <cxxabi.h>
 #endif
 
@@ -121,20 +122,24 @@
     #include <tchar.h>
 #endif
 
-// Include [[hardware.cpu.intel.tbb]]
-#ifdef __x86_64__
-    #include <tbb/tbb.h>
-#endif
-
-// Include [[hardward.gpu.nvidia.thrust]]
+// Include [[hardware.gpu.nvidia]]
 #ifdef __NVCC__
     #include <thrust/device_vector.h>
 #endif
 
-// Include [[third-party.boost]]
-#define BOOST_COMPUTE_USE_CPP11
+// Include [[hardware.gpu.amd]]
+#ifdef __HIPCC__
+#endif
+
+// Include [[hardware.gpu.opencl]]
 #define CL_TARGET_OPENCL_VERSION 300
-#define _GNU_SOURCE
+#include <OpenCL/cl.h>
+
+// Include [[third-party.boost]]
+#ifndef debug_symbol
+    #define BOOST_DISABLE_ASSERTS
+#endif
+#define BOOST_COMPUTE_USE_CPP11
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>
@@ -166,33 +171,38 @@
 
 // Include [[third-party.eigen]]
 #if defined(__GNUC__) and not defined(__clang__)
+    #ifdef debug_symbol
+        #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
+    #else
+        #define eigen_assert(expr)
+    #endif
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wclass-memaccess"
     #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
     #include <eigen3/Eigen/Eigen>
     #include <eigen3/unsupported/Eigen/FFT>
     #pragma GCC diagnostic pop
 #elifdef __clang__
-    #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
+    #ifdef debug_symbol
+        #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
+    #else
+        #define eigen_assert(expr)
+    #endif
     #include <eigen3/Eigen/Eigen>
     #include <eigen3/unsupported/Eigen/FFT>
 #endif
 
-// Include [[third-party.mpg123]]
-#include <mpg123.h>
-
-// Include [[third-party.flac]]
-#include <FLAC++/all.h>
+// Include [[third-party.tbb]]
+#include <tbb/tbb.h>
 
 // Macro.end
-#ifdef tmp_debug_symbol
-    #undef tmp_debug_symbol
+#ifdef debug_symbol
+    #undef debug_symbol
     #define debug true
 #endif
 
-#ifdef tmp_dll_symbol
-    #undef tmp_dll_symbol
+#ifdef dll_symbol
+    #undef dll_symbol
     #define dll true
 #endif
 

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     template < class type >
     struct maybe_array_view;

@@ -168,7 +168,7 @@ exception::exception ( format_string<std::type_identity_t<arg_types>...> str, ar
 }
 
 
-// Auxiliary
+// Detail
 
 constexpr std::string exception::format ( auto&& fmt, auto&&... args )
 {

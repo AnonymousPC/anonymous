@@ -60,7 +60,7 @@ class exception
                 std::string     msg   = std::string();
                 std::stacktrace trace = std::stacktrace();
 
-    private: // Auxiliary
+    private: // Detail
         constexpr static std::string format ( auto&&, auto&&... );
 };
 

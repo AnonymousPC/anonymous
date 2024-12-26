@@ -7,9 +7,9 @@
 #define right_key_type   typename decay<decltype(right)>::key_type
 #define right_value_type typename decay<decltype(right)>::value_type
 
-/// Auxiliary
+/// Detail
 
-namespace aux
+namespace detail
 {
     template < class type, int count = 1 >
     constexpr bool tuplewise_printable = []
@@ -109,7 +109,7 @@ namespace aux
                 return true;
         } ();
 
-} // namespace aux
+} // namespace detail
 
 
 /// Global
@@ -125,14 +125,14 @@ constexpr pair_type  auto          operator  *  ( const           auto& left, co
 constexpr pair_type  auto          operator  /  ( const pair_type auto& left, const           auto& right ) requires dividable_to   <left_key_type,right_type>     and dividable_to   <left_value_type,right_type>       but ( not pair_type<right_type> );
 
 
-constexpr            std::ostream& operator <<  ( std::ostream& left,          const tuple_type auto& right ) requires aux::tuplewise_printable           <right_type>;
-constexpr            bool          operator ==  ( const tuple_type auto& left, const tuple_type auto& right ) requires aux::tuplewise_equalable           <left_type,right_type>;
-constexpr            auto          operator <=> ( const tuple_type auto& left, const tuple_type auto& right ) requires aux::tuplewise_comparable          <left_type,right_type>;
-constexpr tuple_type auto          operator  +  ( const tuple_type auto& left, const tuple_type auto& right ) requires aux::tuplewise_addable             <left_type,right_type>;
-constexpr tuple_type auto          operator  -  ( const tuple_type auto& left, const tuple_type auto& right ) requires aux::tuplewise_minusable           <left_type,right_type>;
-constexpr tuple_type auto          operator  *  ( const tuple_type auto& left, const            auto& right ) requires aux::tuplewise_each_multipliable_to<left_type,right_type> but ( not tuple_type<right_type> );
-constexpr tuple_type auto          operator  *  ( const            auto& left, const tuple_type auto& right ) requires aux::tuplewise_multipliable_to_each<left_type,right_type> but ( not tuple_type<left_type > );
-constexpr tuple_type auto          operator  /  ( const tuple_type auto& left, const            auto& right ) requires aux::tuplewise_each_dividable_to   <left_type,right_type> but ( not tuple_type<right_type> );
+constexpr            std::ostream& operator <<  ( std::ostream& left,          const tuple_type auto& right ) requires detail::tuplewise_printable           <right_type>;
+constexpr            bool          operator ==  ( const tuple_type auto& left, const tuple_type auto& right ) requires detail::tuplewise_equalable           <left_type,right_type>;
+constexpr            auto          operator <=> ( const tuple_type auto& left, const tuple_type auto& right ) requires detail::tuplewise_comparable          <left_type,right_type>;
+constexpr tuple_type auto          operator  +  ( const tuple_type auto& left, const tuple_type auto& right ) requires detail::tuplewise_addable             <left_type,right_type>;
+constexpr tuple_type auto          operator  -  ( const tuple_type auto& left, const tuple_type auto& right ) requires detail::tuplewise_minusable           <left_type,right_type>;
+constexpr tuple_type auto          operator  *  ( const tuple_type auto& left, const            auto& right ) requires detail::tuplewise_each_multipliable_to<left_type,right_type> but ( not tuple_type<right_type> );
+constexpr tuple_type auto          operator  *  ( const            auto& left, const tuple_type auto& right ) requires detail::tuplewise_multipliable_to_each<left_type,right_type> but ( not tuple_type<left_type > );
+constexpr tuple_type auto          operator  /  ( const tuple_type auto& left, const            auto& right ) requires detail::tuplewise_each_dividable_to   <left_type,right_type> but ( not tuple_type<right_type> );
 
 
 #include "discrete_global.ipp"

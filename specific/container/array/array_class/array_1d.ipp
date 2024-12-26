@@ -99,16 +99,16 @@ template < class type, class device >
 constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_range auto&& r )
     requires std::convertible_to<decltype(*r.begin()),type>
 {
-    if constexpr ( requires { r.size(); } )
+    if constexpr ( requires { std::ranges::size(r); } )
     {
         #if debug
             if ( r.size() < 0 )
                 throw value_error("initialize array with negative size {}", r.size());
         #endif
 
-        base::resize(r.size());
-        if constexpr ( requires { device::move(r.begin(), r.end(), base::begin()); } )
-            device::move(r.begin(), r.end(), base::begin());
+        base::resize(std::ranges::size(r));
+        if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), base::begin()); } )
+            device::move(std::ranges::begin(r), std::ranges::end(r), base::begin());
         else
             std::ranges::move(r, base::begin());
     }
@@ -123,13 +123,13 @@ constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_ra
     extends array ( init_size )
 {
     #if debug
-        if constexpr ( requires { r.size(); } )
-            if ( r.size() != init_size )
-                throw value_error("initialize array with ambiguous size (with range-size = {}, explicit-size = {})", r.size(), r);
+        if constexpr ( requires { std::ranges::size(r); } )
+            if ( std::ranges::size(r) != init_size )
+                throw value_error("initialize array with ambiguous size (with range-size = {}, explicit-size = {})", std::ranges::size(r), init_size);
     #endif
 
-    if constexpr ( requires { device::move(r.begin(), r.end(), base::begin()); } )
-        device::move(r.begin(), r.end(), base::begin());
+    if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), base::begin()); } )
+        device::move(std::ranges::begin(r), std::ranges::end(r), base::begin());
     else
         std::ranges::move(r, base::begin());
 }
@@ -202,21 +202,9 @@ constexpr bool array<type,1,device>::empty ( ) const
 }
 
 template < class type, class device >
-constexpr type* array<type,1,device>::data ( )
+constexpr array<type,1,device>::const_pointer array<type,1,device>::data ( ) const
 {
-    if constexpr ( requires { { base::data() } -> std::convertible_to<const type*>; } )
-        if ( not is_view() ) [[likely]]
-            return const_cast<type*>(base::data());
-        else [[unlikely]]
-            throw value_error("cannot get contiguous native data from array: it does not own its data and the borrowed data might sometimes be not contiguous");
-    else
-        static_assert(false, "cannot get contiguous native data from array: not supported on this device");
-}
-
-template < class type, class device >
-constexpr const type* array<type,1,device>::data ( ) const
-{
-    if constexpr ( requires { { base::data() } -> std::convertible_to<const type*>; } )
+    if constexpr ( requires { base::data(); } )
         if ( not is_view() ) [[likely]]
             return base::data();
         else [[unlikely]]
@@ -262,7 +250,7 @@ constexpr array<type,1,device>::const_iterator array<type,1,device>::end ( ) con
 }
 
 template < class type, class device >
-constexpr type& array<type,1,device>::operator [] ( int_type auto pos )
+constexpr array<type,1,device>::reference array<type,1,device>::operator [] ( int_type auto pos )
 {
     #if debug
         if ( pos < -size() or pos == 0 or pos > size() )
@@ -272,12 +260,12 @@ constexpr type& array<type,1,device>::operator [] ( int_type auto pos )
     if ( not is_view() ) [[likely]]
         return pos >= 0 ? base::operator[](pos-1) otherwise
                           base::operator[](pos+size());
-    else [[unlikely]]
-        return span::from_host()[&self - span::from_host().to_views().data() + 1, pos];
+    //else [[unlikely]]
+    //    return span::from_host()[&self - span::from_host().to_views().data() + 1, pos];
 }
 
 template < class type, class device >
-constexpr const type& array<type,1,device>::operator [] ( int_type auto pos ) const
+constexpr array<type,1,device>::const_reference array<type,1,device>::operator [] ( int_type auto pos ) const
 {
     #if debug
         if ( pos < -size() or pos == 0 or pos > size() )
@@ -287,8 +275,8 @@ constexpr const type& array<type,1,device>::operator [] ( int_type auto pos ) co
     if ( not is_view() ) [[likely]]
         return pos >= 0 ? base::operator[](pos-1) otherwise
                           base::operator[](pos+size());
-    else [[unlikely]]
-        return span::from_host()[&self - span::from_host().to_views().data() + 1, pos];
+    //else [[unlikely]]
+    //    return span::from_host()[&self - span::from_host().to_views().data() + 1, pos];
 }
 
 template < class type, class device >
@@ -371,40 +359,41 @@ class array<type,1,device>::iterator
     extends public device::template vector<type>::iterator
 {
     private: // Data
-        int stp = 1;
-    
+        int step = 1;
+
     private: // Typedef
         using base = device::template vector<type>::iterator;
 
     public: // Typedef
-        using  value_type      = type;
-        using  pointer         = type*;
-        using  reference       = type&;
-        using  difference_type = std::ptrdiff_t;
-        struct random_access_iterator_tag { };
+        using iterator_concept = common_type<typename std::iterator_traits<base>::iterator_category,std::random_access_iterator_tag>;
+        using value_type       = decay<typename std::iterator_traits<base>::reference>;
+        using reference        = std::iterator_traits<base>::reference;
+        using pointer          = std::iterator_traits<base>::pointer;
+        using difference_type  = std::iterator_traits<base>::difference_type;
 
     public: // Core
         constexpr iterator ( ) = default;
-        constexpr iterator ( base init_iter )               extends base ( init_iter )                   { };
-        constexpr iterator ( base init_iter, int init_stp ) extends base ( init_iter ), stp ( init_stp ) { }; 
+        constexpr iterator ( base init_iter )                extends base ( init_iter )                     { };
+        constexpr iterator ( base init_iter, int init_step ) extends base ( init_iter ), step ( init_step ) { }; 
 
-    public: // Member
-        constexpr type&           operator *  ( )             const { return base::operator*(); }
-        constexpr type*           operator -> ( )             const { return base::operator->(); }
-        constexpr type&           operator [] ( int t )       const { return base::operator[](t); }
-        constexpr iterator        operator +  ( int t )       const { return iterator(static_cast<const base&>(self) + t * stp, stp); }
-        constexpr iterator        operator -  ( int t )       const { return iterator(static_cast<const base&>(self) - t * stp, stp); }
-        constexpr difference_type operator -  ( iterator it ) const { return (static_cast<const base&>(self) - static_cast<const base&>(it)) / stp; }
-        constexpr iterator&       operator ++ ( )                   { static_cast<base&>(self) += stp;     return self; }
-        constexpr iterator        operator ++ ( int )               { let it = self; ++self;               return it;   }
-        constexpr iterator&       operator += ( int t )             { static_cast<base&>(self) += t * stp; return self; }
-        constexpr iterator&       operator -- ( )                   { static_cast<base&>(self) -= stp;     return self; }
-        constexpr iterator        operator -- ( int )               { let it = self; --self;               return it;   }
-        constexpr iterator&       operator -= ( int t )             { static_cast<base&>(self) -= t * stp; return self; }
+    public: // Operator.member
+        constexpr reference operator *  ( )                   const { return *static_cast<const base&>(self); }
+        constexpr pointer   operator -> ( )                   const { return  static_cast<const base&>(self); }
+        constexpr reference operator [] ( difference_type t ) const { return  static_cast<const base&>(self)[t]; }
 
-    public: // Operator
-        friend constexpr bool operator ==  ( const iterator& left, const iterator& right ) { return static_cast<const base&>(left) ==  static_cast<const base&>(right); }
-        friend constexpr auto operator <=> ( const iterator& left, const iterator& right ) { return static_cast<const base&>(left) <=> static_cast<const base&>(right); }
+    public: // Operator.global
+        friend constexpr bool                 operator ==  ( const iterator&       left, const iterator&       right ) { return static_cast<const base&>(left) == static_cast<const base&>(right); }
+        friend constexpr std::strong_ordering operator <=> ( const iterator&       left, const iterator&       right ) { return std::compare_strong_order_fallback(static_cast<const base&>(left), static_cast<const base&>(right)); }
+        friend constexpr iterator             operator  +  ( const iterator&       left,       difference_type right ) { return iterator(static_cast<const base&>(left ) + left .step * right, left .step); }
+        friend constexpr iterator             operator  +  (       difference_type left, const iterator&       right ) { return iterator(static_cast<const base&>(right) + right.step * left,  right.step); }
+        friend constexpr iterator             operator  -  ( const iterator&       left,       difference_type right ) { return iterator(static_cast<const base&>(left ) - left .step * right, left .step); }
+        friend constexpr difference_type      operator  -  ( const iterator&       left, const iterator&       right ) { return (static_cast<const base&>(left) - static_cast<const base&>(right)) / std::max(left.step, right.step); }
+        friend constexpr iterator&            operator ++  (       iterator&       left                              ) { static_cast<base&>(left) += left.step;         return left; }
+        friend constexpr iterator             operator ++  (       iterator&       left,       int                   ) { let it = left; ++left;                         return it;   }
+        friend constexpr iterator&            operator --  (       iterator&       left                              ) { static_cast<base&>(left) -= left.step;         return left; }
+        friend constexpr iterator             operator --  (       iterator&       left,       int                   ) { let it = left; --left;                         return it;   }
+        friend constexpr iterator&            operator +=  (       iterator&       left,       difference_type right ) { static_cast<base&>(left) += left.step * right; return left; }
+        friend constexpr iterator&            operator -=  (       iterator&       left,       difference_type right ) { static_cast<base&>(left) -= left.step * right; return left; }
 };
 
 template < class type, class device >
@@ -412,38 +401,35 @@ class array<type,1,device>::const_iterator
     extends public device::template vector<type>::const_iterator
 {
     private: // Data
-        int stp = 1;
+        int step = 1;
     
-    private: // Typedef
-        using base = device::template vector<type>::const_iterator;
-
     public: // Typedef
-        using  value_type      = type;
-        using  pointer         = type*;
-        using  reference       = type&;
-        using  difference_type = std::ptrdiff_t;
-        struct random_access_iterator_tag { };
+        using iterator_concept = common_type<typename std::iterator_traits<base>::iterator_category,std::random_access_iterator_tag>;
+        using value_type       = decay<typename std::iterator_traits<base>::reference>;
+        using reference        = std::iterator_traits<base>::reference;
+        using pointer          = std::iterator_traits<base>::pointer;
+        using difference_type  = std::iterator_traits<base>::difference_type;
 
     public: // Core
         constexpr const_iterator ( ) = default;
-        constexpr const_iterator ( base init_iter )               extends base ( init_iter )                   { };
-        constexpr const_iterator ( base init_iter, int init_stp ) extends base ( init_iter ), stp ( init_stp ) { }; 
+        constexpr const_iterator ( base init_iter )                extends base ( init_iter )                     { };
+        constexpr const_iterator ( base init_iter, int init_step ) extends base ( init_iter ), step ( init_step ) { }; 
 
-    public: // Member
-        constexpr const type&           operator *  ( )                   const { return base::operator*(); }
-        constexpr const type*           operator -> ( )                   const { return base::operator->(); }
-        constexpr const type&           operator [] ( int t )             const { return base::operator[](t); }
-        constexpr const_iterator        operator +  ( int t )             const { return const_iterator(static_cast<const base&>(self) + t * stp, stp); }
-        constexpr const_iterator        operator -  ( int t )             const { return const_iterator(static_cast<const base&>(self) - t * stp, stp); }
-        constexpr difference_type       operator -  ( const_iterator it ) const { return (static_cast<const base&>(self) - static_cast<const base&>(it)) / stp; }
-        constexpr const_iterator&       operator ++ ( )                         { static_cast<base&>(self) += stp;     return self; }
-        constexpr const_iterator        operator ++ ( int )                     { let it = self; ++self;               return it;   }
-        constexpr const_iterator&       operator += ( int t )                   { static_cast<base&>(self) += t * stp; return self; }
-        constexpr const_iterator&       operator -- ( )                         { static_cast<base&>(self) -= stp;     return self; }
-        constexpr const_iterator        operator -- ( int )                     { let it = self; --self;               return it;   }
-        constexpr const_iterator&       operator -= ( int t )                   { static_cast<base&>(self) -= t * stp; return self; }
+        constexpr reference operator *  ( )                   const { return *static_cast<const base&>(self); }
+        constexpr pointer   operator -> ( )                   const { return  static_cast<const base&>(self); }
+        constexpr reference operator [] ( difference_type t ) const { return  static_cast<const base&>(self)[t]; }
 
-    public: // Operator
-        friend constexpr bool operator ==  ( const const_iterator& left, const const_iterator& right ) { return static_cast<const base&>(left) ==  static_cast<const base&>(right); }
-        friend constexpr auto operator <=> ( const const_iterator& left, const const_iterator& right ) { return static_cast<const base&>(left) <=> static_cast<const base&>(right); }
+    public: // Operator.global
+        friend constexpr bool                 operator ==  ( const const_iterator& left, const const_iterator& right ) { return static_cast<const base&>(left) == static_cast<const base&>(right); }
+        friend constexpr std::strong_ordering operator <=> ( const const_iterator& left, const const_iterator& right ) { return std::compare_strong_order_fallback(static_cast<const base&>(left), static_cast<const base&>(right)); }
+        friend constexpr const_iterator       operator  +  ( const const_iterator& left,       difference_type right ) { return const_iterator(static_cast<const base&>(left ) + left .step * right, left .step); }
+        friend constexpr const_iterator       operator  +  (       difference_type left, const const_iterator& right ) { return const_iterator(static_cast<const base&>(right) + right.step * left,  right.step); }
+        friend constexpr const_iterator       operator  -  ( const const_iterator& left,       difference_type right ) { return const_iterator(static_cast<const base&>(left ) - left .step * right, left .step); }
+        friend constexpr difference_type      operator  -  ( const const_iterator& left, const const_iterator& right ) { return (static_cast<const base&>(left) - static_cast<const base&>(right)) / std::max(left.step, right.step); }
+        friend constexpr const_iterator&      operator ++  (       const_iterator& left                              ) { static_cast<base&>(left) += left.step;         return left; }
+        friend constexpr const_iterator       operator ++  (       const_iterator& left,       int                   ) { let it = left; ++left;                         return it;   }
+        friend constexpr const_iterator&      operator --  (       const_iterator& left                              ) { static_cast<base&>(left) -= left.step;         return left; }
+        friend constexpr const_iterator       operator --  (       const_iterator& left,       int                   ) { let it = left; --left;                         return it;   }
+        friend constexpr const_iterator&      operator +=  (       const_iterator& left,       difference_type right ) { static_cast<base&>(left) += left.step * right; return left; }
+        friend constexpr const_iterator&      operator -=  (       const_iterator& left,       difference_type right ) { static_cast<base&>(left) -= left.step * right; return left; }
 };

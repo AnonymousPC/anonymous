@@ -1,0 +1,9 @@
+In file included from main.cpp:6:
+./specific/container/interface.hpp:4:15: warning: inline namespace reopened as a non-inline namespace [-Winline-namespace-reopened-noninline]
+    4 | namespace ap::experimental
+      |               ^
+      |             inline 
+./generic/basic/interface.hpp:234:22: note: previous definition is here
+  234 |     inline namespace experimental { }
+      |                      ^
+1 warning generated.

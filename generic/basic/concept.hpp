@@ -2,7 +2,7 @@
 
 /// Core
 
-namespace aux
+namespace detail
 {
     template < int index, class input_type > struct tuple_element_helper;
     template < int index, class input_type > requires ( index > 0 ) struct tuple_element_helper<index,input_type> { using type = std::tuple_element<std::size_t(index-1),input_type>::type; };
@@ -19,13 +19,13 @@ template < class type >                               using          remove_vola
 template < class type >                               using          remove_extent       = std::remove_extent<type>::type;
 template < class type >                               using          remove_pointer      = std::remove_pointer<type>::type;
 template < class type >                               using          remove_reference    = std::remove_reference<type>::type;
-template < int index, class type >                    using          tuple_element       = aux::tuple_element_helper<index,type>::type;
+template < int index, class type >                    using          tuple_element       = detail::tuple_element_helper<index,type>::type;
 template < class type >                               constexpr int  tuple_size          = std::tuple_size<type>::value;
 
 template < class type >                               constexpr bool is_class            = std::is_class<type>::value;
 template < class type >                               constexpr bool is_const            = std::is_const<type>::value;
 template < class type >                               constexpr bool is_lvalue_reference = std::is_lvalue_reference<type>::value;
-template < class type >                               constexpr bool is_pointer_type     = std::is_pointer<type>::value;
+template < class type >                               constexpr bool is_pointer          = std::is_pointer<type>::value;
 template < class type >                               constexpr bool is_reference        = std::is_reference<type>::value;
 template < class type >                               constexpr bool is_rvalue_reference = std::is_rvalue_reference<type>::value;
 template < class type >                               constexpr bool is_void             = std::is_void<type>::value;

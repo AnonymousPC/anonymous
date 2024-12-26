@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     template < int index = 1 > constexpr decltype(auto) tuplewise_print         (       auto&, const auto& );
     template < int index = 1 > constexpr bool           tuplewise_equal         ( const auto&, const auto& );
@@ -11,11 +11,11 @@ namespace aux
     template < int index = 1 > constexpr auto           tuplewise_multiply_each ( const auto&, const auto& );
     template < int index = 1 > constexpr auto           tuplewise_each_divide   ( const auto&, const auto& );
 
-    template < int index = 1 > constexpr void           tuplewise_add_aux           ( const auto&, const auto&, auto& );
-    template < int index = 1 > constexpr void           tuplewise_minus_aux         ( const auto&, const auto&, auto& );
-    template < int index = 1 > constexpr void           tuplewise_each_multiply_aux ( const auto&, const auto&, auto& );
-    template < int index = 1 > constexpr void           tuplewise_multiply_each_aux ( const auto&, const auto&, auto& );
-    template < int index = 1 > constexpr void           tuplewise_each_divide_aux   ( const auto&, const auto&, auto& );
+    template < int index = 1 > constexpr void           tuplewise_add_detail           ( const auto&, const auto&, auto& );
+    template < int index = 1 > constexpr void           tuplewise_minus_detail         ( const auto&, const auto&, auto& );
+    template < int index = 1 > constexpr void           tuplewise_each_multiply_detail ( const auto&, const auto&, auto& );
+    template < int index = 1 > constexpr void           tuplewise_multiply_each_detail ( const auto&, const auto&, auto& );
+    template < int index = 1 > constexpr void           tuplewise_each_divide_detail   ( const auto&, const auto&, auto& );
 
     template < class type1, class type2 > struct        tuplewise_add_result;
     template < class type1, class type2 > struct        tuplewise_minus_result;
@@ -85,51 +85,51 @@ constexpr pair_type auto operator / ( const pair_type auto& left, const auto& ri
 
 
 constexpr std::ostream& operator << ( std::ostream& left, const tuple_type auto& right )
-    requires aux::tuplewise_printable<right_type>
+    requires detail::tuplewise_printable<right_type>
 {
-    return aux::tuplewise_print ( left, right );
+    return detail::tuplewise_print ( left, right );
 }
 
 constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
-    requires aux::tuplewise_equalable<left_type,right_type>
+    requires detail::tuplewise_equalable<left_type,right_type>
 {
-    return aux::tuplewise_equal ( left, right );
+    return detail::tuplewise_equal ( left, right );
 }
 
 constexpr auto operator <=> ( const tuple_type auto& left, const tuple_type auto& right )
-    requires aux::tuplewise_comparable<left_type,right_type>
+    requires detail::tuplewise_comparable<left_type,right_type>
 {
-    return aux::tuplewise_compare ( left, right );
+    return detail::tuplewise_compare ( left, right );
 }
 
 constexpr tuple_type auto operator + ( const tuple_type auto& left, const tuple_type auto& right )
-    requires aux::tuplewise_addable<left_type,right_type>
+    requires detail::tuplewise_addable<left_type,right_type>
 {
-    return aux::tuplewise_add ( left, right );
+    return detail::tuplewise_add ( left, right );
 }
 
 constexpr tuple_type auto operator - ( const tuple_type auto& left, const tuple_type auto& right )
-    requires aux::tuplewise_minusable<left_type,right_type>
+    requires detail::tuplewise_minusable<left_type,right_type>
 {
-    return aux::tuplewise_minus ( left, right );
+    return detail::tuplewise_minus ( left, right );
 }
 
 constexpr tuple_type auto operator * ( const tuple_type auto& left, const auto& right )
-    requires aux::tuplewise_each_multipliable_to<left_type,right_type> but ( not tuple_type<right_type> )
+    requires detail::tuplewise_each_multipliable_to<left_type,right_type> but ( not tuple_type<right_type> )
 {
-    return aux::tuplewise_each_multiply ( left, right );
+    return detail::tuplewise_each_multiply ( left, right );
 }
 
 constexpr tuple_type auto operator * ( const auto& left, const tuple_type auto& right )
-    requires aux::tuplewise_multipliable_to_each<left_type,right_type> but ( not tuple_type<left_type> )
+    requires detail::tuplewise_multipliable_to_each<left_type,right_type> but ( not tuple_type<left_type> )
 {
-    return aux::tuplewise_multiply_each ( left, right );
+    return detail::tuplewise_multiply_each ( left, right );
 }
 
 constexpr tuple_type auto operator / ( const tuple_type auto& left, const auto& right )
-    requires aux::tuplewise_each_dividable_to<left_type,right_type> but ( not tuple_type<right_type> )
+    requires detail::tuplewise_each_dividable_to<left_type,right_type> but ( not tuple_type<right_type> )
 {
-    return aux::tuplewise_each_divide ( left, right );
+    return detail::tuplewise_each_divide ( left, right );
 }
 
 
@@ -137,10 +137,10 @@ constexpr tuple_type auto operator / ( const tuple_type auto& left, const auto& 
 
 
 
-/// Auxiliary (function)
+/// Detail (function)
 
 template < int index >
-constexpr decltype(auto) aux::tuplewise_print ( auto& left, const auto& right )
+constexpr decltype(auto) detail::tuplewise_print ( auto& left, const auto& right )
 {
     if constexpr ( index == 1 )
         left << '(';
@@ -159,16 +159,16 @@ constexpr decltype(auto) aux::tuplewise_print ( auto& left, const auto& right )
 }
 
 template < int index >
-constexpr bool aux::tuplewise_equal ( const auto& left, const auto& right )
+constexpr bool detail::tuplewise_equal ( const auto& left, const auto& right )
 {
     if constexpr ( index < tuple_size<left_type> )
-        return get<index-1>(left) == get<index-1>(right) and aux::tuplewise_equal<index+1> ( left, right );
+        return get<index-1>(left) == get<index-1>(right) and detail::tuplewise_equal<index+1> ( left, right );
     else
         return get<index-1>(left) == get<index-1>(right);
 }
 
 template < int index >
-constexpr auto aux::tuplewise_compare ( const auto& left, const auto& right )
+constexpr auto detail::tuplewise_compare ( const auto& left, const auto& right )
 {
     if constexpr ( index < tuple_size<left_type> )
     {
@@ -186,42 +186,42 @@ constexpr auto aux::tuplewise_compare ( const auto& left, const auto& right )
 }
 
 template < int index >
-constexpr auto aux::tuplewise_add ( const auto& left, const auto& right )
+constexpr auto detail::tuplewise_add ( const auto& left, const auto& right )
 {
     let t = typename tuplewise_add_result<left_type,right_type>::type();
-    tuplewise_add_aux ( left, right, t );
+    tuplewise_add_detail ( left, right, t );
     return t;
 }
 
 template < int index >
-constexpr auto aux::tuplewise_minus ( const auto& left, const auto& right )
+constexpr auto detail::tuplewise_minus ( const auto& left, const auto& right )
 {
     let t = typename tuplewise_minus_result<left_type,right_type>::type();
-    tuplewise_minus_aux ( left, right, t );
+    tuplewise_minus_detail ( left, right, t );
     return t;
 }
 
 template < int index >
-constexpr auto aux::tuplewise_each_multiply ( const auto& left, const auto& right )
+constexpr auto detail::tuplewise_each_multiply ( const auto& left, const auto& right )
 {
     let t = typename tuplewise_each_multiply_result<left_type,right_type>::type();
-    tuplewise_each_multiply_aux ( left, right, t );
+    tuplewise_each_multiply_detail ( left, right, t );
     return t;
 }
 
 template < int index >
-constexpr auto aux::tuplewise_multiply_each ( const auto& left, const auto& right )
+constexpr auto detail::tuplewise_multiply_each ( const auto& left, const auto& right )
 {
     let t = typename tuplewise_multiply_each_result<left_type,right_type>::type();
-    tuplewise_multiply_each_aux ( left, right, t );
+    tuplewise_multiply_each_detail ( left, right, t );
     return t;
 }
 
 template < int index >
-constexpr auto aux::tuplewise_each_divide ( const auto& left, const auto& right )
+constexpr auto detail::tuplewise_each_divide ( const auto& left, const auto& right )
 {
     let t = typename tuplewise_each_divide_result<left_type,right_type>::type();
-    tuplewise_each_divide_aux ( left, right, t );
+    tuplewise_each_divide_detail ( left, right, t );
     return t;
 }
 
@@ -231,50 +231,50 @@ constexpr auto aux::tuplewise_each_divide ( const auto& left, const auto& right 
 
 
 template < int index >
-constexpr void aux::tuplewise_add_aux ( const auto& left, const auto& right, auto& t )
+constexpr void detail::tuplewise_add_detail ( const auto& left, const auto& right, auto& t )
 {
     get<index-1>(t) = get<index-1>(left) + get<index-1>(right);
 
     if constexpr ( index < tuple_size<left_type > and
                    index < tuple_size<right_type> )
-        tuplewise_add_aux<index+1> ( left, right, t );
+        tuplewise_add_detail<index+1> ( left, right, t );
 }
 
 template < int index >
-constexpr void aux::tuplewise_minus_aux ( const auto& left, const auto& right, auto& t )
+constexpr void detail::tuplewise_minus_detail ( const auto& left, const auto& right, auto& t )
 {
     get<index-1>(t) = get<index-1>(left) - get<index-1>(right);
 
     if constexpr ( index < tuple_size<left_type > and
                    index < tuple_size<right_type> )
-        tuplewise_minus_aux<index+1> ( left, right, t );
+        tuplewise_minus_detail<index+1> ( left, right, t );
 }
 
 template < int index >
-constexpr void aux::tuplewise_each_multiply_aux ( const auto& left, const auto& right, auto& t )
+constexpr void detail::tuplewise_each_multiply_detail ( const auto& left, const auto& right, auto& t )
 {
     get<index-1>(t) = get<index-1>(left) * right;
 
     if constexpr ( index < tuple_size<left_type> )
-        tuplewise_each_multiply_aux<index+1> ( left, right, t );
+        tuplewise_each_multiply_detail<index+1> ( left, right, t );
 }
 
 template < int index >
-constexpr void aux::tuplewise_multiply_each_aux ( const auto& left, const auto& right, auto& t )
+constexpr void detail::tuplewise_multiply_each_detail ( const auto& left, const auto& right, auto& t )
 {
     get<index-1>(t) = left * get<index-1>(right);
 
     if constexpr ( index < tuple_size<right_type> )
-        tuplewise_multiply_each_aux<index+1> ( left, right, t );
+        tuplewise_multiply_each_detail<index+1> ( left, right, t );
 }
 
 template < int index >
-constexpr void aux::tuplewise_each_divide_aux ( const auto& left, const auto& right, auto& t )
+constexpr void detail::tuplewise_each_divide_detail ( const auto& left, const auto& right, auto& t )
 {
     get<index-1>(t) = get<index-1>(left) / right;
 
     if constexpr ( index < tuple_size<left_type> )
-        tuplewise_each_divide_aux<index+1> ( left, right, t );
+        tuplewise_each_divide_detail<index+1> ( left, right, t );
 }
 
 
@@ -282,61 +282,61 @@ constexpr void aux::tuplewise_each_divide_aux ( const auto& left, const auto& ri
 
 
 template < class... types1, class... types2 >
-struct aux::tuplewise_add_result<tuple<types1...>,tuple<types2...>>
+struct detail::tuplewise_add_result<tuple<types1...>,tuple<types2...>>
 {
     using type = tuple<add_result<types1,types2>...>;
 };
 
 template < tuple_type type1, tuple_type type2 >
-struct aux::tuplewise_add_result<type1,type2>
+struct detail::tuplewise_add_result<type1,type2>
 {
     using type = tuplewise_add_result<decltype(tuple(std::declval<type1>())),decltype(tuple(std::declval<type2>()))>::type;
 };
 
 template < class... types1, class... types2 >
-struct aux::tuplewise_minus_result<tuple<types1...>,tuple<types2...>>
+struct detail::tuplewise_minus_result<tuple<types1...>,tuple<types2...>>
 {
     using type = tuple<minus_result<types1,types2>...>;
 };
 
 template < tuple_type type1, tuple_type type2 >
-struct aux::tuplewise_minus_result<type1,type2>
+struct detail::tuplewise_minus_result<type1,type2>
 {
     using type = tuplewise_minus_result<decltype(tuple(std::declval<type1>())),decltype(tuple(std::declval<type2>()))>::type;
 };
 
 template < class... types1, class type2 >
-struct aux::tuplewise_each_multiply_result<tuple<types1...>,type2>
+struct detail::tuplewise_each_multiply_result<tuple<types1...>,type2>
 {
     using type = tuple<multiply_result<types1,type2>...>;
 };
 
 template < tuple_type type1, class type2 >
-struct aux::tuplewise_each_multiply_result<type1,type2>
+struct detail::tuplewise_each_multiply_result<type1,type2>
 {
     using type = tuplewise_each_multiply_result<decltype(tuple(std::declval<type1>())),type2>::type;
 };
 
 template < class type1, class... types2 >
-struct aux::tuplewise_multiply_each_result<type1,tuple<types2...>>
+struct detail::tuplewise_multiply_each_result<type1,tuple<types2...>>
 {
     using type = tuple<multiply_result<type1,types2>...>;
 };
 
 template < class type1, tuple_type type2 >
-struct aux::tuplewise_multiply_each_result<type1,type2>
+struct detail::tuplewise_multiply_each_result<type1,type2>
 {
     using type = tuplewise_multiply_each_result<type1,decltype(tuple(std::declval<type2>()))>::type;
 };
 
 template < class... types1, class type2 >
-struct aux::tuplewise_each_divide_result<tuple<types1...>,type2>
+struct detail::tuplewise_each_divide_result<tuple<types1...>,type2>
 {
     using type = tuple<divide_result<types1,type2>...>;
 };
 
 template < tuple_type type1, class type2 >
-struct aux::tuplewise_each_divide_result<type1,type2>
+struct detail::tuplewise_each_divide_result<type1,type2>
 {
     using type = tuplewise_each_divide_result<decltype(tuple(std::declval<type1>())),type2>::type;
 };

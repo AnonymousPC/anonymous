@@ -3,7 +3,7 @@
 template < class type, class device >
 class array<type,1,device>
     extends public  device::template vector<type>,
-            private aux::maybe_array_view<array<type,1,device>>
+            private detail::maybe_array_view<array<type,1,device>>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -11,14 +11,17 @@ class array<type,1,device>
 
     private: // Typedef
         using base = device::template vector<type>;
-        using span = aux::maybe_array_view<array<type,1,device>>;
+        using span = detail::maybe_array_view<array<type,1,device>>;
 
     public: // Typedef
-        using  value_type     = type;
-        using  device_type    = device;
-        using  iterate_type   = type;
+        using  value_type      = base::value_type;
+        using  reference       = base::reference;
+        using  const_reference = base::const_reference;
+        using  pointer         = base::pointer;
+        using  const_pointer   = base::const_pointer;
         class  iterator;
         class  const_iterator;
+        using  device_type     = device;
         struct array_tag { };
 
     public: // Core
@@ -51,14 +54,13 @@ class array<type,1,device>
         constexpr        int                  row           ( )               const = delete;
         constexpr        int                  column        ( )               const = delete;
         constexpr        bool                 empty         ( )               const;
-        constexpr        type*                data          ( );
-        constexpr const  type*                data          ( )               const;
+        constexpr        const_pointer        data          ( )               const;
         constexpr        iterator             begin         ( );
         constexpr        const_iterator       begin         ( )               const;
         constexpr        iterator             end           ( );
         constexpr        const_iterator       end           ( )               const;
-        constexpr        type&                operator []   ( int_type auto );
-        constexpr const  type&                operator []   ( int_type auto ) const;
+        constexpr        reference            operator []   ( int_type auto );
+        constexpr        const_reference      operator []   ( int_type auto ) const;
 
     public: // Member
         constexpr array& clear  ( );
@@ -72,9 +74,8 @@ class array<type,1,device>
         constexpr bool is_view ( ) const;
 
     public: // Views
-        // using array_algo::operator[],
-        //       array_algo::reshape,
-        //       array_algo::flatten;
+        // using array_algo::as_shape,
+        //       array_algo::as_transpose;
 };
 
 #include "array_1d.ipp"

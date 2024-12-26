@@ -5,12 +5,12 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 class array
     extends public  device::template vector<type>,
-            private aux::maybe_mdspan_of   <array<type,dim+1,device>>,
-            private aux::maybe_shape_of    <array<type,dim,device>>,
-            private aux::maybe_transpose_of<array<type,dim,device>>
+            private detail::maybe_mdspan_of   <array<type,dim+1,device>>,
+            private detail::maybe_shape_of    <array<type,dim,device>>,
+            private detail::maybe_transpose_of<array<type,dim,device>>
 {
     private: // Data
-    array<aux::maybe_mdspan_of<array<type,dim,device>>> views_instance     = {}...; 
+    array<detail::maybe_mdspan_of<array<type,dim,device>>> views_instance     = {}...; 
     device::template vector<type>&                      flat_instance      { .ptr = reinterpret_cast<...>&self; };
     array<type,1,device>                                shape_1_instance   { .ptr =  }
     array<type,dim,device>                              transpose_instance { .ptr = &self; };
@@ -30,9 +30,9 @@ class array
     public: // Core
         constexpr          array ( ) = default;
         constexpr explicit array ( int_type auto... args )                                   requires ( sizeof...(args)     == dim );
-        constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and aux::ints_until_last_type     <type,decltype(args)...> and std::copyable<type>;
-        constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and aux::ints_until_last_func     <type,decltype(args)...>;
-        constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and aux::ints_until_last_func_ints<type,decltype(args)...>;
+        constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_type     <type,decltype(args)...> and std::copyable<type>;
+        constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func     <type,decltype(args)...>;
+        constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func_ints<type,decltype(args)...>;
         constexpr          array ( int,  function_type<array<type,dim-1>()>    auto );
         constexpr          array ( int,  function_type<array<type,dim-1>(int)> auto );
         constexpr          array ( const std::initializer_list<array<type,dim-1>>& );

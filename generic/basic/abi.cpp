@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     std::string paint ( std::string, const std::array<const char*,4>&, int = 0, int = 0 );
 }
@@ -25,7 +25,7 @@ std::string abi::demangle ( const std::stacktrace& trace )
                  | std::views::transform ([&] (const auto& e)
                      {
                          return std::format("    {}{} {}{} {}{} {}{}:{}{}",
-                                            yellow, "at", white,  aux::paint(e.description(), grey_scale),
+                                            yellow, "at", white,  detail::paint(e.description(), grey_scale),
                                             green,  "in", grey,   e.source_file(), e.source_line(),
                                             white);
                      })
@@ -41,9 +41,9 @@ std::string abi::demangle ( const std::stacktrace& trace )
 
 
 
-// Auxiliary
+// Detail
 
-std::string aux::paint ( std::string str, const std::array<const char*,4>& colors, int str_pos, int colors_pos )
+std::string detail::paint ( std::string str, const std::array<const char*,4>& colors, int str_pos, int colors_pos )
 {
 
     // Locate brackets

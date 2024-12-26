@@ -133,14 +133,20 @@
                     explicit execution_context_type ( int ) { };
 
                 public: // Member
-                    std::uint32_t available_parallelism ( ) const;
+                    std::uint32_t available_parallelism ( ) const
+                    {
+                        return boost::compute::system::default_device().compute_units();
+                    }
 
-                public: // Extra
                     static boost::compute::command_queue& command_queue ( )
                     {
                         thread_local auto cmd_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
                         return cmd_queue;
                     }
+
+                public: // Friend
+                                                                 friend        execpools::thread_pool_base<execution_context_type>;
+                    template < class pool_type, class receiver > friend struct execpools::operation;  
 
                 private: // Member
                     constexpr static std::execution::forward_progress_guarantee forward_progress_guarantee ( )
@@ -148,18 +154,25 @@
                         return std::execution::forward_progress_guarantee::parallel;
                     };
 
-                    void enqueue ( execpools::task_base* task, std::uint32_t tid = 0 ) noexcept
+                    void enqueue ( execpools::task_base* task, std::uint32_t tid = 0 )
                     {
-                        // thread_local auto task_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
-                        // task_queue.enqueue_native_kernel([task, tid] { task->__execute(task, /*tid=*/tid); });
-                        // task_queue.flush();
+                        thread_local auto task_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
+                        //task_queue.enqueue_native_kernel(enqueue_callback, new task_type(task, tid), sizeof(task_type), 0, 0, 0);
+                        task_queue.enqueue_native_kernel(+[] { int a = 1; a++; });
+                        task_queue.flush();
                     }
 
-                    friend thread_pool_base<execution_context_type>;
-                    template < class pool_type, class receiver > friend struct operation;  
+                    static void BOOST_COMPUTE_CL_CALLBACK enqueue_callback ( void* args )
+                    {
+                        let ptr = static_cast<task_type*>(args);
+                        ptr->task->__execute(ptr->task, /*tid=*/ptr->tid);
+                    }
 
-                private: // Static Data
-                    static thread_local boost::compute::command_queue thread_local_command_queue;           
+                    struct task_type
+                    {
+                        execpools::task_base* task;
+                        std::uint32_t         tid;
+                    };   
             };
     };
     opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());

@@ -8,20 +8,12 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
-#include <execpools/tbb/tbb_thread_pool.hpp>
-
 
 int main ( )
 { 
-   // print(ap::abi::demangle(typeid(std::iter_value_t<boost::compute::buffer_iterator<int>&>).name()));
-    let a = boost::compute::vector<int>(100);
-    for ( int i in range(0, 99) )
-        a[i] = i;
-    opencl::sort(a.begin(), a.end(), boost::compute::greater<int>());
-    let b = a;
-    for ( int i in range(0, 99) )
-        print(b[i]);
-
+    let task = std::execution::schedule(opencl::execution_context.get_scheduler())
+             | std::execution::then([] { print("Hello"); });
+    std::execution::sync_wait(task);
 }
 
 /*

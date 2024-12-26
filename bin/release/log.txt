@@ -1,9 +1,6 @@
-In file included from main.cpp:6:
-./specific/container/interface.hpp:4:15: warning: inline namespace reopened as a non-inline namespace [-Winline-namespace-reopened-noninline]
-    4 | namespace ap::experimental
-      |               ^
-      |             inline 
-./generic/basic/interface.hpp:243:22: note: previous definition is here
-  243 |     inline namespace experimental { }
-      |                      ^
-1 warning generated.
+In file included from generic/basic/device/device.hpp:7,
+                 from generic/basic/interface.hpp:306,
+                 from main.cpp:1:
+generic/basic/device/opencl/opencl.hpp:155:43: error: invalid use of qualified-name 'ap::opencl::execution_context_type::thread_local_command_queue'
+  155 |             boost::compute::command_queue execution_context_type::thread_local_command_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~

@@ -85,6 +85,7 @@
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
     #include <exec/when_any.hpp>
+    #include <execpools/tbb/tbb_thread_pool.hpp>
     namespace std
     {
         namespace execution
@@ -98,6 +99,7 @@
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
     #include <exec/when_any.hpp>
+    #include <execpools/tbb/tbb_thread_pool.hpp>
     namespace std
     {
         namespace execution
@@ -124,6 +126,7 @@
 
 // Include [[hardware.gpu.nvidia]]
 #ifdef __NVCC__
+    #include <nvexec/stream_context.cuh>
     #include <thrust/device_vector.h>
 #endif
 
@@ -133,7 +136,6 @@
 
 // Include [[hardware.gpu.opencl]]
 #define CL_TARGET_OPENCL_VERSION 300
-#include <OpenCL/cl.h>
 
 // Include [[third-party.boost]]
 #ifndef debug_symbol
@@ -247,6 +249,14 @@ namespace ap
     namespace spirit { }
     namespace stock  { }
 
+    /// Device
+    class cpu;
+    class cuda;
+    class hip;
+    class mps;
+    class opencl;
+    class tbb;
+
     /// Class
     template < class type > class range;
 
@@ -289,16 +299,11 @@ namespace ap
     /* lambda function */ // auto input ( const printable auto&... );
 
     /// Global
-    std::execution::static_thread_pool  cpu_context = std::execution::static_thread_pool(std::thread::hardware_concurrency() / 2);
-    std::execution::static_thread_pool& gpu_context = cpu_context;
+    std::execution::static_thread_pool execution_context = std::execution::static_thread_pool(std::thread::hardware_concurrency());
 
     /// Include
-    #include "abi.hpp"
-    #include "concept.hpp"
-    #include "exception.hpp"
-    #include "print.hpp"
-    #include "range.hpp"
-    #include "typedef.hpp"
+    #include "common/common.hpp"
+    #include "device/device.hpp"
     #include "initialize.hpp"
 
 } // namespace ap

@@ -8,6 +8,7 @@ class array<type,1,device>
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( std::default_initializable<type> and std::movable<type> );
+        static_assert ( not std::same_as<type,bool> );
 
     private: // Typedef
         using base = device::template vector<type>;

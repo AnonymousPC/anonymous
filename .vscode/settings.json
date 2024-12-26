@@ -103,6 +103,7 @@
         "fft": "cpp",
         "*.def": "cpp",
         "mdspan": "cpp",
-        "__assert": "cpp"
+        "__assert": "cpp",
+        "__string": "cpp"
     }
 }

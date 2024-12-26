@@ -9,25 +9,18 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-#include <tbb/task_arena.h>
-
 int main ( )
 { 
-    //static_assert(std::same_as<boost::compute::buffer_iterator<int>::reference, int&>);
-
-    cpu::default_context();
-
-    let task = std::execution::schedule(cpu::default_context().get_scheduler())
-             | std::execution::then(mps::random_engine)
-
    // print(ap::abi::demangle(typeid(std::iter_value_t<boost::compute::buffer_iterator<int>&>).name()));
     let a = boost::compute::vector<int>(100);
     let b = boost::compute::vector<int>(100);
     for ( int i in range(0, 99) )
         a[i] = i;
-    std::copy_backward(a.begin(), a.end(), b.begin());
+    boost::compute::sort(a.begin(), a.end(), boost::compute::greater<int>(), opencl::execution_context.command_queue());
+    opencl::execution_context.command_queue().finish();
     for ( int i in range(0, 99) )
         print(b[i]);
+
 }
 
 /*

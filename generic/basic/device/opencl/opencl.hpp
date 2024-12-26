@@ -7,6 +7,10 @@
         public: // Available
             constexpr static bool is_available ( ) { return true; }
 
+        public: // Context
+            class  execution_context_type;
+            static execution_context_type execution_context;
+
         public: // Layout
             using layout_type = std::layout_left;
 
@@ -119,7 +123,38 @@
             constexpr static decltype(auto) unique                   ( auto&&... args ) { return boost::compute::unique                  (std::forward<decltype(args)>(args)...); }
             constexpr static decltype(auto) unique_copy              ( auto&&... args ) { return boost::compute::unique_copy             (std::forward<decltype(args)>(args)...); }
             constexpr static decltype(auto) upper_bound              ( auto&&... args ) { return boost::compute::upper_bound             (std::forward<decltype(args)>(args)...); }
+    
+        public: // Context.detail  
+            class execution_context_type
+                extends public execpools::thread_pool_base<execution_context_type>
+            {
+                public: // Constructor
+                             execution_context_type ( ) = default;
+                    explicit execution_context_type ( int );
+
+                public: // Member
+                    std::uint32_t available_parallelism ( ) const;
+
+                public: // Extra
+                    static boost::compute::command_queue& command_queue ( )
+                    {
+                        return thread_local_command_queue;
+                    }
+
+                private: // Member
+                    constexpr static std::execution::forward_progress_guarantee forward_progress_guarantee ( ) { return std::execution::forward_progress_guarantee::parallel; };
+                    void enqueue ( execpools::task_base*, std::uint32_t = 0 ) noexcept;
+                    friend thread_pool_base<execution_context_type>;
+                    template < class pool_type, class receiver > friend struct operation;  
+
+                private: // Data
+                    static thread_local boost::compute::command_queue thread_local_command_queue;           
+            };
+
+        private: // Context.detail
+            boost::compute::command_queue execution_context_type::thread_local_command_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
     };
+    opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());
 #else
     class opencl
         extends public cpu

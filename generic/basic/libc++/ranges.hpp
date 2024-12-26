@@ -1,4 +1,4 @@
 #pragma once
-#include "ranges_chunk.ipp"
-#include "ranges_join_with.ipp"
-#include "ranges_stride.ipp"
+#include "detail/ranges_chunk.ipp"
+#include "detail/ranges_join_with.ipp"
+#include "detail/ranges_stride.ipp"

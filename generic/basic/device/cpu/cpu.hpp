@@ -5,8 +5,9 @@ class cpu
     public: // Available
         constexpr static bool is_available ( ) { return true; }
 
-    public: // Context
-        static std::execution::static_thread_pool context =
+    public: // Execution_context
+        using  execution_context_type = std::execution::static_thread_pool;
+        static execution_context_type& execution_context;
 
     public: // Layout
         using layout_type = std::layout_right;
@@ -131,3 +132,4 @@ class cpu
 
     public: // Random.
 };
+cpu::execution_context_type& cpu::execution_context = execution_context;

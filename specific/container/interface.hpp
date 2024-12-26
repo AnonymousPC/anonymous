@@ -3,14 +3,6 @@
 
 namespace ap::experimental
 {
-    /// Class
-    class cpu;
-    class cuda;
-    class hip;
-    class mps;
-    class opencl;
-    class tbb;
-
     template < class type, int dim = 1, class device = cpu >                    class array;
     template < class type,              class device = cpu >                    using vector = array<type>;
     template < class type,              class device = cpu >                    using matrix = array<type,2>;
@@ -259,7 +251,6 @@ namespace ap::experimental
     // template < class input_type, class char_type = void >                         concept general_string_type = ...;
 
     // /// Include
-    #include "third_party/device.hpp"
     #include "discrete/discrete.hpp" // First.
     #include "array/array.hpp"
     // #include "chain/chain.hpp"

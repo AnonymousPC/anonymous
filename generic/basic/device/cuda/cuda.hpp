@@ -7,6 +7,10 @@
         public: // Available
             constexpr static bool is_available ( ) { return true; }
 
+        public: // Context
+            using  execution_context_type = nvexec::stream_context;
+            static execution_context_type execution_context;
+
         public: // Layout
             using layout_type = std::layout_left;
 
@@ -32,6 +36,7 @@
             constexpr decltype(auto) move_backward ( auto&&... args ) { return thrust::move_backward(std::forward<decltype(args)>(args)...); }
 
     };
+    cuda::execution_context_type cuda::execution_context = cuda::execution_context_type();
 #else
     class cuda
         extends public cpu 

@@ -5,8 +5,6 @@ namespace detail
     std::string paint ( std::string, const std::array<const char*,4>&, int = 0, int = 0 );
 }
 
-
-
 std::string abi::demangle ( const char* mangled_name )
 {
     let ok             = 0;
@@ -32,16 +30,6 @@ std::string abi::demangle ( const std::stacktrace& trace )
                  | std::views::join_with('\n')
                  | std::ranges::to<std::string>();
 }
-
-
-
-
-
-
-
-
-
-// Detail
 
 std::string detail::paint ( std::string str, const std::array<const char*,4>& colors, int str_pos, int colors_pos )
 {

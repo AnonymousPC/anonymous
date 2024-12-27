@@ -1,12 +1,8 @@
 #pragma once
 
-/// Class range
-
-// Core
-
 template < class type >
 constexpr range<type>::range ( value_type init_high )
-    extends range<type> ( 1, init_high, 1 )
+    extends range<type> ( 1, init_high, 1 ) 
 {
 
 }
@@ -28,8 +24,6 @@ constexpr range<type>::range ( value_type init_low, value_type init_high, value_
                 throw value_error("range from {} to {} with step {} does not work", low, high, step);
     #endif
 }
-
-// Member
 
 template < class type >
 constexpr typename range<type>::iterator range<type>::begin ( ) const
@@ -57,17 +51,6 @@ constexpr bool range<type>::empty ( ) const
 }
 
 template < class type >
-constexpr typename range<type>::value_type range<type>::operator [] ( int pos ) const
-{
-    #if debug
-        if ( pos < -size() or pos == 0 or pos > size() )
-            throw index_error("index {} is out of range with size {}", pos, size());
-    #endif
-
-    return pos > 0 ? low + (pos-1) * step otherwise low + (pos+size()) * step;
-}
-
-template < class type >
 constexpr const typename range<type>::value_type& range<type>::min ( ) const
 {
     return low;
@@ -85,9 +68,48 @@ constexpr const typename range<type>::value_type& range<type>::sep ( ) const
     return step;
 }
 
+template < class type >
+constexpr typename range<type>::value_type range<type>::operator [] ( int pos ) const
+{
+    #if debug
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
+    #endif
+
+    return pos > 0 ? low + (pos-1) * step otherwise low + (pos+size()) * step;
+}
+
 
 
 /// Iterator
+
+template < class type >
+class range<type>::iterator
+{
+    public: // Typedef
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type        = range<type>::value_type;
+        using pointer           = value_type*;
+        using reference         = value_type&;
+
+    private: // Data
+        value_type val;
+        value_type step;
+
+    public: // Core
+        constexpr iterator ( value_type, value_type );
+        constexpr iterator ( const iterator& ) = default;
+        constexpr type&     operator *  ( );
+        constexpr type*     operator -> ( );
+        constexpr bool      operator != ( const iterator& ) const;
+        constexpr iterator& operator ++ ( );
+        constexpr iterator  operator ++ ( int );
+        constexpr iterator& operator -- ( );
+        constexpr iterator  operator -- ( int );
+        constexpr iterator  operator +  ( int ) const;
+        constexpr iterator  operator -  ( int ) const;
+        constexpr int       operator -  ( const iterator& ) const;
+};
 
 template < class type >
 constexpr range<type>::iterator::iterator ( value_type init_val, value_type init_step )

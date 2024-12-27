@@ -1,7 +1,5 @@
 #pragma once
 
-// Print and input.
-
 namespace detail
 {
     struct print_t

@@ -11,7 +11,7 @@ boost::compute::command_queue& opencl::execution_context_type::command_queue ( )
     return cmd_queue;
 }
 
-void opencl::execution_context_type::enqueue ( execpools::task_base* task, std::uint32_t tid )
+void opencl::execution_context_type::enqueue ( execpools::task_base* task, std::uint32_t tid ) noexcept
 {
     if ( boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL )
         try
@@ -22,9 +22,11 @@ void opencl::execution_context_type::enqueue ( execpools::task_base* task, std::
         }
         catch ( const boost::compute::opencl_error& e )
         {
+            // Always calls std::terminate due to noexcept attribute.
             throw device_error("failed to enqueue task [[caused by {}: {}]]", typeid(e), e.what());
         }
     else
+        // Always calls std::terminate due to noexcept attribute.
         throw device_error("failed to enqueue task: opencl device does not supports executing host function (with name = {}, vendor = {}, profile = {}, version = {}, driver_version = {}, capability = {{exec_kernel = {}, exec_native_kernel = {}}})",
                             boost::compute::system::default_device().name(),
                             boost::compute::system::default_device().vendor(),

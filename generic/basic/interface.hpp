@@ -298,12 +298,12 @@ namespace ap
     /* lambda function */ // void print ( const printable auto&... );
     /* lambda function */ // auto input ( const printable auto&... );
 
-    /// Global
-    std::execution::static_thread_pool execution_context = std::execution::static_thread_pool(std::thread::hardware_concurrency());
-
     /// Include
     #include "common/common.hpp"
     #include "device/device.hpp"
     #include "initialize.hpp"
+
+    /// Global
+    cpu::execution_context_type& execution_context = cpu::execution_context;
 
 } // namespace ap

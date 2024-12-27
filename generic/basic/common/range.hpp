@@ -34,48 +34,19 @@ class range
         value_type step = 1;
 
     public: // Constructor
-        constexpr          range ( ) = default;
+        constexpr          range ( ) noexcept = default;
         constexpr explicit range ( value_type );
         constexpr explicit range ( value_type, value_type, value_type = 1 );
 
     public: // Member
-        constexpr iterator begin ( ) const;
-        constexpr iterator end   ( ) const;
-        constexpr int      size  ( ) const;
-        constexpr bool     empty ( ) const;
-
+        constexpr       iterator    begin       ( )     const;
+        constexpr       iterator    end         ( )     const;
+        constexpr       int         size        ( )     const;
+        constexpr       bool        empty       ( )     const;
+        constexpr const value_type& min         ( )     const;
+        constexpr const value_type& max         ( )     const;
+        constexpr const value_type& sep         ( )     const;
         constexpr       value_type  operator [] ( int ) const;
-        constexpr const value_type& min ( ) const;
-        constexpr const value_type& max ( ) const;
-        constexpr const value_type& sep ( ) const;
-};
-
-template < class type >
-class range<type>::iterator
-{
-    public: // Typedef
-        using iterator_category = std::random_access_iterator_tag;
-        using value_type        = range<type>::value_type;
-        using pointer           = value_type*;
-        using reference         = value_type&;
-
-    private: // Data
-        value_type val;
-        value_type step;
-
-    public: // Core
-        constexpr iterator ( value_type, value_type );
-        constexpr iterator ( const iterator& ) = default;
-        constexpr type&     operator *  ( );
-        constexpr type*     operator -> ( );
-        constexpr bool      operator != ( const iterator& ) const;
-        constexpr iterator& operator ++ ( );
-        constexpr iterator  operator ++ ( int );
-        constexpr iterator& operator -- ( );
-        constexpr iterator  operator -- ( int );
-        constexpr iterator  operator +  ( int ) const;
-        constexpr iterator  operator -  ( int ) const;
-        constexpr int       operator -  ( const iterator& ) const;
 };
 
 #include "range.ipp"

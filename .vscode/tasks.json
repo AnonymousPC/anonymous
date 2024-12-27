@@ -2,6 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "debug.clear",
+            "hide": true,
+            "type": "shell",
+            "windows": {
+                "command": "rm bin\\debug\\main.o bin\\debug\\main.exe 2>null || exit /b 0"
+            },
+            "osx": {
+                "command": "rm bin/debug/main.o bin/debug/main 2>&- || :"
+            }
+        },
+        {
             "label": "debug.compile",
             "group": "none",
             "type": "shell",
@@ -65,7 +76,7 @@
             "detail": "debug",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["debug.compile", "debug.link"],
+            "dependsOn": ["debug.clear", "debug.compile", "debug.link"],
             "dependsOrder": "sequence",
             "windows": {
                 "command": "start cmd /c \"bin\\debug\\main.exe & pause\""
@@ -80,6 +91,17 @@
 
 
 
+        {
+            "label": "release.clear",
+            "hide": true,
+            "type": "shell",
+            "windows": {
+                "command": "rm bin\\release\\main.o bin\\release\\main.exe 2>null || exit /b 0"
+            },
+            "osx": {
+                "command": "rm bin/release/main.o bin/release/main 2>&- || :"
+            }
+        },
         {
             "label": "release.compile",
             "group": "none",
@@ -144,7 +166,7 @@
             "detail": "release",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["release.compile", "release.link"],
+            "dependsOn": ["release.clear", "release.compile", "release.link"],
             "dependsOrder": "sequence",
             "windows": {
                 "command": "start cmd /c \"bin\\release\\main.exe & pause\""
@@ -162,6 +184,17 @@
 
 
 
+        {
+            "label": "dll.clear",
+            "hide": true,
+            "type": "shell",
+            "windows": {
+                "command": "rm bin\\dll\\main.o 2>null || exit /b 0"
+            },
+            "osx": {
+                "command": "rm bin/dll/main.o 2>&- || :"
+            }
+        },
         {
             "label": "dll.compile",
             "group": "none",
@@ -214,9 +247,14 @@
             "detail": "dll",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["dll.compile", "dll.link"],
+            "dependsOn": ["dll.clear", "dll.compile", "dll.link"],
             "dependsOrder": "sequence",
-            "command": "echo ok",
+            "windows": {
+                "command": "::"
+            },
+            "osx": {
+                "command": ":"
+            }
         }
     ]
 }

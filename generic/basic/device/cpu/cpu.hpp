@@ -7,7 +7,7 @@ class cpu
 
     public: // Execution_context
         using  execution_context_type = std::execution::static_thread_pool;
-        static execution_context_type& execution_context;
+        static execution_context_type execution_context;
 
     public: // Layout
         using layout_type = std::layout_right;
@@ -130,6 +130,7 @@ class cpu
         constexpr static decltype(auto) unique_copy              ( auto&&... args ) { return std::unique_copy             (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) upper_bound              ( auto&&... args ) { return std::upper_bound             (std::forward<decltype(args)>(args)...); }
 
-    public: // Random.
+    public: // Random
+
 };
-cpu::execution_context_type& cpu::execution_context = execution_context;
+cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());

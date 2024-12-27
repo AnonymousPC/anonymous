@@ -29,11 +29,11 @@
             template < class type, class alloc = allocator<type> > using vector = thrust::device_vector<type,alloc>;
 
         public: // Algorithm
-            constexpr decltype(auto) copy          ( auto&&... args ) { return thrust::copy         (std::forward<decltype(args)>(args)...); }
-            constexpr decltype(auto) copy_n        ( auto&&... args ) { return thrust::copy_n       (std::forward<decltype(args)>(args)...); }
-            constexpr decltype(auto) copy_backward ( auto&&... args ) { return thrust::copy_backward(std::forward<decltype(args)>(args)...); }
-            constexpr decltype(auto) move          ( auto&&... args ) { return thrust::move         (std::forward<decltype(args)>(args)...); }
-            constexpr decltype(auto) move_backward ( auto&&... args ) { return thrust::move_backward(std::forward<decltype(args)>(args)...); }
+            constexpr __host__ __device__ decltype(auto) copy          ( auto&&... args ) { return thrust::copy         (std::forward<decltype(args)>(args)...); }
+            constexpr __host__ __device__ decltype(auto) copy_n        ( auto&&... args ) { return thrust::copy_n       (std::forward<decltype(args)>(args)...); }
+            constexpr __host__ __device__ decltype(auto) copy_backward ( auto&&... args ) { return thrust::copy_backward(std::forward<decltype(args)>(args)...); }
+            constexpr __host__ __device__ decltype(auto) move          ( auto&&... args ) { return thrust::move         (std::forward<decltype(args)>(args)...); }
+            constexpr __host__ __device__ decltype(auto) move_backward ( auto&&... args ) { return thrust::move_backward(std::forward<decltype(args)>(args)...); }
 
     };
     cuda::execution_context_type cuda::execution_context = cuda::execution_context_type();

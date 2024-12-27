@@ -3,6 +3,16 @@
 
 namespace ap
 {
+    template < class type
+
+    template < class type, class value_type = void > concept range_type = []
+    {
+        if constexpr ( is_void<value_type> )
+            return is_range_type<type>::value;
+        else
+            return std::same_as<type,range<value_type>>;
+    }
+
     /// Class
     template < class type, int dim = 1 >                                        class array;
     template < class type >                                                     using vector = array<type>;

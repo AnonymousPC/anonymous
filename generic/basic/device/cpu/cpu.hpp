@@ -5,23 +5,39 @@ class cpu
     public: // Available
         constexpr static bool is_available ( ) { return true; }
 
-    public: // Execution_context
-        using  execution_context_type = std::execution::static_thread_pool;
-        static execution_context_type execution_context;
-
-    public: // Layout
-        using layout_type = std::layout_right;
+    public: // Type
+        template < class type > using value_type      = type;
+        template < class type > using reference       = type&;
+        template < class type > using const_reference = const type&;
+        template < class type > using pointer         = type*;
+        template < class type > using const_pointer   = const type*;
 
     public: // Allocator
         template < class type > using allocator = std::allocator<type>;
 
-    public: // Compare
-        template < class type = void > using equal_to      = std::equal_to<type>;
-        template < class type = void > using not_equal_to  = std::not_equal_to<type>;
-        template < class type = void > using less          = std::less<type>;
-        template < class type = void > using less_equal    = std::less_equal<type>;
-        template < class type = void > using greater       = std::greater<type>;
-        template < class type = void > using greater_equal = std::greater_equal<type>; 
+    public: // Layout
+        using layout_type = std::layout_right;
+
+    public: // Operator
+        template < class type = void > using plus              = std::plus<type>;
+        template < class type = void > using minus             = std::minus<type>;
+        template < class type = void > using multiplies        = std::multiplies<type>;
+        template < class type = void > using divides           = std::divides<type>;
+        template < class type = void > using negate            = std::negate<type>;
+        template < class type = void > using equal_to          = std::equal_to<type>;
+        template < class type = void > using not_equal_to      = std::not_equal_to<type>;
+        template < class type = void > using less              = std::less<type>;
+        template < class type = void > using less_equal        = std::less_equal<type>;
+        template < class type = void > using greater           = std::greater<type>;
+        template < class type = void > using greater_equal     = std::greater_equal<type>; 
+        template < class type = void > using logical_and       = std::logical_and<type>;
+        template < class type = void > using logical_or        = std::logical_or<type>;
+        template < class type = void > using logical_not       = std::logical_not<type>;
+        template < class type = void > using bit_and           = std::bit_and<type>;
+        template < class type = void > using bit_or            = std::bit_or<type>;
+        template < class type = void > using bit_xor           = std::bit_xor<type>;
+        template < class type = void > using bit_not           = std::bit_not<type>;
+                                       using compare_three_way = std::compare_three_way;
 
     public: // Hash
         template < class type > using hash = std::hash<type>;
@@ -130,7 +146,54 @@ class cpu
         constexpr static decltype(auto) unique_copy              ( auto&&... args ) { return std::unique_copy             (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) upper_bound              ( auto&&... args ) { return std::upper_bound             (std::forward<decltype(args)>(args)...); }
 
+    public: // Random_base
+        template < unsigned_int_type type, type        a, type        c, type        m >                                                                                                                    using linear_congruential_engine = std::linear_congruential_engine<type,a,c,m>;
+        template < unsigned_int_type type, std::size_t w, std::size_t n, std::size_t m, std::size_t r, type a, std::size_t u, type d, std::size_t s, type b, std::size_t t, type c, std::size_t l, type f > using mersenne_twister_engine    = std::mersenne_twister_engine   <type,w,n,m,r,a,u,d,s,b,t,c,l,f>;
+        template < unsigned_int_type type, std::size_t w, std::size_t s, std::size_t r >                                                                                                                    using subtract_with_carry_engine = std::subtract_with_carry_engine<type,w,s,r>;
+        template < class engine_type,      std::size_t p, std::size_t r >                                                                                                                                   using discard_block_engine       = std::discard_block_engine      <engine_type,p,r>;
+        template < class engine_type,      std::size_t w, unsigned_int_type type >                                                                                                                          using independent_bits_engine    = std::independent_bits_engine   <engine_type,w,type>;   
+        template < class engine_type,      std::size_t k >                                                                                                                                                  using shuffle_order_engine       = std::shuffle_order_engine      <engine_type,k>;
+        
     public: // Random
+        using minstd_rand0  = std::minstd_rand0;
+        using minstd_rand   = std::minstd_rand;
+        using mt19937       = std::mt19937;
+        using mt19937_64    = std::mt19937_64;
+        using ranlux24_base = std::ranlux24_base;
+        using ranlux48_base = std::ranlux48_base;
+        using ranlux24      = std::ranlux24;
+        using ranlux48      = std::ranlux48;
+        using knuth_b       = std::knuth_b;
+        using random_context_t = mt19937;
+        static thread_local random_context_t random_context;
+
+    public: // Distribution
+        template < int_type   type = int >    using uniform_int_distribution        = std::uniform_int_distribution<type>;
+        template < float_type type = double > using uniform_real_distribution       = std::uniform_real_distribution<type>;
+                                              using bernoulli_distribution          = std::bernoulli_distribution;
+        template < int_type   type = int >    using binomial_distribution           = std::binomial_distribution<type>;
+        template < int_type   type = int >    using negative_binomial_distribution  = std::negative_binomial_distribution<type>;
+        template < int_type   type = int >    using geometric_distribution          = std::geometric_distribution<type>;
+        template < int_type   type = int >    using poisson_distribution            = std::poisson_distribution<type>;
+        template < float_type type = double > using exponential_distribution        = std::exponential_distribution<type>;
+        template < float_type type = double > using gamma_distribution              = std::gamma_distribution<type>;
+        template < float_type type = double > using weibull_distribution            = std::weibull_distribution<type>;
+        template < float_type type = double > using extreme_value_distribution      = std::extreme_value_distribution<type>;
+        template < float_type type = double > using normal_distribution             = std::normal_distribution<type>;
+        template < float_type type = double > using lognormal_distribution          = std::lognormal_distribution<type>;
+        template < float_type type = double > using chi_squared_distribution        = std::chi_squared_distribution<type>;
+        template < float_type type = double > using cauchy_distribution             = std::cauchy_distribution<type>;
+        template < float_type type = double > using fisher_f_distribution           = std::fisher_f_distribution<type>;
+        template < float_type type = double > using student_t_distribution          = std::student_t_distribution<type>;
+        template < int_type   type = int >    using discrete_distribution           = std::discrete_distribution<type>;
+        template < float_type type = double > using piecewise_constant_distribution = std::piecewise_constant_distribution<type>;
+        template < float_type type = double > using piecewise_linear_distribution   = std::piecewise_linear_distribution<type>;
+
+    public: // Execution
+        using  execution_context_t = std::execution::static_thread_pool;
+        static execution_context_t execution_context;
 
 };
-cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());
+
+thread_local cpu::random_context_t    cpu::random_context    = cpu::random_context_t(std::random_device()());
+             cpu::execution_context_t cpu::execution_context = cpu::execution_context_t(std::thread::hardware_concurrency());

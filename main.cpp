@@ -3,15 +3,15 @@
 // #include "generic/io/interface.hpp"
 // #include "generic/math/interface.hpp"
 // #include "specific/audio/interface.hpp"
-#include "specific/container/interface.hpp"
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
+#include <boost/compute/detail/
 using namespace ap;
 
 int main ( )
 {
-
+    print(ap::abi::demangle(typeid(boost::compute::plus<int>).name()));
 }
 
 /*

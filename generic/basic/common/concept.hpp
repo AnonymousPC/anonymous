@@ -34,27 +34,31 @@ template < class type >                               constexpr bool is_volatile
 
 /// Operator
 
-template < class type >               concept addable         = requires { std::declval<type >() + std::declval<type >(); };
-template < class type1, class type2 > concept addable_to      = requires { std::declval<type1>() + std::declval<type2>(); };
-template < class type1, class type2 > using   add_result      = decltype ( std::declval<type1>() + std::declval<type2>() );
+template < class type >               concept plusable        = requires { std::declval<type >() + std::declval<type >(); };
+template < class type1, class type2 > concept plusable_to     = requires { std::declval<type1>() + std::declval<type2>(); std::declval<type2>() + std::declval<type1>(); };
+template < class type1, class type2 > using   plus_result     = decltype ( std::declval<type1>() + std::declval<type2>()  );
 
 template < class type >               concept minusable       = requires { std::declval<type >() - std::declval<type >(); };
-template < class type1, class type2 > concept minusable_to    = requires { std::declval<type1>() - std::declval<type2>(); };
-template < class type1, class type2 > using   minus_result    = decltype ( std::declval<type1>() - std::declval<type2>() );
+template < class type1, class type2 > concept minusable_to    = requires { std::declval<type1>() - std::declval<type2>(); std::declval<type2>() - std::declval<type1>(); };
+template < class type1, class type2 > using   minus_result    = decltype ( std::declval<type1>() - std::declval<type2>()  );
 
 template < class type >               concept multipliable    = requires { std::declval<type >() * std::declval<type >(); };
-template < class type1, class type2 > concept multipliable_to = requires { std::declval<type1>() * std::declval<type2>(); };
-template < class type1, class type2 > using   multiply_result = decltype ( std::declval<type1>() * std::declval<type2>() );
+template < class type1, class type2 > concept multipliable_to = requires { std::declval<type1>() * std::declval<type2>(); std::declval<type2>() * std::declval<type1>(); };
+template < class type1, class type2 > using   multiply_result = decltype ( std::declval<type1>() * std::declval<type2>()  );
 
 template < class type >               concept dividable       = requires { std::declval<type >() / std::declval<type >(); };
-template < class type1, class type2 > concept dividable_to    = requires { std::declval<type1>() / std::declval<type2>(); };
-template < class type1, class type2 > using   divide_result   = decltype ( std::declval<type1>() / std::declval<type2>() );
+template < class type1, class type2 > concept dividable_to    = requires { std::declval<type1>() / std::declval<type2>(); std::declval<type2>() / std::declval<type1>(); };
+template < class type1, class type2 > using   divide_result   = decltype ( std::declval<type1>() / std::declval<type2>()  );
+
+template < class type >               concept modulable       = requires { std::declval<type >() % std::declval<type >(); };
+template < class type1, class type2 > concept modulable_to    = requires { std::declval<type1>() % std::declval<type2>(); std::declval<type2>() % std::declval<type1>(); };
+template < class type1, class type2 > using   modulus_result  = decltype ( std::declval<type1>() % std::declval<type2>()  );
 
 template < class type >               concept equalable       = requires { std::declval<type >() == std::declval<type >(); };
-template < class type1, class type2 > concept equalable_to    = requires { std::declval<type1>() == std::declval<type2>(); };
+template < class type1, class type2 > concept equalable_to    = requires { std::declval<type1>() == std::declval<type2>(); std::declval<type2>() == std::declval<type1>(); };
 
 template < class type >               concept comparable      = requires { std::declval<type >() <=> std::declval<type >(); };
-template < class type1, class type2 > concept comparable_to   = requires { std::declval<type1>() <=> std::declval<type2>(); };
+template < class type1, class type2 > concept comparable_to   = requires { std::declval<type1>() <=> std::declval<type2>(); std::declval<type2>() <=> std::declval<type1>(); };
 
 template < class type >               concept printable       = requires ( type obj ) { std::cout << obj; };
 template < class type >               concept inputable       = requires ( type obj ) { std::cin  >> obj; };
@@ -66,10 +70,11 @@ template < class type >               concept inputable       = requires ( type 
 
 /// Is...type
 
-template < class type > concept char_type   = std::same_as<remove_cv<type>,char> or std::same_as<remove_cv<type>,wchar_t> or std::same_as<remove_cv<type>,char8_t> or std::same_as<remove_cv<type>,char16_t> or std::same_as<remove_cv<type>,char32_t> or requires { typename type::char_tag; };
-template < class type > concept int_type    = ( std::signed_integral<type> and ( not char_type<type> ) ) or requires { typename type::int_tag;    };
-template < class type > concept float_type  = std::floating_point<type>                                  or requires { typename type::float_tag;  };
-template < class type > concept number_type = int_type<type> or float_type<type>                         or requires { typename type::number_tag; };
+template < class type > concept char_type         = std::same_as<remove_cv<type>,char> or std::same_as<remove_cv<type>,wchar_t> or std::same_as<remove_cv<type>,char8_t> or std::same_as<remove_cv<type>,char16_t> or std::same_as<remove_cv<type>,char32_t> or requires { typename type::char_tag; };
+template < class type > concept int_type          = ( std::signed_integral  <type> and ( not char_type<type> ) ) or requires { typename type::int_tag;          };
+template < class type > concept unsigned_int_type = ( std::unsigned_integral<type> and ( not char_type<type> ) ) or requires { typename type::unsigned_int_tag; };
+template < class type > concept float_type        = std::floating_point<type>                                    or requires { typename type::float_tag;        };
+template < class type > concept number_type       = int_type<type> or float_type<type>                           or requires { typename type::number_tag;        };
 
 
 

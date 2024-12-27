@@ -7,35 +7,51 @@
         public: // Available
             constexpr static bool is_available ( ) { return true; }
 
-        public: // Context
-            class  execution_context_type;
-            static execution_context_type execution_context;
-
-        public: // Layout
-            using layout_type = std::layout_left;
+        public: // Type
+            template < class type > using value_type      = boost::compute::buffer_value<type>;
+            template < class type > using reference       = boost::compute::buffer_value<type>;
+            template < class type > using const_reference = const boost::compute::buffer_value<type>;
+            template < class type > using pointer         = boost::compute::buffer_iterator<type>;
+            template < class type > using const_pointer   = const boost::compute::buffer_iterator<type>;
 
         public: // Allocator
             template < class type > using allocator = boost::compute::buffer_allocator<type>;
 
-        public: // Compare
-            template < class type > using equal_to      = boost::compute::equal_to<type>;
-            template < class type > using not_equal_to  = boost::compute::not_equal_to<type>;
-            template < class type > using less          = boost::compute::less<type>;
-            template < class type > using less_equal    = boost::compute::less_equal<type>;
-            template < class type > using greater       = boost::compute::greater<type>;
-            template < class type > using greater_equal = boost::compute::greater_equal<type>; 
+        public: // Layout
+            using layout_type = std::layout_left;
+
+        public: // Operator
+            template < class type > using plus              = boost::compute::plus<type>;
+            template < class type > using minus             = boost::compute::minus<type>;
+            template < class type > using multiplies        = boost::compute::multiplies<type>;
+            template < class type > using divides           = boost::compute::divides<type>;
+            template < class type > using negate            = boost::compute::negate<type>;
+            template < class type > using equal_to          = boost::compute::equal_to<type>;
+            template < class type > using not_equal_to      = boost::compute::not_equal_to<type>;
+            template < class type > using less              = boost::compute::less<type>;
+            template < class type > using less_equal        = boost::compute::less_equal<type>;
+            template < class type > using greater           = boost::compute::greater<type>;
+            template < class type > using greater_equal     = boost::compute::greater_equal<type>; 
+            template < class type > using logical_and       = boost::compute::logical_and<type>;
+            template < class type > using logical_or        = boost::compute::logical_or<type>;
+            template < class type > using logical_not       = boost::compute::logical_not<type>;
+            template < class type > using bit_and           = boost::compute::bit_and<type>;
+            template < class type > using bit_or            = boost::compute::bit_or<type>;
+            template < class type > using bit_xor           = boost::compute::bit_xor<type>;
+            template < class type > using bit_not           = boost::compute::bit_not<type>;
+                                 // using compare_three_way = std::compare_three_way;
 
         public: // Hash
             template < class type > using hash = boost::compute::hash<type>;
 
         public: // Container
-            template < class type, class alloc = allocator<type> >                        using vector       = boost::compute::vector<type,alloc>;
-            template < class type, int len >                                              using array        = boost::compute::array<type,len>;
-            template < class type >                                                       using stack        = boost::compute::stack<type>;
-            template < class type >                                                       using flat_set     = boost::compute::flat_set<type>;
-            template < class type1, class type2 >                                         using flat_map     = boost::compute::flat_map<type1,type2>;
-            template < class char_type, class char_traits = std::char_traits<char_type> > using basic_string = boost::compute::basic_string<char_type,char_traits>;
-                                                                                          using string       = basic_string<char>;
+            template < class type, class alloc = allocator<type> >                        class vector;
+            template < class type, int len >                                              class array;
+            template < class type >                                                       class stack;
+            template < class type >                                                       class flat_set;
+            template < class type1, class type2 >                                         class flat_map;
+            template < class char_type, class char_traits = std::char_traits<char_type> > class basic_string;
+                                                                                          using string = basic_string<char>;
 
         public: // Algorithm
             constexpr static decltype(auto) accumulate               ( auto&&... args ) { return boost::compute::accumulate              (std::forward<decltype(args)>(args)..., execution_context_type::command_queue()); execution_context_type::command_queue().finish(); }
@@ -123,35 +139,49 @@
             constexpr static decltype(auto) unique                   ( auto&&... args ) { return boost::compute::unique                  (std::forward<decltype(args)>(args)..., execution_context_type::command_queue()); execution_context_type::command_queue().finish(); }
             constexpr static decltype(auto) unique_copy              ( auto&&... args ) { return boost::compute::unique_copy             (std::forward<decltype(args)>(args)..., execution_context_type::command_queue()); execution_context_type::command_queue().finish(); }
             constexpr static decltype(auto) upper_bound              ( auto&&... args ) { return boost::compute::upper_bound             (std::forward<decltype(args)>(args)..., execution_context_type::command_queue()); execution_context_type::command_queue().finish(); }
-    
-        public: // Context.detail  
-            class execution_context_type
-                extends public execpools::thread_pool_base<execution_context_type>
-            {
-                public: // Constructor
-                             execution_context_type ( ) = default;
-                    explicit execution_context_type ( int ) { };
 
-                public: // Member
-                           std::uint32_t                  available_parallelism ( ) const;
-                    static boost::compute::command_queue& command_queue         ( );
+        public: // Random_base
+            template < unsigned_int_type type > class linear_congruential_engine;
+            template < unsigned_int_type type > class mersenne_twister_engine;
 
-                public: // Friend
-                                                                 friend        execpools::thread_pool_base<execution_context_type>;
-                    template < class pool_type, class receiver > friend struct execpools::operation;  
+        public: // Random
 
-                private: // Member
-                    constexpr static std::execution::forward_progress_guarantee forward_progress_guarantee ( ) { return std::execution::forward_progress_guarantee::weakly_parallel; }
-                    void enqueue ( execpools::task_base* task, std::uint32_t tid = 0 ) noexcept;
-                    static void BOOST_COMPUTE_CL_CALLBACK enqueue_callback ( void* args );
-                    struct task_type
-                    {
-                        execpools::task_base* task;
-                        std::uint32_t         tid;
-                    };   
-            };
+        public: // Execution
+            class  execution_context_t;
+            static execution_context_t execution_context;
     };
-    opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());
+
+    class opencl::execution_context_t
+        extends public execpools::thread_pool_base<execution_context_t>
+    {
+        public: // Constructor
+                     execution_context_t ( ) = default;
+            explicit execution_context_t ( int ) { };
+
+        public: // Member
+                   std::uint32_t                  available_parallelism ( ) const;
+            static boost::compute::command_queue& command_queue         ( );
+
+        public: // Friend
+                                                         friend        execpools::thread_pool_base<execution_context_t>;
+            template < class pool_type, class receiver > friend struct execpools::operation;  
+
+        private: // Member
+            constexpr static std::execution::forward_progress_guarantee forward_progress_guarantee ( ) { return std::execution::forward_progress_guarantee::weakly_parallel; }
+            void enqueue ( execpools::task_base* task, std::uint32_t tid = 0 ) noexcept;
+            static void throw_opencl_error ( const boost::compute::opencl_error& );
+            static void throw_device_error ( );
+            static void BOOST_COMPUTE_CL_CALLBACK enqueue_callback ( void* args );
+            struct task_type
+            {
+                execpools::task_base* task;
+                std::uint32_t         tid;
+            };   
+    };
+
+    thread_local opencl::random_context_t    opencl::random_context    = opencl::random_context_t   (std::random_device()());
+                 opencl::execution_context_t opencl::execution_context = opencl::execution_context_t(boost::compute::system::default_device().max_work_group_size());
+    
     #if dll
         #include "opencl.cpp"
     #endif

@@ -11,8 +11,8 @@
             template < class type > using value_type      = boost::compute::buffer_value<type>;
             template < class type > using reference       = boost::compute::buffer_value<type>;
             template < class type > using const_reference = const boost::compute::buffer_value<type>;
-            template < class type > using pointer         = boost::compute::buffer_iterator<type>;
-            template < class type > using const_pointer   = const boost::compute::buffer_iterator<type>;
+            template < class type > using pointer         = boost::compute::device_ptr<type>;
+            template < class type > using const_pointer   = const boost::compute::device_ptr<type>;
 
         public: // Allocator
             template < class type > using allocator = boost::compute::buffer_allocator<type>;

@@ -11,9 +11,17 @@ using namespace ap;
 
 int main ( )
 { 
-    let task = std::execution::schedule(opencl::execution_context.get_scheduler())
-             | std::execution::then([] { print("Hello"); });
-    std::execution::sync_wait(task);
+    try
+    {
+        let task = std::execution::schedule(opencl::execution_context.get_scheduler())
+                 | std::execution::then([] { print("OKK"); });
+        std::execution::sync_wait(task);
+    }
+    catch ( const std::exception& e )
+    {
+        print(e.what());
+    }
+
 }
 
 /*

@@ -45,7 +45,7 @@
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
                     }
-                }
+                }   
             }
         },
         {
@@ -54,7 +54,7 @@
             "group": "test",
             "type": "shell",
             "windows": { 
-                "command": "start cmd /k bin\\debug\\main.exe"
+                "command": "start cmd /c \"bin\\debug\\main.exe & pause\""
             },
             "osx": {
                 "command": "bin/debug/main"
@@ -68,7 +68,7 @@
             "dependsOn": ["debug.compile", "debug.link"],
             "dependsOrder": "sequence",
             "windows": {
-                "command": "start cmd /k bin\\debug\\main.exe"
+                "command": "start cmd /c \"bin\\debug\\main.exe & pause\""
             },
             "osx": {
                 "command": "bin/debug/main"
@@ -133,7 +133,7 @@
             "group": "test",
             "type": "shell",
             "windows": {
-                "command": "start cmd /k bin\\release\\main.exe"
+                "command": "start cmd /c \"bin\\release\\main.exe & pause\""
             },
             "osx": {
                 "command": "bin/release/main"
@@ -147,7 +147,7 @@
             "dependsOn": ["release.compile", "release.link"],
             "dependsOrder": "sequence",
             "windows": {
-                "command": "start cmd /k bin\\release\\main.exe"
+                "command": "start cmd /c \"bin\\release\\main.exe & pause\""
             },
             "osx": {
                 "command": "bin/release/main"

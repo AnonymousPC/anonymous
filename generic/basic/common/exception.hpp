@@ -20,6 +20,7 @@ class exception;
         class file_error;
         class network_error;
         class pipe_error;
+        class device_error;
         class math_error;
 
     class signal;

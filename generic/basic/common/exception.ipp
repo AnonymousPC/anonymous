@@ -95,6 +95,12 @@ class pipe_error
     using runtime_error::runtime_error;
 };
 
+class device_error
+    extends public runtime_error
+{
+    using runtime_error::runtime_error;
+};
+
 class math_error
     extends public runtime_error
 {

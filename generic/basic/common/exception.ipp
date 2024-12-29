@@ -1,7 +1,5 @@
 #pragma once
 
-/// Exceptions list
-
 class logic_error
     extends public exception
 {
@@ -149,23 +147,6 @@ class terminate_signal
     using signal::signal;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/// Class exception
-
-// Constructor
-
 template < class... arg_types >
 exception::exception ( format_string<std::type_identity_t<arg_types>...> str, arg_types&&... args )
 {
@@ -173,8 +154,6 @@ exception::exception ( format_string<std::type_identity_t<arg_types>...> str, ar
     trace = std::stacktrace::current();
 }
 
-
-// Detail
 
 constexpr std::string exception::format ( auto&& fmt, auto&&... args )
 {
@@ -186,7 +165,7 @@ constexpr std::string exception::format ( auto&& fmt, auto&&... args )
             return item;
         else if constexpr ( printable<decltype(item)> )
             return (std::stringstream()<<item).str();
-        else if constexpr ( std::same_as<decltype(item),const std::type_info&> )
+        else if constexpr ( same_as<decltype(item),const std::type_info&> )
             return abi::demangle(item.name());
         else
             return std::format("[[{} object at {}]]", abi::demangle(typeid(item).name()), static_cast<const void*>(&item));
@@ -206,17 +185,6 @@ constexpr std::string exception::format ( auto&& fmt, auto&&... args )
             return fmt.string(); break;
     }
 }
-
-
-
-
-
-
-
-
-
-
-/// Class exception::format_string
 
 template < class... arg_types >
 class exception::format_string
@@ -240,20 +208,7 @@ template < class... arg_types >
 consteval exception::format_string<arg_types...>::format_string ( const char* init_data )
     extends data ( init_data )
 {
-    // Tools.
-    let make_formattable = [] ( const auto& item ) -> decltype(auto)
-    {
-        if constexpr ( std::formattable<decay<decltype(item)>,char> ) // std::formattable
-            return item;
-        else if constexpr ( printable<decltype(item)> )
-            return (std::stringstream()<<item).str();
-        else if constexpr ( std::same_as<decltype(item),const std::type_info&> )
-            return abi::demangle(item.name());
-        else
-            return static_cast<const void*>(&item);
-    };
-
-    // Set mode. [[std::string is not always consteval]]
+    // Set mode. (std::string is not always consteval, so that use self-made strlen()).
     let b = data;
     let e = data;
     while ( *e != '\0' )
@@ -275,14 +230,12 @@ consteval exception::format_string<arg_types...>::format_string ( const char* in
     }
 
     // Check if formattable.
-    using string_type = std::format_string<const char*, decltype(make_formattable(std::declval<arg_types>()))...>;
+    using string_type = std::format_string<const char*, conditional<std::formattable<arg_types,char>,arg_types,std::string>...>;
     if ( mode() == mode::explicit_mode )
         string_type(std::string("{0}") + data);
     else
         string_type(std::string("{}")  + data);
 }
-
-// Access
 
 template < class... arg_types >
 constexpr std::string exception::format_string<arg_types...>::string ( ) const

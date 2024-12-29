@@ -16,12 +16,12 @@ constexpr range<type>::range ( value_type init_low, value_type init_high, value_
     #if debug
         if constexpr ( requires { step == 0; low - high != 0; } )
             if ( step == 0 and low - high != 0 )
-                throw value_error("range from {} to {} with step {} does not work", low, high, step);
+                throw value_error("range from {} to {} with step {} is invalid", low, high, step);
 
         if constexpr ( requires { step <=> 0; low - high <=> step; } )
             if ( ( step > 0 and low - high > 0 ) or
                  ( step < 0 and low - high < 0 ) )
-                throw value_error("range from {} to {} with step {} does not work", low, high, step);
+                throw value_error("range from {} to {} with step {} is invalid", low, high, step);
     #endif
 }
 
@@ -93,22 +93,26 @@ class range<type>::iterator
         using reference         = value_type&;
 
     private: // Data
-        value_type val;
-        value_type step;
+        value_type val  = value_type();
+        value_type step = value_type;
 
     public: // Core
+        constexpr iterator ( ) = default;
         constexpr iterator ( value_type, value_type );
-        constexpr iterator ( const iterator& ) = default;
-        constexpr type&     operator *  ( );
-        constexpr type*     operator -> ( );
-        constexpr bool      operator != ( const iterator& ) const;
-        constexpr iterator& operator ++ ( );
-        constexpr iterator  operator ++ ( int );
-        constexpr iterator& operator -- ( );
-        constexpr iterator  operator -- ( int );
-        constexpr iterator  operator +  ( int ) const;
-        constexpr iterator  operator -  ( int ) const;
-        constexpr int       operator -  ( const iterator& ) const;
+
+    public: // Member
+        constexpr        type&     operator *   ( );
+        constexpr        type*     operator ->  ( );
+        constexpr friend bool      operator ==  ( const iterator&, const iterator& );
+        constexpr friend auto      operator <=> ( const iterator&, const iterator& );
+        constexpr friend iterator  operator  +  ( const iterator&,       int       );
+        constexpr friend iterator  operator  +  (       int,       const iterator& );
+        constexpr friend iterator  operator  -  ( const iterator&,       int       );
+        constexpr friend int       operator  -  ( const iterator&, const iterator& );
+        constexpr friend iterator& operator ++  (       iterator&                  );
+        constexpr friend iterator  operator ++  (       iterator&, int             );
+        constexpr friend iterator& operator --  (       iterator&                  );
+        constexpr friend iterator  operator --  (       iterator&, int             );
 };
 
 template < class type >
@@ -132,61 +136,86 @@ constexpr type* range<type>::iterator::operator -> ( )
 }
 
 template < class type >
-constexpr bool range<type>::iterator::operator != ( const iterator& right ) const
-{
-    return step > 0 ? self.val < right.val otherwise
-                      self.val > right.val;
-}
-
-template < class type >
-constexpr range<type>::iterator& range<type>::iterator::operator ++ ( )
-{
-    val += step;
-    return self;
-}
-
-template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator ++ ( int )
-{
-    iterator other = self;
-    val += step;
-    return other;
-}
-
-template < class type >
-constexpr range<type>::iterator& range<type>::iterator::operator -- ( )
-{
-    val -= step;
-    return self;
-}
-
-template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator -- ( int )
-{
-    iterator other = self;
-    val -= step;
-    return other;
-}
-
-template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator + ( int right ) const
-{
-    return iterator ( val + step * right, step );
-}
-
-template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator - ( int right ) const
-{
-    return iterator ( val - step * right, step );
-}
-
-template < class type >
-constexpr int range<type>::iterator::operator - ( const iterator& right ) const
+constexpr bool range<type>::iterator::operator == ( const iterator& left, const iterator& right )
 {
     #if debug
-        if ( step != right.step )
-            throw value_error("subtracting range::iterator with different steps {} and {}", step, right.step);
+        if ( left.step != right.step )
+            throw value_error("range::iterator not equalable (with left = {}, right = {})", left, right);
     #endif
 
-    return ( val - right.val ) / step;
+    return left.step > 0 ? left.val < right.val otherwise left.val > right.val;
 }
+
+template < class type >
+constexpr auto range<type>::iterator::operator <=> ( const iterator& left, const iterator& right )
+{
+    #if debug
+        if ( left.step != right.step )
+            throw value_error("range::iterator not comparable (with left = {}, right = {})", left, right);
+    #endif
+
+    return left.step > 0 ? left.val <=> right.val otherwise - ( left.val <=> right.val );
+}
+
+template < class type >
+constexpr range<type>::iterator range<type>::iterator::operator + ( const iterator& left, int right )
+{
+    return iterator ( left.val + left.step * right, left.step );
+}
+
+template < class type >
+constexpr range<type>::iterator range<type>::iterator::operator + ( int left, const iterator& right )
+{
+    return iterator ( right.val + left * right.step, right.step );
+}
+
+
+template < class type >
+constexpr range<type>::iterator range<type>::iterator::operator - ( const iterator& left, int right ) 
+{
+    return iterator ( left.val - left.step * right, left.step );
+}
+
+template < class type >
+constexpr int range<type>::iterator::operator - ( const iterator& left, const iterator& right )
+{
+    #if debug
+        if ( left.step != right.step )
+            throw value_error("range::iterator not minusable (with left = {}, right = {})", left, right);
+    #endif
+
+    return ( left.val - right.val ) / left.step;
+}
+
+template < class type >
+constexpr range<type>::iterator& range<type>::iterator::operator ++ ( iterator& left )
+{
+    left.val += left.step;
+    return left;
+}
+
+template < class type >
+constexpr range<type>::iterator range<type>::iterator::operator ++ ( iterator& left, int )
+{
+    iterator other = left;
+    ++left;
+    return other;
+}
+
+template < class type >
+constexpr range<type>::iterator& range<type>::iterator::operator -- ( iterator& left )
+{
+    left.val -= left.step;
+    return left;
+}
+
+template < class type >
+constexpr range<type>::iterator range<type>::iterator::operator -- ( iterator& left, int )
+{
+    iterator other = left;
+    --left;
+    return other;
+}
+
+
+

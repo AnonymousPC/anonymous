@@ -34,7 +34,6 @@ class range
         value_type step = 1;
 
     public: // Constructor
-        constexpr          range ( ) noexcept = default;
         constexpr explicit range ( value_type );
         constexpr explicit range ( value_type, value_type, value_type = 1 );
 

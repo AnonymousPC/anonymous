@@ -6,11 +6,11 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
-#include <ranges>
 using namespace ap;
 
 int main ( )
 {
+   
 
 }
 

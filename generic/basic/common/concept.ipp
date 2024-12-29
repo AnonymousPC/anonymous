@@ -13,15 +13,6 @@ namespace detail
 }
 
 
-
-
-
-template < class type, class func_type >  concept function_type = detail::function_type_helper<type,func_type>::value;
-template < class type, class value_type > concept unary_pred    = function_type<type,bool(value_type)>;
-template < class type, class value_type > concept unary_op      = function_type<type,value_type(value_type)>;
-template < class type, class value_type > concept binary_pred   = function_type<type,bool(value_type,value_type)>;
-template < class type, class value_type > concept binary_op     = function_type<type,value_type(value_type,value_type)>;
-
 #define size() (int(1+sizeof...(types))) // Warning: sizeof...(types) returns an unsigned int, which cause error without static_cast<int>
 
 namespace detail

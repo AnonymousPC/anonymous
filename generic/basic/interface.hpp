@@ -300,10 +300,10 @@ namespace ap
 
     /// Include
     #include "common/common.hpp"
-    #include "device/device.hpp"
+   // #include "device/device.hpp"
     #include "initialize.hpp"
 
     /// Global
-    cpu::execution_context_type& execution_context = cpu::execution_context;
+    cpu::execution_context_t& execution_context = cpu::execution_context;
 
 } // namespace ap

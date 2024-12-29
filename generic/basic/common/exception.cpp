@@ -1,15 +1,9 @@
 #pragma once
 
-/// Class exception
-
-// Core
-
 exception::exception ( )
 {
     trace = std::stacktrace::current();
 }
-
-// Member
 
 const char* exception::what ( ) const noexcept
 {

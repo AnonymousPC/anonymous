@@ -6,12 +6,12 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
-#include <boost/compute/detail/
+#include <ranges>
 using namespace ap;
 
 int main ( )
 {
-    print(ap::abi::demangle(typeid(boost::compute::plus<int>).name()));
+
 }
 
 /*

@@ -5,16 +5,17 @@ class opencl::vector
     extends public boost::compute::vector<type,alloc>
 {
     private: // Typedef
-        using base = boost::compute::vector<type,alloc>
+        using base = boost::compute::vector<type,alloc>;
 
-    public: // Core: TODO: noexcept.
+    public: // Core
+        using base::base;
         vector ( )                            noexcept = default;
         vector ( const vector&  )                      = default;
         vector (       vector&& )             noexcept = default;
         vector& operator = ( const vector&  )          = default;
         vector& operator = (       vector&& ) noexcept = default;
-        vector ( auto&&... args ) requires       std::constructible_from<base,decltype(args...),boost::compute::command_queue&>   extends public base ( std::forward<decltype(args)>(args)..., opencl::execution_context.get_command_queue() ) { }
-        vector ( auto&&... args ) requires ( not std::constructible_from<base,decltype(args...),boost::compute::command_queue&> ) extends public base ( std::forward<decltype(args)>(args)...                                                ) { }
+        vector ( auto&&... args ) requires       std::constructible_from<base,decltype(args)...,boost::compute::command_queue&>   extends public base ( std::forward<decltype(args)>(args)..., opencl::execution_context.get_command_queue() ) { }
+        vector ( auto&&... args ) requires ( not std::constructible_from<base,decltype(args)...,boost::compute::command_queue&> ) extends public base ( std::forward<decltype(args)>(args)...                                                ) { }
 
     public: // Member
         decltype(auto) resize        ( auto&&... args ) { return base::resize       (std::forward<decltype(args)>(args)..., opencl::execution_context.get_command_queue()); }

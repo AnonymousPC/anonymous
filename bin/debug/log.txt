@@ -1,0 +1,99 @@
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:303:
+In file included from ./generic/basic/device/device.hpp:7:
+In file included from ./generic/basic/device/opencl/opencl.hpp:165:
+./generic/basic/device/opencl/detail/vector.hpp:17:139: error: expected '(' or '{'
+   17 |         vector ( auto&&... args ) requires       std::constructible_from<base,decltype(args)...,boost::compute::command_queue&>   extends public base ( std::forward<decltype(args)>(args)..., opencl::execution_context.get_command_queue() ) { }
+      |                                                                                                                                           ^
+./generic/basic/device/opencl/detail/vector.hpp:18:139: error: expected '(' or '{'
+   18 |         vector ( auto&&... args ) requires ( not std::constructible_from<base,decltype(args)...,boost::compute::command_queue&> ) extends public base ( std::forward<decltype(args)>(args)...                                                ) { }
+      |                                                                                                                                           ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:303:
+In file included from ./generic/basic/device/device.hpp:7:
+In file included from ./generic/basic/device/opencl/opencl.hpp:166:
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:5:63: error: use of undeclared identifier 'type'; did you mean 'boost::type'?
+    5 |     extends public boost::compute::linear_congruential_engine<type>
+      |                                                               ^~~~
+      |                                                               boost::type
+/opt/homebrew/include/boost/type.hpp:14:10: note: 'boost::type' declared here
+   14 |   struct type {};
+      |          ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:303:
+In file included from ./generic/basic/device/device.hpp:7:
+In file included from ./generic/basic/device/opencl/opencl.hpp:166:
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:5:63: error: use of undeclared identifier 'type'
+    5 |     extends public boost::compute::linear_congruential_engine<type>
+      |                                                               ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:8:65: error: use of undeclared identifier 'type'; did you mean 'boost::type'?
+    8 |         using base = boost::compute::linear_congruential_engine<type>;
+      |                                                                 ^~~~
+      |                                                                 boost::type
+/opt/homebrew/include/boost/type.hpp:14:10: note: 'boost::type' declared here
+   14 |   struct type {};
+      |          ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:303:
+In file included from ./generic/basic/device/device.hpp:7:
+In file included from ./generic/basic/device/opencl/opencl.hpp:166:
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:8:65: error: use of undeclared identifier 'type'
+    8 |         using base = boost::compute::linear_congruential_engine<type>;
+      |                                                                 ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:11:15: error: use of undeclared identifier 'base'
+   11 |         using base::base;
+      |               ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:13:46: error: use of undeclared identifier 'base'
+   13 |             requires std::constructible_from<base,boost::compute::command_queue&,decltype(args)...>
+      |                                              ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:25:9: error: unknown type name 'type'
+   25 |         type operator() ( )
+      |         ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:37:26: error: unknown type name 'type'
+   37 |         constexpr static type min ( )
+      |                          ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:42:26: error: unknown type name 'type'
+   42 |         constexpr static type max ( )
+      |                          ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:14:21: error: member initializer 'base' does not name a non-static data member or base class
+   14 |             extends base ( opencl::execution_context.get_command_queue(), std::forward<decltype(args)>(args)... )
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:22:20: error: use of undeclared identifier 'base'
+   22 |             return base::seed(std::forward<decltype(args)>(args)..., opencl::execution_context.get_command_queue());
+      |                    ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:27:49: error: use of undeclared identifier 'type'; did you mean 'boost::type'?
+   27 |             let result = boost::compute::vector<type>(1);
+      |                                                 ^~~~
+      |                                                 boost::type
+/opt/homebrew/include/boost/type.hpp:14:10: note: 'boost::type' declared here
+   14 |   struct type {};
+      |          ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:303:
+In file included from ./generic/basic/device/device.hpp:7:
+In file included from ./generic/basic/device/opencl/opencl.hpp:166:
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:27:49: error: use of undeclared identifier 'type'
+   27 |             let result = boost::compute::vector<type>(1);
+      |                                                 ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:28:13: error: use of undeclared identifier 'base'
+   28 |             base::generate(result.begin(), result.end(), opencl::execution_context.get_command_queue());
+      |             ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:34:20: error: use of undeclared identifier 'base'
+   34 |             return base::discard(std::forward<decltype(args)>(args)..., opencl::execution_context.get_command_queue());
+      |                    ^
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:44:40: error: use of undeclared identifier 'type'; did you mean 'boost::type'?
+   44 |             return std::numeric_limits<type>::max(); // The source code of boost::compute always implicitly mod 2^sizeof(type).
+      |                                        ^~~~
+      |                                        boost::type
+/opt/homebrew/include/boost/type.hpp:14:10: note: 'boost::type' declared here
+   14 |   struct type {};
+      |          ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:303:
+In file included from ./generic/basic/device/device.hpp:7:
+In file included from ./generic/basic/device/opencl/opencl.hpp:166:
+./generic/basic/device/opencl/detail/linear_congruential_engine.hpp:44:40: error: use of undeclared identifier 'type'
+   44 |             return std::numeric_limits<type>::max(); // The source code of boost::compute always implicitly mod 2^sizeof(type).
+      |                                        ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.

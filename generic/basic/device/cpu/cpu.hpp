@@ -5,6 +5,10 @@ class cpu
     public: // Available
         constexpr static bool is_available ( ) { return true; }
 
+    public: // Execution
+        using  execution_context_t = std::execution::static_thread_pool;
+        static execution_context_t execution_context;
+
     public: // Type
         template < class type > using value_type      = type;
         template < class type > using reference       = type&;
@@ -146,7 +150,7 @@ class cpu
         constexpr static decltype(auto) unique_copy              ( auto&&... args ) { return std::unique_copy             (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) upper_bound              ( auto&&... args ) { return std::upper_bound             (std::forward<decltype(args)>(args)...); }
 
-    public: // Random_base
+    public: // Random base
         template < unsigned_int_type type, type        a, type        c, type        m >                                                                                                                    using linear_congruential_engine = std::linear_congruential_engine<type,a,c,m>;
         template < unsigned_int_type type, std::size_t w, std::size_t n, std::size_t m, std::size_t r, type a, std::size_t u, type d, std::size_t s, type b, std::size_t t, type c, std::size_t l, type f > using mersenne_twister_engine    = std::mersenne_twister_engine   <type,w,n,m,r,a,u,d,s,b,t,c,l,f>;
         template < unsigned_int_type type, std::size_t w, std::size_t s, std::size_t r >                                                                                                                    using subtract_with_carry_engine = std::subtract_with_carry_engine<type,w,s,r>;
@@ -188,12 +192,7 @@ class cpu
         template < int_type   type = int >    using discrete_distribution           = std::discrete_distribution<type>;
         template < float_type type = double > using piecewise_constant_distribution = std::piecewise_constant_distribution<type>;
         template < float_type type = double > using piecewise_linear_distribution   = std::piecewise_linear_distribution<type>;
-
-    public: // Execution
-        using  execution_context_t = std::execution::static_thread_pool;
-        static execution_context_t execution_context;
-
 };
 
-thread_local cpu::random_context_t    cpu::random_context    = cpu::random_context_t(std::random_device()());
              cpu::execution_context_t cpu::execution_context = cpu::execution_context_t(std::thread::hardware_concurrency());
+thread_local cpu::random_context_t    cpu::random_context    = cpu::random_context_t   (std::random_device()());

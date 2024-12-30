@@ -98,124 +98,95 @@ class range<type>::iterator
 
     public: // Core
         constexpr iterator ( ) = default;
-        constexpr iterator ( value_type, value_type );
+
+        constexpr iterator ( value_type init_val, value_type init_step )   
+            extends val  ( init_val  ),
+                    step ( init_step )
+        {
+
+        }
 
     public: // Member
-        constexpr type&     operator *   ( );
-        constexpr type*     operator ->  ( );
-        constexpr bool      operator ==  ( const iterator& );
-        constexpr auto      operator <=> ( const iterator& );
-        constexpr iterator  operator  +  ( int );
-        constexpr iterator  operator  +  ( const iterator& );
-        constexpr iterator  operator  -  ( const iterator&,       int       );
-        constexpr int       operator  -  ( const iterator&, const iterator& );
-        constexpr iterator& operator ++  ( );
-        constexpr iterator  operator ++  ( int );
-        constexpr iterator& operator --  ( );
-        constexpr iterator  operator --  ( int );
+        constexpr type& operator * ( )
+        {
+            return val;
+        }
+
+        constexpr type* operator -> ( )
+        {
+            return &val;
+        }
+        
+        constexpr friend bool operator == ( const iterator& left, const iterator& right )
+        {
+            #if debug
+                if ( left.step != right.step )
+                    throw value_error("range::iterator not equalable (with left = {}, right = {})", left, right);
+            #endif
+
+            return left.step > 0 ? left.val < right.val otherwise left.val > right.val;
+        }
+
+        constexpr friend auto operator <=> ( const iterator& left, const iterator& right )
+        {
+            #if debug
+                if ( left.step != right.step )
+                    throw value_error("range::iterator not comparable (with left = {}, right = {})", left, right);
+            #endif
+
+            return left.step > 0 ? left.val <=> right.val otherwise - ( left.val <=> right.val );
+        }
+
+        constexpr friend iterator operator + ( const iterator& left, int right )
+        {
+            return iterator ( left.val + left.step * right, left.step );
+        }
+
+        constexpr friend iterator operator + ( int left, const iterator& right )
+        {
+            return iterator ( right.val + left * right.step, right.step );
+        }
+
+        constexpr friend iterator operator - ( const iterator& left, int right )
+        {
+            return iterator ( left.val - left.step * right, left.step );
+        }
+
+        constexpr friend int operator - ( const iterator& left, const iterator& right )
+        {
+            #if debug
+                if ( left.step != right.step )
+                    throw value_error("range::iterator not minusable (with left = {}, right = {})", left, right);
+            #endif
+
+            return ( left.val - right.val ) / left.step;
+        }
+
+        constexpr friend iterator& operator ++ ( iterator& left )
+        {
+            left.val += left.step;
+            return left;
+        }
+
+        constexpr friend iterator operator ++ ( iterator& left, int )
+        {
+            let other = left;
+            ++left;
+            return other;
+        }
+
+        constexpr friend iterator& operator -- ( iterator& left )
+        {
+            left.val -= left.step;
+            return left;
+        }
+
+        constexpr friend iterator operator -- ( iterator& left, int )
+        {
+            let other = left;
+            --left;
+            return other;
+        }
 };
-
-template < class type >
-constexpr range<type>::iterator::iterator ( value_type init_val, value_type init_step )
-    extends val  ( init_val  ),
-            step ( init_step )
-{
-
-}
-
-template < class type >
-constexpr type& range<type>::iterator::operator * ( )
-{
-    return val;
-}
-
-template < class type >
-constexpr type* range<type>::iterator::operator -> ( )
-{
-    return &val;
-}
-
-template < class type >
-constexpr bool range<type>::iterator::operator == ( const rangeiterator& right )
-{
-    #if debug
-        if ( left.step != right.step )
-            throw value_error("range::iterator not equalable (with left = {}, right = {})", left, right);
-    #endif
-
-    return left.step > 0 ? left.val < right.val otherwise left.val > right.val;
-}
-
-template < class type >
-constexpr auto operator <=> ( const typename range<type>::iterator& left, const typename range<type>::iterator& right )
-{
-    #if debug
-        if ( left.step != right.step )
-            throw value_error("range::iterator not comparable (with left = {}, right = {})", left, right);
-    #endif
-
-    return left.step > 0 ? left.val <=> right.val otherwise - ( left.val <=> right.val );
-}
-
-template < class type >
-constexpr range<type>::iterator operator + ( const typename range<type>::iterator& left, int right )
-{
-    return range<type>::iterator ( left.val + left.step * right, left.step );
-}
-
-template < class type >
-constexpr range<type>::iterator operator + ( int left, const typename range<type>::iterator& right )
-{
-    return range<type>::iterator ( right.val + left * right.step, right.step );
-}
-
-
-template < class type >
-constexpr range<type>::iterator operator - ( const typename range<type>::iterator& left, int right ) 
-{
-    return range<type>::iterator ( left.val - left.step * right, left.step );
-}
-
-template < class type >
-constexpr int operator - ( const typename range<type>::iterator& left, const typename range<type>::iterator& right )
-{
-    #if debug
-        if ( left.step != right.step )
-            throw value_error("range::iterator not minusable (with left = {}, right = {})", left, right);
-    #endif
-
-    return ( left.val - right.val ) / left.step;
-}
-
-template < class type >
-constexpr range<type>::iterator& operator ++ ( typename range<type>::iterator& left )
-{
-    left.val += left.step;
-    return left;
-}
-
-template < class type >
-constexpr range<type>::iterator operator ++ ( typename range<type>::iterator& left, int )
-{
-    let other = left;
-    ++left;
-    return other;
-}
-
-template < class type >
-constexpr range<type>::iterator& operator -- ( typename range<type>::iterator& left )
-{
-    left.val -= left.step;
-    return left;
-}
-
-template < class type >
-constexpr range<type>::iterator operator -- ( typename range<type>::iterator& left, int )
-{
-    let other = left;
-    --left;
-    return other;
-}
-
 
 

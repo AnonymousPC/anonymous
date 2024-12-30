@@ -1,41 +1,134 @@
-In file included from generic/basic/common/range.hpp:51,
-                 from generic/basic/common/common.hpp:8,
-                 from generic/basic/interface.hpp:301,
-                 from main.cpp:1:
-generic/basic/common/range.ipp:106:84: warning: friend declaration 'constexpr bool ap::operator==(const range<type>::iterator&, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
-  106 |         constexpr friend bool      operator ==  ( const iterator&, const iterator& );
-      |                                                                                    ^
-generic/basic/common/range.ipp:106:84: note: (if this is not what you intended, make sure the function template has already been declared and add '<>' after the function name here)
-generic/basic/common/range.ipp:107:84: warning: friend declaration 'constexpr auto ap::operator<=>(const range<type>::iterator&, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
-  107 |         constexpr friend auto      operator <=> ( const iterator&, const iterator& );
-      |                                                                                    ^
-generic/basic/common/range.ipp:108:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator+(const range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
-  108 |         constexpr friend iterator  operator  +  ( const iterator&,       int       );
-      |                                                                                    ^
-generic/basic/common/range.ipp:109:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator+(int, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
-  109 |         constexpr friend iterator  operator  +  (       int,       const iterator& );
-      |                                                                                    ^
-generic/basic/common/range.ipp:110:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator-(const range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
-  110 |         constexpr friend iterator  operator  -  ( const iterator&,       int       );
-      |                                                                                    ^
-generic/basic/common/range.ipp:111:84: warning: friend declaration 'constexpr int ap::operator-(const range<type>::iterator&, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
-  111 |         constexpr friend int       operator  -  ( const iterator&, const iterator& );
-      |                                                                                    ^
-generic/basic/common/range.ipp:112:84: warning: friend declaration 'constexpr ap::range<type>::iterator& ap::operator++(range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
-  112 |         constexpr friend iterator& operator ++  (       iterator&                  );
-      |                                                                                    ^
-generic/basic/common/range.ipp:113:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator++(range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
-  113 |         constexpr friend iterator  operator ++  (       iterator&, int             );
-      |                                                                                    ^
-generic/basic/common/range.ipp:114:84: warning: friend declaration 'constexpr ap::range<type>::iterator& ap::operator--(range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
-  114 |         constexpr friend iterator& operator --  (       iterator&                  );
-      |                                                                                    ^
-generic/basic/common/range.ipp:115:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator--(range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
-  115 |         constexpr friend iterator  operator --  (       iterator&, int             );
-      |                                                                                    ^
-generic/basic/common/range.ipp:106:36: warning: inline function 'constexpr bool ap::operator==(const range<int>::iterator&, const range<int>::iterator&)' used but never defined
-  106 |         constexpr friend bool      operator ==  ( const iterator&, const iterator& );
-      |                                    ^~~~~~~~
-generic/basic/common/range.ipp:112:36: warning: inline function 'constexpr ap::range<int>::iterator& ap::operator++(range<int>::iterator&)' used but never defined
-  112 |         constexpr friend iterator& operator ++  (       iterator&                  );
-      |                                    ^~~~~~~~
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:149:
+In file included from /opt/homebrew/include/boost/compute.hpp:14:
+In file included from /opt/homebrew/include/boost/compute/algorithm.hpp:18:
+In file included from /opt/homebrew/include/boost/compute/algorithm/accumulate.hpp:20:
+In file included from /opt/homebrew/include/boost/compute/algorithm/reduce.hpp:22:
+In file included from /opt/homebrew/include/boost/compute/container/array.hpp:23:
+In file included from /opt/homebrew/include/boost/compute/algorithm/fill.hpp:25:
+In file included from /opt/homebrew/include/boost/compute/algorithm/copy.hpp:26:
+In file included from /opt/homebrew/include/boost/compute/algorithm/detail/copy_on_device.hpp:21:
+/opt/homebrew/include/boost/compute/detail/iterator_range_size.hpp:30:41: error: no type named 'difference_type' in 'std::iterator_traits<int>'
+   29 |     typedef typename
+      |             ~~~~~~~~
+   30 |         std::iterator_traits<Iterator>::difference_type
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+/opt/homebrew/include/boost/compute/container/vector.hpp:182:26: note: in instantiation of function template specialization 'boost::compute::detail::iterator_range_size<int>' requested here
+  182 |         : m_size(detail::iterator_range_size(first, last)),
+      |                          ^
+main.cpp:15:13: note: in instantiation of function template specialization 'boost::compute::vector<int>::vector<int>' requested here
+   15 |     let a = boost::compute::vector<int>(10, 100, queue);
+      |             ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:149:
+In file included from /opt/homebrew/include/boost/compute.hpp:14:
+In file included from /opt/homebrew/include/boost/compute/algorithm.hpp:18:
+In file included from /opt/homebrew/include/boost/compute/algorithm/accumulate.hpp:20:
+In file included from /opt/homebrew/include/boost/compute/algorithm/reduce.hpp:22:
+In file included from /opt/homebrew/include/boost/compute/container/array.hpp:23:
+In file included from /opt/homebrew/include/boost/compute/algorithm/fill.hpp:25:
+In file included from /opt/homebrew/include/boost/compute/algorithm/copy.hpp:26:
+In file included from /opt/homebrew/include/boost/compute/algorithm/detail/copy_on_device.hpp:21:
+/opt/homebrew/include/boost/compute/detail/iterator_range_size.hpp:33:34: error: no matching function for call to 'distance'
+   33 |     difference_type difference = std::distance(first, last);
+      |                                  ^~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/distance.h:46:1: note: candidate template ignored: substitution failure [with _InputIter = int]: no type named 'difference_type' in 'std::iterator_traits<int>'
+   45 | inline _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_SINCE_CXX17 typename iterator_traits<_InputIter>::difference_type
+      |                                                                                                  ~~~~~~~~~~~~~~~
+   46 | distance(_InputIter __first, _InputIter __last) {
+      | ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:149:
+In file included from /opt/homebrew/include/boost/compute.hpp:14:
+In file included from /opt/homebrew/include/boost/compute/algorithm.hpp:18:
+In file included from /opt/homebrew/include/boost/compute/algorithm/accumulate.hpp:20:
+In file included from /opt/homebrew/include/boost/compute/algorithm/reduce.hpp:22:
+In file included from /opt/homebrew/include/boost/compute/container/array.hpp:23:
+In file included from /opt/homebrew/include/boost/compute/algorithm/fill.hpp:25:
+/opt/homebrew/include/boost/compute/algorithm/copy.hpp:82:58: error: no type named 'value_type' in 'std::iterator_traits<int>'
+   82 |             typename std::iterator_traits<HostIterator>::value_type
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+/opt/homebrew/include/boost/mpl/aux_/nested_type_wknd.hpp:27:7: note: in instantiation of template class 'boost::compute::detail::is_same_value_type<int, boost::compute::buffer_iterator<int>>' requested here
+   27 |     : T::type
+      |       ^
+/opt/homebrew/include/boost/mpl/aux_/preprocessed/gcc/and.hpp:25:11: note: in instantiation of template class 'boost::mpl::aux::nested_type_wknd<boost::compute::detail::is_same_value_type<int, boost::compute::buffer_iterator<int>>>' requested here
+   25 |           BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
+      |           ^
+/opt/homebrew/include/boost/mpl/aux_/nested_type_wknd.hpp:38:24: note: expanded from macro 'BOOST_MPL_AUX_NESTED_TYPE_WKND'
+   38 |     ::boost::mpl::aux::nested_type_wknd<T> \
+      |                        ^
+/opt/homebrew/include/boost/mpl/aux_/preprocessed/gcc/and.hpp:24:7: note: in instantiation of template class 'boost::mpl::aux::and_impl<true, boost::compute::detail::is_same_value_type<int, boost::compute::buffer_iterator<int>>, boost::compute::detail::is_contiguous_iterator<int>, mpl_::bool_<true>, mpl_::bool_<true>>' requested here
+   24 |     : and_impl<
+      |       ^
+/opt/homebrew/include/boost/mpl/aux_/preprocessed/gcc/and.hpp:50:7: note: in instantiation of template class 'boost::mpl::aux::and_impl<true, boost::compute::is_device_iterator<boost::compute::buffer_iterator<int>>, boost::compute::detail::is_same_value_type<int, boost::compute::buffer_iterator<int>>, boost::compute::detail::is_contiguous_iterator<int>, mpl_::bool_<true>>' requested here
+   50 |     : aux::and_impl<
+      |       ^
+/opt/homebrew/include/boost/core/enable_if.hpp:41:41: note: in instantiation of template class 'boost::mpl::and_<boost::mpl::not_<boost::compute::is_device_iterator<int>>, boost::compute::is_device_iterator<boost::compute::buffer_iterator<int>>, boost::compute::detail::is_same_value_type<int, boost::compute::buffer_iterator<int>>, boost::compute::detail::is_contiguous_iterator<int>>' requested here
+   41 |   struct enable_if : public enable_if_c<Cond::value, T> {};
+      |                                         ^
+/opt/homebrew/include/boost/compute/algorithm/copy.hpp:185:31: note: in instantiation of template class 'boost::enable_if<boost::mpl::and_<boost::mpl::not_<boost::compute::is_device_iterator<int>>, boost::compute::is_device_iterator<boost::compute::buffer_iterator<int>>, boost::compute::detail::is_same_value_type<int, boost::compute::buffer_iterator<int>>, boost::compute::detail::is_contiguous_iterator<int>>>' requested here
+  185 |               typename boost::enable_if<
+      |                               ^
+/opt/homebrew/include/boost/compute/algorithm/copy.hpp:860:12: note: while substituting deduced template arguments into function template 'dispatch_copy' [with InputIterator = int, OutputIterator = boost::compute::buffer_iterator<int>]
+  860 |     return detail::dispatch_copy(first, last, result, queue, events);
+      |            ^
+/opt/homebrew/include/boost/compute/container/vector.hpp:187:27: note: in instantiation of function template specialization 'boost::compute::copy<int, boost::compute::buffer_iterator<int>>' requested here
+  187 |         ::boost::compute::copy(first, last, begin(), queue);
+      |                           ^
+main.cpp:15:13: note: in instantiation of function template specialization 'boost::compute::vector<int>::vector<int>' requested here
+   15 |     let a = boost::compute::vector<int>(10, 100, queue);
+      |             ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:149:
+In file included from /opt/homebrew/include/boost/compute.hpp:14:
+In file included from /opt/homebrew/include/boost/compute/algorithm.hpp:18:
+In file included from /opt/homebrew/include/boost/compute/algorithm/accumulate.hpp:20:
+In file included from /opt/homebrew/include/boost/compute/algorithm/reduce.hpp:22:
+In file included from /opt/homebrew/include/boost/compute/container/array.hpp:23:
+In file included from /opt/homebrew/include/boost/compute/algorithm/fill.hpp:25:
+/opt/homebrew/include/boost/compute/algorithm/copy.hpp:309:59: error: no type named 'value_type' in 'std::iterator_traits<int>'
+  309 |     typedef typename std::iterator_traits<InputIterator>::value_type input_type;
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+/opt/homebrew/include/boost/compute/algorithm/copy.hpp:860:20: note: in instantiation of function template specialization 'boost::compute::detail::dispatch_copy<int, boost::compute::buffer_iterator<int>>' requested here
+  860 |     return detail::dispatch_copy(first, last, result, queue, events);
+      |                    ^
+/opt/homebrew/include/boost/compute/container/vector.hpp:187:27: note: in instantiation of function template specialization 'boost::compute::copy<int, boost::compute::buffer_iterator<int>>' requested here
+  187 |         ::boost::compute::copy(first, last, begin(), queue);
+      |                           ^
+main.cpp:15:13: note: in instantiation of function template specialization 'boost::compute::vector<int>::vector<int>' requested here
+   15 |     let a = boost::compute::vector<int>(10, 100, queue);
+      |             ^
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:50:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/algorithm:1794:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy.h:40:19: error: indirection requires pointer operand ('int' invalid)
+   40 |       *__result = *__first;
+      |                   ^~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy_move_common.h:109:19: note: in instantiation of function template specialization 'std::__copy_loop<std::_ClassicAlgPolicy>::operator()<int, int, int *>' requested here
+  109 |   auto __result = _Algorithm()(std::move(__range.first), std::move(__range.second), std::__unwrap_iter(__out_first));
+      |                   ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy_move_common.h:133:15: note: in instantiation of function template specialization 'std::__unwrap_and_dispatch<std::__overload<std::__copy_loop<std::_ClassicAlgPolicy>, std::__copy_trivial>, int, int, int *, 0>' requested here
+  133 |   return std::__unwrap_and_dispatch<_Algorithm>(std::move(__first), std::move(__last), std::move(__out_first));
+      |               ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy.h:111:15: note: in instantiation of function template specialization 'std::__dispatch_copy_or_move<std::_ClassicAlgPolicy, std::__copy_loop<std::_ClassicAlgPolicy>, std::__copy_trivial, int, int, int *>' requested here
+  111 |   return std::__dispatch_copy_or_move<_AlgPolicy, __copy_loop<_AlgPolicy>, __copy_trivial>(
+      |               ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy.h:118:15: note: in instantiation of function template specialization 'std::__copy<std::_ClassicAlgPolicy, int, int, int *>' requested here
+  118 |   return std::__copy<_ClassicAlgPolicy>(__first, __last, __result).second;
+      |               ^
+/opt/homebrew/include/boost/compute/algorithm/detail/copy_to_device.hpp:90:10: note: in instantiation of function template specialization 'std::__1::copy<int, int *>' requested here
+   90 |     std::copy(first, last, pointer);
+      |          ^
+/opt/homebrew/include/boost/compute/algorithm/copy.hpp:355:16: note: in instantiation of function template specialization 'boost::compute::detail::copy_to_device_map<int, boost::compute::buffer_iterator<int>>' requested here
+  355 |         return copy_to_device_map(first, last, result, queue, events);
+      |                ^
+/opt/homebrew/include/boost/compute/algorithm/copy.hpp:860:20: note: in instantiation of function template specialization 'boost::compute::detail::dispatch_copy<int, boost::compute::buffer_iterator<int>>' requested here
+  860 |     return detail::dispatch_copy(first, last, result, queue, events);
+      |                    ^
+/opt/homebrew/include/boost/compute/container/vector.hpp:187:27: note: in instantiation of function template specialization 'boost::compute::copy<int, boost::compute::buffer_iterator<int>>' requested here
+  187 |         ::boost::compute::copy(first, last, begin(), queue);
+      |                           ^
+main.cpp:15:13: note: in instantiation of function template specialization 'boost::compute::vector<int>::vector<int>' requested here
+   15 |     let a = boost::compute::vector<int>(10, 100, queue);
+      |             ^
+5 errors generated.

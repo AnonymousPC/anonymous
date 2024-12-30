@@ -10,8 +10,12 @@ using namespace ap;
 
 int main ( )
 {
-    for ( int i in range(10) )
-        print(i);
+    let& queue = opencl::execution_context.get_command_queue();
+
+    let a = boost::compute::vector<int>(10, 100, queue);
+    a.resize(20, queue);
+    let b = a;
+    print(b[5]);
 }
 
 /*

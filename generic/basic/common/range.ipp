@@ -101,18 +101,18 @@ class range<type>::iterator
         constexpr iterator ( value_type, value_type );
 
     public: // Member
-        constexpr        type&     operator *   ( );
-        constexpr        type*     operator ->  ( );
-        constexpr friend bool      operator ==  ( const iterator&, const iterator& );
-        constexpr friend auto      operator <=> ( const iterator&, const iterator& );
-        constexpr friend iterator  operator  +  ( const iterator&,       int       );
-        constexpr friend iterator  operator  +  (       int,       const iterator& );
-        constexpr friend iterator  operator  -  ( const iterator&,       int       );
-        constexpr friend int       operator  -  ( const iterator&, const iterator& );
-        constexpr friend iterator& operator ++  (       iterator&                  );
-        constexpr friend iterator  operator ++  (       iterator&, int             );
-        constexpr friend iterator& operator --  (       iterator&                  );
-        constexpr friend iterator  operator --  (       iterator&, int             );
+        constexpr type&     operator *   ( );
+        constexpr type*     operator ->  ( );
+        constexpr bool      operator ==  ( const iterator& );
+        constexpr auto      operator <=> ( const iterator& );
+        constexpr iterator  operator  +  ( int );
+        constexpr iterator  operator  +  ( const iterator& );
+        constexpr iterator  operator  -  ( const iterator&,       int       );
+        constexpr int       operator  -  ( const iterator&, const iterator& );
+        constexpr iterator& operator ++  ( );
+        constexpr iterator  operator ++  ( int );
+        constexpr iterator& operator --  ( );
+        constexpr iterator  operator --  ( int );
 };
 
 template < class type >
@@ -136,7 +136,7 @@ constexpr type* range<type>::iterator::operator -> ( )
 }
 
 template < class type >
-constexpr bool operator == ( const typename range<type>::iterator& left, const typename range<type>::iterator& right )
+constexpr bool range<type>::iterator::operator == ( const rangeiterator& right )
 {
     #if debug
         if ( left.step != right.step )

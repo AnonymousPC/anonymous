@@ -104,6 +104,7 @@
         "*.def": "cpp",
         "mdspan": "cpp",
         "__assert": "cpp",
-        "__string": "cpp"
+        "__string": "cpp",
+        "expected": "cpp"
     }
 }

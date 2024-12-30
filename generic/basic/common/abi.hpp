@@ -1,21 +1,8 @@
 #pragma once
 
-
 namespace abi
 {
-    std::string demangle ( const char* );
-    std::string demangle ( const std::stacktrace& );
-
-    constexpr const char* red    = "\033[38;2;240;0;0m";
-    constexpr const char* yellow = "\033[38;2;240;240;0m";
-    constexpr const char* green  = "\033[38;2;0;240;0m";
-    constexpr const char* blue   = "\033[38;2;0;120;240m";
-
-    constexpr const char* white      = "\033[38;2;192;192;192m";
-    constexpr const char* light_grey = "\033[38;2;144;144;144m";
-    constexpr const char* grey       = "\033[38;2;96;96;96m";
-    constexpr const char* dark_grey  = "\033[38;2;48;48;48m";
-
+    std::string demangle ( const std::type_info& );
 }
 
 #if dll

@@ -152,24 +152,7 @@ exception::exception ( format_string<type_identity<types>...> str, types&&... ar
     extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
 {
 
-}
-
-template < class type >
-exception& exception::from ( const std::exception& e )
-{
-    error_from_typeid = typeid(e);
-
-    let ptr = dynamic_cast<exception*>(&e);
-    if ( ptr == nullptr ) // Derived from std::exception, but not derived from ap::exception.
-        error_from_what = e.what();
-    else
-    {
-        error_from_message    = ptr->message();
-        error_from_stacktrace = ptr->stacktrace();
-    }
-
-    return self;
-}
+}   
 
 template < class... types >
 class exception::format_string
@@ -256,9 +239,9 @@ constexpr decltype(auto) exception::format_string<types...>::make_formattable ( 
     else if constexpr ( printable<decltype(args)> )
         return (std::stringstream()<<args).str();
     else if constexpr ( same_as<decltype(args),const std::type_info&> )
-        return abi::demangle(args.name());
+        return abi::demangle(args);
     else
-        return std::format("[[{} object at {}]]", abi::demangle(typeid(args).name()), static_cast<const void*>(&args));
+        return std::format("[[{} object at {}]]", abi::demangle(typeid(args)), static_cast<const void*>(&args));
 } 
 
 template < class... types >

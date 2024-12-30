@@ -59,13 +59,11 @@ class exception
         virtual const std::stacktrace& stacktrace ( ) const;
 
     private: // Data
-        mutable std::string     error_what           = "";
-                std::string     error_message        = "";
-                std::stacktrace error_stacktrace     = std::stacktrace::current();
-        const   std::type_info* error_src_typeid     = nullptr;
-                std::string     error_src_what       = "";
-                std::string     error_src_message    = "";
-                std::stacktrace error_src_stacktrace = std::stacktrace();
+        mutable std::string     error_what       = "";
+                std::string     error_message    = "";
+                std::stacktrace error_stacktrace = std::stacktrace::current();
+        const   std::type_info* from_type        = nullptr;
+                std::string     from_what        = "";
 };
 
 
@@ -77,6 +75,6 @@ class exception
 
 
 #include "exception.ipp"
-#if dll
+//#if dll
     #include "exception.cpp"
-#endif
+//#endif

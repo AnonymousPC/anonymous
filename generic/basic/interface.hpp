@@ -266,8 +266,7 @@ namespace ap
     /// Abi
     namespace abi
     {
-        std::string demangle ( const char* );
-        std::string demangle ( const std::stacktrace& );
+        std::string demangle ( const std::type_info& );
     }
 
     /// Exception

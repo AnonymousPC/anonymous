@@ -31,19 +31,19 @@ void detail::opencl_thread_pool::enqueue ( execpools::task_base* task, std::uint
 
 void detail::opencl_thread_pool::throw_opencl_error ( const boost::compute::opencl_error& e )
 {
-    throw device_error("failed to enqueue task [[caused by {}: {}]]", typeid(e), e.what());
+    throw device_error("failed to enqueue task").from(e);
 }
 
 void detail::opencl_thread_pool::throw_device_error ( )
 {
     throw device_error("failed to enqueue task: opencl device does not supports executing host function (with name = {}, vendor = {}, profile = {}, version = {}, driver_version = {}, capability = {{exec_kernel = {}, exec_native_kernel = {}}})",
-                    boost::compute::system::default_device().name(),
-                    boost::compute::system::default_device().vendor(),
-                    boost::compute::system::default_device().profile(),
-                    boost::compute::system::default_device().version(),
-                    boost::compute::system::default_device().driver_version(),
-                    boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_KERNEL,
-                    boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL);
+                       boost::compute::system::default_device().name(),
+                       boost::compute::system::default_device().vendor(),
+                       boost::compute::system::default_device().profile(),
+                       boost::compute::system::default_device().version(),
+                       boost::compute::system::default_device().driver_version(),
+                       boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_KERNEL,
+                       boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL);
 }
 
 void BOOST_COMPUTE_CL_CALLBACK detail::opencl_thread_pool::enqueue_callback ( void* args )

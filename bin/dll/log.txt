@@ -1,17 +1,35 @@
-In file included from main.cpp:1:
-In file included from ./generic/basic/interface.hpp:303:
-In file included from ./generic/basic/common/common.hpp:6:
-In file included from ./generic/basic/common/exception.hpp:80:
-./generic/basic/common/exception.cpp:11:120: warning: expression with side effects will be evaluated despite being used as an operand to 'typeid' [-Wpotentially-evaluated-expression]
-   11 |                      abi::yellow + std::format("    {}catch {}{}: {}{}", abi::yellow, abi::white, abi::demangle(typeid(*error_from_1).name()), abi::red, error_from_1->message()) +
-      |                                                                                                                        ^
-./generic/basic/common/exception.cpp:16:120: warning: expression with side effects will be evaluated despite being used as an operand to 'typeid' [-Wpotentially-evaluated-expression]
-   16 |                      abi::yellow + std::format("    {}catch {}{}: {}{}", abi::yellow, abi::white, abi::demangle(typeid(*error_from_1).name()), abi::red, error_from_1->what()) + abi::white;
-      |                                                                                                                        ^
-main.cpp:20:39: error: use of undeclared identifier 'matrix'
-   20 |     throw math_error("some error {}", matrix.shape()).from(e);
-      |                                       ^
-main.cpp:20:60: error: use of undeclared identifier 'e'
-   20 |     throw math_error("some error {}", matrix.shape()).from(e);
-      |                                                            ^
-2 warnings and 2 errors generated.
+In file included from generic/basic/common/range.hpp:51,
+                 from generic/basic/common/common.hpp:8,
+                 from generic/basic/interface.hpp:301,
+                 from main.cpp:1:
+generic/basic/common/range.ipp:106:84: warning: friend declaration 'constexpr bool ap::operator==(const range<type>::iterator&, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
+  106 |         constexpr friend bool      operator ==  ( const iterator&, const iterator& );
+      |                                                                                    ^
+generic/basic/common/range.ipp:106:84: note: (if this is not what you intended, make sure the function template has already been declared and add '<>' after the function name here)
+generic/basic/common/range.ipp:107:84: warning: friend declaration 'constexpr auto ap::operator<=>(const range<type>::iterator&, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
+  107 |         constexpr friend auto      operator <=> ( const iterator&, const iterator& );
+      |                                                                                    ^
+generic/basic/common/range.ipp:108:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator+(const range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
+  108 |         constexpr friend iterator  operator  +  ( const iterator&,       int       );
+      |                                                                                    ^
+generic/basic/common/range.ipp:109:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator+(int, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
+  109 |         constexpr friend iterator  operator  +  (       int,       const iterator& );
+      |                                                                                    ^
+generic/basic/common/range.ipp:110:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator-(const range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
+  110 |         constexpr friend iterator  operator  -  ( const iterator&,       int       );
+      |                                                                                    ^
+generic/basic/common/range.ipp:111:84: warning: friend declaration 'constexpr int ap::operator-(const range<type>::iterator&, const range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
+  111 |         constexpr friend int       operator  -  ( const iterator&, const iterator& );
+      |                                                                                    ^
+generic/basic/common/range.ipp:112:84: warning: friend declaration 'constexpr ap::range<type>::iterator& ap::operator++(range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
+  112 |         constexpr friend iterator& operator ++  (       iterator&                  );
+      |                                                                                    ^
+generic/basic/common/range.ipp:113:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator++(range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
+  113 |         constexpr friend iterator  operator ++  (       iterator&, int             );
+      |                                                                                    ^
+generic/basic/common/range.ipp:114:84: warning: friend declaration 'constexpr ap::range<type>::iterator& ap::operator--(range<type>::iterator&)' declares a non-template function [-Wnon-template-friend]
+  114 |         constexpr friend iterator& operator --  (       iterator&                  );
+      |                                                                                    ^
+generic/basic/common/range.ipp:115:84: warning: friend declaration 'constexpr ap::range<type>::iterator ap::operator--(range<type>::iterator&, int)' declares a non-template function [-Wnon-template-friend]
+  115 |         constexpr friend iterator  operator --  (       iterator&, int             );
+      |                                                                                    ^

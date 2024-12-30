@@ -39,15 +39,17 @@ class exception
     extends public std::exception
 {
     private: // Typedef
-        template < class... arg_types > class format_string;
+        template < class... types > class format_string;
 
     public: // Core
-                 exception ( );
-        virtual ~exception ( ) = default;
+        exception ( ) = default;
 
     public: // Constructor
-        template < class... arg_types >
-        exception ( format_string<std::type_identity_t<arg_types>...>, arg_types&&... );
+        template < class... types >
+        exception ( format_string<type_identity<types>...>, types&&... );
+
+    public: // Factory
+        exception& from ( const std::exception& );
 
     public: // Member
         virtual const char*            what       ( ) const noexcept;
@@ -57,12 +59,13 @@ class exception
         virtual const std::stacktrace& stacktrace ( ) const;
 
     private: // Data
-        mutable std::string     wt    = std::string();
-                std::string     msg   = std::string();
-                std::stacktrace trace = std::stacktrace();
-
-    private: // Detail
-        constexpr static std::string format ( auto&&, auto&&... );
+        mutable std::string     error_what           = "";
+                std::string     error_message        = "";
+                std::stacktrace error_stacktrace     = std::stacktrace::current();
+        const   std::type_info* error_src_typeid     = nullptr;
+                std::string     error_src_what       = "";
+                std::string     error_src_message    = "";
+                std::stacktrace error_src_stacktrace = std::stacktrace();
 };
 
 

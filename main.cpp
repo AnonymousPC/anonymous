@@ -8,10 +8,32 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+void three ( )
+{
+    try
+    {
+        four();
+    }
+    catch ( const std::exception& e )
+    {
+        
+    }
+    throw math_error("an math error!");
+}
+
+void four ( )
+{
+    throw std::runtime_error("std error");
+}
+
 int main ( )
 {
-   
-
+    // auto& queue = opencl::execution_context.get_command_queue();
+    // let a = boost::compute::vector<int>(10, 2, queue);
+    // a.resize(20, queue);
+    // let b = a;
+    
+    // print(b[2]);
 }
 
 /*

@@ -300,7 +300,7 @@ namespace ap
 
     /// Include
     #include "common/common.hpp"
-   // #include "device/device.hpp"
+    #include "device/device.hpp"
     #include "initialize.hpp"
 
     /// Global

@@ -94,7 +94,7 @@ class range<type>::iterator
 
     private: // Data
         value_type val  = value_type();
-        value_type step = value_type;
+        value_type step = value_type();
 
     public: // Core
         constexpr iterator ( ) = default;
@@ -136,7 +136,7 @@ constexpr type* range<type>::iterator::operator -> ( )
 }
 
 template < class type >
-constexpr bool range<type>::iterator::operator == ( const iterator& left, const iterator& right )
+constexpr bool operator == ( const typename range<type>::iterator& left, const typename range<type>::iterator& right )
 {
     #if debug
         if ( left.step != right.step )
@@ -147,7 +147,7 @@ constexpr bool range<type>::iterator::operator == ( const iterator& left, const 
 }
 
 template < class type >
-constexpr auto range<type>::iterator::operator <=> ( const iterator& left, const iterator& right )
+constexpr auto operator <=> ( const typename range<type>::iterator& left, const typename range<type>::iterator& right )
 {
     #if debug
         if ( left.step != right.step )
@@ -158,26 +158,26 @@ constexpr auto range<type>::iterator::operator <=> ( const iterator& left, const
 }
 
 template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator + ( const iterator& left, int right )
+constexpr range<type>::iterator operator + ( const typename range<type>::iterator& left, int right )
 {
-    return iterator ( left.val + left.step * right, left.step );
+    return range<type>::iterator ( left.val + left.step * right, left.step );
 }
 
 template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator + ( int left, const iterator& right )
+constexpr range<type>::iterator operator + ( int left, const typename range<type>::iterator& right )
 {
-    return iterator ( right.val + left * right.step, right.step );
+    return range<type>::iterator ( right.val + left * right.step, right.step );
 }
 
 
 template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator - ( const iterator& left, int right ) 
+constexpr range<type>::iterator operator - ( const typename range<type>::iterator& left, int right ) 
 {
-    return iterator ( left.val - left.step * right, left.step );
+    return range<type>::iterator ( left.val - left.step * right, left.step );
 }
 
 template < class type >
-constexpr int range<type>::iterator::operator - ( const iterator& left, const iterator& right )
+constexpr int operator - ( const typename range<type>::iterator& left, const typename range<type>::iterator& right )
 {
     #if debug
         if ( left.step != right.step )
@@ -188,31 +188,31 @@ constexpr int range<type>::iterator::operator - ( const iterator& left, const it
 }
 
 template < class type >
-constexpr range<type>::iterator& range<type>::iterator::operator ++ ( iterator& left )
+constexpr range<type>::iterator& operator ++ ( typename range<type>::iterator& left )
 {
     left.val += left.step;
     return left;
 }
 
 template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator ++ ( iterator& left, int )
+constexpr range<type>::iterator operator ++ ( typename range<type>::iterator& left, int )
 {
-    iterator other = left;
+    let other = left;
     ++left;
     return other;
 }
 
 template < class type >
-constexpr range<type>::iterator& range<type>::iterator::operator -- ( iterator& left )
+constexpr range<type>::iterator& operator -- ( typename range<type>::iterator& left )
 {
     left.val -= left.step;
     return left;
 }
 
 template < class type >
-constexpr range<type>::iterator range<type>::iterator::operator -- ( iterator& left, int )
+constexpr range<type>::iterator operator -- ( typename range<type>::iterator& left, int )
 {
-    iterator other = left;
+    let other = left;
     --left;
     return other;
 }

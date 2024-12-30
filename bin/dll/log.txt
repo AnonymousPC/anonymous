@@ -1,0 +1,17 @@
+In file included from main.cpp:1:
+In file included from ./generic/basic/interface.hpp:303:
+In file included from ./generic/basic/common/common.hpp:6:
+In file included from ./generic/basic/common/exception.hpp:80:
+./generic/basic/common/exception.cpp:11:120: warning: expression with side effects will be evaluated despite being used as an operand to 'typeid' [-Wpotentially-evaluated-expression]
+   11 |                      abi::yellow + std::format("    {}catch {}{}: {}{}", abi::yellow, abi::white, abi::demangle(typeid(*error_from_1).name()), abi::red, error_from_1->message()) +
+      |                                                                                                                        ^
+./generic/basic/common/exception.cpp:16:120: warning: expression with side effects will be evaluated despite being used as an operand to 'typeid' [-Wpotentially-evaluated-expression]
+   16 |                      abi::yellow + std::format("    {}catch {}{}: {}{}", abi::yellow, abi::white, abi::demangle(typeid(*error_from_1).name()), abi::red, error_from_1->what()) + abi::white;
+      |                                                                                                                        ^
+main.cpp:20:39: error: use of undeclared identifier 'matrix'
+   20 |     throw math_error("some error {}", matrix.shape()).from(e);
+      |                                       ^
+main.cpp:20:60: error: use of undeclared identifier 'e'
+   20 |     throw math_error("some error {}", matrix.shape()).from(e);
+      |                                                            ^
+2 warnings and 2 errors generated.

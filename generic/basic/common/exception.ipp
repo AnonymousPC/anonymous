@@ -147,70 +147,83 @@ class terminate_signal
     using signal::signal;
 };
 
-template < class... arg_types >
-exception::exception ( format_string<std::type_identity_t<arg_types>...> str, arg_types&&... args )
+template < class... types >
+exception::exception ( format_string<type_identity<types>...> str, types&&... args )
+    extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
 {
-    msg   = exception::format ( str, std::forward<decltype(args)>(args)... );
-    trace = std::stacktrace::current();
+
 }
 
-
-constexpr std::string exception::format ( auto&& fmt, auto&&... args )
+template < class type >
+exception& exception::from ( const std::exception& e )
 {
-    // Tools.
-    [[maybe_unused]] let make_const_ref   = [] ( const auto& item ) -> decltype(auto) { return item; };
-    [[maybe_unused]] let make_formattable = [] ( const auto& item ) -> decltype(auto)
-    {
-        if constexpr ( std::formattable<decay<decltype(item)>,char> ) // std::formattable
-            return item;
-        else if constexpr ( printable<decltype(item)> )
-            return (std::stringstream()<<item).str();
-        else if constexpr ( same_as<decltype(item),const std::type_info&> )
-            return abi::demangle(item.name());
-        else
-            return std::format("[[{} object at {}]]", abi::demangle(typeid(item).name()), static_cast<const void*>(&item));
-    };
+    error_from_typeid = typeid(e);
 
-    // Format.
-    using mode = decltype(fmt.parse());
-    switch ( fmt.parse() )
+    let ptr = dynamic_cast<exception*>(&e);
+    if ( ptr == nullptr ) // Derived from std::exception, but not derived from ap::exception.
+        error_from_what = e.what();
+    else
     {
-        case mode::implicit_mode:
-            return std::vformat(fmt.string(), std::make_format_args(make_const_ref(make_formattable(args))...)); break;
-        case mode::explicit_mode:
-            return std::vformat(std::string("{0}") + fmt.string(), std::make_format_args("", make_const_ref(make_formattable(args))...)); break;
-        case mode::default_mode:
-            return fmt.string(); break;
-        default:
-            return fmt.string(); break;
+        error_from_message    = ptr->message();
+        error_from_stacktrace = ptr->stacktrace();
     }
+
+    return self;
 }
 
-template < class... arg_types >
+template < class... types >
 class exception::format_string
 {
-    public: // Mode
+    private: // Mode
         enum class mode { implicit_mode, explicit_mode, default_mode };
 
     private: // Data
-        const char* data = nullptr;
-        mode        m    = mode::default_mode;
+        const char* str = nullptr;
 
     public: // Core
         consteval format_string ( const char* );
 
-    public: // Access
-        constexpr std::string string ( ) const;
-        constexpr mode        parse  ( ) const;
+    public: // Member
+        constexpr std::string format ( types&&... ) const;
+        constexpr mode        parse  ( )            const;
+
+    private: // Detail
+        constexpr static decltype(auto) make_const_ref   ( const auto& );
+        constexpr static decltype(auto) make_formattable ( const auto& );
+        constexpr static decltype(auto) make_format_args ( const auto&... );
 };
 
-template < class... arg_types >
-consteval exception::format_string<arg_types...>::format_string ( const char* init_data )
-    extends data ( init_data )
+template < class... types >
+consteval exception::format_string<types...>::format_string ( const char* init_str )
+    extends str ( init_str )
 {
-    // Set mode. (std::string is not always consteval, so that use self-made strlen()).
-    let b = data;
-    let e = data;
+    if ( parse() == mode::explicit_mode )
+        /*check-only*/ (void) std::format_string<const char*,conditional<std::formattable<types,char>,types,std::string>...>(std::string("{0}") + str);
+    else
+        /*check-only*/ (void) std::format_string<const char*,conditional<std::formattable<types,char>,types,std::string>...>(std::string("{}" ) + str);
+}
+
+template < class... types >
+constexpr std::string exception::format_string<types...>::format ( types&&... args ) const
+{
+    switch ( parse() )
+    {
+        case mode::implicit_mode:
+            return std::vformat(str, make_format_args(args...));
+        case mode::explicit_mode:
+            return std::vformat(std::string("{0}") + str, make_format_args("", args...));
+        case mode::default_mode:
+            return str;
+        default:
+            return str;
+    }
+}
+
+template < class... types >
+constexpr exception::format_string<types...>::mode exception::format_string<types...>::parse ( ) const
+{
+    let b = str;
+    let e = str;
     while ( *e != '\0' )
         e++;
 
@@ -219,32 +232,37 @@ consteval exception::format_string<arg_types...>::format_string ( const char* in
         let p = std::find(b, e, '{');
 
         if ( p == e )
-            m = mode::default_mode;
+            return mode::default_mode;
         else if ( *(p+1) >= '0' and *(p+1) <= '9' )
-            m = mode::explicit_mode;
+            return mode::explicit_mode;
         else if ( p+1 < e and *(p+1) != '{' )
-            m = mode::implicit_mode;
+            return mode::implicit_mode;
         else
             { b = p + 2; continue; }
-        break;
     }
+}
 
-    // Check if formattable.
-    using string_type = std::format_string<const char*, conditional<std::formattable<arg_types,char>,arg_types,std::string>...>;
-    if ( mode() == mode::explicit_mode )
-        string_type(std::string("{0}") + data);
+template < class... types >
+constexpr decltype(auto) exception::format_string<types...>::make_const_ref ( const auto& args )
+{
+    return args;
+}
+
+template < class... types >
+constexpr decltype(auto) exception::format_string<types...>::make_formattable ( const auto& args )
+{
+    if constexpr ( std::formattable<decay<decltype(args)>,char> ) // std::formattable
+        return args;
+    else if constexpr ( printable<decltype(args)> )
+        return (std::stringstream()<<args).str();
+    else if constexpr ( same_as<decltype(args),const std::type_info&> )
+        return abi::demangle(args.name());
     else
-        string_type(std::string("{}")  + data);
-}
+        return std::format("[[{} object at {}]]", abi::demangle(typeid(args).name()), static_cast<const void*>(&args));
+} 
 
-template < class... arg_types >
-constexpr std::string exception::format_string<arg_types...>::string ( ) const
+template < class... types >
+constexpr decltype(auto) exception::format_string<types...>::make_format_args ( const auto&... args )
 {
-    return std::string(data);
-}
-
-template < class... arg_types >
-constexpr exception::format_string<arg_types...>::mode exception::format_string<arg_types...>::parse ( ) const
-{
-    return m;
+    return std::make_format_args(make_const_ref(make_formattable(args))...);
 }

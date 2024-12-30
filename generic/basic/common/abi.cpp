@@ -2,7 +2,7 @@
 
 namespace detail
 {
-    std::string paint ( std::string, const std::array<const char*,4>&, int = 0, int = 0 );
+    std::string paint ( std::string, int = 0, int = 0 );
 }
 
 std::string abi::demangle ( const char* mangled_name )
@@ -16,14 +16,13 @@ std::string abi::demangle ( const char* mangled_name )
     return demangled_str;
 } 
 
-
 std::string abi::demangle ( const std::stacktrace& trace )
 {
     return trace | std::views::reverse
                  | std::views::transform ([&] (const auto& e)
                      {
                          return std::format("    {}{} {}{} {}{} {}{}:{}{}",
-                                            yellow, "at", white,  detail::paint(e.description(), grey_scale),
+                                            yellow, "at", white,  detail::paint(e.description()),
                                             green,  "in", grey,   e.source_file(), e.source_line(),
                                             white);
                      })
@@ -31,8 +30,23 @@ std::string abi::demangle ( const std::stacktrace& trace )
                  | std::ranges::to<std::string>();
 }
 
-std::string detail::paint ( std::string str, const std::array<const char*,4>& colors, int str_pos, int colors_pos )
+std::string abi::demangle ( const std::vector<std::stacktrace_entry>& trace )
 {
+    return trace | std::views::reverse
+                 | std::views::transform ([&] (const auto& e)
+                     {
+                         return std::format("    {}{} {}{} {}{} {}{}:{}{}",
+                                            yellow, "at", white,  detail::paint(e.description()),
+                                            green,  "in", grey,   e.source_file(), e.source_line(),
+                                            white);
+                     })
+                 | std::views::join_with('\n')
+                 | std::ranges::to<std::string>();
+}
+
+std::string detail::paint ( std::string str, int str_pos, int colors_pos )
+{
+    constexpr std::array<const char*,4> colors = { abi::white, abi::light_grey, abi::grey, abi::dark_grey };
 
     // Locate brackets
     let p1 = str.find('<', str_pos);
@@ -59,7 +73,7 @@ std::string detail::paint ( std::string str, const std::array<const char*,4>& co
     }
 
     // Continue.
-    return paint ( std::move(str), colors, str_pos, colors_pos );
+    return paint ( std::move(str), str_pos, colors_pos );
 }
 
 

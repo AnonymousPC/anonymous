@@ -169,7 +169,7 @@
     #include "detail/uniform_real_distribution.hpp"
     #include "detail/normal_distribution.hpp"
     #include "detail/discrete_distribution.hpp"
-    #include "detail/generate.hpp"
+    //#include "detail/generate.hpp"
 
                  opencl::execution_context_t opencl::execution_context = opencl::execution_context_t(boost::compute::system::default_device().max_work_group_size());
     thread_local opencl::random_context_t    opencl::random_context    = opencl::random_context_t   (std::random_device()());

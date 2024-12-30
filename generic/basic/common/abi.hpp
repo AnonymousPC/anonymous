@@ -16,10 +16,7 @@ namespace abi
     constexpr const char* grey       = "\033[38;2;96;96;96m";
     constexpr const char* dark_grey  = "\033[38;2;48;48;48m";
 
-    constexpr std::array<const char*,4> grey_scale = { white, light_grey, grey, dark_grey };
-
 }
-
 
 #if dll
     #include "abi.cpp"

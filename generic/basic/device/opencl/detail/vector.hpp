@@ -8,6 +8,8 @@ class opencl::vector
         using base = boost::compute::vector<type,alloc>;
 
     public: // Core
+        /* boost::compute::vector<int>(10, 0, queue) failes, should use size_t(10) */
+
         using base::base;
         vector ( )                            noexcept = default;
         vector ( const vector&  )                      = default;

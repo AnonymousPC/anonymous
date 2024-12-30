@@ -12,16 +12,18 @@ int main ( )
 {
     let& queue = opencl::execution_context.get_command_queue();
 
-    let a = boost::compute::vector<int>(10, 100, queue);
+    let a = boost::compute::vector<int>(size_t(10), 100, queue);
     a.resize(20, queue);
-    let b = a;
-    print(b[5]);
+    let b = boost::compute::vector<int>(size_t(1), 200, queue);
+    print(b[50000]);
+
+    boost::compute::float16_
 }
 
 /*
 
 [[1, 2, 3],
- [4, 5, 6]]
+ [4, 5, 6]]selfself
 
 [1, 2, 3, 4, 5, 6]
 [1, 4, 2, 5, 3, 6]

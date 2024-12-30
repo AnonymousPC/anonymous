@@ -1,6 +1,7 @@
-main.cpp:24:5: error: non-thread-local declaration of 'int B::b_key' follows thread-local declaration
-   24 | int B::b_key = 12;
-      |     ^
-main.cpp:18:29: note: 'int B::b_key' previously declared here
-   18 |     thread_local static int b_key;
-      |                             ^~~~~
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/CL/cl.h:20,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/cl.hpp:19,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/system.hpp:32,
+                 from main.cpp:12:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/CL/cl_version.h:22:104: note: '#pragma message: cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 300 (OpenCL 3.0)'
+   22 | #pragma message("cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 300 (OpenCL 3.0)")
+      |                                                                                                        ^

@@ -17,6 +17,7 @@ void detail::opencl_thread_pool::enqueue ( execpools::task_base* task, std::uint
     if ( boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL )
         try
         {
+            // TODO: I have no environment to run it.
             thread_local auto task_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
             task_queue.enqueue_native_kernel(enqueue_callback, new task_type(task, tid), sizeof(task_type), 0, 0, 0);
             task_queue.flush();

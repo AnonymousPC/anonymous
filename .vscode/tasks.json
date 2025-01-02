@@ -18,7 +18,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "g++ -std=c++26 -fexperimental-library -g -Wall -flarge-source-files -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -29,7 +29,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "clang++ -std=c++26 -fexperimental-library -g -Wall -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
@@ -43,7 +43,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
@@ -51,7 +51,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
+                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lc++experimental -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -108,7 +108,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "g++ -std=c++26 -fexperimental-library -g -Wall -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -119,7 +119,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "clang++ -std=c++26 -fexperimental-library -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
@@ -133,7 +133,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
@@ -141,7 +141,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
+                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lc++experimental -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -201,7 +201,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "g++ -std=c++26 -fexperimental-library -g -Wall -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": [
@@ -212,7 +212,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "clang++ -std=c++26 -fexperimental-library -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"
@@ -226,7 +226,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
@@ -234,7 +234,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lc++experimental -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
+                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lc++experimental -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"

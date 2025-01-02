@@ -105,6 +105,9 @@
         "mdspan": "cpp",
         "__assert": "cpp",
         "__string": "cpp",
-        "expected": "cpp"
+        "expected": "cpp",
+        "typeindex": "cpp",
+        "coroutine": "cpp",
+        "version": "cpp"
     }
 }

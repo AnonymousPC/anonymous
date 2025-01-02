@@ -1,4 +1,5 @@
 #pragma once
+#define size() (int(1+sizeof...(types))) // Warning: sizeof...(types) returns an unsigned int, which cause error without static_cast<int>
 
 namespace detail
 {
@@ -10,13 +11,7 @@ namespace detail
     {
         constexpr static const bool value = std::is_invocable_r<res_type,type,arg_types...>::value;
     };
-}
 
-
-#define size() (int(1+sizeof...(types))) // Warning: sizeof...(types) returns an unsigned int, which cause error without static_cast<int>
-
-namespace detail
-{
     template < class... types >
     struct first_type_of_helper;
 
@@ -25,8 +20,15 @@ namespace detail
     {
         using type = type1;
     };
+    
+    template < class... types > 
+    struct second_type_of_helper;
 
-
+    template < class type1, class type2, class... types >
+    struct second_type_of_helper<type1,type2,types...>
+    {
+        using type = type2;
+    };
 
     template < class... types >
     struct last_type_of_helper;
@@ -43,8 +45,6 @@ namespace detail
     {
         using type = last_type_of_helper<types...>::type;
     };
-
-
 
     template < int index, class... types >
     struct index_type_of_helper;
@@ -69,50 +69,39 @@ namespace detail
     {
         using type = index_type_of_helper<index,types...>::type;
     };
-}
 
-template <            class... types > using first_type_of = detail::first_type_of_helper<types...>::type;
-template <            class... types > using last_type_of  = detail::last_type_of_helper<types...>::type;
-template < int index, class... types > using index_type_of = detail::index_type_of_helper<index,types...>::type;
-
-
-
-
-
-
-constexpr const auto& first_value_of ( const auto& first, const auto&... )
-{
-    return first;
-}
-
-constexpr const auto& last_value_of ( const auto& first, const auto&... other )
-{
-    if constexpr ( sizeof...(other) == 0 )
+    constexpr decltype(auto) first_value_of_helper ( auto&& first, auto&&... )
+    {
         return first;
-    else
-        return last_value_of ( other... );
-}
+    }
 
-template < int index >
-constexpr const auto& index_value_of ( const auto& first, const auto&... other )
-    requires ( ( index >= - sizeof...(other) - 1 and index <= -1 ) or ( index >= 1 and index <= sizeof...(other) + 1 ) )
-{
-    if constexpr ( index == 1 or index == - sizeof...(other) - 1 )
-        return first;
-    else
-        if constexpr ( index >= 2 )
-            return index_value_of<index-1> ( other... );
+    constexpr decltype(auto) second_value_of_helper ( auto&& first, auto&& second, auto&&... )
+    {
+        return second;
+    }
+
+    constexpr decltype(auto) last_value_of_helper ( auto&& first, auto&&... other )
+    {
+        if constexpr ( sizeof...(other) == 0 )
+            return first;
         else
-            return index_value_of<index>   ( other... );
-}
+            return last_value_of_helper(std::forward<decltype(other)>(other)...);
+    }
 
+    template < int index >
+    constexpr decltype(auto) index_value_of_helper ( auto&& first, auto&&... other )
+    {
+        static_assert ( ( index >= - sizeof...(other) - 1 and index <= -1 ) or ( index >= 1 and index <= sizeof...(other) + 1 ), "index out of range" );
 
+        if constexpr ( index == 1 or index == - sizeof...(other) - 1 )
+            return first;
+        else
+            if constexpr ( index >= 2 )
+                return index_value_of_helper<index-1>(std::forward<decltype(other)>(other)...);
+            else
+                return index_value_of_helper<index>  (std::forward<decltype(other)>(other)...);
+    }
 
-
-
-
-namespace detail
-{
     template < class result_type, int index, class... types >
     struct convertible_since_helper;
 
@@ -177,10 +166,5 @@ namespace detail
         constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_until_helper<result_type,index,types...>::value;
     };
 }
-
-
-template < class result_type, int index, class... types > constexpr bool convertible_since = detail::convertible_since_helper<result_type,index,types...>::value;
-template < class result_type, int index, class... types > constexpr bool convertible_until = detail::convertible_until_helper<result_type,index,types...>::value;
-
 
 #undef size

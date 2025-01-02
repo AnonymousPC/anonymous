@@ -55,11 +55,9 @@ class cpu
         template < class type, class container = deque<type> >                                                                                                 using queue          = std::queue<type,container>;
         template < class type, class container = vector<type>, class compare = less<type> >                                                                    using priority_queue = std::priority_queue<type,container,compare>;
         template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                     using set            = std::set<type,compare,alloc>;
-        template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                     using flat_set       = boost::container::flat_set<type,compare,alloc>;
-        template < class type, class method = hash<type>, class equal = equal_to<type>, class alloc = allocator<type> >                                        using unordered_set  = std::unordered_set<type,method,equal,alloc>;
+        template < class type, class hash = hash<type>, class equal = equal_to<type>, class alloc = allocator<type> >                                          using unordered_set  = std::unordered_set<type,hash,equal,alloc>;
         template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>>>                               using map            = std::map<type1,type2,compare,alloc>;
-        template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<type1,type2>>>                                     using flat_map       = boost::container::flat_map<type1,type2,compare,alloc>;
-        template < class type1, class type2, class method = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>>> using unordered_map  = std::unordered_map<type1,type2,method,equal,alloc>;
+        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>>>   using unordered_map  = std::unordered_map<type1,type2,hash,equal,alloc>;
         template < class char_type, class char_traits = std::char_traits<char_type>, class alloc = allocator<char_type> >                                      using basic_string   = std::basic_string<char_type,char_traits,alloc>;
                                                                                                                                                                using string         = basic_string<char>;
 
@@ -146,11 +144,14 @@ class cpu
         constexpr static decltype(auto) stable_sort              ( auto&&... args ) { return std::stable_sort             (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) swap_ranges              ( auto&&... args ) { return std::swap_ranges             (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) transform                ( auto&&... args ) { return std::transform               (std::forward<decltype(args)>(args)...); }
+        constexpr static decltype(auto) transform_exclusive_scan ( auto&&... args ) { return std::transform_exclusive_scan(std::forward<decltype(args)>(args)...); }
+        constexpr static decltype(auto) transform_inclusive_scan ( auto&&... args ) { return std::transform_inclusive_scan(std::forward<decltype(args)>(args)...); }
+        constexpr static decltype(auto) transform_reduce         ( auto&&... args ) { return std::transform_reduce        (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) unique                   ( auto&&... args ) { return std::unique                  (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) unique_copy              ( auto&&... args ) { return std::unique_copy             (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) upper_bound              ( auto&&... args ) { return std::upper_bound             (std::forward<decltype(args)>(args)...); }
 
-    public: // Random base
+    public: // Random engine
         template < unsigned_int_type type, type        a, type        c, type        m >                                                                                                                    using linear_congruential_engine = std::linear_congruential_engine<type,a,c,m>;
         template < unsigned_int_type type, std::size_t w, std::size_t n, std::size_t m, std::size_t r, type a, std::size_t u, type d, std::size_t s, type b, std::size_t t, type c, std::size_t l, type f > using mersenne_twister_engine    = std::mersenne_twister_engine   <type,w,n,m,r,a,u,d,s,b,t,c,l,f>;
         template < unsigned_int_type type, std::size_t w, std::size_t s, std::size_t r >                                                                                                                    using subtract_with_carry_engine = std::subtract_with_carry_engine<type,w,s,r>;

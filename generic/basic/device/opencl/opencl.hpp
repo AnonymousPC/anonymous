@@ -1,7 +1,8 @@
 #pragma once
 
 #ifdef BOOST_COMPUTE_HPP
-    #include "detail/opencl_thread_pool.hpp"
+    #include "detail/opencl_thread_pool.ipp"
+    
     class opencl
         extends public cpu
     {
@@ -53,8 +54,8 @@
             template < class type, class alloc = allocator<type> >                        class vector;
             template < class type, int len >                                              class array;
             template < class type >                                                       class stack;
-            template < class type >                                                       class flat_set;
-            template < class type1, class type2 >                                         class flat_map;
+            template < class type >                                                       class set;
+            template < class type1, class type2 >                                         class map;
             template < class char_type, class char_traits = std::char_traits<char_type> > class basic_string;
                                                                                           using string = basic_string<char>;
 
@@ -83,8 +84,8 @@
             static decltype(auto) find_if_not              ( auto&&... args ) { return boost::compute::find_if_not             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) for_each                 ( auto&&... args ) { return boost::compute::for_each                (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) for_each_n               ( auto&&... args ) { return boost::compute::for_each_n              (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
-            static decltype(auto) generate                 ( auto&&... args ) { return boost::compute::generate                (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
-            static decltype(auto) generate_n               ( auto&&... args ) { return boost::compute::generate_n              (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
+      /*!*/ static decltype(auto) generate                 ( auto&&... args );
+      /*!*/ static decltype(auto) generate_n               ( auto&&... args );
             static decltype(auto) includes                 ( auto&&... args ) { return boost::compute::includes                (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) inclusive_scan           ( auto&&... args ) { return boost::compute::inclusive_scan          (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) inner_product            ( auto&&... args ) { return boost::compute::inner_product           (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
@@ -141,11 +142,14 @@
             static decltype(auto) stable_sort              ( auto&&... args ) { return boost::compute::stable_sort             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) swap_ranges              ( auto&&... args ) { return boost::compute::swap_ranges             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) transform                ( auto&&... args ) { return boost::compute::transform               (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
+         // static decltype(auto) transform_exclusive_scan ( auto&&... args ) { return boost::compute::transform_exclusive_scan(std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
+         // static decltype(auto) transform_inclusive_scan ( auto&&... args ) { return boost::compute::transform_inclusive_scan(std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
+            static decltype(auto) transform_reduce         ( auto&&... args ) { return boost::compute::transform_reduce        (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) unique                   ( auto&&... args ) { return boost::compute::unique                  (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) unique_copy              ( auto&&... args ) { return boost::compute::unique_copy             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) upper_bound              ( auto&&... args ) { return boost::compute::upper_bound             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
 
-        public: // Random_base
+        public: // Random engine
             template < unsigned_int_type type > class linear_congruential_engine;
             template < unsigned_int_type type > class mersenne_twister_engine;
 
@@ -162,18 +166,18 @@
             template < int_type   type = int >    class discrete_distribution;
     };
 
-    #include "detail/vector.hpp"
-    #include "detail/linear_congruential_engine.hpp"
-    #include "detail/mersenne_twister_engine.hpp"
-    #include "detail/uniform_int_distribution.hpp"
-    #include "detail/uniform_real_distribution.hpp"
-    #include "detail/normal_distribution.hpp"
-    #include "detail/discrete_distribution.hpp"
-    //#include "detail/generate.hpp"
+    #include "detail/vector.ipp"
+    #include "detail/generate.ipp"
+    #include "detail/generate_n.ipp"
+    #include "detail/linear_congruential_engine.ipp"
+    #include "detail/mersenne_twister_engine.ipp"
+    #include "detail/uniform_int_distribution.ipp"
+    #include "detail/uniform_real_distribution.ipp"
+    #include "detail/normal_distribution.ipp"
+    #include "detail/discrete_distribution.ipp"
 
                  opencl::execution_context_t opencl::execution_context = opencl::execution_context_t(boost::compute::system::default_device().max_work_group_size());
     thread_local opencl::random_context_t    opencl::random_context    = opencl::random_context_t   (std::random_device()());
-
 #else
     class opencl
         extends public cpu

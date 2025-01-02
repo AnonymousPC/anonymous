@@ -58,6 +58,12 @@ template < class type >                               using          remove_poin
 template < class type >                               using          remove_reference                   = std::remove_reference                  <type>                 ::type;
 template < class type >                               using          type_identity                      = std::type_identity                     <type>                 ::type;
 
+template < class type >                               using          iter_value                         = std::iter_value_t                      <type>;
+template < class type >                               using          iter_reference                     = std::iter_reference_t                  <type>;
+template < class type >                               using          iter_rvalue_reference              = std::iter_rvalue_reference_t           <type>;
+template < class type >                               using          iter_common_reference              = std::iter_common_reference_t           <type>;
+template < class type >                               using          iter_difference                    = std::iter_difference_t                 <type>;
+
 template < class type >                               constexpr int  tuple_size                         = std::tuple_size<type>::value;
 template < int index, class type >                    using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) otherwise std::size_t(index+int(std::tuple_size<type>::value)),type>::type;
 
@@ -101,22 +107,27 @@ template < class type >                           concept contiguous_iterator   
 
 /// Operator
 
+template < class type = void >        using   plus            = std::plus<type>;
 template < class type >               concept plusable        = requires { std::declval<type >() + std::declval<type >(); };
 template < class type1, class type2 > concept plusable_to     = requires { std::declval<type1>() + std::declval<type2>(); std::declval<type2>() + std::declval<type1>(); };
 template < class type1, class type2 > using   plus_result     = decltype ( std::declval<type1>() + std::declval<type2>()  );
 
+template < class type = void >        using   minus           = std::minus<type>;
 template < class type >               concept minusable       = requires { std::declval<type >() - std::declval<type >(); };
 template < class type1, class type2 > concept minusable_to    = requires { std::declval<type1>() - std::declval<type2>(); std::declval<type2>() - std::declval<type1>(); };
 template < class type1, class type2 > using   minus_result    = decltype ( std::declval<type1>() - std::declval<type2>()  );
 
+template < class type = void >        using   multiplies      = std::multiplies<type>;
 template < class type >               concept multipliable    = requires { std::declval<type >() * std::declval<type >(); };
 template < class type1, class type2 > concept multipliable_to = requires { std::declval<type1>() * std::declval<type2>(); std::declval<type2>() * std::declval<type1>(); };
 template < class type1, class type2 > using   multiply_result = decltype ( std::declval<type1>() * std::declval<type2>()  );
 
+template < class type = void >        using   divides         = std::divides<type>;
 template < class type >               concept dividable       = requires { std::declval<type >() / std::declval<type >(); };
 template < class type1, class type2 > concept dividable_to    = requires { std::declval<type1>() / std::declval<type2>(); std::declval<type2>() / std::declval<type1>(); };
 template < class type1, class type2 > using   divide_result   = decltype ( std::declval<type1>() / std::declval<type2>()  );
 
+template < class type = void >        using   modulus         = std::modulus<type>;
 template < class type >               concept modulable       = requires { std::declval<type >() % std::declval<type >(); };
 template < class type1, class type2 > concept modulable_to    = requires { std::declval<type1>() % std::declval<type2>(); std::declval<type2>() % std::declval<type1>(); };
 template < class type1, class type2 > using   modulus_result  = decltype ( std::declval<type1>() % std::declval<type2>()  );
@@ -147,18 +158,17 @@ template < class type > concept number_type       = int_type<type> or float_type
 
 /// Argument pack
 
-// template <            class... types > using first_type_of = ...;
-// template <            class... types > using last_type_of  = ...;
-// template < int index, class... types > using index_type_of = ...;
-
-//                        constexpr const auto& first_value_of ( const auto&, const auto&... );
-//                        constexpr const auto& last_value_of  ( const auto&, const auto&... );
-// template < int index > constexpr const auto& index_value_of ( const auto&, const auto&... );
-
-// template < class result_type, int index, class... types > constexpr bool same_since        = ...;
-// template < class result_type, int index, class... types > constexpr bool same_until        = ...;
-// template < class result_type, int index, class... types > constexpr bool convertible_since = ...;
-// template < class result_type, int index, class... types > constexpr bool convertible_until = ...;
-
-
 #include "concept.ipp"
+
+template <            class... types > using first_type_of  = detail::first_type_of_helper<types...>::type;
+template <            class... types > using second_type_of = detail::second_type_of_helper<types...>::type;
+template <            class... types > using last_type_of   = detail::last_type_of_helper<types...>::type;
+template < int index, class... types > using index_type_of  = detail::index_type_of_helper<index,types...>::type;
+
+                       constexpr decltype(auto) first_value_of  ( auto&&... args ) { return detail::first_value_of_helper       (std::forward<decltype(args)>(args)...); }
+                       constexpr decltype(auto) second_value_of ( auto&&... args ) { return detail::second_value_of_helper      (std::forward<decltype(args)>(args)...); }
+                       constexpr decltype(auto) last_value_of   ( auto&&... args ) { return detail::last_value_of_helper        (std::forward<decltype(args)>(args)...); }
+template < int index > constexpr decltype(auto) index_value_of  ( auto&&... args ) { return detail::index_value_of_helper<index>(std::forward<decltype(args)>(args)...); }
+
+template < class result_type, int index, class... types > constexpr bool convertible_since = detail::convertible_since_helper<result_type,index,types...>::value;
+template < class result_type, int index, class... types > constexpr bool convertible_until = detail::convertible_until_helper<result_type,index,types...>::value;

@@ -1,7 +1,0 @@
-In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/CL/cl.h:20,
-                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/cl.hpp:19,
-                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/system.hpp:32,
-                 from main.cpp:12:
-D:/My Passport/My Passport - Application/MSYS/ucrt64/include/CL/cl_version.h:22:104: note: '#pragma message: cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 300 (OpenCL 3.0)'
-   22 | #pragma message("cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 300 (OpenCL 3.0)")
-      |                                                                                                        ^

@@ -8,17 +8,33 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+class base
+{
+    
+};
+
+int operator+ ( base, int ) { print("base+base"); return 1; }
+
+class derived
+    extends public base
+{
+    public:
+        struct tag { };
+};
+
+template < class type > concept is_derived = requires { typename type::tag; };
+
+double operator+ ( is_derived auto, int_type auto )
+{
+    print("derived+derived"); return 2.0; 
+}
+
 int main ( )
 {
-    let& queue = opencl::execution_context.get_command_queue();
-
-    let a = boost::compute::vector<int>(size_t(10), 100, queue);
-    a.resize(20, queue);
-    let b = boost::compute::vector<int>(size_t(1), 200, queue);
-    print(b[50000]);
-
-    boost::compute::float16_
+    derived() + 1;
 }
+
+
 
 /*
 

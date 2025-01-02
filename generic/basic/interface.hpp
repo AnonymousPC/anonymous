@@ -17,13 +17,14 @@
 
 // Include [[std]]
 #if defined(__GNUC__) and not defined(__clang__)
-    #define __cpp_lib_text_encoding 202412L
+    #define __cpp_lib_text_encoding 202501L
     #include <algorithm>
     #include <cassert>
     #include <charconv>
     #include <chrono>
     #include <concepts>
     #include <csignal>
+    #include <execution>
     #include <filesystem>
     #include <format>
     #include <fstream>
@@ -53,6 +54,7 @@
     #include <chrono>
     #include <concepts>
     #include <csignal>
+    #include <execution>
     #include <filesystem>
     #include <format>
     #include <fstream>
@@ -124,6 +126,11 @@
     #include <tchar.h>
 #endif
 
+// Include [[hardware.cpu.intel]]
+#ifdef __x86_64__
+    #include <tbb/tbb.h>
+#endif
+
 // Include [[hardware.gpu.nvidia]]
 #ifdef __NVCC__
     #include <nvexec/stream_context.cuh>
@@ -136,6 +143,7 @@
 
 // Include [[hardware.gpu.opencl]]
 #define CL_TARGET_OPENCL_VERSION 300
+#include <OpenCL/cl.h>
 
 // Include [[third-party.boost]]
 #ifndef debug_symbol
@@ -162,6 +170,7 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
 #include <boost/locale.hpp>
+#include <boost/mysql.hpp>
 #include <boost/phoenix.hpp>
 #include <boost/process/v2.hpp> 
 #include <boost/spirit/home/qi.hpp>
@@ -193,9 +202,6 @@
     #include <eigen3/Eigen/Eigen>
     #include <eigen3/unsupported/Eigen/FFT>
 #endif
-
-// Include [[third-party.tbb]]
-#include <tbb/tbb.h>
 
 // Macro.end
 #ifdef debug_symbol
@@ -303,6 +309,7 @@ namespace ap
     #include "initialize.hpp"
 
     /// Global
-    cpu::execution_context_t& execution_context = cpu::execution_context;
+                 cpu::execution_context_t& execution_context = cpu::execution_context;
+    thread_local cpu::random_context_t&    random_context    = cpu::random_context;
 
 } // namespace ap

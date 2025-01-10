@@ -10,8 +10,7 @@
             constexpr static bool is_available ( ) { return true; }
 
         public: // Execution
-            using  execution_context_t = detail::opencl_thread_pool;
-            static execution_context_t execution_context;
+            static detail::opencl_thread_pool execution_context;
 
         public: // Type
             template < class type > using value_type      = type;
@@ -148,36 +147,13 @@
             static decltype(auto) unique                   ( auto&&... args ) { return boost::compute::unique                  (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) unique_copy              ( auto&&... args ) { return boost::compute::unique_copy             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) upper_bound              ( auto&&... args ) { return boost::compute::upper_bound             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
-
-        public: // Random engine
-            template < unsigned_int_type type > class linear_congruential_engine;
-            template < unsigned_int_type type > class mersenne_twister_engine;
-
-        public: // Random
-            using mt19937    = mersenne_twister_engine<uint32_t>;
-            using mt19937_64 = mersenne_twister_engine<uint64_t>;
-            using random_context_t = mt19937;
-            static thread_local random_context_t random_context;
-
-        public: // Distribution
-            template < int_type   type = int >    class uniform_int_distribution;
-            template < float_type type = double > class uniform_real_distribution;
-            template < float_type type = double > class normal_distribution;
-            template < int_type   type = int >    class discrete_distribution;
     };
 
     #include "detail/vector.ipp"
     #include "detail/generate.ipp"
     #include "detail/generate_n.ipp"
-    #include "detail/linear_congruential_engine.ipp"
-    #include "detail/mersenne_twister_engine.ipp"
-    #include "detail/uniform_int_distribution.ipp"
-    #include "detail/uniform_real_distribution.ipp"
-    #include "detail/normal_distribution.ipp"
-    #include "detail/discrete_distribution.ipp"
 
-                 opencl::execution_context_t opencl::execution_context = opencl::execution_context_t(boost::compute::system::default_device().max_work_group_size());
-    thread_local opencl::random_context_t    opencl::random_context    = opencl::random_context_t   (std::random_device()());
+    detail::opencl_thread_pool opencl::execution_context = detail::opencl_thread_pool(boost::compute::system::default_device().max_work_group_size());
 #else
     class opencl
         extends public cpu

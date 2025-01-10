@@ -5,26 +5,32 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 class array
     extends public  device::template vector<type>,
-            private detail::maybe_mdspan_of   <array<type,dim+1,device>>,
-            private detail::maybe_shape_of    <array<type,dim,device>>,
-            private detail::maybe_transpose_of<array<type,dim,device>>
+            private detail::from_array_span<array<type,1,  device>>, // Make abi compatible with array<type,1>, required from as_flat().
+            private detail::array_info     <array<type,dim,device>>,
+            private detail::from_array_span<array<type,dim,device>>,
+            private detail::to_array_view  <array<type,dim,device>>
 {
-    private: // Data
-    array<detail::maybe_mdspan_of<array<type,dim,device>>> views_instance     = {}...; 
-    device::template vector<type>&                      flat_instance      { .ptr = reinterpret_cast<...>&self; };
-    array<type,1,device>                                shape_1_instance   { .ptr =  }
-    array<type,dim,device>                              transpose_instance { .ptr = &self; };
-
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( std::default_initializable<type> and std::movable<type> );
+        static_assert ( not std::same_as<type,bool> );
+
+    private: // Base
+        using vector = device::template vector<type>;
+        using info   = detail::array_info     <array<type,dim,device>>;
+        using span   = detail::from_array_view<array<type,dim,device>>;
+        using view   = detail::to_array_view  <array<type,dim,device>>;
 
     public: // Typedef
-        using  value_type     = type;
-        using  device_type    = device;
-        using  iterate_type   = array<type,dim-1,device>;
+        using  value_type      = type;
+        using  iterate_type    = array<type,dim-1,device>;
+        using  reference       = base::reference;
+        using  const_reference = base::const_reference;
+        using  pointer         = base::pointer;
+        using  const_pointer   = base::const_pointer;
         class  iterator;
         class  const_iterator;
+        using  device_type     = device;
         struct array_tag { };
 
     public: // Core
@@ -68,6 +74,19 @@ class array
         template_int_axis constexpr array& pop    ( int );
         template_int_axis constexpr array& insert ( int, const array_type<type,dim-1,device> auto& );
         template_int_axis constexpr array& erase  ( int, int );
+
+    public: // View
+        constexpr       array<type,1,device>&   as_flat      ( );
+        constexpr const array<type,1,device>&   as_flat      ( ) const;
+        constexpr       array<type,dim,device>& as_transpose ( );
+        constexpr const array<type,dim,device>& as_transpose ( ) const;
+
+    private: // Detail
+        constexpr       bool  is_span        ( )                                      const;
+        constexpr       auto  get_view_info  ( const array<type,1,device>&, auto... );
+        constexpr const auto  get_view_info  ( const array<type,1,device>&, auto... ) const;
+        constexpr       auto  get_view_info  ( const array<type,2,device>&, auto... );
+        constexpr const auto  get_view_info  ( const array<type,2,device>&, auto... ) const;
 }
 
 #include "array_nd.ipp"

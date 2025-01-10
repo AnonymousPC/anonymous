@@ -51,134 +51,134 @@ namespace ap
 
 
     /// Concept
-    template < class input_type, class value_type = void, int dim = 0, class device_type = void >
+    template < class type, class value_type = void, int dim = 0, class device_type = void >
     concept array_type = []
     {
-        if constexpr ( requires { typename input_type::array_tag; } )
+        if constexpr ( requires { typename type::array_tag; } )
         {
-            static_assert ( requires { typename input_type::value_type; input_type::dimension(); typename input_type::device_type; }, "class provides array_tag but not provides value_type, dimension() and device_type" );
-            return ( std::convertible_to<typename input_type::value_type,value_type> or is_void<value_type> ) and
-                   ( input_type::dimension() == dim or dim == 0 ) and
-                   ( std::same_as<typename input_type::device_type,device_type> or is_void<device_type> );         
+            static_assert ( requires { typename type::value_type; type::dimension(); typename type::device_type; }, "class provides array_tag but not provides value_type, dimension() and device_type" );
+            return ( std::convertible_to<typename type::value_type,value_type> or is_void<value_type> ) and
+                   ( type::dimension() == dim or dim == 0 ) and
+                   ( std::same_as<typename type::device_type,device_type> or is_void<device_type> );         
         }
         else
             return false;
     } ();
 
-    // template < class input_type, class value_type = void >
+    // template < class type, class value_type = void >
     // concept deque_type = []
     // {
-    //     if constexpr ( requires { typename input_type::deque_tag; } )
+    //     if constexpr ( requires { typename type::deque_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::value_type; }, "class provides deque_tag but not provides value_type" );
+    //         static_assert ( requires { typename type::value_type; }, "class provides deque_tag but not provides value_type" );
     //         if constexpr ( is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    // template < class input_type, class value_type = void >
+    // template < class type, class value_type = void >
     // concept list_type = []
     // {
-    //     if constexpr ( requires { typename input_type::list_tag; } )
+    //     if constexpr ( requires { typename type::list_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::value_type; }, "class provides list_tag but not provides value_type" );
+    //         static_assert ( requires { typename type::value_type; }, "class provides list_tag but not provides value_type" );
     //         if constexpr ( is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    // template < class input_type, class value_type = void >
+    // template < class type, class value_type = void >
     // concept priority_queue_type = []
     // {
-    //     if constexpr ( requires { typename input_type::priority_queue_tag; } )
+    //     if constexpr ( requires { typename type::priority_queue_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::value_type; }, "class provides priority_queue_tag but not provides value_type" );
+    //         static_assert ( requires { typename type::value_type; }, "class provides priority_queue_tag but not provides value_type" );
     //         if constexpr ( is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    // template < class input_type, class value_type = void >
+    // template < class type, class value_type = void >
     // concept queue_type = []
     // {
-    //     if constexpr ( requires { typename input_type::queue_tag; } )
+    //     if constexpr ( requires { typename type::queue_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::value_type; }, "class provides queue_tag but not provides value_type" );
+    //         static_assert ( requires { typename type::value_type; }, "class provides queue_tag but not provides value_type" );
     //         if constexpr ( is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    // template < class input_type, class value_type = void >
+    // template < class type, class value_type = void >
     // concept stack_type = []
     // {
-    //     if constexpr ( requires { typename input_type::stack_tag; } )
+    //     if constexpr ( requires { typename type::stack_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::value_type; }, "class provides stack_tag but not provides value_type" );
+    //         static_assert ( requires { typename type::value_type; }, "class provides stack_tag but not provides value_type" );
     //         if constexpr ( is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    // template < class input_type, class value_type = void >
+    // template < class type, class value_type = void >
     // concept set_type = []
     // {
-    //     if constexpr ( requires { typename input_type::set_tag; } )
+    //     if constexpr ( requires { typename type::set_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::value_type; }, "class provides set_tag but not provides value_type" );
+    //         static_assert ( requires { typename type::value_type; }, "class provides set_tag but not provides value_type" );
     //         if constexpr ( is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    // template < class input_type, class key_type = void, class value_type = void >
+    // template < class type, class key_type = void, class value_type = void >
     // concept map_type = []
     // {
     //     static_assert ( is_void<key_type> == is_void<value_type>, "must enable or disable both key/value type check at the same time" );
-    //     if constexpr ( requires { typename input_type::map_tag; } )
+    //     if constexpr ( requires { typename type::map_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides map_tag but not provides key_type and value_type" );
+    //         static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides map_tag but not provides key_type and value_type" );
     //         if constexpr ( is_void<key_type> and is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::key_type,key_type> and std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::key_type,key_type> and std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    template < class input_type, class type1 = void, class type2 = void >
+    template < class type, class type1 = void, class type2 = void >
     concept pair_type = []
     {
-        if constexpr ( requires { typename input_type::pair_tag; } )
+        if constexpr ( requires { typename type::pair_tag; } )
         {
-            static_assert ( requires { typename input_type::key_type; typename input_type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
-            return ( std::convertible_to<typename input_type::key_type,  type1> or is_void<type1> ) and
-                   ( std::convertible_to<typename input_type::value_type,type2> or is_void<type2> );
+            static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+            return ( std::convertible_to<typename type::key_type,  type1> or is_void<type1> ) and
+                   ( std::convertible_to<typename type::value_type,type2> or is_void<type2> );
         }
         else
             return false;
@@ -186,69 +186,71 @@ namespace ap
 
     namespace detail
     {
-        template < class input_type, int count, class... types >
+        template < class type, int count, class... types >
         constexpr bool tuple_type_helper = true;
 
-        template < class input_type, int count >
-        constexpr bool tuple_type_helper<input_type,count> = true;
+        template < class type, int count >
+        constexpr bool tuple_type_helper<type,count> = true;
 
-        template < class input_type, int count, class type, class... types >
-        constexpr bool tuple_type_helper<input_type,count,type,types...> =
-            ( input_type::size() - count + 1 == 1 + sizeof...(types) ) and
-            ( std::convertible_to<typename input_type::template value_type<count>,type> or is_void<type> ) and []
+        template < class type, int count, class type1, class... types >
+        constexpr bool tuple_type_helper<type,count,type1,types...> =
+            ( type::size() - count + 1 == 1 + sizeof...(types) ) and
+            ( std::convertible_to<typename type::template value_type<count>,type1> or is_void<type1> ) and []
             {
-                if constexpr ( count < input_type::size() )
-                    return tuple_type_helper<input_type,count+1,types...>;
+                if constexpr ( count < type::size() )
+                    return tuple_type_helper<type,count+1,types...>;
                 else
                     return true;
             } ();
-    }
+    } // namespace detail
 
-    template < class input_type, class... types >
+    template < class type, class... types >
     concept tuple_type = []
     {
-        if constexpr ( requires { typename input_type::tuple_tag; } )
+        if constexpr ( requires { typename type::tuple_tag; } )
         {
-            static_assert ( requires { typename input_type::template value_type<1>; typename input_type::template value_type<input_type::size()>; input_type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
-            return detail::tuple_type_helper<input_type,1,types...>;
+            static_assert ( requires { typename type::template value_type<1>; typename type::template value_type<type::size()>; type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+            return detail::tuple_type_helper<type,1,types...>;
         }
         else
             return false;
     } ();
 
-    // template < class input_type, class value_type = void >
+    // template < class type, class value_type = void >
     // concept string_type = []
     // {
-    //     if constexpr ( requires { typename input_type::string_tag; } )
+    //     if constexpr ( requires { typename type::string_tag; } )
     //     {
-    //         static_assert ( requires { typename input_type::value_type; }, "class provides string_tag but not provides value_type" );
+    //         static_assert ( requires { typename type::value_type; }, "class provides string_tag but not provides value_type" );
     //         if constexpr ( is_void<value_type> )
     //             return true;
     //         else
-    //             return std::convertible_to<typename input_type::value_type,value_type>;
+    //             return std::convertible_to<typename type::value_type,value_type>;
     //     }
     //     else
     //         return false;
     // } ();
 
-    // template < class input_type, class value_type = void >
-    // concept general_string_type = char_type<input_type> or
-    //                               char_type<remove_extent<input_type>> or
-    //                               char_type<remove_pointer<input_type>> or
-    //                               string_type<input_type>;
+    // template < class type, class value_type = void >
+    // concept general_string_type = char_type<type> or
+    //                               char_type<remove_extent<type>> or
+    //                               char_type<remove_pointer<type>> or
+    //                               string_type<type>;
 
-    // template < class input_type, class value_type = void, int dim = 0 >           concept array_type          = ...;
-    // template < class input_type, class value_type = void >                        concept deque_type          = ...;
-    // template < class input_type, class value_type = void >                        concept list_type           = ...;
-    // template < class input_type, class value_type = void >                        concept priority_queue_type = ...;
-    // template < class input_type, class value_type = void >                        concept queue_type          = ...;
-    // template < class input_type, class value_type = void >                        concept stack_type          = ...;
-    // template < class input_type, class key_type = void, class value_type = void > concept pair_type           = ...;
-    // template < class input_type, class... value_types >                           concept tuple_type          = ...;
-    // template < class input_type, class value_type = void >                        concept set_type            = ...;
-    // template < class input_type, class key_type = void, class value_type = void > concept map_type            = ...;
-    // template < class input_type, class char_type = void >                         concept string_type         = ...;
-    // template < class input_type, class char_type = void >                         concept general_string_type = ...;
+    namespace detail
+    {
+        template < class type, class attribute_type >
+        struct function_type_helper;
+
+        template < class type, class res_type, class... arg_types >
+        struct function_type_helper<type,res_type(arg_types...)>
+        {
+            constexpr static const bool value = std::is_invocable_r<res_type,type,arg_types...>::value;
+        };
+    } // namespace detail
+    
+    template < class type, class attribute_type >
+    concept function_type = detail::function_type_helper<type,attribute_type>::value;
 
     // /// Include
     #include "discrete/discrete.hpp" // First.

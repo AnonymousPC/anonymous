@@ -3,16 +3,16 @@
 template < class type, class device >
 class array<type,1,device>
     extends public  device::template vector<type>,
-            private detail::maybe_array_view<array<type,1,device>>
+            private detail::from_array_span<array<type,1,device>>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( std::default_initializable<type> and std::movable<type> );
         static_assert ( not std::same_as<type,bool> );
 
-    private: // Typedef
-        using base = device::template vector<type>;
-        using span = detail::maybe_array_view<array<type,1,device>>;
+    private: // Base
+        using vector = device::template vector<type>;
+        using span   = detail::from_array_span<array<type,1,device>>;
 
     public: // Typedef
         using  value_type      = base::value_type;
@@ -71,12 +71,8 @@ class array<type,1,device>
         constexpr array& insert ( int, type );
         constexpr array& erase  ( int, int );
 
-    public: // Views
-        constexpr bool is_view ( ) const;
-
-    public: // Views
-        // using array_algo::as_shape,
-        //       array_algo::as_transpose;
+    private: // Detail
+        constexpr bool is_span ( ) const;
 };
 
 #include "array_1d.ipp"

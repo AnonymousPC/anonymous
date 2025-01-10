@@ -27,7 +27,7 @@ constexpr array<type,dim,device>::array ( auto... args )
              detail::ints_until_last_func<type,decltype(args)...>
     extends device::template vector<type> ( detail::multiply_first_to_second_last(args...) )
 {
-    device::generate(data(), data() + size(), last_value_of(args...));
+    md_generate(data(), data() + size(), last_value_of(args...));
 }
 
 template < class type, int dim, class device >

@@ -8,8 +8,7 @@
             constexpr static bool is_available ( ) { return true; }
 
         public: // Execution
-            using  execution_context_t = execpools::tbb_thread_pool;
-            static execution_context_t execution_context;
+            static execpools::tbb_thread_pool execution_context;
 
         public: // Type
             /* Same as cpu */
@@ -37,25 +36,15 @@
     
         public: // Algorithm
             static decltype(auto) for_each       ( auto&&... args ) { return ::tbb::parallel_for_each(std::forward<decltype(args)>(args)...); }
-            static decltype(auto) inclusive_scan ( auto&&... args ); 
-            static decltype(auto) reduce         ( auto&&... args );
+         // static decltype(auto) inclusive_scan ( auto&&... args ); 
+         // static decltype(auto) reduce         ( auto&&... args );
             static decltype(auto) sort           ( auto&&... args ) { return ::tbb::parallel_sort    (std::forward<decltype(args)>(args)...); }
-
-        public: // Random engine
-            /* Same as cpu */
-
-        public: // Random
-            static thread_local random_context_t& random_context;
-
-        public: // Distribution
-            /* Same as cpu */
     };
 
-    #include "detail/inclusive_scan.ipp"
-    #include "detail/reduce.ipp"
+ // #include "detail/inclusive_scan.ipp"
+ // #include "detail/reduce.ipp"
 
-                 tbb::execution_context_t tbb::execution_context = tbb::execution_context_t(::tbb::this_task_arena::max_concurrency());
-    thread_local tbb::random_context_t&   tbb::random_context    = cpu::random_context;
+    execpools::tbb_thread_pool tbb::execution_context = execpools::tbb_thread_pool(::tbb::this_task_arena::max_concurrency());
 #else
     class tbb
         extends public cpu

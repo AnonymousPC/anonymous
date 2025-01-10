@@ -22,9 +22,13 @@ decltype(auto) tbb::reduce ( auto&&... args )
      */
 
     if constexpr ( sizeof...(args) == 2 )
+    {
+        auto&& begin = first_value_of(std::forward<decltype(args)>(args)...);
+        auto&& end   = last_value_of (std::forward<decltype(args)>(args)...);
+
         return ::tbb::parallel_reduce(
-                   ::tbb::blocked_range<decay<first_type_of<decltype(args)...>>>(first_value_of(args...), last_value_of(args...)),
-                   iter_value<first_type_of<decltype(args)...>>(),                                     
+                   ::tbb::blocked_range<decay<decltype(begin)>>(begin, end),
+                   iter_value<decltype(begin)>(),                                     
                    [&] (const auto& new_range, auto&& old_value)
                    {
                        for ( auto&& new_value in new_range )
@@ -33,6 +37,7 @@ decltype(auto) tbb::reduce ( auto&&... args )
                    },
                    tbb::plus<>()
                );
+    }
 
     else
         return cpu::reduce(std::forward<decltype(args)>(args)...);

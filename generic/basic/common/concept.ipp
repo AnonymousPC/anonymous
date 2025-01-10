@@ -3,14 +3,71 @@
 
 namespace detail
 {
-    template < class type, class func_type >
-    struct function_type_helper;
+    template < class result_type, int index, class... types >
+    struct convertible_since_helper;
 
-    template < class type, class res_type, class... arg_types >
-    struct function_type_helper<type,res_type(arg_types...)>
+    template < class result_type, int index, class type1 >
+        requires ( index == 1 or index == -1 )
+    struct convertible_since_helper<result_type,index,type1>
     {
-        constexpr static const bool value = std::is_invocable_r<res_type,type,arg_types...>::value;
+        constexpr static const bool value = std::convertible_to<type1,result_type>;
     };
+
+    template < class result_type, int index, class type1, class... types >
+        requires ( index == 1 and size() >= 2 )
+    struct convertible_since_helper<result_type,index,type1,types...>
+    {
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_since_helper<result_type,index,types...>::value;
+    };
+
+    template < class result_type, int index, class type1, class... types >
+        requires ( index >= 2 and index <= size() and size() >= 2 )
+    struct convertible_since_helper<result_type,index,type1,types...>
+    {
+        constexpr static const bool value = convertible_since_helper<result_type,index-1,types...>::value;
+    };
+
+    template < class result_type, int index, class type1, class... types >
+        requires ( index == -size() and size() >= 2 )
+    struct convertible_since_helper<result_type,index,type1,types...>
+    {
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_since_helper<result_type,index+1,types...>::value;
+    };
+
+    template < class result_type, int index, class type1, class... types >
+        requires ( index >= -size() + 1 and index <= -1 and size() >= 2 )
+    struct convertible_since_helper<result_type,index,type1,types...>
+    {
+        constexpr static const bool value = convertible_since_helper<result_type,index,types...>::value;
+    };
+
+
+
+    template < class result_type, int index, class... types >
+    struct convertible_until_helper;
+
+    template < class result_type, int index, class type1, class... types >
+        requires ( index == 1 or index == -size() )
+    struct convertible_until_helper<result_type,index,type1,types...>
+    {
+        constexpr static const bool value = std::convertible_to<type1,result_type>;
+    };
+
+    template < class result_type, int index, class type1, class... types >
+        requires ( index >= 2 and index <= size() )
+    struct convertible_until_helper<result_type,index,type1,types...>
+    {
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_until_helper<result_type,index-1,types...>::value;
+    };
+
+    template < class result_type, int index, class type1, class... types >
+        requires ( index >= -size() + 1 and index <= -1 )
+    struct convertible_until_helper<result_type,index,type1,types...>
+    {
+        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_until_helper<result_type,index,types...>::value;
+    };
+
+
 
     template < class... types >
     struct first_type_of_helper;
@@ -101,70 +158,6 @@ namespace detail
             else
                 return index_value_of_helper<index>  (std::forward<decltype(other)>(other)...);
     }
-
-    template < class result_type, int index, class... types >
-    struct convertible_since_helper;
-
-    template < class result_type, int index, class type1 >
-        requires ( index == 1 or index == -1 )
-    struct convertible_since_helper<result_type,index,type1>
-    {
-        constexpr static const bool value = std::convertible_to<type1,result_type>;
-    };
-
-    template < class result_type, int index, class type1, class... types >
-        requires ( index == 1 and size() >= 2 )
-    struct convertible_since_helper<result_type,index,type1,types...>
-    {
-        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_since_helper<result_type,index,types...>::value;
-    };
-
-    template < class result_type, int index, class type1, class... types >
-        requires ( index >= 2 and index <= size() and size() >= 2 )
-    struct convertible_since_helper<result_type,index,type1,types...>
-    {
-        constexpr static const bool value = convertible_since_helper<result_type,index-1,types...>::value;
-    };
-
-    template < class result_type, int index, class type1, class... types >
-        requires ( index == -size() and size() >= 2 )
-    struct convertible_since_helper<result_type,index,type1,types...>
-    {
-        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_since_helper<result_type,index+1,types...>::value;
-    };
-
-    template < class result_type, int index, class type1, class... types >
-        requires ( index >= -size() + 1 and index <= -1 and size() >= 2 )
-    struct convertible_since_helper<result_type,index,type1,types...>
-    {
-        constexpr static const bool value = convertible_since_helper<result_type,index,types...>::value;
-    };
-
-
-
-    template < class result_type, int index, class... types >
-    struct convertible_until_helper;
-
-    template < class result_type, int index, class type1, class... types >
-        requires ( index == 1 or index == -size() )
-    struct convertible_until_helper<result_type,index,type1,types...>
-    {
-        constexpr static const bool value = std::convertible_to<type1,result_type>;
-    };
-
-    template < class result_type, int index, class type1, class... types >
-        requires ( index >= 2 and index <= size() )
-    struct convertible_until_helper<result_type,index,type1,types...>
-    {
-        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_until_helper<result_type,index-1,types...>::value;
-    };
-
-    template < class result_type, int index, class type1, class... types >
-        requires ( index >= -size() + 1 and index <= -1 )
-    struct convertible_until_helper<result_type,index,type1,types...>
-    {
-        constexpr static const bool value = std::convertible_to<type1,result_type> and convertible_until_helper<result_type,index,types...>::value;
-    };
 }
 
 #undef size

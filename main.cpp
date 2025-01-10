@@ -3,35 +3,16 @@
 // #include "generic/io/interface.hpp"
 // #include "generic/math/interface.hpp"
 // #include "specific/audio/interface.hpp"
+#include "specific/container/interface.hpp"
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-class base
-{
-    
-};
-
-int operator+ ( base, int ) { print("base+base"); return 1; }
-
-class derived
-    extends public base
-{
-    public:
-        struct tag { };
-};
-
-template < class type > concept is_derived = requires { typename type::tag; };
-
-double operator+ ( is_derived auto, int_type auto )
-{
-    print("derived+derived"); return 2.0; 
-}
-
 int main ( )
 {
-    derived() + 1;
+    let arr = array<int,1,opencl>{1,2,3,4,5};
+    std::ranges::for_each(arr, print);
 }
 
 

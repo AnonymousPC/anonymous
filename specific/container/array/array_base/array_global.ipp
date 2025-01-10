@@ -2,61 +2,79 @@
 
 namespace detail
 {
+    /* ABI of array (dim == 1)
+     * device::vector     (sizeof = device::vector)
+     * from_array_view
+     *   - host_ptr       (sizeof = sizeof(pointer))
+     */
+
+    /* ABI of array (dim >= 2)
+     * device::vector     (sizeof = device::vector)
+     * from_array_view
+     *   - host_ptr       (sizeof = sizeof(pointer))
+     *   - transpose_ptr  (sizeof = sizeof(pointer))
+     * to_array_view
+     *   - row_views      (sizeof = device::vector)
+     *   - column_views   (sizeof = device::vector)
+     *   - flat_view      [[omitted, directly static_cast]]
+     *   - transpose_view (sizeof = sizeof(pointer))
+     */
+
+    struct size_tag  { };
+    struct shape_tag { };
+    struct empty_tag { };
+    struct begin_tag { };
+    struct end_tag   { };
+    struct index_tag { };
+
     template < class type >
-    struct maybe_array_view;
+    struct from_array_span;
 
     template < class type, class device >
-    struct maybe_array_view<array<type,1,device>>
+    struct from_array_span<array<type,1,device>>
     {
         private:
-            array<type,2,device>* host_ptr = nullptr; // matrix.operator[], matrix.as_flat(), matrix.as_shape(1-dim).
+            array<type,2,device>* host_ptr = nullptr;
     
         public:
-            constexpr maybe_array_view ( ) = default;
-            constexpr maybe_array_view ( array<type,2,device>* ptr ) extends host_ptr ( ptr ) { }
+            constexpr from_array_span ( ) = default;
+            constexpr from_array_span ( array<type,2,device>* ptr ) extends host_ptr ( ptr ) { }
 
         public:
             constexpr       array<type,2,device>& from_host ( )       { return *host_ptr; }
             constexpr const array<type,2,device>& from_host ( ) const { return *host_ptr; }
 
         public: 
-            constexpr bool is_view ( ) const { return host_ptr != nullptr; }
+            constexpr bool is_span ( ) const { return host_ptr != nullptr; }
     };
     
-
     template < class type, int dim, class device >
-    struct maybe_array_view<array<type,dim,device>>
+        requires ( dim >= 2 )
+    struct from_array_span<array<type,dim,device>>
     {
         private:
             array<type,dim+1,device>* host_ptr      = nullptr;
             array<type,dim,  device>* transpose_ptr = nullptr;
 
         public: 
-            constexpr maybe_array_view ( ) = default;
-            constexpr maybe_array_view ( array<type,dim+1,device>* ptr_1, array<type,dim,device>* ptr_2 ) extends host_ptr ( ptr_1 ), transpose_ptr ( ptr_2 ) { }
+            constexpr from_array_span ( ) = default;
+            constexpr from_array_span ( array<type,dim+1,device>* ptr_1, array<type,dim,device>* ptr_2 ) extends host_ptr ( ptr_1 ), transpose_ptr ( ptr_2 ) { }
 
         public:
-            constexpr       array<type,dim+1,device>& from_host      ( )       { return *host_ptr; }
-            constexpr const array<type,dim+1,device>& from_host      ( ) const { return *host_ptr; }
+            constexpr       array<type,dim+1,device>& from_host      ( )       { return *host_ptr;      }
+            constexpr const array<type,dim+1,device>& from_host      ( ) const { return *host_ptr;      }
             constexpr       array<type,dim,  device>& from_transpose ( )       { return *transpose_ptr; }
-            constexpr const array<type,dim,  device>& from_trnspose  ( ) const { return *transpose_ptr; }
+            constexpr const array<type,dim,  device>& from_transpose ( ) const { return *transpose_ptr; }
 
         public:
             constexpr bool is_view ( ) const { return host_ptr != nullptr or transpose_ptr != nullptr; }
     };
 
-    /* ABI of array (dim == 1)
-    * device::vector   (sizeof = ...)
-    * maybe_array_view
-    *   - host_ptr     (sizeof = sizeof(nullptr))
-    */
+    template < class type > 
+    struct to_array_view;
 
-    /* ABI of array (dim >= 2)
-    * device::vector   (sizeof = ...)
-    * maybe_array_view
-    *   - host_ptr      (sizeof = sizeof(nullptr))
-    *   - transpose_ptr (sizeof = sizeof(nullptr))
-    */
+    template < class type, int dim, class device >
+    struct to_array_view
 
     template < class type, class... types >
     constexpr bool ints_until_last_func = []

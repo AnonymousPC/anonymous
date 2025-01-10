@@ -139,11 +139,10 @@
 
 // Include [[hardware.gpu.amd]]
 #ifdef __HIPCC__
-#endif
+#endif 
 
-// Include [[hardware.gpu.opencl]]
+// Include [[hardware.all.opencl]]
 #define CL_TARGET_OPENCL_VERSION 300
-#include <OpenCL/cl.h>
 
 // Include [[third-party.boost]]
 #ifndef debug_symbol
@@ -309,7 +308,7 @@ namespace ap
     #include "initialize.hpp"
 
     /// Global
-                 cpu::execution_context_t& execution_context = cpu::execution_context;
-    thread_local cpu::random_context_t&    random_context    = cpu::random_context;
+                 std::execution::static_thread_pool& execution_context = cpu::execution_context;
+    thread_local std::mt19937                        random_context    = std::mt19937(std::random_device()());
 
 } // namespace ap

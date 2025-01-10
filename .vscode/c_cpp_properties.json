@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Windows",
+            "name": "windows",
             "compilerPath": "D:/My Passport/My Passport - Application/MSYS/ucrt64/bin/g++.exe",
             "compilerArgs": [
                 "-std=c++23"
@@ -16,7 +16,7 @@
             "intelliSenseMode": "windows-gcc-x64"
         },
         {
-            "name": "Mac",
+            "name": "mac",
             "compilerPath": "/opt/homebrew/bin/g++-14",
             "compilerArgs": [
                 "-std=c++23",

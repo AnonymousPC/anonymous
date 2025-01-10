@@ -20,12 +20,14 @@ namespace detail
      *   - transpose_view (sizeof = sizeof(pointer))
      */
 
-    struct size_tag  { };
-    struct shape_tag { };
-    struct empty_tag { };
-    struct begin_tag { };
-    struct end_tag   { };
-    struct index_tag { };
+    struct size_tag   { };
+    struct shape_tag  { };
+    struct empty_tag  { };
+    struct begin_tag  { };
+    struct end_tag    { };
+    struct index_tag  { };
+    struct row_tag    { };
+    struct column_tag { };
 
     template < class type >
     struct from_array_span;
@@ -38,7 +40,7 @@ namespace detail
     
         public:
             constexpr from_array_span ( ) = default;
-            constexpr from_array_span ( array<type,2,device>* ptr ) extends host_ptr ( ptr ) { }
+            constexpr from_array_span ( array<type,2,device>& arr ) extends host_ptr ( &arr ) { }
 
         public:
             constexpr       array<type,2,device>& from_host ( )       { return *host_ptr; }
@@ -58,7 +60,8 @@ namespace detail
 
         public: 
             constexpr from_array_span ( ) = default;
-            constexpr from_array_span ( array<type,dim+1,device>* ptr_1, array<type,dim,device>* ptr_2 ) extends host_ptr ( ptr_1 ), transpose_ptr ( ptr_2 ) { }
+            constexpr from_array_span ( array<type,dim+1,device>& arr ) extends host_ptr      ( &arr ) { }
+            constexpr from_array_span ( array<type,dim,  device>& arr ) extends transpose_ptr ( &arr ) { }
 
         public:
             constexpr       array<type,dim+1,device>& from_host      ( )       { return *host_ptr;      }
@@ -74,7 +77,24 @@ namespace detail
     struct to_array_view;
 
     template < class type, int dim, class device >
-    struct to_array_view
+        requires ( dim >= 2 )
+    struct to_array_view<array<type,dim,device>>
+    {
+        private: 
+            device::template vector<from_array_span<array<type,dim-1,device>>> row_views      = device::template vector<from_array_span<array<type,dim-1,device>>>();
+            device::template vector<from_array_span<array<type,dim-1,device>>> column_views   = device::template vector<from_array_span<array<type,dim-1,device>>>();
+                                    from_array_span<array<type,dim,  device>>  transpose_view =                         from_array_span<array<type,dim,  device>> ();
+
+        public: 
+            constexpr to_array_view ( array<type,dim,device>& arr )                      extends transpose_view ( arr ) { }
+            constexpr to_array_view ( array<type,dim,device>& arr, const auto&... args ) extends row_views      ( index_value_of<1  >(args...), arr ),
+                                                                                                 column_views   ( index_value_of<dim>(args...), arr ),
+                                                                                                 transpose_view ( arr ) { }
+        
+        public: 
+            constexpr       array<type,dim+1,device>& to_rows ( int p ) { return row_views[p]; } // TODO: index starts from 0.
+            constexpr const array<type,dim+1,device>& 
+    };
 
     template < class type, class... types >
     constexpr bool ints_until_last_func = []
@@ -130,5 +150,13 @@ namespace detail
     };
 
     template < class input_type, int count >
-    using invoke_result_by_n_ints = invoke_result_by_n_ints_helper<input_type,count>::type; // Helper
+    using invoke_result_by_n_ints = invoke_result_by_n_ints_helper<input_type,count>::type;
+
+    constexpr auto multiply_first_to_second_last ( const auto& arg1, const auto& arg2, [[maybe_unused]] const auto&... args )
+    {
+        if constexpr ( sizeof...(args) >= 1 )
+            return multiply_first_to_second_last(arg1 * arg2, args...);
+        else 
+            return arg1 * arg2;
+    }
 }

@@ -6,9 +6,9 @@ template < class type, int dim, class device >
 class array
     extends public  device::template vector<type>,
             private detail::from_array_span<array<type,1,  device>>, // Make abi compatible with array<type,1>, required from as_flat().
-            private detail::array_info     <array<type,dim,device>>,
             private detail::from_array_span<array<type,dim,device>>,
-            private detail::to_array_view  <array<type,dim,device>>
+            private detail::to_array_view  <array<type,dim,device>>,
+            private detail::array_info     <array<type,dim,device>>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -34,7 +34,7 @@ class array
         struct array_tag { };
 
     public: // Core
-        constexpr          array ( ) = default;
+        constexpr          array ( );
         constexpr explicit array ( int_type auto... args )                                   requires ( sizeof...(args)     == dim );
         constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_type     <type,decltype(args)...> and std::copyable<type>;
         constexpr          array ( auto... args )                                            requires ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func     <type,decltype(args)...>;

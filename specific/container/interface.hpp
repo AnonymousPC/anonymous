@@ -3,19 +3,19 @@
 
 namespace ap
 {
-    template < class type, int dim = 1, class device = cpu >                    class array;
-    template < class type,              class device = cpu >                    using vector = array<type>;
-    template < class type,              class device = cpu >                    using matrix = array<type,2>;
-    template < class type, int len,     class device = cpu >                    class static_array;
-    template < class type, int len,     class device = cpu >                    using static_vector  = static_array<type,len>;
-    template < class type, int len,     class device = cpu >                    class inplace_array;
-    template < class type, int len,     class device = cpu >                    using inplace_vector = inplace_array<type,len>;
+    template < class type, int dim = 1,                     class device = cpu > class array;
+    template < class type,                                  class device = cpu > using vector = array<type>;
+    template < class type,                                  class device = cpu > using matrix = array<type,2>;
+    template < class type, int len,                         class device = cpu > class static_array;
+    template < class type, int len,                         class device = cpu > using static_vector  = static_array<type,len>;
+    template < class type, int len,                         class device = cpu > class inplace_array;
+    template < class type, int len,                         class device = cpu > using inplace_vector = inplace_array<type,len>;
 
-    // template < class type >                                                     class deque;
-    // template < class type >                                                     class list;
-    // template < class type, class compare = std::less<type> >                    class priority_queue;
-    // template < class type >                                                     class queue;
-    // template < class type >                                                     class stack;
+    template < class type,                                  class device = cpu > class deque;
+    template < class type,                                  class device = cpu > class list;
+    template < class type, class compare = std::less<type>, class device = cpu > class priority_queue;
+    template < class type,                                  class device = cpu > class queue;
+    template < class type,                                  class device = cpu > class stack;
 
     // template < class type,  class compare, class container >                    class basic_set;
     // template < class type1, class type2,   class key_compare, class container > class basic_map;
@@ -57,88 +57,78 @@ namespace ap
         if constexpr ( requires { typename type::array_tag; } )
         {
             static_assert ( requires { typename type::value_type; type::dimension(); typename type::device_type; }, "class provides array_tag but not provides value_type, dimension() and device_type" );
-            return ( std::convertible_to<typename type::value_type,value_type> or is_void<value_type> ) and
+            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
                    ( type::dimension() == dim or dim == 0 ) and
-                   ( std::same_as<typename type::device_type,device_type> or is_void<device_type> );         
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );         
         }
         else
             return false;
     } ();
 
-    // template < class type, class value_type = void >
-    // concept deque_type = []
-    // {
-    //     if constexpr ( requires { typename type::deque_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::value_type; }, "class provides deque_tag but not provides value_type" );
-    //         if constexpr ( is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class type, class value_type = void, class device_type = void >
+    concept deque_type = []
+    {
+        if constexpr ( requires { typename type::deque_tag; } )
+        {
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides deque_tag but not provides value_type and device_type" );
+            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+        }
+        else
+            return false;
+    } ();
 
-    // template < class type, class value_type = void >
-    // concept list_type = []
-    // {
-    //     if constexpr ( requires { typename type::list_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::value_type; }, "class provides list_tag but not provides value_type" );
-    //         if constexpr ( is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class type, class value_type = void, class device_type = void >
+    concept list_type = []
+    {
+        if constexpr ( requires { typename type::list_tag; } )
+        {
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides list_tag but not provides value_type and device_type" );
+            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+        }
+        else
+            return false;
+    } ();
 
-    // template < class type, class value_type = void >
-    // concept priority_queue_type = []
-    // {
-    //     if constexpr ( requires { typename type::priority_queue_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::value_type; }, "class provides priority_queue_tag but not provides value_type" );
-    //         if constexpr ( is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class type, class value_type = void, class device_type = void >
+    concept priority_queue_type = []
+    {
+        if constexpr ( requires { typename type::priority_queue_tag; } )
+        {
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides priority_queue_tag but not provides value_type and device_type" );
+            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+        }
+        else
+            return false;
+    } ();
 
-    // template < class type, class value_type = void >
-    // concept queue_type = []
-    // {
-    //     if constexpr ( requires { typename type::queue_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::value_type; }, "class provides queue_tag but not provides value_type" );
-    //         if constexpr ( is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class type, class value_type = void, class device_type = void >
+    concept queue_type = []
+    {
+        if constexpr ( requires { typename type::queue_tag; } )
+        {
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides queue_tag but not provides value_type and device_type" );
+            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+        }
+        else
+            return false;
+    } ();
 
-    // template < class type, class value_type = void >
-    // concept stack_type = []
-    // {
-    //     if constexpr ( requires { typename type::stack_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::value_type; }, "class provides stack_tag but not provides value_type" );
-    //         if constexpr ( is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class type, class value_type = void, class device_type = void >
+    concept stack_type = []
+    {
+        if constexpr ( requires { typename type::stack_tag; } )
+        {
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides stack_tag but not provides value_type and device_type" );
+            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+        }
+        else
+            return false;
+    } ();
 
     // template < class type, class value_type = void >
     // concept set_type = []
@@ -177,8 +167,8 @@ namespace ap
         if constexpr ( requires { typename type::pair_tag; } )
         {
             static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
-            return ( std::convertible_to<typename type::key_type,  type1> or is_void<type1> ) and
-                   ( std::convertible_to<typename type::value_type,type2> or is_void<type2> );
+            return ( convertible_to<typename type::key_type,  type1> or is_void<type1> ) and
+                   ( convertible_to<typename type::value_type,type2> or is_void<type2> );
         }
         else
             return false;
@@ -195,7 +185,7 @@ namespace ap
         template < class type, int count, class type1, class... types >
         constexpr bool tuple_type_helper<type,count,type1,types...> =
             ( type::size() - count + 1 == 1 + sizeof...(types) ) and
-            ( std::convertible_to<typename type::template value_type<count>,type1> or is_void<type1> ) and []
+            ( convertible_to<typename type::template value_type<count>,type1> or is_void<type1> ) and []
             {
                 if constexpr ( count < type::size() )
                     return tuple_type_helper<type,count+1,types...>;
@@ -254,8 +244,8 @@ namespace ap
 
     // /// Include
     #include "discrete/discrete.hpp" // First.
-    #include "array/array.hpp"
-    // #include "chain/chain.hpp"
+    // #include "array/array.hpp"
+    #include "chain/chain.hpp"
     // #include "collection/collection.hpp"
     // #include "polymorphic/polymorphic.hpp"
     // #include "string/string.hpp"

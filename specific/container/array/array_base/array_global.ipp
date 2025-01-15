@@ -2,76 +2,7 @@
 
 namespace detail
 {
-    /* ABI of array (dim == 1)
-     * device::vector     (sizeof = device::vector)
-     * from_array_view
-     *   - host_ptr       (sizeof = sizeof(pointer))
-     */
 
-    /* ABI of array (dim >= 2)
-     * device::vector     (sizeof = device::vector)
-     * from_array_view
-     *   - host_ptr       (sizeof = sizeof(pointer))
-     *   - transpose_ptr  (sizeof = sizeof(pointer))
-     * to_array_view
-     *   - row_views      (sizeof = device::vector)
-     *   - column_views   (sizeof = device::vector)
-     *   - flat_view      [[omitted, directly static_cast]]
-     *   - transpose_view (sizeof = sizeof(pointer))
-     */
-
-    struct size_tag   { };
-    struct shape_tag  { };
-    struct empty_tag  { };
-    struct begin_tag  { };
-    struct end_tag    { };
-    struct index_tag  { };
-    struct row_tag    { };
-    struct column_tag { };
-
-    template < class type >
-    struct from_array_span;
-
-    template < class type, class device >
-    struct from_array_span<array<type,1,device>>
-    {
-        private:
-            array<type,2,device>* host_ptr = nullptr;
-    
-        public:
-            constexpr from_array_span ( ) = default;
-            constexpr from_array_span ( array<type,2,device>& arr ) extends host_ptr ( &arr ) { }
-
-        public:
-            constexpr       array<type,2,device>& from_host ( )       { return *host_ptr; }
-            constexpr const array<type,2,device>& from_host ( ) const { return *host_ptr; }
-
-        public: 
-            constexpr bool is_span ( ) const { return host_ptr != nullptr; }
-    };
-    
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    struct from_array_span<array<type,dim,device>>
-    {
-        private:
-            array<type,dim+1,device>* host_ptr      = nullptr;
-            array<type,dim,  device>* transpose_ptr = nullptr;
-
-        public: 
-            constexpr from_array_span ( ) = default;
-            constexpr from_array_span ( array<type,dim+1,device>& arr ) extends host_ptr      ( &arr ) { }
-            constexpr from_array_span ( array<type,dim,  device>& arr ) extends transpose_ptr ( &arr ) { }
-
-        public:
-            constexpr       array<type,dim+1,device>& from_host      ( )       { return *host_ptr;      }
-            constexpr const array<type,dim+1,device>& from_host      ( ) const { return *host_ptr;      }
-            constexpr       array<type,dim,  device>& from_transpose ( )       { return *transpose_ptr; }
-            constexpr const array<type,dim,  device>& from_transpose ( ) const { return *transpose_ptr; }
-
-        public:
-            constexpr bool is_view ( ) const { return host_ptr != nullptr or transpose_ptr != nullptr; }
-    };
 
     template < class type > 
     struct to_array_view;
@@ -81,9 +12,9 @@ namespace detail
     struct to_array_view<array<type,dim,device>>
     {
         private: 
-            device::template vector<from_array_span<array<type,dim-1,device>>> row_views      = device::template vector<from_array_span<array<type,dim-1,device>>>();
-            device::template vector<from_array_span<array<type,dim-1,device>>> column_views   = device::template vector<from_array_span<array<type,dim-1,device>>>();
-                                    from_array_span<array<type,dim,  device>>  transpose_view =                         from_array_span<array<type,dim,  device>> ();
+            std::vector<from_array_span<array<type,dim-1,device>>> row_views      = device::template vector<from_array_span<array<type,dim-1,device>>>();
+            std::vector<from_array_span<array<type,dim-1,device>>> column_views   = device::template vector<from_array_span<array<type,dim-1,device>>>();
+                        from_array_span<array<type,dim,  device>>  transpose_view =                         from_array_span<array<type,dim,  device>> ();
 
         public: 
             constexpr to_array_view ( array<type,dim,device>& arr )                      extends transpose_view ( arr ) { }
@@ -92,8 +23,12 @@ namespace detail
                                                                                                  transpose_view ( arr ) { }
         
         public: 
-            constexpr       array<type,dim+1,device>& to_rows ( int p ) { return row_views[p]; } // TODO: index starts from 0.
-            constexpr const array<type,dim+1,device>& 
+            constexpr       array<type,dim-1,device>& to_row       ( int p )       { return static_cast<      array<type,dim-1,device>&>(row_views   [p-1]); } // TODO: index starts from 0.
+            constexpr const array<type,dim-1,device>& to_row       ( int p ) const { return static_cast<const array<type,dim-1,device>&>(row_views   [p-1]); } 
+            constexpr       array<type,dim-1,device>& to_column    ( int p )       { return static_cast<      array<type,dim-1,device>&>(column_views[p-1]); } // TODO: index starts from 0.
+            constexpr const array<type,dim-1,device>& to_column    ( int p ) const { return static_cast<const array<type,dim-1,device>&>(column_views[p-1]); } 
+            constexpr       array<type,dim,  device>& to_transpose ( )             { return static_cast<      array<type,dim,  device>&>(transpose_view);    }
+            constexpr const array<type,dim,  device>& to_transpose ( )       const { return static_cast<const array<type,dim,  device>&>(transpose_view);    }
     };
 
     template < class type, class... types >
@@ -121,7 +56,7 @@ namespace detail
     constexpr bool invocable_r_by_n_ints = invocable_r_by_n_ints_helper<result_type,input_type,count>;
 
     template < class type, class... types >
-    constexpr bool ints_until_last_func_ints = convertible_until<int,-2,types...> and invocable_r_by_n_ints<type,last_type_of<types...>,sizeof...(types)-1>; // No need to check <void,...>, as it forwards to is_invocable_r_by_n_ints.
+    constexpr bool ints_until_last_func_ints = convertible_until<int,-2,types...> and invocable_r_by_n_ints<type,last_type_of<types...>,sizeof...(types)-1>; // No need to check <void,...>, as it forwards to invocable_r_by_n_ints_helper.
 
     template < class type, class... types >
     constexpr bool ints_until_last_type = convertible_until<int,-2,types...> and []

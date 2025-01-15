@@ -8,8 +8,7 @@ std::uint32_t detail::opencl_thread_pool::available_parallelism ( ) const
 
 boost::compute::command_queue& detail::opencl_thread_pool::get_command_queue ( )
 {
-    thread_local auto cmd_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
-    return cmd_queue;
+    return boost::compute::system::default_queue();
 }
 
 void detail::opencl_thread_pool::enqueue ( execpools::task_base* task, std::uint32_t tid ) noexcept
@@ -18,9 +17,8 @@ void detail::opencl_thread_pool::enqueue ( execpools::task_base* task, std::uint
         try
         {
             // TODO: I have no environment to run it.
-            thread_local auto task_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
-            task_queue.enqueue_native_kernel(enqueue_callback, new task_type(task, tid), sizeof(task_type), 0, 0, 0);
-            task_queue.flush();
+            boost::compute::system::default_queue().enqueue_native_kernel(enqueue_callback, new task_type(task, tid), sizeof(task_type), 0, 0, 0);
+            boost::compute::system::default_queue().flush();
         }
         catch ( const boost::compute::opencl_error& e )
         {
@@ -37,7 +35,7 @@ void detail::opencl_thread_pool::throw_opencl_error ( const boost::compute::open
 
 void detail::opencl_thread_pool::throw_device_error ( )
 {
-    throw device_error("failed to enqueue task: opencl device does not supports executing host function (with name = {}, vendor = {}, profile = {}, version = {}, driver_version = {}, capability = {{exec_kernel = {}, exec_native_kernel = {}}})",
+    throw device_error("failed to enqueue task: this opencl device does not supports executing host function (with name = {}, vendor = {}, profile = {}, version = {}, driver_version = {}, capability = {{exec_kernel = {}, exec_native_kernel = {}}})",
                        boost::compute::system::default_device().name(),
                        boost::compute::system::default_device().vendor(),
                        boost::compute::system::default_device().profile(),

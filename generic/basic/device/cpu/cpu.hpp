@@ -22,43 +22,41 @@ class cpu
         using layout_type = std::layout_right;
 
     public: // Operator
-        template < class type = void > using plus              = std::plus<type>;
-        template < class type = void > using minus             = std::minus<type>;
-        template < class type = void > using multiplies        = std::multiplies<type>;
-        template < class type = void > using divides           = std::divides<type>;
-        template < class type = void > using negate            = std::negate<type>;
-        template < class type = void > using equal_to          = std::equal_to<type>;
-        template < class type = void > using not_equal_to      = std::not_equal_to<type>;
-        template < class type = void > using less              = std::less<type>;
-        template < class type = void > using less_equal        = std::less_equal<type>;
-        template < class type = void > using greater           = std::greater<type>;
-        template < class type = void > using greater_equal     = std::greater_equal<type>; 
-        template < class type = void > using logical_and       = std::logical_and<type>;
-        template < class type = void > using logical_or        = std::logical_or<type>;
-        template < class type = void > using logical_not       = std::logical_not<type>;
-        template < class type = void > using bit_and           = std::bit_and<type>;
-        template < class type = void > using bit_or            = std::bit_or<type>;
-        template < class type = void > using bit_xor           = std::bit_xor<type>;
-        template < class type = void > using bit_not           = std::bit_not<type>;
-                                       using compare_three_way = std::compare_three_way;
+        template < class type = void > using plus          = std::plus         <type>;
+        template < class type = void > using minus         = std::minus        <type>;
+        template < class type = void > using multiplies    = std::multiplies   <type>;
+        template < class type = void > using divides       = std::divides      <type>;
+        template < class type = void > using negate        = std::negate       <type>;
+        template < class type = void > using equal_to      = std::equal_to     <type>;
+        template < class type = void > using not_equal_to  = std::not_equal_to <type>;
+        template < class type = void > using less          = std::less         <type>;
+        template < class type = void > using less_equal    = std::less_equal   <type>;
+        template < class type = void > using greater       = std::greater      <type>;
+        template < class type = void > using greater_equal = std::greater_equal<type>; 
+        template < class type = void > using logical_and   = std::logical_and  <type>;
+        template < class type = void > using logical_or    = std::logical_or   <type>;
+        template < class type = void > using logical_not   = std::logical_not  <type>;
+        template < class type = void > using bit_and       = std::bit_and      <type>;
+        template < class type = void > using bit_or        = std::bit_or       <type>;
+        template < class type = void > using bit_xor       = std::bit_xor      <type>;
+        template < class type = void > using bit_not       = std::bit_not      <type>;
 
     public: // Hash
         template < class type > using hash = std::hash<type>;
 
     public: // Container
-        template < class type, class alloc = allocator<type> >                                                                                                 using vector         = std::vector<type,alloc>;
-        template < class type, int len >                                                                                                                       using array          = std::array<type,len>;
-        template < class type, class alloc = allocator<type> >                                                                                                 using deque          = std::deque<type,alloc>;
-        template < class type, class alloc = allocator<type> >                                                                                                 using list           = std::list<type,alloc>;
-        template < class type, class container = deque<type> >                                                                                                 using stack          = std::stack<type,container>;
-        template < class type, class container = deque<type> >                                                                                                 using queue          = std::queue<type,container>;
-        template < class type, class container = vector<type>, class compare = less<type> >                                                                    using priority_queue = std::priority_queue<type,container,compare>;
-        template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                     using set            = std::set<type,compare,alloc>;
-        template < class type, class hash = hash<type>, class equal = equal_to<type>, class alloc = allocator<type> >                                          using unordered_set  = std::unordered_set<type,hash,equal,alloc>;
-        template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>>>                               using map            = std::map<type1,type2,compare,alloc>;
-        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>>>   using unordered_map  = std::unordered_map<type1,type2,hash,equal,alloc>;
-        template < class char_type, class char_traits = std::char_traits<char_type>, class alloc = allocator<char_type> >                                      using basic_string   = std::basic_string<char_type,char_traits,alloc>;
-                                                                                                                                                               using string         = basic_string<char>;
+        template < class type, int len >                                                                                                                      using array          = std::array         <type,len>;
+        template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                         using basic_string   = std::basic_string  <type,traits,alloc>;
+        template < class type, class alloc = allocator<type> >                                                                                                using deque          = std::deque         <type,alloc>;
+        template < class type, class alloc = allocator<type> >                                                                                                using list           = std::list          <type,alloc>;
+        template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>> >                             using map            = std::map           <type1,type2,compare,alloc>;
+        template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using priority_queue = std::priority_queue<type,std::vector<type,alloc>,compare>;
+        template < class type, class alloc = allocator<type> >                                                                                                using queue          = std::queue         <type,std::vector<type,alloc>>;
+        template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using set            = std::set           <type,compare,alloc>;
+        template < class type, class alloc = allocator<type> >                                                                                                using stack          = std::stack         <type,std::vector<type,alloc>>;
+        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = std::unordered_map <type1,type2,hash,equal,alloc>;
+        template < class type, class hash = hash<type>, class equal = equal_to<type>,  class alloc = allocator<type> >                                        using unordered_set  = std::unordered_set <type,hash,equal,alloc>;
+        template < class type, class alloc = allocator<type> >                                                                                                using vector         = std::vector        <type,alloc>;
 
     public: // Algorithm
         constexpr static decltype(auto) accumulate               ( auto&&... args ) { return std::accumulate              (std::forward<decltype(args)>(args)...); }

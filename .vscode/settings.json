@@ -108,6 +108,8 @@
         "expected": "cpp",
         "typeindex": "cpp",
         "coroutine": "cpp",
-        "version": "cpp"
+        "version": "cpp",
+        "target": "cpp",
+        "csetjmp": "cpp"
     }
 }

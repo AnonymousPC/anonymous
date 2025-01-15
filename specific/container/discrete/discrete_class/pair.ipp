@@ -40,8 +40,8 @@ constexpr decltype(auto) pair<type1,type2>::value ( ) const
 template < class type1, class type2 >
 template < class type3, class type4 >
 constexpr pair<type1,type2>::pair ( const pair<type3,type4>& cvt )
-    requires std::convertible_to<type3,type1> and std::convertible_to<type4,type2> but
-             ( not std::same_as<type1,type3> or not std::same_as<type2,type4> )
+    requires convertible_to<type3,type1> and convertible_to<type4,type2> but
+             ( not same_as<type1,type3> or not same_as<type2,type4> )
     extends pair<type1,type2>(type1(cvt.key()), type2(cvt.value()))
 {
 
@@ -50,8 +50,8 @@ constexpr pair<type1,type2>::pair ( const pair<type3,type4>& cvt )
 template < class type1, class type2 >
 template < class type3, class type4 >
 constexpr pair<type1,type2>::pair ( const pair<type3,type4>& cvt )
-    requires std::constructible_from<type1,type3> and std::constructible_from<type2,type4> but
-             ( not std::convertible_to<type3,type1> or not std::convertible_to<type4,type2> )
+    requires constructible_from<type1,type3> and constructible_from<type2,type4> but
+             ( not convertible_to<type3,type1> or not convertible_to<type4,type2> )
     extends pair<type1,type2>(type1(cvt.key()), type2(cvt.value()))
 {
 

@@ -6,7 +6,7 @@ using float16_t = conditional<sizeof(float)      ==16/8,float,
                                                         #ifdef __STDCPP_FLOAT16_T__
                                                         std::float16_t
                                                         #else
-                                                        float16_t
+                                                        void
                                                         #endif
                              >>>;
 
@@ -16,7 +16,7 @@ using float32_t = conditional<sizeof(float)      ==32/8,float,
                                                         #ifdef __STDCPP_FLOAT32_T__
                                                         std::float32_t
                                                         #else
-                                                        float32_t
+                                                        void
                                                         #endif
                              >>>;
 
@@ -26,7 +26,7 @@ using float64_t = conditional<sizeof(float)      ==64/8,float,
                                                         #ifdef __STDCPP_FLOAT64_T__
                                                         std::float64_t
                                                         #else
-                                                        float64_t
+                                                        void
                                                         #endif
                              >>>;
 
@@ -44,5 +44,5 @@ using bfloat16_t =
     #ifdef __STDCPP_BFLOAT16_T__
     std::bfloat16_t;
     #else
-    bfloat16_t;
+    void;
     #endif

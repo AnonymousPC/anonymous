@@ -13,12 +13,12 @@ class pair
         struct pair_tag { };
 
     public: // Core
-        constexpr pair ( )                                                                         requires std::default_initializable<remove_cv<type1>> and std::default_initializable<remove_cv<type2>> = default; // Remove_cv is essential, as std::default_initializable<const int> == false (require "new const int()").
+        constexpr pair ( )                                                                         requires default_initializable<remove_cv<type1>> and default_initializable<remove_cv<type2>> = default; // Remove_cv is essential, as default_initializable<const int> == false (requires "new const int()").
         constexpr pair ( type1, type2 );
 
     public: // Conversion
-        template < class type3, class type4 > constexpr          pair ( const pair<type3,type4>& ) requires std::convertible_to    <type3,type1> and std::convertible_to    <type4,type2> but ( not std::same_as       <type1,type3> or not std::same_as       <type2,type4> );
-        template < class type3, class type4 > constexpr explicit pair ( const pair<type3,type4>& ) requires std::constructible_from<type1,type3> and std::constructible_from<type2,type4> but ( not std::convertible_to<type3,type1> or not std::convertible_to<type4,type2> );
+        template < class type3, class type4 > constexpr          pair ( const pair<type3,type4>& ) requires convertible_to    <type3,type1> and convertible_to    <type4,type2> but ( not same_as       <type1,type3> or not same_as       <type2,type4> );
+        template < class type3, class type4 > constexpr explicit pair ( const pair<type3,type4>& ) requires constructible_from<type1,type3> and constructible_from<type2,type4> but ( not convertible_to<type3,type1> or not convertible_to<type4,type2> );
 
     public: // Member
         constexpr  decltype(auto) key   ( );

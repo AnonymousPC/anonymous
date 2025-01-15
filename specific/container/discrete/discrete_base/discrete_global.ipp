@@ -182,6 +182,47 @@ namespace detail
     // Implemention
 
     template < int index >
+    constexpr void tuplewise_print_impl ( auto& left, const auto& right )
+    {
+        if constexpr ( index == 1 )
+            left << '(';
+        left << get<index-1>(right);
+        if constexpr ( index != tuple_size<right_type> )
+        {
+            left << ", ";
+            tuplewise_print_impl<index+1> ( left, right );
+        }
+        else
+            left << ')';
+    }
+
+    template < int index >
+    constexpr bool tuplewise_equal_impl ( const auto& left, const auto& right )
+    {
+        if constexpr ( index < tuple_size<left_type> )
+            return get<index-1>(left) == get<index-1>(right) and tuplewise_equal_impl<index+1> ( left, right );
+        else
+            return get<index-1>(left) == get<index-1>(right);
+    }
+
+    template < int index >
+    constexpr auto tuplewise_compare_impl ( const auto& left, const auto& right )
+    {
+        if constexpr ( index < tuple_size<left_type> )
+        {
+            using type = common_type<decltype(get<index-1>(left)<=>get<index-1>(right)),decltype(tuplewise_compare_impl<index+1>(left,right))>;
+            let try1 = get<index-1>(left) <=> get<index-1>(right);
+            if ( try1 != decltype(try1)::equivalent )
+                return type(try1);
+            else
+                return type(tuplewise_compare_impl<index+1>(left, right));
+        }
+
+        else
+            return get<index-1>(left) <=> get<index-1>(right);
+    }
+
+    template < int index >
     constexpr void tuplewise_plus_impl ( const auto& left, const auto& right, auto& t )
     {
         get<index-1>(t) = get<index-1>(left) + get<index-1>(right);
@@ -230,53 +271,22 @@ namespace detail
 
     // Interface
 
-    template < int index >
-    constexpr decltype(auto) tuplewise_print ( auto& left, const auto& right )
+    constexpr auto& tuplewise_print ( auto& left, const auto& right )
     {
-        if constexpr ( index == 1 )
-            left << '(';
-
-        left << get<index-1>(right);
-
-        if constexpr ( index != tuple_size<right_type> )
-        {
-            left << ", ";
-            tuplewise_print<index+1> ( left, right );
-        }
-        else
-            left << ')';
-
+        tuplewise_print_impl<1>(left, right);
         return left;
     }
 
-    template < int index >
     constexpr bool tuplewise_equal ( const auto& left, const auto& right )
     {
-        if constexpr ( index < tuple_size<left_type> )
-            return get<index-1>(left) == get<index-1>(right) and tuplewise_equal<index+1> ( left, right );
-        else
-            return get<index-1>(left) == get<index-1>(right);
+        return tuplewise_equal_impl<1>(left, right);
     }
 
-    template < int index >
     constexpr auto tuplewise_compare ( const auto& left, const auto& right )
     {
-        if constexpr ( index < tuple_size<left_type> )
-        {
-            using type = common_type<decltype(get<index-1>(left)<=>get<index-1>(right)),decltype(tuplewise_compare<index+1>(left,right))>;
-
-            let try1 = get<index-1>(left) <=> get<index-1>(right);
-            if ( try1 != decltype(try1)::equivalent )
-                return type(try1);
-            else
-                return type(tuplewise_compare<index+1>(left, right));
-        }
-
-        else
-            return get<index-1>(left) <=> get<index-1>(right);
+        return tuplesize_compare_impl<1>(left, right);
     }
 
-    template < int index >
     constexpr auto tuplewise_plus ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_plus_result<left_type,right_type>::type();
@@ -284,7 +294,6 @@ namespace detail
         return t;
     }
 
-    template < int index >
     constexpr auto tuplewise_minus ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_minus_result<left_type,right_type>::type();
@@ -292,7 +301,6 @@ namespace detail
         return t;
     }
 
-    template < int index >
     constexpr auto tuplewise_each_multiply ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_each_multiply_result<left_type,right_type>::type();
@@ -300,7 +308,6 @@ namespace detail
         return t;
     }
 
-    template < int index >
     constexpr auto tuplewise_multiply_each ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_multiply_each_result<left_type,right_type>::type();
@@ -308,7 +315,6 @@ namespace detail
         return t;
     }
 
-    template < int index >
     constexpr auto tuplewise_each_divide ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_each_divide_result<left_type,right_type>::type();
@@ -429,13 +435,6 @@ constexpr tuple_type auto operator / ( const tuple_type auto& left, const auto& 
 {
     return detail::tuplewise_each_divide ( left, right );
 }
-
-
-
-
-
-
-/// Detail (function)
 
 
 

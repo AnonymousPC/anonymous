@@ -2,7 +2,6 @@
 
 #ifdef __NVCC__
     class cuda
-        extends public cpu
     {
         public: // Available
             constexpr static bool is_available ( ) { return true; }
@@ -39,7 +38,6 @@
     cuda::execution_context_type cuda::execution_context = cuda::execution_context_type();
 #else
     class cuda
-        extends public cpu 
     {
         public: // Available
             constexpr static bool is_available ( ) { return false; }

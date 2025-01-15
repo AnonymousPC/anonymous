@@ -24,9 +24,8 @@ class range
 
     public: // Typedef
         using value_type     = type;
-        class iterator;
-        using const_iterator = iterator;
-        struct range_tag { };
+        class const_iterator;
+        using iterator       = const_iterator;
 
     private: // Range
         value_type low  = type();
@@ -38,14 +37,8 @@ class range
         constexpr explicit range ( value_type, value_type, value_type = 1 );
 
     public: // Member
-        constexpr       iterator    begin       ( )     const;
-        constexpr       iterator    end         ( )     const;
-        constexpr       int         size        ( )     const;
-        constexpr       bool        empty       ( )     const;
-        constexpr const value_type& min         ( )     const;
-        constexpr const value_type& max         ( )     const;
-        constexpr const value_type& sep         ( )     const;
-        constexpr       value_type  operator [] ( int ) const;
+        constexpr const_iterator begin ( ) const;
+        constexpr const_iterator end   ( ) const;
 };
 
 #include "range.ipp"

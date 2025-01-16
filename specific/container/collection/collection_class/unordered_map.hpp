@@ -44,9 +44,9 @@ class unordered_map
 
     public: // Core
         constexpr unordered_map ( );
-        constexpr unordered_map ( const unordered_map&  )                                           requires copyable<type1> and copyable<type2>;
+        constexpr unordered_map ( const unordered_map&  )             requires copyable<type1> and copyable<type2>;
         constexpr unordered_map (       unordered_map&& );
-        constexpr unordered_map& operator = ( const unordered_map&  )                               requires copyable<type1> and copyable<type2>;
+        constexpr unordered_map& operator = ( const unordered_map&  ) requires copyable<type1> and copyable<type2>;
         constexpr unordered_map& operator = (       unordered_map&& );
 
     public: // Constructor

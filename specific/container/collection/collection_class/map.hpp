@@ -44,9 +44,9 @@ class map
 
     public: // Core
         constexpr map ( );
-        constexpr map ( const map&  )                                           requires copyable<type1> and copyable<type2>;
+        constexpr map ( const map&  )             requires copyable<type1> and copyable<type2>;
         constexpr map (       map&& );
-        constexpr map& operator = ( const map&  )                               requires copyable<type1> and copyable<type2>;
+        constexpr map& operator = ( const map&  ) requires copyable<type1> and copyable<type2>;
         constexpr map& operator = (       map&& );
 
     public: // Constructor

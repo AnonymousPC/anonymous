@@ -39,7 +39,7 @@ constexpr tuple<types...>::tuple ( types... inits )
 template < class... types >
 template < class... types2 >
 constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
-    requires ( convertible_to<types2,types> and ... ) but ( ( not same_as<types,types2> ) or ... )
+    requires ( convertible_to<types2,types> and ... ) but ( not ( same_as<types,types2> and ... ) )
 {
     detail::for_constexpr<1,size()>([&] <int index> ( std::integral_constant<int,index> ) { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
 }
@@ -47,7 +47,7 @@ constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
 template < class... types >
 template < class... types2 >
 constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
-    requires ( constructible_from<types,types2> and ... ) but ( ( not convertible_to<types2,types> ) or ... )
+    requires ( constructible_from<types,types2> and ... ) but ( not ( convertible_to<types2,types> and ... ) )
 {
     detail::for_constexpr<1,size()>([&] <int index> ( std::integral_constant<int,index> ) { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
 }

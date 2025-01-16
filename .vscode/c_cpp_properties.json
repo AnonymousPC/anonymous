@@ -17,7 +17,7 @@
         },
         {
             "name": "mac",
-            "compilerPath": "/opt/homebrew/bin/g++-14",
+            "compilerPath": "/opt/homebrew/opt/llvm/bin/clang++",
             "compilerArgs": [
                 "-std=c++23",
                 "-stdlib=libc++"

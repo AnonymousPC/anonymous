@@ -71,6 +71,7 @@
     #include <ranges>
     #include <regex>
     #include <set>
+    #include <stacktrace>
     #include <string>
     #include <thread>
     #include <unordered_map>

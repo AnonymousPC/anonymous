@@ -25,23 +25,27 @@ class set
         struct set_tag { };
 
     public: // Core
-        constexpr set ( ) = default;
+        constexpr set ( )                                                 = default;
+        constexpr set ( const set&  )             requires copyable<type> = default;
+        constexpr set (       set&& )                                     = default;
+        constexpr set& operator = ( const set&  ) requires copyable<type> = default;
+        constexpr set& operator = (       set&& )                         = default;
 
     public: // Constructor
         constexpr          set ( const std::initializer_list<type>& );
         constexpr explicit set ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<set>().push(*std::ranges::begin(r)); };
 
     public: // Interface
-        constexpr int            size        ( )             const;
-        constexpr bool           empty       ( )             const;
-        constexpr const_iterator begin       ( )             const;
-        constexpr const_iterator end         ( )             const;
+        constexpr int            size     ( )             const;
+        constexpr bool           empty    ( )             const;
+        constexpr const_iterator begin    ( )             const;
+        constexpr const_iterator end      ( )             const;
 
-        constexpr set&           clear       ( );
-        constexpr bool           contains    ( const type& ) const;
-        constexpr set&           push        (       type  );
-        constexpr set&           pop         ( const type& );
-        constexpr set&           update      ( const set&  );
+        constexpr set&           clear    ( );
+        constexpr bool           contains ( const type& ) const;
+        constexpr set&           push     (       type  );
+        constexpr set&           pop      ( const type& );
+        constexpr set&           update   ( const set&  );
 };
 
 #include "set.ipp"

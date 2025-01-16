@@ -25,11 +25,11 @@ namespace ap
     template < class type1, class type2 = type1 >                                               class pair;
     template < class... types >                                                                 class tuple;
 
-    //                                                                             class any;
-    // template < class type >                                                     class function;
-    // template < class type >                                                     class optional;
-    // template < class... types >                                                 class property_tree;
-    // template < class... types >                                                 class variant;
+                                                                                                class any;
+    template < class type >                                                                     class function;
+    template < class type >                                                                     class optional;
+    template < class... types >                                                                 class property_tree;
+    template < class... types >                                                                 class variant;
 
     // template < class char_type >                                                class basic_string;
     //                                                                             using string    = basic_string<char>;
@@ -53,41 +53,38 @@ namespace ap
 
 
     /// Concept
-    template < class type, class value_type = void, int dim = 0, class device_type = void >
+    template < class type, class value_type = void, int dim = 0 >
     concept array_type = []
     {
         if constexpr ( requires { typename type::array_tag; } )
         {
-            static_assert ( requires { typename type::value_type; type::dimension(); typename type::device_type; }, "class provides array_tag but not provides value_type, dimension() and device_type" );
-            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
-                   ( type::dimension() == dim or dim == 0 ) and
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );         
+            static_assert ( requires { typename type::value_type; type::dimension(); }, "class provides array_tag but not provides value_type, dimension()" );
+            return ( convertible_to<typename type::value_type,value_type> or is_void<value_type> ) and
+                   ( type::dimension() == dim or dim == 0 );      
         }
         else
             return false;
     } ();
 
-    template < class type, class value_type = void, class device_type = void >
+    template < class type, class value_type = void >
     concept deque_type = []
     {
         if constexpr ( requires { typename type::deque_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides deque_tag but not provides value_type and device_type" );
-            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides deque_tag but not provides value_type" );
+            return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
             return false;
     } ();
 
-    template < class type, class value_type = void, class device_type = void >
+    template < class type, class value_type = void >
     concept list_type = []
     {
         if constexpr ( requires { typename type::list_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides list_tag but not provides value_type and device_type" );
-            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides list_tag but not provides value_type" );
+            return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
             return false;
@@ -98,9 +95,8 @@ namespace ap
     {
         if constexpr ( requires { typename type::priority_queue_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides priority_queue_tag but not provides value_type and device_type" );
-            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides priority_queue_tag but not provides value_type" );
+            return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
             return false;
@@ -111,9 +107,8 @@ namespace ap
     {
         if constexpr ( requires { typename type::queue_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides queue_tag but not provides value_type and device_type" );
-            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides queue_tag but not provides value_type" );
+            return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
             return false;
@@ -124,9 +119,8 @@ namespace ap
     {
         if constexpr ( requires { typename type::stack_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides stack_tag but not provides value_type and device_type" );
-            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides stack_tag but not provides value_type" );
+            return convertible_to<typename type::value_type, value_type> or is_void<value_type>;
         }
         else
             return false;
@@ -137,9 +131,8 @@ namespace ap
     {
         if constexpr ( requires { typename type::set_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides set_tag but not provides value_type and device_type" );
-            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides set_tag but not provides value_type" );
+            return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
             return false;
@@ -150,10 +143,9 @@ namespace ap
     {
         if constexpr ( requires { typename type::map_tag; } ) 
         {
-            static_assert ( requires { typename type::key_type; typename type::value_type; typename type::device_type; }, "class provides map_tag but not provides key_type, value_type and device_type" );
-            return ( convertible_to<typename type::key_type,   key_type   > or is_void<key_type   > ) and
-                   ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
-                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+            static_assert ( requires { typename type::key_type; typename type::value_type; typename type::device_type; }, "class provides map_tag but not provides key_type, value_type" );
+            return ( convertible_to<typename type::key_type,  key_type  > or is_void<key_type  > ) and
+                   ( convertible_to<typename type::value_type,value_type> or is_void<value_type> );
         }
         else
             return false;
@@ -245,7 +237,7 @@ namespace ap
     // #include "array/array.hpp"
     #include "chain/chain.hpp"
     #include "collection/collection.hpp"
-    // #include "polymorphic/polymorphic.hpp"
+    #include "polymorphic/polymorphic.hpp"
     // #include "string/string.hpp"
     #include "utility/utility.hpp"
 

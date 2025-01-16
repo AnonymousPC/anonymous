@@ -11,11 +11,15 @@ using namespace ap;
 
 int main ( )
 {
-    unordered_map<int,double,opencl::template hash<int>,opencl> m;
+    set<int,opencl::template greater<int>,opencl> m;
 
     for ( int i in range(100) )
-        m[i] = i * 111.11;
+        m.push(i);
 
+    for ( int i in range(10) )
+        m.pop(i);
+
+    boost::compute::function
 
     print(m);
 };

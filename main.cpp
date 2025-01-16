@@ -7,17 +7,17 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
-#include <boost/compute/container/stack.hpp>
 using namespace ap;
 
 int main ( )
 {
-    stack<int,opencl> que;
-    for ( int i in range(10, 1, -1) )
-        que.push(i);
+    unordered_map<int,double,opencl::template hash<int>,opencl> m;
 
-    while(not que.empty())
-        print(que.pop(), "OK");
+    for ( int i in range(100) )
+        m[i] = i * 111.11;
+
+
+    print(m);
 };
 
 

@@ -55,7 +55,7 @@ class cpu
         template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using set            = std::set           <type,compare,alloc>;
         template < class type, class alloc = allocator<type> >                                                                                                using stack          = std::stack         <type,std::vector<type,alloc>>;
         template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = std::unordered_map <type1,type2,hash,equal,alloc>;
-        template < class type, class hash = hash<type>, class equal = equal_to<type>,  class alloc = allocator<type> >                                        using unordered_set  = std::unordered_set <type,hash,equal,alloc>;
+        template < class type, class hash = hash<type>, class equal = equal_to<type>, class alloc = allocator<type> >                                         using unordered_set  = std::unordered_set <type,hash,equal,alloc>;
         template < class type, class alloc = allocator<type> >                                                                                                using vector         = std::vector        <type,alloc>;
 
     public: // Algorithm

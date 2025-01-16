@@ -23,8 +23,8 @@ class tuple
         template < class... types2 > constexpr tuple ( const tuple<types2...>& ) requires ( constructible_from<types,types2> and ... ) but ( ( not convertible_to<types2,types> ) or ... );
 
     public: // Member
-        template < int index > constexpr decltype(auto) value ( )       requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() );
-        template < int index > constexpr decltype(auto) value ( ) const requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() );
+        template < int index > constexpr       index_type_of<index,types...>& value ( )       requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() );
+        template < int index > constexpr const index_type_of<index,types...>& value ( ) const requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() );
 };
 
 #include "tuple.ipp"

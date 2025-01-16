@@ -3,25 +3,27 @@
 
 namespace ap
 {
-    template < class type, int dim = 1,                     class device = cpu > class array;
-    template < class type,                                  class device = cpu > using vector = array<type>;
-    template < class type,                                  class device = cpu > using matrix = array<type,2>;
-    template < class type, int len,                         class device = cpu > class static_array;
-    template < class type, int len,                         class device = cpu > using static_vector  = static_array<type,len>;
-    template < class type, int len,                         class device = cpu > class inplace_array;
-    template < class type, int len,                         class device = cpu > using inplace_vector = inplace_array<type,len>;
+    template < class type, int dim = 1,                                    class device = cpu > class array;
+    template < class type,                                                 class device = cpu > using vector = array<type>;
+    template < class type,                                                 class device = cpu > using matrix = array<type,2>;
+    template < class type, int len,                                        class device = cpu > class static_array;
+    template < class type, int len,                                        class device = cpu > using static_vector  = static_array<type,len>;
+    template < class type, int len,                                        class device = cpu > class inplace_array;
+    template < class type, int len,                                        class device = cpu > using inplace_vector = inplace_array<type,len>;
 
-    template < class type,                                  class device = cpu > class deque;
-    template < class type,                                  class device = cpu > class list;
-    template < class type, class compare = std::less<type>, class device = cpu > class priority_queue;
-    template < class type,                                  class device = cpu > class queue;
-    template < class type,                                  class device = cpu > class stack;
+    template < class type,                                                 class device = cpu > class deque;
+    template < class type,                                                 class device = cpu > class list;
+    template < class type,               class compare = std::less<type>,  class device = cpu > class priority_queue;
+    template < class type,                                                 class device = cpu > class queue;
+    template < class type,                                                 class device = cpu > class stack;
 
-    // template < class type,  class compare, class container >                    class basic_set;
-    // template < class type1, class type2,   class key_compare, class container > class basic_map;
+    template < class type,               class compare = std::less<type>,  class device = cpu > class set;
+    template < class type1, class type2, class compare = std::less<type1>, class device = cpu > class map;
+    template < class type,               class hash    = std::hash<type>,  class device = cpu > class unordered_set;
+    template < class type1, class type2, class hash    = std::hash<type1>, class device = cpu > class unordered_map;
 
-    template < class type1, class type2 = type1 >                               class pair;
-    template < class... types >                                                 class tuple;
+    template < class type1, class type2 = type1 >                                               class pair;
+    template < class... types >                                                                 class tuple;
 
     //                                                                             class any;
     // template < class type >                                                     class function;
@@ -130,36 +132,32 @@ namespace ap
             return false;
     } ();
 
-    // template < class type, class value_type = void >
-    // concept set_type = []
-    // {
-    //     if constexpr ( requires { typename type::set_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::value_type; }, "class provides set_tag but not provides value_type" );
-    //         if constexpr ( is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class type, class value_type = void, class device_type = void >
+    concept set_type = []
+    {
+        if constexpr ( requires { typename type::set_tag; } )
+        {
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides set_tag but not provides value_type and device_type" );
+            return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+        }
+        else
+            return false;
+    } ();
 
-    // template < class type, class key_type = void, class value_type = void >
-    // concept map_type = []
-    // {
-    //     static_assert ( is_void<key_type> == is_void<value_type>, "must enable or disable both key/value type check at the same time" );
-    //     if constexpr ( requires { typename type::map_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides map_tag but not provides key_type and value_type" );
-    //         if constexpr ( is_void<key_type> and is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::key_type,key_type> and std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
+    template < class type, class key_type = void, class value_type = void, class device_type = void >
+    concept map_type = []
+    {
+        if constexpr ( requires { typename type::map_tag; } ) 
+        {
+            static_assert ( requires { typename type::key_type; typename type::value_type; typename type::device_type; }, "class provides map_tag but not provides key_type, value_type and device_type" );
+            return ( convertible_to<typename type::key_type,   key_type   > or is_void<key_type   > ) and
+                   ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and 
+                   ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+        }
+        else
+            return false;
+    } ();
 
     template < class type, class type1 = void, class type2 = void >
     concept pair_type = []
@@ -246,7 +244,7 @@ namespace ap
     #include "discrete/discrete.hpp" // First.
     // #include "array/array.hpp"
     #include "chain/chain.hpp"
-    // #include "collection/collection.hpp"
+    #include "collection/collection.hpp"
     // #include "polymorphic/polymorphic.hpp"
     // #include "string/string.hpp"
     #include "utility/utility.hpp"

@@ -19,6 +19,8 @@ class priority_queue
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
+        using  compare_type    = compare;
+        using  device_type     = device;
         struct priority_queue_tag { };
 
     public: // Core

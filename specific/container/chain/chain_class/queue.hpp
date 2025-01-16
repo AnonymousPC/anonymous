@@ -17,6 +17,7 @@ class queue
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
+        using  device_type     = device;
         struct queue_tag { };
 
     public: // Core

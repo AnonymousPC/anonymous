@@ -1,0 +1,447 @@
+In file included from generic/basic/device/device.hpp:7,
+                 from generic/basic/interface.hpp:311,
+                 from main.cpp:1:
+generic/basic/device/opencl/opencl.hpp: In instantiation of 'class ap::opencl::unordered_map<int, double, boost::compute::hash<int> >':
+specific/container/collection/collection_class/unordered_map.hpp:4:7:   required from 'class ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>'
+    4 | class unordered_map
+      |       ^~~~~~~~~~~~~
+main.cpp:14:65:   required from here
+   14 |     unordered_map<int,double,opencl::template hash<int>,opencl> m;
+      |                                                                 ^
+generic/basic/device/opencl/opencl.hpp:60:200: error: static assertion failed: not supported on this device
+   60 |             template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > class unordered_map  { static_assert(false, "not supported on this device"); };
+      |                                                                                                                                                                                                        ^~~~~
+generic/basic/device/opencl/opencl.hpp:60:200: note: 'false' evaluates to false
+In file included from specific/container/collection/collection_class/unordered_map.hpp:81,
+                 from specific/container/collection/collection.hpp:10,
+                 from specific/container/interface.hpp:247,
+                 from main.cpp:6:
+specific/container/collection/collection_class/unordered_map.ipp: In instantiation of 'class ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator':
+specific/container/collection/collection_base/collection_global.ipp:53:31:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   53 |     for ( let it = right.begin(); it != right.end(); ++it )
+      |                    ~~~~~~~~~~~^~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/collection/collection_class/unordered_map.ipp:282:47: error: no type named 'const_iterator' in 'class ap::opencl::unordered_map<int, double, boost::compute::hash<int> >'
+  282 | class unordered_map<type1,type2,hash,device>::const_iterator
+      |                                               ^~~~~~~~~~~~~~
+specific/container/collection/collection_class/unordered_map.ipp:286:15: error: no type named 'const_iterator' in 'class ap::opencl::unordered_map<int, double, boost::compute::hash<int> >'
+  286 |         using base = device::template unordered_map<type1,type2,hash>::const_iterator;
+      |               ^~~~
+In file included from specific/container/collection/collection_base/collection_global.hpp:35,
+                 from specific/container/collection/collection.hpp:5:
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/collection/collection_base/collection_global.ipp:53:38: error: no match for 'operator!=' (operand types are 'ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator' and 'ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator')
+   53 |     for ( let it = right.begin(); it != right.end(); ++it )
+      |                                   ~~~^~~~~~~~~~~~~~
+In file included from specific/container/discrete/discrete_base/discrete_global.hpp:12,
+                 from specific/container/discrete/discrete.hpp:19,
+                 from specific/container/interface.hpp:244:
+specific/container/discrete/discrete_base/discrete_global.ipp:340:16: note: candidate: 'template<class auto:434, class auto:435>  requires (pair_type<auto:434, void, void>) && (pair_type<auto:435, void, void>) constexpr bool ap::operator==(const auto:434&, const auto:435&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+  340 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )
+      |                ^~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:340:16: note:   template argument deduction/substitution failed:
+specific/container/discrete/discrete_base/discrete_global.ipp:340:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:434, class auto:435>  requires (pair_type<auto:434, void, void>) && (pair_type<auto:435, void, void>) constexpr bool ap::operator==(const auto:434&, const auto:435&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:434 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:435 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:53:38:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   53 |     for ( let it = right.begin(); it != right.end(); ++it )
+      |                                   ~~~^~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:163:13:   required for the satisfaction of 'pair_type<auto:434, void, void>' [with auto:434 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:173:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; type1 = void; type2 = void]' evaluated to 'false'
+  163 |     concept pair_type = []
+      |                         ~~
+  164 |     {
+      |     ~  
+  165 |         if constexpr ( requires { typename type::pair_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  166 |         {
+      |         ~
+  167 |             static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  168 |             return ( convertible_to<typename type::key_type,  type1> or is_void<type1> ) and
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  169 |                    ( convertible_to<typename type::value_type,type2> or is_void<type2> );
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  170 |         }
+      |         ~
+  171 |         else
+      |         ~~~~
+  172 |             return false;
+      |             ~~~~~~~~~~~~~
+  173 |     } ();
+      |     ~~^~
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/discrete/discrete_base/discrete_global.ipp:397:16: note: candidate: 'template<class auto:449, class auto:450>  requires (tuple_type<auto:449>) && (tuple_type<auto:450>) constexpr bool ap::operator==(const auto:449&, const auto:450&) requires  tuplewise_equalable_to<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1>' (reversed)
+  397 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
+      |                ^~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:397:16: note:   template argument deduction/substitution failed:
+specific/container/discrete/discrete_base/discrete_global.ipp:397:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:449, class auto:450>  requires (tuple_type<auto:449>) && (tuple_type<auto:450>) constexpr bool ap::operator==(const auto:449&, const auto:450&) requires  tuplewise_equalable_to<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1> [with auto:449 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:450 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:53:38:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   53 |     for ( let it = right.begin(); it != right.end(); ++it )
+      |                                   ~~~^~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:196:13:   required for the satisfaction of 'tuple_type<auto:449>' [with auto:449 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:205:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; types = {}]' evaluated to 'false'
+  196 |     concept tuple_type = []
+      |                          ~~
+  197 |     {
+      |     ~  
+  198 |         if constexpr ( requires { typename type::tuple_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  199 |         {
+      |         ~
+  200 |             static_assert ( requires { typename type::template value_type<1>; typename type::template value_type<type::size()>; type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  201 |             return detail::tuple_type_helper<type,1,types...>;
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  202 |         }
+      |         ~
+  203 |         else
+      |         ~~~~
+  204 |             return false;
+      |             ~~~~~~~~~~~~~
+  205 |     } ();
+      |     ~~^~
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/collection/collection_base/collection_global.ipp:15:16: note: candidate: 'template<class auto:496, class auto:497>  requires (set_type<auto:496, void, void>) && (set_type<auto:497, void, void>) constexpr bool ap::operator==(const auto:496&, const auto:497&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>)' (reversed)
+   15 | constexpr bool operator == ( const set_type auto& left, const set_type auto& right )
+      |                ^~~~~~~~
+specific/container/collection/collection_base/collection_global.ipp:15:16: note:   template argument deduction/substitution failed:
+specific/container/collection/collection_base/collection_global.ipp:15:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:496, class auto:497>  requires (set_type<auto:496, void, void>) && (set_type<auto:497, void, void>) constexpr bool ap::operator==(const auto:496&, const auto:497&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>) [with auto:496 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:497 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:53:38:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   53 |     for ( let it = right.begin(); it != right.end(); ++it )
+      |                                   ~~~^~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:136:13:   required for the satisfaction of 'set_type<auto:496, void, void>' [with auto:496 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:146:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; value_type = void; device_type = void]' evaluated to 'false'
+  136 |     concept set_type = []
+      |                        ~~
+  137 |     {
+      |     ~  
+  138 |         if constexpr ( requires { typename type::set_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  139 |         {
+      |         ~
+  140 |             static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides set_tag but not provides value_type and device_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  141 |             return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  142 |                    ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  143 |         }
+      |         ~
+  144 |         else
+      |         ~~~~
+  145 |             return false;
+      |             ~~~~~~~~~~~~~
+  146 |     } ();
+      |     ~~^~
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/collection/collection_base/collection_global.ipp:60:16: note: candidate: 'template<class auto:525, class auto:526>  requires (map_type<auto:525, void, void, void>) && (map_type<auto:526, void, void, void>) constexpr bool ap::operator==(const auto:525&, const auto:526&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>)' (reversed)
+   60 | constexpr bool operator == ( const map_type auto& left, const map_type auto& right )
+      |                ^~~~~~~~
+specific/container/collection/collection_base/collection_global.ipp:60:16: note:   template argument deduction/substitution failed:
+specific/container/collection/collection_base/collection_global.ipp:60:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:525, class auto:526>  requires (map_type<auto:525, void, void, void>) && (map_type<auto:526, void, void, void>) constexpr bool ap::operator==(const auto:525&, const auto:526&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>) [with auto:525 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:526 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:53:38:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   53 |     for ( let it = right.begin(); it != right.end(); ++it )
+      |                                   ~~~^~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:149:13:   required for the satisfaction of 'map_type<auto:525, void, void, void>' [with auto:525 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:160:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; key_type = void; value_type = void; device_type = void]' evaluated to 'false'
+  149 |     concept map_type = []
+      |                        ~~
+  150 |     {
+      |     ~  
+  151 |         if constexpr ( requires { typename type::map_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  152 |         {
+      |         ~
+  153 |             static_assert ( requires { typename type::key_type; typename type::value_type; typename type::device_type; }, "class provides map_tag but not provides key_type, value_type and device_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  154 |             return ( convertible_to<typename type::key_type,   key_type   > or is_void<key_type   > ) and
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  155 |                    ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  156 |                    ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  157 |         }
+      |         ~
+  158 |         else
+      |         ~~~~
+  159 |             return false;
+      |             ~~~~~~~~~~~~~
+  160 |     } ();
+      |     ~~^~
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/winnt.h:667,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/minwindef.h:163,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/windef.h:9,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/windows.h:69,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/winsock2.h:23,
+                 from generic/basic/interface.hpp:130:
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/guiddef.h:181:15: note: candidate: 'bool operator!=(const GUID&, const GUID&)'
+  181 | __inline bool operator!= (REFGUID guidOne, REFGUID guidOther) { return ! (guidOne == guidOther); }
+      |               ^~~~~~~~
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/guiddef.h:181:35: note:   no known conversion for argument 1 from 'ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator' to 'const GUID&'
+  181 | __inline bool operator!= (REFGUID guidOne, REFGUID guidOther) { return ! (guidOne == guidOther); }
+      |                                   ^
+specific/container/collection/collection_base/collection_global.ipp:54:12: error: no match for 'operator==' (operand types are 'ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator' and 'ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator')
+   54 |         it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+      |         ~~~^~~~~~~~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:340:16: note: candidate: 'template<class auto:434, class auto:435>  requires (pair_type<auto:434, void, void>) && (pair_type<auto:435, void, void>) constexpr bool ap::operator==(const auto:434&, const auto:435&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>)' (reversed)
+  340 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )
+      |                ^~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:340:16: note:   template argument deduction/substitution failed:
+specific/container/discrete/discrete_base/discrete_global.ipp:340:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:434, class auto:435>  requires (pair_type<auto:434, void, void>) && (pair_type<auto:435, void, void>) constexpr bool ap::operator==(const auto:434&, const auto:435&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) [with auto:434 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:435 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:54:12:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   54 |         it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+      |         ~~~^~~~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:163:13:   required for the satisfaction of 'pair_type<auto:434, void, void>' [with auto:434 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:173:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; type1 = void; type2 = void]' evaluated to 'false'
+  163 |     concept pair_type = []
+      |                         ~~
+  164 |     {
+      |     ~  
+  165 |         if constexpr ( requires { typename type::pair_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  166 |         {
+      |         ~
+  167 |             static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  168 |             return ( convertible_to<typename type::key_type,  type1> or is_void<type1> ) and
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  169 |                    ( convertible_to<typename type::value_type,type2> or is_void<type2> );
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  170 |         }
+      |         ~
+  171 |         else
+      |         ~~~~
+  172 |             return false;
+      |             ~~~~~~~~~~~~~
+  173 |     } ();
+      |     ~~^~
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/discrete/discrete_base/discrete_global.ipp:397:16: note: candidate: 'template<class auto:449, class auto:450>  requires (tuple_type<auto:449>) && (tuple_type<auto:450>) constexpr bool ap::operator==(const auto:449&, const auto:450&) requires  tuplewise_equalable_to<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1>' (reversed)
+  397 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
+      |                ^~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:397:16: note:   template argument deduction/substitution failed:
+specific/container/discrete/discrete_base/discrete_global.ipp:397:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:449, class auto:450>  requires (tuple_type<auto:449>) && (tuple_type<auto:450>) constexpr bool ap::operator==(const auto:449&, const auto:450&) requires  tuplewise_equalable_to<typename std::decay<decltype(ap::operator==::left)>::type, typename std::decay<decltype(ap::operator==::right)>::type, 1> [with auto:449 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:450 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:54:12:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   54 |         it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+      |         ~~~^~~~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:196:13:   required for the satisfaction of 'tuple_type<auto:449>' [with auto:449 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:205:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; types = {}]' evaluated to 'false'
+  196 |     concept tuple_type = []
+      |                          ~~
+  197 |     {
+      |     ~  
+  198 |         if constexpr ( requires { typename type::tuple_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  199 |         {
+      |         ~
+  200 |             static_assert ( requires { typename type::template value_type<1>; typename type::template value_type<type::size()>; type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  201 |             return detail::tuple_type_helper<type,1,types...>;
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  202 |         }
+      |         ~
+  203 |         else
+      |         ~~~~
+  204 |             return false;
+      |             ~~~~~~~~~~~~~
+  205 |     } ();
+      |     ~~^~
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/collection/collection_base/collection_global.ipp:15:16: note: candidate: 'template<class auto:496, class auto:497>  requires (set_type<auto:496, void, void>) && (set_type<auto:497, void, void>) constexpr bool ap::operator==(const auto:496&, const auto:497&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>)' (reversed)
+   15 | constexpr bool operator == ( const set_type auto& left, const set_type auto& right )
+      |                ^~~~~~~~
+specific/container/collection/collection_base/collection_global.ipp:15:16: note:   template argument deduction/substitution failed:
+specific/container/collection/collection_base/collection_global.ipp:15:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:496, class auto:497>  requires (set_type<auto:496, void, void>) && (set_type<auto:497, void, void>) constexpr bool ap::operator==(const auto:496&, const auto:497&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>) [with auto:496 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:497 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:54:12:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   54 |         it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+      |         ~~~^~~~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:136:13:   required for the satisfaction of 'set_type<auto:496, void, void>' [with auto:496 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:146:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; value_type = void; device_type = void]' evaluated to 'false'
+  136 |     concept set_type = []
+      |                        ~~
+  137 |     {
+      |     ~  
+  138 |         if constexpr ( requires { typename type::set_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  139 |         {
+      |         ~
+  140 |             static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides set_tag but not provides value_type and device_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  141 |             return ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  142 |                    ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  143 |         }
+      |         ~
+  144 |         else
+      |         ~~~~
+  145 |             return false;
+      |             ~~~~~~~~~~~~~
+  146 |     } ();
+      |     ~~^~
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/collection/collection_base/collection_global.ipp:60:16: note: candidate: 'template<class auto:525, class auto:526>  requires (map_type<auto:525, void, void, void>) && (map_type<auto:526, void, void, void>) constexpr bool ap::operator==(const auto:525&, const auto:526&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>)' (reversed)
+   60 | constexpr bool operator == ( const map_type auto& left, const map_type auto& right )
+      |                ^~~~~~~~
+specific/container/collection/collection_base/collection_global.ipp:60:16: note:   template argument deduction/substitution failed:
+specific/container/collection/collection_base/collection_global.ipp:60:16: note: constraints not satisfied
+specific/container/interface.hpp: In substitution of 'template<class auto:525, class auto:526>  requires (map_type<auto:525, void, void, void>) && (map_type<auto:526, void, void, void>) constexpr bool ap::operator==(const auto:525&, const auto:526&) requires (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::key_type, typename std::decay<decltype(ap::operator==::right)>::type::key_type>) && (equalable_to<typename std::decay<decltype(ap::operator==::left)>::type::value_type, typename std::decay<decltype(ap::operator==::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator==::left)>::type::device_type, typename std::decay<decltype(ap::operator==::right)>::type::device_type>) [with auto:525 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; auto:526 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]':
+specific/container/collection/collection_base/collection_global.ipp:54:12:   required from 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]'
+   54 |         it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+      |         ~~~^~~~~~~~~~~~~~~~
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/interface.hpp:149:13:   required for the satisfaction of 'map_type<auto:525, void, void, void>' [with auto:525 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator]
+specific/container/interface.hpp:160:7: note: the expression '(<lambda>)() [with type = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator; key_type = void; value_type = void; device_type = void]' evaluated to 'false'
+  149 |     concept map_type = []
+      |                        ~~
+  150 |     {
+      |     ~  
+  151 |         if constexpr ( requires { typename type::map_tag; } )
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  152 |         {
+      |         ~
+  153 |             static_assert ( requires { typename type::key_type; typename type::value_type; typename type::device_type; }, "class provides map_tag but not provides key_type, value_type and device_type" );
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  154 |             return ( convertible_to<typename type::key_type,   key_type   > or is_void<key_type   > ) and
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  155 |                    ( convertible_to<typename type::value_type, value_type > or is_void<value_type > ) and
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  156 |                    ( same_as       <typename type::device_type,device_type> or is_void<device_type> );
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  157 |         }
+      |         ~
+  158 |         else
+      |         ~~~~
+  159 |             return false;
+      |             ~~~~~~~~~~~~~
+  160 |     } ();
+      |     ~~^~
+specific/container/collection/collection_base/collection_global.ipp: In instantiation of 'constexpr std::ostream& ap::operator<<(std::ostream&, const auto:524&) requires (printable<typename std::decay<decltype(ap::operator<<::right)>::type::key_type>) && (printable<typename std::decay<decltype(ap::operator<<::right)>::type::value_type>) [with auto:524 = unordered_map<int, double, boost::compute::hash<int>, opencl>; std::ostream = std::basic_ostream<char>]':
+generic/basic/common/print.ipp:18:19:   required from 'void ap::detail::print_t::operator()(const auto:130&, const auto:131& ...) const [with auto:128 = ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>; auto:129 = {}]'
+   18 |         std::cout << first;
+      |         ~~~~~~~~~~^~~~~~~~
+main.cpp:20:10:   required from here
+   20 |     print(m);
+      |     ~~~~~^~~
+specific/container/collection/collection_base/collection_global.ipp:54:47: error: result of 'operator->()' yields non-pointer result
+   54 |         it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+      |                                               ^~
+specific/container/collection/collection_base/collection_global.ipp:54:68: error: result of 'operator->()' yields non-pointer result
+   54 |         it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+      |                                                                    ^~
+specific/container/collection/collection_base/collection_global.ipp:55:47: error: result of 'operator->()' yields non-pointer result
+   55 |                               left << ", " << it->key() << ": " << it->value();
+      |                                               ^~
+specific/container/collection/collection_base/collection_global.ipp:55:68: error: result of 'operator->()' yields non-pointer result
+   55 |                               left << ", " << it->key() << ": " << it->value();
+      |                                                                    ^~
+specific/container/collection/collection_class/unordered_map.ipp:334:42: warning: inline function 'constexpr ap::unordered_map<int, double, boost::compute::hash<int>, ap::opencl>::const_iterator& ap::operator++(unordered_map<int, double, boost::compute::hash<int>, opencl>::const_iterator&) requires requires(typename device::unordered_map::const_iterator b) {++b;}' used but never defined
+  334 |         constexpr friend const_iterator& operator ++ ( const_iterator& left )
+      |                                          ^~~~~~~~

@@ -21,10 +21,10 @@ class pair
         template < class type3, class type4 > constexpr explicit pair ( const pair<type3,type4>& ) requires constructible_from<type1,type3> and constructible_from<type2,type4> but ( not convertible_to<type3,type1> or not convertible_to<type4,type2> );
 
     public: // Member
-        constexpr  decltype(auto) key   ( );
-        constexpr  decltype(auto) key   ( ) const;
-        constexpr  decltype(auto) value ( );
-        constexpr  decltype(auto) value ( ) const;
+        constexpr       type1& key   ( );
+        constexpr const type1& key   ( ) const;
+        constexpr       type2& value ( );
+        constexpr const type2& value ( ) const;
 };
 
 #include "pair.ipp"

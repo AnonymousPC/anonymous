@@ -54,7 +54,7 @@ constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
 
 template < class... types >
 template < int index >
-constexpr decltype(auto) tuple<types...>::value ( )
+constexpr index_type_of<index,types...>& tuple<types...>::value ( )
     requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() )
 {
     if constexpr ( index > 0 )
@@ -65,7 +65,7 @@ constexpr decltype(auto) tuple<types...>::value ( )
 
 template < class... types >
 template < int index >
-constexpr decltype(auto) tuple<types...>::value ( ) const
+constexpr const index_type_of<index,types...>& tuple<types...>::value ( ) const
     requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() )
 {
     if constexpr ( index > 0 )

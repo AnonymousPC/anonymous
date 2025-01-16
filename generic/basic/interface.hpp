@@ -47,6 +47,9 @@
     #include <utility>
     #include "libstdc++/mdspan.hpp"
     #include "libstdc++/text_encoding.hpp"
+    #if not __cpp_lib_stacktrace
+        #include "std/stacktrace.hpp"
+    #endif
 #elifdef __clang__
     #include <algorithm>
     #include <cassert>
@@ -75,6 +78,9 @@
     #include <utility>
     #include "libc++/ranges.hpp"
     #include "libc++/text_encoding.hpp"
+    #if not __cpp_lib_stacktrace
+        #include "std/stacktrace.hpp"
+    #endif
 #endif
 
 // Include [[std.experimental.execution]]
@@ -175,9 +181,6 @@
 #include <boost/spirit/home/qi.hpp>
 #include <boost/spirit/home/x3.hpp>
 #include <boost/stacktrace.hpp>
-#if not __cpp_lib_stacktrace
-    #include "std/stacktrace.hpp"
-#endif
 
 // Include [[third-party.eigen]]
 #if defined(__GNUC__) and not defined(__clang__)
@@ -228,6 +231,7 @@
 
 // Compiler.clang++
 #ifdef __clang__
+    #pragma clang diagnostic ignored "-Wunknown-attributes" // Allowing [[assume(bool-expr)]]
 #endif
 
 

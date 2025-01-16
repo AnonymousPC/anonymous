@@ -14,25 +14,25 @@ constexpr pair<type1,type2>::pair ( type1 init_x, type2 init_y )
 }
 
 template < class type1, class type2 >
-constexpr decltype(auto) pair<type1,type2>::key ( )
+constexpr type1& pair<type1,type2>::key ( )
 {
     return self.first;
 }
 
 template < class type1, class type2 >
-constexpr decltype(auto) pair<type1,type2>::key ( ) const
+constexpr const type1& pair<type1,type2>::key ( ) const
 {
     return self.first;
 }
 
 template < class type1, class type2 >
-constexpr decltype(auto) pair<type1,type2>::value ( )
+constexpr type2& pair<type1,type2>::value ( )
 {
     return self.second;
 }
 
 template < class type1, class type2 >
-constexpr decltype(auto) pair<type1,type2>::value ( ) const
+constexpr const type2& pair<type1,type2>::value ( ) const
 {
     return self.second;
 }

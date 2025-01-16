@@ -25,24 +25,24 @@
             using layout_type = std::layout_left;
 
         public: // Operator
-            template < class type > requires ( not is_void<type> ) using plus          = boost::compute::plus         <type>;
-            template < class type > requires ( not is_void<type> ) using minus         = boost::compute::minus        <type>;
-            template < class type > requires ( not is_void<type> ) using multiplies    = boost::compute::multiplies   <type>;
-            template < class type > requires ( not is_void<type> ) using divides       = boost::compute::divides      <type>;
-            template < class type > requires ( not is_void<type> ) class negate        { static_assert(false, "not supported on this deivce"); };
-            template < class type > requires ( not is_void<type> ) using equal_to      = boost::compute::equal_to     <type>;
-            template < class type > requires ( not is_void<type> ) using not_equal_to  = boost::compute::not_equal_to <type>;
-            template < class type > requires ( not is_void<type> ) using less          = boost::compute::less         <type>;
-            template < class type > requires ( not is_void<type> ) using less_equal    = boost::compute::less_equal   <type>;
-            template < class type > requires ( not is_void<type> ) using greater       = boost::compute::greater      <type>;
-            template < class type > requires ( not is_void<type> ) using greater_equal = boost::compute::greater_equal<type>; 
-            template < class type > requires ( not is_void<type> ) using logical_and   = boost::compute::logical_and  <type>;
-            template < class type > requires ( not is_void<type> ) using logical_or    = boost::compute::logical_or   <type>;
-            template < class type > requires ( not is_void<type> ) using logical_not   = boost::compute::logical_not  <type>;
-            template < class type > requires ( not is_void<type> ) using bit_and       = boost::compute::bit_and      <type>;
-            template < class type > requires ( not is_void<type> ) using bit_or        = boost::compute::bit_or       <type>;
-            template < class type > requires ( not is_void<type> ) using bit_xor       = boost::compute::bit_xor      <type>;
-            template < class type > requires ( not is_void<type> ) class bit_not       { static_assert(false, "not supported on this deivce"); };
+            template < class type = void > using plus          = boost::compute::plus         <type>;
+            template < class type = void > using minus         = boost::compute::minus        <type>;
+            template < class type = void > using multiplies    = boost::compute::multiplies   <type>;
+            template < class type = void > using divides       = boost::compute::divides      <type>;
+            template < class type = void > class negate        { static_assert(false, "not supported on this deivce"); };
+            template < class type = void > using equal_to      = boost::compute::equal_to     <type>;
+            template < class type = void > using not_equal_to  = boost::compute::not_equal_to <type>;
+            template < class type = void > using less          = boost::compute::less         <type>;
+            template < class type = void > using less_equal    = boost::compute::less_equal   <type>;
+            template < class type = void > using greater       = boost::compute::greater      <type>;
+            template < class type = void > using greater_equal = boost::compute::greater_equal<type>; 
+            template < class type = void > using logical_and   = boost::compute::logical_and  <type>;
+            template < class type = void > using logical_or    = boost::compute::logical_or   <type>;
+            template < class type = void > using logical_not   = boost::compute::logical_not  <type>;
+            template < class type = void > using bit_and       = boost::compute::bit_and      <type>;
+            template < class type = void > using bit_or        = boost::compute::bit_or       <type>;
+            template < class type = void > using bit_xor       = boost::compute::bit_xor      <type>;
+            template < class type = void > class bit_not       { static_assert(false, "not supported on this deivce"); };
 
         public: // Hash
             template < class type > using hash = boost::compute::hash<type>;
@@ -56,7 +56,7 @@
             template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    class priority_queue { static_assert(false, "not supported on this device"); };
             template < class type, class alloc = allocator<type> >                                                                                                class queue          { static_assert(false, "not supported on this device"); };
             template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using set            = boost::compute::flat_set<type>;
-            template < class type, class alloc = allocator<type> >                                                                                                using stack          = boost::compute::stack<type>;
+            template < class type, class alloc = allocator<type> >                                                                                                class stack;         // Override top(), pop().
             template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > class unordered_map  { static_assert(false, "not supported on this device"); };
             template < class type, class hash = hash<type>, class equal = equal_to<type>,  class alloc = allocator<type> >                                        class unordered_set  { static_assert(false, "not supported on this device"); };
             template < class type, class alloc = allocator<type> >                                                                                                using vector         = boost::compute::vector<type,alloc>;
@@ -151,6 +151,8 @@
             static decltype(auto) unique_copy              ( auto&&... args ) { return boost::compute::unique_copy             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
             static decltype(auto) upper_bound              ( auto&&... args ) { return boost::compute::upper_bound             (std::forward<decltype(args)>(args)..., execution_context.get_command_queue()); execution_context.get_command_queue().finish(); }
     };
+
+    #include "detail/stack.hpp"
 
     detail::opencl_thread_pool opencl::execution_context = detail::opencl_thread_pool(boost::compute::system::default_device().max_work_group_size());
 #else

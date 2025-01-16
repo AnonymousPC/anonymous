@@ -55,7 +55,7 @@
             template < class type, class alloc = allocator<type> >                                                                                                class queue;          // Override size(), pop().
             template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using set            = ::tbb::concurrent_set<type,compare,alloc>;
             template < class type, class alloc = allocator<type> >                                                                                                class stack          { static_assert(false, "not supported on this device"); };
-            template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = ::tbb::concurrent_unordered_map<type1,type2,hash,equal,alloc>;
+            template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = ::tbb::concurrent_unordered_map<type1,type2,hash,equal>; // Use default allocator<std::pair>
             template < class type, class hash = hash<type>, class equal = equal_to<type>,  class alloc = allocator<type> >                                        using unordered_set  = ::tbb::concurrent_unordered_set<type,hash,equal,alloc>;
             template < class type, class alloc = allocator<type> >                                                                                                using vector         = ::tbb::concurrent_vector<type,alloc>;
 

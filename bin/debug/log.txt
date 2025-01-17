@@ -1,0 +1,19 @@
+main.cpp:16:2: error: expected ';' after struct definition
+   16 | }
+      |  ^
+      |  ;
+main.cpp: In function 'int main()':
+main.cpp:20:24: error: static assertion failed
+   20 |     static_assert(std::integral<int&>);
+      |                   ~~~~~^~~~~~~~~~~~~~
+main.cpp:20:24: note: constraints not satisfied
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/compare:40,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/stl_pair.h:65,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/stl_algobase.h:64,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/algorithm:60,
+                 from generic/basic/interface.hpp:21,
+                 from main.cpp:1:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/concepts:107:13:   required by the constraints of 'template<class _Tp> concept std::integral'
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/concepts:107:24: note: the expression 'is_integral_v<_Tp> [with _Tp = int&]' evaluated to 'false'
+  107 |     concept integral = is_integral_v<_Tp>;
+      |                        ^~~~~~~~~~~~~~~~~~

@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr any::any ( movable auto init )
+constexpr any::any ( copyable auto init )
     extends base ( std::move(init) )
 {
 
@@ -19,25 +19,19 @@ constexpr const std::type_info& any::type ( ) const
 template < class value_type >
 constexpr value_type& any::value ( )
 {
-    try
-    {
-        return std::any_cast<value_type&>(static_cast<base&>(self));   
-    }
-    catch ( const std::bad_any_cast& e )
-    {
-        throw type_error("bad any cast: cannot get {} from {} (whose type = {}, empty = {})", typeid(value_type), typeid(self), type(), empty()).from(e);
-    }
+    let ptr = std::any_cast<value_type*>(static_cast<base*>(&self));
+    if ( ptr != nullptr )
+        return *ptr;
+    else
+        throw type_error("bad any cast: cannot cast {} (whose type = {}, empty = {}) into {}", typeid(self), type(), empty(), typeid(value_type));
 }
 
 template < class value_type >
 constexpr const value_type& any::value ( ) const
 {
-    try
-    {
-        return std::any_cast<const value_type&>(static_cast<const base&>(self));   
-    }
-    catch ( const std::bad_any_cast& e )
-    {
-        throw type_error("bad any cast: cannot get {} from {} (whose type = {}, empty = {})", typeid(value_type), typeid(self), type(), empty()).from(e);
-    }
+    let ptr = std::any_cast<const value_type*>(static_cast<const base*>(&self));
+    if ( ptr != nullptr )
+        return *ptr;
+    else
+        throw type_error("bad any cast: cannot cast {} (whose type = {}, empty = {}) into {}", typeid(self), type(), empty(), typeid(value_type));
 }

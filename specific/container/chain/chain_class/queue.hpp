@@ -27,7 +27,7 @@ class queue
         constexpr queue& operator = ( const queue&  ) requires copyable<type> = default;
         constexpr queue& operator = (       queue&& )                         = default;
 
-    public: // Interface
+    public: // Member
         constexpr int             size  ( )      const;
         constexpr bool            empty ( )      const;
         constexpr reference       front ( );

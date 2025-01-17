@@ -9,19 +9,10 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+
 int main ( )
 {
-    set<int,opencl::template greater<int>,opencl> m;
-
-    for ( int i in range(100) )
-        m.push(i);
-
-    for ( int i in range(10) )
-        m.pop(i);
-
-    boost::compute::function
-
-    print(m);
+    static_assert(std::integral<int&>);
 };
 
 

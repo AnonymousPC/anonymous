@@ -50,14 +50,14 @@ class unordered_map
         constexpr unordered_map& operator = (       unordered_map&& );
 
     public: // Constructor
-        constexpr          unordered_map ( const std::initializer_list<pair<const type1,type2>>& ) requires copyable<type1> and copyable<type2>;
-        constexpr explicit unordered_map ( std::from_range_t, std::ranges::input_range auto&& r )  requires requires { std::declval<unordered_map>()[get<0>(*std::ranges::begin(r))] = get<1>(*std::ranges::begin(r)); };
+        constexpr          unordered_map ( std::initializer_list<pair<const type1,type2>> )       requires copyable<type1> and copyable<type2>;
+        constexpr explicit unordered_map ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<unordered_map>()[get<0>(*std::ranges::begin(r))] = get<1>(*std::ranges::begin(r)); };
 
     public: // Conversion 
         template < class type3, class type4, class hash2 > constexpr          unordered_map ( const unordered_map<type3,type4,hash2,device>& ) requires convertible_to    <type3,type1> and convertible_to    <type4,type2> but ( not same_as       <type1,type3> or not same_as       <type2,type4> );
         template < class type3, class type4, class hash2 > constexpr explicit unordered_map ( const unordered_map<type3,type4,hash2,device>& ) requires constructible_from<type1,type3> and constructible_from<type2,type4> but ( not convertible_to<type3,type1> or not convertible_to<type4,type2> );
 
-    public: // Interface
+    public: // Member
         constexpr        int                   size        ( )                      const;
         constexpr        bool                  empty       ( )                      const;
         constexpr        iterator              begin       ( );
@@ -67,13 +67,13 @@ class unordered_map
         constexpr        value_reference       operator [] ( const type1&  );
         constexpr        value_reference       operator [] (       type1&& );
         constexpr        const_value_reference operator [] ( const type1&  )        const;
+        constexpr        bool                  contains    ( const type1&  )        const;
 
         constexpr const  auto                  keys        ( )                      const;
         constexpr        auto                  values      ( );
         constexpr const  auto                  values      ( )                      const;
         
         constexpr        unordered_map&        clear       ( );
-        constexpr        bool                  contains    ( const type1&  )        const;
         constexpr        unordered_map&        pop         ( const type1&  );
         constexpr        unordered_map&        update      ( const unordered_map& );
 };

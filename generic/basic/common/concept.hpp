@@ -149,7 +149,7 @@ template < class type >                                   concept        inputab
 
 /// Is...type
 
-template < class type >                                   concept        char_type                          = std::same_as<remove_cv<type>,char> or std::same_as<remove_cv<type>,wchar_t> or std::same_as<remove_cv<type>,char8_t> or std::same_as<remove_cv<type>,char16_t> or std::same_as<remove_cv<type>,char32_t> or requires { typename type::char_tag; };
+template < class type >                                   concept        char_type                          = same_as<remove_cv<type>,char> or same_as<remove_cv<type>,wchar_t> or same_as<remove_cv<type>,char8_t> or same_as<remove_cv<type>,char16_t> or same_as<remove_cv<type>,char32_t> or requires { typename type::char_tag;         };
 template < class type >                                   concept        int_type                           = ( std::signed_integral  <type> and ( not char_type<type> ) ) or requires { typename type::int_tag;          };
 template < class type >                                   concept        unsigned_int_type                  = ( std::unsigned_integral<type> and ( not char_type<type> ) ) or requires { typename type::unsigned_int_tag; };
 template < class type >                                   concept        float_type                         = std::floating_point<type>                                    or requires { typename type::float_tag;        };

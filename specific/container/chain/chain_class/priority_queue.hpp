@@ -30,7 +30,7 @@ class priority_queue
         constexpr priority_queue& operator = ( const priority_queue&  ) requires copyable<type> = default;
         constexpr priority_queue& operator = (       priority_queue&& )                         = default;
 
-    public: // Interface
+    public: // Member
         constexpr int             size  ( )      const;
         constexpr bool            empty ( )      const;
         constexpr const_reference top   ( )      const;

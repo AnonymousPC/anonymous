@@ -29,7 +29,7 @@ class deque
         constexpr deque& operator = ( const deque&  ) requires copyable<type> = default;
         constexpr deque& operator = (       deque&& )                         = default;
 
-    public: // Interface
+    public: // Member
         constexpr int             size        ( )      const;
         constexpr bool            empty       ( )      const;
         constexpr iterator        begin       ( );

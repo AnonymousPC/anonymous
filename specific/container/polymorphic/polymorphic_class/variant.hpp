@@ -37,14 +37,14 @@ class variant
         constexpr explicit variant ( auto v ) requires ( constructible_from<types,decltype(v)> or ... ) but ( not ( convertible_to<decltype(v),types> or ... ) );
 
     public: // Member
-                                       constexpr       int                       index ( )          const;
-                                       constexpr const std::type_info&           type  ( )          const;
-        template < class value_type  > constexpr       value_type&               value ( )                requires ( same_as<types,value_type> or ... );
-        template < class value_type  > constexpr const value_type&               value ( )          const requires ( same_as<types,value_type> or ... );
-        template < int   value_index > constexpr       value_type<output_index>& value ( )                requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) );
-        template < int   value_index > constexpr const value_type<output_index>& value ( )          const requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) );
-                                       constexpr       decltype(auto)            visit ( auto&& v )       requires detail::all_invocable_and_returns_same_type<decltype(v),types...>;
-                                       constexpr       decltype(auto)            visit ( auto&& v ) const requires detail::all_invocable_adn_returns_same_type<decltype(v),types...>;
+                                       constexpr       int                                  index ( )          const;
+                                       constexpr const std::type_info&                      type  ( )          const;
+        template < class value_type  > constexpr       value_type&                          value ( )                requires ( same_as<types,value_type> or ... );
+        template < class value_type  > constexpr const value_type&                          value ( )          const requires ( same_as<types,value_type> or ... );
+        template < int   value_index > constexpr       index_type_of<value_index,types...>& value ( )                requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) );
+        template < int   value_index > constexpr const index_type_of<value_index,types...>& value ( )          const requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) );
+                                       constexpr       decltype(auto)                       visit ( auto&& v )       requires detail::all_invocable_and_returns_same_type<decltype(v),types...>;
+                                       constexpr       decltype(auto)                       visit ( auto&& v ) const requires detail::all_invocable_and_returns_same_type<decltype(v),types...>;
 };
 
 #include "variant.ipp"

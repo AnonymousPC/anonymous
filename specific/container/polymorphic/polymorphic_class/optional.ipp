@@ -1,45 +1,45 @@
 #pragma once
 
-template < class type >
-constexpr optional<type>::optional ( type init )
+template < class types >
+constexpr optional<types>::optional ( types init )
     extends base ( std::move(init) )
 {
     
 }
 
-template < class type >
-constexpr optional<type>::optional ( nullopt_t )
+template < class types >
+constexpr optional<types>::optional ( nullopt_t )
     extends base ( nullopt_t() )
 {
     
 }
 
-template < class type > 
-constexpr bool optional<type>::empty ( ) const
+template < class types > 
+constexpr bool optional<types>::empty ( ) const
 {
     return not base::has_value();
 }
 
-template < class type >
-constexpr const std::type_info& optional<type>::type ( ) const
+template < class types >
+constexpr const std::type_info& optional<types>::type ( ) const
 {
-    return not empty() ? typeid(type) otherwise typeid(void);
+    return not empty() ? typeid(types) otherwise typeid(void);
 }
 
-template < class type >
-constexpr type& optional<type>::value ( )
+template < class types >
+constexpr types& optional<types>::value ( )
 {
     if ( not empty() )
         return base::value();
     else
-        throw type_error("bad optional access: cannot get {} from {} (whose type = {}, empty = {})", typeid(type), typeid(self), typeid(void), true);
+        throw type_error("bad optional access: cannot access {} in {} (whose type = {}, empty = {})", typeid(types), typeid(self), typeid(void), true);
 }
 
-template < class type >
-constexpr const type& optional<type>::value ( ) const
+template < class types >
+constexpr const types& optional<types>::value ( ) const
 {
     if ( not empty() )
         return base::value();
     else
-        throw type_error("bad optional access: cannot get {} from {} (whose type = {}, empty = {})", typeid(type), typeid(self), typeid(void), true);
+        throw type_error("bad optional access: cannot access {} in {} (whose type = {}, empty = {})", typeid(types), typeid(self), typeid(void), true);
 }

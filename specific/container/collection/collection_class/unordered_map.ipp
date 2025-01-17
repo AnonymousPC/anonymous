@@ -44,7 +44,7 @@ constexpr unordered_map<type1,type2,hash,device>& unordered_map<type1,type2,hash
 }
 
 template < class type1, class type2, class hash, class device >
-constexpr unordered_map<type1,type2,hash,device>::unordered_map ( const std::initializer_list<pair<const type1,type2>>& init )
+constexpr unordered_map<type1,type2,hash,device>::unordered_map ( std::initializer_list<pair<const type1,type2>> init )
     requires copyable<type1> and copyable<type2>
     extends base   ( /*initialized later*/ ),
             k_view ( self ),
@@ -142,6 +142,15 @@ constexpr unordered_map<type1,type2,hash,device>::const_value_reference unordere
 }
 
 template < class type1, class type2, class hash, class device > 
+constexpr bool unordered_map<type1,type2,hash,device>::contains ( const type1& k ) const
+{
+    if constexpr ( requires { base::contains(k); } )
+        return base::contains(k);
+    else
+        return base::find(k) != base::end();
+}
+
+template < class type1, class type2, class hash, class device > 
 constexpr const auto unordered_map<type1,type2,hash,device>::keys ( ) const
 {
     return k_view;
@@ -164,15 +173,6 @@ constexpr unordered_map<type1,type2,hash,device>& unordered_map<type1,type2,hash
 {
     base::clear();
     return self;
-}
-
-template < class type1, class type2, class hash, class device > 
-constexpr bool unordered_map<type1,type2,hash,device>::contains ( const type1& k ) const
-{
-    if constexpr ( requires { base::contains(k); } )
-        return base::contains(k);
-    else
-        return base::find(k) != base::end();
 }
 
 template < class type1, class type2, class hash, class device > 

@@ -28,27 +28,17 @@ namespace ap
                                                                                                 class any;
     template < class type >                                                                     class function;
     template < class type >                                                                     class optional;
-    template < class... types >                                                                 class property_tree;
     template < class... types >                                                                 class variant;
 
-    // template < class char_type >                                                class basic_string;
-    //                                                                             using string    = basic_string<char>;
-    //                                                                             using wstring   = basic_string<wchar_t>;
-    //                                                                             using u8string  = basic_string<char8_t>;
-    //                                                                             using u16string = basic_string<char16_t>;
-    //                                                                             using u32string = basic_string<char32_t>;
-    // template < class char_type >                                                class basic_string_view;
-    //                                                                             using string_view    = basic_string_view<char>;
-    //                                                                             using wstring_view   = basic_string_view<wchar_t>;
-    //                                                                             using u8string_view  = basic_string_view<char8_t>;
-    //                                                                             using u16string_view = basic_string_view<char16_t>;
-    //                                                                             using u32string_view = basic_string_view<char32_t>;
-    // template < class char_type >                                                class basic_regex;
-    //                                                                             using regex       = basic_regex<char>;
-    //                                                                             using wregex      = basic_regex<wchar_t>;
-
-
-    // template < auto... digits >                                                 class constexpr_index;
+    template < class type,                                                 class device = cpu > class basic_string;
+                                                                                                using string            = basic_string<char>;
+                                                                                                using wstring           = basic_string<wchar_t>;
+    template < class type,                                                 class device = cpu > class basic_string_view;
+                                                                                                using string_view       = basic_string_view<char>;
+                                                                                                using wstring_view      = basic_string_view<wchar_t>;
+    template < class type >                                                                     class basic_regex;
+                                                                                                using regex             = basic_regex<char>;
+                                                                                                using wregex            = basic_regex<wchar_t>;
 
 
 
@@ -151,14 +141,14 @@ namespace ap
             return false;
     } ();
 
-    template < class type, class type1 = void, class type2 = void >
+    template < class type, class key_type = void, class value_type = void >
     concept pair_type = []
     {
         if constexpr ( requires { typename type::pair_tag; } )
         {
             static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
-            return ( convertible_to<typename type::key_type,  type1> or is_void<type1> ) and
-                   ( convertible_to<typename type::value_type,type2> or is_void<type2> );
+            return ( convertible_to<typename type::key_type,  key_type  > or is_void<key_type  > ) and
+                   ( convertible_to<typename type::value_type,value_type> or is_void<value_type> );
         }
         else
             return false;
@@ -166,56 +156,53 @@ namespace ap
 
     namespace detail
     {
-        template < class type, int count, class... types >
+        template < class type, int count, class... value_types >
         constexpr bool tuple_type_helper = true;
 
         template < class type, int count >
         constexpr bool tuple_type_helper<type,count> = true;
 
-        template < class type, int count, class type1, class... types >
-        constexpr bool tuple_type_helper<type,count,type1,types...> =
-            ( type::size() - count + 1 == 1 + sizeof...(types) ) and
+        template < class type, int count, class type1, class... value_types >
+        constexpr bool tuple_type_helper<type,count,type1,value_types...> =
+            ( type::size() - count + 1 == 1 + sizeof...(value_types) ) and
             ( convertible_to<typename type::template value_type<count>,type1> or is_void<type1> ) and []
             {
                 if constexpr ( count < type::size() )
-                    return tuple_type_helper<type,count+1,types...>;
+                    return tuple_type_helper<type,count+1,value_types...>;
                 else
                     return true;
             } ();
     } // namespace detail
 
-    template < class type, class... types >
+    template < class type, class... value_types >
     concept tuple_type = []
     {
         if constexpr ( requires { typename type::tuple_tag; } )
         {
             static_assert ( requires { typename type::template value_type<1>; typename type::template value_type<type::size()>; type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
-            return detail::tuple_type_helper<type,1,types...>;
+            return detail::tuple_type_helper<type,1,value_types...>;
         }
         else
             return false;
     } ();
 
-    // template < class type, class value_type = void >
-    // concept string_type = []
-    // {
-    //     if constexpr ( requires { typename type::string_tag; } )
-    //     {
-    //         static_assert ( requires { typename type::value_type; }, "class provides string_tag but not provides value_type" );
-    //         if constexpr ( is_void<value_type> )
-    //             return true;
-    //         else
-    //             return std::convertible_to<typename type::value_type,value_type>;
-    //     }
-    //     else
-    //         return false;
-    // } ();
-
-    // template < class type, class value_type = void >
-    // concept general_string_type = char_type<type> or
-    //                               char_type<remove_extent<type>> or
-    //                               char_type<remove_pointer<type>> or
-    //                               string_type<type>;
+    template < class type, class value_type = void >
+    concept string_type = []
+    {
+        if constexpr ( requires { typename type::string_tag; } )
+        {
+            static_assert ( requires { typename type::value_type; }, "class provides string_tag but not provides value_type" );
+            return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
+        }
+        else if constexpr ( not is_void<value_type> )
+            return char_type<type> or 
+                   char_type<remove_extent<type>> or
+                   char_type<remove_pointer<type>>;
+        else
+            return same_as<remove_cv<type>,value_type> or
+                   same_as<remove_cv<remove_extent<type>>,value_type> or
+                   same_as<remove_cv<remove_pointer<type>>,value_type>;
+    } ();
 
     namespace detail
     {

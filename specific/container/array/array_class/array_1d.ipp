@@ -447,7 +447,7 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int
            ( p2 < 1 or p2 > size() ) )
     and not // Except for below:
          ( ( p1 == size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
-        throw index_error("index [{},{}] is out of range with size {}", old_pos_1, old_pos_2, size());
+        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
     #endif
 
     vector::erase(vector::begin() + p1 - 1, vector::begin() + p2 - 1);

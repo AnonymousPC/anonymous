@@ -44,7 +44,7 @@ constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::oper
 }
 
 template < class type1, class type2, class compare, class device >
-constexpr map<type1,type2,compare,device>::map ( const std::initializer_list<pair<const type1,type2>>& init )
+constexpr map<type1,type2,compare,device>::map ( std::initializer_list<pair<const type1,type2>> init )
     requires copyable<type1> and copyable<type2>
     extends base   ( /*initialized later*/ ),
             k_view ( self ),
@@ -142,6 +142,15 @@ constexpr map<type1,type2,compare,device>::const_value_reference map<type1,type2
 }
 
 template < class type1, class type2, class compare, class device > 
+constexpr bool map<type1,type2,compare,device>::contains ( const type1& k ) const
+{
+    if constexpr ( requires { base::contains(k); } )
+        return base::contains(k);
+    else
+        return base::find(k) != base::end();
+}
+
+template < class type1, class type2, class compare, class device > 
 constexpr const auto map<type1,type2,compare,device>::keys ( ) const
 {
     return k_view;
@@ -164,15 +173,6 @@ constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::clea
 {
     base::clear();
     return self;
-}
-
-template < class type1, class type2, class compare, class device > 
-constexpr bool map<type1,type2,compare,device>::contains ( const type1& k ) const
-{
-    if constexpr ( requires { base::contains(k); } )
-        return base::contains(k);
-    else
-        return base::find(k) != base::end();
 }
 
 template < class type1, class type2, class compare, class device > 

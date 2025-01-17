@@ -27,7 +27,7 @@ class stack
         constexpr stack& operator = ( const stack&  ) requires copyable<type> = default;
         constexpr stack& operator = (       stack&& )                         = default;
 
-    public: // Interface
+    public: // Member
         constexpr int             size  ( )      const;
         constexpr bool            empty ( )      const;
         constexpr reference       top   ( );

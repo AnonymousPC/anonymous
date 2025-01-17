@@ -29,7 +29,7 @@ class list
         constexpr list& operator = ( const list&  ) requires copyable<type> = default;
         constexpr list& operator = (       list&& ) requires movable <type> = default;
 
-    public: // Interface
+    public: // Member
         constexpr int             size          ( )      const;
         constexpr bool            empty         ( )      const;
         constexpr iterator        begin         ( );

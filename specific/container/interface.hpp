@@ -225,7 +225,7 @@ namespace ap
     #include "chain/chain.hpp"
     #include "collection/collection.hpp"
     #include "polymorphic/polymorphic.hpp"
-    // #include "string/string.hpp"
+    #include "string/string.hpp"
     #include "utility/utility.hpp"
 
     // /// Literal

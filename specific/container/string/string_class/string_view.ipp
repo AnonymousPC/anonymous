@@ -1,7 +1,7 @@
 #pragma once
 
 template < class type, class device >
-constexpr basic_string_view<type,device>& basic_string_view<type,device>::operator = ( const string_view& right )
+constexpr basic_string_view<type,device>& basic_string_view<type,device>::operator = ( const basic_string_view& right )
 {
     #if debug
     if ( size() != right.size() )
@@ -41,13 +41,14 @@ constexpr basic_string_view<type,device>::basic_string_view ( const string& init
 
 template < class type, class device >
 template < char_type type2 >
-constexpr basic_string_view<type,device>::operator basic_string<type2> ( ) const
+constexpr basic_string_view<type,device>::operator basic_string<type2,device> ( ) const
 {
     return basic_string<type2>(basic_string<type>(self));
 }
 
 template < class type, class device >
 constexpr basic_string_view<type,device>::operator bool ( ) const
+    requires same_as<type,char>
 {
     return self == "true"  ? true  otherwise
            self == "false" ? false otherwise
@@ -60,7 +61,7 @@ constexpr basic_string_view<type,device>::operator type2 ( ) const
     requires same_as<type,char>
 {
     let cvt = type2();
-    auto [p,ec] = std::from_chars ( begin(), end(), cvt );
+    auto [p, ec] = std::from_chars ( begin(), end(), cvt );
     if ( p != end() or ec != std::errc() )
         throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
     return cvt;
@@ -135,5 +136,11 @@ constexpr basic_string_view<type,device> basic_string_view<type,device>::operato
         throw index_error("index [{}, {}] is out of range with size {}", pos_1, pos_2, size());
     #endif
 
-    return basic_string_view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1)
+    return basic_string_view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1);
+}
+
+template < class type, class device >
+constexpr bool basic_string_view<type,device>::ownership ( )
+{
+    return false;
 }

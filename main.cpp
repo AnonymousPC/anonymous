@@ -12,7 +12,9 @@ using namespace ap;
 
 int main ( )
 {
-    static_assert(std::integral<int&>);
+    string str = "Hello";
+    print(str == "Hello");
+    print(str * 3);
 };
 
 

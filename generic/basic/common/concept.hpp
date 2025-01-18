@@ -133,11 +133,14 @@ template < class type >                                   concept        modulab
 template < class type1, class type2 >                     concept        modulable_to                       = requires { std::declval<type1>() % std::declval<type2>(); std::declval<type2>() % std::declval<type1>(); };
 template < class type1, class type2 >                     using          modulus_result                     = decltype ( std::declval<type1>() % std::declval<type2>()  );
 
+template < class type >                                   using          equal                              = std::equal_to<type>;        
 template < class type >                                   concept        equalable                          = requires { std::declval<type >() == std::declval<type >(); };
 template < class type1, class type2 >                     concept        equalable_to                       = requires { std::declval<type1>() == std::declval<type2>(); std::declval<type2>() == std::declval<type1>(); };
 
+template < class type >                                   using          compare                            = std::compare_three_way;
 template < class type >                                   concept        comparable                         = requires { std::declval<type >() <=> std::declval<type >(); };
 template < class type1, class type2 >                     concept        comparable_to                      = requires { std::declval<type1>() <=> std::declval<type2>(); std::declval<type2>() <=> std::declval<type1>(); };
+template < class type1, class type2 >                     using          compare_result                     = decltype ( std::declval<type1>() <=> std::declval<type2>()  );
 
 template < class type >                                   concept        printable                          = requires ( type obj ) { std::cout << obj; };
 template < class type >                                   concept        inputable                          = requires ( type obj ) { std::cin  >> obj; };

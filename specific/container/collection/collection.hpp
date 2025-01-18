@@ -1,8 +1,6 @@
 #pragma once
 
-// Include
-
-#include "collection_base/collection_global.hpp" // First.
+#include "collection_base/collection_global.hpp"
 #include "collection_base/collection_algo.hpp"
 #include "collection_class/set.hpp"
 #include "collection_class/map.hpp"

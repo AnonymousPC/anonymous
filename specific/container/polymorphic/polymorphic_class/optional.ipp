@@ -9,7 +9,7 @@ constexpr optional<types>::optional ( types init )
 
 template < class types >
 constexpr optional<types>::optional ( nullopt_t )
-    extends base ( nullopt_t() )
+    extends base ( nullopt )
 {
     
 }

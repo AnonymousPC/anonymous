@@ -22,13 +22,6 @@ constexpr basic_string<type,device>::basic_string ( int init_size, type init_cha
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( string_view init )
-    extends base ( init.begin(), init.end() )
-{
-    
-}
-
-template < class type, class device >
 constexpr basic_string<type,device>::basic_string ( std::from_range_t, std::ranges::input_range auto&& r )
     requires requires { std::declval<basic_string>().push(*std::ranges::begin(r)); }
 {
@@ -37,7 +30,20 @@ constexpr basic_string<type,device>::basic_string ( std::from_range_t, std::rang
 }
 
 template < class type, class device >
-template < class type2 >
+constexpr basic_string<type,device>::basic_string ( string_view cvt )
+    extends base ( cvt.data(), cvt.size() )
+{
+
+}
+
+template < class type, class device >
+constexpr basic_string<type,device>::operator string_view ( ) const
+{
+    return string_view(data(), size());
+}
+
+template < class type, class device >
+template < char_type type2 >
 constexpr basic_string<type,device>::basic_string ( const basic_string<type2,device>& cvt )
     requires same_as<type,char>
 {
@@ -65,7 +71,7 @@ constexpr basic_string<type,device>::basic_string ( const basic_string<type2,dev
 }
 
 template < class type, class device >
-template < class type2 >
+template < char_type type2 >
 constexpr basic_string<type,device>::operator basic_string<type2,device> ( ) const
     requires same_as<type,char>
 {
@@ -93,7 +99,7 @@ constexpr basic_string<type,device>::operator basic_string<type2,device> ( ) con
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( bool cvt )
+constexpr basic_string<type,device>::basic_string ( const bool& cvt )
     requires same_as<type,char>
     extends basic_string ( cvt ? "true" otherwise "false" ) 
 {
@@ -102,6 +108,7 @@ constexpr basic_string<type,device>::basic_string ( bool cvt )
 
 template < class type, class device >
 constexpr basic_string<type,device>::operator bool ( ) const
+    requires same_as<type,char>
 {
     return self == "true"  ? true  otherwise
            self == "false" ? false otherwise
@@ -110,14 +117,14 @@ constexpr basic_string<type,device>::operator bool ( ) const
 
 template < class type, class device >
 template < number_type type2 > 
-constexpr basic_string<type,device>::basic_string ( type2 cvt )
+constexpr basic_string<type,device>::basic_string ( const type2& cvt )
     requires same_as<type,char>
 {
     resize(64);
-    auto [p,ec] = std::to_chars ( begin(), end(), cvt );
+    auto [p, ec] = std::to_chars ( begin(), end(), cvt );
     if ( ec != std::errc() )
         throw value_error("cannot convert {} from {} into {}", cvt, typeid(cvt), typeid(self));
-    resize ( p - begin() );
+    resize(p - begin());
 }
 
 template < class type, class device >
@@ -126,7 +133,7 @@ constexpr basic_string<type,device>::operator type2 ( ) const
     requires same_as<type,char>
 {
     let cvt = type2();
-    auto [p,ec] = std::from_chars ( begin(), end(), cvt );
+    auto [p, ec] = std::from_chars ( begin(), end(), cvt );
     if ( p != end() or ec != std::errc() )
         throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
     return cvt;
@@ -134,7 +141,7 @@ constexpr basic_string<type,device>::operator type2 ( ) const
 
 template < class type, class device >
 template < printable type2 >
-constexpr basic_string<type,device>::basic_string ( type2 cvt )
+constexpr basic_string<type,device>::basic_string ( const type2& cvt )
     requires same_as<type,char> and 
              ( not number_type<type2> ) and
              ( not string_type<type2> )
@@ -181,6 +188,7 @@ constexpr basic_string<type,device>::operator basic_string<type,device2> ( ) con
 
 template < class type, class device >
 constexpr basic_string<type,device>::basic_string ( const std::type_info& cvt )
+    requires same_as<type,char>
     extends base ( abi::demangle(cvt) )
 {
     
@@ -336,4 +344,10 @@ constexpr basic_string<type,device>& basic_string<type,device>::pop ( int old_po
     #endif
     base::erase(old_pos >= 0 ? old_pos - 1 otherwise old_pos + size(), 1);
     return self;
+}
+
+template < class type, class device >
+constexpr bool basic_string<type,device>::ownership ( )
+{
+    return true;
 }

@@ -21,7 +21,7 @@ class basic_string_view
         using  const_iterator  = base::const_iterator;
      // using  array_algo      = array_algo <basic_string_view,type>;
      // using  string_algo     = string_algo<basic_string_view,type>;
-        using  string_view     = basic_string_view<type,device>; 
+        using  device_type     = device;  
         struct string_tag { };
 
     private: // Core
@@ -31,17 +31,17 @@ class basic_string_view
 
     public: // Constructor
         constexpr basic_string_view ( const type& );
-        constexpr basic_string_view ( const char_type* );
-        constexpr basic_string_view ( const char_type*, int );
+        constexpr basic_string_view ( const type* );
+        constexpr basic_string_view ( const type*, int );
         constexpr basic_string_view ( const string& );
 
     public: // Conversion (type)
-        template < char_type   type2 > constexpr explicit operator basic_string<type2> ( ) const;
-                                       constexpr explicit operator bool                ( ) const requires same_as<type,char>;
-        template < number_type type2 > constexpr explicit operator number_type         ( ) const requires same_as<type,char>;
-        template < inputable   type2 > constexpr explicit operator inputable           ( ) const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
+        template < char_type   type2 > constexpr explicit operator basic_string<type2,device> ( ) const;
+                                       constexpr explicit operator bool                       ( ) const requires same_as<type,char>;
+        template < number_type type2 > constexpr explicit operator type2                      ( ) const requires same_as<type,char>;
+        template < inputable   type2 > constexpr explicit operator type2                      ( ) const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
 
-    public: // Interface
+    public: // Member
         constexpr int               size        ( )          const;
         constexpr bool              empty       ( )          const;
         constexpr const_iterator    begin       ( )          const;
@@ -49,6 +49,9 @@ class basic_string_view
         constexpr const_pointer     data        ( )          const;
         constexpr const_reference   operator [] ( int )      const;
         constexpr basic_string_view operator [] ( int, int ) const;
+
+    public: // Memory
+        constexpr static bool ownership ( );
 
     public: // Algo
         // using array_algo::clear,
@@ -128,8 +131,8 @@ class basic_string_view
         //       string_algo::match;
 };
 
-template < char_type type > basic_string_view ( type )               -> basic_string_view<type>;
-template < char_type type > basic_string_view ( const type* )        -> basic_string_view<type>;
-template < char_type type > basic_string_view ( basic_string<type> ) -> basic_string_view<type>;
+template < char_type type >               basic_string_view ( type )                      -> basic_string_view<type>;
+template < char_type type >               basic_string_view ( const type* )               -> basic_string_view<type>;
+template < char_type type, class device > basic_string_view ( basic_string<type,device> ) -> basic_string_view<type,device>;
 
 #include "string_view.ipp"

@@ -21,6 +21,7 @@ class basic_string
         using  const_iterator  = base::const_iterator;
      // using  array_algo      = array_algo <basic_string,type>;
      // using  string_algo     = string_algo<basic_string,type>;
+        using  device_type     = device;
         struct string_tag { };
 
     public: // Core
@@ -33,20 +34,23 @@ class basic_string
     public: // Constructor
         constexpr basic_string ( type );
         constexpr basic_string ( const type* );
-        constexpr basic_string ( string_view );
         constexpr basic_string ( int, type );
         constexpr basic_string ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<basic_string>().push(*std::ranges::begin(r)); };
 
+    public: // Conversion (view)
+        constexpr basic_string ( string_view );
+        constexpr operator       string_view ( ) const;
+
     public: // Conversion (type)
-        template < char_type   type2 > constexpr explicit basic_string ( const basic_string<type2>& )        requires same_as<type,char>;
-        template < char_type   type2 > constexpr explicit operator             basic_string<type2> ( ) const requires same_as<type,char>;
-                                       constexpr explicit basic_string ( const bool& )                       requires same_as<type,char>;
-                                       constexpr explicit operator             bool ( )                const requires same_as<type,char>;
-        template < number_type type2 > constexpr explicit basic_string ( const type2& )                      requires same_as<type,char>;
-        template < number_type type2 > constexpr explicit operator             type2 ( )               const requires same_as<type,char>;
-        template < printable   type2 > constexpr explicit basic_string ( const type2& )                      requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
-        template < inputable   type2 > constexpr explicit operator             type2 ( )               const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
-                                       constexpr explicit basic_string ( const std::type_info& )             requires same_as<type,char>;
+        template < char_type   type2 > constexpr explicit basic_string ( const basic_string<type2,device>& )        requires same_as<type,char>;
+        template < char_type   type2 > constexpr explicit operator             basic_string<type2,device> ( ) const requires same_as<type,char>;
+                                       constexpr explicit basic_string ( const bool& )                              requires same_as<type,char>;
+                                       constexpr explicit operator             bool ( )                       const requires same_as<type,char>;
+        template < number_type type2 > constexpr explicit basic_string ( const type2& )                             requires same_as<type,char>;
+        template < number_type type2 > constexpr explicit operator             type2 ( )                      const requires same_as<type,char>;
+        template < printable   type2 > constexpr explicit basic_string ( const type2& )                             requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
+        template < inputable   type2 > constexpr explicit operator             type2 ( )                      const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
+                                       constexpr explicit basic_string ( const std::type_info& )                    requires same_as<type,char>;
 
     public: // Conversion (device)
         template < class device2 > constexpr explicit basic_string ( const basic_string<type,device2>& )        requires same_as<device,cpu>;
@@ -72,6 +76,9 @@ class basic_string
         constexpr basic_string&   insert      ( int, string_view );
         constexpr basic_string&   push        (      string_view );
         constexpr basic_string&   pop         ( int );
+
+    public: // Memory 
+        constexpr static bool ownership ( );
 
     public: // Algo
         // using array_algo::clear,
@@ -151,9 +158,9 @@ class basic_string
         //       string_algo::match;
 };
 
-template < char_type type > basic_string ( type )                    -> basic_string<type>;
-template < char_type type > basic_string ( const type* )             -> basic_string<type>;
-template < char_type type > basic_string ( basic_string_view<type> ) -> basic_string<type>;
+template < char_type type >               basic_string ( type )                           -> basic_string<type>;
+template < char_type type >               basic_string ( const type* )                    -> basic_string<type>;
+template < char_type type, class device > basic_string ( basic_string_view<type,device> ) -> basic_string<type,device>;
 
 
 #include "string.ipp"

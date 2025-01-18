@@ -37,7 +37,6 @@
     #include <ranges>
     #include <regex>
     #include <set>
-    #include <stacktrace>
     #include <stdfloat>
     #include <string>
     #include <text_encoding>
@@ -47,7 +46,9 @@
     #include <utility>
     #include "libstdc++/mdspan.hpp"
     #include "libstdc++/text_encoding.hpp"
-    #if not __cpp_lib_stacktrace
+    #if __cpp_lib_stacktrace
+        #include <stacktrace>
+    #else
         #include "std/stacktrace.hpp"
     #endif
 #elifdef __clang__
@@ -71,7 +72,6 @@
     #include <ranges>
     #include <regex>
     #include <set>
-    #include <stacktrace>
     #include <string>
     #include <thread>
     #include <unordered_map>
@@ -79,7 +79,9 @@
     #include <utility>
     #include "libc++/ranges.hpp"
     #include "libc++/text_encoding.hpp"
-    #if not __cpp_lib_stacktrace
+    #if __cpp_lib_stacktrace
+        #include <stacktrace>
+    #else
         #include "std/stacktrace.hpp"
     #endif
 #endif

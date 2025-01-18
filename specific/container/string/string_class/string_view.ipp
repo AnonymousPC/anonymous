@@ -1,49 +1,31 @@
 #pragma once
 
 template < class type, class device >
-constexpr basic_string_view<type,device>& basic_string_view<type,device>::operator = ( const basic_string_view& right )
-{
-    #if debug
-    if ( size() != right.size() )
-        throw logic_error("cannot copy assgin string_view: size mismatches (with self_size = {}, other_size = {})", size(), right.size());
-    #endif
-    device::copy(right.begin(), right.end(), begin());
-    return self;
-}
-
-template < class type, class device >
-constexpr basic_string_view<type,device>::basic_string_view ( const type& init )
+constexpr basic_string_view<type,device>::basic_string_view ( const_reference init )
     extends base ( &init, 1 )
 {
     
 }
 
 template < class type, class device >
-constexpr basic_string_view<type,device>::basic_string_view ( const type* init )
+constexpr basic_string_view<type,device>::basic_string_view ( const_pointer init )
     extends base ( init )
 {
     
 }
 
 template < class type, class device >
-constexpr basic_string_view<type,device>::basic_string_view ( const type* init_data, int init_size )
+constexpr basic_string_view<type,device>::basic_string_view ( const_pointer init_data, int init_size )
     extends base ( init_data, init_size )
 {
 
 }
 
 template < class type, class device >
-constexpr basic_string_view<type,device>::basic_string_view ( const string& init )
-    extends base ( init.c_str(), init.size() )
+constexpr basic_string_view<type,device>::basic_string_view ( const string& cvt )
+    extends base ( cvt.data(), cvt.size() )
 {
     
-}
-
-template < class type, class device >
-template < char_type type2 >
-constexpr basic_string_view<type,device>::operator basic_string<type2,device> ( ) const
-{
-    return basic_string<type2>(basic_string<type>(self));
 }
 
 template < class type, class device >
@@ -136,7 +118,7 @@ constexpr basic_string_view<type,device> basic_string_view<type,device>::operato
         throw index_error("index [{}, {}] is out of range with size {}", pos_1, pos_2, size());
     #endif
 
-    return basic_string_view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1);
+    return basic_string_view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
 }
 
 template < class type, class device >

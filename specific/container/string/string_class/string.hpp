@@ -33,28 +33,29 @@ class basic_string
 
     public: // Constructor
         constexpr basic_string ( type );
-        constexpr basic_string ( const type* );
         constexpr basic_string ( int, type );
+        constexpr basic_string ( const type* );
         constexpr basic_string ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<basic_string>().push(*std::ranges::begin(r)); };
 
     public: // Conversion (view)
         constexpr basic_string ( string_view );
-        constexpr operator       string_view ( ) const;
 
     public: // Conversion (type)
-        template < char_type   type2 > constexpr explicit basic_string ( const basic_string<type2,device>& )        requires same_as<type,char>;
-        template < char_type   type2 > constexpr explicit operator             basic_string<type2,device> ( ) const requires same_as<type,char>;
-                                       constexpr explicit basic_string ( const bool& )                              requires same_as<type,char>;
-                                       constexpr explicit operator             bool ( )                       const requires same_as<type,char>;
-        template < number_type type2 > constexpr explicit basic_string ( const type2& )                             requires same_as<type,char>;
-        template < number_type type2 > constexpr explicit operator             type2 ( )                      const requires same_as<type,char>;
-        template < printable   type2 > constexpr explicit basic_string ( const type2& )                             requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
-        template < inputable   type2 > constexpr explicit operator             type2 ( )                      const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
-                                       constexpr explicit basic_string ( const std::type_info& )                    requires same_as<type,char>;
+        template < char_type type2 > constexpr explicit basic_string ( const basic_string     <type2,device>& );
+        template < char_type type2 > constexpr explicit basic_string ( const basic_string_view<type2,device>& );
 
     public: // Conversion (device)
-        template < class device2 > constexpr explicit basic_string ( const basic_string<type,device2>& )        requires same_as<device,cpu>;
-        template < class device2 > constexpr explicit operator             basic_string<type,device2> ( ) const requires same_as<device,cpu>;
+        template < class device2 > constexpr explicit basic_string ( const basic_string     <type,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
+        template < class device2 > constexpr explicit basic_string ( const basic_string_view<type,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
+
+    public: // Conversion (other)
+                                       constexpr explicit basic_string ( const bool& )                 requires same_as<type,char>;
+                                       constexpr explicit operator             bool ( )          const requires same_as<type,char>;
+        template < number_type type2 > constexpr explicit basic_string ( const type2& )                requires same_as<type,char>;
+        template < number_type type2 > constexpr explicit operator             type2 ( )         const requires same_as<type,char>;
+        template < printable   type2 > constexpr explicit basic_string ( const type2& )                requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
+        template < inputable   type2 > constexpr explicit operator             type2 ( )         const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
+                                       constexpr explicit basic_string ( const std::type_info& )       requires same_as<type,char>;
 
     public: // Member
         constexpr int             size        ( )                                    const;

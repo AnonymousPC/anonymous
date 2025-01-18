@@ -1,22 +1,19 @@
 #pragma once
 
-template < class char_type >
+template < class type >
 class basic_regex
-    extends public basic_string<char_type>,
-            public array_algo <basic_regex<char_type>,char_type>,
-            public string_algo<basic_regex<char_type>,char_type>
+    extends public basic_string<type>
 {
     public: // Core
         constexpr          basic_regex ( ) = default;
-        constexpr explicit basic_regex ( basic_string<char_type> );
+        constexpr explicit basic_regex ( basic_string<type> );
 
     public: // Conversion
-        constexpr basic_regex ( std::basic_regex<char_type> ) = delete; // std::regex does not support fetch raw string from it.
-        constexpr operator      std::basic_regex<char_type> ( ) const;
+        constexpr basic_regex ( std::basic_regex<type> ) = delete; // std::regex does not support fetch raw string from it.
+        constexpr operator      std::basic_regex<type> ( ) const;
 
     public: // Typedef
         using  value_type     = char_type;
-        using  iterate_type   = char_type;
         using  iterator       = char_type*;
         using  const_iterator = const char_type*;
         using  array_algo     = array_algo <basic_regex,char_type>;

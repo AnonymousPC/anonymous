@@ -8,15 +8,15 @@ constexpr basic_string<type,device>::basic_string ( type init )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( const type* init )
-    extends base ( init )
+constexpr basic_string<type,device>::basic_string ( int init_size, type init_char )
+    extends base ( init_size, init_char )
 {
     
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( int init_size, type init_char )
-    extends base ( init_size, init_char )
+constexpr basic_string<type,device>::basic_string ( const type* init )
+    extends base ( init )
 {
     
 }
@@ -37,15 +37,8 @@ constexpr basic_string<type,device>::basic_string ( string_view cvt )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::operator string_view ( ) const
-{
-    return string_view(data(), size());
-}
-
-template < class type, class device >
 template < char_type type2 >
 constexpr basic_string<type,device>::basic_string ( const basic_string<type2,device>& cvt )
-    requires same_as<type,char>
 {
     try
     {
@@ -64,7 +57,7 @@ constexpr basic_string<type,device>::basic_string ( const basic_string<type2,dev
         else
             static_assert(false, "unknown encoding");
     }
-    catch ( const std::filesystem::filesystem_error& /*ignored*/ )
+    catch ( const std::filesystem::filesystem_error& /*unused*/ )
     {
         throw encode_error("cannot encode string \"{}\" from {} into {}", cvt, typeid(type2), typeid(type));
     }
@@ -72,30 +65,53 @@ constexpr basic_string<type,device>::basic_string ( const basic_string<type2,dev
 
 template < class type, class device >
 template < char_type type2 >
-constexpr basic_string<type,device>::operator basic_string<type2,device> ( ) const
-    requires same_as<type,char>
+constexpr basic_string<type,device>::basic_string ( const basic_string_view<type2,device>& cvt )
 {
     try
     {
-        let converter = std::filesystem::path(self.c_str());
+        let converter = std::filesystem::path(cvt.begin(), cvt.end());
 
         if constexpr ( same_as<type,char> )
-            return static_cast<const basic_string<type2,device>&>(converter.string());
+            self.base::operator=(converter.string());
         else if constexpr ( same_as<type,wchar_t> )
-            return static_cast<const basic_string<type2,device>&>(converter.wstring());
+            self.base::operator=(converter.wstring());
         else if constexpr ( same_as<type,char8_t> )
-            return static_cast<const basic_string<type2,device>&>(converter.u8string());
+            self.base::operator=(converter.u8string());
         else if constexpr ( same_as<type,char16_t> )
-            return static_cast<const basic_string<type2,device>&>(converter.u16string());
+            self.base::operator=(converter.u16string());
         else if constexpr ( same_as<type,char32_t> )
-            return static_cast<const basic_string<type2,device>&>(converter.u32string());
+            self.base::operator=(converter.u32string());
         else
             static_assert(false, "unknown encoding");
     }
-    catch ( const std::filesystem::filesystem_error& /*ignored*/ )
+    catch ( const std::filesystem::filesystem_error& /*unused*/ )
     {
-        throw encode_error("cannot encode string \"{}\" from {} into {}", self, typeid(type), typeid(type2));
+        throw encode_error("cannot encode string \"{}\" from {} into {}", cvt, typeid(type2), typeid(type));
     }
+}
+
+template < class type, class device >
+template < class device2 >
+constexpr basic_string<type,device>::basic_string ( const basic_string<type,device2>& cvt )
+    requires same_as<device,cpu> or same_as<device2,cpu>
+{
+    resize(cvt.size());
+    if constexpr ( not same_as<device,cpu> )
+        device::copy(cvt.begin(), cvt.end(), begin());
+    else
+        device2::copy(cvt.begin(), cvt.end(), begin());
+}
+
+template < class type, class device >
+template < class device2 >
+constexpr basic_string<type,device>::basic_string ( const basic_string_view<type,device2>& cvt )
+    requires same_as<device,cpu> or same_as<device2,cpu>
+{
+    resize(cvt.size());
+    if constexpr ( not same_as<device,cpu> )
+        device::copy(cvt.begin(), cvt.end(), begin());
+    else
+        device2::copy(cvt.begin(), cvt.end(), begin());
 }
 
 template < class type, class device >
@@ -164,26 +180,6 @@ constexpr basic_string<type,device>::operator type2 ( ) const
     stream >> cvt;
     if ( not stream.eof() and stream.fail() ) // Not until the stream reaches end, that the stream fails.
         throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
-}
-
-template < class type, class device >
-template < class device2 >
-constexpr basic_string<type,device>::basic_string ( const basic_string<type,device2>& cvt )
-    requires same_as<device,cpu>
-{
-    resize(cvt.size());
-    device2::copy(cvt.begin(), cvt.end(), begin());
-}
-
-template < class type, class device >
-template < class device2 >
-constexpr basic_string<type,device>::operator basic_string<type,device2> ( ) const
-    requires same_as<device,cpu>
-{
-    let cvt = basic_string<type,device2>();
-    cvt.resize(size());
-    device2::copy(self.begin(), self.end(), cvt.begin());
-    return cvt;
 }
 
 template < class type, class device >
@@ -262,7 +258,7 @@ constexpr basic_string<type,device>::reference basic_string<type,device>::operat
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
-    return base::operator[](pos >= 0 ? pos-1 otherwise pos+size());
+    return base::operator[](pos >= 0 ? pos - 1 otherwise pos+size());
 }
 
 template < class type, class device >
@@ -289,7 +285,7 @@ constexpr basic_string<type,device>::string_view basic_string<type,device>::oper
         throw index_error("index [{}, {}] is out of range with size {}", pos_1, pos_2, size());
     #endif
 
-    return string_view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1);
+    return string_view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
 }
 
 template < class type, class device >
@@ -313,7 +309,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::erase ( int old_
         throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
     #endif
 
-    base::erase(abs_pos_1 - 1, abs_pos_2 - abs_pos_1);
+    base::erase(abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
     return self;
 }
 

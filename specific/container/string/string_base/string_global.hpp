@@ -10,8 +10,8 @@
 
 /// Global
 
-constexpr std::istream&     operator >>  (       std::istream&     left,       string_type auto& right ) requires same_as<right_value_type,char> and ( right_type::ownership() );
-constexpr std::ostream&     operator <<  (       std::ostream&     left, const string_type auto& right ) requires same_as<right_value_type,char>;
+constexpr std::istream&     operator >>  (       std::istream&     left,       string_type auto& right ) requires ( right_type::ownership() );
+constexpr std::ostream&     operator <<  (       std::ostream&     left, const string_type auto& right );
 constexpr             bool  operator ==  ( const string_type auto& left, const string_type auto& right ) requires same_as<left_value_type,right_value_type> and same_as<left_device_type,right_device_type>;
 constexpr             auto  operator <=> ( const string_type auto& left, const string_type auto& right ) requires same_as<left_value_type,right_value_type> and same_as<left_device_type,right_device_type>;
 constexpr string_type auto  operator  +  ( const string_type auto& left, const string_type auto& right ) requires same_as<left_value_type,right_value_type> and same_as<left_device_type,right_device_type>;

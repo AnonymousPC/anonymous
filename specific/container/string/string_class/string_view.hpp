@@ -24,22 +24,25 @@ class basic_string_view
         using  device_type     = device;  
         struct string_tag { };
 
-    private: // Core
-        constexpr basic_string_view ( )                                      = delete;
-        constexpr basic_string_view ( const basic_string_view& )             = delete;
-        constexpr basic_string_view& operator = ( const basic_string_view& );
+    public: // Core
+        constexpr basic_string_view ( )                                       = delete;
+        constexpr basic_string_view ( const basic_string_view&  )             = default;
+        constexpr basic_string_view (       basic_string_view&& )             = default;
+        constexpr basic_string_view& operator = ( const basic_string_view&  ) = delete;
+        constexpr basic_string_view& operator = (       basic_string_view&& ) = delete;
 
     public: // Constructor
-        constexpr basic_string_view ( const type& );
-        constexpr basic_string_view ( const type* );
-        constexpr basic_string_view ( const type*, int );
+        constexpr basic_string_view ( const_reference );
+        constexpr basic_string_view ( const_pointer );
+        constexpr basic_string_view ( const_pointer, int );
+
+    public: // Conversion (view)
         constexpr basic_string_view ( const string& );
 
-    public: // Conversion (type)
-        template < char_type   type2 > constexpr explicit operator basic_string<type2,device> ( ) const;
-                                       constexpr explicit operator bool                       ( ) const requires same_as<type,char>;
-        template < number_type type2 > constexpr explicit operator type2                      ( ) const requires same_as<type,char>;
-        template < inputable   type2 > constexpr explicit operator type2                      ( ) const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
+    public: // Conversion (other)
+                                       constexpr explicit operator bool  ( ) const requires same_as<type,char>;
+        template < number_type type2 > constexpr explicit operator type2 ( ) const requires same_as<type,char>;
+        template < inputable   type2 > constexpr explicit operator type2 ( ) const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );
 
     public: // Member
         constexpr int               size        ( )          const;

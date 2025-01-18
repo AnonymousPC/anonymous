@@ -3,21 +3,29 @@
 /// Global
 
 constexpr std::istream& operator >> ( std::istream& left, string_type auto& right )
-    requires same_as<right_value_type,char> and
-             ( right_type::ownership() )
+    requires ( right_type::ownership() )
 {
-    let tmp = right_device_type::template basic_string<char>();
-    left >> tmp;
-    right = std::move(tmp);
+    right.clear();
+    [[maybe_unused]] let entry = std::istream::sentry(left, false);
+    while ( true )
+    {
+        let buf = right_value_type(left.get());
+        if ( not std::isspace(buf) and not left.eof() )
+            right.push(buf);
+        else
+        {
+            left.unget();
+            break;
+        }
+    }
     return left;
 }
 
 constexpr std::ostream& operator << ( std::ostream& left, const string_type auto& right )
-    requires same_as<right_value_type,char>
 {
     using device = right_device_type;
-    let right_view = basic_string_view(right);
-    device::copy(right_view.begin(), right_view.end(), std::ostream_iterator<char>(left));
+    [[maybe_unused]] let entry = std::ostream::sentry(left);
+    device::copy(right.begin(), right.end(), std::ostream_iterator<right_value_type>(left));
     return left;
 }
 

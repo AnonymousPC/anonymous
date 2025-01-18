@@ -7,14 +7,24 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
+#include <boost/compute/iterator/buffer_iterator.hpp>
 using namespace ap;
-
 
 int main ( )
 {
-    string str = "Hello";
-    print(str == "Hello");
-    print(str * 3);
+    let task = std::execution::just()
+             | std::execution::bulk(10, [] (int i)
+                 {
+                     let str = basic_string<char,cpu>(1000, 'a');
+                     let str2 = str[1,500];
+                     let str3 = str2 * 1;
+                     let str4 = str2[1,10];
+                     let str5 = string(str4);
+                     print(str5);
+                 });
+        
+    std::execution::sync_wait(task);
+
 };
 
 

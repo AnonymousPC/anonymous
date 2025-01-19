@@ -17,7 +17,43 @@ class opencl::basic_string
         using const_iterator  = const boost::compute::buffer_iterator<type>;
 
     public: // Core
+        basic_string ( ) = default;
+        
+        basic_string ( const basic_string& init )
+            extends base ( init.size() )
+        {
+            boost::compute::copy(init.begin(), init.end(), self.begin(), execution_context.get_command_queue());
+            execution_context.get_command_queue().finish();
+        }
+
+        basic_string ( basic_string&& init )
+        {
+            self = std::move(init);
+        }
+
+        basic_string& operator = ( const basic_string& right )
+        {
+            base::resize(right.size(), execution_context.get_command_queue());
+            boost::compute::copy(right.begin(), right.end(), self.begin(), execution_context.get_command_queue());
+            execution_context.get_command_queue().finish();
+            return self;
+        }
+
+        basic_string& operator = ( basic_string&& right )
+        {
+            self.as_vector() = std::move(right.as_vector());
+            return self;
+        }
+
+    public: // Constructor
         using base::base;
+
+        basic_string ( const_pointer init_data, int init_size )
+        {
+            as_vector().resize(init_size, execution_context.get_command_queue());
+            boost::compute::copy(init_data, init_data + init_size, self.data(), execution_context.get_command_queue());
+            execution_context.get_command_queue().finish();
+        }
 
     public: // Member  
         pointer data ( )
@@ -32,26 +68,30 @@ class opencl::basic_string
 
         void resize ( int new_size )
         {
-            as_vector().resize(new_size);
+            as_vector().resize(new_size, execution_context.get_command_queue());
+            execution_context.get_command_queue().finish();
         }
 
         basic_string& erase ( int old_pos, int old_count )
         {
-            as_vector().erase(self.begin() + old_pos, self.begin() + old_pos + old_count);
+            as_vector().erase(self.begin() + old_pos, self.begin() + old_pos + old_count, execution_context.get_command_queue());
+            execution_context.get_command_queue().finish();
             return self;
         }
         
         basic_string& insert ( int new_pos, const_pointer new_data, int new_size )
         {
-            as_vector().insert(self.begin() + new_pos, new_data, new_data + new_size);
+            as_vector().insert(self.begin() + new_pos, new_data, new_data + new_size, execution_context.get_command_queue());
+            execution_context.get_command_queue().finish();
             return self;
         }
 
         basic_string& append ( const_pointer new_data, int new_size )
         {
             let old_size = self.size();
-            as_vector().resize(self.size() + new_size);
-            boost::compute::copy(new_data, new_data + new_size, self.begin() + old_size);
+            as_vector().resize(self.size() + new_size, execution_context.get_command_queue());
+            boost::compute::copy(new_data, new_data + new_size, self.begin() + old_size, execution_context.get_command_queue());
+            execution_context.get_command_queue().finish();
             return self;
         }
 

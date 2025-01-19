@@ -61,19 +61,19 @@ template < class type >                                   using          type_id
 
 template < class type >                                   using          iter_value                         = std::iter_value_t                      <type>;
 template < class type >                                   using          iter_reference                     = std::iter_reference_t                  <type>;
-template < class type >                                   using          iter_const_reference               = std::iter_const_reference_t            <type>;
+//template < class type >                                 using          iter_const_reference               = std::iter_const_reference_t            <type>;
 template < class type >                                   using          iter_rvalue_reference              = std::iter_rvalue_reference_t           <type>;
 template < class type >                                   using          iter_common_reference              = std::iter_common_reference_t           <type>;
 template < class type >                                   using          iter_difference                    = std::iter_difference_t                 <type>;
 template < class type >                                   using          range_value                        = std::ranges::range_value_t             <type>;
 template < class type >                                   using          range_reference                    = std::ranges::range_reference_t         <type>;
-template < class type >                                   using          range_const_reference              = std::ranges::range_const_reference_t   <type>;
+//template < class type >                                 using          range_const_reference              = std::ranges::range_const_reference_t   <type>;
 template < class type >                                   using          range_rvalue_reference             = std::ranges::range_rvalue_reference_t  <type>;
 template < class type >                                   using          range_difference                   = std::ranges::range_difference_t        <type>;                       
-template < class type >                                   using          range_iterator                     = std::ranges::range_iterator_t          <type>; 
-template < class type >                                   using          range_const_iterator               = std::ranges::range_const_iterator_t    <type>; 
-template < class type >                                   using          range_sentinel                     = std::ranges::range_sentinel_t          <type>; 
-template < class type >                                   using          range_const_sentinel               = std::ranges::range_const_sentinel_t    <type>; 
+template < class type >                                   using          range_iterator                     = std::ranges::iterator_t                <type>; 
+//template < class type >                                 using          range_const_iterator               = std::ranges::const_iterator_t          <type>; 
+template < class type >                                   using          range_sentinel                     = std::ranges::sentinel_t                <type>; 
+//template < class type >                                 using          range_const_sentinel               = std::ranges::const_sentinel_t          <type>; 
 
 template < class type >                                   constexpr int  tuple_size                         = std::tuple_size<type>::value;
 template < int index, class type >                        using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) otherwise std::size_t(index+int(std::tuple_size<type>::value)),type>::type;

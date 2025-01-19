@@ -7,12 +7,25 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
+#include <boost/compute/container/basic_string.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/system.hpp>
 using namespace ap;
 
 int main ( )
 {
-    std::vector<char> vct = { 'a', 'b', 'c', 'd' };
-    print ( vct | std::ranges::to<string>() );
+    let execution_context = std::execution::static_thread_pool(10);
+
+    let task = std::execution::schedule(execution_context.get_scheduler())
+             | std::execution::bulk(200, [] (int i)
+                 {
+                     let str = basic_string<char,opencl>(10000, 'a');
+                     str = str[1,5000];
+                     str = str[1,2500];
+                     let str2 = basic_string<char,cpu>(str);
+                     print(std::this_thread::get_id(), str2.size());
+                 });
+    std::execution::sync_wait(task);
 };
 
 

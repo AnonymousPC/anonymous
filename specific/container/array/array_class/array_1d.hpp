@@ -27,28 +27,31 @@ class array<type,1,device>
 
     public: // Core
         constexpr          array ( ) = default;
-        constexpr          array ( const array&  )                                                       requires copyable<type>;
+        constexpr          array ( const array&  )                                         requires copyable<type>;
         constexpr          array (       array&& );
-        constexpr          array& operator = ( const array&  )                                           requires copyable<type>;
+        constexpr          array& operator = ( const array&  )                             requires copyable<type>;
         constexpr          array& operator = (       array&& );
 
     public: // Constructor
         constexpr explicit array ( int );
-        constexpr          array ( int,  const type& )                                                   requires copyable<type>;
+        constexpr          array ( int,  const type& )                                     requires copyable<type>;
         constexpr          array ( int,  function_type<type()   > auto );
         constexpr          array ( int,  function_type<type(int)> auto );
-        constexpr          array ( const std::initializer_list<type>& )                                  requires copyable<type>;
-        constexpr          array ( const range<type>& )                                                  requires copyable<type>;
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r )                requires convertible_to<decltype(*r.begin()),type>;
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r, int )           requires convertible_to<decltype(*r.begin()),type>;
-
-    public: // Conversion (type)
-        template < class type2 > constexpr          array ( const array<type2,1,device>& )               requires convertible_to<type2,type>     but ( not same_as<type,type2>        );
-        template < class type2 > constexpr explicit array ( const array<type2,1,device>& )               requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
+        constexpr          array ( const std::initializer_list<type>& )                    requires copyable<type>;
+        constexpr          array ( const range<type>& )                                    requires copyable<type>;
+        constexpr          array ( std::from_range_t, input_range auto&& r )               requires convertible_to<range_value<decltype(r)>,type>;
+        constexpr          array ( std::from_range_t, input_range auto&& r, int )          requires convertible_to<range_value<decltype(r)>,type>;
 
     public: // Conversion (size)
-        template < int len >     constexpr          array ( const inplace_array<type,len,device> auto& );
-        template < int len >     constexpr          array ( const static_array <type,len,device> auto& );
+        template < int len > constexpr array ( const inplace_array<type,len,device> auto& );
+        template < int len > constexpr array ( const static_array <type,len,device> auto& );
+
+    public: // Conversion (type)
+        template < class type2 > constexpr          array ( const array<type2,1,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2>        );
+        template < class type2 > constexpr explicit array ( const array<type2,1,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
+
+    public: // Conversion (device)
+        template < class device2 > constexpr array ( const array<type,1,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>; 
 
     public: // Memebr
         constexpr static int                  dimension     ( );

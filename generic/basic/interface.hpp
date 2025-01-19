@@ -157,6 +157,7 @@
 #ifndef debug_symbol
     #define BOOST_DISABLE_ASSERTS
 #endif
+#define BOOST_COMPUTE_HAVE_THREAD_LOCAL
 #define BOOST_COMPUTE_THREAD_SAFE
 #define BOOST_COMPUTE_USE_CPP11
 #include <boost/asio.hpp>

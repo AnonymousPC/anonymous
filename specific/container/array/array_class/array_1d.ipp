@@ -3,27 +3,28 @@
 template < class type, class device >
 constexpr array<type,1,device>::array ( const array& init )
     requires copyable<type>
-    extends vector ( /*initialized latter*/ )
+
+    extends base ( /*initialized latter*/ )
 {
     if ( right.ownership() ) [[likely]]
-        vector::operator=(static_cast<const vector&>(right));
+        base::operator=(static_cast<const base&>(right));
     else
     {
-        vector::resize(right.size());
-        device::copy(right.begin(), right.end(), vector::begin());
+        base::resize(right.upper::size());
+        device::copy(right.upper::begin(), right.upper::end(), base::begin());
     }
 } 
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( array&& init )
-    extends vector ( /*initialized latter*/ )
+    extends base ( /*initialized latter*/ )
 {
-    if ( right.independent() ) [[likely]]
-        vector::operator=(static_cast<vector&&>(right));
+    if ( right.ownership() ) [[likely]]
+        base::operator=(static_cast<base&&>(right));
     else
     {
-        vector::resize(right.size());
-        device::move(right.begin(), right.end(), vector::begin());
+        base::resize(right.upper::size());
+        device::move(right.upper::begin(), right.upper::end(), base::begin());
     }
 }
 
@@ -31,22 +32,22 @@ template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& right )
     requires copyable<type>
 {
-    if ( independent() and right.independent() ) [[likely]]
-        vector::operator=(static_cast<const vector&>(right));
+    if ( ownership() and right.ownership() ) [[likely]]
+        base::operator=(static_cast<const base&>(right));
 
-    else if ( independent() and not right.independent() )
+    else if ( ownership() and not right.ownership() )
     {
-        vector::resize(right.size());
-        device::copy(right.begin(), right.end(), vector::begin());
+        base::resize(right.upper::size());
+        device::copy(right.begin(), right.end(), base::begin());
     }
 
-    else if ( not independent() and right.independent() )
+    else if ( not ownership() and right.ownership() )
     {
         #if debug
         if ( size() != right.size() )
             throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", size(), right.size());
         #endif
-        device::copy(right.vector::begin(), right.vector::end(), begin());
+        device::copy(right.base::begin(), right.base::end(), begin());
     }
 
     else /* if ( not independent() and not right.independent() ) */
@@ -64,25 +65,25 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
 template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right )
 {
-    if ( independent() and right.independent() ) [[likely]]
-        vector::operator=(static_cast<vector&&>(right));
+    if ( ownership() and right.ownership() ) [[likely]]
+        base::operator=(static_cast<base&&>(right));
 
-    else if ( independent() and not right.independent() )
+    else if ( ownership() and not right.ownership() )
     {
-        vector::resize(right.size());
-        device::move(right.begin(), right.end(), vector::begin());
+        base::resize(right.size());
+        device::move(right.begin(), right.end(), base::begin());
     }
 
-    else if ( not independent() and right.independent() )
+    else if ( not ownership() and right.ownership() )
     {
         #if debug
         if ( size() != right.size() )
             throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", size(), right.size());
         #endif
-        device::move(right.vector::begin(), right.vector::end(), begin());
+        device::move(right.base::begin(), right.base::end(), begin());
     }
     
-    else /* if ( not independent() and not right.independent() ) */
+    else /* if ( not ownership() and not right.ownership() ) */
     {
         #if debug
         if ( size() != right.size() )

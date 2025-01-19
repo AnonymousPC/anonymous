@@ -7,9 +7,6 @@
 // #include "specific/neural/interface.hpp"*
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
-#include <boost/compute/container/basic_string.hpp>
-#include <boost/compute/container/vector.hpp>
-#include <boost/compute/system.hpp>
 using namespace ap;
 
 int main ( )

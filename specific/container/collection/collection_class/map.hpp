@@ -2,8 +2,8 @@
 
 template < class type1, class type2, class compare, class device >
 class map
-    extends public device::template map<type1,type2,compare>,
-            public collection_algo<map<type1,type2,compare,device>,pair<const type1,type2>,compare,device>
+    extends protected device::template map<type1,type2,compare>,
+            public    collection_algo<map<type1,type2,compare,device>,pair<const type1,type2>,compare,device>
 {
     private: // Precondition
         static_assert ( not is_const<type1> and not is_volatile<type1> and not is_reference<type1> );

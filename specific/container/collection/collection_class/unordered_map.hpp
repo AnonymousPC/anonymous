@@ -2,8 +2,8 @@
 
 template < class type1, class type2, class hash, class device >
 class unordered_map
-    extends public device::template unordered_map<type1,type2,hash>,
-            public collection_algo<unordered_map<type1,type2,hash,device>,pair<const type1,type2>,hash,device>
+    extends protected device::template unordered_map<type1,type2,hash>,
+            public    collection_algo<unordered_map<type1,type2,hash,device>,pair<const type1,type2>,hash,device>
 {
     private: // Precondition
         static_assert ( not is_const<type1> and not is_volatile<type1> and not is_reference<type1> );

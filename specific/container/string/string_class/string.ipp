@@ -22,11 +22,36 @@ constexpr basic_string<type,device>::basic_string ( const type* init )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires requires { std::declval<basic_string>().push(*std::ranges::begin(r)); }
+constexpr basic_string<type,device>::basic_string ( std::from_range_t, input_range auto&& r )
+    requires convertible_to<range_value<decltype(r)>,type>
 {
-    for ( auto&& s in r )
-        push(std::forward<decltype(s)>(s));
+    if constexpr ( std::ranges::sized_range<decltype(r)> )
+    {
+        resize(std::ranges::size(r));
+        if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), begin()); } )
+            device::move(std::ranges::begin(r), std::ranges::end(r), begin());
+        else
+            std::ranges::move(std::ranges::begin(r), std::ranges::end(r), begin());
+    }
+    else
+        for ( auto&& s in r )
+            push(std::forward<decltype(s)>(s));
+}
+
+template < class type, class device >
+constexpr basic_string<type,device>::basic_string ( std::from_range_t, input_range auto&& r, int s )
+    requires convertible_to<range_value<decltype(r)>,type>
+{
+    #if debug
+    if constexpr ( std::ranges::sized_range<decltype(r)> )
+        if ( std::ranges::size(r) != s )
+            throw value_error("initialize string with amiguous size (with range_size = {}, explicit = {})", std::ranges::size(r), s);
+    #endif
+    resize(s);
+    if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), begin()); } )
+        device::move(std::ranges::begin(r), std::ranges::end(r), begin());
+    else
+        std::ranges::move(std::ranges::begin(r), std::ranges::end(r), begin());
 }
 
 template < class type, class device >

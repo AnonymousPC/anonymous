@@ -5,7 +5,7 @@ constexpr array<type,1,device>::array ( const array& init )
     requires copyable<type>
     extends vector ( /*initialized latter*/ )
 {
-    if ( right.independent() ) [[likely]]
+    if ( right.ownership() ) [[likely]]
         vector::operator=(static_cast<const vector&>(right));
     else
     {
@@ -157,7 +157,6 @@ constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_ra
         if ( r.size() < 0 )
             throw value_error("initialize array with negative size {}", r.size());
         #endif
-
         vector::resize(std::ranges::size(r));
         if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin()); } )
             device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin());
@@ -178,8 +177,7 @@ constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_ra
     if constexpr ( requires { std::ranges::size(r); } )
         if ( std::ranges::size(r) != init_size )
             throw value_error("initialize array with ambiguous size (with range_size = {}, explicit_size = {})", std::ranges::size(r), init_size);
-    #endif
-
+    #endif  
     if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin()); } )
         device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin());
     else

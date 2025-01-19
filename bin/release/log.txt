@@ -1,0 +1,320 @@
+In file included from generic/basic/common/common.hpp:3,
+                 from generic/basic/interface.hpp:313,
+                 from main.cpp:1:
+generic/basic/common/concept.hpp:70:190: error: 'us' does not name a type
+   70 | template < class type >                                   using          range_difference                   = std::ranges::range_difference_t        <type>;                                 us
+      |                                                                                                                                                                                              ^~
+generic/basic/common/concept.hpp:113:124: error: wrong number of template arguments (1, should be 2)
+  113 | template < class type >                                   concept        output_range                       = std::ranges::output_range              <type>;
+      |                                                                                                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ranges_algobase.h:38,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ranges_algo.h:38,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/algorithm:63,
+                 from generic/basic/interface.hpp:21:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ranges_base.h:583:13: note: provided for 'template<class _Range, class _Tp> concept std::ranges::output_range'
+  583 |     concept output_range
+      |             ^~~~~~~~~~~~
+In file included from specific/container/discrete/discrete_base/discrete_global.hpp:12,
+                 from specific/container/discrete/discrete.hpp:3,
+                 from specific/container/interface.hpp:223,
+                 from main.cpp:6:
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:10:36: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   10 |             if constexpr ( count < tuple_size<type> )
+      |                                    ^~~~~~~~~~
+      |                                    std::tuple_size
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/stl_pair.h:62,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/stl_algobase.h:64,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/algorithm:60:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:10:51: error: expected primary-expression before '>' token
+   10 |             if constexpr ( count < tuple_size<type> )
+      |                                                   ^
+specific/container/discrete/discrete_base/discrete_global.ipp:10:53: error: expected primary-expression before ')' token
+   10 |             if constexpr ( count < tuple_size<type> )
+      |                                                     ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:19:28: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   19 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                            ^~~~~~~~~~
+      |                            std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:19:44: error: expected primary-expression before '>' token
+   19 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                            ^
+specific/container/discrete/discrete_base/discrete_global.ipp:19:46: error: expected primary-expression before '==' token
+   19 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                              ^~
+specific/container/discrete/discrete_base/discrete_global.ipp:19:65: error: expected primary-expression before '>' token
+   19 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp:19:95: error: expected primary-expression before '>' token
+   19 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                               ^
+specific/container/discrete/discrete_base/discrete_global.ipp:19:97: error: expected primary-expression before ')' token
+   19 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:28:28: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   28 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                            ^~~~~~~~~~
+      |                            std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:28:44: error: expected primary-expression before '>' token
+   28 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                            ^
+specific/container/discrete/discrete_base/discrete_global.ipp:28:46: error: expected primary-expression before '==' token
+   28 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                              ^~
+specific/container/discrete/discrete_base/discrete_global.ipp:28:65: error: expected primary-expression before '>' token
+   28 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp:28:95: error: expected primary-expression before '>' token
+   28 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                               ^
+specific/container/discrete/discrete_base/discrete_global.ipp:28:97: error: expected primary-expression before ')' token
+   28 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:37:28: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   37 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                            ^~~~~~~~~~
+      |                            std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:37:44: error: expected primary-expression before '>' token
+   37 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                            ^
+specific/container/discrete/discrete_base/discrete_global.ipp:37:46: error: expected primary-expression before '==' token
+   37 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                              ^~
+specific/container/discrete/discrete_base/discrete_global.ipp:37:65: error: expected primary-expression before '>' token
+   37 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp:37:95: error: expected primary-expression before '>' token
+   37 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                               ^
+specific/container/discrete/discrete_base/discrete_global.ipp:37:97: error: expected primary-expression before ')' token
+   37 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:46:28: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   46 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                            ^~~~~~~~~~
+      |                            std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:46:44: error: expected primary-expression before '>' token
+   46 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                            ^
+specific/container/discrete/discrete_base/discrete_global.ipp:46:46: error: expected primary-expression before '==' token
+   46 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                              ^~
+specific/container/discrete/discrete_base/discrete_global.ipp:46:65: error: expected primary-expression before '>' token
+   46 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp:46:95: error: expected primary-expression before '>' token
+   46 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                               ^
+specific/container/discrete/discrete_base/discrete_global.ipp:46:97: error: expected primary-expression before ')' token
+   46 |             if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+      |                                                                                                 ^
+specific/container/discrete/discrete_base/discrete_global.ipp: At global scope:
+specific/container/discrete/discrete_base/discrete_global.ipp:66:9: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   66 |         tuple_size<type1> == tuple_size<type2> and
+      |         ^~~~~~~~~~
+      |         std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:66:25: error: expected primary-expression before '>' token
+   66 |         tuple_size<type1> == tuple_size<type2> and
+      |                         ^
+specific/container/discrete/discrete_base/discrete_global.ipp:66:27: error: expected primary-expression before '==' token
+   66 |         tuple_size<type1> == tuple_size<type2> and
+      |                           ^~
+specific/container/discrete/discrete_base/discrete_global.ipp:66:30: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   66 |         tuple_size<type1> == tuple_size<type2> and
+      |                              ^~~~~~~~~~
+      |                              std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:66:46: error: expected primary-expression before '>' token
+   66 |         tuple_size<type1> == tuple_size<type2> and
+      |                                              ^
+specific/container/discrete/discrete_base/discrete_global.ipp:67:9: error: label 'std' referenced outside of any function
+   67 |         std::same_as<tuple_element<count,type1>,tuple_element<count,type2>> and []
+      |         ^~~
+specific/container/discrete/discrete_base/discrete_global.ipp:73:10: error: expected ';' before '(' token
+   73 |         } ();
+      |          ^~
+      |          ;
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:79:36: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   79 |             if constexpr ( count < tuple_size<type1> )
+      |                                    ^~~~~~~~~~
+      |                                    std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:79:52: error: expected primary-expression before '>' token
+   79 |             if constexpr ( count < tuple_size<type1> )
+      |                                                    ^
+specific/container/discrete/discrete_base/discrete_global.ipp:79:54: error: expected primary-expression before ')' token
+   79 |             if constexpr ( count < tuple_size<type1> )
+      |                                                      ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:89:36: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   89 |             if constexpr ( count < tuple_size<type2> )
+      |                                    ^~~~~~~~~~
+      |                                    std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:89:52: error: expected primary-expression before '>' token
+   89 |             if constexpr ( count < tuple_size<type2> )
+      |                                                    ^
+specific/container/discrete/discrete_base/discrete_global.ipp:89:54: error: expected primary-expression before ')' token
+   89 |             if constexpr ( count < tuple_size<type2> )
+      |                                                      ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In lambda function:
+specific/container/discrete/discrete_base/discrete_global.ipp:99:36: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+   99 |             if constexpr ( count < tuple_size<type1> )
+      |                                    ^~~~~~~~~~
+      |                                    std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:99:52: error: expected primary-expression before '>' token
+   99 |             if constexpr ( count < tuple_size<type1> )
+      |                                                    ^
+specific/container/discrete/discrete_base/discrete_global.ipp:99:54: error: expected primary-expression before ')' token
+   99 |             if constexpr ( count < tuple_size<type1> )
+      |                                                      ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr void ap::detail::tuplewise_print_impl(auto:382&, const auto:383&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:190:33: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  190 |         if constexpr ( index != tuple_size<right_type> )
+      |                                 ^~~~~~~~~~
+      |                                 std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:190:54: error: expected primary-expression before '>' token
+  190 |         if constexpr ( index != tuple_size<right_type> )
+      |                                                      ^
+specific/container/discrete/discrete_base/discrete_global.ipp:190:56: error: expected primary-expression before ')' token
+  190 |         if constexpr ( index != tuple_size<right_type> )
+      |                                                        ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr bool ap::detail::tuplewise_equal_impl(const auto:384&, const auto:385&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:202:32: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  202 |         if constexpr ( index < tuple_size<left_type> )
+      |                                ^~~~~~~~~~
+      |                                std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:202:52: error: expected primary-expression before '>' token
+  202 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                    ^
+specific/container/discrete/discrete_base/discrete_global.ipp:202:54: error: expected primary-expression before ')' token
+  202 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                      ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr auto ap::detail::tuplewise_compare_impl(const auto:386&, const auto:387&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:211:32: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  211 |         if constexpr ( index < tuple_size<left_type> )
+      |                                ^~~~~~~~~~
+      |                                std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:211:52: error: expected primary-expression before '>' token
+  211 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                    ^
+specific/container/discrete/discrete_base/discrete_global.ipp:211:54: error: expected primary-expression before ')' token
+  211 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                      ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr void ap::detail::tuplewise_plus_impl(const auto:388&, const auto:389&, auto:390&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:230:32: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  230 |         if constexpr ( index < tuple_size<left_type > and
+      |                                ^~~~~~~~~~
+      |                                std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:230:53: error: expected primary-expression before '>' token
+  230 |         if constexpr ( index < tuple_size<left_type > and
+      |                                                     ^
+specific/container/discrete/discrete_base/discrete_global.ipp:231:53: error: expected primary-expression before '>' token
+  231 |                        index < tuple_size<right_type> )
+      |                                                     ^
+specific/container/discrete/discrete_base/discrete_global.ipp:231:55: error: expected primary-expression before ')' token
+  231 |                        index < tuple_size<right_type> )
+      |                                                       ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr void ap::detail::tuplewise_minus_impl(const auto:391&, const auto:392&, auto:393&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:240:32: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  240 |         if constexpr ( index < tuple_size<left_type > and
+      |                                ^~~~~~~~~~
+      |                                std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:240:53: error: expected primary-expression before '>' token
+  240 |         if constexpr ( index < tuple_size<left_type > and
+      |                                                     ^
+specific/container/discrete/discrete_base/discrete_global.ipp:241:53: error: expected primary-expression before '>' token
+  241 |                        index < tuple_size<right_type> )
+      |                                                     ^
+specific/container/discrete/discrete_base/discrete_global.ipp:241:55: error: expected primary-expression before ')' token
+  241 |                        index < tuple_size<right_type> )
+      |                                                       ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr void ap::detail::tuplewise_each_multiply_impl(const auto:394&, const auto:395&, auto:396&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:250:32: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  250 |         if constexpr ( index < tuple_size<left_type> )
+      |                                ^~~~~~~~~~
+      |                                std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:250:52: error: expected primary-expression before '>' token
+  250 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                    ^
+specific/container/discrete/discrete_base/discrete_global.ipp:250:54: error: expected primary-expression before ')' token
+  250 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                      ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr void ap::detail::tuplewise_multiply_each_impl(const auto:397&, const auto:398&, auto:399&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:259:32: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  259 |         if constexpr ( index < tuple_size<right_type> )
+      |                                ^~~~~~~~~~
+      |                                std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:259:53: error: expected primary-expression before '>' token
+  259 |         if constexpr ( index < tuple_size<right_type> )
+      |                                                     ^
+specific/container/discrete/discrete_base/discrete_global.ipp:259:55: error: expected primary-expression before ')' token
+  259 |         if constexpr ( index < tuple_size<right_type> )
+      |                                                       ^
+specific/container/discrete/discrete_base/discrete_global.ipp: In function 'constexpr void ap::detail::tuplewise_each_divide_impl(const auto:400&, const auto:401&, auto:402&)':
+specific/container/discrete/discrete_base/discrete_global.ipp:268:32: error: 'tuple_size' was not declared in this scope; did you mean 'std::tuple_size'?
+  268 |         if constexpr ( index < tuple_size<left_type> )
+      |                                ^~~~~~~~~~
+      |                                std::tuple_size
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/utility.h:49:12: note: 'std::tuple_size' declared here
+   49 |     struct tuple_size;
+      |            ^~~~~~~~~~
+specific/container/discrete/discrete_base/discrete_global.ipp:268:52: error: expected primary-expression before '>' token
+  268 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                    ^
+specific/container/discrete/discrete_base/discrete_global.ipp:268:54: error: expected primary-expression before ')' token
+  268 |         if constexpr ( index < tuple_size<left_type> )
+      |                                                      ^

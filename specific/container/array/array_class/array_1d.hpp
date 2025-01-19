@@ -2,8 +2,8 @@
 
 template < class type, class device >
 class array<type,1,device>
-    extends public  device::template vector<type>,
-            private detail::upper_array<type,1,device>
+    extends public device::template vector<type>,
+            public detail::upper_array<type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -11,8 +11,8 @@ class array<type,1,device>
         static_assert ( not same_as<type,bool> );
 
     private: // Base
-        using vector = device::template vector<type>;
-        using upper  = detail::upper_array<type,1,device>;
+        using base  = device::template vector<type>;
+        using upper = detail::upper_array<type,1,device>;
 
     public: // Typedef
         using  value_type      = base::value_type;
@@ -77,8 +77,8 @@ class array<type,1,device>
         constexpr array& erase  ( int, int );
 
     public: // Memory
-        constexpr bool independent ( ) const;
-        constexpr bool contiguous  ( ) const;
+        constexpr bool ownership  ( ) const;
+        constexpr bool contiguous ( ) const;
 };
 
 #include "array_1d.ipp"

@@ -30,9 +30,8 @@ namespace detail
                     try
                     {
                         // TODO: I currently have no environment to check it.
-                        thread_local auto cmd_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
-                        cmd_queue.enqueue_native_kernel(enqueue_callback, new task_type(task, tid), sizeof(task_type), 0, 0, 0);
-                        cmd_queue.flush();
+                        boost::compute::system::default_queue().enqueue_native_kernel(enqueue_callback, new task_type(task, tid), sizeof(task_type), 0, 0, 0);
+                        boost::compute::system::default_queue().flush();
                     }
                     catch ( const boost::compute::opencl_error& e )
                     {
@@ -40,13 +39,6 @@ namespace detail
                     }
                 else
                     throw_capatability_error();
-            }
-
-            static boost::compute::command_queue& get_command_queue ( )
-            {
-                // thread_local auto cmd_queue = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
-                // return cmd_queue;
-                return boost::compute::system::default_queue();
             }
 
         public: // Friend

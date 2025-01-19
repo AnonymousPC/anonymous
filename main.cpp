@@ -4,7 +4,7 @@
 // #include "generic/math/interface.hpp"
 // #include "specific/audio/interface.hpp"
 #include "specific/container/interface.hpp"
-// #include "specific/neural/interface.hpp"
+// #include "specific/neural/interface.hpp"*
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 #include <boost/compute/container/basic_string.hpp>

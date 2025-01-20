@@ -3,28 +3,27 @@
 template < class type, class device >
 constexpr array<type,1,device>::array ( const array& init )
     requires copyable<type>
-
-    extends base ( /*initialized latter*/ )
+    extends base ( /*initialized later*/ )
 {
-    if ( right.ownership() ) [[likely]]
-        base::operator=(static_cast<const base&>(right));
+    if ( init.ownership() ) [[likely]]
+        self.base::operator=(static_cast<const base&>(init));
     else
     {
-        base::resize(right.upper::size());
-        device::copy(right.upper::begin(), right.upper::end(), base::begin());
+        self.base::resize(init.upper::size());
+        device::copy(init.upper::begin(), init.upper::end(), self.base::begin());
     }
 } 
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( array&& init )
-    extends base ( /*initialized latter*/ )
+    extends base ( /*initialized later*/ )
 {
     if ( right.ownership() ) [[likely]]
-        base::operator=(static_cast<base&&>(right));
+        self.base::operator=(static_cast<base&&>(init));
     else
     {
-        base::resize(right.upper::size());
-        device::move(right.upper::begin(), right.upper::end(), base::begin());
+        self.base::resize(init.upper::size());
+        device::move(init.upper::begin(), init.upper::end(), self.base::begin());
     }
 }
 

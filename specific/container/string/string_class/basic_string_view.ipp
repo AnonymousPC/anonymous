@@ -22,13 +22,6 @@ constexpr basic_string_view<type,device>::basic_string_view ( const_pointer init
 }
 
 template < class type, class device >
-constexpr basic_string_view<type,device>::basic_string_view ( const string& cvt )
-    extends base ( cvt.data(), cvt.size() )
-{
-    
-}
-
-template < class type, class device >
 constexpr basic_string_view<type,device>::operator bool ( ) const
     requires same_as<type,char>
 {

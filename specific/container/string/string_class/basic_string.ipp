@@ -22,43 +22,16 @@ constexpr basic_string<type,device>::basic_string ( const type* init )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( std::from_range_t, input_range auto&& r )
-    requires convertible_to<range_value<decltype(r)>,type>
-{
-    if constexpr ( std::ranges::sized_range<decltype(r)> )
-    {
-        resize(std::ranges::size(r));
-        if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), begin()); } )
-            device::move(std::ranges::begin(r), std::ranges::end(r), begin());
-        else
-            std::ranges::move(std::ranges::begin(r), std::ranges::end(r), begin());
-    }
-    else
-        for ( auto&& s in r )
-            push(std::forward<decltype(s)>(s));
-}
-
-template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( std::from_range_t, input_range auto&& r, int s )
-    requires convertible_to<range_value<decltype(r)>,type>
-{
-    #if debug
-    if constexpr ( std::ranges::sized_range<decltype(r)> )
-        if ( std::ranges::size(r) != s )
-            throw value_error("initialize string with amiguous size (with range_size = {}, explicit = {})", std::ranges::size(r), s);
-    #endif
-    resize(s);
-    if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), begin()); } )
-        device::move(std::ranges::begin(r), std::ranges::end(r), begin());
-    else
-        std::ranges::move(std::ranges::begin(r), std::ranges::end(r), begin());
-}
-
-template < class type, class device >
 constexpr basic_string<type,device>::basic_string ( string_view cvt )
     extends base ( cvt.data(), cvt.size() )
 {
 
+}
+
+template < class type, class device >
+constexpr basic_string<type,device>::operator string_view ( ) const
+{
+    return string_view(data(), size());
 }
 
 template < class type, class device >
@@ -119,8 +92,8 @@ template < class type, class device >
 template < class device2 >
 constexpr basic_string<type,device>::basic_string ( const basic_string<type,device2>& cvt )
     requires same_as<device,cpu> or same_as<device2,cpu>
+    extends basic_string ( cvt.size(), '\0' )
 {
-    resize(cvt.size());
     if constexpr ( not same_as<device,cpu> )
         device::copy(cvt.begin(), cvt.end(), begin());
     else
@@ -131,8 +104,8 @@ template < class type, class device >
 template < class device2 >
 constexpr basic_string<type,device>::basic_string ( const basic_string_view<type,device2>& cvt )
     requires same_as<device,cpu> or same_as<device2,cpu>
+    extends basic_string ( cvt.size(), '\0' )
 {
-    resize(cvt.size());
     if constexpr ( not same_as<device,cpu> )
         device::copy(cvt.begin(), cvt.end(), begin());
     else

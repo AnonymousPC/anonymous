@@ -54,6 +54,7 @@
             template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                         class basic_string;      // Create data(). Create resize() and other resize-based functions.
             template < class type, class traits = std::char_traits<type> >                                                                                        class basic_string_view; // Create whole class.
          // template < class type, class alloc = allocator<type> >                                                                                                using deque              = unsupported;
+         // template < class type, int len >                                                                                                                      using inplace_vector     = unsupported;
          // template < class type, class alloc = allocator<type> >                                                                                                using list               = unsupported;
             template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>> >                             using map                = boost::compute::flat_map<type1,type2>;
          // template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using priority_queue     = unsupported;

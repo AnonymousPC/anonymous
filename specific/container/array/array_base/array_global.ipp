@@ -2,35 +2,6 @@
 
 namespace detail
 {
-
-
-    template < class type > 
-    struct to_array_view;
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    struct to_array_view<array<type,dim,device>>
-    {
-        private: 
-            std::vector<from_array_span<array<type,dim-1,device>>> row_views      = device::template vector<from_array_span<array<type,dim-1,device>>>();
-            std::vector<from_array_span<array<type,dim-1,device>>> column_views   = device::template vector<from_array_span<array<type,dim-1,device>>>();
-                        from_array_span<array<type,dim,  device>>  transpose_view =                         from_array_span<array<type,dim,  device>> ();
-
-        public: 
-            constexpr to_array_view ( array<type,dim,device>& arr )                      extends transpose_view ( arr ) { }
-            constexpr to_array_view ( array<type,dim,device>& arr, const auto&... args ) extends row_views      ( index_value_of<1  >(args...), arr ),
-                                                                                                 column_views   ( index_value_of<dim>(args...), arr ),
-                                                                                                 transpose_view ( arr ) { }
-        
-        public: 
-            constexpr       array<type,dim-1,device>& to_row       ( int p )       { return static_cast<      array<type,dim-1,device>&>(row_views   [p-1]); } // TODO: index starts from 0.
-            constexpr const array<type,dim-1,device>& to_row       ( int p ) const { return static_cast<const array<type,dim-1,device>&>(row_views   [p-1]); } 
-            constexpr       array<type,dim-1,device>& to_column    ( int p )       { return static_cast<      array<type,dim-1,device>&>(column_views[p-1]); } // TODO: index starts from 0.
-            constexpr const array<type,dim-1,device>& to_column    ( int p ) const { return static_cast<const array<type,dim-1,device>&>(column_views[p-1]); } 
-            constexpr       array<type,dim,  device>& to_transpose ( )             { return static_cast<      array<type,dim,  device>&>(transpose_view);    }
-            constexpr const array<type,dim,  device>& to_transpose ( )       const { return static_cast<const array<type,dim,  device>&>(transpose_view);    }
-    };
-
     template < class type, class... types >
     constexpr bool ints_until_last_func = []
     {

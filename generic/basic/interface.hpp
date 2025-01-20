@@ -16,74 +16,66 @@
 #endif
 
 // Include [[std]]
-#if defined(__GNUC__) and not defined(__clang__)
-    #define __cpp_lib_text_encoding 202501L
-    #include <algorithm>
-    #include <cassert>
-    #include <charconv>
-    #include <chrono>
-    #include <concepts>
-    #include <csignal>
-    #include <execution>
-    #include <filesystem>
-    #include <format>
-    #include <fstream>
-    #include <iostream>
-    #include <iomanip>
-    #include <map>
-    #include <new>
-    #include <numbers>
-    #include <print>
-    #include <ranges>
-    #include <regex>
-    #include <set>
-    #include <stdfloat>
-    #include <string>
-    #include <text_encoding>
-    #include <thread>
-    #include <unordered_map>
-    #include <unordered_set>
-    #include <utility>
-    #include "libstdc++/mdspan.hpp"
-    #include "libstdc++/text_encoding.hpp"
-    #if __cpp_lib_stacktrace
-        #include <stacktrace>
-    #else
-        #include "std/stacktrace.hpp"
-    #endif
-#elifdef __clang__
-    #include <algorithm>
-    #include <cassert>
-    #include <charconv>
-    #include <chrono>
-    #include <concepts>
-    #include <csignal>
-    #include <execution>
-    #include <filesystem>
-    #include <format>
-    #include <fstream>
-    #include <iostream>
-    #include <iomanip>
-    #include <map>
+#include <algorithm>
+#include <cassert>
+#include <charconv>
+#include <chrono>
+#include <concepts>
+#include <csignal>
+#include <execution>
+#include <filesystem>
+#include <format>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <map>
+#include <new>
+#include <numbers>
+#include <print>
+#include <ranges>
+#include <regex>
+#include <set>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+
+// Include [[std.feature]]
+#ifdef __cpp_lib_inplace_vector
+    #include <inplace_vector>
+#else
+    #include "std/inplace_vector.hpp"
+#endif
+#ifdef __cpp_lib_mdspan
     #include <mdspan>
-    #include <new>
-    #include <numbers>
-    #include <print>
-    #include <ranges>
-    #include <regex>
-    #include <set>
-    #include <string>
-    #include <thread>
-    #include <unordered_map>
-    #include <unordered_set>
-    #include <utility>
-    #include "libc++/ranges.hpp"
-    #include "libc++/text_encoding.hpp"
-    #if __cpp_lib_stacktrace
-        #include <stacktrace>
-    #else
-        #include "std/stacktrace.hpp"
-    #endif
+#else
+    #include "std/mdspan.hpp"
+#endif
+#ifdef __cpp_lib_stacktrace
+    #include <stacktrace>
+#else
+    #include "std/stacktrace.hpp"
+#endif
+#ifdef __STDCPP_FLOAT16_T__ 
+    #include <stdfloat>
+#endif
+#ifdef __cpp_lib_text_encoding
+    #include <text_encoding>
+#else
+    #include "std/text_encoding.hpp"
+#endif
+#ifndef __cpp_lib_is_layout_compatible
+    #include "std/is_layout_compatible.hpp"
+#endif
+#ifndef __cpp_lib_ranges_chunk
+    #include "std/ranges_chunk.hpp"
+#endif
+#ifndef __cpp_lib_ranges_join_with
+    #include "std/ranges_join_with.hpp"
+#endif
+#ifndef __cpp_lib_ranges_stride
+    #include "std/ranges_stride.hpp"
 #endif
 
 // Include [[std.experimental.execution]]

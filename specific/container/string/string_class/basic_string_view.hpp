@@ -36,9 +36,6 @@ class basic_string_view
         constexpr basic_string_view ( const_pointer );
         constexpr basic_string_view ( const_pointer, int );
 
-    public: // Conversion (view)
-        constexpr basic_string_view ( const string& );
-
     public: // Conversion (other)
                                        constexpr explicit operator bool  ( ) const requires same_as<type,char>;
         template < number_type type2 > constexpr explicit operator type2 ( ) const requires same_as<type,char>;

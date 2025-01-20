@@ -46,21 +46,12 @@ constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::oper
 template < class type1, class type2, class compare, class device >
 constexpr map<type1,type2,compare,device>::map ( std::initializer_list<pair<const type1,type2>> init )
     requires copyable<type1> and copyable<type2>
-    extends base   ( /*initialized later*/ ),
+    extends base   ( /* not forwardable, as base only accepts std::pair */ ),
             k_view ( self ),
             v_view ( self )
 {
     for ( const auto& [k, v] in init )
         self[k] = v;
-}
-
-template < class type1, class type2, class compare, class device >
-constexpr map<type1,type2,compare,device>::map ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires requires { std::declval<map>()[get<0>(*std::ranges::begin(r))] = get<1>(*std::ranges::begin(r)); }
-    extends map ( )
-{
-    for ( auto&& [k, v] in r )
-        self[std::forward<decltype(k)>(k)] = std::forward<decltype(v)>(v);
 }
 
 template < class type1, class type2, class compare, class device >

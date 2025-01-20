@@ -9,9 +9,22 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+struct test
+{
+    test() = default;
+    test(const test&) = delete;
+    test(test&&) = delete;
+};
+
+test func()
+{
+    return test();
+}
+
 int main ( )
 {
-    std::vector<int>{1, 2, 3} | std::views:transform([] (const auto& a) { return a.size(); }) | std::ranges::to<std::map<int,int>>();
+    let arr = static_array<int,3,opencl>{1, 2, 3};
+    std::for_each(arr.begin(), arr.end(), print);
 };
 
 

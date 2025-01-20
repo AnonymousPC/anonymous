@@ -2,8 +2,8 @@
 
 template < class type1, class type2, class hash, class device >
 class unordered_map
-    extends protected device::template unordered_map<type1,type2,hash>,
-            public    collection_algo<unordered_map<type1,type2,hash,device>,pair<const type1,type2>,hash,device>
+    extends public device::template unordered_map<type1,type2,hash>,
+            public collection_algo<unordered_map<type1,type2,hash,device>,pair<const type1,type2>,hash,device>
 {
     private: // Precondition
         static_assert ( not is_const<type1> and not is_volatile<type1> and not is_reference<type1> );
@@ -50,8 +50,7 @@ class unordered_map
         constexpr unordered_map& operator = (       unordered_map&& );
 
     public: // Constructor
-        constexpr          unordered_map ( std::initializer_list<pair<const type1,type2>> )       requires copyable<type1> and copyable<type2>;
-        constexpr explicit unordered_map ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<unordered_map>()[get<0>(*std::ranges::begin(r))] = get<1>(*std::ranges::begin(r)); };
+        constexpr unordered_map ( std::initializer_list<pair<const type1,type2>> ) requires copyable<type1> and copyable<type2>;
 
     public: // Conversion 
         template < class type3, class type4, class hash2 > constexpr          unordered_map ( const unordered_map<type3,type4,hash2,device>& ) requires convertible_to    <type3,type1> and convertible_to    <type4,type2> but ( not same_as       <type1,type3> or not same_as       <type2,type4> );

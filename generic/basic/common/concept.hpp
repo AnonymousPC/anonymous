@@ -108,6 +108,7 @@ template < class type1, class type2 >                     concept        swappab
 template < class type1, class type2 >                     concept        nothrow_swappable_with             = std::swappable_with                    <type1,type2>      and std::is_nothrow_swappable_with<type1,type2>::value;
 template < class type1, class type2 >                     concept        common_with                        = std::common_with                       <type1,type2>;
 template < class type1, class type2 >                     concept        common_reference_with              = std::common_reference_with             <type1,type2>;
+template < class type1, class type2 >                     concept        layout_compatible_with             = std::is_layout_compatible              <type1,type2>::value;
 
 template < class type >                                   concept        input_iterator                     = std::input_iterator                    <type>;
 template < class type >                                   concept        output_iterator                    = std::input_or_output_iterator          <type>;

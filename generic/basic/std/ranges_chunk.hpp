@@ -1,7 +1,6 @@
 #pragma once
 
 namespace std {
-inline namespace __1 { 
 namespace ranges {
 
     template<typename _Tp>
@@ -550,5 +549,4 @@ namespace ranges {
   }
 
 } // namespace ranges
-} // namespace __1
 } // namespace std

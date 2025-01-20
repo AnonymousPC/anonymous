@@ -18,7 +18,7 @@ template < class type, class device >
 constexpr array<type,1,device>::array ( array&& init )
     extends base ( /*initialized later*/ )
 {
-    if ( right.ownership() ) [[likely]]
+    if ( init.ownership() ) [[likely]]
         self.base::operator=(static_cast<base&&>(init));
     else
     {
@@ -31,31 +31,31 @@ template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& right )
     requires copyable<type>
 {
-    if ( ownership() and right.ownership() ) [[likely]]
-        base::operator=(static_cast<const base&>(right));
+    if ( self.ownership() and right.ownership() ) [[likely]]
+        self.base::operator=(static_cast<const base&>(right));
 
-    else if ( ownership() and not right.ownership() )
+    else if ( self.ownership() and not right.ownership() )
     {
-        base::resize(right.upper::size());
-        device::copy(right.begin(), right.end(), base::begin());
+        self.base::resize(right.upper::size());
+        device::copy(right.begin(), right.end(), self.base::begin());
     }
 
-    else if ( not ownership() and right.ownership() )
+    else if ( not self.ownership() and right.ownership() )
     {
         #if debug
-        if ( size() != right.size() )
-            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", size(), right.size());
+        if ( self.upper::size() != right.base::size() )
+            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.base::size());
         #endif
-        device::copy(right.base::begin(), right.base::end(), begin());
+        device::copy(right.base::begin(), right.base::end(), self.upper::begin());
     }
 
-    else /* if ( not independent() and not right.independent() ) */
+    else /* if ( not self.ownership() and not right.ownership() ) */
     {
         #if debug
-        if ( size() != right.size() )
-            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", size(), right.size());
+        if ( self.upper::size() != right.upper::size() )
+            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.upper::size());
         #endif
-        device::copy(right.begin(), right.end(), begin());
+        device::copy(right.upper::begin(), right.upper::end(), self.upper::begin());
     }
 
     return self;
@@ -64,31 +64,31 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
 template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right )
 {
-    if ( ownership() and right.ownership() ) [[likely]]
-        base::operator=(static_cast<base&&>(right));
+    if ( self.ownership() and right.ownership() ) [[likely]]
+        self.base::operator=(static_cast<base&&>(right));
 
-    else if ( ownership() and not right.ownership() )
+    else if ( self.ownership() and not right.ownership() )
     {
-        base::resize(right.size());
-        device::move(right.begin(), right.end(), base::begin());
+        self.base::resize(right.upper::size());
+        device::move(right.begin(), right.end(), self.base::begin());
     }
 
-    else if ( not ownership() and right.ownership() )
+    else if ( not self.ownership() and right.ownership() )
     {
         #if debug
-        if ( size() != right.size() )
-            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", size(), right.size());
+        if ( self.upper::size() != right.base::size() )
+            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.base::size());
         #endif
-        device::move(right.base::begin(), right.base::end(), begin());
+        device::move(right.base::begin(), right.base::end(), self.upper::begin());
     }
-    
-    else /* if ( not ownership() and not right.ownership() ) */
+
+    else /* if ( not self.ownership() and not right.ownership() ) */
     {
         #if debug
-        if ( size() != right.size() )
-            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", size(), right.size());
+        if ( self.upper::size() != right.upper::size() )
+            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.upper::size());
         #endif
-        device::move(right.begin(), right.end(), begin());
+        device::move(right.upper::begin(), right.upper::end(), self.upper::begin());
     }
 
     return self;
@@ -97,7 +97,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size )
-    extends vector ( init_size )
+    extends base ( init_size )
 {
     #if debug
     if ( init_size < 0 )
@@ -108,7 +108,7 @@ constexpr array<type,1,device>::array ( int init_size )
 template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size, const type& init_value )
     requires copyable<type>
-    extends vector ( init_size, init_value )
+    extends base ( init_size, init_value )
 {
     #if debug
     if ( init_size < 0 )
@@ -119,7 +119,7 @@ constexpr array<type,1,device>::array ( int init_size, const type& init_value )
 template < class type, class device >
 constexpr array<type,1,device>::array ( const std::initializer_list<type>& init )
     requires copyable<type>
-    extends vector ( init )
+    extends base ( init )
 {
 
 }
@@ -128,7 +128,7 @@ template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size, const function_type<type()> auto init_value )
     extends array ( init_size )
 {
-    device::generate(vector::begin(), vector::end(), init_value);
+    device::generate(self.base::begin(), self.base::end(), init_value);
 }
 
 template < class type, class device >
@@ -140,48 +140,35 @@ constexpr array<type,1,device>::array ( int init_size, const function_type<type(
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( const range<type>& init )
+constexpr array<type,1,device>::array ( std::initializer_list<type> init )
     requires copyable<type>
-    extends array ( init.size() )
+    extends base ( std::forward<decltype(init)>(init) )
 {
-    device::copy(init.begin(), init.end(), vector::begin());
+    
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires convertible_to<decltype(*r.begin()),type>
+constexpr array<type,1,device>::array ( range<type> init )
+    requires copyable<type>
+    extends base ( init.begin(), init.end() )
 {
-    if constexpr ( requires { std::ranges::size(r); } )
-    {
-        #if debug
-        if ( r.size() < 0 )
-            throw value_error("initialize array with negative size {}", r.size());
-        #endif
-        vector::resize(std::ranges::size(r));
-        if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin()); } )
-            device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin());
-        else
-            std::ranges::move(r, vector::begin());
-    }
-    else
-        for ( auto&& val in r )
-            vector::push_back(std::forward<decltype(val)>(val));
+
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( std::from_range_t, std::ranges::input_range auto&& r, int init_size )
-    requires convertible_to<decltype(*r.begin()),type>
-    extends array ( init_size )
+template < int len >
+constexpr array<type,1,device>::array ( const inplace_array<type,len,device>& cvt )
+    extends array ( cvt.size() )
 {
-    #if debug
-    if constexpr ( requires { std::ranges::size(r); } )
-        if ( std::ranges::size(r) != init_size )
-            throw value_error("initialize array with ambiguous size (with range_size = {}, explicit_size = {})", std::ranges::size(r), init_size);
-    #endif  
-    if constexpr ( requires { device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin()); } )
-        device::move(std::ranges::begin(r), std::ranges::end(r), vector::begin());
-    else
-        std::ranges::move(r, vector::begin());
+    device::copy(cvt.begin(), cvt.end(), self.base::begin());
+}
+
+template < class type, class device >
+template < int len >
+constexpr array<type,1,device>::array ( const static_array<type,len,device>& cvt )
+    extends array ( cvt.size() )
+{
+    device::copy(cvt.begin(), cvt.end(), self.base::begin());
 }
 
 template < class type, class device >
@@ -190,10 +177,10 @@ constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
     requires convertible_to<type2,type> but ( not same_as<type,type2> )
     extends array ( cvt.size() )
 {
-    if ( cvt.independent() ) [[likely]]
-        device::transform(cvt.array<type2,1,device>::vector::begin(), cvt.array<type2,1,device>::vector::end(), vector::begin(), [] (const auto& val) { return type(val); });
+    if ( cvt.ownership() ) [[likely]]
+        device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
     else
-        device::transform(cvt.begin(), cvt.end(), vector::begin(), [] (const auto& val) { return type(val); });
+        device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
@@ -202,28 +189,28 @@ constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
     requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
     extends array ( cvt.size() )
 {
-    if ( cvt.independent() ) [[likely]]
-        device::transform(cvt.array<type2,1,device>::vector::begin(), cvt.array<type2,1,device>::vector::end(), vector::begin(), [] (const auto& val) { return type(val); });
+    if ( cvt.ownership() ) [[likely]]
+        device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
     else
-        device::transform(cvt.begin(), cvt.end(), vector::begin(), [] (const auto& val) { return type(val); });
+        device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
-template < int len >
-constexpr array<type,1,device>::array ( const inplace_array<type,len,device>& cvt )
-    requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
+template < class device2 >
+constexpr array<type,1,device>::array ( const array<type,1,device2>& cvt )
+    requires same_as<device,cpu> or same_as<device2,cpu>
     extends array ( cvt.size() )
 {
-    device::copy(cvt.begin(), cvt.end(), vector::begin());
-}
-
-template < class type, class device >
-template < int len >
-constexpr array<type,1,device>::array ( const static_array<type,len,device>& cvt )
-    requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
-    extends array ( cvt.size() )
-{
-    device::copy(cvt.begin(), cvt.end(), vector::begin());
+    if constexpr ( not same_as<device,cpu> )
+        if ( cvt.ownership() ) [[likely]]
+            device::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
+        else
+            device::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+    else
+        if ( cvt.ownership() ) [[likely]]
+            device2::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
+        else
+            device2::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
 }
 
 template < class type, class device >
@@ -235,10 +222,19 @@ constexpr int array<type,1,device>::dimension ( )
 template < class type, class device >
 constexpr int array<type,1,device>::size ( ) const
 {
-    if ( independent() ) [[likely]]
-        return vector::size();
+    if ( ownership() ) [[likely]]
+        return base::size();
     else
         return upper::size();
+}
+
+template < class type, class device >
+constexpr int array<type,1,device>::capacity ( ) const
+{
+    if ( ownership() ) [[likely]]
+        return base::capacity();
+    else
+        throw value_error("cannot get memory capacity from array: it does not own its data");
 }
 
 template < class type, class device >
@@ -247,23 +243,23 @@ constexpr array<int> array<type,1,device>::shape ( ) const
     return { size() };
 }
 
-// template < class type, class device >
-// constexpr static_array<int,1> array<type,1,device>::static_shape ( ) const
-// {
-//     return { size() };
-// }
+template < class type, class device >
+constexpr inplace_array<int,1> array<type,1,device>::inplace_shape ( ) const
+{
+    return { size() };
+}
 
-// template < class type, class device >
-// constexpr inplace_array<int,1> array<type,1,device>::inplace_shape ( ) const
-// {
-//     return { size() };
-// }
+template < class type, class device >
+constexpr static_array<int,1> array<type,1,device>::static_shape ( ) const
+{
+    return { size() };
+}
 
 template < class type, class device >
 constexpr bool array<type,1,device>::empty ( ) const
 {
-    if ( independent() ) [[likely]]
-        return vector::empty();
+    if ( ownership() ) [[likely]]
+        return base::empty();
     else
         return upper::empty();
 }
@@ -271,38 +267,30 @@ constexpr bool array<type,1,device>::empty ( ) const
 template < class type, class device >
 constexpr array<type,1,device>::pointer array<type,1,device>::data ( )
 {
-    if constexpr ( requires { { vector::data() } -> convertible_to<const_pointer>; } )
-        if ( independent() ) [[likely]]
-            return vector::data();
-        else if ( ( upper::category() == upper::row_category    and same_as<typename device::layout_type,std::layout_right> ) or 
-                  ( upper::category() == upper::column_category and same_as<typename device::layout_type,std::layout_left > ) )
-            return begin();
-        else
-            throw logic_error("cannot get native data from array: it does not own its data, and the borrowed data might be not contiguous");
+    if ( ownership() ) [[likely]]
+        return base::data();
+    else if ( contiguous() )
+        return upper::data();
     else
-        static_assert(false, "cannot get native data from array: not supported on this device");
+        throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data might be not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_pointer array<type,1,device>::data ( ) const
 {
-    if constexpr ( requires { { vector::data() } -> convertible_to<const_pointer>; } )
-        if ( independent() ) [[likely]]
-            return vector::data();
-        else if ( ( upper::category() == upper::row_category    and same_as<typename device::layout_type,std::layout_right> ) or 
-                  ( upper::category() == upper::column_category and same_as<typename device::layout_type,std::layout_left > ) )
-            return begin();
-        else
-            throw logic_error("cannot get native data from array: it does not own its data, and the borrowed data might be not contiguous");
+    if ( ownership() ) [[likely]]
+        return base::data();
+    else if ( contiguous() )
+        return upper::data();
     else
-        static_assert(false, "cannot get native data from array: not supported on this device");
+        throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data might be not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::begin ( )
 {
-    if ( independent() ) [[likely]]
-        return iterator(vector::begin());
+    if ( ownership() ) [[likely]]
+        return base::begin();
     else
         return upper::begin();
 }
@@ -310,8 +298,8 @@ constexpr array<type,1,device>::iterator array<type,1,device>::begin ( )
 template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::begin ( ) const
 {
-    if ( independent() ) [[likely]]
-        return const_iterator(vector::begin());
+    if ( ownership() ) [[likely]]
+        return base::begin();
     else
         return upper::begin();
 }
@@ -319,8 +307,8 @@ constexpr array<type,1,device>::const_iterator array<type,1,device>::begin ( ) c
 template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::end ( )
 {
-    if ( independent() ) [[likely]]
-        return iterator(vector::end());
+    if ( ownership() ) [[likely]]
+        return base::end();
     else
         return upper::end();
 }
@@ -328,52 +316,54 @@ constexpr array<type,1,device>::iterator array<type,1,device>::end ( )
 template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::end ( ) const
 {
-    if ( independent() ) [[likely]]
-        return const_iterator(vector::end());
+    if ( ownership() ) [[likely]]
+        return base::end();
     else
         return upper::end();
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::reference array<type,1,device>::operator [] ( int auto pos )
+constexpr array<type,1,device>::reference array<type,1,device>::operator [] ( int pos )
 {
     #if debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    if ( independent() ) [[likely]]
-        return pos >= 0 ? vector::operator[](pos-1) otherwise
-                          vector::operator[](pos+size());
+    if ( ownership() ) [[likely]]
+        return pos >= 0 ? base::operator[](pos-1) otherwise
+                          base::operator[](pos+base::size());
     else
-        return upper::operator[](pos);
+        return pos >= 0 ? upper::operator[](pos-1) otherwise
+                          upper::operator[](pos+upper::size());
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::const_reference array<type,1,device>::operator [] ( int auto pos ) const
+constexpr array<type,1,device>::const_reference array<type,1,device>::operator [] ( int pos ) const
 {
     #if debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    if ( independent() ) [[likely]]
-        return pos >= 0 ? vector::operator[](pos-1) otherwise
-                          vector::operator[](pos+size());
+    if ( ownership() ) [[likely]]
+        return pos >= 0 ? base::operator[](pos-1) otherwise
+                          base::operator[](pos+base::size());
     else
-        return upper::operator[](pos);
+        return pos >= 0 ? upper::operator[](pos-1) otherwise
+                          upper::operator[](pos+upper::size());
 }
 
 template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::clear ( )
 {
     #if debug
-    if ( not independent() ) [[unlikely]]
+    if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot clear array: it does not own its data");
     #endif
 
-    vector::clear();
-    vector::shrink_to_fit();
+    base::clear();
+    base::shrink_to_fit();
     return self;
 }
 
@@ -381,13 +371,13 @@ template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::resize ( int new_size )
 {
     #if debug
-    if ( not independent() ) [[unlikely]]
+    if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot resize array: it does not own its data");
     if ( new_size < 0 )
         throw value_error("resize array with negative size {}", new_size);
     #endif
 
-    vector::resize(new_size);
+    base::resize(new_size);
     return self;
 }
 
@@ -395,11 +385,11 @@ template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::push ( type new_value )
 {
     #if debug
-    if ( not independent() ) [[unlikely]]
+    if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot push into array: it does not own its data");
     #endif
 
-    vector::push_back(std::move(new_value));
+    base::push_back(std::move(new_value));
     return self;
 }
 
@@ -407,54 +397,60 @@ template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::pop ( int old_pos )
 {
     #if debug
-    if ( not independent() ) [[unlikely]]
+    if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot pop from array: it does not own its data");
-    if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
-        throw index_error("index {} is out of range with size {}", old_pos, size());
+    if ( old_pos < -base::size() or old_pos == 0 or old_pos > base::size() )
+        throw index_error("index {} is out of range with size {}", old_pos, base::size());
     #endif
 
-    vector::erase(old_pos >= 0 ? vector::begin() + old_pos - 1 otherwise vector::begin() + old_pos + size());
+    base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 otherwise base::begin() + old_pos + base::size());
 }
 
 template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::insert ( int new_pos, type new_value )
 {
     #if debug
-    if ( not independent() ) [[unlikely]]
+    if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot insert into array: it does not own its data");
-    if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
-        throw index_error("index {} is out of range with size {}", new_pos, size());
+    if ( new_pos < -base::size() or new_pos == 0 or new_pos > base::size() )
+        throw index_error("index {} is out of range with size {}", new_pos, base::size());
     #endif
     
-    vector::insert(new_pos >= 0 ? vector::begin() + new_pos - 1 otherwise vector::begin() + new_pos + size(), std::move(new_value));
+    base::insert(new_pos >= 0 ? base::begin() + new_pos - 1 otherwise base::begin() + new_pos + base::size(), std::move(new_value));
 }
 
 template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int old_pos_2 )
 {
     #if debug
-    if ( not independent() ) [[unlikely]]
+    if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot erase from array: it does not own its data");
     #endif
 
-    let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size();
-    let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size();
+    let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + base::size();
+    let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + base::size();
 
     #if debug
-    if ( ( ( p1 < 1 or p1 > size() ) or
-           ( p2 < 1 or p2 > size() ) )
+    if ( ( ( p1 < 1 or p1 > base::size() ) or
+           ( p2 < 1 or p2 > base::size() ) )
     and not // Except for below:
-         ( ( p1 == size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
-        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
+         ( ( p1 == base::size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
+        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, base::size());
     #endif
 
-    vector::erase(vector::begin() + p1 - 1, vector::begin() + p2 - 1);
+    base::erase(base::begin() + p1 - 1, base::begin() + p2 - 1);
 }
 
 template < class type, class device >
-constexpr bool array<type,1,device>::independent ( ) const
+constexpr bool array<type,1,device>::ownership ( ) const
 {
-    return upper::independent();
+    return upper::ownership();
+}
+
+template < class type, class device >
+constexpr bool array<type,1,device>::contiguous ( ) const
+{
+    return ownership() or upper::contiguous();
 }
 
 template < class type, class device >
@@ -471,11 +467,11 @@ class array<type,1,device>::iterator
         int  step = 1;
 
     public: // Typedef
-        using iterator_concept = common_type<typename std::iterator_traits<base>::iterator_category,std::random_access_iterator_tag>;
-        using value_type       = decay<typename std::iterator_traits<base>::reference>;
-        using reference        = std::iterator_traits<base>::reference;
-        using pointer          = std::iterator_traits<base>::pointer;
-        using difference_type  = std::iterator_traits<base>::difference_type;
+        using iterator_concept = std::random_access_iterator_tag;
+        using value_type       = device::template value_type<type>;
+        using reference        = device::template reference <type>;
+        using pointer          = device::template pointer   <type>;
+        using difference_type  = base::difference_type;
 
     public: // Core
         constexpr iterator ( ) = default;
@@ -514,11 +510,11 @@ class array<type,1,device>::const_iterator
         int  step = 1;
 
     public: // Typedef
-        using iterator_concept = common_type<typename std::iterator_traits<base>::iterator_category,std::random_access_iterator_tag>;
-        using value_type       = decay<typename std::iterator_traits<base>::reference>;
-        using reference        = std::iterator_traits<base>::reference;
-        using pointer          = std::iterator_traits<base>::pointer;
-        using difference_type  = std::iterator_traits<base>::difference_type;
+        using iterator_concept = std::random_access_iterator_tag;
+        using value_type       = device::template value_type     <type>;
+        using reference        = device::template const_reference<type>;
+        using pointer          = device::template const_pointer  <type>;
+        using difference_type  = base::difference_type;
 
     public: // Core
         constexpr const_iterator ( ) = default;

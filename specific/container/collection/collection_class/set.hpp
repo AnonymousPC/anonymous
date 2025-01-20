@@ -32,8 +32,7 @@ class set
         constexpr set& operator = (       set&& )                         = default;
 
     public: // Constructor
-        constexpr          set ( std::initializer_list<type> )                          requires copyable<type>;
-        constexpr explicit set ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<set>().push(*std::ranges::begin(r)); };
+        constexpr set ( std::initializer_list<type> ) requires copyable<type>;
 
     public: // Member
         constexpr int            size     ( )             const;

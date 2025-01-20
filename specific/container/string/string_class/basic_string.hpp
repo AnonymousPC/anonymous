@@ -35,11 +35,10 @@ class basic_string
         constexpr basic_string ( type );
         constexpr basic_string ( int, type );
         constexpr basic_string ( const type* );
-        constexpr basic_string ( std::from_range_t, input_range auto&& r )      requires convertible_to<range_value<decltype(r)>,type>;
-        constexpr basic_string ( std::from_range_t, input_range auto&& r, int ) requires convertible_to<range_value<decltype(r)>,type>;
 
     public: // Conversion (view)
         constexpr basic_string ( string_view );
+        constexpr operator       string_view ( ) const;
 
     public: // Conversion (type)
         template < char_type type2 > constexpr explicit basic_string ( const basic_string     <type2,device>& );

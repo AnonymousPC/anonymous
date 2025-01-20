@@ -50,6 +50,7 @@
          // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                         using basic_string      = unsupported;
          // template < class type, class traits = std::char_traits<type> >                                                                                        using basic_string_view = unsupported;
          // template < class type, class alloc = allocator<type> >                                                                                                using deque             = unsupported;
+         // template < class type, int len >                                                                                                                      using inplace_vector    = unsupported;
          // template < class type, class alloc = allocator<type> >                                                                                                using list              = unsupported;
             template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>> >                             using map               = ::tbb::concurrent_map<type1,type2,compare,alloc>;
             template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    class priority_queue;    // Override pop().

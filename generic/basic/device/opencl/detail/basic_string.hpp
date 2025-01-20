@@ -67,13 +67,13 @@ class opencl::basic_string
     private: // Detail
         boost::compute::vector<type>& as_vector ( )
         {
-            static_assert(sizeof(self) == sizeof(boost::compute::vector<type>), "fatal error: abi not compatible");
+            static_assert(layout_compatible_with<basic_string,boost::compute::vector<type>>, "fatal error: abi not compatible");
             return reinterpret_cast<boost::compute::vector<type>&>(self);
         }
 
         const boost::compute::vector<type>& as_vector ( ) const
         {
-            static_assert(sizeof(self) == sizeof(boost::compute::vector<type>), "fatal error: abi not compatible");
+            static_assert(layout_compatible_with<basic_string,boost::compute::vector<type>>, "fatal error: abi not compatible");
             return reinterpret_cast<const boost::compute::vector<type>&>(self);
         }
 };

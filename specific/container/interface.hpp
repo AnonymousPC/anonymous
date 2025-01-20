@@ -221,7 +221,7 @@ namespace ap
 
     // /// Include
     #include "discrete/discrete.hpp" // First.
-    // #include "array/array.hpp"
+    #include "array/array.hpp"
     #include "chain/chain.hpp"
     #include "collection/collection.hpp"
     #include "polymorphic/polymorphic.hpp"

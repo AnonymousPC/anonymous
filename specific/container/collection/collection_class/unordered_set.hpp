@@ -32,8 +32,7 @@ class unordered_set
         constexpr unordered_set& operator = (       unordered_set&& )                         = default;
 
     public: // Constructor
-        constexpr          unordered_set ( std::initializer_list<type> )                          requires copyable<type>;
-        constexpr explicit unordered_set ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<unordered_set>().push(*std::ranges::begin(r)); };
+        constexpr unordered_set ( std::initializer_list<type> ) requires copyable<type>;
 
     public: // Member
         constexpr int            size     ( )                      const;

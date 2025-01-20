@@ -8,18 +8,18 @@ class array<type,1,device>
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> and movable<type> );
-        static_assert ( not same_as<type,bool> );
+        static_assert ( not same_as<type,bool> ); // std::vector<bool>
 
-    private: // Base
+    public: // Base
         using base  = device::template vector<type>;
         using upper = detail::upper_array<type,1,device>;
 
     public: // Typedef
-        using  value_type      = base::value_type;
-        using  reference       = base::reference;
-        using  const_reference = base::const_reference;
-        using  pointer         = base::pointer;
-        using  const_pointer   = base::const_pointer;
+        using  value_type      = device::template value_type     <type>;
+        using  reference       = device::template reference      <type>;
+        using  const_reference = device::template const_reference<type>;
+        using  pointer         = device::template pointer        <type>;
+        using  const_pointer   = device::template const_pointer  <type>;
         class  iterator;
         class  const_iterator;
         using  device_type     = device;
@@ -27,24 +27,22 @@ class array<type,1,device>
 
     public: // Core
         constexpr          array ( ) = default;
-        constexpr          array ( const array&  )                                         requires copyable<type>;
+        constexpr          array ( const array&  )             requires copyable<type>;
         constexpr          array (       array&& );
-        constexpr          array& operator = ( const array&  )                             requires copyable<type>;
+        constexpr          array& operator = ( const array&  ) requires copyable<type>;
         constexpr          array& operator = (       array&& );
 
     public: // Constructor
         constexpr explicit array ( int );
-        constexpr          array ( int,  const type& )                                     requires copyable<type>;
-        constexpr          array ( int,  function_type<type()   > auto );
-        constexpr          array ( int,  function_type<type(int)> auto );
-        constexpr          array ( const std::initializer_list<type>& )                    requires copyable<type>;
-        constexpr          array ( const range<type>& )                                    requires copyable<type>;
-        constexpr          array ( std::from_range_t, input_range auto&& r )               requires convertible_to<range_value<decltype(r)>,type>;
-        constexpr          array ( std::from_range_t, input_range auto&& r, int )          requires convertible_to<range_value<decltype(r)>,type>;
+        constexpr          array ( int, const type& )                   requires copyable<type>;
+        constexpr          array ( int, function_type<type()   > auto );
+        constexpr          array ( int, function_type<type(int)> auto );
+        constexpr          array ( std::initializer_list<type> )        requires copyable<type>;
+        constexpr          array ( range<type> )                        requires copyable<type>;
 
-    public: // Conversion (size)
-        template < int len > constexpr array ( const inplace_array<type,len,device> auto& );
-        template < int len > constexpr array ( const static_array <type,len,device> auto& );
+    public: // Conversion (attribute)
+        template < int len > constexpr array ( const inplace_array<type,len,device>& );
+        template < int len > constexpr array ( const static_array <type,len,device>& );
 
     public: // Conversion (type)
         template < class type2 > constexpr          array ( const array<type2,1,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2>        );
@@ -56,9 +54,10 @@ class array<type,1,device>
     public: // Memebr
         constexpr static int                  dimension     ( );
         constexpr        int                  size          ( )     const;
+        constexpr        int                  capacity      ( )     const;
         constexpr        array<int>           shape         ( )     const;
-        constexpr        static_array<int,1>  static_shape  ( )     const;
         constexpr        inplace_array<int,1> inplace_shape ( )     const;
+        constexpr        static_array<int,1>  static_shape  ( )     const;
         constexpr        int                  row           ( )     const = delete;
         constexpr        int                  column        ( )     const = delete;
         constexpr        bool                 empty         ( )     const;
@@ -75,7 +74,7 @@ class array<type,1,device>
         constexpr array& clear  ( );
         constexpr array& resize ( int );
         constexpr array& push   ( type );
-        constexpr array& pop    ( int );
+        constexpr array& pop    ( int = -1);
         constexpr array& insert ( int, type );
         constexpr array& erase  ( int, int );
 

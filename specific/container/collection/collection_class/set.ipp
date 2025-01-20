@@ -3,18 +3,9 @@
 template < class type, class compare, class device >
 constexpr set<type,compare,device>::set ( std::initializer_list<type> init )
     requires copyable<type>
-    extends base ( /*initialized later*/ )
+    extends base ( std::forward<decltype(init)>(init) )
 {
-    for ( const auto& k in init )  
-        push(k);
-}
 
-template < class type, class compare, class device >
-constexpr set<type,compare,device>::set ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires requires { std::declval<set>().push(*std::ranges::begin(r)); }
-{
-    for ( auto&& k in r )
-        push(std::forward<decltype(k)>(k));   
 }
 
 template < class type, class compare, class device >

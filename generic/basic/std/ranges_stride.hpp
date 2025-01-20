@@ -1,7 +1,6 @@
 #pragma once
 
 namespace std { 
-inline namespace __1 {
 namespace ranges {
 
 template<input_range _Vp>
@@ -358,5 +357,4 @@ template<input_range _Vp>
 
 
 } // namespace ranges
-} // namespace __1
 } // namespace std

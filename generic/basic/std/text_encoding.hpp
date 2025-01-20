@@ -1,5 +1,6 @@
+#pragma once
+
 namespace std {
-inline namespace __1 {
   /**
    * @brief An interface for accessing the IANA Character Sets registry.
    * @ingroup locales
@@ -352,11 +353,11 @@ inline namespace __1 {
     static text_encoding
     environment()
     {
-        #ifdef system_windows
+        #ifdef _WIN32
             return GBK;
-        #elifdef system_linux
+        #elifdef __linux__
             return UTF8;
-        #elifdef system_mac
+        #elifdef __APPLE__
             return UTF8;
         #else
             return unknown;
@@ -1470,5 +1471,4 @@ namespace ranges
     enable_borrowed_range<std::text_encoding::aliases_view> = true;
 }
 
-} // namespace __1
 } // namespace std

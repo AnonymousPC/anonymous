@@ -11,7 +11,7 @@ using namespace ap;
 
 int main ( )
 {
-    std::vector<int>() | std::ranges::to<std::map<int,int>>();
+    std::vector<int>{1, 2, 3} | std::views:transform([] (const auto& a) { return a.size(); }) | std::ranges::to<std::map<int,int>>();
 };
 
 

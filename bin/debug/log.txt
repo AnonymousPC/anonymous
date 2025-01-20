@@ -1,0 +1,107 @@
+[1mmain.cpp:14:43: [0m[0;1;31merror: [0m[1munexpected ':' in nested name specifier; did you mean '::'?[0m
+   14 |     std::vector<[0;34mint[0m>{[0;32m1[0m, [0;32m2[0m, [0;32m3[0m} | std::views:transform([] ([0;34mconst[0m [0;34mauto[0m& a) { [0;34mreturn[0m a.size(); }) | std::ranges::to<std::map<[0;34mint[0m,[0;34mint[0m>>();[0m
+      | [0;1;32m                                          ^
+[0m      | [0;32m                                          ::
+[0m[1mmain.cpp:14:83: [0m[0;1;31merror: [0m[1mmember reference base type 'const int' is not a structure or union[0m
+   14 |     std::vector<[0;34mint[0m>{[0;32m1[0m, [0;32m2[0m, [0;32m3[0m} | std::views:transform([] ([0;34mconst[0m [0;34mauto[0m& a) { [0;34mreturn[0m a.size(); }) | std::ranges::to<std::map<[0;34mint[0m,[0;34mint[0m>>();[0m
+      | [0;1;32m                                                                                 ~^~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__type_traits/invoke.h:146:10: [0m[0;1;36mnote: [0min instantiation of function template specialization 'main()::(anonymous class)::operator()<int>' requested here[0m
+  146 | [0;34mdecltype[0m(std::declval<_Fp>()(std::declval<_Args>()...))[0m
+      | [0;1;32m         ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__type_traits/invoke.h:156:19: [0m[0;1;36mnote: [0mwhile substituting deduced template arguments into function template '__invoke' [with _Fp = (lambda at main.cpp:14:54) &, _Args = <int &>][0m
+  156 |   [0;34mstatic[0m [0;34mdecltype[0m(std::__invoke(std::declval<_XFp>(), std::declval<_XArgs>()...)) __try_call([0;34mint[0m);[0m
+      | [0;1;32m                  ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__type_traits/invoke.h:162:28: [0m[0;1;36mnote: [0mwhile substituting deduced template arguments into function template '__try_call' [with _XFp = (lambda at main.cpp:14:54) &, _XArgs = (no value)][0m
+  162 |   [0;34musing[0m _Result = [0;34mdecltype[0m(__try_call<_Fp, _Args...>([0;32m0[0m));[0m
+      | [0;1;32m                           ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__type_traits/invoke.h:210:24: [0m[0;1;36mnote: [0min instantiation of template class 'std::__invokable_r<void, (lambda at main.cpp:14:54) &, int &>' requested here[0m
+  210 |     : [0;34mpublic[0m enable_if<__invokable<_Fp, _Args...>::value, [0;34mtypename[0m __invokable_r<[0;34mvoid[0m, _Fp, _Args...>::_Result> {};[0m
+      | [0;1;32m                       ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__type_traits/invoke.h:261:45: [0m[0;1;36mnote: [0min instantiation of template class 'std::__invoke_of<(lambda at main.cpp:14:54) &, int &>' requested here[0m
+  261 | [0;34mstruct[0m _LIBCPP_TEMPLATE_VIS invoke_result : __invoke_of<_Fn, _Args...> {};[0m
+      | [0;1;32m                                            ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__type_traits/invoke.h:264:1: [0m[0;1;36mnote: [0m(skipping 37 contexts in backtrace; use -ftemplate-backtrace-limit=0 to see all)[0m
+  264 | [0;34musing[0m invoke_result_t = [0;34mtypename[0m invoke_result<_Fn, _Args...>::type;[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__concepts/invocable.h:27:21: [0m[0;1;36mnote: [0mwhile substituting template arguments into constraint expression here[0m
+   27 | [0;34mconcept[0m invocable = [0;34mrequires[0m(_Fn&& __fn, _Args&&... __args) {[0m
+      | [0;1;32m                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m   28 |   std::invoke(std::forward<_Fn>(__fn), std::forward<_Args>(__args)...); [0;33m// not required to be equality preserving[0m
+      | [0;1;32m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m   29 | };[0m
+      | [0;1;32m~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__ranges/range_adaptor.h:69:12: [0m[0;1;36mnote: [0mwhile checking the satisfaction of concept 'invocable<std::ranges::__range_adaptor_closure_t<std::__bind_back_t<std::ranges::views::__transform::__fn, std::tuple<(lambda at main.cpp:14:54)>>>, std::vector<int>>' requested here[0m
+   69 |   [0;34mrequires[0m invocable<_Closure, _Range>[0m
+      | [0;1;32m           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__ranges/range_adaptor.h:69:12: [0m[0;1;36mnote: [0mwhile substituting template arguments into constraint expression here[0m
+   69 |   [0;34mrequires[0m invocable<_Closure, _Range>[0m
+      | [0;1;32m           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1mmain.cpp:14:31: [0m[0;1;36mnote: [0mwhile checking constraint satisfaction for template 'operator|<std::vector<int>, std::ranges::__range_adaptor_closure_t<std::__bind_back_t<std::ranges::views::__transform::__fn, std::tuple<(lambda at main.cpp:14:54)>>>>' required here[0m
+   14 |     std::vector<[0;34mint[0m>{[0;32m1[0m, [0;32m2[0m, [0;32m3[0m} | std::views:transform([] ([0;34mconst[0m [0;34mauto[0m& a) { [0;34mreturn[0m a.size(); }) | std::ranges::to<std::map<[0;34mint[0m,[0;34mint[0m>>();[0m
+      | [0;1;32m                              ^
+[0m[1mmain.cpp:14:31: [0m[0;1;36mnote: [0min instantiation of function template specialization 'std::ranges::operator|<std::vector<int>, std::ranges::__range_adaptor_closure_t<std::__bind_back_t<std::ranges::views::__transform::__fn, std::tuple<(lambda at main.cpp:14:54)>>>>' requested here[0m
+[1mmain.cpp:14:31: [0m[0;1;31merror: [0m[1minvalid operands to binary expression ('std::vector<int>' and '__range_adaptor_closure_t<__bind_back_t<__fn, tuple<(lambda at main.cpp:14:54)>>>' (aka 'std::ranges::__range_adaptor_closure_t<std::__bind_back_t<std::ranges::views::__transform::__fn, std::tuple<(lambda at main.cpp:14:54)>>>'))[0m
+   14 |     std::vector<[0;34mint[0m>{[0;32m1[0m, [0;32m2[0m, [0;32m3[0m} | std::views:transform([] ([0;34mconst[0m [0;34mauto[0m& a) { [0;34mreturn[0m a.size(); }) | std::ranges::to<std::map<[0;34mint[0m,[0;34mint[0m>>();[0m
+      | [0;1;32m    ~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/cstddef:73:45: [0m[0;1;36mnote: [0mcandidate function not viable: no known conversion from 'std::vector<int>' to 'byte' for 1st argument[0m
+   73 | _LIBCPP_HIDE_FROM_ABI [0;34minline[0m [0;34mconstexpr[0m byte [0;34moperator[0m|(byte __lhs, byte __rhs) [0;34mnoexcept[0m {[0m
+      | [0;1;32m                                            ^         ~~~~~~~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__charconv/chars_format.h:34:53: [0m[0;1;36mnote: [0mcandidate function not viable: no known conversion from 'std::vector<int>' to 'chars_format' for 1st argument[0m
+   34 | [0;34minline[0m _LIBCPP_HIDE_FROM_ABI [0;34mconstexpr[0m chars_format [0;34moperator[0m|(chars_format __x, chars_format __y) {[0m
+      | [0;1;32m                                                    ^         ~~~~~~~~~~~~~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/future:431:47: [0m[0;1;36mnote: [0mcandidate function not viable: no known conversion from 'std::vector<int>' to 'launch' for 1st argument[0m
+  431 | [0;34minline[0m _LIBCPP_HIDE_FROM_ABI [0;34mconstexpr[0m launch [0;34moperator[0m|(launch __x, launch __y) {[0m
+      | [0;1;32m                                              ^         ~~~~~~~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/bitset:932:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'bitset' against 'std::vector'[0m
+  932 | [0;34moperator[0m|([0;34mconst[0m bitset<_Size>& __x, [0;34mconst[0m bitset<_Size>& __y) _NOEXCEPT {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__ranges/range_adaptor.h:71:1: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with _Range = std::vector<int>, _Closure = __range_adaptor_closure_t<__bind_back_t<__fn, tuple<(lambda at main.cpp:14:54)>>>][0m
+   71 | [0;34moperator[0m|(_Range&& __range, _Closure&& __closure) [0;34mnoexcept[0m(is_nothrow_invocable_v<_Closure, _Range>) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__ranges/range_adaptor.h:69:12: [0m[0;1;36mnote: [0mbecause 'invocable<std::ranges::__range_adaptor_closure_t<std::__bind_back_t<std::ranges::views::__transform::__fn, std::tuple<(lambda at main.cpp:14:54)> > >, std::vector<int> >' evaluated to false[0m
+   69 |   [0;34mrequires[0m invocable<_Closure, _Range>[0m
+      | [0;1;32m           ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__concepts/invocable.h:28:3: [0m[0;1;36mnote: [0mbecause 'std::invoke(std::forward<_Fn>(__fn), std::forward<_Args>(__args)...)' would be invalid: no matching function for call to 'invoke'[0m
+   28 |   std::invoke(std::forward<_Fn>(__fn), std::forward<_Args>(__args)...); [0;33m// not required to be equality preserving[0m
+      | [0;1;32m  ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__ranges/range_adaptor.h:77:52: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with _Closure = std::vector<int>, _OtherClosure = __range_adaptor_closure_t<__bind_back_t<__fn, tuple<(lambda at main.cpp:14:54)>>>][0m
+   77 | [[nodiscard]] _LIBCPP_HIDE_FROM_ABI [0;34mconstexpr[0m [0;34mauto[0m [0;34moperator[0m|(_Closure&& __c1, _OtherClosure&& __c2) [0;34mnoexcept[0m([0m
+      | [0;1;32m                                                   ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__ranges/range_adaptor.h:75:11: [0m[0;1;36mnote: [0mbecause 'std::vector<int>' does not satisfy '_RangeAdaptorClosure'[0m
+   75 | [0;34mtemplate[0m <_RangeAdaptorClosure _Closure, _RangeAdaptorClosure _OtherClosure>[0m
+      | [0;1;32m          ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__ranges/range_adaptor.h:62:32: [0m[0;1;36mnote: [0mbecause '!ranges::range<remove_cvref_t<vector<int, allocator<int> > > >' evaluated to false[0m
+   62 | [0;34mconcept[0m _RangeAdaptorClosure = !ranges::range<remove_cvref_t<_Tp>> && [0;34mrequires[0m {[0m
+      | [0;1;32m                               ^
+[0m[1m/opt/homebrew/include/stdexec/execution.hpp:77:6: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with _Ignore = std::vector<int>, _Sender = __range_adaptor_closure_t<__bind_back_t<__fn, tuple<(lambda at main.cpp:14:54)>>>][0m
+   77 | [0;34mauto[0m [0;34moperator[0m|(_Ignore&&, _Sender&&) [0;34mnoexcept[0m;[0m
+      | [0;1;32m     ^
+[0m[1m/opt/homebrew/include/stdexec/execution.hpp:75:11: [0m[0;1;36mnote: [0mbecause 'std::vector<int>' does not satisfy 'sender'[0m
+   75 | [0;34mtemplate[0m <stdexec::sender _Ignore, stdexec::sender _Sender>[0m
+      | [0;1;32m          ^
+[0m[1m/opt/homebrew/include/stdexec/__detail/__senders_core.hpp:49:5: [0m[0;1;36mnote: [0mbecause 'enable_sender<__decay_t<vector<int, allocator<int> > > >' evaluated to false[0m
+   49 |     enable_sender<__decay_t<_Sender>>                     [0;33m//[0m
+      | [0;1;32m    ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/valarray:2858:1: [0m[0;1;36mnote: [0mcandidate template ignored: requirement '__is_val_expr<std::vector<int, std::allocator<int>>>::value' was not satisfied [with _Expr1 = std::vector<int>, _Expr2 = __range_adaptor_closure_t<__bind_back_t<__fn, tuple<(lambda at main.cpp:14:54)>>>][0m
+ 2858 | [0;34moperator[0m|([0;34mconst[0m _Expr1& __x, [0;34mconst[0m _Expr2& __y) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/valarray:2867:1: [0m[0;1;36mnote: [0mcandidate template ignored: requirement '__is_val_expr<std::vector<int, std::allocator<int>>>::value' was not satisfied [with _Expr = std::vector<int>][0m
+ 2867 | [0;34moperator[0m|([0;34mconst[0m _Expr& __x, [0;34mconst[0m [0;34mtypename[0m _Expr::value_type& __y) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/valarray:2876:1: [0m[0;1;36mnote: [0mcandidate template ignored: requirement '__is_val_expr<std::ranges::__range_adaptor_closure_t<std::__bind_back_t<std::ranges::views::__transform::__fn, std::tuple<(lambda at main.cpp:14:54)>>>>::value' was not satisfied [with _Expr = __range_adaptor_closure_t<__bind_back_t<__fn, tuple<(lambda at main.cpp:14:54)>>>][0m
+ 2876 | [0;34moperator[0m|([0;34mconst[0m [0;34mtypename[0m _Expr::value_type& __x, [0;34mconst[0m _Expr& __y) {[0m
+      | [0;1;32m^
+[0m[1m./specific/container/collection/collection_base/collection_global.hpp:21:35: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with left:auto = std::vector<int>, right:auto = __range_adaptor_closure_t<__bind_back_t<__fn, tuple<(lambda at main.cpp:14:54)>>>][0m
+   21 | [0;34mconstexpr[0m set_type [0;34mauto[0m           [0;34moperator[0m  |  ( [0;34mconst[0m set_type [0;34mauto[0m& left, [0;34mconst[0m set_type [0;34mauto[0m& right ) [0;34mrequires[0m same_as      <left_value_type,right_value_type> and same_as<left_compare_type,right_compare_type> and same_as<left_device_type,right_device_type>;[0m
+      | [0;1;32m                                  ^
+[0m[1m./specific/container/collection/collection_base/collection_global.hpp:21:56: [0m[0;1;36mnote: [0mbecause 'std::vector<int>' does not satisfy 'set_type'[0m
+   21 | [0;34mconstexpr[0m set_type [0;34mauto[0m           [0;34moperator[0m  |  ( [0;34mconst[0m set_type [0;34mauto[0m& left, [0;34mconst[0m set_type [0;34mauto[0m& right ) [0;34mrequires[0m same_as      <left_value_type,right_value_type> and same_as<left_compare_type,right_compare_type> and same_as<left_device_type,right_device_type>;[0m
+      | [0;1;32m                                                       ^
+[0m[1m./specific/container/interface.hpp:120:24: [0m[0;1;36mnote: [0mbecause '[] {
+    if (requires { <<error-type>>; }) {
+    } else
+        return false;
+}()' evaluated to false[0m
+  120 |     [0;34mconcept[0m set_type = [][0m
+      | [0;1;32m                       ^
+[0m3 errors generated.

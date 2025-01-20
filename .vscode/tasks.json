@@ -29,7 +29,7 @@
                 }
             },
             "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -fdiagnostics-color=always -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "clang++ -std=c++26 -g -fdiagnostics-color=always -Wall -fdiagnostics-color=always -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
                 "options": {
                     "env": {
                         "CPLUS_INCLUDE_PATH": "/opt/homebrew/include"

@@ -12,7 +12,7 @@ namespace detail
             array<type,2,device>* ptr = nullptr;
 
         public: // Attribute
-            enum { independent_array, row_view, column_view };
+            enum { independent, rows, columns };
 
         public: // Typedef
             using value_type      = array<type,1,device>::value_type;
@@ -39,10 +39,11 @@ namespace detail
             constexpr const_reference operator [] ( int ) const;
         
         private: // Memory
-            constexpr       array<type,2,device>& upper       ( );
-            constexpr const array<type,2,device>& upper       ( ) const;
-            constexpr       bool                  independent ( ) const;
-            constexpr       auto                  attribute   ( ) const;
+            constexpr       array<type,2,device>& host        ( );
+            constexpr const array<type,2,device>& host        ( ) const;
+            constexpr       bool                  ownership   ( ) const;
+            constexpr       bool                  contiguous  ( ) const;
+            constexpr       int                   attribute   ( ) const;22222222222223221q11111111111   33333w1`````````````````````````
             constexpr       int                   index       ( ) const;
     }
 
@@ -54,7 +55,7 @@ namespace detail
             array<type,dim,  device>* ptr_2 = nullptr;
 
         public: // Attribute
-            enum { independent_array, row_view, column_view, transpose_view };
+            enum { independent, rows, columns, transposed };
 
         public: // Typedef
             using value_type      = array<type,dim,device>::value_type;
@@ -85,15 +86,19 @@ namespace detail
             constexpr       const_reference           at          ( int_type auto... args ) const requires ( sizeof...(args) == dim );
         
         private: // Memory
-            template < int attribute > constexpr       array<type,dim+1,device>& upper       ( )       requires ( attribute == 1 );
-            template < int attribute > constexpr const array<type,dim+1,device>& upper       ( ) const requires ( attribute == 1 );
-            template < int attribute > constexpr       array<type,dim,  device>& upper       ( )       requires ( attribute == 2 );
-            template < int attribute > constexpr const array<type,dim,  device>& upper       ( ) const requires ( attribute == 2 );
-                                       constexpr       bool                      independent ( ) const;
-                                       constexpr       auto                      attribute   ( ) const;
+            template < int attribute > constexpr       array<type,dim+1,device>& host        ( )       requires ( attribute == 1 );
+            template < int attribute > constexpr const array<type,dim+1,device>& host        ( ) const requires ( attribute == 1 );
+            template < int attribute > constexpr       array<type,dim,  device>& host        ( )       requires ( attribute == 2 );
+            template < int attribute > constexpr const array<type,dim,  device>& host        ( ) const requires ( attribute == 2 );
+                                       constexpr       bool                      ownership   ( ) const;
+                                       constexpr       bool                      contiguous  ( ) const;
+                                       constexpr       int                       attribute   ( ) const;
                                        constexpr       int                       index       ( ) const;
     }
 
 } // namespace detail
 
-#include "array_upper.ipp"
+/* .ipp files are explicit extern included, which instantiates
+ * array.shape(), array.inplace_shape() and array.static_shape()
+ * in a correct order
+ */

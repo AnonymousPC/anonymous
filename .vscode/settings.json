@@ -110,6 +110,7 @@
         "coroutine": "cpp",
         "version": "cpp",
         "target": "cpp",
-        "csetjmp": "cpp"
+        "csetjmp": "cpp",
+        "inplace_vector": "cpp"
     }
 }

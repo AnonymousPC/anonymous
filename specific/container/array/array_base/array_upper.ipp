@@ -3,15 +3,15 @@
 namespace detail
 {
     template < class type, class device >
-    constexpr array_upper<type,1,device>::array_upper ( array<type,2,device>& init_upper )
-        extends ptr ( &init_upper )
+    constexpr array_upper<type,1,device>::array_upper ( array<type,2,device>& init_host )
+        extends ptr ( &init_host )
     {
 
     }
 
     template < class type, class device >
-    constexpr array_upper<type,1,device>::array_upper ( const array<type,2,device>& init_upper )
-        extends ptr ( &const_cast<array<type,2,device>&>(init_upper) )
+    constexpr array_upper<type,1,device>::array_upper ( const array<type,2,device>& init_host )
+        extends ptr ( &const_cast<array<type,2,device>&>(init_host) )
     {
         
     }
@@ -19,107 +19,52 @@ namespace detail
     template < class type, class device >
     constexpr int array_upper<type,1,device>::size ( ) const 
     {
-        if ( attribute() == row_view ) [[likely]]
-            return upper().column();
-        else // if ( attribute() == column_view )
-            return upper().row();
+        return attribute() == rows ? host().column() otherwise host().row();
     }
 
     template < class type, class device >
     constexpr bool array_upper<type,1,device>::empty ( ) const 
     {
         // Assume shape() cannot contain partial 0.
-        return upper().empty();
+        return host().empty();
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::pointer array_upper<type,1,device>::data ( )
     {
-        if constexpr ( same_as<typename device::layout_type,std::layout_right> /* and [[assume(attribute() == row_view)]] */ )
-            return upper().data() + (index() - 1) * upper().column();
-        else if constexpr ( same_as<typename device::layout_type,std::layout_left> /* and [[assume(attribute() == column_view)]] */ )
-            return upper().data() + (index() - 1) * upper().row();
-        else
-            static_assert(false, "device::layout_type is neither std::layout_right nor std::layout_left");
+        assume[[contiguous()]];
+        return host().data() + (index() - 1) * size();
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_pointer array_upper<type,1,device>::data ( ) const
     {
-        if constexpr ( same_as<typename device::layout_type,std::layout_right> /* and [[assume(attribute() == row_view)]] */ )
-            return upper().data() + (index() - 1) * upper().column();
-        else if constexpr ( same_as<typename device::layout_type,std::layout_left> /* and [[assume(attribute() == column_view)]] */ )
-            return upper().data() + (index() - 1) * upper().row();
-        else
-            static_assert(false, "device::layout_type is neither std::layout_right nor std::layout_left");
+        assume[[contiguous()]];
+        return host().data() + (index() - 1) * size();
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::begin ( )
     {
-        if constexpr ( same_as<typename device::layout_type,std::layout_right> )
-            if ( attribute() == row_view ) [[likely]]
-                return { data() };
-            else 
-                throw exception("not coded yet");
-        else if constexpr ( same_as<typename device::layout_type,std::layout_left> )
-            if ( attribute() == row_view ) [[likely]]
-                throw exception("not coded yet");
-            else
-                return { data() };
-        else
-            static_assert(false, "device::layout_type is neither std::layout_right nor std::layout_left");
+        return contiguous() ? data() otherwise {data(), size()};
     }
 
     template < class type, class device >
     constexpr const array_upper<type,1,device>::iterator array_upper<type,1,device>::begin ( ) const
     {
-        if constexpr ( same_as<typename device::layout_type,std::layout_right> )
-            if ( attribute() == row_view ) [[likely]]
-                return { data() };
-            else 
-                throw exception("not coded yet");
-        else if constexpr ( same_as<typename device::layout_type,std::layout_left> )
-            if ( attribute() == row_view ) [[likely]]
-                throw exception("not coded yet");
-            else
-                return { data() };
-        else
-            static_assert(false, "device::layout_type is neither std::layout_right nor std::layout_left");
+        return contiguous() ? data() otherwise {data(), size()};
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::end ( )
     {
-        if constexpr ( same_as<typename device::layout_type,std::layout_right> )
-            if ( attribute() == row_view ) [[likely]]
-                return { data() + size() };
-            else 
-                throw exception("not coded yet");
-        else if constexpr ( same_as<typename device::layout_type,std::layout_left> )
-            if ( attribute() == row_view ) [[likely]]
-                throw exception("not coded yet");
-            else
-                return { data() + size() };
-        else
-            static_assert(false, "device::layout_type is neither std::layout_right nor std::layout_left");
+        return contiguous() ? data() + size() otherwise {data() + host().size(), size()};
     }
 
     template < class type, class device >
     constexpr const array_upper<type,1,device>::iterator array_upper<type,1,device>::end ( ) const
     {
-        if constexpr ( same_as<typename device::layout_type,std::layout_right> )
-            if ( attribute() == row_view ) [[likely]]
-                return { data() + size() };
-            else 
-                throw exception("not coded yet");
-        else if constexpr ( same_as<typename device::layout_type,std::layout_left> )
-            if ( attribute() == row_view ) [[likely]]
-                throw exception("not coded yet");
-            else
-                return { data() + size() };
-        else
-            static_assert(false, "device::layout_type is neither std::layout_right nor std::layout_left");
+        return contiguous() ? data() + size() otherwise {data() + host().size(), size()};
     }
 
     template < class type, class device >
@@ -135,45 +80,53 @@ namespace detail
     }
 
     template < class type, class device >
-    constexpr array<type,2,device>& array_upper<type,1,device>::upper ( )
+    constexpr array<type,2,device>& array_upper<type,1,device>::host ( )
     {
         return *ptr;
     }
     
     template < class type, class device >
-    constexpr const array<type,2,device>& array_upper<type,1,device>::upper ( ) const
+    constexpr const array<type,2,device>& array_upper<type,1,device>::host ( ) const
     {
         return *ptr;
     } 
         
     template < class type, class device >
-    constexpr bool independent ( ) const
+    constexpr bool array_upper<type,1,device>::ownership ( ) const
     {
-        return upper_ptr == nullptr;
+        return ptr != nullptr;
+    }
+
+    template < class type, class device >
+    constexpr bool array_upper<type,1,device>::contiguous ( ) const
+    {
+        return ( attribute() == rows    and same_as<typename device::layout_type,std::layout_right> ) or 
+               ( attribute() == columns and same_as<typename device::layout_type,std::layout_left > );
     }
 
     template < class type, class device >
     constexpr auto array_upper<type,1,device>::attribute ( ) const
     {
-        let row_index = &self - upper().array_lower<type,2,device>::template row_views<1>().data() + 1;
-        if ( row_index >= 1 and row_index <= upper().array_lower<type,2,device>::template row_views<1>().size() ) [[likely]]
-            return row_view;
-        else
-            return column_view;
+        let rows_list = host().template rows<1>();
+        return this >= rows_list.begin() and this <= rows_list.end() ? rows otherwise columns;
     }
 
     template < class type, class device >
     constexpr int array_upper<type,1,device>::index ( ) const
     {
-        let row_index = &self - upper().array_lower<type,2,device>::template row_views<1>().data() + 1;
-        if ( row_index >= 1 and row_index <= upper().array_lower<type,2,device>::template row_views<1>().size() ) [[likely]]
-            return row_index;
-        else
-            return &self - upper().lower::column_views().data() + 1;
+        let rows_list = host().template rows<1>();
+        if ( this >= rows_list.begin() and this <= rows_list.end() )
+            return this - rows_list.begin() + 1;
+
+        let columns_list = host().template columns<1>();
+        if ( this >= columns_list.begin() and this <= columns_list.end() )
+            return this - columns_list.begin() + 1;
+
+        throw value_error("unknown index");
     }
     
     template < class type, int dim, class device >
-    constexpr array_upper<type,dim,device>::array_upper ( array_upper<type,dim+1,device>& init_upper )
+    constexpr array_upper<type,dim,device>::array_upper ( array_upper<type,dim+1,device>& init_  )
         extends ptr_1 ( &init_upper )
     {
 

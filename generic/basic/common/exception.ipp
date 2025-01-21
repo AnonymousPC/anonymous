@@ -239,9 +239,9 @@ constexpr decltype(auto) exception::format_string<types...>::make_formattable ( 
     else if constexpr ( printable<decltype(args)> )
         return (std::stringstream()<<args).str();
     else if constexpr ( same_as<decltype(args),const std::type_info&> )
-        return abi::demangle(args);
+        return demangle(args);
     else
-        return std::format("[[{} object at {}]]", abi::demangle(typeid(args)), static_cast<const void*>(&args));
+        return std::format("[[{} object at {}]]", demangle(typeid(args)), static_cast<const void*>(&args));
 } 
 
 template < class... types >

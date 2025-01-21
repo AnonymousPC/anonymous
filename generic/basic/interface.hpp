@@ -270,10 +270,7 @@ namespace ap
     // See concept.h.
 
     /// Abi
-    namespace abi
-    {
-        std::string demangle ( const std::type_info& );
-    }
+    std::string demangle ( const std::type_info& );
 
     /// Exception
     class exception;

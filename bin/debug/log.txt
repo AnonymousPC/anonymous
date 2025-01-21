@@ -1,0 +1,11 @@
+[1mmain.cpp:12:1: [0m[0;1;31merror: [0m[1munknown type name 'test'[0m
+   12 | test func([0;34mauto[0m args)[0m
+      | [0;1;32m^
+[0m[1mmain.cpp:15:17: [0m[0;1;31merror: [0m[1mexpected parentheses around type name in sizeof expression[0m
+   15 |     print([0;34msizeof[0m [0;34mint[0m);[0m
+      | [0;1;32m                ^   
+[0m      | [0;32m                (   )
+[0m[1mmain.cpp:20:5: [0m[0;1;31merror: [0m[1mno matching function for call to 'func'[0m
+   20 |     func([0;32m1[0m);;[0m
+      | [0;1;32m    ^~~~
+[0m3 errors generated.

@@ -3,7 +3,7 @@
 template < class type, class device >
 constexpr array<type,1,device>::array ( const array& init )
     requires copyable<type>
-    extends base ( /*initialized later*/ )
+    extends base ( /* initialized later */ )
 {
     if ( init.ownership() ) [[likely]]
         self.base::operator=(static_cast<const base&>(init));
@@ -16,7 +16,7 @@ constexpr array<type,1,device>::array ( const array& init )
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( array&& init )
-    extends base ( /*initialized later*/ )
+    extends base ( /* initialized later */ )
 {
     if ( init.ownership() ) [[likely]]
         self.base::operator=(static_cast<base&&>(init));

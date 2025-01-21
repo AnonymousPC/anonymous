@@ -74,7 +74,7 @@ class array<type,1,device>
         constexpr array& clear  ( );
         constexpr array& resize ( int );
         constexpr array& push   ( type );
-        constexpr array& pop    ( int = -1);
+        constexpr array& pop    ( int = -1 );
         constexpr array& insert ( int, type );
         constexpr array& erase  ( int, int );
 

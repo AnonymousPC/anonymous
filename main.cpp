@@ -3,28 +3,21 @@
 // #include "generic/io/interface.hpp"
 // #include "generic/math/interface.hpp"
 // #include "specific/audio/interface.hpp"
-#include "specific/container/interface.hpp"
+// #include "specific/container/interface.hpp"
 // #include "specific/neural/interface.hpp"*
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-struct test
+test func(auto args)
 {
-    test() = default;
-    test(const test&) = delete;
-    test(test&&) = delete;
-};
-
-test func()
-{
-    return test();
+    print(sizeof args);
+    print(sizeof int);
 }
 
 int main ( )
 {
-    let arr = static_array<int,3,opencl>{1, 2, 3};
-    std::for_each(arr.begin(), arr.end(), print);
+    func(1);;
 };
 
 

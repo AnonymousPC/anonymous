@@ -4,32 +4,36 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr array<type,dim,device>::array ( const array& init )
     requires copyable<type>
-    extends vector ( /*initialized latter*/ ),
-            info   ( static_cast<const info&>(init) ),
-            lower  ( self, static_shape() )
+    extends base ( /* initialized later */ )
 {
-    if ( right.independent() ) [[likely]]
-        vector::operator=(static_cast<const vector&>(right));
+    if ( right.ownership() ) [[likely]]
+    {
+        self.base ::operator=(static_cast<const base&>(init));
+        self.info ::resize(init.static_shape());
+        self.lower::resize(init.static_shape());
+    }
     else
     {
-        resize(right.static_shape());
-        device::copy(right.begin(), right.end(), begin());
+        self.resize(init.static_shape());
+        device::copy(right.base::begin(), right.base::end(), self.base::begin());
     }
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr array<type,dim,device>::array ( array&& init )
-    extends vector ( /*initialized latter*/ ),
-            info   ( static_cast<info&&>(init) ),
-            lower  ( self, static_shape() )
+    extends base ( /* initialized later */ )
 {
-    if ( right.independent() ) [[likely]]
-        vector::operator=(static_cast<vector&&>(right));
+    if ( init.ownership() ) [[likely]]
+    {
+        self.base ::operator=(static_cast<base&&>(right));
+        self.info ::resize(init.static_shape());
+        self.lower::resize(init.static_shape());
+    }
     else
     {
-        resize(right.static_shape());
-        device::move(right.begin(), right.end(), begin());
+        self.resize(init.static_shape());
+        device::move(right.base::begin(), right.base::end(), self.base::begin());
     }
 }
 
@@ -38,12 +42,14 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const array& right )
     requires copyable<type>
 {
-    if ( independent() and right.independent() ) [[likely]]
+    if ( self.ownership() and right.ownership() ) [[likely]]
     {
-        vector::operator=(static_cast<const vector&>(right));
-        info  ::operator=(static_cast<const info  &>(right));
-        lower ::resize(static_shape());
+        self.base ::operator=(static_cast<const base&>(right));
+        self.info ::resize(init.static_shape());
+        self.lower::resize(init.static_shape());
     }
+
+    else if ( self.ownership() and not right)
 
     else
     {

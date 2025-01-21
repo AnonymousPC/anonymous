@@ -12,7 +12,7 @@ namespace detail
             array<type,2,device>* ptr = nullptr;
 
         public: // Attribute
-            enum { independent, rows, columns };
+            enum { rows, columns };
 
         public: // Typedef
             using value_type      = array<type,1,device>::value_type;
@@ -38,24 +38,24 @@ namespace detail
             constexpr reference       operator [] ( int );
             constexpr const_reference operator [] ( int ) const;
         
-        private: // Memory
+        public: // Memory
             constexpr       array<type,2,device>& host        ( );
             constexpr const array<type,2,device>& host        ( ) const;
             constexpr       bool                  ownership   ( ) const;
             constexpr       bool                  contiguous  ( ) const;
-            constexpr       int                   attribute   ( ) const;22222222222223221q11111111111   33333w1`````````````````````````
-            constexpr       int                   index       ( ) const;
+            constexpr       auto                  attribute   ( ) const;
+            constexpr       int                   offset      ( ) const;
     }
 
     template < class type, int dim, class device >
     struct array_upper<type,dim,device>
     {
         private: // Data
-            array<type,dim+1,device>* ptr_1 = nullptr;
-            array<type,dim,  device>* ptr_2 = nullptr;
+            array<type,dim+1,device>* ptr1 = nullptr;
+            array<type,dim,  device>* ptr2 = nullptr;
 
         public: // Attribute
-            enum { independent, rows, columns, transposed };
+            enum { rows, columns, transposed };
 
         public: // Typedef
             using value_type      = array<type,dim,device>::value_type;
@@ -82,18 +82,18 @@ namespace detail
             constexpr       const_iterator            end         ( )                       const;
             constexpr       array<type,dim-1,device>& operator [] ( int );
             constexpr const array<type,dim-1,device>& operator [] ( int )                   const;
-            constexpr       reference                 at          ( int_type auto... args )       requires ( sizeof...(args) == dim );
-            constexpr       const_reference           at          ( int_type auto... args ) const requires ( sizeof...(args) == dim );
         
-        private: // Memory
+        public: // Memory
             template < int attribute > constexpr       array<type,dim+1,device>& host        ( )       requires ( attribute == 1 );
             template < int attribute > constexpr const array<type,dim+1,device>& host        ( ) const requires ( attribute == 1 );
             template < int attribute > constexpr       array<type,dim,  device>& host        ( )       requires ( attribute == 2 );
             template < int attribute > constexpr const array<type,dim,  device>& host        ( ) const requires ( attribute == 2 );
                                        constexpr       bool                      ownership   ( ) const;
                                        constexpr       bool                      contiguous  ( ) const;
-                                       constexpr       int                       attribute   ( ) const;
-                                       constexpr       int                       index       ( ) const;
+                                       constexpr       auto                      attribute   ( ) const;
+                                       constexpr       int                       offset      ( ) const;
+                                       constexpr       reference                 at          ( int_type auto... args )       requires ( sizeof...(args) == dim );
+                                       constexpr       const_reference           at          ( int_type auto... args ) const requires ( sizeof...(args) == dim );
     }
 
 } // namespace detail

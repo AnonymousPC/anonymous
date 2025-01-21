@@ -1,6 +1,6 @@
 #pragma once
 
-std::string abi::demangle ( const std::type_info& t )
+std::string demangle ( const std::type_info& t )
 {
     let ok  = 0;
     let str = ::abi::__cxa_demangle(t.name(), nullptr, nullptr, &ok);

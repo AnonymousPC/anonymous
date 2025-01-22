@@ -4,11 +4,11 @@
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 class array
-    extends public  device::template vector<type>,
-            private detail::upper_array<type,1,  device>, // Make abi compatible with array<type,1>, required from as_flat().
-            private detail::array_info <     dim,device>,
-            private detail::upper_array<type,dim,device>,
-            private detail::lower_array<type,dim,device>
+    extends public device::template vector<type>,
+            public detail::upper_array<type,1,  device>, // Make abi compatible with array<type,1>, required from as_flat().
+            public detail::array_info <     dim,device>,
+            public detail::upper_array<type,dim,device>,
+            public detail::lower_array<type,dim,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -59,6 +59,7 @@ class array
     public: // Member
         constexpr static int                       dimension     ( );
         constexpr        int                       size          ( )     const;
+        constexpr        int                       capacity      ( )     const = delete;
         constexpr        array<int>                shape         ( )     const;
         constexpr        inplace_array<int,dim>    inplace_shape ( )     const;
         constexpr        static_array<int,dim>     static_shape  ( )     const;
@@ -75,10 +76,10 @@ class array
         constexpr const  array<type,dim-1,device>& operator []   ( int ) const;
 
     public: // Member
+        template_int_axis constexpr array& clear  ( );
         template_int_axis constexpr array& resize ( int );
                           constexpr array& resize ( int_type auto... args ) requires ( sizeof...(args) == dim );
                           constexpr array& resize ( const array<int>& );
-        template_int_axis constexpr array& clear  ( );
         template_int_axis constexpr array& push   (      array<type,dim-1,device> );
         template_int_axis constexpr array& pop    ( int = -1 );
         template_int_axis constexpr array& insert ( int, array<type,dim-1,device> );
@@ -93,8 +94,18 @@ class array
     public: // Memory
         constexpr bool            ownership  ( )                       const;
         constexpr bool            contiguous ( )                       const;
+
+    public: // For view
+        constexpr int             top_size   ( )                       const;
         constexpr reference       at         ( int_type auto... args )       requires ( sizeof...(args) == dim );
         constexpr const_reference at         ( int_type auto... args ) const requires ( sizeof...(args) == dim );
+
+    private: // Detail
+        constexpr static int  multiply_first_until_last                 ( const auto&... );
+        constexpr static int  multiply_first_until_second_last          ( const auto&... );
+        constexpr static bool check_first_until_last_as_positive        ( const auto&... );
+        constexpr static bool check_first_until_second_last_as_positive ( const auto&... );
+        constexpr        void device_generate_mdspan                    ( const auto& );
 }
 
 #include "array_nd.ipp"

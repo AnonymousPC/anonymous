@@ -11,7 +11,7 @@ namespace detail
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::array_upper ( const array<type,2,device>& init_host )
-        extends ptr ( &const_cast<array<type,2,device>&>(init_host) )
+        extends ptr ( const_cast<array<type,2,device>*>(&init_host) )
     {
         
     }
@@ -20,6 +20,24 @@ namespace detail
     constexpr int array_upper<type,1,device>::size ( ) const 
     {
         return attribute() == rows ? host().column() otherwise host().row();
+    }
+
+    template < class type, class device >
+    constexpr array<int> array_upper<type,1,device>::shape ( ) const 
+    {
+        return { size() };
+    }
+
+    template < class type, class device >
+    constexpr inplace_array<int,1> array_upper<type,1,device>::inplace_shape ( ) const 
+    {
+        return { size() };
+    }
+
+    template < class type, class device >
+    constexpr static_array<int,1> array_upper<type,1,device>::static_shape ( ) const 
+    {
+        return { size() };
     }
 
     template < class type, class device >
@@ -51,41 +69,41 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::begin ( )
     {
-        return contiguous() ? data() otherwise { data(), attribute() == rows ? host().row() otherwise host().column() };
+        return contiguous() ? data() otherwise { &self[0], top_size() / size() };
     }
 
     template < class type, class device >
     constexpr const array_upper<type,1,device>::iterator array_upper<type,1,device>::begin ( ) const
     {
-        return contiguous() ? data() otherwise { data(), attribute() == rows ? host().row() otherwise host().column() };
+        return contiguous() ? data() otherwise { &self[0], top_size() / size() };
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::end ( )
     {
-        return contiguous() ? data() + size() otherwise { data() + host().size(), attribute() == rows ? host().row() otherwise host().column() };
+        return contiguous() ? data() + size() otherwise { &self[0] + top_size(), top_size() / size() };
     }
 
     template < class type, class device >
     constexpr const array_upper<type,1,device>::iterator array_upper<type,1,device>::end ( ) const
     {
-        return contiguous() ? data() + size() otherwise { data() + host().size(), attribute() == rows ? host().row() otherwise host().column() };
+        return contiguous() ? data() + size() otherwise { &self[0] + top_size(), top_size() / size() };
     }
 
     template < class type, class device >
-    constexpr array_upper<type,1,device>::reference array_upper<type,1,device>::operator [] ( int args )
+    constexpr array_upper<type,1,device>::reference array_upper<type,1,device>::operator [] ( int ofs )
     {
-        return contiguous()        ? data()[args]              otherwise 
-               attribute() == rows ? host().at(offset(), args) otherwise 
-                                     host().at(args, offset());
+        return contiguous()        ? data()[ofs]              otherwise 
+               attribute() == rows ? host().at(offset(), ofs) otherwise 
+                                     host().at(ofs, offset());
     }
 
     template < class type, class device >
-    constexpr array_upper<type,1,device>::const_reference array_upper<type,1,device>::operator [] ( int args ) const
+    constexpr array_upper<type,1,device>::const_reference array_upper<type,1,device>::operator [] ( int ofs ) const
     {
-        return contiguous()        ? data()[args]              otherwise 
-               attribute() == rows ? host().at(offset(), args) otherwise 
-                                     host().at(args, offset());
+        return contiguous()        ? data()[ofs]              otherwise 
+               attribute() == rows ? host().at(offset(), ofs) otherwise 
+                                     host().at(ofs, offset());
     }
 
     template < class type, class device >
@@ -136,6 +154,12 @@ namespace detail
         return attribute() == rows ? this - host().template rows   <1>().begin() otherwise 
                                      this - host().template columns<1>().begin();
     }
+
+    template < class type, class device >
+    constexpr int array_upper<type,1,device>::top_size ( ) const
+    {
+        return host().top_size();
+    }
     
 
 
@@ -175,9 +199,50 @@ namespace detail
     template < class type, int dim, class device >
     constexpr int array_upper<type,dim,device>::size ( ) const
     {
-        return attribute() == rows    ? partial_size<2,-1>(host<1>()) otherwise
-               attribute() == columns ? partial_size<1,-2>(host<1>()) otherwise
+        return attribute() == rows    ? partial_size_of<2,-1>(host<1>()) otherwise
+               attribute() == columns ? partial_size_of<1,-2>(host<1>()) otherwise
                                         host<2>().size();
+    }
+
+    template < class type, int dim, class device >
+    constexpr array<int> array_upper<type,dim,device>::shape ( ) const
+    {
+        return attribute() == rows    ? partial_shape_of<2,-1>(host<1>()) otherwise
+               attribute() == columns ? partial_shape_of<1,-2>(host<1>()) otherwise
+                                        host<2>().shape().reverse();
+    }
+
+    template < class type, int dim, class device >
+    constexpr inplace_array<int,dim> array_upper<type,dim,device>::inplace_shape ( ) const
+    {
+        return attribute() == rows    ? partial_shape_of<2,-1>(host<1>()) otherwise
+               attribute() == columns ? partial_shape_of<1,-2>(host<1>()) otherwise
+                                        host<2>().inplace_shape().reverse();
+    }
+
+    template < class type, int dim, class device >
+    constexpr static_array<int,dim> array_upper<type,dim,device>::static_shape ( ) const
+    {
+        return attribute() == rows    ? partial_shape_of<2,-1>(host<1>()) otherwise
+               attribute() == columns ? partial_shape_of<1,-2>(host<1>()) otherwise
+                                        host<2>().static_shape().reverse();
+    }
+
+    template < class type, int dim, class device >
+    constexpr int array_upper<type,dim,device>::row ( ) const
+    {
+        return attribute() == rows    ? host<1>().static_shape()[2] otherwise
+               attribute() == columns ? host<1>().static_shape()[1] otherwise
+                                        host<2>().static_shape()[-1]; 
+    }
+
+    template < class type, int dim, class device >
+    constexpr int array_upper<type,dim,device>::column ( ) const    
+        requires ( dim == 2 )
+    {
+        return attribute() == rows    ? host<1>().static_shape()[-1] otherwise
+               attribute() == columns ? host<1>().static_shape()[-2] otherwise
+                                        host<2>().static_shape()[1]; 
     }
 
     template < class type, int dim, class device >
@@ -239,19 +304,19 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-    constexpr array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int pos )
+    constexpr array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int ofs )
     {
-        return attribute() == rows    ? host<1>().template rows   <dim-1>()[offset() * row()    + pos] otherwise
-               attribute() == columns ? host<1>().template columns<dim-1>()[offset() * column() + pos] otherwise 
-                                        host<2>().template columns<dim-1>()[pos];
+        return attribute() == rows    ? host<1>().template rows   <dim-1>()[offset() * row()    + ofs] otherwise
+               attribute() == columns ? host<1>().template columns<dim-1>()[offset() * column() + ofs] otherwise 
+                                        host<2>().template columns<dim-1>()[ofs];
     }
 
     template < class type, int dim, class device >
-    constexpr array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int pos )
+    constexpr array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int ofs )
     {
-        return attribute() == rows    ? host<1>().template rows   <dim-1>()[offset() * row()    + pos] otherwise
-               attribute() == columns ? host<1>().template columns<dim-1>()[offset() * column() + pos] otherwise 
-                                        host<2>().template columns<dim-1>()[pos];
+        return attribute() == rows    ? host<1>().template rows   <dim-1>()[offset() * row()    + ofs] otherwise
+               attribute() == columns ? host<1>().template columns<dim-1>()[offset() * column() + ofs] otherwise 
+                                        host<2>().template columns<dim-1>()[ofs];
     }
 
     template < class type, int dim, class device >
@@ -333,7 +398,7 @@ namespace detail
     {
         #if debug
         if ( attribute() == transposed )   
-            throw logic_error("get view offset from a transposed one");
+            throw logic_error("using offset() on a transposed array");
         #endif
         return attribute() == rows ? this - host<1>().template rows   <dim>().begin() otherwise
                                      this - host<1>().template columns<dim>().begin();
@@ -343,17 +408,24 @@ namespace detail
     constexpr array_upper<type,dim,device>::reference array_upper<type,dim,device>::at ( int_type auto... args )
         requires ( sizeof...(args) == dim )
     {
-        return attribute() == rows    ? host<1>().at(offset(), args...) otherwise
-               attribute() == columns ? host<2>().at(args..., offset()) otherwise 
-                                        host<2>().at(          args...);
+        #if debug
+        if ( attribute() == transposed )
+            throw logic_error("using at() on a transposed array");
+        #endif
+        return attribute() == rows ? host<1>().at(offset(), args...) otherwise
+                                     host<2>().at(args..., offset());
     }
 
     template < class type, int dim, class device >
     constexpr array_upper<type,dim,device>::const_reference array_upper<type,dim,device>::at ( int_type auto... args ) const
         requires ( sizeof...(args) == dim )
     {
-        return attribute() == rows or attribute() == columns ? host<1>().at(offset(), args...) otherwise
-                                                               host<2>().at(          args...);
+        #if debug
+        if ( attribute() == transposed )
+            throw logic_error("using at() from a transposed array");
+        #endif
+        return attribute() == rows    ? host<1>().at(offset(), args...) otherwise
+                                        host<2>().at(args..., offset());
     }
 
 

@@ -3,27 +3,25 @@
 template < class type, class device >
 constexpr array<type,1,device>::array ( const array& init )
     requires copyable<type>
-    extends base ( /* initialized later */ )
 {
     if ( init.ownership() ) [[likely]]
         self.base::operator=(static_cast<const base&>(init));
     else
     {
-        self.base::resize(init.upper::size());
-        device::copy(init.upper::begin(), init.upper::end(), self.base::begin());
+        self.resize(init.size());
+        device::copy(init.begin(), init.end(), self.begin());
     }
 } 
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( array&& init )
-    extends base ( /* initialized later */ )
 {
     if ( init.ownership() ) [[likely]]
         self.base::operator=(static_cast<base&&>(init));
     else
     {
-        self.base::resize(init.upper::size());
-        device::move(init.upper::begin(), init.upper::end(), self.base::begin());
+        self.resize(init.size());
+        device::move(init.begin(), init.end(), self.begin());
     }
 }
 
@@ -36,26 +34,17 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
 
     else if ( self.ownership() and not right.ownership() )
     {
-        self.base::resize(right.upper::size());
-        device::copy(right.begin(), right.end(), self.base::begin());
+        self.resize(right.size());
+        device::copy(right.begin(), right.end(), self.begin());
     }
 
-    else if ( not self.ownership() and right.ownership() )
+    else
     {
         #if debug
-        if ( self.upper::size() != right.base::size() )
-            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.base::size());
+        if ( self.size() != right.size() )
+            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.size(), right.size());
         #endif
-        device::copy(right.base::begin(), right.base::end(), self.upper::begin());
-    }
-
-    else /* if ( not self.ownership() and not right.ownership() ) */
-    {
-        #if debug
-        if ( self.upper::size() != right.upper::size() )
-            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.upper::size());
-        #endif
-        device::copy(right.upper::begin(), right.upper::end(), self.upper::begin());
+        device::copy(right.begin(), right.end(), self.begin());
     }
 
     return self;
@@ -69,26 +58,17 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right
 
     else if ( self.ownership() and not right.ownership() )
     {
-        self.base::resize(right.upper::size());
-        device::move(right.begin(), right.end(), self.base::begin());
+        self.resize(right.upper::size());
+        device::move(right.begin(), right.end(), self.begin());
     }
 
-    else if ( not self.ownership() and right.ownership() )
+    else
     {
         #if debug
-        if ( self.upper::size() != right.base::size() )
-            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.base::size());
+        if ( self.size() != right.size() )
+            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.size(), right.size());
         #endif
-        device::move(right.base::begin(), right.base::end(), self.upper::begin());
-    }
-
-    else /* if ( not self.ownership() and not right.ownership() ) */
-    {
-        #if debug
-        if ( self.upper::size() != right.upper::size() )
-            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.upper::size(), right.upper::size());
-        #endif
-        device::move(right.upper::begin(), right.upper::end(), self.upper::begin());
+        device::move(right.begin(), right.end(), self.begin());
     }
 
     return self;
@@ -117,18 +97,10 @@ constexpr array<type,1,device>::array ( int init_size, const type& init_value )
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( const std::initializer_list<type>& init )
-    requires copyable<type>
-    extends base ( init )
-{
-
-}
-
-template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size, const function_type<type()> auto init_value )
     extends array ( init_size )
 {
-    device::generate(self.base::begin(), self.base::end(), init_value);
+    device::generate(self.begin(), self.end(), init_value);
 }
 
 template < class type, class device >
@@ -137,6 +109,14 @@ constexpr array<type,1,device>::array ( int init_size, const function_type<type(
 {
     for ( int i in range(init_size) )
         self[i] = init_value(i);
+}
+
+template < class type, class device >
+constexpr array<type,1,device>::array ( const std::initializer_list<type>& init )
+    requires copyable<type>
+    extends base ( init )
+{
+
 }
 
 template < class type, class device >
@@ -160,7 +140,7 @@ template < int len >
 constexpr array<type,1,device>::array ( const inplace_array<type,len,device>& cvt )
     extends array ( cvt.size() )
 {
-    device::copy(cvt.begin(), cvt.end(), self.base::begin());
+    device::copy(cvt.begin(), cvt.end(), self.begin());
 }
 
 template < class type, class device >
@@ -168,7 +148,7 @@ template < int len >
 constexpr array<type,1,device>::array ( const static_array<type,len,device>& cvt )
     extends array ( cvt.size() )
 {
-    device::copy(cvt.begin(), cvt.end(), self.base::begin());
+    device::copy(cvt.begin(), cvt.end(), self.begin());
 }
 
 template < class type, class device >
@@ -177,10 +157,7 @@ constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
     requires convertible_to<type2,type> but ( not same_as<type,type2> )
     extends array ( cvt.size() )
 {
-    if ( cvt.ownership() ) [[likely]]
-        device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-    else
-        device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+    device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::end(), self.begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
@@ -189,10 +166,7 @@ constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
     requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
     extends array ( cvt.size() )
 {
-    if ( cvt.ownership() ) [[likely]]
-        device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-    else
-        device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+    device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
@@ -202,15 +176,9 @@ constexpr array<type,1,device>::array ( const array<type,1,device2>& cvt )
     extends array ( cvt.size() )
 {
     if constexpr ( not same_as<device,cpu> )
-        if ( cvt.ownership() ) [[likely]]
-            device::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
-        else
-            device::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+        device::copy(cvt.begin(), cvt.end(), self.begin());
     else
-        if ( cvt.ownership() ) [[likely]]
-            device2::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
-        else
-            device2::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+        device2::copy(cvt.begin(), cvt.end(), self.begin());
 }
 
 template < class type, class device >
@@ -332,10 +300,10 @@ constexpr array<type,1,device>::reference array<type,1,device>::operator [] ( in
     
     if ( ownership() ) [[likely]]
         return pos >= 0 ? base::operator[](pos-1) otherwise
-                          base::operator[](pos+base::size());
+                          base::operator[](pos+size());
     else
         return pos >= 0 ? upper::operator[](pos-1) otherwise
-                          upper::operator[](pos+upper::size());
+                          upper::operator[](pos+size());
 }
 
 template < class type, class device >
@@ -348,10 +316,10 @@ constexpr array<type,1,device>::const_reference array<type,1,device>::operator [
     
     if ( ownership() ) [[likely]]
         return pos >= 0 ? base::operator[](pos-1) otherwise
-                          base::operator[](pos+base::size());
+                          base::operator[](pos+size());
     else
         return pos >= 0 ? upper::operator[](pos-1) otherwise
-                          upper::operator[](pos+upper::size());
+                          upper::operator[](pos+size());
 }
 
 template < class type, class device >
@@ -399,8 +367,8 @@ constexpr array<type,1,device>& array<type,1,device>::pop ( int old_pos )
     #if debug
     if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot pop from array: it does not own its data");
-    if ( old_pos < -base::size() or old_pos == 0 or old_pos > base::size() )
-        throw index_error("index {} is out of range with size {}", old_pos, base::size());
+    if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
+        throw index_error("index {} is out of range with size {}", old_pos, size());
     #endif
 
     base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 otherwise base::begin() + old_pos + base::size());
@@ -412,8 +380,8 @@ constexpr array<type,1,device>& array<type,1,device>::insert ( int new_pos, type
     #if debug
     if ( not ownership() ) [[unlikely]]
         throw logic_error("cannot insert into array: it does not own its data");
-    if ( new_pos < -base::size() or new_pos == 0 or new_pos > base::size() )
-        throw index_error("index {} is out of range with size {}", new_pos, base::size());
+    if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
+        throw index_error("index {} is out of range with size {}", new_pos, size());
     #endif
     
     base::insert(new_pos >= 0 ? base::begin() + new_pos - 1 otherwise base::begin() + new_pos + base::size(), std::move(new_value));
@@ -427,15 +395,15 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int
         throw logic_error("cannot erase from array: it does not own its data");
     #endif
 
-    let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + base::size();
-    let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + base::size();
+    let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size();
+    let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size();
 
     #if debug
-    if ( ( ( p1 < 1 or p1 > base::size() ) or
-           ( p2 < 1 or p2 > base::size() ) )
+    if ( ( ( p1 < 1 or p1 > size() ) or
+           ( p2 < 1 or p2 > size() ) )
     and not // Except for below:
-         ( ( p1 == base::size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
-        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, base::size());
+         ( ( p1 == size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
+        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
     #endif
 
     base::erase(base::begin() + p1 - 1, base::begin() + p2 - 1);

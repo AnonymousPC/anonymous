@@ -3,10 +3,10 @@
 namespace detail
 {
     template < class type, int dim, class device >
-    struct array_upper;
+    class array_upper;
 
     template < class type, class device >
-    struct array_upper<type,1,device>
+    class array_upper<type,1,device>
     {
         private: // Data
             array<type,2,device>* ptr = nullptr;
@@ -27,16 +27,22 @@ namespace detail
             constexpr array_upper ( const array<type,2,device>& );
 
         public: // Member
-            constexpr int             size        ( )     const;
-            constexpr bool            empty       ( )     const;
-            constexpr pointer         data        ( );
-            constexpr const_pointer   data        ( )     const;
-            constexpr iterator        begin       ( );
-            constexpr const_iterator  begin       ( )     const;
-            constexpr iterator        end         ( );
-            constexpr const_iterator  end         ( )     const;
-            constexpr reference       operator [] ( int );
-            constexpr const_reference operator [] ( int ) const;
+            constexpr int                  size          ( )     const;
+            constexpr int                  capacity      ( )     const = delete;
+            constexpr array<int>           shape         ( )     const = delete;
+            constexpr inplace_array<int,1> inplace_shape ( )     const = delete;
+            constexpr static_array<int,1>  static_shape  ( )     const = delete;
+            constexpr int                  row           ( )     const = delete;
+            constexpr int                  column        ( )     const = delete;
+            constexpr bool                 empty         ( )     const;
+            constexpr pointer              data          ( );
+            constexpr const_pointer        data          ( )     const;
+            constexpr iterator             begin         ( );
+            constexpr const_iterator       begin         ( )     const;
+            constexpr iterator             end           ( );
+            constexpr const_iterator       end           ( )     const;
+            constexpr reference            operator []   ( int );
+            constexpr const_reference      operator []   ( int ) const;
         
         public: // Memory
             constexpr       array<type,2,device>& host        ( );
@@ -45,10 +51,11 @@ namespace detail
             constexpr       bool                  contiguous  ( ) const;
             constexpr       auto                  attribute   ( ) const;
             constexpr       int                   offset      ( ) const;
+            constexpr       int                   top_size    ( ) const;
     }
 
     template < class type, int dim, class device >
-    struct array_upper<type,dim,device>
+    class array_upper<type,dim,device>
     {
         private: // Data
             array<type,dim+1,device>* ptr1 = nullptr;
@@ -72,16 +79,22 @@ namespace detail
             constexpr array_upper ( const array<type,dim,  device>& );
 
         public: // Member
-            constexpr       int                       size        ( )                       const;
-            constexpr       bool                      empty       ( )                       const;
-            constexpr       pointer                   data        ( );
-            constexpr       const_pointer             data        ( )                       const;
-            constexpr       iterator                  begin       ( );
-            constexpr       const_iterator            begin       ( )                       const;
-            constexpr       iterator                  end         ( );
-            constexpr       const_iterator            end         ( )                       const;
-            constexpr       array<type,dim-1,device>& operator [] ( int );
-            constexpr const array<type,dim-1,device>& operator [] ( int )                   const;
+            constexpr       int                       size          ( )     const;
+            constexpr       int                       capacity      ( )     const = delete;
+            constexpr       array<int>                shape         ( )     const;
+            constexpr       inplace_array<int,dim>    inplace_shape ( )     const;
+            constexpr       static_array<int,dim>     static_shape  ( )     const;
+            constexpr       int                       row           ( )     const = delete;
+            constexpr       int                       column        ( )     const = delete;
+            constexpr       bool                      empty         ( )     const;
+            constexpr       pointer                   data          ( );
+            constexpr       const_pointer             data          ( )     const;
+            constexpr       iterator                  begin         ( );
+            constexpr       const_iterator            begin         ( )     const;
+            constexpr       iterator                  end           ( );
+            constexpr       const_iterator            end           ( )     const;
+            constexpr       array<type,dim-1,device>& operator []   ( int );
+            constexpr const array<type,dim-1,device>& operator []   ( int ) const;
         
         public: // Memory
             template < int attribute > constexpr       array<type,dim+1,device>& host        ( )       requires ( attribute == 1 );
@@ -92,8 +105,13 @@ namespace detail
                                        constexpr       bool                      contiguous  ( ) const;
                                        constexpr       auto                      attribute   ( ) const;
                                        constexpr       int                       offset      ( ) const;
+                                       constexpr       int                       top_size    ( ) const;
                                        constexpr       reference                 at          ( int_type auto... args )       requires ( sizeof...(args) == dim );
                                        constexpr       const_reference           at          ( int_type auto... args ) const requires ( sizeof...(args) == dim );
+
+        private: // Detail
+            template < int from, int to > constexpr static int partial_size_of ( const auto& );
+            template < int from, int to > constexpr static auto 
     }
 
 } // namespace detail

@@ -112,14 +112,6 @@ constexpr array<type,1,device>::array ( int init_size, const function_type<type(
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( const std::initializer_list<type>& init )
-    requires copyable<type>
-    extends base ( init )
-{
-
-}
-
-template < class type, class device >
 constexpr array<type,1,device>::array ( std::initializer_list<type> init )
     requires copyable<type>
     extends base ( std::forward<decltype(init)>(init) )
@@ -258,7 +250,7 @@ template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::begin ( )
 {
     if ( ownership() ) [[likely]]
-        return base::begin();
+        return base::data();
     else
         return upper::begin();
 }
@@ -267,7 +259,7 @@ template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::begin ( ) const
 {
     if ( ownership() ) [[likely]]
-        return base::begin();
+        return base::data();
     else
         return upper::begin();
 }
@@ -276,7 +268,7 @@ template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::end ( )
 {
     if ( ownership() ) [[likely]]
-        return base::end();
+        return base::data() + base::size();
     else
         return upper::end();
 }
@@ -285,7 +277,7 @@ template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::end ( ) const
 {
     if ( ownership() ) [[likely]]
-        return base::end();
+        return base::data() + base::size();
     else
         return upper::end();
 }
@@ -421,91 +413,3 @@ constexpr bool array<type,1,device>::contiguous ( ) const
     return ownership() or upper::contiguous();
 }
 
-template < class type, class device >
-class array<type,1,device>::iterator
-{
-    private: // Data
-        int step = 1;
-
-    private: // Typedef
-        using base = device::template vector<type>::iterator;
-
-    private: // Data
-        base iter = base();
-        int  step = 1;
-
-    public: // Typedef
-        using iterator_concept = std::random_access_iterator_tag;
-        using value_type       = device::template value_type<type>;
-        using reference        = device::template reference <type>;
-        using pointer          = device::template pointer   <type>;
-        using difference_type  = base::difference_type;
-
-    public: // Core
-        constexpr iterator ( ) = default;
-        constexpr iterator ( base init_iter )                extends iter ( init_iter )                     { };
-        constexpr iterator ( base init_iter, int init_step ) extends iter ( init_iter ), step ( init_step ) { }; 
-
-    public: // Operator.member
-        constexpr           operator base ( )                   const { return  iter;    }
-        constexpr reference operator *    ( )                   const { return *iter;    }
-        constexpr pointer   operator ->   ( )                   const { return  iter;    }
-        constexpr reference operator []   ( difference_type t ) const { return  iter[t]; }
-
-    public: // Operator.global
-        friend constexpr bool                 operator ==  ( const iterator&       left, const iterator&       right ) { return left.iter == right.iter;                                    }
-        friend constexpr std::strong_ordering operator <=> ( const iterator&       left, const iterator&       right ) { return std::compare_strong_order_fallback(left.iter, right.iter);  }
-        friend constexpr iterator             operator  +  ( const iterator&       left,       difference_type right ) { return iterator(left .iter + left .step * right, left .step);      }
-        friend constexpr iterator             operator  +  (       difference_type left, const iterator&       right ) { return iterator(right.iter + right.step * left,  right.step);      }
-        friend constexpr iterator             operator  -  ( const iterator&       left,       difference_type right ) { return iterator(left .iter - left .step * right, left .step);      }
-        friend constexpr difference_type      operator  -  ( const iterator&       left, const iterator&       right ) { [[assume(left.step == right.step)]]; return (left.iter - right.iter) / left.step; }
-        friend constexpr iterator&            operator ++  (       iterator&       left                              ) { left.iter += left.step;         return left; }
-        friend constexpr iterator             operator ++  (       iterator&       left,       int                   ) { let it = left; ++left;          return it;   }
-        friend constexpr iterator&            operator --  (       iterator&       left                              ) { left.iter -= left.step;         return left; }
-        friend constexpr iterator             operator --  (       iterator&       left,       int                   ) { let it = left; --left;          return it;   }
-        friend constexpr iterator&            operator +=  (       iterator&       left,       difference_type right ) { left.iter += left.step * right; return left; }
-        friend constexpr iterator&            operator -=  (       iterator&       left,       difference_type right ) { left.iter -= left.step * right; return left; }
-};
-
-template < class type, class device >
-class array<type,1,device>::const_iterator
-{
-    private: // Base
-        using base = device::template vector<type>::const_iterator
-
-    private: // Data
-        base iter = base();
-        int  step = 1;
-
-    public: // Typedef
-        using iterator_concept = std::random_access_iterator_tag;
-        using value_type       = device::template value_type     <type>;
-        using reference        = device::template const_reference<type>;
-        using pointer          = device::template const_pointer  <type>;
-        using difference_type  = base::difference_type;
-
-    public: // Core
-        constexpr const_iterator ( ) = default;
-        constexpr const_iterator ( base init_iter )                extends iter ( init_iter )                     { }
-        constexpr const_iterator ( base init_iter, int init_step ) extends iter ( init_iter ), step ( init_step ) { } 
-
-    public: // Operator.member
-        constexpr           operator base ( )                   const { return  iter;    }
-        constexpr reference operator *    ( )                   const { return *iter;    }
-        constexpr pointer   operator ->   ( )                   const { return  iter;    }
-        constexpr reference operator []   ( difference_type t ) const { return  iter[t]; }
-
-    public: // Operator.global
-        friend constexpr bool                 operator ==  ( const const_iterator& left, const const_iterator& right ) { return left.iter == right.iter;                                     }                  
-        friend constexpr std::strong_ordering operator <=> ( const const_iterator& left, const const_iterator& right ) { return std::compare_strong_order_fallback(left.iter, right.iter);   }
-        friend constexpr const_iterator       operator  +  ( const const_iterator& left,       difference_type right ) { return const_iterator(left .iter + left .step * right, left .step); }
-        friend constexpr const_iterator       operator  +  (       difference_type left, const const_iterator& right ) { return const_iterator(right.iter + right.step * left,  right.step); }
-        friend constexpr const_iterator       operator  -  ( const const_iterator& left,       difference_type right ) { return const_iterator(left .iter - left .step * right, left .step); }
-        friend constexpr difference_type      operator  -  ( const const_iterator& left, const const_iterator& right ) { [[assume(left.step == right.step)]]; return (left.iter - right.iter) / left.step;  }
-        friend constexpr const_iterator&      operator ++  (       const_iterator& left                              ) { left.iter += left.step;         return left; }
-        friend constexpr const_iterator       operator ++  (       const_iterator& left,       int                   ) { let it = left; ++left;          return it;   }
-        friend constexpr const_iterator&      operator --  (       const_iterator& left                              ) { left.iter -= left.step;         return left; }
-        friend constexpr const_iterator       operator --  (       const_iterator& left,       int                   ) { let it = left; --left;          return it;   }
-        friend constexpr const_iterator&      operator +=  (       const_iterator& left,       difference_type right ) { left.iter += left.step * right; return left; }
-        friend constexpr const_iterator&      operator -=  (       const_iterator& left,       difference_type right ) { left.iter -= left.step * right; return left; }
-};

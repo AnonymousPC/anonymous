@@ -1,14 +1,13 @@
 #pragma once
-#define template_int_axis template < int axis = 1 > requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-class array
+class array<type,dim,device>
     extends public device::template vector<type>,
-            public detail::upper_array<type,1,  device>, // Make abi compatible with array<type,1>, required from as_flat().
-            public detail::array_info <     dim,device>,
-            public detail::upper_array<type,dim,device>,
-            public detail::lower_array<type,dim,device>
+            public detail::array_upper<type,1,  device>, // Make abi compatible with array<type,1>, required from as_flat().
+            public detail::array_info <type,dim,device>,
+            public detail::array_upper<type,dim,device>,
+            public detail::array_lower<type,dim,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -17,10 +16,10 @@ class array
 
     private: // Base
         using base   = device::template vector<type>;
-        using flat   = detail::upper_array<type,1,  device>;
-        using info   = detail::array_info <     dim,device>;
-        using upper  = detail::upper_array<type,dim,device>;
-        using lower  = detail::lower_array<type,dim,device>;
+        using flat   = detail::array_upper<type,1,  device>;
+        using info   = detail::array_info <type,dim,device>;
+        using upper  = detail::array_upper<type,dim,device>;
+        using lower  = detail::array_lower<type,dim,device>;
 
     public: // Typedef
         using  value_type      = device::template value_type     <type>;
@@ -28,8 +27,8 @@ class array
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        class  iterator;
-        class  const_iterator;
+        using  iterator        = std::vector<detail::array_upper<type,dim-1,device>>::iterator;
+        using  const_iterator  = std::vector<detail::array_upper<type,dim-1,device>>::const_iterator;
         using  device_type     = device;
         struct array_tag { };
 
@@ -47,7 +46,7 @@ class array
         constexpr          array ( auto... args )                                      requires                    ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func_ints<type,decltype(args)...>;
         constexpr          array ( int,  function_type<array<type,dim-1>()>    auto );
         constexpr          array ( int,  function_type<array<type,dim-1>(int)> auto );
-        constexpr          array ( std::initializer_list<array<type,dim-1>> );         requires copyable<type>;
+        constexpr          array ( std::initializer_list<array<type,dim-1,device>> )   requires copyable<type>;
 
     public: // Conversion (type)
         template < class type2 > constexpr          array ( const array<type2,dim,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2> );
@@ -76,14 +75,14 @@ class array
         constexpr const  array<type,dim-1,device>& operator []   ( int ) const;
 
     public: // Member
-        template_int_axis constexpr array& clear  ( );
-        template_int_axis constexpr array& resize ( int );
-                          constexpr array& resize ( int_type auto... args ) requires ( sizeof...(args) == dim );
-                          constexpr array& resize ( const array<int>& );
-        template_int_axis constexpr array& push   (      array<type,dim-1,device> );
-        template_int_axis constexpr array& pop    ( int = -1 );
-        template_int_axis constexpr array& insert ( int, array<type,dim-1,device> );
-        template_int_axis constexpr array& erase  ( int, int );
+                                  constexpr array& clear  ( );
+        template < int axis = 1 > constexpr array& resize ( int )                           requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) );
+                                  constexpr array& resize ( int_type auto... args )         requires ( sizeof...(args) == dim );
+                                  constexpr array& resize ( const array<int>& );
+        template < int axis = 1 > constexpr array& push   (      array<type,dim-1,device> ) requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) );
+        template < int axis = 1 > constexpr array& pop    ( int = -1 )                      requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) );
+        template < int axis = 1 > constexpr array& insert ( int, array<type,dim-1,device> ) requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) );
+        template < int axis = 1 > constexpr array& erase  ( int, int )                      requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) );
 
     public: // View
         constexpr       array<type,1,device>&   as_flat      ( );
@@ -92,13 +91,17 @@ class array
         constexpr const array<type,dim,device>& as_transpose ( ) const;
 
     public: // Memory
-        constexpr bool            ownership  ( )                       const;
-        constexpr bool            contiguous ( )                       const;
+        constexpr bool ownership  ( ) const;
+        constexpr bool contiguous ( ) const;
 
-    public: // For view
-        constexpr int             top_size   ( )                       const;
-        constexpr reference       at         ( int_type auto... args )       requires ( sizeof...(args) == dim );
-        constexpr const_reference at         ( int_type auto... args ) const requires ( sizeof...(args) == dim );
+    public: // View
+        template < int dim2 > constexpr       std::vector<detail::array_upper<type,dim2,device>>& rows     ( );
+        template < int dim2 > constexpr const std::vector<detail::array_upper<type,dim2,device>>& rows     ( ) const;
+        template < int dim2 > constexpr       std::vector<detail::array_upper<type,dim2,device>>& columns  ( );
+        template < int dim2 > constexpr const std::vector<detail::array_upper<type,dim2,device>>& columns  ( ) const;
+                              constexpr       int                                                 top_size ( )                       const;
+                              constexpr       reference                                           at       ( int_type auto... args )       requires ( sizeof...(args) == dim );
+                              constexpr       const_reference                                     at       ( int_type auto... args ) const requires ( sizeof...(args) == dim );
 
     private: // Detail
         constexpr static int  multiply_first_until_last                 ( const auto&... );
@@ -106,7 +109,9 @@ class array
         constexpr static bool check_first_until_last_as_positive        ( const auto&... );
         constexpr static bool check_first_until_second_last_as_positive ( const auto&... );
         constexpr        void device_generate_mdspan                    ( const auto& );
-}
+};
 
-#include "array_nd.ipp"
-#undef template_int_axis
+/* .ipp files are explicit extern included, which instantiates
+ * array.shape(), array.inplace_shape() and array.static_shape()
+ * in a correct order
+ */

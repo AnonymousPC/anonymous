@@ -228,7 +228,8 @@
 
 // Compiler.clang++
 #ifdef __clang__
-    #pragma clang diagnostic ignored "-Wunknown-attributes" // Allowing [[assume(bool-expr)]]
+    #pragma clang diagnostic ignored "-Wunknown-attributes"    // Allowing [[assume(bool-expr)]]
+    #pragma clang diagnostic ignored "-Wuser-defined-literals" // Allowing user-defined literal without being warned that literal not begins with '_' is reserved for further standarlization. 
 #endif
 
 

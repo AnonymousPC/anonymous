@@ -2,23 +2,26 @@
 
 namespace detail
 {
-    template < int from, int to, int index >
+    template < int from, int to, int add, int index >
     constexpr void for_constexpr_impl ( auto&& op )
     {
-        if constexpr ( index <= to )
+        if constexpr ( ( add > 0 and index <= to ) or
+                       ( add < 0 and index >= to ) )
         {
             op(std::integral_constant<int,index>());
-            for_constexpr_impl<from,to,index+1>(std::forward<decltype(op)>(op));
+            for_constexpr_impl<from,to,index+add>(std::forward<decltype(op)>(op));
         }
     }
 
-    template < int from, int to >
+    template < int from, int to, int add = 1 >
     constexpr void for_constexpr ( auto&& op )
     {
-        if constexpr ( from <= to )
-            for_constexpr_impl<from,to,from>(op);
+        static_assert(add != 0, "this for-clause is infinite");
+        if constexpr ( ( add > 0 and from <= to ) or
+                       ( add < 0 and from >= to ) )
+            for_constexpr_impl<from,to,add,from>(op);
         else
-            static_assert(false, "from > to");
+            static_assert(false, "this for-clause does not do anything");
     }
 } // namespace detail
 

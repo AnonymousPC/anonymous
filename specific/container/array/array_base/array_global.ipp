@@ -65,4 +65,38 @@ namespace detail
         else 
             return arg1 * arg2;
     }
+
+    constexpr int multiply_first_until_last ( const auto&... args )
+    {
+        return args * ...;
+    }
+
+    constexpr int multiply_first_until_second_last ( const auto& arg1, const auto&... args )
+    {
+        if constexpr ( sizeof...(args) >= 1 )
+            return arg1 * multiply_first_until_second_last(args...);
+        else
+            return 1;
+    }
+
+    constexpr bool check_first_until_last_as_positive ( const auto&... args )
+    {
+        return [] (const auto& v) { return v >= 0 } ( args ) and ...;
+    }
+
+    constexpr bool check_first_until_second_last_as_positive ( const auto& arg1, const auto&... args )
+    {
+        if constexpr ( sizeof...(args) >= 1 )
+            return arg1 > 0 and check_first_until_second_last_as_positive(args...);
+        else
+            return true;
+    }
+
+    constexpr void device_generate_mdspan ( const auto&, const auto& )
+    {
+        static_assert(false, "not coded yet");
+    }
+
+    
+    
 }

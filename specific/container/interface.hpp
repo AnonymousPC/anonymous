@@ -33,9 +33,15 @@ namespace ap
     template < class type,                                                 class device = cpu > class basic_string;
                                                                                                 using string            = basic_string<char>;
                                                                                                 using wstring           = basic_string<wchar_t>;
+                                                                                                using u8string          = basic_string<char8_t>;
+                                                                                                using u16string         = basic_string<char16_t>;
+                                                                                                using u32string         = basic_string<char32_t>;
     template < class type,                                                 class device = cpu > class basic_string_view;
                                                                                                 using string_view       = basic_string_view<char>;
                                                                                                 using wstring_view      = basic_string_view<wchar_t>;
+                                                                                                using u8string_view     = basic_string_view<char8_t>;
+                                                                                                using u16string_view    = basic_string_view<char16_t>;
+                                                                                                using u32string_view    = basic_string_view<char32_t>;
     template < class type >                                                                     class basic_regex;
                                                                                                 using regex             = basic_regex<char>;
                                                                                                 using wregex            = basic_regex<wchar_t>;
@@ -228,23 +234,19 @@ namespace ap
     #include "string/string.hpp"
     #include "utility/utility.hpp"
 
-    // /// Literal
-    // namespace literals
-    // {
-    //     template < char... index >
-    //     constexpr auto           operator ""c   ( )                                { return constexpr_index<index...>();  }
-    //     constexpr string         operator ""s   ( const char*     ptr, size_t    ) { return string         ( ptr     );   }
-    //     constexpr wstring        operator ""s   ( const wchar_t*  ptr, size_t    ) { return wstring        ( ptr     );   }
-    //     constexpr u8string       operator ""s   ( const char8_t*  ptr, size_t    ) { return u8string       ( ptr     );   }
-    //     constexpr u16string      operator ""s   ( const char16_t* ptr, size_t    ) { return u16string      ( ptr     );   }
-    //     constexpr u32string      operator ""s   ( const char32_t* ptr, size_t    ) { return u32string      ( ptr     );   }
-    //     constexpr string_view    operator ""sv  ( const char*     ptr, size_t sz ) { return string_view    ( ptr, sz );   }
-    //     constexpr wstring_view   operator ""sv  ( const wchar_t*  ptr, size_t sz ) { return wstring_view   ( ptr, sz );   }
-    //     constexpr u8string_view  operator ""sv  ( const char8_t*  ptr, size_t sz ) { return u8string_view  ( ptr, sz );   }
-    //     constexpr u16string_view operator ""sv  ( const char16_t* ptr, size_t sz ) { return u16string_view ( ptr, sz );   }
-    //     constexpr u32string_view operator ""sv  ( const char32_t* ptr, size_t sz ) { return u32string_view ( ptr, sz );   }
-    //     constexpr regex          operator ""rgx ( const char*     ptr, size_t sz ) { return regex (string_view (ptr,sz)); }
-    //     constexpr wregex         operator ""rgx ( const wchar_t*  ptr, size_t sz ) { return wregex(wstring_view(ptr,sz)); }
-    // }
+    /// Literal
+    inline namespace literals
+    {
+        constexpr string         operator ""s   ( const char*     ptr, size_t    ) { return string         ( ptr     );   }
+        constexpr wstring        operator ""s   ( const wchar_t*  ptr, size_t    ) { return wstring        ( ptr     );   }
+        constexpr u8string       operator ""s   ( const char8_t*  ptr, size_t    ) { return u8string       ( ptr     );   }
+        constexpr u16string      operator ""s   ( const char16_t* ptr, size_t    ) { return u16string      ( ptr     );   }
+        constexpr u32string      operator ""s   ( const char32_t* ptr, size_t    ) { return u32string      ( ptr     );   }
+        constexpr string_view    operator ""sv  ( const char*     ptr, size_t sz ) { return string_view    ( ptr, sz );   }
+        constexpr wstring_view   operator ""sv  ( const wchar_t*  ptr, size_t sz ) { return wstring_view   ( ptr, sz );   }
+        constexpr u8string_view  operator ""sv  ( const char8_t*  ptr, size_t sz ) { return u8string_view  ( ptr, sz );   }
+        constexpr u16string_view operator ""sv  ( const char16_t* ptr, size_t sz ) { return u16string_view ( ptr, sz );   }
+        constexpr u32string_view operator ""sv  ( const char32_t* ptr, size_t sz ) { return u32string_view ( ptr, sz );   }
+    }
 
 } // namespace ap

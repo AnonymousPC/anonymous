@@ -3,7 +3,7 @@
 template < class type, class device >
 class array<type,1,device>
     extends public device::template vector<type>,
-            public detail::upper_array<type,1,device>
+            public detail::array_upper<type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -12,7 +12,7 @@ class array<type,1,device>
 
     public: // Base
         using base  = device::template vector<type>;
-        using upper = detail::upper_array<type,1,device>;
+        using upper = detail::array_upper<type,1,device>;
 
     public: // Typedef
         using  value_type      = device::template value_type     <type>;
@@ -20,8 +20,8 @@ class array<type,1,device>
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        class  iterator;
-        class  const_iterator;
+        using  iterator        = detail::array_iterator          <type,device>;
+        using  const_iterator  = detail::array_const_iterator    <type,device>;
         using  device_type     = device;
         struct array_tag { };
 
@@ -83,4 +83,7 @@ class array<type,1,device>
         constexpr bool contiguous ( ) const;
 };
 
-#include "array_1d.ipp"
+/* .ipp files are explicit extern included, which instantiates
+ * array.shape(), array.inplace_shape() and array.static_shape()
+ * in a correct order
+ */

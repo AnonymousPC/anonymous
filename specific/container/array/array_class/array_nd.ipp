@@ -1,5 +1,6 @@
 #pragma once
 
+
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr array<type,dim,device>::array ( const array& init )
@@ -14,7 +15,8 @@ constexpr array<type,dim,device>::array ( const array& init )
     else
     {
         self.resize(init.static_shape());
-        device::copy(init.as_flat().begin(), init.as_flat().end(), self.as_flat().begin());
+        init.contiguous() ? device::copy(init.data(), init.data()+init.size(), data()) otherwise
+                            device::copy(init.begin(), init.end(), begin());
     }
 }
 
@@ -31,7 +33,8 @@ constexpr array<type,dim,device>::array ( array&& init )
     else
     {
         self.resize(init.static_shape());
-        device::move(init.as_flat().begin(), init.as_flat().end(), self.as_flat().begin());
+        init.contiguous() ? device::move(init.data(), init.data()+init.size(), data()) otherwise 
+                            device::move(init.begin(), init.end(), begin());
     }
 }
 
@@ -50,7 +53,8 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
     else if ( self.ownership() and not right.ownership() )
     {
         self.resize(right.static_shape());
-        device::copy(right.as_flat().begin(), right.as_flat().end(), self.as_flat().begin());
+        right.contiguous() ? device::copy(right.data(), right.data()+right.size(), data()) otherwise
+                             device::copy(right.begin(), right.end(), begin());
     }
 
     else
@@ -59,7 +63,8 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
         if ( self.static_shape() == right.static_shape() )
             throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on shape (with left_shape = {}, right_shape = {})", self.static_shape(), right.static_shape());
         #endif
-        device::copy(right.as_flat().begin(), right.as_flat().end(), self.as_flat().begin());
+        right.contiguous() ? device::copy(right.data(), right.data()+right.size(), data()) otherwise
+                             device::copy(right.begin(), right.end(), begin());
     } 
 
     return self;
@@ -67,7 +72,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const array&& right )
+constexpr array<type,dim,device>& array<type,dim,device>::operator = ( array&& right )
 {
     if ( self.ownership() and right.ownership() ) [[likely]]
     {
@@ -79,7 +84,8 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
     else if ( self.ownership() and not right.ownership() )
     {
         self.resize(right.static_shape());
-        device::move(right.as_flat().begin(), right.as_flat().end(), self.as_flat().begin());
+        right.contiguous() ? device::move(right.data(), right.data()+right.size(), data()) otherwise
+                             device::move(right.begin(), right.end(), begin());
     }
 
     else
@@ -88,7 +94,8 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
         if ( self.static_shape() == right.static_shape() )
             throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on shape (with left_shape = {}, right_shape = {})", self.static_shape(), right.static_shape());
         #endif
-        device::move(right.as_flat().begin(), right.as_flat().end(), self.as_flat().begin());
+        right.contiguous() ? device::move(right.data(), right.data()+right.size(), data()) otherwise
+                             device::move(right.begin(), right.end(), begin());
     } 
 
     return self;
@@ -98,12 +105,12 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr array<type,dim,device>::array ( int_type auto... args )
     requires ( sizeof...(args) == dim )
-    extends base  ( multiply_first_until_last(args...) ),
+    extends base  ( detail::multiply_first_until_last(args...) ),
             info  ( args... ),
-            lower ( args... ),
+            lower ( args... )
 {
     #if debug
-    if ( not check_first_until_last_as_positive(args...) )
+    if ( not detail::check_first_until_last_as_positive(args...) )
         throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
     #endif
 }
@@ -114,12 +121,12 @@ constexpr array<type,dim,device>::array ( auto... args )
     requires copyable<type> and
              ( sizeof...(args) - 1 == dim ) and 
              detail::ints_until_last_type<type,decltype(args)...>
-    extends base  ( multiply_first_until_second_last(args...), last_value_of(args...) ),
+    extends base  ( detail::multiply_first_until_second_last(args...), last_value_of(args...) ),
             info  ( args... ),
             lower ( args... )
 {
     #if debug
-    if ( not check_first_until_second_last_as_positive(args...) )
+    if ( not detail::check_first_until_second_last_as_positive(args...) )
         throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
     #endif
 }
@@ -129,12 +136,12 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>::array ( auto... args )
     requires ( sizeof...(args) - 1 == dim ) and
              detail::ints_until_last_func<type,decltype(args)...>
-    extends base  ( multiply_first_until_second_last(args...) ),
+    extends base  ( detail::multiply_first_until_second_last(args...) ),
             info  ( args... ),
             lower ( args... )
 {
     #if debug
-    if ( not check_first_until_second_last_as_positive(args...) )
+    if ( not detail::check_first_until_second_last_as_positive(args...) )
         throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
     #endif
     device::generate(self.as_flat().begin(), self.as_flat().end(), last_value_of(args...));
@@ -144,21 +151,22 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr array<type,dim,device>::array ( auto... args )
     requires ( sizeof...(args) - 1 == dim ) and
-             detail::ints_until_last_func_ints<type,decltype(args...)>
-    extends vector ( multiply_first_to_second_last(args...) ),
-            info   ( args... ),
-            lower  ( args... )
+             detail::ints_until_last_func_ints<type,decltype(args)...>
+    extends base  ( detail::multiply_first_to_second_last(args...) ),
+            info  ( args... ),
+            lower ( args... )
 {
     #if debug
-    if ( not check_first_until_second_last_as_positive(args...) )
+    if ( not detail::check_first_until_second_last_as_positive(args...) )
         throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
     #endif
-    device_generate_mdspan(last_value_of(args...)
+    detail::device_generate_mdspan(last_value_of(args...), self.data());
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1,device>>& init )
+constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1,device>> init )
+    requires copyable<type>
 {
     static_assert(false, "not coded yet. notice the shape is known till here");
 }
@@ -194,7 +202,7 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr int array<type,dim,device>::size ( ) const
 {
-    assume[[base::size() == info::size()]];
+    [[assume(base::size() == info::size())]];
     if ( ownership() ) [[likely]]
         return info::size();
     else
@@ -213,7 +221,7 @@ constexpr array<int> array<type,dim,device>::shape ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr inplace_array<int> array<type,dim,device>::inplace_shape ( ) const
+constexpr inplace_array<int,dim> array<type,dim,device>::inplace_shape ( ) const
 {
     if ( ownership() ) [[likely]]
         return info::inplace_shape();
@@ -223,7 +231,7 @@ constexpr inplace_array<int> array<type,dim,device>::inplace_shape ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr static_array<int> array<type,dim,device>::static_shape ( ) const
+constexpr static_array<int,dim> array<type,dim,device>::static_shape ( ) const
 {
     if ( ownership() ) [[likely]]
         return info::static_shape();
@@ -254,10 +262,9 @@ constexpr int array<type,dim,device>::column ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr int array<type,dim,device>::empty ( ) const
-    requires ( dim == 2 )
+constexpr bool array<type,dim,device>::empty ( ) const
 {
-    assume[[base::empty() == info::empty()]];
+    [[assume(base::empty() == info::empty())]];
     if ( ownership() ) [[likely]]
         return info::empty();
     else
@@ -303,7 +310,7 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>::const_iterator array<type,dim,device>::begin ( ) const
 {
     if ( ownership() ) [[likely]]
-        return lower::begin()
+        return lower::begin();
     else
         return upper::begin();
 }
@@ -380,8 +387,9 @@ constexpr array<type,dim,device>& array<type,dim,device>::clear ( )
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-template_int_axis
+template < int axis >
 constexpr array<type,dim,device>& array<type,dim,device>::resize ( int new_size )
+    requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
 {
     #if debug
     if ( not ownership() ) [[unlikely]]
@@ -413,7 +421,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::resize ( int_type auto
     requires ( sizeof...(args) == dim )
 {
     #if debug
-    if ( args < 0 or ... )
+    if ( not detail::check_first_until_last_as_positive(args...) )
         throw value_error("resize array with negative shape {}", static_array<int,dim>{args...});
     #endif
 
@@ -422,28 +430,36 @@ constexpr array<type,dim,device>& array<type,dim,device>::resize ( int_type auto
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr array<type,dim,device>& array<type,dim,device>::push ( const array<type,dim-1,device>& new_value )
+template < int axis >
+constexpr array<type,dim,device>& array<type,dim,device>::push ( array<type,dim-1,device> new_value )
+    requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
 {
     static_assert(false, "not coded yet");
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
+template < int axis >
 constexpr array<type,dim,device>& array<type,dim,device>::pop ( int old_pos )
+    requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
 {
     static_assert(false, "not coded yet");
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr array<type,dim,device>& array<type,dim,device>::insert ( int old_pos, const array<type,dim-1,device>& new_value )
+template < int axis >
+constexpr array<type,dim,device>& array<type,dim,device>::insert ( int old_pos, array<type,dim-1,device> new_value )
+    requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
 {
     static_assert(false, "not coded yet");
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
+template < int axis >
 constexpr array<type,dim,device>& array<type,dim,device>::erase ( int old_pos_1, int old_pos_2 )
+    requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
 {
     static_assert(false, "not coded yet");
 }
@@ -463,7 +479,7 @@ template < class type, int dim, class device >
 constexpr const array<type,1,device>& array<type,dim,device>::as_flat ( ) const
 {
     if ( ownership() ) [[likely]]
-        return static_cast<flat&>(self);
+        return static_cast<const flat&>(self);
     else
         throw logic_error("cannot make array as_flat: it does not own its data");
 }
@@ -473,7 +489,7 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>& array<type,dim,device>::as_transpose ( )
 {
     if ( ownership() ) [[likely]]
-        return lower::transpose();
+        return lower::as_transpose();
     else if ( upper::attribute() == upper::transposed )
         return upper::template host<2>();
     else
@@ -485,7 +501,7 @@ template < class type, int dim, class device >
 constexpr const array<type,dim,device>& array<type,dim,device>::as_transpose ( ) const
 {
     if ( ownership() ) [[likely]]
-        return lower::transpose();
+        return lower::as_transpose();
     else if ( upper::attribute() == upper::transposed )
         return upper::template host<2>();
     else
@@ -508,11 +524,50 @@ constexpr bool array<type,dim,device>::contiguous ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
+template < int dim2 >
+constexpr std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::rows ( ) 
+{
+    return ownership() ? lower::template rows<dim2>() otherwise upper::template rows<dim2>();
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+template < int dim2 >
+constexpr const std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::rows ( ) const
+{
+    return ownership() ? lower::template rows<dim2>() otherwise upper::template rows<dim2>();
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+template < int dim2 >
+constexpr std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::columns ( ) 
+{
+    return ownership() ? lower::template columns<dim2>() otherwise upper::template columns<dim2>();
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+template < int dim2 >
+constexpr const std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::columns ( ) const
+{
+    return ownership() ? lower::template columns<dim2>() otherwise upper::template columns<dim2>();
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+constexpr int array<type,dim,device>::top_size ( ) const
+{
+    return ownership() ? size() otherwise upper::top_size();
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
 constexpr array<type,dim,device>::reference array<type,dim,device>::at ( int_type auto... args )
     requires ( sizeof...(args) == dim )
 {
     if ( ownership() ) [[likely]]
-        return std::mdspan<type,std::dextents<dim>,typename device::layout_type>(data(), static_cast<const std::array<int,dim>&>(static_shape()))[args...];
+        return std::mdspan<type,std::dextents<int,dim>,typename device::layout_type>(data(), static_cast<const std::array<int,dim>&>(static_shape()))[args...];
     else
         return upper::at(args...);
 }
@@ -523,7 +578,7 @@ constexpr array<type,dim,device>::const_reference array<type,dim,device>::at ( i
     requires ( sizeof...(args) == dim )
 {
     if ( ownership() ) [[likely]]
-        return std::mdspan<type,std::dextents<dim>,typename device::layout_type>(data(), static_cast<const std::array<int,dim>&>(static_shape()))[args...];
+        return std::mdspan<type,std::dextents<int,dim>,typename device::layout_type>(data(), static_cast<const std::array<int,dim>&>(static_shape()))[args...];
     else
         return upper::at(args...);
 }

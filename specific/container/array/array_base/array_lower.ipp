@@ -24,14 +24,14 @@ namespace detail
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::iterator array_lower<type,dim,device>::begin ( )
     {
-        return rows_begin<dim-1>();
+        return rows<dim-1>();
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::const_iterator array_lower<type,dim,device>::begin ( ) const
     {
-        return rows_begin<dim-1>();
+        return rows<dim-1>();
     }
 
     template < class type, int dim, class device > 

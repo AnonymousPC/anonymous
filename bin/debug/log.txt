@@ -1,37 +1,191 @@
-In file included from main.cpp:6:
-In file included from ./specific/container/interface.hpp:230:
-In file included from ./specific/container/array/array.hpp:15:
-[1m./specific/container/array/array_class/array_xd.hpp:98:99: [0m[0;1;35mwarning: [0m[1minline function 'ap::array<int, 2>::rows<1>' is not defined [-Wundefined-inline][0m
-   98 |         [0;34mtemplate[0m < [0;34mint[0m dim2 > [0;34mconstexpr[0m [0;34mconst[0m std::vector<detail::array_upper<type,dim2,device>>& rows     ( ) [0;34mconst[0m;[0m
-      | [0;1;32m                                                                                                  ^
-[0m[1m./specific/container/array/array_base/array_upper.ipp:137:49: [0m[0;1;36mnote: [0mused here[0m
-  137 |         [0;34mconst[0m [0;34mauto[0m& rows_list = host().[0;34mtemplate[0m rows<[0;32m1[0m>();[0m
-      | [0;1;32m                                                ^
-[0mIn file included from main.cpp:6:
-In file included from ./specific/container/interface.hpp:230:
-In file included from ./specific/container/array/array.hpp:15:
-[1m./specific/container/array/array_class/array_xd.hpp:100:99: [0m[0;1;35mwarning: [0m[1minline function 'ap::array<int, 2>::columns<1>' is not defined [-Wundefined-inline][0m
-  100 |         [0;34mtemplate[0m < [0;34mint[0m dim2 > [0;34mconstexpr[0m [0;34mconst[0m std::vector<detail::array_upper<type,dim2,device>>& columns  ( ) [0;34mconst[0m;[0m
-      | [0;1;32m                                                                                                  ^
-[0m[1m./specific/container/array/array_base/array_upper.ipp:142:52: [0m[0;1;36mnote: [0mused here[0m
-  142 |         [0;34mconst[0m [0;34mauto[0m& columns_list = host().[0;34mtemplate[0m columns<[0;32m1[0m>();[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from main.cpp:6:
-In file included from ./specific/container/interface.hpp:230:
-In file included from ./specific/container/array/array.hpp:15:
-[1m./specific/container/array/array_class/array_xd.hpp:65:56: [0m[0;1;35mwarning: [0m[1minline function 'ap::array<int, 2>::column' is not defined [-Wundefined-inline][0m
-   65 |         [0;34mconstexpr[0m        [0;34mint[0m                           column        ( )     [0;34mconst[0m [0;34mrequires[0m ( max_dim == [0;32m2[0m );[0m
-      | [0;1;32m                                                       ^
-[0m[1m./specific/container/array/array_base/array_upper.ipp:22:49: [0m[0;1;36mnote: [0mused here[0m
-   22 |         [0;34mreturn[0m attribute() == row_view ? host().column() otherwise host().row();[0m
-      | [0;1;32m                                                ^
-[0mIn file included from main.cpp:6:
-In file included from ./specific/container/interface.hpp:230:
-In file included from ./specific/container/array/array.hpp:15:
-[1m./specific/container/array/array_class/array_xd.hpp:64:56: [0m[0;1;35mwarning: [0m[1minline function 'ap::array<int, 2>::row' is not defined [-Wundefined-inline][0m
-   64 |         [0;34mconstexpr[0m        [0;34mint[0m                           row           ( )     [0;34mconst[0m;[0m
-      | [0;1;32m                                                       ^
-[0m[1m./specific/container/array/array_base/array_upper.ipp:22:75: [0m[0;1;36mnote: [0mused here[0m
-   22 |         [0;34mreturn[0m attribute() == row_view ? host().column() otherwise host().row();[0m
-      | [0;1;32m                                                                          ^
-[0m4 warnings generated.
+In file included from [01m[Kspecific/container/array/array.hpp:21[m[K,
+                 from [01m[Kspecific/container/interface.hpp:230[m[K,
+                 from [01m[Kmain.cpp:6[m[K:
+[01m[Kspecific/container/array/array_base/array_upper.ipp:344:41:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires ((ap::detail::array_upper<type, dim, device>*)this)->ap::detail::array_upper<type, dim, device>::attribute() == 1[m[K'
+  344 |     constexpr array<type,dim+1,device>& [01;31m[Karray_upper<type,dim,device>[m[K::host ( )
+      |                                         [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kspecific/container/array/array.hpp:10[m[K:
+[01m[Kspecific/container/array/array_base/array_upper.hpp:114:82:[m[K [01;36m[Knote: [m[Kcandidates are: '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 2[m[K'
+  114 |             template < int attribute > constexpr const array<type,dim,  device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:113:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 2[m[K'
+  113 |             template < int attribute > constexpr       array<type,dim,  device>& [01;36m[Khost[m[K ( )       requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:112:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 1[m[K'
+  112 |             template < int attribute > constexpr const array<type,dim+1,device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:111:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 1[m[K'
+  111 |             template < int attribute > constexpr       array<type,dim+1,device>& [01;36m[Khost[m[K ( )       requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:64:11:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::detail::array_upper<type, dim, device>[m[K' defined here
+   64 |     class [01;36m[Karray_upper<type,dim,device>[m[K
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.ipp:353:47:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr const ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires ((const ap::detail::array_upper<type, dim, device>*)this)->ap::detail::array_upper<type, dim, device>::attribute() == 1[m[K'
+  353 |     constexpr const array<type,dim+1,device>& [01;31m[Karray_upper<type,dim,device>[m[K::host ( ) const
+      |                                               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:114:82:[m[K [01;36m[Knote: [m[Kcandidates are: '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 2[m[K'
+  114 |             template < int attribute > constexpr const array<type,dim,  device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:113:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 2[m[K'
+  113 |             template < int attribute > constexpr       array<type,dim,  device>& [01;36m[Khost[m[K ( )       requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:112:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 1[m[K'
+  112 |             template < int attribute > constexpr const array<type,dim+1,device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:111:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 1[m[K'
+  111 |             template < int attribute > constexpr       array<type,dim+1,device>& [01;36m[Khost[m[K ( )       requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:64:11:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::detail::array_upper<type, dim, device>[m[K' defined here
+   64 |     class [01;36m[Karray_upper<type,dim,device>[m[K
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.ipp:362:39:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires ((ap::detail::array_upper<type, dim, device>*)this)->ap::detail::array_upper<type, dim, device>::attribute() == 2[m[K'
+  362 |     constexpr array<type,dim,device>& [01;31m[Karray_upper<type,dim,device>[m[K::host ( )
+      |                                       [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:114:82:[m[K [01;36m[Knote: [m[Kcandidates are: '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 2[m[K'
+  114 |             template < int attribute > constexpr const array<type,dim,  device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:113:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 2[m[K'
+  113 |             template < int attribute > constexpr       array<type,dim,  device>& [01;36m[Khost[m[K ( )       requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:112:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 1[m[K'
+  112 |             template < int attribute > constexpr const array<type,dim+1,device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:111:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 1[m[K'
+  111 |             template < int attribute > constexpr       array<type,dim+1,device>& [01;36m[Khost[m[K ( )       requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:64:11:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::detail::array_upper<type, dim, device>[m[K' defined here
+   64 |     class [01;36m[Karray_upper<type,dim,device>[m[K
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.ipp:371:45:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr const ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires ((const ap::detail::array_upper<type, dim, device>*)this)->ap::detail::array_upper<type, dim, device>::attribute() == 2[m[K'
+  371 |     constexpr const array<type,dim,device>& [01;31m[Karray_upper<type,dim,device>[m[K::host ( ) const
+      |                                             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:114:82:[m[K [01;36m[Knote: [m[Kcandidates are: '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 2[m[K'
+  114 |             template < int attribute > constexpr const array<type,dim,  device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:113:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, dim, device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 2[m[K'
+  113 |             template < int attribute > constexpr       array<type,dim,  device>& [01;36m[Khost[m[K ( )       requires ( attribute == 2 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:112:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr const ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() const requires  attribute == 1[m[K'
+  112 |             template < int attribute > constexpr const array<type,dim+1,device>& [01;36m[Khost[m[K ( ) const requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:111:82:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, int dim, class device> template<int attribute> constexpr ap::array<type, (dim + 1), device>& ap::detail::array_upper<type, dim, device>::[01;32m[Khost[m[K() requires  attribute == 1[m[K'
+  111 |             template < int attribute > constexpr       array<type,dim+1,device>& [01;36m[Khost[m[K ( )       requires ( attribute == 1 );
+      |                                                                                  [01;36m[K^~~~[m[K
+[01m[Kspecific/container/array/array_base/array_upper.hpp:64:11:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::detail::array_upper<type, dim, device>[m[K' defined here
+   64 |     class [01;36m[Karray_upper<type,dim,device>[m[K
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kspecific/container/array/array.hpp:23[m[K:
+[01m[Kspecific/container/array/array_base/array_lower.ipp:[m[K In member function '[01m[Kconstexpr ap::detail::array_lower<type, dim, device>::iterator ap::detail::array_lower<type, dim, device>::[01;32m[Kbegin[m[K()[m[K':
+[01m[Kspecific/container/array/array_base/array_lower.ipp:27:16:[m[K [01;31m[Kerror: [m[Kthere are no arguments to '[01m[Krows_begin[m[K' that depend on a template parameter, so a declaration of '[01m[Krows_begin[m[K' must be available [[01;31m[K-fpermissive[m[K]
+   27 |         return [01;31m[Krows_begin<dim-1>[m[K();
+      |                [01;31m[K^~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.ipp:27:16:[m[K [01;36m[Knote: [m[K(if you use '[01m[K-fpermissive[m[K', G++ will accept your code, but allowing the use of an undeclared name is deprecated)
+[01m[Kspecific/container/array/array_base/array_lower.ipp:[m[K In member function '[01m[Kconstexpr ap::detail::array_lower<type, dim, device>::const_iterator ap::detail::array_lower<type, dim, device>::[01;32m[Kbegin[m[K() const[m[K':
+[01m[Kspecific/container/array/array_base/array_lower.ipp:34:16:[m[K [01;31m[Kerror: [m[Kthere are no arguments to '[01m[Krows_begin[m[K' that depend on a template parameter, so a declaration of '[01m[Krows_begin[m[K' must be available [[01;31m[K-fpermissive[m[K]
+   34 |         return [01;31m[Krows_begin<dim-1>[m[K();
+      |                [01;31m[K^~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.ipp:[m[K In member function '[01m[Kconstexpr ap::detail::array_lower<type, dim, device>::iterator ap::detail::array_lower<type, dim, device>::[01;32m[Kend[m[K()[m[K':
+[01m[Kspecific/container/array/array_base/array_lower.ipp:41:16:[m[K [01;31m[Kerror: [m[Kthere are no arguments to '[01m[Krows_end[m[K' that depend on a template parameter, so a declaration of '[01m[Krows_end[m[K' must be available [[01;31m[K-fpermissive[m[K]
+   41 |         return [01;31m[Krows_end<dim-1>[m[K();
+      |                [01;31m[K^~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.ipp:[m[K In member function '[01m[Kconstexpr ap::detail::array_lower<type, dim, device>::const_iterator ap::detail::array_lower<type, dim, device>::[01;32m[Kend[m[K() const[m[K':
+[01m[Kspecific/container/array/array_base/array_lower.ipp:48:16:[m[K [01;31m[Kerror: [m[Kthere are no arguments to '[01m[Krows_end[m[K' that depend on a template parameter, so a declaration of '[01m[Krows_end[m[K' must be available [[01;31m[K-fpermissive[m[K]
+   48 |         return [01;31m[Krows_end<dim-1>[m[K();
+      |                [01;31m[K^~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.ipp:[m[K At global scope:
+[01m[Kspecific/container/array/array_base/array_lower.ipp:67:51:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr const ap::detail::array_lower<type, dim, device>& ap::detail::array_lower<type, dim, device>::[01;32m[Kclear[m[K()[m[K'
+   67 |     constexpr const array_lower<type,dim,device>& [01;31m[Karray_lower<type,dim,device>[m[K::clear ( )
+      |                                                   [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kspecific/container/array/array.hpp:12[m[K:
+[01m[Kspecific/container/array/array_base/array_lower.hpp:50:38:[m[K [01;36m[Knote: [m[Kcandidate is: '[01m[Kconstexpr ap::detail::array_lower<type, dim, device>& ap::detail::array_lower<type, dim, device>::[01;32m[Kclear[m[K()[m[K'
+   50 |             constexpr array_lower&   [01;36m[Kclear[m[K  ( );
+      |                                      [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.hpp:19:11:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::detail::array_lower<type, dim, device>[m[K' defined here
+   19 |     class [01;36m[Karray_lower<type,dim,device>[m[K
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.ipp:75:51:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr const ap::detail::array_lower<type, dim, device>& ap::detail::array_lower<type, dim, device>::[01;32m[Kresize[m[K(const ap::static_array<int, dim>&)[m[K'
+   75 |     constexpr const array_lower<type,dim,device>& [01;31m[Karray_lower<type,dim,device>[m[K::resize ( const static_array<int,dim>& new_shape )
+      |                                                   [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.hpp:51:38:[m[K [01;36m[Knote: [m[Kcandidate is: '[01m[Kconstexpr ap::detail::array_lower<type, dim, device>& ap::detail::array_lower<type, dim, device>::[01;32m[Kresize[m[K(const ap::static_array<int, dim>&)[m[K'
+   51 |             constexpr array_lower&   [01;36m[Kresize[m[K ( const static_array<int,dim>& );
+      |                                      [01;36m[K^~~~~~[m[K
+[01m[Kspecific/container/array/array_base/array_lower.hpp:19:11:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::detail::array_lower<type, dim, device>[m[K' defined here
+   19 |     class [01;36m[Karray_lower<type,dim,device>[m[K
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kspecific/container/array/array.hpp:26[m[K:
+[01m[Kspecific/container/array/array_class/array_xd.ipp:105:59:[m[K [01;31m[Kerror: [m[K'[01m[Ktype2[m[K' was not declared in this scope; did you mean '[01m[Ktype[m[K'?
+  105 | constexpr array<type,max_dim,device>::array ( const array<[01;31m[Ktype2[m[K,max_dim,device>& cvt )
+      |                                                           [01;31m[K^~~~~[m[K
+      |                                                           [32m[Ktype[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:105:79:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+  105 | constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device[01;31m[K>[m[K& cvt )
+      |                                                                               [01;31m[K^[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:106:29:[m[K [01;31m[Kerror: [m[K'[01m[Ktype2[m[K' was not declared in this scope; did you mean '[01m[Ktype[m[K'?
+  106 |     requires convertible_to<[01;31m[Ktype2[m[K,type> but ( not same_as<type,type2> )
+      |                             [01;31m[K^~~~~[m[K
+      |                             [32m[Ktype[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:106:14:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+  106 |     requires [01;31m[Kconvertible_to<type2,type>[m[K but ( not same_as<type,type2> )
+      |              [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:106:64:[m[K [01;31m[Kerror: [m[K'[01m[Ktype2[m[K' was not declared in this scope; did you mean '[01m[Ktype[m[K'?
+  106 |     requires convertible_to<type2,type> but ( not same_as<type,[01;31m[Ktype2[m[K> )
+      |                                                                [01;31m[K^~~~~[m[K
+      |                                                                [32m[Ktype[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:106:51:[m[K [01;31m[Kerror: [m[Ktemplate argument 2 is invalid
+  106 |     requires convertible_to<type2,type> but ( not [01;31m[Ksame_as<type,type2>[m[K )
+      |                                                   [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:105:11:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(const int&) requires  <erroneous-expression>[m[K'
+  105 | constexpr [01;31m[Karray<type,max_dim,device>[m[K::array ( const array<type2,max_dim,device>& cvt )
+      |           [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kspecific/container/array/array.hpp:15[m[K:
+[01m[Kspecific/container/array/array_class/array_xd.hpp:55:46:[m[K [01;36m[Knote: [m[Kcandidates are: '[01m[Ktemplate<class type, class device> template<class device2> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(const ap::array<type, 2, device2>&) requires (same_as<device, ap::cpu>) || (same_as<device2, ap::cpu>)[m[K'
+   55 |         template < class device2 > constexpr [01;36m[Karray[m[K ( const array<type,max_dim,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
+      |                                              [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:52:53:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class type2> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(const ap::array<type2, 2, device>&) requires (constructible_from<type, type2>) && !(convertible_to<type2, type>)[m[K'
+   52 |         template < class type2 > constexpr explicit [01;36m[Karray[m[K ( const array<type2,max_dim,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
+      |                                                     [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:51:53:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class type2> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(const ap::array<type2, 2, device>&) requires (convertible_to<type2, type>) && !(same_as<type, type2>)[m[K'
+   51 |         template < class type2 > constexpr          [01;36m[Karray[m[K ( const array<type2,max_dim,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2> );
+      |                                                     [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:98:11:[m[K [01;36m[Knote: [m[K                '[01m[Kconstexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(std::initializer_list<ap::array<type, 1, device> >) requires  copyable<type>[m[K'
+   98 | constexpr [01;36m[Karray<type,max_dim,device>[m[K::array ( std::initializer_list<array<type,max_dim-1,device>> init )
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:47:28:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class auto:523>  requires  function_type<auto:523, ap::array<type, 1, ap::cpu>(int)> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(int, auto:523)[m[K'
+   47 |         constexpr          [01;36m[Karray[m[K ( int,  function_type<array<type,max_dim-1>(int)> auto );
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:46:28:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class auto:522>  requires  function_type<auto:522, ap::array<type, 1, ap::cpu>()> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(int, auto:522)[m[K'
+   46 |         constexpr          [01;36m[Karray[m[K ( int,  function_type<array<type,max_dim-1>()>    auto );
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:45:28:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class ... auto:521> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(auto:553 ...) requires  sizeof ... ((ap::array<type, 2, device>::__ct ::args ...)) - 1 == ap::max_dim && (ints_until_last_func_ints<type, decltype(ap::array<type, 2, device>::__ct ::args)...>)[m[K'
+   45 |         constexpr          [01;36m[Karray[m[K ( auto... args )                                          requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_func_ints<type,decltype(args)...>;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:44:28:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class ... auto:520> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(auto:552 ...) requires  sizeof ... ((ap::array<type, 2, device>::__ct ::args ...)) - 1 == ap::max_dim && (ints_until_last_func<type, decltype(ap::array<type, 2, device>::__ct ::args)...>)[m[K'
+   44 |         constexpr          [01;36m[Karray[m[K ( auto... args )                                          requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_func     <type,decltype(args)...>;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:43:28:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class ... auto:519> constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(auto:551 ...) requires (copyable<type>) && sizeof ... ((ap::array<type, 2, device>::__ct ::args ...)) - 1 == ap::max_dim && (ints_until_last_type<type, decltype(ap::array<type, 2, device>::__ct ::args)...>)[m[K'
+   43 |         constexpr          [01;36m[Karray[m[K ( auto... args )                                          requires copyable<type> and ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_type     <type,decltype(args)...>;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:42:28:[m[K [01;36m[Knote: [m[K                '[01m[Ktemplate<class type, class device> template<class ... auto:518>  requires (... && int_type<auto:518>) constexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(auto:550 ...) requires  sizeof ... ((ap::array<type, 2, device>::__ct ::args ...)) == ap::max_dim[m[K'
+   42 |         constexpr explicit [01;36m[Karray[m[K ( int_type auto... args )                                 requires                    ( sizeof...(args)     == max_dim );
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:13:11:[m[K [01;36m[Knote: [m[K                '[01m[Kconstexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(ap::array<type, 2, device>&&)[m[K'
+   13 | constexpr [01;36m[Karray<type,max_dim,device>[m[K::array ( array&& init )
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:4:11:[m[K [01;36m[Knote: [m[K                '[01m[Kconstexpr ap::array<type, 2, device>::[01;32m[Karray[m[K(const ap::array<type, 2, device>&) requires  copyable<type>[m[K'
+    4 | constexpr [01;36m[Karray<type,max_dim,device>[m[K::array ( const array& init )
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:35:28:[m[K [01;36m[Knote: [m[K                '[01m[Kconstexpr ap::array<type, 2, device>::[01;32m[Karray[m[K()[m[K'
+   35 |         constexpr          [01;36m[Karray[m[K ( ) = default;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:6:7:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::array<type, 2, device>[m[K' defined here
+    6 | class [01;36m[Karray<type,max_dim,device>[m[K
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.ipp:159:15:[m[K [01;31m[Kerror: [m[Kno declaration matches '[01m[Kconstexpr int ap::array<type, 2, device>::[01;32m[Kcolumn[m[K() const[m[K'
+  159 | constexpr int [01;31m[Karray<type,max_dim,device>[m[K::column ( ) const
+      |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:65:56:[m[K [01;36m[Knote: [m[Kcandidate is: '[01m[Kconstexpr int ap::array<type, 2, device>::[01;32m[Kcolumn[m[K() const requires  ap::max_dim == 2[m[K'
+   65 |         constexpr        int                           [01;36m[Kcolumn[m[K        ( )     const requires ( max_dim == 2 );
+      |                                                        [01;36m[K^~~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_xd.hpp:6:7:[m[K [01;36m[Knote: [m[K'[01m[Kclass ap::array<type, 2, device>[m[K' defined here
+    6 | class [01;36m[Karray<type,max_dim,device>[m[K
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K

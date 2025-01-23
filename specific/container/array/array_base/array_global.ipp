@@ -68,7 +68,7 @@ namespace detail
 
     constexpr int multiply_first_until_last ( const auto&... args )
     {
-        return args * ...;
+        return ( args * ... );
     }
 
     constexpr int multiply_first_until_second_last ( const auto& arg1, const auto&... args )
@@ -81,7 +81,7 @@ namespace detail
 
     constexpr bool check_first_until_last_as_positive ( const auto&... args )
     {
-        return [] (const auto& v) { return v >= 0 } ( args ) and ...;
+        return ( [] (const auto& v) { return v >= 0; } ( args ) and ... );
     }
 
     constexpr bool check_first_until_second_last_as_positive ( const auto& arg1, const auto&... args )

@@ -24,59 +24,120 @@ namespace detail
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::iterator array_lower<type,dim,device>::begin ( )
     {
-        return rows<dim-1>();
+        return rows<dim-1>().begin();
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::const_iterator array_lower<type,dim,device>::begin ( ) const
     {
-        return rows<dim-1>();
+        return rows<dim-1>().begin();
     }
 
     template < class type, int dim, class device > 
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::iterator array_lower<type,dim,device>::end ( )
     {
-        return rows_end<dim-1>();
+        return rows<dim-1>().end();
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::const_iterator array_lower<type,dim,device>::end ( ) const
     {
-        return rows_end<dim-1>();
+        return rows<dim-1>().end();
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr array<type,dim-1,device>& array_lower<type,dim,device>::operator [] ( int ofs )
     {
-        return begin()[ofs];
+        return rows<dim-1>()[ofs];
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr const array<type,dim-1,device>& array_lower<type,dim,device>::operator [] ( int ofs ) const
     {
-        return begin()[ofs];
+        return rows<dim-1>()[ofs];
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr const array_lower<type,dim,device>& array_lower<type,dim,device>::clear ( )
+    constexpr array_lower<type,dim,device>& array_lower<type,dim,device>::clear ( )
     {
-        for_constexpr<1,dim-1>([&] <int index> ( std::integral_constant<int,index> ) { rows_view   .template value<index>().clear(); });
-        for_constexpr<1,dim-1>([&] <int index> ( std::integral_constant<int,index> ) { columns_view.template value<index>().clear(); });
+        rows_view   .clear();
+        columns_view.clear();
+        return self;
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr const array_lower<type,dim,device>& array_lower<type,dim,device>::resize ( const static_array<int,dim>& new_shape )
+    constexpr array_lower<type,dim,device>& array_lower<type,dim,device>::resize ( const static_array<int,dim>& new_shape )
     {
-        static_assert(dimension() == 2, "you need to fill() each part of lower-vectors");
-        for_constexpr<1,dim-1>([&] <int index> ( std::integral_constant<int,index> ) { rows_view   .template value<index>().resize(new_shape[index], static_cast<array<type,dim,device>&>(self)); });
-        for_constexpr<1,dim-1>([&] <int index> ( std::integral_constant<int,index> ) { columns_view.template value<index>().resize(new_shape[index], static_cast<array<type,dim,device>&>(self)); });
+        rows_view   .resize(new_shape, static_cast<array<type,dim,device>&>(self));
+        columns_view.resize(new_shape, static_cast<array<type,dim,device>&>(self));
+        return self;
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::rows ( int_type auto... offsets )
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return std::span<array_upper<type,dim2,device>>(rows_view.template value<dim2>().data() + detail::view_offset_begin(static_shape(), offsets...),
+                                                        rows_view.template value<dim2>().data() + detail::view_offset_end  (static_shape(), offsets...));
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr const std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::rows ( int_type auto... offsets ) const
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return std::span<array_upper<type,dim2,device>>(rows_view.template value<dim2>().data() + detail::view_offset_begin(static_shape(), offsets...),
+                                                        rows_view.template value<dim2>().data() + detail::view_offset_end  (static_shape(), offsets...));
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::columns ( int_type auto... offsets )
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return std::span<array_upper<type,dim2,device>>(columns_view.template value<dim2>().data() + detail::view_offset_begin(static_shape(), offsets...),
+                                                        columns_view.template value<dim2>().data() + detail::view_offset_end  (static_shape(), offsets...));
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr const std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::columns ( int_type auto... offsets ) const
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return std::span<array_upper<type,dim2,device>>(columns_view.template value<dim2>().data() + detail::view_offset_begin(static_shape(), offsets...),
+                                                        columns_view.template value<dim2>().data() + detail::view_offset_end  (static_shape(), offsets...));
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr array_upper<type,dim2,device>& array_lower<type,dim,device>::as_transpose ( )
+    {
+        return transpose_view;
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr const array_upper<type,dim2,device>& array_lower<type,dim,device>::as_transpose ( ) const
+    {
+        return transpose_view;
     }
     
 

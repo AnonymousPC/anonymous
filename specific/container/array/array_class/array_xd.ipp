@@ -102,6 +102,7 @@ constexpr array<type,max_dim,device>::array ( std::initializer_list<array<type,m
 }
 
 template < class type, class device >
+template < class type2 >
 constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device>& cvt )
     requires convertible_to<type2,type> but ( not same_as<type,type2> )
 {
@@ -157,8 +158,9 @@ constexpr int array<type,max_dim,device>::row ( ) const
 
 template < class type, class device >
 constexpr int array<type,max_dim,device>::column ( ) const
+    requires ( max_dim == 2 )
 {
-    return info::column
+    return info::column();
 }
 
 template < class type, class device >

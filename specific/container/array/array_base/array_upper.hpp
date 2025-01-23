@@ -12,7 +12,7 @@ namespace detail
             array<type,2,device>* ptr = nullptr;
 
         public: // Attribute
-            enum { row_view, column_view };
+            enum { rows_attribute, columns_attribute };
 
         public: // Typedef
             using value_type      = device::template value_type     <type>;
@@ -50,13 +50,23 @@ namespace detail
             constexpr const_reference      operator []   ( int ) const;
         
         public: // Memory
-            constexpr       array<type,2,device>& host        ( );
-            constexpr const array<type,2,device>& host        ( ) const;
-            constexpr       bool                  ownership   ( ) const;
-            constexpr       bool                  contiguous  ( ) const;
-            constexpr       auto                  attribute   ( ) const;
-            constexpr       int                   offset      ( ) const;
-            constexpr       int                   top_size    ( ) const;
+            constexpr bool ownership  ( ) const;
+            constexpr bool contiguous ( ) const;
+            constexpr auto attribute  ( ) const;
+            constexpr int  offset     ( ) const;
+    
+        public: // Up
+            constexpr       array<type,2,device>& host     ( );
+            constexpr const array<type,2,device>& host     ( ) const;
+            constexpr       int                   top_size ( ) const;
+
+        public: // Down
+            constexpr       auto            rows     ( )           = delete;
+            constexpr const auto            rows     ( )     const = delete;
+            constexpr       auto            columns  ( )           = delete;
+            constexpr const auto            columns  ( )     const = delete;
+            constexpr       reference       at       ( int )       = delete;
+            constexpr       const_reference at       ( int ) const = delete;
     };
 
     template < class type, int dim, class device >
@@ -68,7 +78,7 @@ namespace detail
             array<type,dim,  device>* ptr2 = nullptr;
 
         public: // Attribute
-            enum { row_view, column_view, transpose_view };
+            enum { rows_attribute, columns_attribute, transpose_attribute };
 
         public: // Typedef
             using value_type      = device::template value_type     <type>;
@@ -76,8 +86,8 @@ namespace detail
             using const_reference = device::template const_reference<type>;
             using pointer         = device::template pointer        <type>;
             using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = std::vector<array_upper<type,dim-1,device>>::iterator;
-            using const_iterator  = std::vector<array_upper<type,dim-1,device>>::const_iterator;
+            using iterator        = std::span<array_upper<type,dim-1,device>>::iterator;
+            using const_iterator  = std::span<array_upper<type,dim-1,device>>::const_iterator;
         
         public: // Core
             constexpr array_upper ( )                    = default;
@@ -106,31 +116,27 @@ namespace detail
             constexpr       const_iterator            end           ( )     const;
             constexpr       array<type,dim-1,device>& operator []   ( int );
             constexpr const array<type,dim-1,device>& operator []   ( int ) const;
-        
-        public: // Host
-            template < int attribute > constexpr       array<type,dim+1,device>& host ( )       requires ( attribute == 1 );
-            template < int attribute > constexpr const array<type,dim+1,device>& host ( ) const requires ( attribute == 1 );
-            template < int attribute > constexpr       array<type,dim,  device>& host ( )       requires ( attribute == 2 );
-            template < int attribute > constexpr const array<type,dim,  device>& host ( ) const requires ( attribute == 2 );
 
         public: // Memory
             constexpr bool ownership  ( ) const;
             constexpr bool contiguous ( ) const;
             constexpr auto attribute  ( ) const;
             constexpr int  offset     ( ) const;
+        
+        public: // Host
+            template < int attr > constexpr       array<type,dim+1,device>& host     ( )       requires ( attr == 1 );
+            template < int attr > constexpr const array<type,dim+1,device>& host     ( ) const requires ( attr == 1 );
+            template < int attr > constexpr       array<type,dim,  device>& host     ( )       requires ( attr == 2 );
+            template < int attr > constexpr const array<type,dim,  device>& host     ( ) const requires ( attr == 2 );
+                                  constexpr       int                       top_size ( ) const;
 
         public: // View
-            template < int dim2 > constexpr       std::vector<array_upper<type,dim2,device>>& rows     ( )                             requires ( dim2 > 0 and dim2 < dim );
-            template < int dim2 > constexpr const std::vector<array_upper<type,dim2,device>>& rows     ( )                       const requires ( dim2 > 0 and dim2 < dim );
-            template < int dim2 > constexpr       std::vector<array_upper<type,dim2,device>>& columns  ( )                             requires ( dim2 > 0 and dim2 < dim );
-            template < int dim2 > constexpr const std::vector<array_upper<type,dim2,device>>& columns  ( )                       const requires ( dim2 > 0 and dim2 < dim );
-                                  constexpr       int                                         top_size ( )                       const;
-                                  constexpr       reference                                   at       ( int_type auto... args )       requires ( sizeof...(args) == dim );
-                                  constexpr       const_reference                             at       ( int_type auto... args ) const requires ( sizeof...(args) == dim );
-   
-        private: // Detail
-            template < int from, int to > constexpr static int  partial_size_of  ( const auto& );
-            template < int from, int to > constexpr static auto partial_shape_of ( const auto& );
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> rows     ( int_type auto... offsets );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> rows     ( int_type auto... offsets ) const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> columns  ( int_type auto... offsets );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> columns  ( int_type auto... offsets ) const;
+                                  constexpr       reference                                at       ( int_type auto... offsets );
+                                  constexpr       const_reference                          at       ( int_type auto... offsets ) const;
     };
 
 } // namespace detail

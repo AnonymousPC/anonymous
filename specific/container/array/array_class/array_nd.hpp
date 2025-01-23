@@ -27,8 +27,8 @@ class array<type,dim,device>
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = std::vector<detail::array_upper<type,dim-1,device>>::iterator;
-        using  const_iterator  = std::vector<detail::array_upper<type,dim-1,device>>::const_iterator;
+        using  iterator        = std::span<detail::array_upper<type,dim-1,device>>::iterator;
+        using  const_iterator  = std::span<detail::array_upper<type,dim-1,device>>::const_iterator;
         using  device_type     = device;
         struct array_tag { };
 

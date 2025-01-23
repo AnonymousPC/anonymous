@@ -19,7 +19,7 @@ class static_array
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
         using  iterator        = base::iterator;
-        using  const_iterator  = base::iterator;
+        using  const_iterator  = base::const_iterator;
         using  device_type     = device;
         struct array_tag { };
 

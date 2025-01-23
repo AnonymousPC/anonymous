@@ -29,8 +29,8 @@ namespace detail
             using const_reference = device::template const_reference<type>;
             using pointer         = device::template pointer        <type>;
             using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = std::vector<array_upper<type,dim-1,device>>::iterator;
-            using const_iterator  = std::vector<array_upper<type,dim-1,device>>::const_iterator;
+            using iterator        = std::span<array_upper<type,dim-1,device>>::iterator;
+            using const_iterator  = std::span<array_upper<type,dim-1,device>>::const_iterator;
 
         public: // Core
             constexpr array_lower ( );
@@ -40,23 +40,24 @@ namespace detail
             constexpr array_lower ( const auto&... /*shape*/ );
 
         public: // Member
-            constexpr       iterator                  begin       ( );
-            constexpr       const_iterator            begin       ( )     const;
-            constexpr       iterator                  end         ( );
-            constexpr       const_iterator            end         ( )     const;
-            constexpr       array<type,dim-1,device>& operator [] ( int );
-            constexpr const array<type,dim-1,device>& operator [] ( int ) const;
+            constexpr       static_array<int,dim>     static_shape ( ) const;
+            constexpr       iterator                  begin        ( );
+            constexpr       const_iterator            begin        ( )     const;
+            constexpr       iterator                  end          ( );
+            constexpr       const_iterator            end          ( )     const;
+            constexpr       array<type,dim-1,device>& operator []  ( int );
+            constexpr const array<type,dim-1,device>& operator []  ( int ) const;
 
-            constexpr array_lower&   clear  ( );
-            constexpr array_lower&   resize ( const static_array<int,dim>& );
+            constexpr array_lower& clear  ( );
+            constexpr array_lower& resize ( const static_array<int,dim>& );
 
-        public: // Member
-            template < int dim2 >       std::vector<array_upper<type,dim2,device>>& rows         ( );
-            template < int dim2 > const std::vector<array_upper<type,dim2,device>>& rows         ( ) const; 
-            template < int dim2 >       std::vector<array_upper<type,dim2,device>>& columns      ( );
-            template < int dim2 > const std::vector<array_upper<type,dim2,device>>& columns      ( ) const;
-                                                    array_upper<type,dim, device>&  as_transpose ( );
-                                  const             array_upper<type,dim, device>&  as_transpose ( ) const;
+        public: // View
+            template < int dim2 >       std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets );
+            template < int dim2 > const std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets ) const; 
+            template < int dim2 >       std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... offsets );
+            template < int dim2 > const std::span<array_upper<type,dim2,device>>  columns      ( ) const;
+                                                  array_upper<type,dim, device>&  as_transpose ( );
+                                  const           array_upper<type,dim, device>&  as_transpose ( ) const;
     };
 } // namespace detail
 

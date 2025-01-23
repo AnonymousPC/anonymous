@@ -97,6 +97,40 @@ namespace detail
         static_assert(false, "not coded yet");
     }
 
+    template < int from, int to >
+    constexpr int partial_size_of ( const auto& arr )
+    {
+        // TODO: optimize.
+
+        let shp = arr.static_shape();
+
+        if constexpr ( from == 2 and to == -1 )
+            return std::accumulate(++shp.begin(), shp.end(), 1, std::multiplies<>());
+        else if constexpr ( from == 1 and to == -2 )
+            return std::accumulate(shp.begin(), --shp.end(), 1, std::multiplies<>());
+        else
+            static_assert(false, "only accepts partial_size_of<2,-1> or partial_size_of<1,-2>");
+    }
+
+    template < int from, int to >
+    constexpr auto partial_shape_of ( const auto& arr )
+    {
+        // TODO: optimize.
+
+        let shp = arr.static_shape();
+        let partial = static_array<int,arr.size()-1>();
+
+        if constexpr ( from == 2 and to == -1 )
+            std::copy(++shp.begin(), shp.end(), partial.begin());
+        else if constexpr ( from == 1 and to == -2 )
+            std::copy(shp.begin(), --shp.end(), partial.begin());
+        else
+            static_assert(false, "only accepts partial_shape_of<2,-1> or partial_shape_of<1,-2>");
+
+        return partial;
+    }
+
+
     
     
 }

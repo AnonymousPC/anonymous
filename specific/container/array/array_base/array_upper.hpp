@@ -5,14 +5,13 @@ namespace detail
     template < class type, int dim, class device >
     class array_upper;
 
+    enum { rows_attribute, columns_attribute, transpose_attribute };
+
     template < class type, class device >
     class array_upper<type,1,device>
     {
         private: // Data
             array<type,2,device>* ptr = nullptr;
-
-        public: // Attribute
-            enum { rows_attribute, columns_attribute };
 
         public: // Typedef
             using value_type      = device::template value_type     <type>;
@@ -76,9 +75,6 @@ namespace detail
         private: // Data
             array<type,dim+1,device>* ptr1 = nullptr;
             array<type,dim,  device>* ptr2 = nullptr;
-
-        public: // Attribute
-            enum { rows_attribute, columns_attribute, transpose_attribute };
 
         public: // Typedef
             using value_type      = device::template value_type     <type>;

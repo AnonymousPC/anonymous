@@ -15,8 +15,10 @@ constexpr array<type,dim,device>::array ( const array& init )
     else
     {
         self.resize(init.static_shape());
-        init.contiguous() ? device::copy(init.data(), init.data()+init.size(), data()) otherwise
-                            device::copy(init.begin(), init.end(), begin());
+        if ( init.contiguous() ) [[likely]]
+            device::copy(init.data(), init.data()+init.size(), data());
+        else
+            device::copy(init.begin(), init.end(), begin());
     }
 }
 
@@ -33,8 +35,10 @@ constexpr array<type,dim,device>::array ( array&& init )
     else
     {
         self.resize(init.static_shape());
-        init.contiguous() ? device::move(init.data(), init.data()+init.size(), data()) otherwise 
-                            device::move(init.begin(), init.end(), begin());
+        if ( init.contiguous() ) [[likely]]
+            device::move(init.data(), init.data()+init.size(), data()); 
+        else
+            device::move(init.begin(), init.end(), begin());
     }
 }
 
@@ -53,8 +57,10 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
     else if ( self.ownership() and not right.ownership() )
     {
         self.resize(right.static_shape());
-        right.contiguous() ? device::copy(right.data(), right.data()+right.size(), data()) otherwise
-                             device::copy(right.begin(), right.end(), begin());
+        if ( right.contiguous() ) [[likely]]
+            device::copy(right.data(), right.data()+right.size(), data());
+        else
+            device::copy(right.begin(), right.end(), begin());
     }
 
     else
@@ -63,8 +69,10 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
         if ( self.static_shape() == right.static_shape() )
             throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on shape (with left_shape = {}, right_shape = {})", self.static_shape(), right.static_shape());
         #endif
-        right.contiguous() ? device::copy(right.data(), right.data()+right.size(), data()) otherwise
-                             device::copy(right.begin(), right.end(), begin());
+        if ( right.contiguous() )
+            device::copy(right.data(), right.data()+right.size(), data());
+        else
+            device::copy(right.begin(), right.end(), begin());
     } 
 
     return self;

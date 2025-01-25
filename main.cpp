@@ -11,26 +11,27 @@ using namespace ap;
 
 int main ( )
 {
-    let a = array<int>(10);
-    print(a);
-    print(a.inplace_shape());
+    // let a = array<int>(10);
+    // print(a);
+    // print(a.inplace_shape());
 
-    print("==============");
+    // print("==============");
 
-    let b = array<int,2>(3, 4);
-    for ( int i in range(b.row()) )
-        for ( int j in range(b.column()) )
-            b[i][j] = i*10 + j*1;
-    print(b);
-    print(b.static_shape());
+    // let b = array<int,2>(3, 4);
+    // for ( int i in range(b.row()) )
+    //     for ( int j in range(b.column()) )
+    //         b[i][j] = i*10 + j*1;
+    // print(b);
+    // print(b.static_shape());
 
-    print("==============");
+    // print("==============");
 
     let c = array<int,3>(3,4,5);
-    for ( int i in range(c.static_shape()[1]) )
-        for ( int j in range(c.static_shape()[2]) )
-            for ( int k in range(c.static_shape()[3]))
-                c[i][j][k] = i*100 + j*10 + k;
+    let& c1 = c[1];
+    print("c1:", c1.shape(), c1.ownership(), c1.detail::array_upper<int,2,cpu>::attribute());
+    let& c2 = c1[1];
+    print("c2:", c2.shape(), c2.ownership(), c2.detail::array_upper<int,1,cpu>::attribute());
+    let& c3 = c2[1];
     print(c);
     print(c.shape());
 };

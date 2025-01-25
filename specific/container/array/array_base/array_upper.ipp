@@ -122,18 +122,24 @@ namespace detail
     template < class type, class device >
     constexpr auto array_upper<type,1,device>::attribute ( ) const
     {
-        const auto& rows_list = host().template rows<1>();
-        if ( this >= rows_list.data() and this <= rows_list.data() + rows_list.size() ) 
-            return rows_attribute;
-            
-        #if debug
-        const auto& columns_list = host().template columns<1>();
-        if ( this >= columns_list.data() and this <= columns_list.data() + rows_list.size() )
+        if ( host().ownership() )
+        {
+            let rows_list = host().template rows<1>();
+            if ( this >= rows_list.data() and this <= rows_list.data() + rows_list.size() ) 
+                return rows_attribute;
+                
+            #if debug
+            let columns_list = host().template columns<1>();
+            if ( this >= columns_list.data() and this <= columns_list.data() + columns_list.size() )
+                return columns_attribute;
+            throw logic_error("unknown attribute: this array is probably not a view");
+            #else
             return columns_attribute;
-        throw logic_error("unknown attribute: this array is probably not a view");
-        #else
-        return columns_attribute;
-        #endif
+            #endif
+        }
+
+        else
+            return host().array_upper<type,2,device>::attribute();
     }
 
     template < class type, class device >
@@ -364,18 +370,23 @@ namespace detail
     {
         if ( ptr1 != nullptr )
         {
-            let rows_list = host<1>().template rows<dim>();
-            if ( this >= rows_list.data() and this <= rows_list.data() + size() ) 
-                return rows_attribute;
-                
-            #if debug
-            let columns_list = host<1>().template columns<dim>();
-            if ( this >= columns_list.data() and this <= columns_list.data() + columns_list.size() )
+            if ( host<1>().ownership() )
+            {
+                let rows_list = host<1>().template rows<dim>();
+                if ( this >= rows_list.data() and this <= rows_list.data() + rows_list.size() ) 
+                    return rows_attribute;
+                    
+                #if debug
+                let columns_list = host<1>().template columns<dim>();
+                if ( this >= columns_list.data() and this <= columns_list.data() + columns_list.size() )
+                    return columns_attribute;
+                throw logic_error("unknown attribute: this array is probably not a view");
+                #else
                 return columns_attribute;
-            throw logic_error("unknown attribute: this array is probably not a view");
-            #else
-            return columns_attribute;
-            #endif
+                #endif
+            }
+            else
+                return host<1>().array_upper<type,dim+1,device>::attribute();
         }
 
         #if debug

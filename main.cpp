@@ -4,36 +4,13 @@
 // #include "generic/math/interface.hpp"
 // #include "specific/audio/interface.hpp"
 #include "specific/container/interface.hpp"
-// #include "specific/neural/interface.hpp"*
+// #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-int test()
-{
-    return test();
-}
-
 int main ( )
 {
-    try
-    {
-        test();
-    }
-    catch ( ... )
-    {
-        print("1. test() throws exception!");
-    }
-
-    try
-    {
-        test();
-    }
-    catch ( ... )
-    {
-        print("2. test() throws exception!");
-    }
-
     let a = array<int>(10);
     print(a);
     print(a.inplace_shape());

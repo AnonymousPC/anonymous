@@ -99,31 +99,16 @@ namespace detail
 
             // Stack-overflow.posix
             #if defined(SIGSTKSZ) and defined(SA_ONSTACK)
-            static void(*sh)(int) = nullptr;       // Signal segv handler.
-            let rf = []                           // Signal refresher.
-            {
-                print("refreshing...");
-
-                stack_t ss;
-                ss.ss_sp    = malloc(SIGSTKSZ);
-                ss.ss_size  = SIGSTKSZ;
-                ss.ss_flags = 0;
-                sigaltstack(&ss, nullptr);
-
-                struct sigaction sa_segv;
-                sa_segv.sa_handler = sh;
-                sa_segv.sa_flags   = SA_ONSTACK;
-                sigemptyset(&sa_segv.sa_mask);
-                sigaction  (SIGSEGV, &sa_segv, nullptr);
-            };
-            static let sh_src = [] (int s) // Signal segv handler source.
-            {
-                print("prepare to throw signal");
-                rf();
-                segmentation_violation_signal_handler(s);
-            };
-            sh = sh_src;
-            rf();
+            stack_t ss;
+            ss.ss_sp    = malloc(SIGSTKSZ);
+            ss.ss_size  = SIGSTKSZ;
+            ss.ss_flags = 0;
+            sigaltstack(&ss, nullptr);
+            struct sigaction sa_segv;
+            sa_segv.sa_handler = segmentation_violation_signal_handler;
+            sa_segv.sa_flags   = SA_ONSTACK;
+            sigemptyset(&sa_segv.sa_mask);
+            sigaction  (SIGSEGV, &sa_segv, nullptr);
             #endif
 
         }

@@ -60,16 +60,16 @@ const std::stacktrace& exception::stacktrace ( ) const
 
 std::string detail::format_stacktrace ( const std::stacktrace& trace )
 {
-    return trace | std::views::drop_while([&] (const auto& line)
+    return trace | std::views::drop_while([&] (const auto& entry)
                      {
-                         return line.description().contains("ap::exception::format_string");
+                         return entry.description().contains("ap::exception");
                      })
                  | std::views::reverse
-                 | std::views::transform([&] (const auto& line)
+                 | std::views::transform([&] (const auto& entry)
                      {
                          return std::format("    {}{} {}{} {}{} {}{}:{}{}",
-                                            yellow, "at", white, format_stacktrace_color(line.description()),
-                                            green,  "in", grey,  line.source_file(), line.source_line(),
+                                            yellow, "at", white, format_stacktrace_color(entry.description()),
+                                            green,  "in", grey,  entry.source_file(), entry.source_line(),
                                             white);
                      })
                  | std::views::join_with('\n')

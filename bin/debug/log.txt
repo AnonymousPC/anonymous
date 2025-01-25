@@ -1,4 +1,0 @@
-[1mmain.cpp:13:1: [0m[0;1;35mwarning: [0m[1mall paths through this function will call itself [-Winfinite-recursion][0m
-   13 | {[0m
-      | [0;1;32m^
-[0m1 warning generated.

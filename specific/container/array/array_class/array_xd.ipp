@@ -312,13 +312,13 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::erase ( int ol
 template < class type, class device >
 constexpr array<type,1,device>& array<type,max_dim,device>::as_flat ( )
 {
-    return static_cast<flat&>(self);
+    return static_cast<array<type,1,device>&>(static_cast<flat&>(self));
 }
 
 template < class type, class device >
 constexpr const array<type,1,device>& array<type,max_dim,device>::as_flat ( ) const
 {
-    return static_cast<const flat&>(self);
+    return static_cast<const array<type,1,device>&>(static_cast<const flat&>(self));
 }
 
 template < class type, class device >
@@ -346,49 +346,57 @@ constexpr bool array<type,max_dim,device>::contiguous ( )
 }
 
 template < class type, class device >
-template < int dim2 >
-constexpr std::vector<detail::array_upper<type,dim2,device>>& array<type,max_dim,device>::rows ( ) 
-{
-    return lower::template rows<dim2>();
-}
-
-template < class type, class device >
-template < int dim2 >
-constexpr const std::vector<detail::array_upper<type,dim2,device>>& array<type,max_dim,device>::rows ( ) const
-{
-    return lower::template rows<dim2>();
-}
-
-template < class type, class device >
-template < int dim2 >
-constexpr std::vector<detail::array_upper<type,dim2,device>>& array<type,max_dim,device>::columns ( ) 
-{
-    return lower::template columns<dim2>();
-}
-
-template < class type, class device >
-template < int dim2 >
-constexpr const std::vector<detail::array_upper<type,dim2,device>>& array<type,max_dim,device>::columns ( ) const
-{
-    return lower::template columns<dim2>();
-}
-
-template < class type, class device >
 constexpr int array<type,max_dim,device>::top_size ( ) const
 {
     return size();
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::reference array<type,max_dim,device>::at ( int_type auto... args )
-    requires ( sizeof...(args) == max_dim )
+template < int dim2 >
+constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::rows ( int_type auto... offsets )
 {
-    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type>(data(), static_cast<const std::array<int,max_dim>&>(static_shape()))[args...];
+    static_assert ( dim2 > 0 and dim2 < max_dim );
+    static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
+    return lower::template rows<dim2>(offsets...);
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>::at ( int_type auto... args ) const
-    requires ( sizeof...(args) == max_dim )
+template < int dim2 >
+constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::rows ( int_type auto... offsets ) const
 {
-    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type>(data(), static_cast<const std::array<int,max_dim>&>(static_shape()))[args...];
+    static_assert ( dim2 > 0 and dim2 < max_dim );
+    static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
+    return lower::template rows<dim2>(offsets...);
+}
+
+template < class type, class device >
+template < int dim2 >
+constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::columns ( int_type auto... offsets ) 
+{
+    static_assert ( dim2 > 0 and dim2 < max_dim );
+    static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
+    return lower::template columns<dim2>(offsets...);
+}
+
+template < class type, class device >
+template < int dim2 >
+constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::columns ( int_type auto... offsets ) const
+{
+    static_assert ( dim2 > 0 and dim2 < max_dim );
+    static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
+    return lower::template columns<dim2>(offsets...);
+}
+
+template < class type, class device >
+constexpr array<type,max_dim,device>::reference array<type,max_dim,device>::at ( int_type auto... offsets )
+{
+    static_assert ( sizeof...(offsets) == max_dim );
+    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type>(data(), static_cast<const std::array<int,max_dim>&>(static_shape()))[offsets...];
+}
+
+template < class type, class device >
+constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>::at ( int_type auto... offsets ) const
+{
+    static_assert ( sizeof...(offsets) == max_dim );
+    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type>(const_cast<pointer>(data()), static_cast<const std::array<int,max_dim>&>(static_shape()))[offsets...];
 }

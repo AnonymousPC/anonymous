@@ -114,7 +114,7 @@ class signal
 class abort_signal
     extends public signal
 {
-    using signal::signal;
+    using signal::signal;  
 };
 
 class floating_point_exception_signal

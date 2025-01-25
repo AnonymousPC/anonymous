@@ -1,5 +1,14 @@
 #pragma once
 
+std::ostream& operator << ( std::ostream& left, const array_type auto& right )
+{
+    if constexpr ( decay<decltype(right)>::dimension() == 1 )
+        std::ranges::for_each(right, [&] (const auto& val) { left << val << ' '; });
+    else
+        std::ranges::for_each(right, [&] (const auto& line) { left << line << '\n'; });
+    return left;
+}
+
 namespace detail
 {
     template < class type, class... types >
@@ -87,7 +96,7 @@ namespace detail
     constexpr bool check_first_until_second_last_as_positive ( const auto& arg1, const auto&... args )
     {
         if constexpr ( sizeof...(args) >= 1 )
-            return arg1 > 0 and check_first_until_second_last_as_positive(args...);
+            return arg1 >= 0 and check_first_until_second_last_as_positive(args...);
         else
             return true;
     }
@@ -100,34 +109,71 @@ namespace detail
     template < int from, int to >
     constexpr int partial_size_of ( const auto& arr )
     {
-        // TODO: optimize.
-
         let shp = arr.static_shape();
+        int partial = 1;
 
         if constexpr ( from == 2 and to == -1 )
-            return std::accumulate(++shp.begin(), shp.end(), 1, std::multiplies<>());
+            detail::for_constexpr<2,decltype(shp)::size()>  ([&] <int index> { partial *= shp[index]; });
         else if constexpr ( from == 1 and to == -2 )
-            return std::accumulate(shp.begin(), --shp.end(), 1, std::multiplies<>());
+            detail::for_constexpr<1,decltype(shp)::size()-1>([&] <int index> { partial *= shp[index]; });
         else
             static_assert(false, "only accepts partial_size_of<2,-1> or partial_size_of<1,-2>");
+
+        return partial;
     }
 
     template < int from, int to >
     constexpr auto partial_shape_of ( const auto& arr )
     {
-        // TODO: optimize.
-
         let shp = arr.static_shape();
-        let partial = static_array<int,arr.size()-1>();
+        let partial = static_array<int,decltype(shp)::size()-1>();
 
         if constexpr ( from == 2 and to == -1 )
-            std::copy(++shp.begin(), shp.end(), partial.begin());
+            detail::for_constexpr<2,decltype(shp)::size()>  ([&] <int index> { partial[index-1] = shp[index]; });
         else if constexpr ( from == 1 and to == -2 )
-            std::copy(shp.begin(), --shp.end(), partial.begin());
+            detail::for_constexpr<1,decltype(shp)::size()-1>([&] <int index> { partial[index]   = shp[index]; });
         else
             static_assert(false, "only accepts partial_shape_of<2,-1> or partial_shape_of<1,-2>");
 
         return partial;
+    }
+    
+    constexpr int view_offset_begin ( const auto& shp, int_type auto... offsets )
+    {
+        if constexpr ( sizeof...(offsets) == 0 )
+            return 0;
+        else
+        {
+            int ofs = 0;
+            detail::for_constexpr<1,sizeof...(offsets)>([&] <int index>
+                {
+                    // shp[index+1] * ... * shp[-1] * index_value_of<index>(offsets...)
+                    let p = 1;
+                    detail::for_constexpr<index+1,decay<decltype(shp)>::size()>([&] <int index2> { p *= shp[index2]; });
+                    p *= index_value_of<index>(offsets...);
+                    ofs += p;
+                });
+            return ofs;
+        }
+    }
+
+    constexpr int view_offset_end ( const auto& shp, int_type auto... offsets )
+    {
+        if constexpr ( sizeof...(offsets) == 0 )
+            return shp[1];
+        else
+        {
+            int ofs = 0;
+            detail::for_constexpr<1,sizeof...(offsets)>([&] <int index>
+                {
+                    // shp[index+1] * ... * shp[-1] * index_value_of<index>(offsets...)
+                    let p = 1;
+                    detail::for_constexpr<index+1,decay<decltype(shp)>::size()>([&] <int index2> { p *= shp[index2]; });
+                    p *= index_value_of<index>(offsets...);
+                    ofs += p;
+                });
+            return ofs + shp[sizeof...(offsets)+1];
+        }
     }
 
 

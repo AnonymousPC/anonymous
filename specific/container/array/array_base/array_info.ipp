@@ -7,7 +7,7 @@ namespace detail
     constexpr array_info<type,dim,device>::array_info ( const auto&... args )
     {
         static_assert(sizeof...(args) == dim or sizeof...(args) == dim + 1);
-        for_constexpr<1,dim>([&] <int index> ( std::integral_constant<int,index> ) { shp[index] = index_value_of<index>(args...); });
+        for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
     }
 
     template < class type, int dim, class device >

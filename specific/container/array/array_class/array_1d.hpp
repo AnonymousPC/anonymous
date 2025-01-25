@@ -20,8 +20,8 @@ class array<type,1,device>
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = detail::array_iterator          <type,device>;
-        using  const_iterator  = detail::array_const_iterator    <type,device>;
+        using  iterator        = detail::array_iterator          <type,1,device>;
+        using  const_iterator  = detail::array_const_iterator    <type,1,device>;
         using  device_type     = device;
         struct array_tag { };
 

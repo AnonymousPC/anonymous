@@ -20,12 +20,12 @@ namespace detail
             using const_reference = device::template const_reference<type>;
             using pointer         = device::template pointer        <type>;
             using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = detail::array_iterator          <type,device>;
-            using const_iterator  = detail::array_const_iterator    <type,device>;
+            using iterator        = detail::array_iterator          <type,1,device>;
+            using const_iterator  = detail::array_const_iterator    <type,1,device>;
         
         public: // Core
-            constexpr array_upper ( )                    = default;
-            constexpr array_upper ( const array_upper& ) = delete;
+            constexpr array_upper ( ) = default;
+            // TODO: make copy_constructor private and only accessible to friend: tuple_lower<type,dim,device>;
 
         public: // Constructor
             constexpr array_upper (       array<type,2,device>& );
@@ -86,12 +86,12 @@ namespace detail
             using const_reference = device::template const_reference<type>;
             using pointer         = device::template pointer        <type>;
             using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = std::span<array_upper<type,dim-1,device>>::iterator;
-            using const_iterator  = std::span<array_upper<type,dim-1,device>>::const_iterator;
+            using iterator        = detail::array_iterator          <type,dim,device>;
+            using const_iterator  = detail::array_const_iterator    <type,dim,device>;
         
         public: // Core
-            constexpr array_upper ( )                    = default;
-            constexpr array_upper ( const array_upper& ) = delete;
+            constexpr array_upper ( ) = default;
+            // TODO: make copy_constructor private and only accessible to friend: tuple_lower<type,dim,device>;
 
         public: // Constructor
             constexpr array_upper (       array<type,dim+1,device>& );
@@ -120,7 +120,7 @@ namespace detail
         public: // Memory
             constexpr bool ownership  ( ) const;
             constexpr bool contiguous ( ) const;
-            constexpr auto attribute  ( ) const;
+            constexpr int  attribute  ( ) const; // TODO: make return_type 'enum'.
             constexpr int  offset     ( ) const;
         
         public: // Host
@@ -131,12 +131,12 @@ namespace detail
                                   constexpr       int                       top_size ( ) const;
 
         public: // View
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> rows     ( int_type auto... offsets );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> rows     ( int_type auto... offsets ) const;
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> columns  ( int_type auto... offsets );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> columns  ( int_type auto... offsets ) const;
-                                  constexpr       reference                                at       ( int_type auto... offsets );
-                                  constexpr       const_reference                          at       ( int_type auto... offsets ) const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> rows     ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> rows     ( int_type auto... ) const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> columns  ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> columns  ( int_type auto... ) const;
+                                  constexpr       reference                                at       ( int_type auto... );
+                                  constexpr       const_reference                          at       ( int_type auto... ) const;
     };
 
 } // namespace detail

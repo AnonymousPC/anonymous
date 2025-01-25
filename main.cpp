@@ -3,39 +3,59 @@
 // #include "generic/io/interface.hpp"
 // #include "generic/math/interface.hpp"
 // #include "specific/audio/interface.hpp"
-// #include "specific/container/interface.hpp"
+#include "specific/container/interface.hpp"
 // #include "specific/neural/interface.hpp"*
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-template < int from, int to, int add, int index >
-constexpr void for_constexpr_impl ( auto&& op )
+int test()
 {
-    if constexpr ( ( add > 0 and index <= to ) or
-                    ( add < 0 and index >= to ) )
-    {
-        op<index>;
-        for_constexpr_impl<from,to,index+add>(std::forward<decltype(op)>(op));
-    }
-}
-
-template < int from, int to, int add = 1 >
-constexpr void for_constexpr ( auto&& op )
-{
-    static_assert(add != 0, "this for-clause is infinite");
-    if constexpr ( ( add > 0 and from <= to ) or
-                    ( add < 0 and from >= to ) )
-        for_constexpr_impl<from,to,add,from>(op);
-    else
-        static_assert(false, "this for-clause does not do anything");
+    return test();
 }
 
 int main ( )
 {
-    let t = [] <int index> (const auto&) { return index; };
+    try
+    {
+        test();
+    }
+    catch ( ... )
+    {
+        print("1. test() throws exception!");
+    }
 
-    for_constexpr<1,3>(t);
+    try
+    {
+        test();
+    }
+    catch ( ... )
+    {
+        print("2. test() throws exception!");
+    }
+
+    let a = array<int>(10);
+    print(a);
+    print(a.inplace_shape());
+
+    print("==============");
+
+    let b = array<int,2>(3, 4);
+    for ( int i in range(b.row()) )
+        for ( int j in range(b.column()) )
+            b[i][j] = i*10 + j*1;
+    print(b);
+    print(b.static_shape());
+
+    print("==============");
+
+    let c = array<int,3>(3,4,5);
+    for ( int i in range(c.static_shape()[1]) )
+        for ( int j in range(c.static_shape()[2]) )
+            for ( int k in range(c.static_shape()[3]))
+                c[i][j][k] = i*100 + j*10 + k;
+    print(c);
+    print(c.shape());
 };
 
 

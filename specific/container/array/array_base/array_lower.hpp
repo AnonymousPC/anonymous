@@ -12,16 +12,16 @@ namespace detail
     };
 
     template < class type, int dim, class device >
-    class tuple_of_vector_array_upper;
+    class tuple_upper;
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     class array_lower<type,dim,device>
     {
         private: // Data
-            tuple_of_vector_array_upper<type,dim-1,device> rows_view;
-            tuple_of_vector_array_upper<type,dim-1,device> columns_view;
-                            array_upper<type,dim,  device> transpose_view;
+            tuple_upper<type,dim-1,device> rows_view;
+            tuple_upper<type,dim-1,device> columns_view;
+            array_upper<type,dim,  device> transpose_view;
 
         public: // Typedef
             using value_type      = device::template value_type     <type>;
@@ -29,8 +29,8 @@ namespace detail
             using const_reference = device::template const_reference<type>;
             using pointer         = device::template pointer        <type>;
             using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = std::span<array_upper<type,dim-1,device>>::iterator;
-            using const_iterator  = std::span<array_upper<type,dim-1,device>>::const_iterator;
+            using iterator        = detail::array_iterator          <type,dim,device>;
+            using const_iterator  = detail::array_const_iterator    <type,dim,device>;
 
         public: // Core
             constexpr array_lower ( );
@@ -52,12 +52,12 @@ namespace detail
             constexpr array_lower& resize ( const static_array<int,dim>& );
 
         public: // View
-            template < int dim2 >       std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets );
-            template < int dim2 > const std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets ) const; 
-            template < int dim2 >       std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... offsets );
-            template < int dim2 > const std::span<array_upper<type,dim2,device>>  columns      ( ) const;
-                                                  array_upper<type,dim, device>&  as_transpose ( );
-                                  const           array_upper<type,dim, device>&  as_transpose ( ) const;
+            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets );
+            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets ) const; 
+            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... offsets );
+            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... offsets) const;
+                                  constexpr                  array_upper<type,dim, device>&  as_transpose ( );
+                                  constexpr  const           array_upper<type,dim, device>&  as_transpose ( ) const;
     };
 } // namespace detail
 

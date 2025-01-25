@@ -216,7 +216,7 @@ namespace detail
     {
         return attribute() == rows_attribute    ? detail::partial_shape_of<2,-1>(host<1>()) otherwise
                attribute() == columns_attribute ? detail::partial_shape_of<1,-2>(host<1>()) otherwise
-                                                  host<2>().shape().reverse();
+                                                  throw exception("not coded yet: host<2>().shape().reverse()");
     }
 
     template < class type, int dim, class device >
@@ -225,7 +225,7 @@ namespace detail
     {
         return attribute() == rows_attribute    ? detail::partial_shape_of<2,-1>(host<1>()) otherwise
                attribute() == columns_attribute ? detail::partial_shape_of<1,-2>(host<1>()) otherwise
-                                                  host<2>().inplace_shape().reverse();
+                                                  throw exception("not coded yet: host<2>().shape().reverse()");
     }
 
     template < class type, int dim, class device >
@@ -234,7 +234,7 @@ namespace detail
     {
         return attribute() == rows_attribute    ? detail::partial_shape_of<2,-1>(host<1>()) otherwise
                attribute() == columns_attribute ? detail::partial_shape_of<1,-2>(host<1>()) otherwise
-                                                  host<2>().static_shape().reverse();
+                                                  throw exception("not coded yet: host<2>().shape().reverse()");
     }
 
     template < class type, int dim, class device >
@@ -328,18 +328,18 @@ namespace detail
         requires ( dim >= 2 )
     constexpr array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int ofs )
     {
-        return attribute() == rows_attribute    ? host<1>().template rows   <dim-1>(offset())[ofs] otherwise
-               attribute() == columns_attribute ? host<1>().template columns<dim-1>(offset())[ofs] otherwise 
-                                                  host<2>().template columns<dim-1>()[ofs];
+        return attribute() == rows_attribute    ? static_cast<array<type,dim-1,device>&>(host<1>().template rows   <dim-1>(offset())[ofs]) otherwise
+               attribute() == columns_attribute ? static_cast<array<type,dim-1,device>&>(host<1>().template columns<dim-1>(offset())[ofs]) otherwise 
+                                                  static_cast<array<type,dim-1,device>&>(host<2>().template columns<dim-1>()[ofs]);
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr const array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int ofs ) const
     {
-        return attribute() == rows_attribute    ? host<1>().template rows   <dim-1>(offset())[ofs] otherwise
-               attribute() == columns_attribute ? host<1>().template columns<dim-1>(offset())[ofs] otherwise 
-                                                  host<2>().template columns<dim-1>()[ofs];
+        return attribute() == rows_attribute    ? static_cast<const array<type,dim-1,device>&>(host<1>().template rows   <dim-1>(offset())[ofs]) otherwise
+               attribute() == columns_attribute ? static_cast<const array<type,dim-1,device>&>(host<1>().template columns<dim-1>(offset())[ofs]) otherwise 
+                                                  static_cast<const array<type,dim-1,device>&>(host<2>().template columns<dim-1>()[ofs]);
     }
 
     template < class type, int dim, class device >
@@ -360,7 +360,7 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr auto array_upper<type,dim,device>::attribute ( ) const
+    constexpr int array_upper<type,dim,device>::attribute ( ) const
     {
         if ( ptr1 != nullptr )
         {

@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr int max_dim = 2;
+constexpr int max_dim = 3;
 
 template < class type, class device >
 class array<type,max_dim,device>
@@ -26,8 +26,8 @@ class array<type,max_dim,device>
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = std::vector<detail::array_upper<type,max_dim-1,device>>::iterator;
-        using  const_iterator  = std::vector<detail::array_upper<type,max_dim-1,device>>::const_iterator;
+        using  iterator        = detail::array_iterator          <type,max_dim,device>;
+        using  const_iterator  = detail::array_const_iterator    <type,max_dim,device>;
         using  device_type     = device;
         struct array_tag { };
 
@@ -93,22 +93,24 @@ class array<type,max_dim,device>
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
 
+    public: // Host
+        constexpr int top_size ( ) const;
+
     public: // View
-        template < int dim2 > constexpr       std::vector<detail::array_upper<type,dim2,device>>& rows     ( );
-        template < int dim2 > constexpr const std::vector<detail::array_upper<type,dim2,device>>& rows     ( ) const;
-        template < int dim2 > constexpr       std::vector<detail::array_upper<type,dim2,device>>& columns  ( );
-        template < int dim2 > constexpr const std::vector<detail::array_upper<type,dim2,device>>& columns  ( ) const;
-                              constexpr       int                                                 top_size ( )                       const;
-                              constexpr       reference                                           at       ( int_type auto... args )       requires ( sizeof...(args) == max_dim );
-                              constexpr       const_reference                                     at       ( int_type auto... args ) const requires ( sizeof...(args) == max_dim );
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... );
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... ) const;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> columns  ( int_type auto... );
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> columns  ( int_type auto... ) const;
+                              constexpr       reference                                        at       ( int_type auto... );
+                              constexpr       const_reference                                  at       ( int_type auto... ) const;
 };
 
-template < class type, int dim, class device >
-    requires ( dim >= 2 ) and ( dim > max_dim )
-class array<type,dim,device>
-{
-    static_assert(false, "dim > max_dim");
-};
+// template < class type, int dim, class device >
+//     requires ( dim >= 2 ) and ( dim > max_dim )
+// class array<type,dim,device>
+// {
+//     static_assert(false, "dim > max_dim");
+// };
 
 /* .ipp files are explicit extern included, which instantiates
  * array.shape(), array.inplace_shape() and array.static_shape()

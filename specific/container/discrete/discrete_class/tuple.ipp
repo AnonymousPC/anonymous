@@ -8,8 +8,8 @@ namespace detail
         if constexpr ( ( add > 0 and index <= to ) or
                        ( add < 0 and index >= to ) )
         {
-            op(std::integral_constant<int,index>());
-            for_constexpr_impl<from,to,index+add>(std::forward<decltype(op)>(op));
+            op.template operator()<index>();
+            for_constexpr_impl<from,to,add,index+add>(std::forward<decltype(op)>(op));
         }
     }
 
@@ -44,7 +44,7 @@ template < class... types2 >
 constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
     requires ( convertible_to<types2,types> and ... ) but ( not ( same_as<types,types2> and ... ) )
 {
-    detail::for_constexpr<1,size()>([&] <int index> ( std::integral_constant<int,index> ) { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
+    detail::for_constexpr<1,size()>([&] <int index> { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
 }
 
 template < class... types >
@@ -52,7 +52,7 @@ template < class... types2 >
 constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
     requires ( constructible_from<types,types2> and ... ) but ( not ( convertible_to<types2,types> and ... ) )
 {
-    detail::for_constexpr<1,size()>([&] <int index> ( std::integral_constant<int,index> ) { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
+    detail::for_constexpr<1,size()>([&] <int index> { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
 }
 
 template < class... types >

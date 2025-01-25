@@ -27,8 +27,8 @@ class array<type,dim,device>
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = std::span<detail::array_upper<type,dim-1,device>>::iterator;
-        using  const_iterator  = std::span<detail::array_upper<type,dim-1,device>>::const_iterator;
+        using  iterator        = detail::array_iterator          <type,dim,device>;
+        using  const_iterator  = detail::array_const_iterator    <type,dim,device>;
         using  device_type     = device;
         struct array_tag { };
 
@@ -94,21 +94,16 @@ class array<type,dim,device>
         constexpr bool ownership  ( ) const;
         constexpr bool contiguous ( ) const;
 
-    public: // View
-        template < int dim2 > constexpr       std::vector<detail::array_upper<type,dim2,device>>& rows     ( );
-        template < int dim2 > constexpr const std::vector<detail::array_upper<type,dim2,device>>& rows     ( ) const;
-        template < int dim2 > constexpr       std::vector<detail::array_upper<type,dim2,device>>& columns  ( );
-        template < int dim2 > constexpr const std::vector<detail::array_upper<type,dim2,device>>& columns  ( ) const;
-                              constexpr       int                                                 top_size ( )                       const;
-                              constexpr       reference                                           at       ( int_type auto... args )       requires ( sizeof...(args) == dim );
-                              constexpr       const_reference                                     at       ( int_type auto... args ) const requires ( sizeof...(args) == dim );
+    public: // Host
+        constexpr int top_size ( ) const;
 
-    private: // Detail
-        constexpr static int  multiply_first_until_last                 ( const auto&... );
-        constexpr static int  multiply_first_until_second_last          ( const auto&... );
-        constexpr static bool check_first_until_last_as_positive        ( const auto&... );
-        constexpr static bool check_first_until_second_last_as_positive ( const auto&... );
-        constexpr        void device_generate_mdspan                    ( const auto& );
+    public: // View
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... );
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... ) const;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> columns  ( int_type auto... );
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> columns  ( int_type auto... ) const;
+                              constexpr       reference                                        at       ( int_type auto... );
+                              constexpr       const_reference                                  at       ( int_type auto... ) const;
 };
 
 /* .ipp files are explicit extern included, which instantiates

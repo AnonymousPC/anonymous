@@ -524,38 +524,6 @@ constexpr bool array<type,dim,device>::contiguous ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-template < int dim2 >
-constexpr std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::rows ( ) 
-{
-    return ownership() ? lower::template rows<dim2>() otherwise upper::template rows<dim2>();
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 )
-template < int dim2 >
-constexpr const std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::rows ( ) const
-{
-    return ownership() ? lower::template rows<dim2>() otherwise upper::template rows<dim2>();
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 )
-template < int dim2 >
-constexpr std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::columns ( ) 
-{
-    return ownership() ? lower::template columns<dim2>() otherwise upper::template columns<dim2>();
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 )
-template < int dim2 >
-constexpr const std::vector<detail::array_upper<type,dim2,device>>& array<type,dim,device>::columns ( ) const
-{
-    return ownership() ? lower::template columns<dim2>() otherwise upper::template columns<dim2>();
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 )
 constexpr int array<type,dim,device>::top_size ( ) const
 {
     return ownership() ? size() otherwise upper::top_size();
@@ -563,22 +531,62 @@ constexpr int array<type,dim,device>::top_size ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr array<type,dim,device>::reference array<type,dim,device>::at ( int_type auto... args )
-    requires ( sizeof...(args) == dim )
+template < int dim2 >
+constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::rows ( int_type auto... offsets ) 
 {
-    if ( ownership() ) [[likely]]
-        return std::mdspan<type,std::dextents<int,dim>,typename device::layout_type>(data(), static_cast<const std::array<int,dim>&>(static_shape()))[args...];
-    else
-        return upper::at(args...);
+    static_assert ( dim2 > 0 and dim2 < dim );
+    static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+    return ownership() ? lower::template rows<dim2>(offsets...) otherwise upper::template rows<dim2>(offsets...);
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr array<type,dim,device>::const_reference array<type,dim,device>::at ( int_type auto... args ) const
-    requires ( sizeof...(args) == dim )
+template < int dim2 >
+constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::rows ( int_type auto... offsets) const
 {
+    static_assert ( dim2 > 0 and dim2 < dim );
+    static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+    return ownership() ? lower::template rows<dim2>() otherwise upper::template rows<dim2>();
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+template < int dim2 >
+constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::columns ( int_type auto... offsets ) 
+{
+    static_assert ( dim2 > 0 and dim2 < dim );
+    static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+    return ownership() ? lower::template columns<dim2>(offsets...) otherwise upper::template columns<dim2>(offsets...);
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+template < int dim2 >
+constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::columns ( int_type auto... offsets) const
+{
+    static_assert ( dim2 > 0 and dim2 < dim );
+    static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+    return ownership() ? lower::template columns<dim2>() otherwise upper::template columns<dim2>();
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+constexpr array<type,dim,device>::reference array<type,dim,device>::at ( int_type auto... offsets )
+{
+    static_assert ( sizeof...(offsets) == dim );
     if ( ownership() ) [[likely]]
-        return std::mdspan<type,std::dextents<int,dim>,typename device::layout_type>(data(), static_cast<const std::array<int,dim>&>(static_shape()))[args...];
+        return std::mdspan<type,std::dextents<int,dim>,typename device::layout_type>(data(), static_cast<const std::array<int,dim>&>(static_shape()))[offsets...];
     else
-        return upper::at(args...);
+        return upper::at(offsets...);
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 )
+constexpr array<type,dim,device>::const_reference array<type,dim,device>::at ( int_type auto... offsets ) const
+{
+    static_assert ( sizeof...(offsets) == dim );
+    if ( ownership() ) [[likely]]
+        return std::mdspan<type,std::dextents<int,dim>,typename device::layout_type>(const_cast<pointer>(data()), static_cast<const std::array<int,dim>&>(static_shape()))[offsets...];
+    else
+        return upper::at(offsets...);
 }

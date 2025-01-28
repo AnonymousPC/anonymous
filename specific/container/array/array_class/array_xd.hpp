@@ -1,12 +1,11 @@
 #pragma once
 
-constexpr int max_dim = 3;
-
 template < class type, class device >
 class array<type,max_dim,device>
     extends public device::template vector<type>,
             public detail::array_upper<type,1,      device>, // Make abi compatible with array<type,1>, required from as_flat().
             public detail::array_info <type,max_dim,device>,
+            public detail::array_upper<type,max_dim,device>, // Never a view of higher array, only transposable.
             public detail::array_lower<type,max_dim,device>
 {
     private: // Precondition
@@ -18,6 +17,7 @@ class array<type,max_dim,device>
         using base   = device::template vector<type>;
         using flat   = detail::array_upper<type,1,      device>;
         using info   = detail::array_info <type,max_dim,device>;
+        using upper  = detail::array_upper<type,max_dim,device>;
         using lower  = detail::array_lower<type,max_dim,device>;
 
     public: // Typedef
@@ -90,11 +90,12 @@ class array<type,max_dim,device>
         constexpr const array<type,max_dim,device>& as_transpose ( ) const;
 
     public: // Memory
-        constexpr static bool ownership  ( );
-        constexpr static bool contiguous ( );
+        constexpr bool ownership  ( ) const;
+        constexpr bool contiguous ( ) const;
 
     public: // Host
-        constexpr int top_size ( ) const;
+                              constexpr int top_size  ( ) const;
+        template < int axis > constexpr int axis_size ( ) const;
 
     public: // View
         template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... );
@@ -104,13 +105,6 @@ class array<type,max_dim,device>
                               constexpr       reference                                        at       ( int_type auto... );
                               constexpr       const_reference                                  at       ( int_type auto... ) const;
 };
-
-// template < class type, int dim, class device >
-//     requires ( dim >= 2 ) and ( dim > max_dim )
-// class array<type,dim,device>
-// {
-//     static_assert(false, "dim > max_dim");
-// };
 
 /* .ipp files are explicit extern included, which instantiates
  * array.shape(), array.inplace_shape() and array.static_shape()

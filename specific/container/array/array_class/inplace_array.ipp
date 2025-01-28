@@ -47,7 +47,10 @@ constexpr inplace_array<type,len,device>::inplace_array ( std::initializer_list<
     requires copyable<type>
     extends base ( std::forward<decltype(init)>(init) )
 {
-
+    #if debug
+    if ( int(init.size()) > capacity() )
+        throw value_error("initialize inplace_array with size {} out of capacity {}", init.size(), size());
+    #endif
 }
 
 template < class type, int len, class device >

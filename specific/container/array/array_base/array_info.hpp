@@ -18,6 +18,13 @@ namespace detail
         private: // Data
             static_array<int,dim> shp;
 
+        public: // Typedef
+            using value_type      = device::template value_type     <type>;
+            using reference       = device::template reference      <type>;
+            using const_reference = device::template const_reference<type>;
+            using pointer         = device::template pointer        <type>;
+            using const_pointer   = device::template const_pointer  <type>;
+
         public: // Core
             constexpr array_info ( ) = default;
 
@@ -32,8 +39,10 @@ namespace detail
             constexpr int                    row           ( ) const;
             constexpr int                    column        ( ) const requires ( dim == 2 );
             constexpr bool                   empty         ( ) const;
-
             constexpr array_info&            resize        ( const static_array<int,dim>& );
+
+        public: // Detail
+            template < int axis > constexpr int axis_size ( ) const;
           
     };
 } // namespace detail

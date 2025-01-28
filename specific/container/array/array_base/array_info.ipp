@@ -14,7 +14,9 @@ namespace detail
         requires ( dim >= 2 )
     constexpr int array_info<type,dim,device>::size ( ) const
     {
-        return std::accumulate(shp.begin(), shp.end(), 1, std::multiplies<>());
+        let s = 1;
+        for_constexpr<1,dim>([&] <int index> { s *= shp[index]; });
+        return s;
     }
 
     template < class type, int dim, class device >
@@ -57,7 +59,9 @@ namespace detail
         requires ( dim >= 2 )
     constexpr bool array_info<type,dim,device>::empty ( ) const
     {
-        return std::any_of(shp.begin(), shp.end(), [] (int s) { return s == 0; });
+        let e = false;
+        for_constexpr<1,dim>([&] <int index> { if (shp[index] == 0) e = true; });
+        return e;
     }
 
     template < class type, int dim, class device >
@@ -68,4 +72,12 @@ namespace detail
         return self;
     }
 
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int axis >
+    constexpr int array_info<type,dim,device>::axis_size ( ) const
+    {
+        static_assert ( axis >= 1 and axis <= dim );
+        return shp[axis];
+    }
 } // namespace detail

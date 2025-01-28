@@ -62,7 +62,7 @@ std::string detail::format_stacktrace ( const std::stacktrace& trace )
 {
     return trace | std::views::drop_while([&] (const auto& entry)
                      {
-                         return entry.description().contains("ap::exception");
+                         return entry.description().contains("ap::exception::format_string");
                      })
                  | std::views::reverse
                  | std::views::transform([&] (const auto& entry)

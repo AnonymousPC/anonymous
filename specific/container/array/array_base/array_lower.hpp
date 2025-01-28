@@ -52,12 +52,12 @@ namespace detail
             constexpr array_lower& resize ( const static_array<int,dim>& );
 
         public: // View
-            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets );
-            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... offsets ) const; 
-            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... offsets );
-            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... offsets) const;
-                                  constexpr                  array_upper<type,dim, device>&  as_transpose ( );
-                                  constexpr  const           array_upper<type,dim, device>&  as_transpose ( ) const;
+            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... );
+            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... ) const; 
+            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... );
+            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... ) const;
+                                  constexpr                  array      <type,dim, device>&  as_transpose ( );
+                                  constexpr  const           array      <type,dim, device>&  as_transpose ( )                  const;
     };
 } // namespace detail
 

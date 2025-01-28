@@ -252,7 +252,6 @@ namespace ap
     inline namespace constants { }
     inline namespace literals  { }
 
-    namespace abi    { }
     namespace neural { }
     namespace spirit { }
     namespace stock  { }

@@ -1,9 +1,10 @@
 #pragma once
 
 #ifdef BOOST_COMPUTE_HPP
-    #include "detail/opencl_stream_context.hpp"
     #include "third_party/buffer_iterator.hpp"
     #include "third_party/device_ptr.hpp"
+    #include "detail/opencl_accessor.hpp"
+    #include "detail/opencl_stream_context.hpp"
     
     class opencl
     {
@@ -15,16 +16,17 @@
 
         public: // Type
             template < class type > using value_type      = type;
-            template < class type > using reference       =       boost::compute::detail::buffer_value<type>;
-            template < class type > using const_reference = const boost::compute::detail::buffer_value<type>;
-            template < class type > using pointer         =       boost::compute::detail::device_ptr<type>;
-            template < class type > using const_pointer   = const boost::compute::detail::device_ptr<type>;
+            template < class type > using reference       = boost::compute::detail::buffer_value<type>;
+            template < class type > using const_reference = boost::compute::detail::buffer_value<type>;
+            template < class type > using pointer         = boost::compute::detail::device_ptr<type>;
+            template < class type > using const_pointer   = boost::compute::detail::device_ptr<type>;
 
         public: // Allocator
             template < class type > using allocator = boost::compute::buffer_allocator<type>;
 
-        public: // Layout
-            using layout_type = std::layout_left;
+        public: // Memory
+                                    using layout_type   = std::layout_left;
+            template < class type > using accessor_type = detail::opencl_accessor<type>;
 
         public: // Operator
             template < class type = void > using plus          = boost::compute::plus         <type>;
@@ -63,7 +65,7 @@
             template < class type, class alloc = allocator<type> >                                                                                                class stack;             // Override top(), pop().
          // template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map      = unsupported;
          // template < class type, class hash = hash<type>, class equal = equal_to<type>,  class alloc = allocator<type> >                                        using unordered_set      = unsupported;
-            template < class type, class alloc = allocator<type> >                                                                                                using vector             = boost::compute::vector<type,alloc>;
+            template < class type, class alloc = allocator<type> >                                                                                                class vector;            // Create data().
 
         public: // Algorithm
             static decltype(auto) accumulate                        ( auto&&... args ) { return boost::compute::accumulate              (std::forward<decltype(args)>(args)...); }
@@ -160,6 +162,7 @@
     #include "detail/basic_string.hpp"
     #include "detail/basic_string_view.hpp"
     #include "detail/stack.hpp"
+    #include "detail/vector.hpp"
 
     detail::opencl_stream_context opencl::execution_context = detail::opencl_stream_context(boost::compute::system::default_device().max_work_group_size());
 #else

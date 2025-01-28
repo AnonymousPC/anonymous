@@ -19,11 +19,11 @@ namespace detail
             int  step = 1;
 
         public: // Typedef
-            using iterator_concept = std::random_access_iterator_tag;
-            using value_type       = device::template value_type<type>;
-            using reference        = device::template reference <type>;
-            using pointer          = device::template pointer   <type>;
-            using difference_type  = minus_result<pointer,pointer>;
+            using iterator_category = std::random_access_iterator_tag;
+            using value_type        = device::template value_type<type>;
+            using reference         = device::template reference <type>;
+            using pointer           = device::template pointer   <type>;
+            using difference_type   = minus_result<pointer,pointer>;
 
         public: // Core
             constexpr array_iterator ( ) = default;
@@ -62,11 +62,11 @@ namespace detail
             base iter = base();
 
         public: // Typedef
-            using iterator_concept = std::contiguous_iterator_tag;
-            using value_type       = array<type,dim-1,device>;
-            using reference        = array<type,dim-1,device>&;
-            using pointer          = array<type,dim-1,device>*;
-            using difference_type  = ptrdiff_t;
+            using iterator_category = std::contiguous_iterator_tag;
+            using value_type        = array<type,dim-1,device>;
+            using reference         = array<type,dim-1,device>&;
+            using pointer           = array<type,dim-1,device>*;
+            using difference_type   = ptrdiff_t;
 
         public: // Core
             constexpr array_iterator ( ) = default;
@@ -107,11 +107,11 @@ namespace detail
             int  step = 1;
 
         public: // Typedef
-            using iterator_concept = std::random_access_iterator_tag;
-            using value_type       = device::template value_type     <type>;
-            using reference        = device::template const_reference<type>;
-            using pointer          = device::template const_pointer  <type>;
-            using difference_type  = minus_result<pointer,pointer>;
+            using iterator_category = std::random_access_iterator_tag;
+            using value_type        = device::template value_type     <type>;
+            using reference         = device::template const_reference<type>;
+            using pointer           = device::template const_pointer  <type>;
+            using difference_type   = minus_result<pointer,pointer>;
 
         public: // Core
             constexpr array_const_iterator ( ) = default;
@@ -130,7 +130,7 @@ namespace detail
             friend constexpr array_const_iterator  operator  +  ( const array_const_iterator& left,       difference_type       right ) { return array_const_iterator(left .iter + left .step * right, left .step); }
             friend constexpr array_const_iterator  operator  +  (       difference_type       left, const array_const_iterator& right ) { return array_const_iterator(right.iter + right.step * left,  right.step); }
             friend constexpr array_const_iterator  operator  -  ( const array_const_iterator& left,       difference_type       right ) { return array_const_iterator(left .iter - left .step * right, left .step); }
-            friend constexpr difference_type       operator  -  ( const array_const_iterator& left, const array_const_iterator& right ) { [[assume(left.step == right.step)]]; return (left.iter - right.iter) / left.step;  }
+            friend constexpr difference_type       operator  -  ( const array_const_iterator& left, const array_const_iterator& right ) { [[assume(left.step == right.step)]]; return (left.iter - right.iter) / left.step; }
             friend constexpr array_const_iterator& operator ++  (       array_const_iterator& left                                    ) { left.iter += left.step;         return left; }
             friend constexpr array_const_iterator  operator ++  (       array_const_iterator& left,       int                         ) { let it = left; ++left;          return it;   }
             friend constexpr array_const_iterator& operator --  (       array_const_iterator& left                                    ) { left.iter -= left.step;         return left; }
@@ -150,11 +150,11 @@ namespace detail
             base iter = base();
 
         public: // Typedef
-            using iterator_concept = std::contiguous_iterator_tag;
-            using value_type       = array<type,dim-1,device>;
-            using reference        = const array<type,dim-1,device>&;
-            using pointer          = const array<type,dim-1,device>*;
-            using difference_type  = ptrdiff_t;
+            using iterator_category = std::contiguous_iterator_tag;
+            using value_type        = array<type,dim-1,device>;
+            using reference         = const array<type,dim-1,device>&;
+            using pointer           = const array<type,dim-1,device>*;
+            using difference_type   = ptrdiff_t;
 
         public: // Core
             constexpr array_const_iterator ( ) = default;

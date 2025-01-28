@@ -15,11 +15,21 @@ namespace detail
     constexpr array_lower<type,dim,device>::array_lower ( const auto&... args )
         extends transpose_view ( static_cast<array<type,dim,device>&>(self) )
     {
-        static_assert(sizeof...(args) == dim or sizeof...(args) == dim + 1);
-        let shp = static_array<int,dim-1>();
-        detail::for_constexpr<1,dim-1>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-        rows_view   .resize(shp, static_cast<array<type,dim,device>&>(self));
-        columns_view.resize(shp, static_cast<array<type,dim,device>&>(self));
+        if constexpr ( sizeof...(args) == dim ) // Without trailing value
+        {
+            let shp = static_array<int,dim>{args...};
+            rows_view   .template resize<rows_attribute   >(shp, static_cast<array<type,dim,device>&>(self));
+            columns_view.template resize<columns_attribute>(shp, static_cast<array<type,dim,device>&>(self));
+        }
+        else if constexpr ( sizeof...(args) == dim + 1 ) // With trailing value
+        {
+            let shp = static_array<int,dim>();
+            for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
+            rows_view   .template resize<rows_attribute   >(shp, static_cast<array<type,dim,device>&>(self));
+            columns_view.template resize<columns_attribute>(shp, static_cast<array<type,dim,device>&>(self));
+        }
+        else
+            static_assert(false, "invalid argument list");
     }
 
     template < class type, int dim, class device > 
@@ -77,8 +87,8 @@ namespace detail
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>& array_lower<type,dim,device>::resize ( const static_array<int,dim>& new_shape )
     {
-        rows_view   .resize(new_shape, static_cast<array<type,dim,device>&>(self));
-        columns_view.resize(new_shape, static_cast<array<type,dim,device>&>(self));
+        rows_view   .template resize<rows_attribute   >(new_shape, static_cast<array<type,dim,device>&>(self));
+        columns_view.template resize<columns_attribute>(new_shape, static_cast<array<type,dim,device>&>(self));
         return self;
     }
 
@@ -89,7 +99,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
+        return rows_view.template value<rows_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -99,7 +109,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
+        return rows_view.template value<rows_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -109,7 +119,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
+        return columns_view.template value<columns_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -119,21 +129,21 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
+        return columns_view.template value<columns_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr array_upper<type,dim,device>& array_lower<type,dim,device>::as_transpose ( )
+    constexpr array<type,dim,device>& array_lower<type,dim,device>::as_transpose ( )
     {
-        return transpose_view;
+        return static_cast<array<type,dim,device>&>(transpose_view);
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr const array_upper<type,dim,device>& array_lower<type,dim,device>::as_transpose ( ) const
+    constexpr const array<type,dim,device>& array_lower<type,dim,device>::as_transpose ( ) const
     {
-        return transpose_view;
+        return static_cast<const array<type,dim,device>&>(transpose_view);
     }
     
 
@@ -146,53 +156,53 @@ namespace detail
     template < class type, class device >
     class tuple_upper<type,1,device>
     {
-        private: // Data
+        public: // Data
             std::vector<array_upper<type,1,device>> vct;
 
         public: // Access
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... ) const;
+            template < auto attr, int dim2 > constexpr       std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... );
+            template < auto attr, int dim2 > constexpr const std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... ) const;
     
         public: // Member
-            constexpr tuple_upper& clear  ( );
-            constexpr tuple_upper& resize ( const static_array<int,1>&, array<type,2,device>& );
-            constexpr tuple_upper& resize ( const static_array<int,1>&, std::vector<array_upper<type,2,device>>& );  
+                                   constexpr tuple_upper& clear  ( );
+            template < auto attr > constexpr tuple_upper& resize ( const auto&, array<type,2,device>& );
+            template < auto attr > constexpr tuple_upper& resize ( const auto&, std::vector<array_upper<type,2,device>>& );  
     };
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     class tuple_upper<type,dim,device>
     {
-        private: // Data
+        public: // Data
             std::vector<array_upper<type,dim,device>> vct;
             tuple_upper<type,dim-1,device>            vct_other;
 
         public: // Access
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... ) const; 
+            template < auto attr, int dim2 > constexpr       std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... );
+            template < auto attr, int dim2 > constexpr const std::span<array_upper<type,dim2,device>> value ( const auto&, const auto&... ) const; 
 
         public: // Member
-            constexpr tuple_upper& clear  ( );
-            constexpr tuple_upper& resize ( const static_array<int,dim>&, array<type,dim+1,device>& );
-            constexpr tuple_upper& resize ( const static_array<int,dim>&, std::vector<array_upper<type,dim+1,device>>& );  
+                                   constexpr tuple_upper& clear  ( );
+            template < auto attr > constexpr tuple_upper& resize ( const auto&, array<type,dim+1,device>& );
+            template < auto attr > constexpr tuple_upper& resize ( const auto&, std::vector<array_upper<type,dim+1,device>>& );  
     };
 
     template < class type, class device >
-    template < int dim2 >
+    template < auto attr, int dim2 >
     constexpr std::span<array_upper<type,dim2,device>> tuple_upper<type,1,device>::value ( const auto& shp, const auto&... offsets )
     {
         static_assert ( dim2 == 1 );
-        return std::span<array_upper<type,dim2,device>>(vct.data() + detail::view_offset_begin(shp, offsets...),
-                                                        vct.data() + detail::view_offset_end  (shp, offsets...));
+        return std::span(vct.data() + detail::view_offset_begin<attr>(shp, offsets...),
+                         vct.data() + detail::view_offset_end  <attr>(shp, offsets...));
     }
 
     template < class type, class device >
-    template < int dim2 >
+    template < auto attr, int dim2 >
     constexpr const std::span<array_upper<type,dim2,device>> tuple_upper<type,1,device>::value ( const auto& shp, const auto&... offsets ) const
     {
         static_assert ( dim2 == 1 );
-        return std::span<array_upper<type,dim2,device>>(const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_begin(shp, offsets...)),
-                                                        const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_end  (shp, offsets...)));
+        return std::span(const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_begin<attr>(shp, offsets...)),
+                         const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_end  <attr>(shp, offsets...)));
     }
 
     template < class type, class device >
@@ -203,20 +213,39 @@ namespace detail
     }
 
     template < class type, class device >
-    constexpr tuple_upper<type,1,device>& tuple_upper<type,1,device>::resize ( const static_array<int,1>& shp, array<type,2,device>& arr )
+    template < auto attr >
+    constexpr tuple_upper<type,1,device>& tuple_upper<type,1,device>::resize ( const auto& shp, array<type,2,device>& arr )
     {
-        vct.resize(shp[1]);
-        std::fill(vct.begin(), vct.end(), array_upper<type,1,device>(arr));
+        let s = 1;
+        if constexpr ( attr == rows_attribute )
+            for_constexpr<1,decay<decltype(shp)>::size()-1>([&] <int index> { s *= shp[index]; });
+        else if constexpr ( attr == columns_attribute )
+            for_constexpr<2,decay<decltype(shp)>::size()  >([&] <int index> { s *= shp[index]; });
+        else
+            static_assert(false, "unknown attribute");
+        vct.resize(s);
+        for ( int i in range(0, s-1) ) 
+            vct[i] = array_upper<type,1,device>(arr, attr, i);
         return self;
     }
 
     template < class type, class device >
-    constexpr tuple_upper<type,1,device>& tuple_upper<type,1,device>::resize ( const static_array<int,1>& shp, std::vector<array_upper<type,2,device>>& arrs )
+    template < auto attr >
+    constexpr tuple_upper<type,1,device>& tuple_upper<type,1,device>::resize ( const auto& shp, std::vector<array_upper<type,2,device>>& arrs )
     {
-        vct.resize(shp[1]);
-        let ck = shp[1] / arrs.size(); // chunk.
+        let s = 1;
+        if constexpr ( attr == rows_attribute )
+            for_constexpr<1,decay<decltype(shp)>::size()-1>([&] <int index> { s *= shp[index]; });
+        else if constexpr ( attr == columns_attribute )
+            for_constexpr<2,decay<decltype(shp)>::size()  >([&] <int index> { s *= shp[index]; });
+        else
+            static_assert(false, "unknown attribute");
+        vct.resize(s);
+        [[assume(s % arrs.size() == 0)]];
+        let ck = s / arrs.size(); // chunk.
         for ( int i in range(0, int(arrs.size()-1)) )
-            std::fill(vct.begin() + i * ck, vct.begin() + (i + 1) * ck, array_upper<type,1,device>(static_cast<array<type,2,device>&>(arrs[i])));
+            for ( int j in range(0, int(ck-1)))
+                vct[i*ck+j] = array_upper<type,1,device>(static_cast<array<type,2,device>&>(arrs[i]), attr, j);
         return self;
     }
 
@@ -224,28 +253,28 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    template < int dim2 >
+    template < auto attr, int dim2 >
     constexpr std::span<array_upper<type,dim2,device>> tuple_upper<type,dim,device>::value ( const auto& shp, const auto&... offsets )
     {
         static_assert ( dim2 >= 1 and dim2 <= dim );
         if constexpr ( dim2 == dim )
-            return std::span<array_upper<type,dim2,device>>(vct.data() + detail::view_offset_begin(shp, offsets...),
-                                                            vct.data() + detail::view_offset_end  (shp, offsets...));
+            return std::span(vct.data() + detail::view_offset_begin<attr>(shp, offsets...),
+                             vct.data() + detail::view_offset_end  <attr>(shp, offsets...));
         else
-            return vct_other.template value<dim2>(shp, offsets...);
+            return vct_other.template value<attr,dim2>(shp, offsets...);
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    template < int dim2 >
+    template < auto attr, int dim2 >
     constexpr const std::span<array_upper<type,dim2,device>> tuple_upper<type,dim,device>::value ( const auto& shp, const auto&... offsets ) const
     {
         static_assert ( dim2 >= 1 and dim2 <= dim );
         if constexpr ( dim2 == dim )
-            return std::span<array_upper<type,dim2,device>>(const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_begin(shp, offsets...)),
-                                                            const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_end  (shp, offsets...)));
+            return std::span(const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_begin<attr>(shp, offsets...)),
+                             const_cast<array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_end  <attr>(shp, offsets...)));
         else
-            return vct_other.template value<dim2>(shp, offsets...);
+            return vct_other.template value<attr,dim2>(shp, offsets...);
     }
 
     template < class type, int dim, class device >
@@ -259,35 +288,42 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr tuple_upper<type,dim,device>& tuple_upper<type,dim,device>::resize ( const static_array<int,dim>& shp, array<type,dim+1,device>& arr )
+    template < auto attr >
+    constexpr tuple_upper<type,dim,device>& tuple_upper<type,dim,device>::resize ( const auto& shp, array<type,dim+1,device>& arr )
     {
-        vct.resize(shp[1]);
-        std::fill(vct.begin(), vct.end(), array_upper<type,dim,device>(arr));
-
-        let new_shp = static_array<int,dim-1>();
-        new_shp[1] = shp[1] * shp[2];
-        if constexpr ( dim >= 3 )
-            detail::for_constexpr<2,dim-1>([&] <int index> { new_shp[index] = shp[index+1]; });
-        vct_other.resize(new_shp, vct);
-
+        let s = 1;
+        if constexpr ( attr == rows_attribute )
+            for_constexpr<1,decay<decltype(shp)>::size()-dim>([&] <int index> { s *= shp[index]; });
+        else if constexpr ( attr == columns_attribute )
+            for_constexpr<dim+1,decay<decltype(shp)>::size()>([&] <int index> { s *= shp[index]; });
+        else
+            static_assert(false, "unknown attribute");
+        vct.resize(s);
+        for ( int i in range(0, s-1) )
+            vct[i] = array_upper<type,dim,device>(arr, attr, i);
+        vct_other.template resize<attr>(shp, vct);
         return self;
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr tuple_upper<type,dim,device>& tuple_upper<type,dim,device>::resize ( const static_array<int,dim>& shp, std::vector<array_upper<type,dim+1,device>>& arrs )
+    template < auto attr >
+    constexpr tuple_upper<type,dim,device>& tuple_upper<type,dim,device>::resize ( const auto& shp, std::vector<array_upper<type,dim+1,device>>& arrs )
     {
-        vct.resize(shp[1]);
-        let ck = shp[1] / arrs.size(); // chunk.
+        let s = 1;
+        if constexpr ( attr == rows_attribute )
+            for_constexpr<1,decay<decltype(shp)>::size()-dim>([&] <int index> { s *= shp[index]; });
+        else if constexpr ( attr == columns_attribute )
+            for_constexpr<dim+1,decay<decltype(shp)>::size()>([&] <int index> { s *= shp[index]; });
+        else
+            static_assert(false, "unknown attribute");
+        vct.resize(s);
+        [[assume(s % arrs.size() == 0)]];
+        let ck = s / arrs.size(); // chunk.
         for ( int i in range(0, int(arrs.size()-1)) )
-            std::fill(vct.begin() + i * ck, vct.begin() + (i + 1) * ck, array_upper<type,dim,device>(static_cast<array<type,dim+1,device>&>(arrs[i])));
-
-        let new_shp = static_array<int,dim-1>();
-        new_shp[1] = shp[1] * shp[2];
-        if constexpr ( dim >= 3 )
-            detail::for_constexpr<2,dim-1>([&] <int index> { new_shp[index] = shp[index+1]; });
-        vct_other.resize(new_shp, vct);
-
+            for ( int j in range(0, int(ck-1)) )
+                vct[i*ck+j] = array_upper<type,dim,device>(static_cast<array<type,dim+1,device>&>(arrs[i]), attr, j);
+        vct_other.template resize<attr>(shp, vct);
         return self;
     }
 

@@ -8,13 +8,13 @@ class opencl::basic_string
         using base = boost::compute::basic_string<type,traits>;
 
     public: // Typedef
-        using value_type      = type;
-        using reference       =       boost::compute::detail::buffer_value<type>;
-        using const_reference = const boost::compute::detail::buffer_value<type>;
-        using pointer         =       boost::compute::detail::device_ptr<type>;
-        using const_pointer   = const boost::compute::detail::device_ptr<type>;
-        using iterator        =       boost::compute::buffer_iterator<type>;
-        using const_iterator  = const boost::compute::buffer_iterator<type>;
+        using value_type      = opencl::template value_type     <type>;
+        using reference       = opencl::template reference      <type>;
+        using const_reference = opencl::template const_reference<type>;
+        using pointer         = opencl::template pointer        <type>;
+        using const_pointer   = opencl::template const_pointer  <type>;
+        using iterator        = base::iterator;
+        using const_iterator  = base::const_iterator;
 
     public: // Core
         basic_string ( ) = default;

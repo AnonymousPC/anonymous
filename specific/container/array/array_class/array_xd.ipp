@@ -4,35 +4,101 @@ template < class type, class device >
 constexpr array<type,max_dim,device>::array ( const array& init )
     requires copyable<type>
 {
-    self.base ::operator=(static_cast<const base&>(init));
-    self.info ::resize(init.static_shape());
-    self.lower::resize(init.static_shape());
+    if ( init.ownership() ) 
+    {
+        self.base ::operator=(static_cast<const base&>(init));
+        self.info ::resize(init.info::static_shape());
+        self.lower::resize(init.info::static_shape());
+    }
+    else // if ( not init.ownership() )
+    {
+        self.resize(init.upper::static_shape());
+        device::copy(init.upper::begin(), init.upper::end(), self./*line-wise*/begin());
+    }
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::array ( array&& init )
 {
-    self.base ::operator=(static_cast<base&&>(init));
-    self.info ::resize(init.static_shape());
-    self.lower::resize(init.static_shape());
+    if ( init.ownership() ) 
+    {
+        self.base ::operator=(static_cast<base&&>(init));
+        self.info ::resize(init.info::static_shape());
+        self.lower::resize(init.info::static_shape());
+    }
+    else // if ( not init.owenrship() )
+    {
+        self.resize(init.upper::static_shape());
+        device::move(init.upper::begin(), init.upper::end(), self./*line-wise*/begin());
+    }
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>& array<type,max_dim,device>::operator = ( const array& right )
     requires copyable<type>
 {
-    self.base ::operator=(static_cast<const base&>(right));
-    self.info ::resize(right.static_shape());
-    self.lower::resize(right.static_shape());
+    if ( self.ownership() and right.ownership() ) 
+    {
+        self.base ::operator=(static_cast<const base&>(right));
+        self.info ::resize(right.info::static_shape());
+        self.lower::resize(right.info::static_shape());
+    }
+    else if ( self.ownership() and not right.ownership() )
+    {
+        self.resize(right.upper::static_shape());
+        device::copy(right.upper::begin(), right.upper::end(), self./*line-wise*/begin());
+    }
+    else if ( not self.ownership() and right.ownership() )
+    {
+        #if debug
+        if ( self.upper::static_shape() != right.info::static_shape() )
+            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on shape (with left_shape = {}, right_shape = {})", self.static_shape(), right.static_shape());
+        #endif
+        device::copy(right./*line-wise*/begin(), right./*line-wise*/end(), self.upper::begin());
+    }
+    else // if ( not self.ownership() and not right.ownership() )
+    {
+        #if debug
+        if ( self.upper::static_shape() != right.upper::static_shape() )
+            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on shape (with left_shape = {}, right_shape = {})", self.static_shape(), right.static_shape());
+        #endif
+        device::copy(right.upper::begin(), right.upper::end(), self.upper::end());
+    }
+
     return self;
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>& array<type,max_dim,device>::operator = ( array&& right )
 {
-    self.base ::operator=(static_cast<base&&>(right));
-    self.info ::resize(right.static_shape());
-    self.lower::resize(right.static_shape());
+    if ( self.ownership() and right.ownership() ) 
+    {
+        self.base ::operator=(static_cast<const base&>(right));
+        self.info ::resize(right.info::static_shape());
+        self.lower::resize(right.info::static_shape());
+    }
+    else if ( self.ownership() and not right.ownership() )
+    {
+        self.resize(right.upper::static_shape());
+        device::move(right.upper::begin(), right.upper::end(), self./*line-wise*/begin());
+    }
+    else if ( not self.ownership() and right.ownership() )
+    {
+        #if debug
+        if ( self.upper::static_shape() != right.info::static_shape() )
+            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on shape (with left_shape = {}, right_shape = {})", self.static_shape(), right.static_shape());
+        #endif
+        device::move(right./*line-wise*/begin(), right./*line-wise*/end(), self.upper::begin());
+    }
+    else // if ( not self.ownership() and not right.ownership() )
+    {
+        #if debug
+        if ( self.upper::static_shape() != right.upper::static_shape() )
+            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on shape (with left_shape = {}, right_shape = {})", self.static_shape(), right.static_shape());
+        #endif
+        device::move(right.upper::begin(), right.upper::end(), self.upper::end());
+    }
+
     return self;
 }
 
@@ -76,7 +142,7 @@ constexpr array<type,max_dim,device>::array ( auto... args )
     if ( not detail::check_first_until_second_last_as_positive(args...) )
         throw value_error("initialize array with negative shape {}", static_array<int,max_dim>{args...});
     #endif
-    device::generate(self.as_flat().begin(), self.as_flat().end(), last_value_of(args...));
+    device::generate(self.base::begin(), self.base::end(), last_value_of(args...));
 }
 
 template < class type, class device >
@@ -105,18 +171,57 @@ template < class type, class device >
 template < class type2 >
 constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device>& cvt )
     requires convertible_to<type2,type> but ( not same_as<type,type2> )
+    extends array ( cvt.static_shape() )
 {
-    self.resize(cvt.static_shape());
-    device::transform(cvt.::begin(), cvt.base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
+    if ( cvt.ownership() )
+        device::transform(cvt.array<type2,max_dim,device>::base::begin(), cvt.array<type2,max_dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
+    else
+        device::transform(cvt.array<type2,max_dim,device>::upper::begin(), cvt.array<type2,max_dim,device>::upper::end(), self./*line-wise*/begin());
 }
 
 template < class type, class device >
 template < class type2 >
 constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device>& cvt )
     requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
+    extends array ( cvt.static_shape() )
 {
-    self.resize(cvt.static_shape());
-    device::transform(cvt.as_flat().begin(), cvt.as_flat().end(), self.as_flat().begin(), [] (const auto& val) { return type2(val); });
+    if ( cvt.ownership() )
+        device::transform(cvt.array<type2,max_dim,device>::base::begin(), cvt.array<type2,max_dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
+    else
+        device::transform(cvt.array<type2,max_dim,device>::upper::begin(), cvt.array<type2,max_dim,device>::upper::end(), self./*line-wise*/begin());
+}
+
+template < class type, class device >
+template < class device2 >
+constexpr array<type,max_dim,device>::array ( const array<type,max_dim,device2>& cvt )
+    requires same_as<device,cpu> or same_as<device2,cpu>
+    extends array ( cvt.static_shape() )
+{
+    static_assert(same_as<typename device ::layout_type,std::layout_right> or same_as<typename device ::layout_type,std::layout_left>);
+    static_assert(same_as<typename device2::layout_type,std::layout_right> or same_as<typename device2::layout_type,std::layout_left>);
+
+    if constexpr ( not same_as<device,cpu> )
+        if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
+            if ( cvt.ownership() )
+                device::copy(cvt.array<type,max_dim,device2>::base::begin(), cvt.array<type,max_dim,device2>::base::end(), self.base::begin());
+            else
+                device::copy(cvt.array<type,max_dim,device2>::upper::begin(), cvt.array<type,max_dim,device2>::upper::end(), self./*line-wise*/begin());
+        else
+            if ( cvt.ownership() )
+                device::copy(cvt.array<type,max_dim,device2>::upper::begin(), cvt.array<type,max_dim,device2>::upper::end(), self./*line-wise*/begin());
+            else
+                device::copy(cvt.array<type,max_dim,device2>::upper::host().array<type,max_dim,device2>::base::begin(), cvt.array<type,max_dim,device2>::upper::host().array<type,max_dim,device2>::base::end(), self.base::begin());
+    else
+        if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
+            if ( cvt.ownership() )
+                device2::copy(cvt.array<type,max_dim,device2>::base::begin(), cvt.array<type,max_dim,device2>::base::end(), self.base::begin());
+            else
+                device2::copy(cvt.array<type,max_dim,device2>::upper::begin(), cvt.array<type,max_dim,device2>::upper::end(), self./*line-wise*/begin());
+        else
+            if ( cvt.ownership() )
+                device2::copy(cvt.array<type,max_dim,device2>::upper::begin(), cvt.array<type,max_dim,device2>::upper::end(), self./*line-wise*/begin());
+            else
+                device2::copy(cvt.array<type,max_dim,device2>::upper::host().array<type,max_dim,device2>::base::begin(), cvt.array<type,max_dim,device2>::upper::host().array<type,max_dim,device2>::base::end(), self.base::begin());
 }
 
 template < class type, class device >
@@ -128,81 +233,95 @@ constexpr int array<type,max_dim,device>::dimension ( )
 template < class type, class device >
 constexpr int array<type,max_dim,device>::size ( ) const
 {
-    [[assume(base::size() == info::size())]];
-    return info::size();
+    [[assume(int(base::size()) == info::size())]];
+    return ownership() ? info::size() otherwise
+                         upper::size();
 }
 
 template < class type, class device >
 constexpr array<int> array<type,max_dim,device>::shape ( ) const
 {   
-    return info::shape();
+    return ownership() ? info::shape() otherwise
+                         upper::shape();
 }
 
 template < class type, class device >
 constexpr inplace_array<int,max_dim> array<type,max_dim,device>::inplace_shape ( ) const
 {
-    return info::shape();
+    return ownership() ? info::inplace_shape() otherwise
+                         upper::inplace_shape();
 }
 
 template < class type, class device >
 constexpr static_array<int,max_dim> array<type,max_dim,device>::static_shape ( ) const
 {
-    return info::static_shape();
+    return ownership() ? info::static_shape() otherwise 
+                         upper::static_shape();
 }
 
 template < class type, class device >
 constexpr int array<type,max_dim,device>::row ( ) const
 {
-    return info::row();
+    return ownership() ? info::row() otherwise
+                         upper::row();
 }
 
 template < class type, class device >
 constexpr int array<type,max_dim,device>::column ( ) const
     requires ( max_dim == 2 )
 {
-    return info::column();
+    return ownership() ? info::column() otherwise
+                         upper::column();
 }
 
 template < class type, class device >
 constexpr bool array<type,max_dim,device>::empty ( ) const
 {
-    return info::empty();
+    [[assume(base::empty() == info::empty())]];
+    return ownership() ? info::empty() otherwise
+                         upper::empty();
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::pointer array<type,max_dim,device>::data ( )
 {
-    return base::data();
+    return ownership() ? base::data() otherwise
+                         throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::data ( ) const
 {
-    return base::data();
+    return ownership() ? base::data() otherwise
+                         throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::iterator array<type,max_dim,device>::begin ( )
 {
-    return lower::begin();
+    return ownership() ? lower::begin() otherwise
+                         upper::begin();
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::const_iterator array<type,max_dim,device>::begin ( ) const
 {
-    return lower::begin();
+    return ownership() ? lower::begin() otherwise
+                         upper::begin();
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::iterator array<type,max_dim,device>::end ( )
 {
-    return lower::end();
+    return ownership() ? lower::end() otherwise
+                         upper::end();
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::const_iterator array<type,max_dim,device>::end ( ) const
 {
-    return lower::end();
+    return ownership() ? lower::end() otherwise
+                         upper::end();
 }
 
 template < class type, class device >
@@ -213,8 +332,10 @@ constexpr array<type,max_dim-1,device>& array<type,max_dim,device>::operator[] (
         throw index_error("index {} is out of range with size {}", pos, row());
     #endif
 
-    return pos >= 0 ? lower::operator[](pos-1) otherwise
-                      lower::operator[](pos+size());
+    return ownership() ? pos >= 0 ? lower::operator[](pos-1)            otherwise
+                                    lower::operator[](pos+info::row())  otherwise
+                         pos >= 0 ? upper::operator[](pos-1)            otherwise
+                                    upper::operator[](pos+upper::row());
 }
 
 template < class type, class device >
@@ -225,13 +346,20 @@ constexpr const array<type,max_dim-1,device>& array<type,max_dim,device>::operat
         throw index_error("index {} is out of range with size {}", pos, row());
     #endif
 
-    return pos >= 0 ? lower::operator[](pos-1) otherwise
-                      lower::operator[](pos+size());
+    return ownership() ? pos >= 0 ? lower::operator[](pos-1)            otherwise
+                                    lower::operator[](pos+info::row())  otherwise
+                         pos >= 0 ? upper::operator[](pos-1)            otherwise
+                                    upper::operator[](pos+upper::row());
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>& array<type,max_dim,device>::clear ( )
 {
+    #if debug
+    if ( not ownership() ) [[unlikely]]
+        throw logic_error("cannot clear array: it does not own its data");
+    #endif
+
     base ::clear();
     base ::shrink_to_fit();
     info ::clear();
@@ -245,6 +373,8 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::resize ( int n
     requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) )
 {
     #if debug
+    if ( not ownership() ) [[unlikely]]
+        throw logic_error("cannot resize array: it does not own its data");
     if ( new_size < 0 )
         throw value_error("resize array with negative shape {} (on axis {})", new_size, axis);
     #endif
@@ -256,6 +386,8 @@ template < class type, class device >
 constexpr array<type,max_dim,device>& array<type,max_dim,device>::resize ( const array<int,1>& new_size )
 {
     #if debug
+    if ( not ownership() ) [[unlikely]]
+        throw logic_error("cannot resize array: it does not own its data");
     if ( new_size.size() != dimension() )
         throw value_error("resize array with inconsistent dimension (with provided = {}, expected = {})", new_size.size(), dimension());
  // if ( new_size.any([] (int s) { return s < 0;}))
@@ -270,6 +402,8 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::resize ( int_t
     requires ( sizeof...(args) == max_dim )
 {
     #if debug
+    if ( not ownership() ) [[unlikely]]
+        throw logic_error("cannot resize array: it does not own its data");
     if ( not detail::check_first_until_last_as_positive(args...) )
         throw value_error("resize array with negative shape {}", static_array<int,max_dim>{args...});
     #endif
@@ -312,37 +446,41 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::erase ( int ol
 template < class type, class device >
 constexpr array<type,1,device>& array<type,max_dim,device>::as_flat ( )
 {
-    return static_cast<array<type,1,device>&>(static_cast<flat&>(self));
+    return ownership() ? static_cast<array<type,1,device>&>(static_cast<flat&>(self)) otherwise
+                         throw logic_error("cannot make array as_flat: it does not own its data");
 }
 
 template < class type, class device >
 constexpr const array<type,1,device>& array<type,max_dim,device>::as_flat ( ) const
 {
-    return static_cast<const array<type,1,device>&>(static_cast<const flat&>(self));
+    return ownership() ? static_cast<const array<type,1,device>&>(static_cast<const flat&>(self)) otherwise
+                         throw logic_error("cannot make array as_flat: it does not own its data");
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>& array<type,max_dim,device>::as_transpose ( )
 {
-    return lower::as_transpose();
+    return ownership() ? lower::as_transpose() otherwise
+                         upper::host();
 }
 
 template < class type, class device >
 constexpr const array<type,max_dim,device>& array<type,max_dim,device>::as_transpose ( ) const
 {
-    return lower::as_transpose();
+    return ownership() ? lower::as_transpose() otherwise
+                         upper::host();
 }
 
 template < class type, class device >
-constexpr bool array<type,max_dim,device>::ownership ( )
+constexpr bool array<type,max_dim,device>::ownership ( ) const
 {
-    return true;
+    return upper::ownership();
 }
 
 template < class type, class device >
-constexpr bool array<type,max_dim,device>::contiguous ( )
+constexpr bool array<type,max_dim,device>::contiguous ( ) const
 {
-    return true;
+    return ownership();
 }
 
 template < class type, class device >
@@ -352,12 +490,22 @@ constexpr int array<type,max_dim,device>::top_size ( ) const
 }
 
 template < class type, class device >
+template < int axis >
+constexpr int array<type,max_dim,device>::axis_size ( ) const
+{
+    static_assert ( axis >= 1 and axis <= dimension() );
+    return ownership() ? info::template axis_size<axis>() otherwise
+                         upper::template axis_size<axis>();
+}
+
+template < class type, class device >
 template < int dim2 >
 constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::rows ( int_type auto... offsets )
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return lower::template rows<dim2>(offsets...);
+    return ownership() ? lower::template rows<dim2>(offsets...) otherwise
+                         upper::template rows<dim2>(offsets...);
 }
 
 template < class type, class device >
@@ -366,7 +514,8 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return lower::template rows<dim2>(offsets...);
+    return ownership() ? lower::template rows<dim2>(offsets...) otherwise
+                         upper::template rows<dim2>(offsets...);
 }
 
 template < class type, class device >
@@ -375,7 +524,8 @@ constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,de
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return lower::template columns<dim2>(offsets...);
+    return ownership() ? lower::template columns<dim2>(offsets...) otherwise
+                         upper::template columns<dim2>(offsets...);
 }
 
 template < class type, class device >
@@ -384,19 +534,25 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return lower::template columns<dim2>(offsets...);
+    return ownership() ? lower::template columns<dim2>(offsets...) otherwise
+                         upper::template columns<dim2>(offsets...);
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::reference array<type,max_dim,device>::at ( int_type auto... offsets )
 {
     static_assert ( sizeof...(offsets) == max_dim );
-    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type>(data(), static_cast<const std::array<int,max_dim>&>(static_shape()))[offsets...];
+    [[assume(ownership())]];
+    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::accessor_type<type>>(base::data(), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>::at ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == max_dim );
-    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type>(const_cast<pointer>(data()), static_cast<const std::array<int,max_dim>&>(static_shape()))[offsets...];
+    [[assume(ownership())]];
+    if constexpr ( is_pointer<typename device::pointer<type>> )
+        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::accessor_type<type>>(const_cast <pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+    else
+        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::accessor_type<type>>(static_cast<pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
 }

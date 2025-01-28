@@ -95,7 +95,8 @@ class array<type,dim,device>
         constexpr bool contiguous ( ) const;
 
     public: // Host
-        constexpr int top_size ( ) const;
+                              constexpr int top_size  ( ) const;
+        template < int axis > constexpr int axis_size ( ) const;
 
     public: // View
         template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... );

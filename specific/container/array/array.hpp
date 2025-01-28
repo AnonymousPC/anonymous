@@ -5,6 +5,8 @@
  * in a correct order
  */
 
+constexpr int max_dim = 4;
+
 #include "array_base/array_global.hpp"
 #include "array_class/inplace_array.hpp"
 #include "array_class/static_array.hpp"

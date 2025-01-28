@@ -1,4 +1,0 @@
-[1mmain.cpp:34:10: [0m[0;1;35mwarning: [0m[1munused variable 'c3' [-Wunused-variable][0m
-   34 |     let& c3 = c2[[0;32m1[0m];[0m
-      | [0;1;32m         ^~
-[0m1 warning generated.

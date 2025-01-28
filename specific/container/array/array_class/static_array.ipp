@@ -12,7 +12,7 @@ constexpr static_array<type,len,device>::static_array ( std::initializer_list<ty
     requires copyable<type>
 {
     #if debug
-    if ( init.size() != size() )
+    if ( int(init.size()) != size() )
         throw value_error("initialize static_array with size {} inconsistent with fixed_size {}", init.size(), size());
     #endif
     device::copy(init.begin(), init.end(), begin());

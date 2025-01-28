@@ -7,36 +7,27 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
-boost::compute::buffer_iterator
 using namespace ap;
-using mdspan = std::mdspan<int,std::dextents<int,3>,std::layout_left,opencl::template accessor_type<int>>;
 
-template < class type > 
-class pointer
-{
-    private: // Data
-        boost::compute::buffer buf = boost::compute::buffer();
-        size_t                 idx = 0;
-
-    public: // Core
-        pointer ( ) = delete;
-        pointer ( const pointer& ) = default;
-        pointer& operator = ( const pointer& right ) = default;
-
-    public: // Operator
-        
-    
-}
+using reference = opencl::template reference<int>;
+using reference2 = opencl::template reference<float>;
 
 int main ( )
 {
     boost::compute::vector<int> vct(10);
-    boost::compute::buffer_iterator<int>    ptr1(vct.begin().get_buffer(), vct.begin().get_index());
-    boost::compute::detail::device_ptr<int> ptr2(vct.begin().get_buffer(), vct.begin().get_index());
-    *(ptr1+4) = 100;
-    *(ptr2+4) = 200;
-    for ( int i in range(0, 9) )
-        print(vct[i]);
+    reference a = vct[1];
+    a = 100;
+
+    boost::compute::vector<float> vct2(10);
+    reference2 b = vct2[1];
+    b = 2.2;
+
+    print(a > b);
+    print(a < b);
+
+
+
+    
     // let arr = array<int,2,opencl>(4, 4);
     // for ( int i in range(4) )
     //     for ( int j in range(4) )

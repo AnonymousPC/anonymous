@@ -3,8 +3,7 @@
 #ifdef BOOST_COMPUTE_HPP
     #include "third_party/buffer_iterator.hpp"
     #include "third_party/device_ptr.hpp"
-    #include "detail/opencl_accessor.hpp"
-    #include "detail/opencl_stream_context.hpp"
+    #include "third_party/opencl_stream_context.hpp"
     
     class opencl
     {
@@ -26,7 +25,7 @@
 
         public: // Memory
                                     using layout_type   = std::layout_left;
-            template < class type > using accessor_type = detail::opencl_accessor<type>;
+            template < class type > class accessor_type;
 
         public: // Operator
             template < class type = void > using plus          = boost::compute::plus         <type>;
@@ -159,6 +158,7 @@
             static decltype(auto) upper_bound                       ( auto&&... args ) { return boost::compute::upper_bound             (std::forward<decltype(args)>(args)...); }
     };
 
+    #include "detail/accessor_type.hpp"
     #include "detail/basic_string.hpp"
     #include "detail/basic_string_view.hpp"
     #include "detail/stack.hpp"

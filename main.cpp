@@ -7,27 +7,56 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
-#include <boost/compute/detail/meta_kernel.hpp>
+boost::compute::buffer_iterator
 using namespace ap;
+using mdspan = std::mdspan<int,std::dextents<int,3>,std::layout_left,opencl::template accessor_type<int>>;
 
-// boost::compute::function<void (int)> add_four =
-//     boost::compute::make_function_from_source<void (int)>(
-//         "add_four",
-//         "void add_four(int x) { x += 4; }"
-//     );
+template < class type > 
+class pointer
+{
+    private: // Data
+        boost::compute::buffer buf = boost::compute::buffer();
+        size_t                 idx = 0;
+
+    public: // Core
+        pointer ( ) = delete;
+        pointer ( const pointer& ) = default;
+        pointer& operator = ( const pointer& right ) = default;
+
+    public: // Operator
+        
+    
+}
 
 int main ( )
 {
-    // let arr = array<int,3,opencl>(2, 3, 4);
+    boost::compute::vector<int> vct(10);
+    boost::compute::buffer_iterator<int>    ptr1(vct.begin().get_buffer(), vct.begin().get_index());
+    boost::compute::detail::device_ptr<int> ptr2(vct.begin().get_buffer(), vct.begin().get_index());
+    *(ptr1+4) = 100;
+    *(ptr2+4) = 200;
+    for ( int i in range(0, 9) )
+        print(vct[i]);
+    // let arr = array<int,2,opencl>(4, 4);
+    // for ( int i in range(4) )
+    //     for ( int j in range(4) )
+    //         arr[i][j] = (i-1)*4 + j;
+    // print(array<int>(arr.as_flat()));
+
+    // let arr1= array<int,3,opencl>(2, 3, 4);
     // for ( int i in range(2) )
     //     for ( int j in range(3) )
     //         for ( int k in range(4) )
-    //             arr[i][j][k] = (i-1)*12 + (j-1)*4 + (k-1) + 1;
+    // print(array<int>(arr1.as_flat()));
 
-    // let arr2 = array<int,1,cpu>(arr.as_flat());
-    // print(arr2);
+    // let arr2 = array<int,3,cpu>(2, 3, 4);
+    // for ( int i in range(2) )
+    //     for ( int j in range(3) )
+    //         for ( int k in range(4) )
+    //             arr2[i][j][k] = (i-1)*12 + (j-1)*4 + (k-1) + 1;
+    // print(arr2.as_flat());
 
-    print(sizeof(boost::compute::buffer));
+
 }
 
 

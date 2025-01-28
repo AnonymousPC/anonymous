@@ -16,6 +16,12 @@ class opencl::vector
         using iterator        = base::iterator;
         using const_iterator  = base::const_iterator;
 
+    public: // Core
+        vector ( ) = default;
+
+    public: // Constructor
+        using base::base;
+
     public: // Override
         pointer data ( )
         {

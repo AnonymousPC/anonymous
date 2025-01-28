@@ -97,7 +97,7 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::reference array_upper<type,1,device>::operator [] ( int index )
     {
-        return contiguous()                  ? data()[index]              otherwise 
+        return contiguous()                  ? *(data()+index)            otherwise 
                attribute() == rows_attribute ? host().at(offset(), index) otherwise 
                                                host().at(index, offset());
     }
@@ -105,7 +105,7 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_reference array_upper<type,1,device>::operator [] ( int index ) const
     {
-        return contiguous()                  ? data()[index]              otherwise 
+        return contiguous()                  ? *(data()+index)            otherwise 
                attribute() == rows_attribute ? host().at(offset(), index) otherwise 
                                                host().at(index, offset());
     }

@@ -20,7 +20,7 @@
             template < class type > using allocator = std::allocator<type>;
 
         public: // Memory
-                                    using layout_type   = std::layout_right;
+                                    using layout_type   = std::layout_left;
             template < class type > using accessor_type = std::default_accessor<type>;
 
         public: // Operator

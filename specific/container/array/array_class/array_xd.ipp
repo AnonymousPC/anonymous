@@ -543,7 +543,7 @@ constexpr array<type,max_dim,device>::reference array<type,max_dim,device>::at (
 {
     static_assert ( sizeof...(offsets) == max_dim );
     [[assume(ownership())]];
-    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::accessor_type<type>>(base::data(), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>(base::data(), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
 }
 
 template < class type, class device >
@@ -551,8 +551,8 @@ constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>
 {
     static_assert ( sizeof...(offsets) == max_dim );
     [[assume(ownership())]];
-    if constexpr ( is_pointer<typename device::pointer<type>> )
-        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::accessor_type<type>>(const_cast <pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+    if constexpr ( is_pointer<typename device::template pointer<type>> )
+        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>(const_cast <pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
     else
-        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::accessor_type<type>>(static_cast<pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>(static_cast<pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
 }

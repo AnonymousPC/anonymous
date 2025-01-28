@@ -620,7 +620,7 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>::reference array<type,dim,device>::at ( int_type auto... offsets )
 {
     static_assert ( sizeof...(offsets) == dim );
-    return ownership() ? std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::accessor_type<type>>(base::data(), static_cast<const std::array<int,dim>&>(info::static_shape()))[offsets...] otherwise
+    return ownership() ? std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>(base::data(), static_cast<const std::array<int,dim>&>(info::static_shape()))[offsets...] otherwise
                          upper::at(offsets...);
 }
 
@@ -629,10 +629,10 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>::const_reference array<type,dim,device>::at ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == dim );
-    if constexpr ( is_pointer<typename device::pointer<type>> )
-        return ownership() ? std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::accessor_type<type>>(const_cast <pointer>(base::data()), static_cast<const std::array<int,dim>&>(info::static_shape()))[offsets...] otherwise
+    if constexpr ( is_pointer<typename device::template pointer<type>> )
+        return ownership() ? std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>(const_cast <pointer>(base::data()), static_cast<const std::array<int,dim>&>(info::static_shape()))[offsets...] otherwise
                              upper::at(offsets...);
     else
-        return ownership() ? std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::accessor_type<type>>(static_cast<pointer>(base::data()), static_cast<const std::array<int,dim>&>(info::static_shape()))[offsets...] otherwise
+        return ownership() ? std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>(static_cast<pointer>(base::data()), static_cast<const std::array<int,dim>&>(info::static_shape()))[offsets...] otherwise
                              upper::at(offsets...);
 }

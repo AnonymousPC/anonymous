@@ -30,7 +30,7 @@ namespace detail
                 std::uint32_t         tid;
             };   
     };
-}
+} // namespace detail
 
 #if dll
     #include "opencl_stream_context.cpp"

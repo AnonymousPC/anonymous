@@ -9,32 +9,14 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-boost::compute::vector
-
 int main ( )
 {
-    boost::compute::vector<int> a(1000000);
-    boost::compute::vector<int> b(1000000);
-    array<int,1,opencl>         c(1000000);
-    array<int,1,opencl>         d(1000000);
+    set<int,opencl::template less<int>,opencl> s;
+    for ( int i in range(100) )
+        s.push(i);
 
-    let t = std::chrono::system_clock::now();
-    for ( int _ in range(100) )
-    {
-        a = b;
-        b = a;
-    }
-    print(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - t).count());
-
-    t = std::chrono::system_clock::now();
-    for ( int _ in range(100) )
-    {
-        c = d;
-        d = c;
-    }
-    print(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now() - t).count());
-
-
+    for ( int i in s )
+        print(i);
 }
 
 

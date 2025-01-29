@@ -2,8 +2,10 @@
 
 template < class type1, class type2, class hash, class device >
 class unordered_map
-    extends public device::template unordered_map<type1,type2,hash>,
-            public collection_algo<unordered_map<type1,type2,hash,device>,pair<const type1,type2>,hash,device>
+    extends public  device::template unordered_map<type1,type2,hash>,
+            private detail::map_keys  <unordered_map<type1,type2,hash,device>,type1,device>,
+            private detail::map_values<unordered_map<type1,type2,hash,device>,type2,device>,
+            public  collection_algo<unordered_map<type1,type2,hash,device>,pair<const type1,type2>,device>
 {
     private: // Precondition
         static_assert ( not is_const<type1> and not is_volatile<type1> and not is_reference<type1> );
@@ -14,12 +16,8 @@ class unordered_map
 
     private: // Typedef
         using base = device::template unordered_map<type1,type2,hash>;
-        class keys_view;
-        class values_view;
-
-    private: // Data
-        keys_view   k_view;
-        values_view v_view;
+        friend detail::map_keys  <unordered_map,type1,device>;
+        friend detail::map_values<unordered_map,type2,device>;
 
     public: // Typedef
         using  key_type              = device::template value_type     <type1>;
@@ -43,18 +41,14 @@ class unordered_map
         struct map_tag { };
 
     public: // Core
-        constexpr unordered_map ( );
-        constexpr unordered_map ( const unordered_map&  )             requires copyable<type1> and copyable<type2>;
-        constexpr unordered_map (       unordered_map&& );
-        constexpr unordered_map& operator = ( const unordered_map&  ) requires copyable<type1> and copyable<type2>;
-        constexpr unordered_map& operator = (       unordered_map&& );
+        constexpr unordered_map ( )                                                                                = default;
+        constexpr unordered_map ( const unordered_map&  )             requires copyable<type1> and copyable<type2> = default;
+        constexpr unordered_map (       unordered_map&& )                                                          = default;
+        constexpr unordered_map& operator = ( const unordered_map&  ) requires copyable<type1> and copyable<type2> = default;
+        constexpr unordered_map& operator = (       unordered_map&& )                                              = default;
 
     public: // Constructor
         constexpr unordered_map ( std::initializer_list<pair<const type1,type2>> ) requires copyable<type1> and copyable<type2>;
-
-    public: // Conversion 
-        template < class type3, class type4, class hash2 > constexpr          unordered_map ( const unordered_map<type3,type4,hash2,device>& ) requires convertible_to    <type3,type1> and convertible_to    <type4,type2> but ( not same_as       <type1,type3> or not same_as       <type2,type4> );
-        template < class type3, class type4, class hash2 > constexpr explicit unordered_map ( const unordered_map<type3,type4,hash2,device>& ) requires constructible_from<type1,type3> and constructible_from<type2,type4> but ( not convertible_to<type3,type1> or not convertible_to<type4,type2> );
 
     public: // Member
         constexpr        int                   size        ( )                      const;
@@ -68,9 +62,9 @@ class unordered_map
         constexpr        const_value_reference operator [] ( const type1&  )        const;
         constexpr        bool                  contains    ( const type1&  )        const;
 
-        constexpr const  auto                  keys        ( )                      const;
-        constexpr        auto                  values      ( );
-        constexpr const  auto                  values      ( )                      const;
+        constexpr const  auto&                 keys        ( )                      const;
+        constexpr        auto&                 values      ( );
+        constexpr const  auto&                 values      ( )                      const;
         
         constexpr        unordered_map&        clear       ( );
         constexpr        unordered_map&        pop         ( const type1&  );

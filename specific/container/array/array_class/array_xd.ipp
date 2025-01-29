@@ -157,7 +157,7 @@ constexpr array<type,max_dim,device>::array ( auto... args )
     if ( not detail::check_first_until_second_last_as_positive(args...) )
         throw value_error("initialize array with negative shape {}", static_array<int,max_dim>{args...});
     #endif
-    detail::device_generate_mdspan(last_value_of(args...), self.data());
+    detail::md_generate(self, static_shape(), last_value_of(args...));
 }
 
 template < class type, class device >

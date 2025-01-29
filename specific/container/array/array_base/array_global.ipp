@@ -82,7 +82,7 @@ namespace detail
         if constexpr ( sizeof...(args) >= 1 )
             return multiply_first_to_second_last(arg1 * arg2, args...);
         else 
-            return arg1 * arg2;
+            return arg1;
     }
 
     constexpr int multiply_first_until_last ( const auto&... args )
@@ -111,9 +111,30 @@ namespace detail
             return true;
     }
 
-    constexpr void device_generate_mdspan ( const auto&, const auto& )
+    constexpr decltype(auto) md_access ( auto& arr, int_type auto idx1, int_type auto... idxs )
     {
-        static_assert(false, "not coded yet");
+        if constexpr ( sizeof...(idxs) >= 1 )
+            return md_access(arr[idx1], idxs...);
+        else
+            return arr[idx1];
+    }
+
+    constexpr decltype(auto) md_access ( const auto& arr, int_type auto idx1, int_type auto... idxs )
+    {
+        if constexpr ( sizeof...(idxs) >= 1 )
+            return md_access(arr[idx1], idxs...);
+        else
+            return arr[idx1];
+    }
+
+    constexpr void md_generate ( auto& arr, const auto& shp, const auto& func, int_type auto... idx )
+    {
+        if constexpr ( sizeof...(idx) <= decay<decltype(arr)>::dimension() - 2 )
+            for ( int i in range(shp[sizeof...(idx)+1]) )
+                md_generate(arr, shp, func, idx..., i);
+        else
+            for ( int i in range(shp[-1]) )
+                md_access(arr, idx..., i) = func(idx..., i);
     }
 
     template < auto attr >

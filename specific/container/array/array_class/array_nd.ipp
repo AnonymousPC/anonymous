@@ -18,7 +18,7 @@ constexpr array<type,dim,device>::array ( const array& init )
         if ( init.upper::contiguous() )
             device::copy(init.upper::data(), init.upper::data() + init.upper::size(), self.base::data());
         else
-            device::copy(init.upper::begin(), init.upper::end(), self./*line-wise*/begin());
+            std::copy(init.upper::begin(), init.upper::end(), self./*line-wise*/begin());
     }
 }
 
@@ -157,7 +157,7 @@ constexpr array<type,dim,device>::array ( auto... args )
 {
     #if debug
     if ( not detail::check_first_until_second_last_as_positive(args...) )
-        throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
+        throw value_error("initialize array with negative shape {}", static_shape());
     #endif
 }
 
@@ -172,7 +172,7 @@ constexpr array<type,dim,device>::array ( auto... args )
 {
     #if debug
     if ( not detail::check_first_until_second_last_as_positive(args...) )
-        throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
+        throw value_error("initialize array with negative shape {}", static_shape());
     #endif
     device::generate(self.base::begin(), self.base::end(), last_value_of(args...));
 }
@@ -188,9 +188,9 @@ constexpr array<type,dim,device>::array ( auto... args )
 {
     #if debug
     if ( not detail::check_first_until_second_last_as_positive(args...) )
-        throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
+        throw value_error("initialize array with negative shape {}", static_shape());
     #endif
-    detail::device_generate_mdspan(last_value_of(args...), self.data());
+    detail::md_generate(self, static_shape(), last_value_of(args...));
 }
 
 template < class type, int dim, class device >
@@ -435,7 +435,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::resize ( int new_size 
         throw value_error("resize array with negative shape {} (on axis {})", new_size, axis);
     #endif
     
-    static_assert(false, "not coded yet. the elements should be moved carefully");
+    
 }
 
 template < class type, int dim, class device >

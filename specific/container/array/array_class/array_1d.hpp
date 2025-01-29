@@ -40,7 +40,7 @@ class array<type,1,device>
         constexpr          array ( std::initializer_list<type> )        requires copyable<type>;
         constexpr          array ( range<type> )                        requires copyable<type>;
 
-    public: // Conversion (attribute)
+    public: // Conversion (size)
         template < int len > constexpr array ( const inplace_array<type,len,device>& );
         template < int len > constexpr array ( const static_array <type,len,device>& );
 

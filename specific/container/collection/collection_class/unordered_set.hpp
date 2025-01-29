@@ -3,7 +3,7 @@
 template < class type, class hash, class device >
 class unordered_set
     extends public device::template unordered_set<type,hash>,
-            public collection_algo<unordered_set<type,hash,device>,type,hash,device>
+            public collection_algo<unordered_set<type,hash,device>,type,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -20,7 +20,7 @@ class unordered_set
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
         using  const_iterator  = base::const_iterator;
-        using  hash_type    = hash;
+        using  hash_type       = hash;
         using  device_type     = device;
         struct set_tag { };
 

@@ -2,8 +2,10 @@
 
 template < class type1, class type2, class compare, class device >
 class map
-    extends public device::template map<type1,type2,compare>,
-            public collection_algo<map<type1,type2,compare,device>,pair<const type1,type2>,compare,device>
+    extends public  device::template map<type1,type2,compare>,
+            private detail::map_keys  <map<type1,type2,compare,device>,type1,device>,
+            private detail::map_values<map<type1,type2,compare,device>,type2,device>,
+            public  collection_algo<map<type1,type2,compare,device>,pair<const type1,type2>,device>
 {
     private: // Precondition
         static_assert ( not is_const<type1> and not is_volatile<type1> and not is_reference<type1> );
@@ -14,13 +16,9 @@ class map
 
     private: // Typedef
         using base = device::template map<type1,type2,compare>;
-        class keys_view;
-        class values_view;
-
-    private: // Data
-        keys_view   k_view;
-        values_view v_view;
-
+        friend detail::map_keys  <map,type1,device>;
+        friend detail::map_values<map,type2,device>;
+        
     public: // Typedef
         using  key_type              = device::template value_type     <type1>;
         using  value_type            = device::template value_type     <type2>;
@@ -43,18 +41,14 @@ class map
         struct map_tag { };
 
     public: // Core
-        constexpr map ( );
-        constexpr map ( const map&  )             requires copyable<type1> and copyable<type2>;
-        constexpr map (       map&& );
-        constexpr map& operator = ( const map&  ) requires copyable<type1> and copyable<type2>;
-        constexpr map& operator = (       map&& );
+        constexpr map ( )                                                                      = default;
+        constexpr map ( const map&  )             requires copyable<type1> and copyable<type2> = default;
+        constexpr map (       map&& )                                                          = default;
+        constexpr map& operator = ( const map&  ) requires copyable<type1> and copyable<type2> = default;
+        constexpr map& operator = (       map&& )                                              = default;
 
     public: // Constructor
         constexpr map ( std::initializer_list<pair<const type1,type2>> ) requires copyable<type1> and copyable<type2>;
-\
-    public: // Conversion 
-        template < class type3, class type4, class compare2 > constexpr          map ( const map<type3,type4,compare2,device>& ) requires convertible_to    <type3,type1> and convertible_to    <type4,type2> but ( not same_as       <type1,type3> or not same_as       <type2,type4> );
-        template < class type3, class type4, class compare2 > constexpr explicit map ( const map<type3,type4,compare2,device>& ) requires constructible_from<type1,type3> and constructible_from<type2,type4> but ( not convertible_to<type3,type1> or not convertible_to<type4,type2> );
 
     public: // Member
         constexpr        int                   size        ( )               const;
@@ -68,9 +62,9 @@ class map
         constexpr        const_value_reference operator [] ( const type1&  ) const;
         constexpr        bool                  contains    ( const type1&  ) const;
 
-        constexpr const  auto                  keys        ( )               const;
-        constexpr        auto                  values      ( );
-        constexpr const  auto                  values      ( )               const;
+        constexpr const  auto&                 keys        ( )               const;
+        constexpr        auto&                 values      ( );
+        constexpr const  auto&                 values      ( )               const;
         
         constexpr        map&                  clear       ( );
         constexpr        map&                  pop         ( const type1&  );

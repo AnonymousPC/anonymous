@@ -3,7 +3,7 @@
 template < class type, class compare, class device >
 class set
     extends public device::template set<type,compare>,
-            public collection_algo<set<type,compare,device>,type,compare,device>
+            public collection_algo<set<type,compare,device>,type,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );

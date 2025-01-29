@@ -90,7 +90,17 @@ class opencl::set
         {
             let p = base::insert(val, opencl::execution_context.command_queue());
             opencl::execution_context.command_queue().finish();
-            return std::pair<iterator,bool>(p.first, p.second);
+            return std::pair<iterator,bool>(end(), p.second);
+
+            /* Bug in boost::compute::flat_set. 
+             * 
+             * (Minimal reproducable):
+             * boost::compute::flat_set<int> s;
+             * for (int i = 0; i < 100; i++)
+             *     auto buf = s.insert(i).first.get_buffer();
+             * 
+             * Return pair(end(), p.second) anyway here to avoid triggering it.
+             */
         }
 
         size_t erase ( const type& val )

@@ -1,6 +1,6 @@
 #pragma once
 
-template < class collection_type, class type, class compare, class device > // Type means the type in iterator, not key_type or value_type.
+template < class collection_type, class type, class device > // Type means the type in iterator, not key_type or value_type.
 class collection_algo
 {
     public: // Algorithm

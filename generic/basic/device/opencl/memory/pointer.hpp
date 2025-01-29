@@ -11,7 +11,6 @@ class opencl::pointer
         using  iterator_category = std::contiguous_iterator_tag;
         using  value_type        = type;
         using  difference_type   = int;
-        struct opencl_pointer_tag { };
 
     public: // Core 
         pointer ( )                = default;
@@ -51,7 +50,6 @@ class opencl::const_pointer
         using  iterator_category = std::contiguous_iterator_tag;
         using  value_type        = type;
         using  difference_type   = int;
-        struct opencl_const_pointer_tag { };
 
     public: // Core 
         const_pointer ( )                      = default;

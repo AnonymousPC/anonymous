@@ -6,7 +6,8 @@ class cpu
         constexpr static bool is_available ( ) { return true; }
 
     public: // Execution
-        static std::execution::static_thread_pool execution_context;
+        using  execution_context_type = std::execution::static_thread_pool;
+        static execution_context_type execution_context;
 
     public: // Type
         template < class type > using value_type      = type;
@@ -153,4 +154,4 @@ class cpu
         constexpr static decltype(auto) upper_bound                       ( auto&&... args ) { return std::upper_bound                      (std::forward<decltype(args)>(args)...); }
 };
 
-std::execution::static_thread_pool cpu::execution_context = std::execution::static_thread_pool(std::thread::hardware_concurrency());
+cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());

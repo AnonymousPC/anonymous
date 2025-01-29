@@ -144,6 +144,8 @@
 
 // Include [[hardware.all.opencl]]
 #define CL_TARGET_OPENCL_VERSION 300
+#include <CL/cl.h>
+#include <clblast.h>
 
 // Include [[third-party.boost]]
 #ifndef debug_symbol

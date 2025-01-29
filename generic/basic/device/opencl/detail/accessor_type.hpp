@@ -6,8 +6,8 @@ class opencl::accessor_type
     public: // Typedef
         using offset_policy    = accessor_type;
         using element_type     = type;
-        using reference        = boost::compute::detail::buffer_value<type>;
-        using data_handle_type = boost::compute::detail::device_ptr<type>;
+        using reference        = opencl::template reference<type>;
+        using data_handle_type = opencl::template pointer  <type>;
 
     public: // Member
         constexpr reference access ( data_handle_type p, std::size_t i ) const

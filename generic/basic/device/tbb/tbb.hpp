@@ -7,7 +7,8 @@
             constexpr static bool is_available ( ) { return true; }
 
         public: // Execution
-            static execpools::tbb_thread_pool execution_context;
+            using  execution_context_type = execpools::tbb_thread_pool;
+            static execution_context_type execution_context;
 
         public: // Type
             template < class type > using value_type      = type;
@@ -157,7 +158,7 @@
     #include "detail/priority_queue.hpp"
     #include "detail/queue.hpp"
 
-    execpools::tbb_thread_pool tbb::execution_context = execpools::tbb_thread_pool(::tbb::this_task_arena::max_concurrency());
+    tbb::execution_context_type tbb::execution_context = tbb::execution_context_type(::tbb::this_task_arena::max_concurrency());
 #else
     class tbb 
     {

@@ -406,5 +406,5 @@ constexpr decltype(auto) exception::format_string<types...>::make_formattable ( 
 template < class... types >
 constexpr decltype(auto) exception::format_string<types...>::make_format_args ( const auto&... args )
 {
-    return std::.make_format_args(make_const_ref(make_formattable(args))...);
+    return std::make_format_args(make_const_ref(make_formattable(args))...);
 }

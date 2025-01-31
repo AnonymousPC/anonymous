@@ -59,10 +59,15 @@ std::string detail::format_stacktrace ( const std::stacktrace& trace )
                  | std::views::reverse
                  | std::views::transform([&] (const auto& entry)
                      {
-                         return std::format("    {}{} {}{} {}{} {}{}:{}{}",
-                                            yellow, "at", white, format_stacktrace_color(entry.description()),
-                                            green,  "in", grey,  entry.source_file(), entry.source_line(),
-                                            white);
+                         if ( entry.source_file() != "" and entry.source_line() != 0 )
+                             return std::format("    {}{} {}{} {}{} {}{}:{}{}",
+                                                yellow, "at", white, format_stacktrace_color(entry.description()),
+                                                green,  "in", grey,  entry.source_file(), entry.source_line(),
+                                                white);
+                         else
+                             return std::format("    {}{} {}{}{}",
+                                                yellow, "at", white, format_stacktrace_color(entry.description()),
+                                                white);
                      })
                  | std::views::join_with('\n')
                  | std::ranges::to<std::string>();
@@ -71,9 +76,9 @@ std::string detail::format_stacktrace ( const std::stacktrace& trace )
 std::string detail::format_nested_exception ( const std::type_info& from_type, const std::string& from_what )
 {
     #if defined(__GNUC__) but not defined(__clang__) // terminate called after throwing an instance of '{typeid}'\n  what():  {what}
-        return std::format("after throwing an instance of '{}'\n  what(): {}", demangle(from_type), from_what);
+        return std::format("after throwing another instance of '{}'\n  what(): {}", demangle(from_type), from_what);
     #elifdef __clang__ // libc++abi: terminating due to uncaught exception of type {typeid}: {what}
-        return std::format("due to exception of type {}: {}", demangle(from_type), from_what);
+        return std::format("due to another exception of type {}: {}", demangle(from_type), from_what);
     #else
         return std::format("catch {}: {}", demangle(from_type), from_what);
     #endif

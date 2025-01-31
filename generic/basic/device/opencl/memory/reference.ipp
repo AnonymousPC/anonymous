@@ -1,6 +1,14 @@
 #pragma once
 
 template < class type >
+opencl::template reference<type> opencl::reference<type>::operator = ( type right )
+{
+    boost::compute::detail::write_single_value<type>(right, buf, idx, opencl::execution_context.command_queue());
+    opencl::execution_context.command_queue().finish();
+    return self;
+}
+
+template < class type >
 opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template reference<type> right )
 {
     return self = opencl::template const_reference<type>(right);
@@ -24,37 +32,46 @@ opencl::template reference<type> opencl::reference<type>::operator = ( opencl::t
 }
 
 template < class type >
-opencl::reference<type>::reference ( opencl::template const_reference<type> cvt )
-    extends reference ( cvt.get_buffer(), cvt.get_index() )
+template < class type2 >
+opencl::template reference<type> opencl::reference<type>::operator = ( type2 right )
+    requires convertible_to<type2,type>
 {
-    
+    return self = type(right);
 }
 
 template < class type >
 template < class type2 >
-opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template const_reference<type2> cvt )
+opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template reference<type2> right )
+    requires convertible_to<type2,type>
+{
+    return self = opencl::template const_reference<type2>(right);
+}
+
+template < class type >
+template < class type2 >
+opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template const_reference<type2> right )
+    requires convertible_to<type2,type>
 {
     using type1 = type;
     static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
-        __kernel void assign ( __global type1* self_buf, int self_idx, __global type2* cvt_buf, int cvt_idx )
+        __kernel void assign ( __global type1* self_buf, int self_idx, __global type2* right_buf, int right_idx )
         {
-            self_buf[self_idx] = cvt_buf[cvt_idx];
+            self_buf[self_idx] = right_buf[right_idx];
         }
     ), type1(), "type1", type2(), "type2");
     
     let kernel = opencl::execution_context.build_kernel(program, "assign");
-    kernel.set_args(self.get_buffer(), self.get_index(), cvt.get_buffer(), cvt.get_index());
+    kernel.set_args(self.get_buffer(), self.get_index(), right.get_buffer(), right.get_index());
     opencl::execution_context.command_queue().enqueue_task(kernel);
     opencl::execution_context.command_queue().finish();
     return self;
 }
 
 template < class type >
-opencl::template reference<type> opencl::reference<type>::operator = ( type cvt )
+opencl::reference<type>::reference ( opencl::template const_reference<type> cvt )
+    extends reference ( cvt.get_buffer(), cvt.get_index() )
 {
-    boost::compute::detail::write_single_value<type>(cvt, buf, idx, opencl::execution_context.command_queue());
-    opencl::execution_context.command_queue().finish();
-    return self;
+    
 }
 
 template < class type >
@@ -283,6 +300,24 @@ compare_result<type1,type2> operator <=> ( opencl::template const_reference<type
 }
 
 template < class type1, class type2 >
+opencl::template reference<type1> operator += ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a += b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void plus_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] += right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "plus_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
 opencl::template reference<type1> operator += ( opencl::template reference<type1> left, opencl::template reference<type2> right )
     requires requires ( type1 a, type2 b ) { a += b; }
 {
@@ -302,6 +337,24 @@ opencl::template reference<type1> operator += ( opencl::template reference<type1
 
     let kernel = opencl::execution_context.build_kernel(program, "plus_assign");
     kernel.set_args(left.get_buffer(), left.get_index(), right.get_buffer(), right.get_index());
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
+opencl::template reference<type1> operator -= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a -= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void minus_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] -= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "minus_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
     opencl::execution_context.command_queue().enqueue_task(kernel);
     opencl::execution_context.command_queue().finish();
     return left;
@@ -333,6 +386,24 @@ opencl::template reference<type1> operator -= ( opencl::template reference<type1
 }
 
 template < class type1, class type2 >
+opencl::template reference<type1> operator *= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a *= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void multiplies_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] *= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "multiplies_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
 opencl::template reference<type1> operator *= ( opencl::template reference<type1> left, opencl::template reference<type2> right )
     requires requires ( type1 a, type2 b ) { a *= b; }
 {
@@ -352,6 +423,24 @@ opencl::template reference<type1> operator *= ( opencl::template reference<type1
 
     let kernel = opencl::execution_context.build_kernel(program, "multiplies_assign");
     kernel.set_args(left.get_buffer(), left.get_index(), right.get_buffer(), right.get_index());
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
+opencl::template reference<type1> operator /= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a /= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void divides_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] /= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "divides_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
     opencl::execution_context.command_queue().enqueue_task(kernel);
     opencl::execution_context.command_queue().finish();
     return left;
@@ -383,6 +472,24 @@ opencl::template reference<type1> operator /= ( opencl::template reference<type1
 }
 
 template < class type1, class type2 >
+opencl::template reference<type1> operator %= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a %= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void modulus_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] %= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "modulus_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
 opencl::template reference<type1> operator %= ( opencl::template reference<type1> left, opencl::template reference<type2> right )
     requires requires ( type1 a, type2 b ) { a %= b; }
 {
@@ -402,6 +509,24 @@ opencl::template reference<type1> operator %= ( opencl::template reference<type1
 
     let kernel = opencl::execution_context.build_kernel(program, "modulus_assign");
     kernel.set_args(left.get_buffer(), left.get_index(), right.get_buffer(), right.get_index());
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
+opencl::template reference<type1> operator &= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a &= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void bitand_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] &= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "bitand_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
     opencl::execution_context.command_queue().enqueue_task(kernel);
     opencl::execution_context.command_queue().finish();
     return left;
@@ -433,6 +558,24 @@ opencl::template reference<type1> operator &= ( opencl::template reference<type1
 }
 
 template < class type1, class type2 >
+opencl::template reference<type1> operator |= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a |= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void bitor_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] |= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "bitor_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
 opencl::template reference<type1> operator |= ( opencl::template reference<type1> left, opencl::template reference<type2> right )
     requires requires ( type1 a, type2 b ) { a |= b; }
 {
@@ -452,6 +595,24 @@ opencl::template reference<type1> operator |= ( opencl::template reference<type1
 
     let kernel = opencl::execution_context.build_kernel(program, "bitor_assign");
     kernel.set_args(left.get_buffer(), left.get_index(), right.get_buffer(), right.get_index());
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
+opencl::template reference<type1> operator ^= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a ^= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void bitxor_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] ^= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "bitxor_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
     opencl::execution_context.command_queue().enqueue_task(kernel);
     opencl::execution_context.command_queue().finish();
     return left;
@@ -483,6 +644,24 @@ opencl::template reference<type1> operator ^= ( opencl::template reference<type1
 }
 
 template < class type1, class type2 >
+opencl::template reference<type1> operator <<= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a <<= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void left_shift_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] <<= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "left_shift_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
 opencl::template reference<type1> operator <<= ( opencl::template reference<type1> left, opencl::template reference<type2> right )
     requires requires ( type1 a, type2 b ) { a <<= b; }
 {
@@ -502,6 +681,24 @@ opencl::template reference<type1> operator <<= ( opencl::template reference<type
 
     let kernel = opencl::execution_context.build_kernel(program, "left_shift_assign");
     kernel.set_args(left.get_buffer(), left.get_index(), right.get_buffer(), right.get_index());
+    opencl::execution_context.command_queue().enqueue_task(kernel);
+    opencl::execution_context.command_queue().finish();
+    return left;
+}
+
+template < class type1, class type2 >
+opencl::template reference<type1> operator >>= ( opencl::template reference<type1> left, type2 right )
+    requires requires ( type1 a, type2 b ) { a >>= b; }
+{
+    static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void right_shift_assign ( __global type1* left_buf, int left_idx, type2 right_val )
+        {
+            left_buf[left_idx] >>= right_val;
+        }
+    ), type1(), "type1", type2(), "type2");
+
+    let kernel = opencl::execution_context.build_kernel(program, "right_shift_assign");
+    kernel.set_args(left.get_buffer(), left.get_index(), right);
     opencl::execution_context.command_queue().enqueue_task(kernel);
     opencl::execution_context.command_queue().finish();
     return left;

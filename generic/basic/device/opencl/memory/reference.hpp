@@ -12,25 +12,21 @@ class opencl::reference
         reference ( const reference& ) = default;
 
     public: // Assign
-        reference operator = (       reference<type> );
-        reference operator = ( const_reference<type> );
-
-    public: // Conversion (type)
-        template < class type2 > reference operator = ( const_reference<type2> );
+                                 reference operator = (                 type   );
+                                 reference operator = (       reference<type > );
+                                 reference operator = ( const_reference<type > );
+        template < class type2 > reference operator = (                 type2  ) requires convertible_to<type2,type>;
+        template < class type2 > reference operator = (       reference<type2> ) requires convertible_to<type2,type>;
+        template < class type2 > reference operator = ( const_reference<type2> ) requires convertible_to<type2,type>;
 
     public: // Conversion (const)
         explicit reference ( const_reference<type> );
-
-    public: // Conversion (device)
-        reference operator = ( type );
         operator type ( ) const;
 
-    public: // Conversion (boost::compute)
+    public: // Boost.compute
         reference ( boost::compute::buffer, size_t );
         reference ( boost::compute::detail::buffer_value<type> );
         operator    boost::compute::detail::buffer_value<type> ( ) const;
-
-    public: // Member
         boost::compute::buffer get_buffer ( ) const;
         size_t                 get_index  ( ) const;
 };
@@ -47,24 +43,21 @@ class opencl::const_reference
         const_reference ( const const_reference& ) = default;
 
     public: // Assign
-        const_reference operator = ( const_reference<type> ) = delete;
+                                 const_reference operator = (                 type   )                                     = delete;
+                                 const_reference operator = (       reference<type > )                                     = delete;
+                                 const_reference operator = ( const_reference<type > )                                     = delete;
+        template < class type2 > const_reference operator = (                 type2  ) requires convertible_to<type2,type> = delete;
+        template < class type2 > const_reference operator = (       reference<type2> ) requires convertible_to<type2,type> = delete;
+        template < class type2 > const_reference operator = ( const_reference<type2> ) requires convertible_to<type2,type> = delete;
 
-    public: // Conversion (type)
-        template < class type2 > const_reference operator = ( const_reference<type2> ) = delete;
-
-    public: // Conversion (const)
+    public: // Conversion
         const_reference ( reference<type> );
-
-    public: // Conversion (device)
-        const_reference operator = ( type ) = delete;
         operator type ( ) const;
 
-    public: // Conversion (boost::compute)
+    public: // Boost.compute
         const_reference ( boost::compute::buffer, size_t );
         const_reference ( boost::compute::detail::buffer_value<type> );
         operator          boost::compute::detail::buffer_value<type> ( ) const = delete;
-
-    public: // Member
         boost::compute::buffer get_buffer ( ) const;
         size_t                 get_index  ( ) const;
 };
@@ -79,24 +72,34 @@ template < class type1, class type2 > compare_result<type1,type2>          opera
 template < class type1, class type2 > compare_result<type1,type2>          operator <=> ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a <=> b; };
 template < class type1, class type2 > compare_result<type1,type2>          operator <=> ( opencl::template const_reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a <=> b; };
 template < class type1, class type2 > compare_result<type1,type2>          operator <=> ( opencl::template const_reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a <=> b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator +=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a +=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator +=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a +=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator +=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a +=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator -=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a -=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator -=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a -=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator -=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a -=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator *=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a *=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator *=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a *=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator *=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a *=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator /=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a /=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator /=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a /=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator /=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a /=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator %=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a %=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator %=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a %=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator %=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a %=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator &=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a &=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator &=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a &=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator &=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a &=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator |=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a |=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator |=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a |=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator |=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a |=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator ^=  ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a ^=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator ^=  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a ^=  b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator ^=  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a ^=  b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator <<= ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a <<= b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator <<= ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a <<= b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator <<= ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a <<= b; };
+template < class type1, class type2 > opencl::template reference<type1>    operator >>= ( opencl::template       reference<type1>,                                  type2  ) requires requires ( type1 a, type2 b ) { a >>= b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator >>= ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a >>= b; };
 template < class type1, class type2 > opencl::template reference<type1>    operator >>= ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a >>= b; };
 template < class type >               opencl::template reference<type>     operator ++  ( opencl::template       reference<type>                                           ) requires requires ( type  a          ) {   ++  a; };

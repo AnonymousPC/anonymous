@@ -36,7 +36,22 @@ boost::compute::kernel detail::opencl_queue_context::build_kernel ( const boost:
     }
     catch ( const boost::compute::opencl_error& e )
     {
-        throw opencl_error("failed to build opencl kernel").from(e);
+        throw opencl_error("failed to build opencl kernel\n"
+                           "    ===== source =====\n"
+                           "{}\n"
+                           "\n"
+                           "    ===== build log =====\n"
+                           "{}", // build log ends with "\n" itself.
+                           prog.source()    | std::views::split     ('\n')
+                                            | std::views::drop_while([] (const auto& line) { return std::ranges::starts_with(line, std::string_view("#pragma")); })
+                                            | std::views::transform ([] (const auto& line) { return "      " + (line | std::ranges::to<std::string>()); })
+                                            | std::views::join_with ('\n')
+                                            | std::ranges::to<std::string>(),
+                           prog.build_log() | std::views::split     ('\n')
+                                            | std::views::transform ([] (const auto& line) { return "      " + (line | std::ranges::to<std::string>()); })
+                                            | std::views::join_with ('\n')
+                                            | std::ranges::to<std::string>()
+                          ).from(e);
     }
 }
 

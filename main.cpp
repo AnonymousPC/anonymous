@@ -11,10 +11,9 @@ using namespace ap;
 
 int main ( )
 {
-    array<double,3,opencl> arr(2, 3, 4, [] (int i, int j, int k) { return (i-1)*12 + (j-1) * 4 + (k-1) + 1; });
-
-    std::ranges::for_each(opencl::execution_context.device().extensions(), print);
-    print(arr[1][1][1] = arr[1][1][2]);
+    array<float,3,opencl> arr(2, 3, 4, [] (int i, int j, int k) { return (i-1)*12 + (j-1) * 4 + (k-1) + 1; });
+    arr[1][1][1] += 100;
+    print(arr);
 }
 
 

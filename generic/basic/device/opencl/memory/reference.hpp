@@ -12,6 +12,7 @@ class opencl::reference
         reference ( const reference& ) = default;
 
     public: // Assign
+        reference operator = (       reference<type> );
         reference operator = ( const_reference<type> );
 
     public: // Conversion (type)

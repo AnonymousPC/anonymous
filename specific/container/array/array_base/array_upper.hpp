@@ -49,24 +49,24 @@ namespace detail
             constexpr const_reference      operator []   ( int ) const;
         
         public: // Memory
-            constexpr bool            ownership  ( ) const;
-            constexpr bool            contiguous ( ) const;
-            constexpr array_attribute attribute  ( ) const;
-            constexpr int             offset     ( ) const;
+            constexpr bool ownership  ( ) const;
+            constexpr bool contiguous ( ) const;
     
-        public: // Host
-                                  constexpr       array<type,2,device>& host      ( );
-                                  constexpr const array<type,2,device>& host      ( ) const;
-                                  constexpr       int                   top_size  ( ) const;
-            template < int axis > constexpr       int                   axis_size ( ) const;
-
-        public: // View
-            constexpr       auto            rows     ( )           = delete;
-            constexpr const auto            rows     ( )     const = delete;
-            constexpr       auto            columns  ( )           = delete;
-            constexpr const auto            columns  ( )     const = delete;
-            constexpr       reference       at       ( int )       = delete;
-            constexpr       const_reference at       ( int ) const = delete;
+        public: // Detail
+                                  constexpr       array_attribute       get_attribute ( )     const;
+                                  constexpr       int                   get_offset    ( )     const;
+                                  constexpr       array<type,2,device>& get_host      ( );
+                                  constexpr const array<type,2,device>& get_host      ( )     const;
+                                  constexpr       int                   get_size_top  ( )     const;
+            template < int axis > constexpr       int                   get_size_axis ( )     const;
+            template < int dim2 > constexpr       auto                  get_rows      ( )           = delete;
+            template < int dim2 > constexpr const auto                  get_rows      ( )     const = delete;
+            template < int dim2 > constexpr       auto                  get_columns   ( )           = delete;
+            template < int dim2 > constexpr const auto                  get_columns   ( )     const = delete;
+                                  constexpr       reference             get_value     ( int );
+                                  constexpr       const_reference       get_value     ( int ) const;
+                                  constexpr       pointer               get_pointer   ( int );
+                                  constexpr       const_pointer         get_pointer   ( int ) const;
     };
 
     template < class type, int dim, class device >
@@ -117,26 +117,26 @@ namespace detail
             constexpr const array<type,dim-1,device>& operator []   ( int ) const;
 
         public: // Memory
-            constexpr bool            ownership  ( ) const;
-            constexpr bool            contiguous ( ) const;
-            constexpr array_attribute attribute  ( ) const;
-            constexpr int             offset     ( ) const;
-        
-        public: // Host
-            template < int attr > constexpr       array<type,dim+1,device>& host      ( )       requires ( attr == 1 );
-            template < int attr > constexpr const array<type,dim+1,device>& host      ( ) const requires ( attr == 1 );
-            template < int attr > constexpr       array<type,dim,  device>& host      ( )       requires ( attr == 2 );
-            template < int attr > constexpr const array<type,dim,  device>& host      ( ) const requires ( attr == 2 );
-                                  constexpr       int                       top_size  ( ) const;
-            template < int axis > constexpr       int                       axis_size ( ) const;
+            constexpr bool ownership  ( ) const;
+            constexpr bool contiguous ( ) const;
 
-        public: // View
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> rows     ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> rows     ( int_type auto... ) const;
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> columns  ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> columns  ( int_type auto... ) const;
-                                  constexpr       reference                                at       ( int_type auto... );
-                                  constexpr       const_reference                          at       ( int_type auto... ) const;
+        public: // Detail
+                                  constexpr       array_attribute                          get_attribute ( )                  const;
+                                  constexpr       int                                      get_offset    ( )                  const;
+            template < int attr > constexpr       array<type,dim+1,device>&                get_host      ( )                        requires ( attr == 1 );
+            template < int attr > constexpr const array<type,dim+1,device>&                get_host      ( )                  const requires ( attr == 1 );
+            template < int attr > constexpr       array<type,dim,  device>&                get_host      ( )                        requires ( attr == 2 );
+            template < int attr > constexpr const array<type,dim,  device>&                get_host      ( )                  const requires ( attr == 2 );
+                                  constexpr       int                                      get_size_top  ( )                  const;
+            template < int axis > constexpr       int                                      get_size_axis ( )                  const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... ) const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
+                                  constexpr       reference                                get_value     ( int_type auto... );
+                                  constexpr       const_reference                          get_value     ( int_type auto... ) const;
+                                  constexpr       pointer                                  get_pointer   ( int_type auto... );
+                                  constexpr       const_pointer                            get_pointer   ( int_type auto... ) const;
     };
 
     template < class type, class device >
@@ -181,29 +181,29 @@ namespace detail
             constexpr const array<type,max_dim-1,device>& operator []   ( int ) const;
 
         public: // Memory
-            constexpr bool            ownership  ( ) const;
-            constexpr bool            contiguous ( ) const = delete;
-            constexpr array_attribute attribute  ( ) const = delete;
-            constexpr int             offset     ( ) const = delete;
-        
-        public: // Host
-                                  constexpr       array<type,max_dim,device>& host      ( );
-                                  constexpr const array<type,max_dim,device>& host      ( ) const;
-                                  constexpr       int                         top_size  ( ) const = delete;
-            template < int axis > constexpr       int                         axis_size ( ) const;
+            constexpr bool ownership  ( ) const;
+            constexpr bool contiguous ( ) const = delete;
 
-        public: // View
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> rows     ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> rows     ( int_type auto... ) const;
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> columns  ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> columns  ( int_type auto... ) const;
-                                  constexpr       reference                                at       ( int_type auto... )       = delete;
-                                  constexpr       const_reference                          at       ( int_type auto... ) const = delete;
+        public: // Detail
+                                  constexpr       array_attribute                          get_attribute ( )                  const;
+                                  constexpr       int                                      get_offset    ( )                  const;
+                                  constexpr       array<type,max_dim,device>&              get_host      ( );
+                                  constexpr const array<type,max_dim,device>&              get_host      ( )                  const;
+                                  constexpr       int                                      get_size_top  ( )                  const = delete;
+            template < int axis > constexpr       int                                      get_size_axis ( )                  const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... ) const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
+                                  constexpr       reference                                get_value     ( int_type auto... )       = delete;
+                                  constexpr       const_reference                          get_value     ( int_type auto... ) const = delete;
+                                  constexpr       pointer                                  get_pointer   ( int_type auto... )       = delete;
+                                  constexpr       const_pointer                            get_pointer   ( int_type auto... ) const = delete;
     };
 
 } // namespace detail
 
 /* .ipp files are explicit extern included, which instantiates
  * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order
+ * in a correct order.
  */

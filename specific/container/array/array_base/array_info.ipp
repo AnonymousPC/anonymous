@@ -75,7 +75,7 @@ namespace detail
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     template < int axis >
-    constexpr int array_info<type,dim,device>::axis_size ( ) const
+    constexpr int array_info<type,dim,device>::get_size_axis ( ) const
     {
         static_assert ( axis >= 1 and axis <= dim );
         return shp[axis];

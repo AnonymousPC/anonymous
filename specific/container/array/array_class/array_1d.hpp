@@ -2,8 +2,8 @@
 
 template < class type, class device >
 class array<type,1,device>
-    extends public device::template vector<type>,
-            public detail::array_upper<type,1,device>
+    extends public  device::template vector<type>,
+            private detail::array_upper<type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -77,13 +77,37 @@ class array<type,1,device>
         constexpr array& pop    ( int = -1 );
         constexpr array& insert ( int, type );
         constexpr array& erase  ( int, int );
+    public: // View
+        constexpr       array<type,1,device>& as_flat      ( )       = delete;
+        constexpr const array<type,1,device>& as_flat      ( ) const = delete;
+        constexpr       array<type,1,device>& as_transpose ( )       = delete;
+        constexpr const array<type,1,device>& as_transpose ( ) const = delete;
 
     public: // Memory
         constexpr bool ownership  ( ) const;
         constexpr bool contiguous ( ) const;
+
+    private: // Detail
+                              constexpr       int                                              get_size_top  ( )                  const = delete;
+        template < int axis > constexpr       int                                              get_size_axis ( )                  const = delete;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... )       = delete;
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... ) const = delete;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... )       = delete;
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const = delete;
+                              constexpr       reference                                        get_value     ( int_type auto... )       = delete;
+                              constexpr       const_reference                                  get_value     ( int_type auto... ) const = delete;
+                              constexpr       pointer                                          get_pointer   ( int_type auto... )       = delete;
+                              constexpr       const_pointer                                    get_pointer   ( int_type auto... ) const = delete;
+
+    private: // Friend
+        template < class type2, int dim2, class device2 > friend class detail::array_lower;
+        template < class type2, int dim2, class device2 > friend class detail::array_upper;
+        template < class type2, int dim2, class device2 > friend class detail::tuple_upper;
+        template < class type2, int dim2, class device2 > friend class detail::array_iterator;
+        template < class type2, int dim2, class device2 > friend class detail::array_const_iterator;
 };
 
 /* .ipp files are explicit extern included, which instantiates
  * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order
+ * in a correct order.
  */

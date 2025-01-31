@@ -42,40 +42,43 @@
 #include <utility>
 
 // Include [[std.feature]]
-#ifdef __cpp_lib_inplace_vector
-    #include <inplace_vector>
-#else
-    #include "std/inplace_vector.hpp"
-#endif
-#ifdef __cpp_lib_mdspan
-    #include <mdspan>
-#else
-    #include "std/mdspan.hpp"
-#endif
-#ifdef __cpp_lib_stacktrace
-    #include <stacktrace>
-#else
-    #include "std/stacktrace.hpp"
-#endif
-#ifdef __STDCPP_FLOAT16_T__ 
+#ifdef __STDCPP_FLOAT16_T__ // #
     #include <stdfloat>
 #endif
-#ifdef __cpp_lib_text_encoding
+#ifdef __cpp_lib_text_encoding // #
     #include <text_encoding>
 #else
     #include "std/text_encoding.hpp"
 #endif
-#ifndef __cpp_lib_is_layout_compatible
+#ifdef __cpp_lib_inplace_vector // #
+    #include <inplace_vector>
+#else
+    #include "std/inplace_vector.hpp"
+#endif
+#ifndef __cpp_lib_is_layout_compatible // #
     #include "std/is_layout_compatible.hpp"
 #endif
-#ifndef __cpp_lib_ranges_chunk
+#ifdef __cpp_lib_mdspan // #
+    #include <mdspan>
+#else
+    #include "std/mdspan.hpp"
+#endif
+#ifndef __cpp_lib_ranges_chunk // #
     #include "std/ranges_chunk.hpp"
 #endif
-#ifndef __cpp_lib_ranges_join_with
+#ifndef __cpp_lib_ranges_join_with // #
     #include "std/ranges_join_with.hpp"
 #endif
-#ifndef __cpp_lib_ranges_stride
+#ifndef __cpp_lib_ranges_starts_ends_with // #
+    #include "std/ranges_starts_ends_with.hpp"
+#endif
+#ifndef __cpp_lib_ranges_stride // #
     #include "std/ranges_stride.hpp"
+#endif
+#ifdef __cpp_lib_stacktrace // #
+    #include <stacktrace>
+#else
+    #include "std/stacktrace.hpp"
 #endif
 
 // Include [[std.experimental.execution]]

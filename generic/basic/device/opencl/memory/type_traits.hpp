@@ -29,7 +29,8 @@ namespace detail
 namespace boost::compute
 {
     template < class type >
-        requires requires ( type it ) { { *it } -> ap::detail::opencl_reference_type; }
+        requires requires ( type it ) { { *it } -> ap::detail::opencl_reference_type; } and
+                 requires ( type it, detail::meta_kernel_variable<type> v ) { it[v]; }
     struct is_device_iterator<type>
         extends public boost::true_type
     {

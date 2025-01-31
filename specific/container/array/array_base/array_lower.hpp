@@ -48,20 +48,23 @@ namespace detail
             constexpr       array<type,dim-1,device>& operator []  ( int );
             constexpr const array<type,dim-1,device>& operator []  ( int ) const;
 
+        public: // Member
             constexpr array_lower& clear  ( );
             constexpr array_lower& resize ( const static_array<int,dim>& );
 
         public: // View
-            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... );
-            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  rows         ( int_type auto... ) const; 
-            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... );
-            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>>  columns      ( int_type auto... ) const;
-                                  constexpr                  array      <type,dim, device>&  as_transpose ( );
-                                  constexpr  const           array      <type,dim, device>&  as_transpose ( )                  const;
+            constexpr       array<type,dim, device>& as_transpose ( );
+            constexpr const array<type,dim, device>& as_transpose ( ) const;
+
+        public: // Detail
+            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>> get_rows    ( int_type auto... );
+            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>> get_rows    ( int_type auto... ) const; 
+            template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>> get_columns ( int_type auto... );
+            template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>> get_columns ( int_type auto... ) const;
     };
 } // namespace detail
 
 /* .ipp files are explicit extern included, which instantiates
  * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order
+ * in a correct order.
  */

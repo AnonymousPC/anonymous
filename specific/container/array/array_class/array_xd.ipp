@@ -461,14 +461,14 @@ template < class type, class device >
 constexpr array<type,max_dim,device>& array<type,max_dim,device>::as_transpose ( )
 {
     return ownership() ? lower::as_transpose() otherwise
-                         upper::host();
+                         upper::get_host();
 }
 
 template < class type, class device >
 constexpr const array<type,max_dim,device>& array<type,max_dim,device>::as_transpose ( ) const
 {
     return ownership() ? lower::as_transpose() otherwise
-                         upper::host();
+                         upper::get_host();
 }
 
 template < class type, class device >
@@ -484,75 +484,96 @@ constexpr bool array<type,max_dim,device>::contiguous ( ) const
 }
 
 template < class type, class device >
-constexpr int array<type,max_dim,device>::top_size ( ) const
+constexpr int array<type,max_dim,device>::get_size_top ( ) const
 {
-    return size();
+    return info::size();
 }
 
 template < class type, class device >
 template < int axis >
-constexpr int array<type,max_dim,device>::axis_size ( ) const
+constexpr int array<type,max_dim,device>::get_size_axis( ) const
 {
     static_assert ( axis >= 1 and axis <= dimension() );
-    return ownership() ? info::template axis_size<axis>() otherwise
-                         upper::template axis_size<axis>();
+    return ownership() ? info ::template get_size_axis<axis>() otherwise
+                         upper::template get_size_axis<axis>();
 }
 
 template < class type, class device >
 template < int dim2 >
-constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::rows ( int_type auto... offsets )
+constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::get_rows ( int_type auto... offsets )
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return ownership() ? lower::template rows<dim2>(offsets...) otherwise
-                         upper::template rows<dim2>(offsets...);
+    return ownership() ? lower::template get_rows<dim2>(offsets...) otherwise
+                         upper::template get_rows<dim2>(offsets...);
 }
 
 template < class type, class device >
 template < int dim2 >
-constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::rows ( int_type auto... offsets ) const
+constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::get_rows ( int_type auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return ownership() ? lower::template rows<dim2>(offsets...) otherwise
-                         upper::template rows<dim2>(offsets...);
+    return ownership() ? lower::template get_rows<dim2>(offsets...) otherwise
+                         upper::template get_rows<dim2>(offsets...);
 }
 
 template < class type, class device >
 template < int dim2 >
-constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::columns ( int_type auto... offsets ) 
+constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::get_columns ( int_type auto... offsets ) 
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return ownership() ? lower::template columns<dim2>(offsets...) otherwise
-                         upper::template columns<dim2>(offsets...);
+    return ownership() ? lower::template get_columns<dim2>(offsets...) otherwise
+                         upper::template get_columns<dim2>(offsets...);
 }
 
 template < class type, class device >
 template < int dim2 >
-constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::columns ( int_type auto... offsets ) const
+constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::get_columns ( int_type auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
-    return ownership() ? lower::template columns<dim2>(offsets...) otherwise
-                         upper::template columns<dim2>(offsets...);
+    return ownership() ? lower::template get_columns<dim2>(offsets...) otherwise
+                         upper::template get_columns<dim2>(offsets...);
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::reference array<type,max_dim,device>::at ( int_type auto... offsets )
+constexpr array<type,max_dim,device>::reference array<type,max_dim,device>::get_value ( int_type auto... offsets )
 {
     static_assert ( sizeof...(offsets) == max_dim );
     [[assume(ownership())]];
-    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>(base::data(), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>
+               (base::data(), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>::at ( int_type auto... offsets ) const
+constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>::get_value ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == max_dim );
     [[assume(ownership())]];
-    if constexpr ( is_pointer<typename device::template pointer<type>> )
-        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>(const_cast <pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>
+               (const_cast<pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+}
+
+template < class type, class device >
+constexpr array<type,max_dim,device>::pointer array<type,max_dim,device>::get_pointer ( int_type auto... offsets )
+{
+    static_assert ( sizeof...(offsets) == max_dim );
+    [[assume(ownership())]];
+    return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>
+               (base::data(), static_cast<const std::array<int,max_dim>&>(info::static_shape())).mapping()(offsets...) + base::data();
+}
+
+template < class type, class device >
+constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::get_pointer ( int_type auto... offsets ) const
+{
+    static_assert ( sizeof...(offsets) == max_dim );
+    [[assume(ownership())]];
+    if constexpr ( is_pointer<typename  device::template pointer<type>> )
+        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>
+                   (const_cast<pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape())).mapping()(offsets...) + base::data();
     else
-        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>(static_cast<pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape()))[offsets...];
+        return std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>
+                   (static_cast<pointer>(base::data()), static_cast<const std::array<int,max_dim>&>(info::static_shape())).mapping()(offsets...) + base::data();
 }

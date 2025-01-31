@@ -16,14 +16,6 @@ namespace detail
     std::string format_stacktrace_color ( std::string, int = 0, int = 0 );
 }
 
-exception& exception::from ( const std::exception& e )
-{
-    from_type = &typeid(e);
-    from_what = e.what();
-    return self;
-
-}
-
 const char* exception::what ( ) const noexcept
 {
     if ( from_type == nullptr )

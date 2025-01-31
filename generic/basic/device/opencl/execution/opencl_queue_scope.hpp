@@ -9,4 +9,6 @@ namespace detail
     };
 } // namespace detail
 
-// .cpp is explicitly included in "opencl.hpp"
+#if dll
+    #include "opencl_queue_scope.cpp"
+#endif

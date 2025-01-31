@@ -158,10 +158,6 @@
             static decltype(auto) upper_bound                       ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::upper_bound             (std::forward<decltype(args)>(args)..., scope.command_queue()); }
     };
 
-    #if dll
-        #include "execution/opencl_queue_scope.cpp"
-    #endif
-
     #include "memory/reference.hpp"
     #include "memory/pointer.hpp"
     #include "memory/accessor_type.hpp"

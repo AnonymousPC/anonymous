@@ -36,42 +36,42 @@ namespace detail
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::iterator array_lower<type,dim,device>::begin ( )
     {
-        return rows<dim-1>().begin();
+        return get_rows<dim-1>().begin();
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::const_iterator array_lower<type,dim,device>::begin ( ) const
     {
-        return rows<dim-1>().begin();
+        return get_rows<dim-1>().begin();
     }
 
     template < class type, int dim, class device > 
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::iterator array_lower<type,dim,device>::end ( )
     {
-        return rows<dim-1>().end();
+        return get_rows<dim-1>().end();
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::const_iterator array_lower<type,dim,device>::end ( ) const
     {
-        return rows<dim-1>().end();
+        return get_rows<dim-1>().end();
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr array<type,dim-1,device>& array_lower<type,dim,device>::operator [] ( int ofs )
     {
-        return static_cast<array<type,dim-1,device>&>(rows<dim-1>()[ofs]);
+        return static_cast<array<type,dim-1,device>&>(get_rows<dim-1>()[ofs]);
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
     constexpr const array<type,dim-1,device>& array_lower<type,dim,device>::operator [] ( int ofs ) const
     {
-        return static_cast<const array<type,dim-1,device>&>(rows<dim-1>()[ofs]);
+        return static_cast<const array<type,dim-1,device>&>(get_rows<dim-1>()[ofs]);
     }
 
     template < class type, int dim, class device >
@@ -94,46 +94,6 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    template < int dim2 >
-    constexpr std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::rows ( int_type auto... offsets )
-    {
-        static_assert ( dim2 > 0 and dim2 < dim );
-        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<rows_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    template < int dim2 >
-    constexpr const std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::rows ( int_type auto... offsets ) const
-    {
-        static_assert ( dim2 > 0 and dim2 < dim );
-        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<rows_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    template < int dim2 >
-    constexpr std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::columns ( int_type auto... offsets )
-    {
-        static_assert ( dim2 > 0 and dim2 < dim );
-        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<columns_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    template < int dim2 >
-    constexpr const std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::columns ( int_type auto... offsets ) const
-    {
-        static_assert ( dim2 > 0 and dim2 < dim );
-        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<columns_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
     constexpr array<type,dim,device>& array_lower<type,dim,device>::as_transpose ( )
     {
         return static_cast<array<type,dim,device>&>(transpose_view);
@@ -144,6 +104,46 @@ namespace detail
     constexpr const array<type,dim,device>& array_lower<type,dim,device>::as_transpose ( ) const
     {
         return static_cast<const array<type,dim,device>&>(transpose_view);
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::get_rows ( int_type auto... offsets )
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return rows_view.template value<rows_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr const std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::get_rows ( int_type auto... offsets ) const
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return rows_view.template value<rows_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::get_columns ( int_type auto... offsets )
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return columns_view.template value<columns_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    template < int dim2 >
+    constexpr const std::span<array_upper<type,dim2,device>> array_lower<type,dim,device>::get_columns ( int_type auto... offsets ) const
+    {
+        static_assert ( dim2 > 0 and dim2 < dim );
+        static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
+        return columns_view.template value<columns_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
     }
     
 

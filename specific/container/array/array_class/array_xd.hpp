@@ -2,11 +2,11 @@
 
 template < class type, class device >
 class array<type,max_dim,device>
-    extends public device::template vector<type>,
-            public detail::array_upper<type,1,      device>, // Make abi compatible with array<type,1>, required from as_flat().
-            public detail::array_info <type,max_dim,device>,
-            public detail::array_upper<type,max_dim,device>, // Never a view of higher array, only transposable.
-            public detail::array_lower<type,max_dim,device>
+    extends public  device::template vector<type>,
+            private detail::array_upper<type,1,      device>, // Make abi compatible with array<type,1>, required from as_flat().
+            private detail::array_info <type,max_dim,device>,
+            private detail::array_upper<type,max_dim,device>, // Never a view of higher array, only transposable.
+            private detail::array_lower<type,max_dim,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -93,20 +93,27 @@ class array<type,max_dim,device>
         constexpr bool ownership  ( ) const;
         constexpr bool contiguous ( ) const;
 
-    public: // Host
-                              constexpr int top_size  ( ) const;
-        template < int axis > constexpr int axis_size ( ) const;
+    private: // Detail
+                              constexpr       int                                              get_size_top  ( )                  const;
+        template < int axis > constexpr       int                                              get_size_axis ( )                  const;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... );
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... ) const;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... );
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
+                              constexpr       reference                                        get_value     ( int_type auto... );
+                              constexpr       const_reference                                  get_value     ( int_type auto... ) const;
+                              constexpr       pointer                                          get_pointer   ( int_type auto... );
+                              constexpr       const_pointer                                    get_pointer   ( int_type auto... ) const;
 
-    public: // View
-        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... );
-        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> rows     ( int_type auto... ) const;
-        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> columns  ( int_type auto... );
-        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> columns  ( int_type auto... ) const;
-                              constexpr       reference                                        at       ( int_type auto... );
-                              constexpr       const_reference                                  at       ( int_type auto... ) const;
+    private: // Friend
+        template < class type2, int dim2, class device2 > friend class detail::array_lower;
+        template < class type2, int dim2, class device2 > friend class detail::array_upper;
+        template < class type2, int dim2, class device2 > friend class detail::tuple_upper;
+        template < class type2, int dim2, class device2 > friend class detail::array_iterator;
+        template < class type2, int dim2, class device2 > friend class detail::array_const_iterator;
 };
 
 /* .ipp files are explicit extern included, which instantiates
  * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order
+ * in a correct order.
  */

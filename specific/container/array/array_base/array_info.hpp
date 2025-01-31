@@ -42,12 +42,12 @@ namespace detail
             constexpr array_info&            resize        ( const static_array<int,dim>& );
 
         public: // Detail
-            template < int axis > constexpr int axis_size ( ) const;
+            template < int axis > constexpr int get_size_axis ( ) const;
           
     };
 } // namespace detail
 
 /* .ipp files are explicit extern included, which instantiates
  * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order
+ * in a correct order.
  */

@@ -46,7 +46,7 @@
 
         public: // Hash
             template < class type > using hash = std::hash<type>;
-
+            
         public: // Container
          // template < class type, int len >                                                                                                                      using array             = unsupported;
          // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                         using basic_string      = unsupported;

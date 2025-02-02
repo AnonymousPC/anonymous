@@ -133,7 +133,7 @@ constexpr array<type,1,device>::array ( std::initializer_list<type> init )
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( range<type> init )
-    requires copyable<type>
+    requires copyable<type> and number_type<type>
     extends base ( init.begin(), init.end() )
 {
 

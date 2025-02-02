@@ -7,6 +7,9 @@ class opencl::pointer
         boost::compute::buffer buf = boost::compute::buffer();
         size_t                 idx = 0;
 
+    public: // Typedef
+        using value_type = type;
+
     public: // Core 
         pointer ( )                            = default;
         pointer ( const pointer& )             = default;
@@ -40,6 +43,9 @@ class opencl::const_pointer
     private: // Data
         boost::compute::buffer buf = boost::compute::buffer();
         size_t                 idx = 0;
+    
+    public: // Typedef
+        using value_type = type;
 
     public: // Core 
         const_pointer ( )                                  = default;

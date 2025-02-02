@@ -209,7 +209,8 @@ constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1
         #endif
         let sub_shp = init.begin()[0].shape();
         detail::for_constexpr<2,dim>([&] <int index> { shp[index] = sub_shp[index-1]; });
-        device::copy(init.begin(), init.end(), begin());
+        resize(shp);
+        device::copy(init.begin(), init.end(), self./*line-wise*/begin());
     }
 }
 

@@ -52,8 +52,7 @@ template < class... types >
 exception::exception ( format_string<type_identity<types>...> str, types&&... args )
     extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
 {
-    std::println("exception constructor: error_message = {}", error_message);
-    std::println("size = {}", error_message.size());
+    
 }   
 
 

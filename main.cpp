@@ -9,38 +9,11 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-template < class T >
-class B
-{
-    static_assert(std::integral<T>);
-};
-
-template < class T >
-class A
-{
-    A ( const A& ) = default;
-    A ( const B<T>& ) {};
-};
-
-
 int main ( )
 {
-    print(std::constructible_from<A<std::string>, A<std::string>>);
-
-    // let arr = array<float,2> { {1, 2}, {3, 4} }; 
-    // print(arr);
-    // print("======");
-    // print(arr.insert<-2>(-1, array<float>(2, [] (int i ) { return i*10; })));
-    // print("======");
-    // print(arr.pop<-2>(2));
-    // print("======");
-    // print(arr.erase<-1>(2, -1));
-
-    // let arr = std::vector<std::string>{"hello", "world"};
-    // print(arr | std::ranges::to<array<std::string>>());
-    
-
-  //  print(std::constructible_from<array<std::string>, array<std::string>>);
+    array<int,1,opencl> arr;
+    boost::compute::detail::counting_iterator_base
+    array arr2 = arr;
 }
 
 

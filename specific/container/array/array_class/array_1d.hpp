@@ -38,7 +38,7 @@ class array<type,1,device>
         constexpr          array ( int, function_type<type()   > auto );
         constexpr          array ( int, function_type<type(int)> auto );
         constexpr          array ( std::initializer_list<type> )        requires copyable<type>;
-        constexpr          array ( range<type> )                        requires copyable<type>;
+        constexpr          array ( range<type> )                        requires copyable<type> and number_type<type>;
 
     public: // Conversion (size)
         template < int len > constexpr array ( const inplace_array<type,len,device>& );

@@ -198,7 +198,19 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1,device>> init )
     requires copyable<type>
 {
-    static_assert(false, "not coded yet. notice the shape is known till here");
+    let shp = static_array<int,dim>();
+    shp[1] = init.size();
+
+    if ( not init.empty() )
+    {
+        #if debug
+            if ( not std::ranges::all_of(init | std::views::adjacent<2>, [] (const auto& adj) { const auto& [a, b] = adj; return a.shape() == b.shape(); }) )
+                throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), init | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>>());
+        #endif
+        let sub_shp = init.begin()[0].shape();
+        detail::for_constexpr<2,dim>([&] <int index> { shp[index] = sub_shp[index-1]; });
+        device::copy(init.begin(), init.end(), begin());
+    }
 }
 
 template < class type, int dim, class device >
@@ -238,6 +250,9 @@ constexpr array<type,dim,device>::array ( const array<type,dim,device2>& cvt )
     requires same_as<device,cpu> or same_as<device2,cpu>
     extends array ( cvt.shape() )
 {
+    static_assert(same_as<typename device ::layout_type,std::layout_right> or same_as<typename device ::layout_type,std::layout_left>);
+    static_assert(same_as<typename device2::layout_type,std::layout_right> or same_as<typename device2::layout_type,std::layout_left>);
+
     if constexpr ( not same_as<device,cpu> )
         if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
             if ( cvt.ownership() )
@@ -588,7 +603,7 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr array<type,1,device>& array<type,dim,device>::flatten ( )
 {
-    return ownership() ? static_cast<array<type,1,device>&>(static_cast<flat&>(self)) otherwise
+    return ownership() ? static_cast<array<type,1,device>&>(static_cast<base&>(self)) otherwise
                          throw logic_error("cannot flatten array: it does not own its data");
 }
 
@@ -596,7 +611,7 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr const array<type,1,device>& array<type,dim,device>::flatten ( ) const
 {
-    return ownership() ? static_cast<const array<type,1,device>&>(static_cast<const flat&>(self)) otherwise
+    return ownership() ? static_cast<const array<type,1,device>&>(static_cast<const base&>(self)) otherwise
                          throw logic_error("cannot flatten array: it does not own its data");
 }
 

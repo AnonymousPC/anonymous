@@ -15,7 +15,6 @@ class array<type,max_dim,device>
 
     private: // Base
         using base   = device::template vector<type>;
-        using flat   = detail::array_upper<type,1,      device>;
         using info   = detail::array_info <type,max_dim,device>;
         using upper  = detail::array_upper<type,max_dim,device>;
         using lower  = detail::array_lower<type,max_dim,device>;
@@ -73,7 +72,6 @@ class array<type,max_dim,device>
 
     public: // Member
                                   constexpr array& clear  ( );
-        template < int axis = 1 > constexpr array& resize ( int )                               requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) );
                                   constexpr array& resize ( int_type auto... args )             requires ( sizeof...(args) == max_dim );
                                   constexpr array& resize ( static_array<int,max_dim> );
         template < int axis = 1 > constexpr array& push   (      array<type,max_dim-1,device> ) requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) );

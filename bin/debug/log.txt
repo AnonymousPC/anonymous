@@ -1,0 +1,227 @@
+In file included from [01m[Kspecific/container/array/array.hpp:29[m[K,
+                 from [01m[Kspecific/container/interface.hpp:230[m[K,
+                 from [01m[Kmain.cpp:6[m[K:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:[m[K In constructor '[01m[Kconstexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(std::initializer_list<ap::array<type, (dim - 1), device> >) requires  copyable<type>[m[K':
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:227:[m[K [01;31m[Kerror: [m[Kparse error in template argument list
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), init | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::[01;31m[Kto<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                                                                                                                   [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kmain.cpp:[m[K In function '[01m[Kint[01;32m[K main[m[K()[m[K':
+[01m[Kmain.cpp:16:30:[m[K [01;31m[Kerror: [m[Kcannot convert '[01m[Karray<[...],[01;32m[K2[m[K,[...]>[m[K' to '[01m[Karray<[...],[01;32m[K1[m[K,[...]>[m[K'
+   16 |     print(arr.insert<-2>(-1, [01;31m[Karray<float,2,cpu>(2, 2, [] (int i, int j) { return i*100 + j*10; })[m[K));
+      |                              [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+      |                              [01;31m[K|[m[K
+      |                              [01;31m[Karray<[...],2,[...]>[m[K
+[01m[Kspecific/container/array/array_class/array_nd.ipp:529:106:[m[K [01;36m[Knote: [m[K  initializing argument 2 of '[01m[Kconstexpr ap::array<type, dim, device>& ap::array<type, dim, device>::[01;32m[Kinsert[m[K(int, ap::array<type, (dim - 1), device>) requires  axis >= 1 && axis <= dim || axis >= -dim && axis <= -1 [35m[K[with int axis = -2; type = float; int dim = 2; device = ap::cpu][m[K[m[K'
+  529 | constexpr array<type,dim,device>& array<type,dim,device>::insert ( int new_pos, [01;36m[Karray<type,dim-1,device> new_value[m[K )
+      |                                                                                 [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~[m[K
+specific/container/array/array_class/array_nd.ipp: In instantiation of '[01m[Kconstexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(std::initializer_list<ap::array<type, (dim - 1), device> >) requires  copyable<type> [35m[K[with type = float; int dim = 2; device = ap::cpu][m[K[m[K':
+[01m[Kmain.cpp:13:47:[m[K   required from here
+   13 |     let arr = array<float,2> { {1, 2}, {3, 4} [01;36m[K}[m[K;
+      |                                               [01;36m[K^[m[K
+[01m[Kspecific/container/array/array_class/array_nd.ipp:204:19:[m[K [01;31m[Kerror: [m[K'[01m[Kclass std::initializer_list<ap::array<float, 1, ap::cpu> >[m[K' has no member named '[01m[Kempty[m[K'
+  204 |     if ( not [01;31m[Kinit.empty[m[K() )
+      |              [01;31m[K~~~~~^~~~~[m[K
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;31m[Kerror: [m[Kno match for '[01m[Koperator|[m[K' (operand types are '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' and '[01m[K<unresolved overloaded function type>[m[K')
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;31m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;31m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kgeneric/basic/interface.hpp:91[m[K,
+                 from [01m[Kmain.cpp:1[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/stdexec/execution.hpp:77:6:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Ignore, class _Sender>  requires (sender<_Ignore>) && (sender<_Sender>) && (__ok<stdexec::_ERROR_<stdexec::_CANNOT_PIPE_INTO_A_SENDER_<stdexec::__mstring<41>{"You cannot pipe one sender into another."}>, stdexec::__errs::_WITH_SENDER_<typename stdexec::__i<_Ok<_Sender>, _Ok<decltype(__name_of_v<_Sender>)> >::__f::__f<_Sender> > > >) auto[01;32m[K operator|[m[K(_Ignore&&, _Sender&&)[m[K'
+   77 | auto [01;36m[Koperator[m[K|(_Ignore&&, _Sender&&) noexcept;
+      |      [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/stdexec/execution.hpp:77:6:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  couldn't deduce template parameter '[01m[K_Sender[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kspecific/container/collection/collection.hpp:3[m[K,
+                 from [01m[Kspecific/container/interface.hpp:232[m[K:
+[01m[Kspecific/container/collection/collection_base/collection_global.hpp:21:35:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class auto:708, class auto:709>  requires (set_type<auto:708, void, void>) && (set_type<auto:709, void, void>) constexpr auto [requires ap::set_type<<placeholder>, void, void>] ap::[01;32m[Koperator|[m[K(const auto:708&, const auto:709&) requires (same_as<typename std::decay<decltype(ap::operator|::left)>::type::value_type, typename std::decay<decltype(ap::operator|::right)>::type::value_type>) && (same_as<typename std::decay<decltype(ap::operator|::left)>::type::compare_type, typename std::decay<decltype(ap::operator|::right)>::type::compare_type>) && (same_as<typename std::decay<decltype(ap::operator|::left)>::type::device_type, typename std::decay<decltype(ap::operator|::right)>::type::device_type>)[m[K'
+   21 | constexpr set_type auto           [01;36m[Koperator[m[K  |  ( const set_type auto& left, const set_type auto& right ) requires same_as      <left_value_type,right_value_type> and same_as<left_compare_type,right_compare_type> and same_as<left_device_type,right_device_type>;
+      |                                   [01;36m[K^~~~~~~~[m[K
+[01m[Kspecific/container/collection/collection_base/collection_global.hpp:21:35:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  couldn't deduce template parameter '[01m[Kauto:709[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/regex:40[m[K,
+                 from [01m[Kgeneric/basic/interface.hpp:36[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bitset:1567:5:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<long long unsigned int _Nb> constexpr std::bitset<_Nb> std::[01;32m[Koperator|[m[K(const bitset<_Nb>&, const bitset<_Nb>&)[m[K'
+ 1567 |     [01;36m[Koperator[m[K|(const bitset<_Nb>& __x, const bitset<_Nb>& __y) _GLIBCXX_NOEXCEPT
+      |     [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bitset:1567:5:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' is not derived from '[01m[Kconst std::bitset<_Nb>[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/valarray:605[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/detail/is_contiguous_iterator.hpp:15[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm/copy.hpp:32[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm/fill.hpp:25[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/container/array.hpp:23[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm/reduce.hpp:22[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm/accumulate.hpp:20[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm.hpp:18[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute.hpp:14[m[K,
+                 from [01m[Kgeneric/basic/interface.hpp:161[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Dom1, class _Dom2> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_Expr, std::_Expr, _Dom1, _Dom2>, typename std::__fun<std::__bitwise_or, typename _Dom1::value_type>::result_type> std::[01;32m[Koperator|[m[K(const _Expr<_Dom1, typename _Dom1::value_type>&, const _Expr<_Dom2, typename _Dom2::value_type>&)[m[K'
+  412 |     [01;36m[K_DEFINE_EXPR_BINARY_OPERATOR[m[K(|, struct std::__bitwise_or)
+      |     [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' is not derived from '[01m[Kconst std::_Expr<_Dom1, typename _Dom1::value_type>[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Dom> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_Expr, std::_Constant, _Dom, typename _Dom::value_type>, typename std::__fun<std::__bitwise_or, typename _Dom1::value_type>::result_type> std::[01;32m[Koperator|[m[K(const _Expr<_Dom1, typename _Dom1::value_type>&, const typename _Dom::value_type&)[m[K'
+  412 |     [01;36m[K_DEFINE_EXPR_BINARY_OPERATOR[m[K(|, struct std::__bitwise_or)
+      |     [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' is not derived from '[01m[Kconst std::_Expr<_Dom1, typename _Dom1::value_type>[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Dom> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_Constant, std::_Expr, typename _Dom::value_type, _Dom>, typename std::__fun<std::__bitwise_or, typename _Dom1::value_type>::result_type> std::[01;32m[Koperator|[m[K(const typename _Dom::value_type&, const _Expr<_Dom1, typename _Dom1::value_type>&)[m[K'
+  412 |     [01;36m[K_DEFINE_EXPR_BINARY_OPERATOR[m[K(|, struct std::__bitwise_or)
+      |     [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  couldn't deduce template parameter '[01m[K_Dom[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Dom> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_Expr, std::_ValArray, _Dom, typename _Dom::value_type>, typename std::__fun<std::__bitwise_or, typename _Dom1::value_type>::result_type> std::[01;32m[Koperator|[m[K(const _Expr<_Dom1, typename _Dom1::value_type>&, const valarray<typename _Dom::value_type>&)[m[K'
+  412 |     [01;36m[K_DEFINE_EXPR_BINARY_OPERATOR[m[K(|, struct std::__bitwise_or)
+      |     [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' is not derived from '[01m[Kconst std::_Expr<_Dom1, typename _Dom1::value_type>[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Dom> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_ValArray, std::_Expr, typename _Dom::value_type, _Dom>, typename std::__fun<std::__bitwise_or, typename _Dom1::value_type>::result_type> std::[01;32m[Koperator|[m[K(const valarray<typename _Dom::value_type>&, const _Expr<_Dom1, typename _Dom1::value_type>&)[m[K'
+  412 |     [01;36m[K_DEFINE_EXPR_BINARY_OPERATOR[m[K(|, struct std::__bitwise_or)
+      |     [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/valarray_after.h:412:5:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  couldn't deduce template parameter '[01m[K_Dom[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/valarray:1203:1:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Tp> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_ValArray, std::_ValArray, _Tp, _Tp>, typename std::__fun<std::__bitwise_or, _Tp>::result_type> std::[01;32m[Koperator|[m[K(const valarray<_Tp>&, const valarray<_Tp>&)[m[K'
+ 1203 | [01;36m[K_DEFINE_BINARY_OPERATOR[m[K(|, __bitwise_or)
+      | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/valarray:1203:1:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' is not derived from '[01m[Kconst std::valarray<_Tp>[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/valarray:1203:1:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Tp> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_ValArray, std::_Constant, _Tp, _Tp>, typename std::__fun<std::__bitwise_or, _Tp>::result_type> std::[01;32m[Koperator|[m[K(const valarray<_Tp>&, const typename valarray<_Tp>::value_type&)[m[K'
+ 1203 | [01;36m[K_DEFINE_BINARY_OPERATOR[m[K(|, __bitwise_or)
+      | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/valarray:1203:1:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' is not derived from '[01m[Kconst std::valarray<_Tp>[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/valarray:1203:1:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class _Tp> std::_Expr<std::__detail::_BinClos<std::__bitwise_or, std::_Constant, std::_ValArray, _Tp, _Tp>, typename std::__fun<std::__bitwise_or, _Tp>::result_type> std::[01;32m[Koperator|[m[K(const typename valarray<_Tp>::value_type&, const valarray<_Tp>&)[m[K'
+ 1203 | [01;36m[K_DEFINE_BINARY_OPERATOR[m[K(|, __bitwise_or)
+      | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/valarray:1203:1:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kspecific/container/array/array_class/array_nd.ipp:208:212:[m[K [01;36m[Knote: [m[K  couldn't deduce template parameter '[01m[K_Tp[m[K'
+  208 |                 throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), [01;36m[Kinit | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>()[m[K);
+      |                                                                                                                                   [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/minwindef.h:163[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/windef.h:9[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/windows.h:69[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winsock2.h:23[m[K,
+                 from [01m[Kgeneric/basic/interface.hpp:128[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winnt.h:5050:1:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr JOB_OBJECT_NET_RATE_CONTROL_FLAGS[01;32m[K operator|[m[K(JOB_OBJECT_NET_RATE_CONTROL_FLAGS, JOB_OBJECT_NET_RATE_CONTROL_FLAGS)[m[K'
+ 5050 | [01;36m[KDEFINE_ENUM_FLAG_OPERATORS[m[K(JOB_OBJECT_NET_RATE_CONTROL_FLAGS)
+      | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winnt.h:5050:1:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[KJOB_OBJECT_NET_RATE_CONTROL_FLAGS[m[K'
+ 5050 | [01;36m[KD[m[KEFINE_ENUM_FLAG_OPERATORS(JOB_OBJECT_NET_RATE_CONTROL_FLAGS)
+      | [01;36m[K^[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winnt.h:5071:1:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr JOB_OBJECT_IO_RATE_CONTROL_FLAGS[01;32m[K operator|[m[K(JOB_OBJECT_IO_RATE_CONTROL_FLAGS, JOB_OBJECT_IO_RATE_CONTROL_FLAGS)[m[K'
+ 5071 | [01;36m[KDEFINE_ENUM_FLAG_OPERATORS[m[K(JOB_OBJECT_IO_RATE_CONTROL_FLAGS)
+      | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winnt.h:5071:1:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[KJOB_OBJECT_IO_RATE_CONTROL_FLAGS[m[K'
+ 5071 | [01;36m[KD[m[KEFINE_ENUM_FLAG_OPERATORS(JOB_OBJECT_IO_RATE_CONTROL_FLAGS)
+      | [01;36m[K^[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/processthreadsapi.h:132:1:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr MACHINE_ATTRIBUTES[01;32m[K operator|[m[K(MACHINE_ATTRIBUTES, MACHINE_ATTRIBUTES)[m[K'
+  132 | [01;36m[KDEFINE_ENUM_FLAG_OPERATORS[m[K(MACHINE_ATTRIBUTES);
+      | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/processthreadsapi.h:132:1:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[KMACHINE_ATTRIBUTES[m[K'
+  132 | [01;36m[KD[m[KEFINE_ENUM_FLAG_OPERATORS(MACHINE_ATTRIBUTES);
+      | [01;36m[K^[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winuser.h:6737:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr AR_STATE[01;32m[K operator|[m[K(AR_STATE, AR_STATE)[m[K'
+ 6737 |   [01;36m[KDEFINE_ENUM_FLAG_OPERATORS[m[K (AR_STATE);
+      |   [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winuser.h:6737:3:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[KAR_STATE[m[K' {aka '[01m[KtagAR_STATE[m[K'}
+ 6737 |   [01;36m[KD[m[KEFINE_ENUM_FLAG_OPERATORS (AR_STATE);
+      |   [01;36m[K^[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winuser.h:6750:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr ORIENTATION_PREFERENCE[01;32m[K operator|[m[K(ORIENTATION_PREFERENCE, ORIENTATION_PREFERENCE)[m[K'
+ 6750 |   [01;36m[KDEFINE_ENUM_FLAG_OPERATORS[m[K (ORIENTATION_PREFERENCE);
+      |   [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/winuser.h:6750:3:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[KORIENTATION_PREFERENCE[m[K'
+ 6750 |   [01;36m[KD[m[KEFINE_ENUM_FLAG_OPERATORS (ORIENTATION_PREFERENCE);
+      |   [01;36m[K^[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/shlwapi.h:974:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr FILETYPEATTRIBUTEFLAGS[01;32m[K operator|[m[K(FILETYPEATTRIBUTEFLAGS, FILETYPEATTRIBUTEFLAGS)[m[K'
+  974 |   [01;36m[KDEFINE_ENUM_FLAG_OPERATORS[m[K(FILETYPEATTRIBUTEFLAGS)
+      |   [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/shlwapi.h:974:3:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[KFILETYPEATTRIBUTEFLAGS[m[K'
+  974 |   [01;36m[KD[m[KEFINE_ENUM_FLAG_OPERATORS(FILETYPEATTRIBUTEFLAGS)
+      |   [01;36m[K^[m[K
+In file included from [01m[Kgeneric/basic/interface.hpp:21[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/charconv:627:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr std::chars_format std::[01;32m[Koperator|[m[K(chars_format, chars_format)[m[K'
+  627 |   [01;36m[Koperator[m[K|(chars_format __lhs, chars_format __rhs) noexcept
+      |   [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/charconv:627:26:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[Kstd::chars_format[m[K'
+  627 |   operator|([01;36m[Kchars_format __lhs[m[K, chars_format __rhs) noexcept
+      |             [01;36m[K~~~~~~~~~~~~~^~~~~[m[K
+In file included from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/memory_resource.h:38[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/string:67[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/locale_classes.h:40[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:41[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/ios:44[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/istream:40[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/sstream:40[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/chrono:45[m[K,
+                 from [01m[Kgeneric/basic/interface.hpp:22[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/cstddef:136:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr std::byte std::[01;32m[Koperator|[m[K(byte, byte)[m[K'
+  136 |   [01;36m[Koperator[m[K|(byte __l, byte __r) noexcept
+      |   [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/cstddef:136:18:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[Kstd::byte[m[K'
+  136 |   operator|([01;36m[Kbyte __l[m[K, byte __r) noexcept
+      |             [01;36m[K~~~~~^~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:89:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr std::_Ios_Fmtflags std::[01;32m[Koperator|[m[K(_Ios_Fmtflags, _Ios_Fmtflags)[m[K'
+   89 |   [01;36m[Koperator[m[K|(_Ios_Fmtflags __a, _Ios_Fmtflags __b) _GLIBCXX_NOTHROW
+      |   [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:89:27:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[Kstd::_Ios_Fmtflags[m[K'
+   89 |   operator|([01;36m[K_Ios_Fmtflags __a[m[K, _Ios_Fmtflags __b) _GLIBCXX_NOTHROW
+      |             [01;36m[K~~~~~~~~~~~~~~^~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:139:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr std::_Ios_Openmode std::[01;32m[Koperator|[m[K(_Ios_Openmode, _Ios_Openmode)[m[K'
+  139 |   [01;36m[Koperator[m[K|(_Ios_Openmode __a, _Ios_Openmode __b) _GLIBCXX_NOTHROW
+      |   [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:139:27:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[Kstd::_Ios_Openmode[m[K'
+  139 |   operator|([01;36m[K_Ios_Openmode __a[m[K, _Ios_Openmode __b) _GLIBCXX_NOTHROW
+      |             [01;36m[K~~~~~~~~~~~~~~^~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:186:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr std::_Ios_Iostate std::[01;32m[Koperator|[m[K(_Ios_Iostate, _Ios_Iostate)[m[K'
+  186 |   [01;36m[Koperator[m[K|(_Ios_Iostate __a, _Ios_Iostate __b) _GLIBCXX_NOTHROW
+      |   [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/ios_base.h:186:26:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[Kstd::_Ios_Iostate[m[K'
+  186 |   operator|([01;36m[K_Ios_Iostate __a[m[K, _Ios_Iostate __b) _GLIBCXX_NOTHROW
+      |             [01;36m[K~~~~~~~~~~~~~^~~[m[K
+In file included from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/atomic:50[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/oneapi/tbb/detail/_utils.h:22[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/oneapi/tbb/detail/_range_common.h:21[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/oneapi/tbb/blocked_range.h:22[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/tbb/blocked_range.h:17[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/pstl/parallel_backend_tbb.h:24[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/pstl/parallel_backend.h:20[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/pstl/algorithm_impl.h:22[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/pstl/glue_execution_defs.h:50[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/execution:39[m[K,
+                 from [01m[Kgeneric/basic/interface.hpp:25[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/atomic_base.h:103:3:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr std::memory_order std::[01;32m[Koperator|[m[K(memory_order, __memory_order_modifier)[m[K'
+  103 |   [01;36m[Koperator[m[K|(memory_order __m, __memory_order_modifier __mod) noexcept
+      |   [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/bits/atomic_base.h:103:26:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[Kstd::memory_order[m[K'
+  103 |   operator|([01;36m[Kmemory_order __m[m[K, __memory_order_modifier __mod) noexcept
+      |             [01;36m[K~~~~~~~~~~~~~^~~[m[K
+In file included from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/asio/detail/future.hpp:19[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/asio/packaged_task.hpp:19[m[K,
+                 from [01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/asio.hpp:149[m[K,
+                 from [01m[Kgeneric/basic/interface.hpp:157[m[K:
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/future:163:20:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr std::launch std::[01;32m[Koperator|[m[K(launch, launch)[m[K'
+  163 |   constexpr launch [01;36m[Koperator[m[K|(launch __x, launch __y) noexcept
+      |                    [01;36m[K^~~~~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0/future:163:37:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::ranges::transform_view<std::ranges::ref_view<std::initializer_list<ap::array<float, 1, ap::cpu> > >, ap::array<float, 2>::array(std::initializer_list<ap::array<float, 1, ap::cpu> >) requires  copyable<type>::<lambda(const auto:666&)> >[m[K' to '[01m[Kstd::launch[m[K'
+  163 |   constexpr launch operator|([01;36m[Klaunch __x[m[K, launch __y) noexcept
+      |                              [01;36m[K~~~~~~~^~~[m[K

@@ -10,10 +10,10 @@
 using namespace ap;
 int main ( )
 {
-    let arr = array<float,3,cpu>(3, 3, 3, [] (int i, int j, int k) { return (i-1)*9 + (j-1) * 3 + (k-1) + 1; });
+    let arr = array<float,2> { {1, 2}, {3, 4} }; 
     print(arr);
     print("======");
-    print(arr.insert<-2>(-1, array<float,2,cpu>(3, 3, [] (int i, int j) { return i*100 + j*10; })));
+    print(arr.insert<-2>(-1, array<float,2,cpu>(2, 2, [] (int i, int j) { return i*100 + j*10; })));
     print("======");
     print(arr.pop<-2>(2));
     print("======");

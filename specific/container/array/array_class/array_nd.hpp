@@ -16,7 +16,6 @@ class array<type,dim,device>
 
     private: // Base
         using base   = device::template vector<type>;
-        using flat   = detail::array_upper<type,1,  device>;
         using info   = detail::array_info <type,dim,device>;
         using upper  = detail::array_upper<type,dim,device>;
         using lower  = detail::array_lower<type,dim,device>;

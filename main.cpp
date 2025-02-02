@@ -10,8 +10,9 @@
 using namespace ap;
 int main ( )
 {
-    arr = array{{1, 2}, {3, 4}};
-    print(arr);
+    let arr = array(range(10));
+    print(arr.adjacent_where([] (const auto& a, const auto& b) { return a == b - 1; }));
+    print(arr.size());
 }
 
 //     print("begin");

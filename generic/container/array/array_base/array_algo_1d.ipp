@@ -14,13 +14,13 @@
 templates
 constexpr int array_algo::size ( ) const
 {
-    return const_derive_of_self.size();
+    return size();
 }
 
 templates
 constexpr bool array_algo::empty ( ) const
 {
-    return const_derive_of_self.empty();
+    return empty();
 }
 
 templates
@@ -32,7 +32,7 @@ constexpr decltype(auto) array_algo::begin ( )
 templates
 constexpr decltype(auto) array_algo::begin ( ) const
 {
-    return const_derive_of_self.begin();
+    return begin();
 }
 
 templates
@@ -44,7 +44,7 @@ constexpr decltype(auto) array_algo::end ( )
 templates
 constexpr decltype(auto) array_algo::end ( ) const
 {
-    return const_derive_of_self.end();
+    return end();
 }
 
 // N-dimension

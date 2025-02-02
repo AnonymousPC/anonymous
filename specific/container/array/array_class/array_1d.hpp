@@ -3,7 +3,8 @@
 template < class type, class device >
 class array<type,1,device>
     extends public  device::template vector<type>,
-            private detail::array_upper<type,1,device>
+            private detail::array_upper<type,1,device>,
+            public  array_algo<array<type,1,device>,type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );

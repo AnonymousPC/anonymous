@@ -197,7 +197,4 @@ namespace detail
 
 } // namespace detail
 
-/* .ipp files are explicit extern included, which instantiates
- * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order.
- */
+#include "array_upper.ipp"

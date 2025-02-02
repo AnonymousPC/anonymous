@@ -10,13 +10,19 @@
 using namespace ap;
 int main ( )
 {
-    print("begin");
-    let arr = array<float,2,opencl> { {1, 2}, {3, 4} }; 
-    let slice = arr[1];
-    print(array(slice));
-    slice = arr[2];
-    print(array(slice));
+    arr = array{{1, 2}, {3, 4}};
+    print(arr);
 }
+
+//     print("begin");
+//     let arr = array<float,2,opencl> { {1, 2}, {3, 4} }; 
+//     let slice = arr[1];
+//     print(array(slice));
+//     slice = arr[2];
+//     print(array(slice));
+//     arr.template push<2>(array<float,1,opencl>(range<float>(10, 11)));
+//     print(arr);
+// }
 
 
 // TODO:

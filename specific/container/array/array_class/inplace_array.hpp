@@ -68,7 +68,4 @@ class inplace_array
         constexpr static bool contiguous ( );
 };
 
-/* .ipp files are explicit extern included, which instantiates
- * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order
- */
+#include "inplace_array.ipp"

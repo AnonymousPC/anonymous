@@ -1,0 +1,21 @@
+[1mmain.cpp:13:5: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'arr'[0m
+   13 |     arr = array{{[0;32m1[0m, [0;32m2[0m}, {[0;32m3[0m, [0;32m4[0m}};[0m
+      | [0;1;32m    ^
+[0m[1mmain.cpp:13:11: [0m[0;1;31merror: [0m[1mno viable constructor or deduction guide for deduction of template arguments of 'array'[0m
+   13 |     arr = array{{[0;32m1[0m, [0;32m2[0m}, {[0;32m3[0m, [0;32m4[0m}};[0m
+      | [0;1;32m          ^
+[0m[1m./specific/container/interface.hpp:6:103: [0m[0;1;36mnote: [0mcandidate function template not viable: requires 1 argument, but 2 were provided[0m
+    6 |     [0;34mtemplate[0m < [0;34mclass[0m type, [0;34mint[0m dim = [0;32m1[0m,                                    [0;34mclass[0m device = cpu > [0;34mclass[0m array;[0m
+      | [0;1;32m                                                                                                      ^~~~~
+[0m[1m./specific/container/interface.hpp:6:103: [0m[0;1;36mnote: [0mimplicit deduction guide declared as 'template <class type, int dim = 1, class device = cpu> array(array<type, dim, device>) -> array<type, dim, device>'[0m
+[1m./specific/container/array/array_base/array_deduction.hpp:53:1: [0m[0;1;36mnote: [0mcandidate template ignored: substitution failure: deduced incomplete pack <(no value), (no value)> for template parameter 'args:auto'[0m
+   53 | array ( [0;34mauto[0m... args ) -> array<[0;34mtypename[0m detail::array_deduction<[0;34mdecltype[0m(args)...>::value_type,[0m
+      | [0;1;32m^               ~~~~
+[0m[1m./specific/container/interface.hpp:6:103: [0m[0;1;36mnote: [0mcandidate function template not viable: requires 0 arguments, but 2 were provided[0m
+    6 |     [0;34mtemplate[0m < [0;34mclass[0m type, [0;34mint[0m dim = [0;32m1[0m,                                    [0;34mclass[0m device = cpu > [0;34mclass[0m array;[0m
+      | [0;1;32m                                                                                                      ^
+[0m[1m./specific/container/interface.hpp:6:103: [0m[0;1;36mnote: [0mimplicit deduction guide declared as 'template <class type, int dim = 1, class device = cpu> array() -> array<type, dim, device>'[0m
+[1mmain.cpp:14:11: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'arr'[0m
+   14 |     print(arr);[0m
+      | [0;1;32m          ^
+[0m3 errors generated.

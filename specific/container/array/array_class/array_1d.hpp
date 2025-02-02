@@ -107,7 +107,4 @@ class array<type,1,device>
         template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
 };
 
-/* .ipp files are explicit extern included, which instantiates
- * array.shape(), array.inplace_shape() and array.static_shape()
- * in a correct order.
- */
+#include "array_1d.ipp"

@@ -483,7 +483,10 @@ constexpr array<type,dim,device>& array<type,dim,device>::push ( array<type,dim-
     if constexpr ( axis == 1 or axis == -dim )
         self[-1] = std::move(new_value);
     else if constexpr ( axis == -1 or axis == dim )
-        self.transpose()[-1] = std::move(new_value.transpose());
+        if constexpr ( dim == 2 )
+            self.transpose()[-1] = std::move(new_value);
+        else
+            self.transpose()[-1] = std::move(new_value.transpose());
     else
         if constexpr ( axis > 0 )
             detail::md_slice_push<device,axis>      (self, shape(), std::move(new_value));
@@ -552,7 +555,10 @@ constexpr array<type,dim,device>& array<type,dim,device>::insert ( int new_pos, 
     else if constexpr ( axis == -1 or axis == dim )
     {
         device::move_backward(self.transpose().begin() + abs_pos - 1, self.transpose().end() - 1, self.transpose().end());
-        self.transpose()[abs_pos] = std::move(new_value.transpose());
+        if constexpr ( dim == 2 )
+            self.transpose()[abs_pos] = std::move(new_value);
+        else
+            self.transpose()[abs_pos] = std::move(new_value.transpose());
     }
     else
         if constexpr ( axis > 0 )

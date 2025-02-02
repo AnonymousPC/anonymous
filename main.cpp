@@ -18,6 +18,8 @@ int main ( )
     print(arr.pop<-2>(2));
     print("======");
     print(arr.erase<-1>(2, -1));
+
+    std::views::adjacent
 }
 
 

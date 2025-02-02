@@ -42,9 +42,7 @@ class inplace_array
         constexpr static int                  dimension     ( );
         constexpr        int                  size          ( )     const;
         constexpr static int                  capacity      ( );
-        constexpr        array<int>           shape         ( )     const;
-        constexpr        inplace_array<int,1> inplace_shape ( )     const;
-        constexpr        static_array<int,1>  static_shape  ( )     const;
+        constexpr        static_array<int,1>  shape         ( )     const;
         constexpr        int                  row           ( )     const = delete;
         constexpr        int                  column        ( )     const = delete;
         constexpr        bool                 empty         ( )     const;

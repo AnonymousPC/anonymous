@@ -1,21 +1,7 @@
 #pragma once
 
 template < class type >
-opencl::template reference<type> opencl::reference<type>::operator = ( type right )
-{
-    boost::compute::detail::write_single_value<type>(right, buf, idx, opencl::execution_context.command_queue());
-    opencl::execution_context.command_queue().finish();
-    return self;
-}
-
-template < class type >
-opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template reference<type> right )
-{
-    return self = opencl::template const_reference<type>(right);
-}
-
-template < class type >
-opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template const_reference<type> right )
+opencl::template reference<type> opencl::reference<type>::operator = ( const reference& right )
 {
     static let program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
         __kernel void assign ( __global type* self_buf, int self_idx, __global type* right_buf, int right_idx )
@@ -32,6 +18,20 @@ opencl::template reference<type> opencl::reference<type>::operator = ( opencl::t
 }
 
 template < class type >
+opencl::template reference<type> opencl::reference<type>::operator = ( type right )
+{
+    boost::compute::detail::write_single_value<type>(right, buf, idx, opencl::execution_context.command_queue());
+    opencl::execution_context.command_queue().finish();
+    return self;
+}
+
+template < class type >
+opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template const_reference<type> right )
+{
+    return self = opencl::template reference<type>(right);
+}
+
+template < class type >
 template < class type2 >
 opencl::template reference<type> opencl::reference<type>::operator = ( type2 right )
     requires convertible_to<type2,type>
@@ -42,14 +42,6 @@ opencl::template reference<type> opencl::reference<type>::operator = ( type2 rig
 template < class type >
 template < class type2 >
 opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template reference<type2> right )
-    requires convertible_to<type2,type>
-{
-    return self = opencl::template const_reference<type2>(right);
-}
-
-template < class type >
-template < class type2 >
-opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template const_reference<type2> right )
     requires convertible_to<type2,type>
 {
     using type1 = type;
@@ -65,6 +57,14 @@ opencl::template reference<type> opencl::reference<type>::operator = ( opencl::t
     opencl::execution_context.command_queue().enqueue_task(kernel);
     opencl::execution_context.command_queue().finish();
     return self;
+}
+
+template < class type >
+template < class type2 >
+opencl::template reference<type> opencl::reference<type>::operator = ( opencl::template const_reference<type2> right )
+    requires convertible_to<type2,type>
+{
+    return self = opencl::template reference<type2>(right);
 }
 
 template < class type >

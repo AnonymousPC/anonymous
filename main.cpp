@@ -8,15 +8,34 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
-
 int main ( )
 {
-    array<float,3,opencl> arr(2, 3, 4, [] (int i, int j, int k) { return (i-1)*12 + (j-1) * 4 + (k-1) + 1; });
-    arr[1][1][1] += 100;
+    let arr = array<float,3,cpu>(3, 3, 3, [] (int i, int j, int k) { return (i-1)*9 + (j-1) * 3 + (k-1) + 1; });
     print(arr);
+    print("======");
+    print(arr.insert<-2>(-1, array<float,2,cpu>(3, 3, [] (int i, int j) { return i*100 + j*10; })));
+    print("======");
+    print(arr.pop<-2>(2));
+    print("======");
+    print(arr.erase<-1>(2, -1));
 }
 
 
 // TODO:
+// 1. row()限定为只有dim==2.
 // 3. array<nd>.resize().
 // 4. 先开启io, 然后适配线性代数。
+
+
+/*
+[[[ 1,  2,  3,  4],
+  [ 5,  6,  7,  8],
+  [ 9, 10, 11, 12]],
+  
+ [[13, 14, 15, 16],
+  [17, 18, 19, 20],
+  [21, 22, 23, 24]]]
+
+[1, 13, 5, 17, 9, 21, 2, 14, 6, 18, 10, 22, 3, 15, 7, 19, 11, 23, 4, 16, 8, 20, 12, 24]
+[1, 1]
+*/

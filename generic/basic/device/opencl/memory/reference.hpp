@@ -8,18 +8,19 @@ class opencl::reference
         size_t                 idx = 0;
 
     public: // Core 
-        reference ( )                  = delete;
-        reference ( const reference& ) = default;
+        reference ( )                             = delete;
+        reference ( const reference& )            = default;
+        reference operator = ( const reference& );
 
     public: // Assign
                                  reference operator = (                 type   );
-                                 reference operator = (       reference<type > );
+     //                          reference operator = (       reference<type > );
                                  reference operator = ( const_reference<type > );
         template < class type2 > reference operator = (                 type2  ) requires convertible_to<type2,type>;
         template < class type2 > reference operator = (       reference<type2> ) requires convertible_to<type2,type>;
         template < class type2 > reference operator = ( const_reference<type2> ) requires convertible_to<type2,type>;
 
-    public: // Conversion (const)
+    public: // Conversion
         explicit reference ( const_reference<type> );
         operator type ( ) const;
 
@@ -39,13 +40,14 @@ class opencl::const_reference
         size_t                 idx = 0;
 
     public: // Core
-        const_reference ( )                        = delete;
-        const_reference ( const const_reference& ) = default;
+        const_reference ( )                                   = delete;
+        const_reference ( const const_reference& )            = default;
+        const_reference operator = ( const const_reference& ) = delete;
 
     public: // Assign
                                  const_reference operator = (                 type   )                                     = delete;
                                  const_reference operator = (       reference<type > )                                     = delete;
-                                 const_reference operator = ( const_reference<type > )                                     = delete;
+     //                          const_reference operator = ( const_reference<type > )                                     = delete;
         template < class type2 > const_reference operator = (                 type2  ) requires convertible_to<type2,type> = delete;
         template < class type2 > const_reference operator = (       reference<type2> ) requires convertible_to<type2,type> = delete;
         template < class type2 > const_reference operator = ( const_reference<type2> ) requires convertible_to<type2,type> = delete;

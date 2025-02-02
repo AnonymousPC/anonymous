@@ -40,7 +40,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
     {
         #if debug
         if ( self.upper::size() != int(right.base::size()) )
-            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.size(), right.size());
+            throw value_error("copy assign array with inconsistent size (with left_ownership = false, left_size = {}, right_size = {})", self.size(), right.size());
         #endif
         device::copy(right.base::begin(), right.base::end(), self.upper::begin());
     }
@@ -48,7 +48,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
     {
         #if debug
         if ( self.upper::size() != right.upper::size() )
-            throw logic_error("cannot copy assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.size(), right.size());
+            throw value_error("copy assign array with inconsistent size (with left_ownership = false, left_size = {}, right_size = {})", self.size(), right.size());
         #endif
         device::copy(right.upper::begin(), right.upper::end(), self.upper::begin());
     }
@@ -70,7 +70,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right
     {
         #if debug
         if ( self.upper::size() != int(right.base::size()) )
-            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.size(), right.size());
+            throw value_error("move assign array with inconsistent size (with left_ownership = false, left_size = {}, right_size = {})", self.size(), right.size());
         #endif
         device::move(right.base::begin(), right.base::end(), self.upper::begin());
     }
@@ -78,7 +78,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right
     {
         #if debug
         if ( self.upper::size() != right.upper::size() )
-            throw logic_error("cannot move assign array: the left array does not own its data, and the right array mismatches on size (with left_size = {}, right_size = {})", self.size(), right.size());
+            throw value_error("move assign array with inconsistent size (with left_ownership = false, left_size = {}, right_size = {})", self.size(), right.size());
         #endif
         device::move(right.upper::begin(), right.upper::end(), self.upper::begin());
     }
@@ -218,19 +218,7 @@ constexpr int array<type,1,device>::capacity ( ) const
 }
 
 template < class type, class device >
-constexpr array<int> array<type,1,device>::shape ( ) const
-{
-    return { size() };
-}
-
-template < class type, class device >
-constexpr inplace_array<int,1> array<type,1,device>::inplace_shape ( ) const
-{
-    return { size() };
-}
-
-template < class type, class device >
-constexpr static_array<int,1> array<type,1,device>::static_shape ( ) const
+constexpr static_array<int,1> array<type,1,device>::shape ( ) const
 {
     return { size() };
 }
@@ -342,6 +330,12 @@ constexpr array<type,1,device>& array<type,1,device>::resize ( int new_size )
 }
 
 template < class type, class device >
+constexpr array<type,1,device>& array<type,1,device>::resize ( static_array<int,1> new_shape )
+{
+    return resize(new_shape[1]);
+}
+
+template < class type, class device >
 constexpr array<type,1,device>& array<type,1,device>::push ( type new_value )
 {
     #if debug
@@ -387,18 +381,17 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int
         throw logic_error("cannot erase from array: it does not own its data");
     #endif
 
-    let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + base::size();
-    let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + base::size();
-
+    let abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + base::size();
+    let abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + base::size();
     #if debug
-    if ( ( ( p1 < 1 or p1 > size() ) or
-           ( p2 < 1 or p2 > size() ) )
+    if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
+           ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
     and not // Except for below:
-         ( ( p1 == base::size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
+         ( ( abs_pos_1 == base::size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
         throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, base::size());
     #endif
 
-    base::erase(base::begin() + p1 - 1, base::begin() + p2 - 1);
+    base::erase(base::begin() + abs_pos_1 - 1, base::begin() + abs_pos_2 - 1);
 }
 
 template < class type, class device >

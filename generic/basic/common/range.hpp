@@ -39,6 +39,7 @@ class range
     public: // Member
         constexpr const_iterator begin ( ) const;
         constexpr const_iterator end   ( ) const;
+        constexpr int            size  ( ) const;
 };
 
 #include "range.ipp"

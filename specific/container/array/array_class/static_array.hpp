@@ -38,9 +38,7 @@ class static_array
         constexpr static int                  dimension     ( );
         constexpr static int                  size          ( );
         constexpr static int                  capacity      ( );
-        constexpr static array<int>           shape         ( );
-        constexpr static inplace_array<int,1> inplace_shape ( );
-        constexpr static static_array<int,1>  static_shape  ( );
+        constexpr static static_array<int,1>  shape         ( );
         constexpr        int                  row           ( )     const = delete;
         constexpr        int                  column        ( )     const = delete;
         constexpr static bool                 empty         ( );

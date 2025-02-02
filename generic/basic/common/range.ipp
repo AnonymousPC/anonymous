@@ -37,6 +37,12 @@ constexpr typename range<type>::const_iterator range<type>::end ( ) const
     return const_iterator ( low + ( ( high - low ) / step + 1 ) * step, step );
 }
 
+template < class type >
+constexpr int range<type>::size ( ) const
+{
+    return (high - low) / step + 1;
+}
+
 
 
 /// Iterator

@@ -55,9 +55,7 @@ class array<type,1,device>
         constexpr static int                  dimension     ( );
         constexpr        int                  size          ( )     const;
         constexpr        int                  capacity      ( )     const;
-        constexpr        array<int>           shape         ( )     const;
-        constexpr        inplace_array<int,1> inplace_shape ( )     const;
-        constexpr        static_array<int,1>  static_shape  ( )     const;
+        constexpr        static_array<int,1>  shape         ( )     const;
         constexpr        int                  row           ( )     const = delete;
         constexpr        int                  column        ( )     const = delete;
         constexpr        bool                 empty         ( )     const;
@@ -73,15 +71,16 @@ class array<type,1,device>
     public: // Member
         constexpr array& clear  ( );
         constexpr array& resize ( int );
+        constexpr array& resize ( static_array<int,1> );
         constexpr array& push   ( type );
         constexpr array& pop    ( int = -1 );
         constexpr array& insert ( int, type );
         constexpr array& erase  ( int, int );
     public: // View
-        constexpr       array<type,1,device>& as_flat      ( )       = delete;
-        constexpr const array<type,1,device>& as_flat      ( ) const = delete;
-        constexpr       array<type,1,device>& as_transpose ( )       = delete;
-        constexpr const array<type,1,device>& as_transpose ( ) const = delete;
+        constexpr       array<type,1,device>& flatten   ( )       = delete;
+        constexpr const array<type,1,device>& flatten   ( ) const = delete;
+        constexpr       array<type,1,device>& transpose ( )       = delete;
+        constexpr const array<type,1,device>& transpose ( ) const = delete;
 
     public: // Memory
         constexpr bool ownership  ( ) const;
@@ -100,6 +99,7 @@ class array<type,1,device>
                               constexpr       const_pointer                                    get_pointer   ( int_type auto... ) const = delete;
 
     private: // Friend
+        template < class type2, int dim2, class device2 > friend class array;
         template < class type2, int dim2, class device2 > friend class detail::array_lower;
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
         template < class type2, int dim2, class device2 > friend class detail::tuple_upper;

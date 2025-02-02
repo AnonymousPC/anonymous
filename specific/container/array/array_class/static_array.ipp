@@ -47,20 +47,8 @@ constexpr int static_array<type,len,device>::capacity ( )
     return len;
 }
 
-// template < class type, int len, class device >
-// constexpr array<int> static_array<type,len,device>::shape ( )
-// {
-//     return { size() };
-// }
-
 template < class type, int len, class device >
-constexpr inplace_array<int,1> static_array<type,len,device>::inplace_shape ( )
-{
-    return { size() };
-}
-
-template < class type, int len, class device >
-constexpr static_array<int,1> static_array<type,len,device>::static_shape ( )
+constexpr static_array<int,1> static_array<type,len,device>::shape ( )
 {
     return { size() };
 }

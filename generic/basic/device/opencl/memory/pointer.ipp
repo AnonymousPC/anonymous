@@ -1,11 +1,11 @@
 #pragma once
 
 template < class type >
-opencl::template pointer<type>& opencl::pointer<type>::operator = ( opencl::template const_pointer<type> right )
+opencl::pointer<type>::pointer ( opencl::template const_pointer<type> cvt )
+    extends buf ( cvt.get_buffer() ),
+            idx ( cvt.get_index() )
 {
-    buf = right.get_buffer();
-    idx = right.get_index();
-    return self;
+
 }
 
 template < class type > 
@@ -18,14 +18,6 @@ template < class type >
 opencl::template reference<type> opencl::pointer<type>::operator [] ( int ofs ) const
 {
     return opencl::template reference<type>(get_buffer(), get_index() + ofs);
-}
-
-template < class type >
-opencl::pointer<type>::pointer ( opencl::template const_pointer<type> cvt )
-    extends buf ( cvt.get_buffer() ),
-            idx ( cvt.get_index() )
-{
-
 }
 
 template < class type >
@@ -85,11 +77,17 @@ size_t opencl::pointer<type>::get_index ( ) const
 
 
 template < class type >
-opencl::template const_pointer<type>& opencl::const_pointer<type>::operator = ( opencl::template const_pointer<type> right )
+opencl::const_pointer<type>::const_pointer ( opencl::template pointer<type> cvt )
+    extends buf ( cvt.get_buffer() ),
+            idx ( cvt.get_index() )
 {
-    buf = right.get_buffer();
-    idx = right.get_index();
-    return self;
+
+}
+
+template < class type >
+opencl::template const_pointer<type>& opencl::const_pointer<type>::operator = ( opencl::template pointer<type> cvt )
+{
+    return self = opencl::template const_pointer<type>(cvt);
 }
 
 template < class type > 
@@ -102,14 +100,6 @@ template < class type >
 opencl::template const_reference<type> opencl::const_pointer<type>::operator [] ( int ofs ) const
 {
     return opencl::template const_reference<type>(get_buffer(), get_index() + ofs);
-}
-
-template < class type >
-opencl::const_pointer<type>::const_pointer ( opencl::template pointer<type> cvt )
-    extends buf ( cvt.get_buffer() ),
-            idx ( cvt.get_index() )
-{
-
 }
 
 template < class type >

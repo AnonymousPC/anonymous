@@ -62,7 +62,7 @@ namespace detail
             base iter = base();
 
         public: // Typedef
-            using iterator_category = std::contiguous_iterator_tag;
+            using iterator_category = std::random_access_iterator_tag;
             using value_type        = array<type,dim-1,device>;
             using reference         = array<type,dim-1,device>&;
             using pointer           = array<type,dim-1,device>*;
@@ -150,7 +150,7 @@ namespace detail
             base iter = base();
 
         public: // Typedef
-            using iterator_category = std::contiguous_iterator_tag;
+            using iterator_category = std::random_access_iterator_tag;
             using value_type        = array<type,dim-1,device>;
             using reference         = const array<type,dim-1,device>&;
             using pointer           = const array<type,dim-1,device>*;

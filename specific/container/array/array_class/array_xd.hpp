@@ -58,10 +58,8 @@ class array<type,max_dim,device>
         constexpr static int                           dimension     ( );
         constexpr        int                           size          ( )     const;
         constexpr        int                           capacity      ( )     const = delete;
-        constexpr        array<int>                    shape         ( )     const;
-        constexpr        inplace_array<int,max_dim>    inplace_shape ( )     const;
-        constexpr        static_array<int,max_dim>     static_shape  ( )     const;
-        constexpr        int                           row           ( )     const;
+        constexpr        static_array<int,max_dim>     shape         ( )     const;
+        constexpr        int                           row           ( )     const requires ( max_dim == 2 );
         constexpr        int                           column        ( )     const requires ( max_dim == 2 );
         constexpr        bool                          empty         ( )     const;
         constexpr        pointer                       data          ( );
@@ -77,17 +75,17 @@ class array<type,max_dim,device>
                                   constexpr array& clear  ( );
         template < int axis = 1 > constexpr array& resize ( int )                               requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) );
                                   constexpr array& resize ( int_type auto... args )             requires ( sizeof...(args) == max_dim );
-                                  constexpr array& resize ( const array<int>& );
+                                  constexpr array& resize ( static_array<int,max_dim> );
         template < int axis = 1 > constexpr array& push   (      array<type,max_dim-1,device> ) requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) );
         template < int axis = 1 > constexpr array& pop    ( int = -1 )                          requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) );
         template < int axis = 1 > constexpr array& insert ( int, array<type,max_dim-1,device> ) requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) );
         template < int axis = 1 > constexpr array& erase  ( int, int )                          requires ( ( axis >= 1 and axis <= max_dim ) or ( axis >= -max_dim and axis <= -1 ) );
 
     public: // View
-        constexpr       array<type,1,device>&       as_flat      ( );
-        constexpr const array<type,1,device>&       as_flat      ( ) const;
-        constexpr       array<type,max_dim,device>& as_transpose ( );
-        constexpr const array<type,max_dim,device>& as_transpose ( ) const;
+        constexpr       array<type,1,device>&       flatten   ( );
+        constexpr const array<type,1,device>&       flatten   ( ) const;
+        constexpr       array<type,max_dim,device>& transpose ( );
+        constexpr const array<type,max_dim,device>& transpose ( ) const;
 
     public: // Memory
         constexpr bool ownership  ( ) const;
@@ -106,6 +104,7 @@ class array<type,max_dim,device>
                               constexpr       const_pointer                                    get_pointer   ( int_type auto... ) const;
 
     private: // Friend
+        template < class type2, int dim2, class device2 > friend class array;
         template < class type2, int dim2, class device2 > friend class detail::array_lower;
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
         template < class type2, int dim2, class device2 > friend class detail::tuple_upper;

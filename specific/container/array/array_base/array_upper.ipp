@@ -27,19 +27,7 @@ namespace detail
     }
 
     template < class type, class device >
-    constexpr array<int> array_upper<type,1,device>::shape ( ) const 
-    {
-        return { size() };
-    }
-
-    template < class type, class device >
-    constexpr inplace_array<int,1> array_upper<type,1,device>::inplace_shape ( ) const 
-    {
-        return { size() };
-    }
-
-    template < class type, class device >
-    constexpr static_array<int,1> array_upper<type,1,device>::static_shape ( ) const 
+    constexpr static_array<int,1> array_upper<type,1,device>::shape ( ) const 
     {
         return { size() };
     }
@@ -243,25 +231,7 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr array<int> array_upper<type,dim,device>::shape ( ) const
-    {
-        let s = array<int>(dim);
-        for_constexpr<1,dim>([&] <int index> { s[index] = get_size_axis<index>(); });
-        return s;
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    constexpr inplace_array<int,dim> array_upper<type,dim,device>::inplace_shape ( ) const
-    {
-        let s = inplace_array<int,dim>();
-        for_constexpr<1,dim>([&] <int index> { s[index] = get_size_axis<index>(); });
-        return s;
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    constexpr static_array<int,dim> array_upper<type,dim,device>::static_shape ( ) const
+    constexpr static_array<int,dim> array_upper<type,dim,device>::shape ( ) const
     {
         let s = static_array<int,dim>();
         for_constexpr<1,dim>([&] <int index> { s[index] = get_size_axis<index>(); });
@@ -588,27 +558,9 @@ namespace detail
     }
 
     template < class type, class device >
-    constexpr array<int> array_upper<type,max_dim,device>::shape ( ) const
+    constexpr static_array<int,max_dim> array_upper<type,max_dim,device>::shape ( ) const
     {
-        let s1 = get_host().static_shape();
-        let s2 = array<int>(max_dim);
-        for_constexpr<1,max_dim>([&] <int index> { s2[index] = s1[-index]; });
-        return s2;
-    }
-
-    template < class type, class device >
-    constexpr inplace_array<int,max_dim> array_upper<type,max_dim,device>::inplace_shape ( ) const
-    {
-        let s1 = get_host().static_shape();
-        let s2 = inplace_array<int,max_dim>();
-        for_constexpr<1,max_dim>([&] <int index> { s2[index] = s1[-index]; });
-        return s2;
-    }
-
-    template < class type, class device >
-    constexpr static_array<int,max_dim> array_upper<type,max_dim,device>::static_shape ( ) const
-    {
-        let s1 = get_host().static_shape();
+        let s1 = get_host().shape();
         let s2 = static_array<int,max_dim>();
         for_constexpr<1,max_dim>([&] <int index> { s2[index] = s1[-index]; });
         return s2;
@@ -617,14 +569,14 @@ namespace detail
     template < class type, class device >
     constexpr int array_upper<type,max_dim,device>::row ( ) const
     {
-        return get_host().static_shape()[-1]; 
+        return get_host().shape()[-1]; 
     }
 
     template < class type, class device >
     constexpr int array_upper<type,max_dim,device>::column ( ) const    
         requires ( max_dim == 2 )
     {
-        return get_host().static_shape()[1]; 
+        return get_host().shape()[1]; 
     }
 
     template < class type, class device >
@@ -691,7 +643,8 @@ namespace detail
     template < int axis >
     constexpr int array_upper<type,max_dim,device>::get_size_axis ( ) const
     {
-        return get_host().static_shape()[-axis];
+        static_assert ( axis >= 1 and axis <= max_dim );
+        return get_host().template get_size_axis<max_dim-axis+1>();
     }
 
     template < class type, class device >

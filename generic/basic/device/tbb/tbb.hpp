@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __x86_64__
+#ifdef __TBB_tbb_H
     class tbb
     {
         public: // Available

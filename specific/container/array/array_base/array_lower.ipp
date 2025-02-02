@@ -94,14 +94,14 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr array<type,dim,device>& array_lower<type,dim,device>::as_transpose ( )
+    constexpr array<type,dim,device>& array_lower<type,dim,device>::transpose ( )
     {
         return static_cast<array<type,dim,device>&>(transpose_view);
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr const array<type,dim,device>& array_lower<type,dim,device>::as_transpose ( ) const
+    constexpr const array<type,dim,device>& array_lower<type,dim,device>::transpose ( ) const
     {
         return static_cast<const array<type,dim,device>&>(transpose_view);
     }
@@ -113,7 +113,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<rows_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
+        return rows_view.template value<rows_attribute,dim2>(static_cast<array<type,dim,device>&>(self).shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -123,7 +123,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<rows_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
+        return rows_view.template value<rows_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -133,7 +133,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<columns_attribute,dim2>(static_cast<array<type,dim,device>&>(self).static_shape(), offsets...);
+        return columns_view.template value<columns_attribute,dim2>(static_cast<array<type,dim,device>&>(self).shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -143,7 +143,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<columns_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).static_shape(), offsets...);
+        return columns_view.template value<columns_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).shape(), offsets...);
     }
     
 

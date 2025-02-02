@@ -7,26 +7,21 @@ class opencl::pointer
         boost::compute::buffer buf = boost::compute::buffer();
         size_t                 idx = 0;
 
-    public: // Typedef
-        using  iterator_category = std::contiguous_iterator_tag;
-        using  value_type        = type;
-        using  difference_type   = int;
-
     public: // Core 
-        pointer ( )                = default;
-        pointer ( const pointer& ) = default;
+        pointer ( )                            = default;
+        pointer ( const pointer& )             = default;
+        pointer& operator = ( const pointer& ) = default;
 
     public: // Assign
-        pointer& operator = ( const_pointer<type> );
+     // pointer& operator = (       pointer<type> );
+        pointer& operator = ( const_pointer<type> ) = delete;
 
     public: // Member
+        explicit pointer ( const_pointer<type> );
         reference<type> operator *  ( )     const;
         reference<type> operator [] ( int ) const;
 
-    public: // Conversion (const)
-        explicit pointer ( const_pointer<type> );
-
-    public: // Conversion (boost::compute)
+    public: // Boost.compute
         pointer ( boost::compute::buffer, size_t );
         pointer ( boost::compute::buffer_iterator<type> );
         operator  boost::compute::buffer_iterator<type> ( ) const;
@@ -46,26 +41,21 @@ class opencl::const_pointer
         boost::compute::buffer buf = boost::compute::buffer();
         size_t                 idx = 0;
 
-    public: // Typedef
-        using  iterator_category = std::contiguous_iterator_tag;
-        using  value_type        = type;
-        using  difference_type   = int;
-
     public: // Core 
-        const_pointer ( )                      = default;
-        const_pointer ( const const_pointer& ) = default;
+        const_pointer ( )                                  = default;
+        const_pointer ( const const_pointer& )             = default;
+        const_pointer& operator = ( const const_pointer& ) = default;
 
     public: // Assign
-        const_pointer& operator = ( const_pointer<type> );
+        const_pointer& operator = (       pointer<type> );
+     // const_pointer& operator = ( const_pointer<type> );
 
     public: // Member
+        const_pointer ( pointer<type> );
         const_reference<type> operator *  ( )     const;
         const_reference<type> operator [] ( int ) const;
 
-    public: // Conversion (const)
-        const_pointer ( pointer<type> );
-
-    public: // Conversion (boost::compute)
+    public: // Boost.compute
         const_pointer ( boost::compute::buffer, size_t );
         const_pointer ( boost::compute::buffer_iterator<type> );
         operator        boost::compute::buffer_iterator<type> ( ) const = delete;

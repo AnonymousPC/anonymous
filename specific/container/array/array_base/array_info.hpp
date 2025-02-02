@@ -33,9 +33,7 @@ namespace detail
 
         public: // Member
             constexpr int                    size          ( ) const;
-            constexpr array<int>             shape         ( ) const;
-            constexpr inplace_array<int,dim> inplace_shape ( ) const;
-            constexpr static_array<int,dim>  static_shape  ( ) const;
+            constexpr static_array<int,dim>  shape         ( ) const;
             constexpr int                    row           ( ) const;
             constexpr int                    column        ( ) const requires ( dim == 2 );
             constexpr bool                   empty         ( ) const;

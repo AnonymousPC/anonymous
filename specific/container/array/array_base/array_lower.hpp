@@ -40,7 +40,6 @@ namespace detail
             constexpr array_lower ( const auto&... /*shape*/ );
 
         public: // Member
-            constexpr       static_array<int,dim>     static_shape ( ) const;
             constexpr       iterator                  begin        ( );
             constexpr       const_iterator            begin        ( )     const;
             constexpr       iterator                  end          ( );
@@ -53,8 +52,8 @@ namespace detail
             constexpr array_lower& resize ( const static_array<int,dim>& );
 
         public: // View
-            constexpr       array<type,dim, device>& as_transpose ( );
-            constexpr const array<type,dim, device>& as_transpose ( ) const;
+            constexpr       array<type,dim, device>& transpose ( );
+            constexpr const array<type,dim, device>& transpose ( ) const;
 
         public: // Detail
             template < int dim2 > constexpr        std::span<array_upper<type,dim2,device>> get_rows    ( int_type auto... );

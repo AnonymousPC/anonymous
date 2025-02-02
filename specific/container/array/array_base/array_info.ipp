@@ -21,21 +21,7 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
-    constexpr array<int> array_info<type,dim,device>::shape ( ) const
-    {
-        return shp;
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    constexpr inplace_array<int,dim> array_info<type,dim,device>::inplace_shape ( ) const
-    {
-        return shp;
-    }
-
-    template < class type, int dim, class device >
-        requires ( dim >= 2 )
-    constexpr static_array<int,dim> array_info<type,dim,device>::static_shape ( ) const
+    constexpr static_array<int,dim> array_info<type,dim,device>::shape ( ) const
     {
         return shp;
     }

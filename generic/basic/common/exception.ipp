@@ -7,6 +7,18 @@ class exception_interface
         exception_type& from ( const std::exception& );
 };
 
+template < class exception_type >
+exception_type& exception_interface<exception_type>::from ( const std::exception& e )
+{
+    static_cast<exception_type&>(self).from_type = &typeid(e);
+    static_cast<exception_type&>(self).from_what = e.what();
+    return static_cast<exception_type&>(self);
+}
+
+
+
+
+
 class exception
     extends public std::exception,
             public exception_interface<exception>
@@ -34,6 +46,19 @@ class exception
         const   std::type_info* from_type        = nullptr;
                 std::string     from_what        = "";
 };
+
+
+template < class... types >
+exception::exception ( format_string<type_identity<types>...> str, types&&... args )
+    extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
+{
+    std::println("exception constructor: error_message = {}", error_message);
+    std::println("size = {}", error_message.size());
+}   
+
+
+
+
 
 class logic_error
     extends public exception,
@@ -298,20 +323,9 @@ class terminate_signal
     using signal::signal;
 };
 
-template < class exception_type >
-exception_type& exception_interface<exception_type>::from ( const std::exception& e )
-{
-    static_cast<exception_type&>(self).from_type = &typeid(e);
-    static_cast<exception_type&>(self).from_what = e.what();
-    return static_cast<exception_type&>(self);
-}
 
-template < class... types >
-exception::exception ( format_string<type_identity<types>...> str, types&&... args )
-    extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
-{
 
-}   
+
 
 template < class... types >
 class exception::format_string
@@ -351,9 +365,9 @@ constexpr std::string exception::format_string<types...>::format ( types&&... ar
     switch ( parse() )
     {
         case mode::implicit_mode:
-            return std::vformat(str, make_format_args(args...));
+            return std::format(std::runtime_format(str), make_formattable(args)...);
         case mode::explicit_mode:
-            return std::vformat(std::string("{0}") + str, make_format_args("", args...));
+            return std::format(std::runtime_format(std::string("{0}") + str), "", make_formattable(args)...);
         case mode::default_mode:
             return str;
         default:
@@ -385,12 +399,6 @@ constexpr exception::format_string<types...>::mode exception::format_string<type
 }
 
 template < class... types >
-constexpr decltype(auto) exception::format_string<types...>::make_const_ref ( const auto& args )
-{
-    return args;
-}
-
-template < class... types >
 constexpr decltype(auto) exception::format_string<types...>::make_formattable ( const auto& args )
 {
     if constexpr ( std::formattable<decay<decltype(args)>,char> ) // std::formattable
@@ -402,9 +410,3 @@ constexpr decltype(auto) exception::format_string<types...>::make_formattable ( 
     else
         return std::format("[[{} object at {}]]", demangle(typeid(args)), static_cast<const void*>(&args));
 } 
-
-template < class... types >
-constexpr decltype(auto) exception::format_string<types...>::make_format_args ( const auto&... args )
-{
-    return std::make_format_args(make_const_ref(make_formattable(args))...);
-}

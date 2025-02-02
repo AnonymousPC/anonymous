@@ -78,20 +78,8 @@ constexpr int inplace_array<type,len,device>::capacity ( )
     return len;
 }
 
-// template < class type, int len, class device >
-// constexpr array<int> inplace_array<type,len,device>::shape ( ) const
-// {
-//     return { size() };
-// }
-
 template < class type, int len, class device >
-constexpr inplace_array<int,1> inplace_array<type,len,device>::inplace_shape ( ) const
-{
-    return { size() };
-}
-
-template < class type, int len, class device >
-constexpr static_array<int,1> inplace_array<type,len,device>::static_shape ( ) const
+constexpr static_array<int,1> inplace_array<type,len,device>::shape ( ) const
 {
     return { size() };
 }

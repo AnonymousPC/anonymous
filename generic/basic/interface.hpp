@@ -130,10 +130,8 @@
     #include <tchar.h>
 #endif
 
-// Include [[hardware.cpu.intel]]
-#ifdef __x86_64__
-    #include <tbb/tbb.h>
-#endif
+// Include [[hardware.all.intel]]
+#include <tbb/tbb.h>
 
 // Include [[hardware.gpu.nvidia]]
 #ifdef __NVCC__

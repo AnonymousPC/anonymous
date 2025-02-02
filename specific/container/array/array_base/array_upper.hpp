@@ -33,9 +33,7 @@ namespace detail
         public: // Member
             constexpr int                  size          ( )     const;
             constexpr int                  capacity      ( )     const = delete;
-            constexpr array<int>           shape         ( )     const;
-            constexpr inplace_array<int,1> inplace_shape ( )     const;
-            constexpr static_array<int,1>  static_shape  ( )     const;
+            constexpr static_array<int,1>  shape         ( )     const;
             constexpr int                  row           ( )     const = delete;
             constexpr int                  column        ( )     const = delete;
             constexpr bool                 empty         ( )     const;
@@ -101,9 +99,7 @@ namespace detail
         public: // Member
             constexpr       int                       size          ( )     const;
             constexpr       int                       capacity      ( )     const = delete;
-            constexpr       array<int>                shape         ( )     const;
-            constexpr       inplace_array<int,dim>    inplace_shape ( )     const;
-            constexpr       static_array<int,dim>     static_shape  ( )     const;
+            constexpr       static_array<int,dim>     shape         ( )     const;
             constexpr       int                       row           ( )     const;
             constexpr       int                       column        ( )     const requires ( dim == 2 );
             constexpr       bool                      empty         ( )     const;
@@ -165,9 +161,7 @@ namespace detail
         public: // Member
             constexpr       int                           size          ( )     const;
             constexpr       int                           capacity      ( )     const = delete;
-            constexpr       array<int>                    shape         ( )     const;
-            constexpr       inplace_array<int,max_dim>    inplace_shape ( )     const;
-            constexpr       static_array<int,max_dim>     static_shape  ( )     const;
+            constexpr       static_array<int,max_dim>     shape         ( )     const;
             constexpr       int                           row           ( )     const;
             constexpr       int                           column        ( )     const requires ( max_dim == 2 );
             constexpr       bool                          empty         ( )     const;

@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: remove these implemention
+
 std::ostream& operator << ( std::ostream& left, const array_type auto& right )
 {
     if constexpr ( decay<decltype(right)>::dimension() == 1 )
@@ -8,6 +10,15 @@ std::ostream& operator << ( std::ostream& left, const array_type auto& right )
         std::ranges::for_each(right, [&] (const auto& line) { left << line << '\n'; });
     return left;
 }
+
+constexpr bool operator == ( const array_type auto& left, const array_type auto& right )
+{
+    return std::equal(left.begin(), left.end(), right.begin(), right.end());
+}
+
+
+
+
 
 namespace detail
 {
@@ -69,13 +80,7 @@ namespace detail
 
 
 
-    enum array_attribute
-    {
-        no_attribute,
-        rows_attribute,
-        columns_attribute,
-        transpose_attribute 
-    };
+
 
     constexpr auto multiply_first_to_second_last ( const auto& arg1, const auto& arg2, [[maybe_unused]] const auto&... args )
     {
@@ -129,6 +134,8 @@ namespace detail
 
     constexpr void md_generate ( auto& arr, const auto& shp, const auto& func, int_type auto... idx )
     {
+        [[assume(arr.ownership())]];
+
         if constexpr ( sizeof...(idx) <= decay<decltype(arr)>::dimension() - 2 )
             for ( int i in range(shp[sizeof...(idx)+1]) )
                 md_generate(arr, shp, func, idx..., i);
@@ -136,6 +143,198 @@ namespace detail
             for ( int i in range(shp[-1]) )
                 md_access(arr, idx..., i) = func(idx..., i);
     }
+
+    template < class device >
+    constexpr auto md_common_smaller ( const auto& old_shape, const auto& new_shape )
+    {
+        static_assert ( decay<decltype(old_shape)>::size() == decay<decltype(new_shape)>::size() );
+
+        let smaller_shape     = old_shape;
+        let smaller_size      = 1;
+        let smaller_resizable = 0;
+        for_constexpr<1,decay<decltype(old_shape)>::size()>([&] <int index>
+        {
+            if ( new_shape[index] < old_shape[index] )
+            {
+                smaller_shape[index] = new_shape[index];
+                smaller_resizable += 1;
+            }
+        });
+        for_constexpr<1,decay<decltype(smaller_shape)>::size()>([&] <int index> { smaller_size *= smaller_shape[index]; });
+        let smaller_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and smaller_resizable == 1 and new_shape[ 1] < old_shape[ 1] ) or
+                                         ( same_as<typename device::layout_type,std::layout_left > and smaller_resizable == 1 and new_shape[-1] < old_shape[-1] ) );                   
+
+        return tuple(smaller_shape, smaller_size, smaller_resizable > 0, smaller_relayoutable);
+    }
+
+    template < class device >
+    constexpr auto md_common_larger ( const auto& old_shape, const auto& new_shape )
+    {
+        static_assert ( decay<decltype(old_shape)>::size() == decay<decltype(new_shape)>::size() );
+
+        let larger_shape     = old_shape;
+        let larger_size      = 1;
+        let larger_resizable = 0;
+        for_constexpr<1,decay<decltype(old_shape)>::size()>([&] <int index>
+        {
+            if ( new_shape[index] > old_shape[index] )
+            {
+                larger_shape[index] = new_shape[index];
+                larger_resizable += 1;
+            }
+        });
+        for_constexpr<1,decay<decltype(larger_shape)>::size()>([&] <int index> { larger_size *= larger_shape[index]; });
+        let larger_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and larger_resizable == 1 and new_shape[ 1] > old_shape[ 1] ) or
+                                        ( same_as<typename device::layout_type,std::layout_left > and larger_resizable == 1 and new_shape[-1] > old_shape[-1] ) );                   
+
+        return tuple(larger_shape, larger_size, larger_resizable > 0, larger_relayoutable);
+    }
+
+    constexpr void md_relayout_strict_smaller ( auto& arr, const auto& old_shape, const auto& new_shape, int_type auto... idx )
+    {   
+        using device_type   = decay<decltype(arr)>::device_type;
+        using value_type    = decay<decltype(arr)>::value_type;
+        constexpr int dim   = decay<decltype(arr)>::dimension();
+        using layout_type   = device_type::layout_type;
+        using accessor_type = device_type::template accessor_type<value_type>;
+        using mdspan        = std::mdspan<value_type,std::dextents<int,dim>,layout_type,accessor_type>;
+
+        let adjust = [] (int x) { return x - 1; };
+        [[assume(arr.ownership())]];
+
+        if constexpr ( same_as<layout_type,std::layout_right> )
+        {
+            if constexpr ( sizeof...(idx) <= decay<decltype(arr)>::dimension() - 2 )
+                for ( int i in range(new_shape[sizeof...(idx)+1]) )
+                    md_relayout_strict_smaller(arr, old_shape, new_shape, idx..., i);
+            else
+                for ( int i in range(new_shape[-1]) )
+                    mdspan(arr.data(), new_shape)[adjust(idx)..., adjust(i)] = std::move(mdspan(arr.data(), old_shape)[adjust(idx)..., adjust(i)]);
+        }
+        
+        else if constexpr ( same_as<layout_type,std::layout_left> )
+        {
+            if constexpr ( sizeof...(idx) <= decay<decltype(arr)>::dimension() - 2 )
+                for ( int i in range(new_shape[-int(sizeof...(idx))-1]) )
+                    md_relayout_strict_smaller(arr, old_shape, new_shape, i, idx...);
+            else
+                for ( int i in range(new_shape[1]) )
+                    mdspan(arr.data(), new_shape)[adjust(i), adjust(idx)...] = std::move(mdspan(arr.data(), old_shape)[adjust(i), adjust(idx)...]);
+        }
+    }
+
+    constexpr void md_relayout_strict_larger ( auto& arr, const auto& old_shape, const auto& new_shape, int_type auto... idx )
+    {
+        using device_type   = decay<decltype(arr)>::device_type;
+        using value_type    = decay<decltype(arr)>::value_type;
+        constexpr int dim   = decay<decltype(arr)>::dimension();
+        using layout_type   = device_type::layout_type;
+        using accessor_type = device_type::template accessor_type<value_type>;
+        using reference     = device_type::template reference<value_type>;
+        using mdspan        = std::mdspan<value_type,std::dextents<int,dim>,layout_type,accessor_type>;
+
+        let adjust = [] (int x) { return x - 1; };
+        [[assume(arr.ownership())]];
+
+        if constexpr ( same_as<layout_type,std::layout_right> )
+        {
+            if constexpr ( sizeof...(idx) <= decay<decltype(arr)>::dimension() - 2 )
+                for ( int i in range(old_shape[sizeof...(idx)+1], 1, -1) )
+                    md_relayout_strict_larger(arr, old_shape, new_shape, idx..., i);
+            else
+                for ( int i in range(old_shape[-1], 1, -1) )
+                {
+                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(idx)..., adjust(i));
+                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(idx)..., adjust(i));
+                    if ( old_offset != new_offset )
+                    {
+                        reference new_value = arr.data()[new_offset];
+                        reference old_value = arr.data()[old_offset];
+                        new_value = std::move(old_value);
+                        old_value = value_type();
+                    }
+                }
+        }
+
+        else if constexpr ( same_as<layout_type,std::layout_left> )
+        {
+            if constexpr ( sizeof...(idx) <= decay<decltype(arr)>::dimension() - 2 )
+                for ( int i in range(old_shape[-int(sizeof...(idx))-1], 1, -1) )
+                    md_relayout_strict_larger(arr, old_shape, new_shape, i, idx...);
+            else
+                for ( int i in range(old_shape[1], 1, -1) )
+                {
+                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(i), adjust(idx)...);
+                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(i), adjust(idx)...);
+                    if ( old_offset != new_offset )
+                    {
+                        reference new_value = arr.data()[new_offset];
+                        reference old_value = arr.data()[old_offset];
+                        new_value = std::move(old_value);
+                        old_value = value_type();
+                    }
+                }
+        }
+    }
+    
+    template < class device, int axis, int depth = 1 >
+    constexpr void md_slice_push ( auto& arr, const auto& shp, auto&& new_value )
+    {
+        static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
+        if constexpr ( axis == 1 )
+            arr[-1] = std::move(new_value);
+        else
+            for ( int i in range(shp[depth]) )
+                md_slice_push<device,axis-1,depth+1>(arr[i], shp, std::move(new_value[i]));
+    }
+
+    template < class device, int axis, int depth = 1 >
+    constexpr void md_slice_pop ( auto& arr, const auto& shp, int pos )
+    {
+        static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
+        [[assume(pos >= 1)]];
+        if constexpr ( axis == 1 )
+            device::move(arr.begin() + pos, arr.end(), arr.begin() + pos - 1);
+        else
+            for ( int i in range(shp[depth]) )
+                md_slice_pop<device,axis-1,depth+1>(arr[i], shp, pos); 
+    }
+
+    template < class device, int axis, int depth = 1 >
+    constexpr void md_slice_insert ( auto& arr, const auto& shp, int pos, auto&& new_value )
+    {
+        static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
+        [[assume(pos >= 1)]];
+        if constexpr ( axis == 1 )
+        {
+            device::move_backward(arr.begin() + pos - 1, arr.end() - 1, arr.end());
+            arr[pos] = std::move(new_value);
+        }
+        else
+            for ( int i in range(shp[depth]) )
+                md_slice_insert<device,axis-1,depth+1>(arr[i], shp, pos, std::move(new_value[i]));
+    }
+
+    template < class device, int axis, int depth = 1 >
+    constexpr void md_slice_erase ( auto& arr, const auto& shp, int pos_1, int pos_2 )
+    {
+        static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
+        [[assume(pos_1 >= 1 and pos_2 >= 1)]];
+        if constexpr ( axis == 1 )
+            device::move(arr.begin() + pos_2, arr.end(), arr.begin() + pos_1 - 1);
+        else
+            for ( int i in range(shp[depth]) )
+                md_slice_erase<device,axis-1,depth+1>(arr[i], shp, pos_1, pos_2); 
+    }
+
+    enum array_attribute
+    {
+        no_attribute,
+        rows_attribute,
+        columns_attribute,
+        transpose_attribute 
+    };
+
 
     template < auto attr >
     constexpr int view_offset_begin ( const auto& shp, int_type auto... offsets )

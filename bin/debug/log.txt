@@ -1,5 +1,22 @@
-In file included from main.cpp:1:
-[1m./generic/basic/interface.hpp:79:14: [0m[0;1;31mfatal error: [0m[1m'std/ranges_zip.hpp' file not found[0m
-   79 |     #include [0;32m"std/ranges_zip.hpp"[0m
-      | [0;1;32m             ^~~~~~~~~~~~~~~~~~~~
+[1mmain.cpp:15:19: [0m[0;1;31merror: [0m[1mstatic assertion failed[0m
+   15 |     [0;34mstatic_assert[0m(std::integral<T>);[0m
+      | [0;1;32m                  ^~~~~~~~~~~~~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__type_traits/is_constructible.h:28:68: [0m[0;1;36mnote: [0min instantiation of template class 'B<std::string>' requested here[0m
+   28 | [0;34minline[0m [0;34mconstexpr[0m [0;34mbool[0m is_constructible_v = [0;34m__is_constructible[0m(_Tp, _Args...);[0m
+      | [0;1;32m                                                                   ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__concepts/constructible.h:27:51: [0m[0;1;36mnote: [0min instantiation of variable template specialization 'std::is_constructible_v<A<std::string>, A<std::string>>' requested here[0m
+   27 | [0;34mconcept[0m constructible_from = destructible<_Tp> && is_constructible_v<_Tp, _Args...>;[0m
+      | [0;1;32m                                                  ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__concepts/constructible.h:27:51: [0m[0;1;36mnote: [0mwhile substituting template arguments into constraint expression here[0m
+   27 | [0;34mconcept[0m constructible_from = destructible<_Tp> && is_constructible_v<_Tp, _Args...>;[0m
+      | [0;1;32m                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1mmain.cpp:28:11: [0m[0;1;36mnote: [0mwhile checking the satisfaction of concept 'constructible_from<A<std::string>, A<std::string>>' requested here[0m
+   28 |     print(std::constructible_from<A<std::string>, A<std::string>>);[0m
+      | [0;1;32m          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1mmain.cpp:15:19: [0m[0;1;36mnote: [0mbecause 'std::string' does not satisfy 'integral'[0m
+   15 |     [0;34mstatic_assert[0m(std::integral<T>);[0m
+      | [0;1;32m                  ^
+[0m[1m/opt/homebrew/Cellar/llvm/19.1.7/bin/../include/c++/v1/__concepts/arithmetic.h:30:20: [0m[0;1;36mnote: [0mbecause 'is_integral_v<std::string>' evaluated to false[0m
+   30 | [0;34mconcept[0m integral = is_integral_v<_Tp>;[0m
+      | [0;1;32m                   ^
 [0m1 error generated.

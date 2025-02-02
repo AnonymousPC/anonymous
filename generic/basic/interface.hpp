@@ -75,6 +75,9 @@
 #ifndef __cpp_lib_ranges_stride // #
     #include "std/ranges_stride.hpp"
 #endif
+#ifndef __cpp_lib_ranges_zip // #
+    #include "std/ranges_zip.hpp"
+#endif
 #ifdef __cpp_lib_stacktrace // #
     #include <stacktrace>
 #else
@@ -130,8 +133,12 @@
     #include <tchar.h>
 #endif
 
-// Include [[hardware.all.intel]]
+// Include [[hardware.cpu.general]]
 #include <tbb/tbb.h>
+
+// Include [[hardware.gpu.general]]
+#define CL_TARGET_OPENCL_VERSION 300
+#include <clblast.h>
 
 // Include [[hardware.gpu.nvidia]]
 #ifdef __NVCC__
@@ -142,10 +149,6 @@
 // Include [[hardware.gpu.amd]]
 #ifdef __HIPCC__
 #endif 
-
-// Include [[hardware.all.opencl]]
-#define CL_TARGET_OPENCL_VERSION 300
-#include <clblast.h>
 
 // Include [[third-party.boost]]
 #ifndef debug_symbol

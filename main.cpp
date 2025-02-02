@@ -13,7 +13,7 @@ int main ( )
     let arr = array<float,2> { {1, 2}, {3, 4} }; 
     print(arr);
     print("======");
-    print(arr.insert<-2>(-1, array<float,2,cpu>(2, 2, [] (int i, int j) { return i*100 + j*10; })));
+    print(arr.insert<-2>(-1, array<float>(2, [] (int i ) { return i*10; })));
     print("======");
     print(arr.pop<-2>(2));
     print("======");

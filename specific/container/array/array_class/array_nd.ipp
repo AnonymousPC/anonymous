@@ -201,7 +201,7 @@ constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1
     let shp = static_array<int,dim>();
     shp[1] = init.size();
 
-    if ( not init.empty() )
+    if ( init.size() != 0 )
     {
         #if debug
             if ( not std::ranges::all_of(init | std::views::adjacent<2>, [] (const auto& adj) { const auto& [a, b] = adj; return a.shape() == b.shape(); }) )

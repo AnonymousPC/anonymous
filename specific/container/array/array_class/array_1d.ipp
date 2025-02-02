@@ -249,28 +249,28 @@ constexpr array<type,1,device>::const_pointer array<type,1,device>::data ( ) con
 template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::begin ( )
 {
-    return ownership() ? iterator(base::data()) otherwise
+    return ownership() ? iterator(base::data(), 1) otherwise
                          upper::begin();
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::begin ( ) const
 {
-    return ownership() ? const_iterator(base::data()) otherwise
+    return ownership() ? const_iterator(base::data(), 1) otherwise
                          upper::begin();
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::end ( )
 {
-    return ownership() ? iterator(base::data() + base::size()) otherwise
+    return ownership() ? iterator(base::data() + base::size(), 1) otherwise
                          upper::end();
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::end ( ) const
 {
-    return ownership() ? const_iterator(base::data() + base::size()) otherwise
+    return ownership() ? const_iterator(base::data() + base::size(), 1) otherwise
                          upper::end();
 }
 

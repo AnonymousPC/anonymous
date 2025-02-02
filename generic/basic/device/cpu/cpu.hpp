@@ -15,6 +15,8 @@ class cpu
         template < class type > using const_reference = const type&;
         template < class type > using pointer         = type*;
         template < class type > using const_pointer   = const type*;
+        template < class type > class stride_pointer;
+        template < class type > class const_stride_pointer;
 
     public: // Allocator
         template < class type > using allocator = std::allocator<type>;
@@ -155,3 +157,5 @@ class cpu
 };
 
 cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());
+
+#include "type/stride_pointer.hpp"

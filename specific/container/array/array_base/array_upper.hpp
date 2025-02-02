@@ -14,13 +14,13 @@ namespace detail
             int                   ofs = 0;
 
         public: // Typedef
-            using value_type      = device::template value_type     <type>;
-            using reference       = device::template reference      <type>;
-            using const_reference = device::template const_reference<type>;
-            using pointer         = device::template pointer        <type>;
-            using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = detail::array_iterator          <type,1,device>;
-            using const_iterator  = detail::array_const_iterator    <type,1,device>;
+            using value_type      = device::template value_type          <type>;
+            using reference       = device::template reference           <type>;
+            using const_reference = device::template const_reference     <type>;
+            using pointer         = device::template pointer             <type>;
+            using const_pointer   = device::template const_pointer       <type>;
+            using iterator        = device::template stride_pointer      <type>;
+            using const_iterator  = device::template const_stride_pointer<type>;
         
         public: // Core
             constexpr array_upper ( ) = default;
@@ -78,13 +78,13 @@ namespace detail
             int                       ofs  = 0;
 
         public: // Typedef
-            using value_type      = device::template value_type     <type>;
-            using reference       = device::template reference      <type>;
-            using const_reference = device::template const_reference<type>;
-            using pointer         = device::template pointer        <type>;
-            using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = detail::array_iterator          <type,dim,device>;
-            using const_iterator  = detail::array_const_iterator    <type,dim,device>;
+            using value_type      = device::template value_type      <type>;
+            using reference       = device::template reference       <type>;
+            using const_reference = device::template const_reference <type>;
+            using pointer         = device::template pointer         <type>;
+            using const_pointer   = device::template const_pointer   <type>;
+            using iterator        = detail::array_line_iterator      <type,dim,device>;
+            using const_iterator  = detail::array_line_const_iterator<type,dim,device>;
         
         public: // Core
             constexpr array_upper ( ) = default;
@@ -142,13 +142,13 @@ namespace detail
             array<type,max_dim,device>* ptr = nullptr;
 
         public: // Typedef
-            using value_type      = device::template value_type     <type>;
-            using reference       = device::template reference      <type>;
-            using const_reference = device::template const_reference<type>;
-            using pointer         = device::template pointer        <type>;
-            using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = detail::array_iterator          <type,max_dim,device>;
-            using const_iterator  = detail::array_const_iterator    <type,max_dim,device>;
+            using value_type      = device::template value_type      <type>;
+            using reference       = device::template reference       <type>;
+            using const_reference = device::template const_reference <type>;
+            using pointer         = device::template pointer         <type>;
+            using const_pointer   = device::template const_pointer   <type>;
+            using iterator        = detail::array_line_iterator      <type,max_dim,device>;
+            using const_iterator  = detail::array_line_const_iterator<type,max_dim,device>;
         
         public: // Core
             constexpr array_upper ( ) = default;

@@ -8,12 +8,14 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
-
 int main ( )
 {
-    array<int,1,opencl> arr;
-    boost::compute::detail::counting_iterator_base
-    array arr2 = arr;
+    print("begin");
+    let arr = array<float,2,opencl> { {1, 2}, {3, 4} }; 
+    let slice = arr[1];
+    print(array(slice));
+    slice = arr[2];
+    print(array(slice));
 }
 
 

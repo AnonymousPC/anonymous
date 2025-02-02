@@ -21,13 +21,13 @@ class array<type,dim,device>
         using lower  = detail::array_lower<type,dim,device>;
 
     public: // Typedef
-        using  value_type      = device::template value_type     <type>;
-        using  reference       = device::template reference      <type>;
-        using  const_reference = device::template const_reference<type>;
-        using  pointer         = device::template pointer        <type>;
-        using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = detail::array_iterator          <type,dim,device>;
-        using  const_iterator  = detail::array_const_iterator    <type,dim,device>;
+        using  value_type      = device::template value_type      <type>;
+        using  reference       = device::template reference       <type>;
+        using  const_reference = device::template const_reference <type>;
+        using  pointer         = device::template pointer         <type>;
+        using  const_pointer   = device::template const_pointer   <type>;
+        using  iterator        = detail::array_line_iterator      <type,dim,device>;
+        using  const_iterator  = detail::array_line_const_iterator<type,dim,device>;
         using  device_type     = device;
         struct array_tag { };
 
@@ -107,8 +107,8 @@ class array<type,dim,device>
         template < class type2, int dim2, class device2 > friend class detail::array_lower;
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
         template < class type2, int dim2, class device2 > friend class detail::tuple_upper;
-        template < class type2, int dim2, class device2 > friend class detail::array_iterator;
-        template < class type2, int dim2, class device2 > friend class detail::array_const_iterator;
+        template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
+        template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
 };
 
 /* .ipp files are explicit extern included, which instantiates

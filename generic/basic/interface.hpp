@@ -143,6 +143,8 @@
 // Include [[hardware.gpu.nvidia]]
 #ifdef __NVCC__
     #include <nvexec/stream_context.cuh>
+    #include <thrust/device_ptr.h>
+    #include <thrust/device_reference.h>
     #include <thrust/device_vector.h>
 #endif
 

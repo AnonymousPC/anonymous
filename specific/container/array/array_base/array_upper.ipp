@@ -61,25 +61,25 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::begin ( )
     {
-        return contiguous() ? iterator(data()) otherwise iterator(get_pointer(0), get_size_top()/size());
+        return contiguous() ? iterator(data(), 1) otherwise iterator(get_pointer(0), get_size_top()/size());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_iterator array_upper<type,1,device>::begin ( ) const
     {
-        return contiguous() ? const_iterator(data()) otherwise const_iterator(get_pointer(0), get_size_top()/size());
+        return contiguous() ? const_iterator(data(), 1) otherwise const_iterator(get_pointer(0), get_size_top()/size());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::end ( )
     {
-        return contiguous() ? iterator(data()+size()) otherwise iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
+        return contiguous() ? iterator(data()+size(), 1) otherwise iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_iterator array_upper<type,1,device>::end ( ) const
     {
-        return contiguous() ? const_iterator(data()+size()) otherwise const_iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
+        return contiguous() ? const_iterator(data()+size(), 1) otherwise const_iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
     }
 
     template < class type, class device >

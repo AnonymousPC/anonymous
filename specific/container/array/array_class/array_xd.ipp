@@ -473,12 +473,12 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::insert ( int n
     if constexpr ( axis == 1 or axis == -max_dim )
     {
         device::move_backward(self.begin() + abs_pos - 1, self.end() - 1, self.end());
-        self[new_pos] = std::move(new_value);
+        self[abs_pos] = std::move(new_value);
     }
     else if constexpr ( axis == -1 or axis == max_dim )
     {
         device::move_backward(self.transpose().begin() + abs_pos - 1, self.transpose().end() - 1, self.transpose().end());
-        self.transpose()[new_pos] = std::move(new_value.transpose());
+        self.transpose()[abs_pos] = std::move(new_value.transpose());
     }
     else
         if constexpr ( axis > 0 )

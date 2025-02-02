@@ -24,13 +24,13 @@ namespace detail
             array_upper<type,dim,  device> transpose_view;
 
         public: // Typedef
-            using value_type      = device::template value_type     <type>;
-            using reference       = device::template reference      <type>;
-            using const_reference = device::template const_reference<type>;
-            using pointer         = device::template pointer        <type>;
-            using const_pointer   = device::template const_pointer  <type>;
-            using iterator        = detail::array_iterator          <type,dim,device>;
-            using const_iterator  = detail::array_const_iterator    <type,dim,device>;
+            using value_type      = device::template value_type      <type>;
+            using reference       = device::template reference       <type>;
+            using const_reference = device::template const_reference <type>;
+            using pointer         = device::template pointer         <type>;
+            using const_pointer   = device::template const_pointer   <type>;
+            using iterator        = detail::array_line_iterator      <type,dim,device>;
+            using const_iterator  = detail::array_line_const_iterator<type,dim,device>;
 
         public: // Core
             constexpr array_lower ( );

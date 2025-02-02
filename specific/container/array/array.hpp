@@ -10,7 +10,7 @@ constexpr int max_dim = 3;
 #include "array_base/array_global.hpp"
 #include "array_class/inplace_array.hpp"
 #include "array_class/static_array.hpp"
-#include "array_base/array_iterator.hpp"
+#include "array_base/array_line_iterator.hpp"
 #include "array_base/array_upper.hpp"
 #include "array_base/array_info.hpp"
 #include "array_base/array_lower.hpp"
@@ -21,7 +21,6 @@ constexpr int max_dim = 3;
 // #include "array_base/array_global.ipp": this .ipp file does not to be explicit extern included.
 #include "array_class/inplace_array.ipp"
 #include "array_class/static_array.ipp"
-#include "array_base/array_iterator.ipp"
 #include "array_base/array_upper.ipp"
 #include "array_base/array_info.ipp"
 #include "array_base/array_lower.ipp"

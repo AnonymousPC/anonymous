@@ -123,7 +123,7 @@ class opencl
         static decltype(auto) partition_copy                    ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::partition_copy          (std::forward<decltype(args)>(args)..., scope.command_queue()); }
         static decltype(auto) partition_point                   ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::partition_point         (std::forward<decltype(args)>(args)..., scope.command_queue()); }
         static decltype(auto) prev_permutation                  ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::prev_permutation        (std::forward<decltype(args)>(args)..., scope.command_queue()); }
-        static decltype(auto) reduce                            ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::reduce                  (std::forward<decltype(args)>(args)..., scope.command_queue()); }
+        static decltype(auto) reduce                            ( auto&&... args ); 
         static decltype(auto) remove                            ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::remove                  (std::forward<decltype(args)>(args)..., scope.command_queue()); }
      // static decltype(auto) remove_copy                       ( auto&&... args ) { unsupported }
      // static decltype(auto) remove_copy_if                    ( auto&&... args ) { unsupported }
@@ -172,6 +172,8 @@ class opencl
 #include "container/set.hpp"
 #include "container/stack.hpp"
 #include "container/vector.hpp"
+
+#include "algorithm/reduce.hpp"
 
 opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());
 

@@ -2,7 +2,7 @@
 
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( const array& init )
     requires copyable<type>
 {
@@ -23,7 +23,7 @@ constexpr array<type,dim,device>::array ( const array& init )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( array&& init )
 {
     if ( init.ownership() ) 
@@ -43,7 +43,7 @@ constexpr array<type,dim,device>::array ( array&& init )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const array& right )
     requires copyable<type>
 {
@@ -88,7 +88,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>& array<type,dim,device>::operator = ( array&& right )
 {
     if ( self.ownership() and right.ownership() ) 
@@ -132,7 +132,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( array&& r
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( int_type auto... args )
     requires ( sizeof...(args) == dim )
     extends base  ( detail::multiply_first_until_last(args...) ),
@@ -146,7 +146,7 @@ constexpr array<type,dim,device>::array ( int_type auto... args )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( auto... args )
     requires copyable<type> and
              ( sizeof...(args) - 1 == dim ) and 
@@ -162,7 +162,7 @@ constexpr array<type,dim,device>::array ( auto... args )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( auto... args )
     requires ( sizeof...(args) - 1 == dim ) and
              detail::ints_until_last_func<type,decltype(args)...>
@@ -178,7 +178,7 @@ constexpr array<type,dim,device>::array ( auto... args )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( auto... args )
     requires ( sizeof...(args) - 1 == dim ) and
              detail::ints_until_last_func_ints<type,decltype(args)...>
@@ -194,7 +194,7 @@ constexpr array<type,dim,device>::array ( auto... args )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1,device>> init )
     requires copyable<type>
 {
@@ -215,7 +215,7 @@ constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < class type2 >
 constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
     requires convertible_to<type2,type> but ( not same_as<type,type2> )
@@ -230,7 +230,7 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < class type2 >
 constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
     requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
@@ -245,7 +245,7 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < class device2 >
 constexpr array<type,dim,device>::array ( const array<type,dim,device2>& cvt )
     requires same_as<device,cpu> or same_as<device2,cpu>
@@ -277,14 +277,14 @@ constexpr array<type,dim,device>::array ( const array<type,dim,device2>& cvt )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int array<type,dim,device>::dimension ( )
 {
     return dim;
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int array<type,dim,device>::size ( ) const
 {
     [[assume(int(base::size()) == info::size())]];
@@ -293,7 +293,7 @@ constexpr int array<type,dim,device>::size ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr static_array<int,dim> array<type,dim,device>::shape ( ) const
 {   
     return ownership() ? info::shape() otherwise
@@ -301,7 +301,7 @@ constexpr static_array<int,dim> array<type,dim,device>::shape ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int array<type,dim,device>::row ( ) const
     requires ( dim == 2 )
 {
@@ -310,7 +310,7 @@ constexpr int array<type,dim,device>::row ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int array<type,dim,device>::column ( ) const
     requires ( dim == 2 )
 {
@@ -319,7 +319,7 @@ constexpr int array<type,dim,device>::column ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr bool array<type,dim,device>::empty ( ) const
 {
     [[assume(base::empty() == info::empty())]];
@@ -328,7 +328,7 @@ constexpr bool array<type,dim,device>::empty ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::pointer array<type,dim,device>::data ( )
 {
     return ownership()  ? base::data()  otherwise
@@ -337,7 +337,7 @@ constexpr array<type,dim,device>::pointer array<type,dim,device>::data ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::const_pointer array<type,dim,device>::data ( ) const
 {
     return ownership()  ? base::data()  otherwise
@@ -346,7 +346,7 @@ constexpr array<type,dim,device>::const_pointer array<type,dim,device>::data ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::iterator array<type,dim,device>::begin ( )
 {
     return ownership() ? lower::begin() otherwise
@@ -354,7 +354,7 @@ constexpr array<type,dim,device>::iterator array<type,dim,device>::begin ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::const_iterator array<type,dim,device>::begin ( ) const
 {
     return ownership() ? lower::begin() otherwise
@@ -362,7 +362,7 @@ constexpr array<type,dim,device>::const_iterator array<type,dim,device>::begin (
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::iterator array<type,dim,device>::end ( )
 {
     return ownership() ? lower::end() otherwise
@@ -370,7 +370,7 @@ constexpr array<type,dim,device>::iterator array<type,dim,device>::end ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::const_iterator array<type,dim,device>::end ( ) const
 {
     return ownership() ? lower::end() otherwise 
@@ -378,7 +378,7 @@ constexpr array<type,dim,device>::const_iterator array<type,dim,device>::end ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim-1,device>& array<type,dim,device>::operator [] ( int pos )
 {
     #if debug
@@ -393,7 +393,7 @@ constexpr array<type,dim-1,device>& array<type,dim,device>::operator [] ( int po
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr const array<type,dim-1,device>& array<type,dim,device>::operator [] ( int pos ) const
 {
     #if debug
@@ -408,7 +408,7 @@ constexpr const array<type,dim-1,device>& array<type,dim,device>::operator [] ( 
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>& array<type,dim,device>::clear ( )
 {
     #if debug
@@ -424,7 +424,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::clear ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>& array<type,dim,device>::resize ( int_type auto... args )
     requires ( sizeof...(args) == dim )
 {
@@ -432,7 +432,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::resize ( int_type auto
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>& array<type,dim,device>::resize ( static_array<int,dim> new_shape )
 {
     #if debug
@@ -464,7 +464,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::resize ( static_array<
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int axis >
 constexpr array<type,dim,device>& array<type,dim,device>::push ( array<type,dim-1,device> new_value )
     requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
@@ -489,15 +489,15 @@ constexpr array<type,dim,device>& array<type,dim,device>::push ( array<type,dim-
             self.transpose()[-1] = std::move(new_value.transpose());
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_push<device,axis>      (self, shape(), std::move(new_value));
+            detail::md_push<device,axis>      (self, shape(), std::move(new_value));
         else
-            detail::md_slice_push<device,axis+dim+1>(self, shape(), std::move(new_value));
+            detail::md_push<device,axis+dim+1>(self, shape(), std::move(new_value));
     
     return self;
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int axis >
 constexpr array<type,dim,device>& array<type,dim,device>::pop ( int old_pos )
     requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
@@ -519,16 +519,16 @@ constexpr array<type,dim,device>& array<type,dim,device>::pop ( int old_pos )
         device::move(self.transpose().begin() + abs_pos, self.transpose().end(), self.transpose().begin() + abs_pos - 1);
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_pop<device,axis>      (self, shape(), abs_pos);
+            detail::md_pop<device,axis>      (self, shape(), abs_pos);
         else 
-            detail::md_slice_pop<device,axis+dim+1>(self, shape(), abs_pos);
+            detail::md_pop<device,axis+dim+1>(self, shape(), abs_pos);
 
     resize(new_shape);
     return self;
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int axis >
 constexpr array<type,dim,device>& array<type,dim,device>::insert ( int new_pos, array<type,dim-1,device> new_value )
     requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
@@ -562,15 +562,15 @@ constexpr array<type,dim,device>& array<type,dim,device>::insert ( int new_pos, 
     }
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_insert<device,axis>      (self, shape(), abs_pos, std::move(new_value));
+            detail::md_insert<device,axis>      (self, shape(), abs_pos, std::move(new_value));
         else
-            detail::md_slice_insert<device,axis+dim+1>(self, shape(), abs_pos, std::move(new_value));
+            detail::md_insert<device,axis+dim+1>(self, shape(), abs_pos, std::move(new_value));
     
     return self;
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int axis >
 constexpr array<type,dim,device>& array<type,dim,device>::erase ( int old_pos_1, int old_pos_2 )
     requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
@@ -598,16 +598,16 @@ constexpr array<type,dim,device>& array<type,dim,device>::erase ( int old_pos_1,
         device::move(self.transpose().begin() + abs_pos_2, self.transpose().end(), self.transpose().begin() + abs_pos_1 - 1);
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_erase<device,axis>      (self, shape(), abs_pos_1, abs_pos_2);
+            detail::md_erase<device,axis>      (self, shape(), abs_pos_1, abs_pos_2);
         else 
-            detail::md_slice_erase<device,axis+dim+1>(self, shape(), abs_pos_1, abs_pos_2);
+            detail::md_erase<device,axis+dim+1>(self, shape(), abs_pos_1, abs_pos_2);
 
     resize(new_shape);
     return self;
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,1,device>& array<type,dim,device>::flatten ( )
 {
     return ownership() ? static_cast<array<type,1,device>&>(static_cast<base&>(self)) otherwise
@@ -615,7 +615,7 @@ constexpr array<type,1,device>& array<type,dim,device>::flatten ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr const array<type,1,device>& array<type,dim,device>::flatten ( ) const
 {
     return ownership() ? static_cast<const array<type,1,device>&>(static_cast<const base&>(self)) otherwise
@@ -623,7 +623,7 @@ constexpr const array<type,1,device>& array<type,dim,device>::flatten ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>& array<type,dim,device>::transpose ( )
 {
     return ownership()                                           ? lower::transpose()            otherwise
@@ -632,7 +632,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::transpose ( )
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr const array<type,dim,device>& array<type,dim,device>::transpose ( ) const
 {
     return ownership()                                           ? lower::transpose()            otherwise
@@ -641,21 +641,21 @@ constexpr const array<type,dim,device>& array<type,dim,device>::transpose ( ) co
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr bool array<type,dim,device>::ownership ( ) const
 {
     return upper::ownership();
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr bool array<type,dim,device>::contiguous ( ) const
 {
     return ownership() or upper::contiguous();
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int array<type,dim,device>::get_size_top ( ) const
 {
     return ownership() ? info::size() otherwise
@@ -663,7 +663,7 @@ constexpr int array<type,dim,device>::get_size_top ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int axis >
 constexpr int array<type,dim,device>::get_size_axis ( ) const
 {
@@ -673,7 +673,7 @@ constexpr int array<type,dim,device>::get_size_axis ( ) const
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
 constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_rows ( int_type auto... offsets ) 
 {
@@ -684,7 +684,7 @@ constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
 constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_rows ( int_type auto... offsets) const
 {
@@ -695,7 +695,7 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
 constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_columns ( int_type auto... offsets ) 
 {
@@ -706,7 +706,7 @@ constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
 constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_columns ( int_type auto... offsets) const
 {
@@ -717,7 +717,7 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::reference array<type,dim,device>::get_value ( int_type auto... offsets )
 {
     static_assert ( sizeof...(offsets) == dim );
@@ -727,7 +727,7 @@ constexpr array<type,dim,device>::reference array<type,dim,device>::get_value ( 
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::const_reference array<type,dim,device>::get_value ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == dim );
@@ -741,7 +741,7 @@ constexpr array<type,dim,device>::const_reference array<type,dim,device>::get_va
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::pointer array<type,dim,device>::get_pointer ( int_type auto... offsets )
 {
     static_assert ( sizeof...(offsets) == dim );
@@ -751,7 +751,7 @@ constexpr array<type,dim,device>::pointer array<type,dim,device>::get_pointer ( 
 }
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::const_pointer array<type,dim,device>::get_pointer ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == dim );

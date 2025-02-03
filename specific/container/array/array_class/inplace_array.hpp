@@ -67,5 +67,3 @@ class inplace_array
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
 };
-
-#include "inplace_array.ipp"

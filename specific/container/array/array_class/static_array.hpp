@@ -55,5 +55,3 @@ class static_array
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
 };
-
-#include "static_array.ipp"

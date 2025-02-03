@@ -62,5 +62,3 @@ namespace detail
             template < int dim2 > constexpr  const std::span<array_upper<type,dim2,device>> get_columns ( int_type auto... ) const;
     };
 } // namespace detail
-
-#include "array_lower.ipp"

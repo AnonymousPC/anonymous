@@ -6,7 +6,8 @@ class array<type,max_dim,device>
             private detail::array_upper<type,1,      device>, // Make abi compatible with array<type,1>, required from as_flat().
             private detail::array_info <type,max_dim,device>,
             private detail::array_upper<type,max_dim,device>, // Never a view of higher array, only transposable.
-            private detail::array_lower<type,max_dim,device>
+            private detail::array_lower<type,max_dim,device>,
+            public  array_algo<array<type,max_dim,device>,type,max_dim,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -109,5 +110,3 @@ class array<type,max_dim,device>
         template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
         template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
 };
-
-#include "array_xd.ipp"

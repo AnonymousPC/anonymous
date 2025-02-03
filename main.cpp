@@ -8,11 +8,41 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
+
+struct my_plus
+    extends public boost::compute::plus<int>
+{
+    decltype(auto) operator() ( const auto& a, const auto& b )
+    {
+        print("my_plus::operator():", demangle(typeid(a)), demangle(typeid(b)));
+        print(exception().what());
+        return boost::compute::plus<int>::operator()(a, b);
+    }  
+};
+
 int main ( )
 {
-    let arr = array(range(10));
-    print(arr.adjacent_where([] (const auto& a, const auto& b) { return a == b - 1; }));
-    print(arr.size());
+    let arr = boost::compute::vector<int>(100000);
+    let t = std::chrono::system_clock::now();
+    for ( int i in range(3) )
+    {
+        let result = 0;
+        boost::compute::reduce(arr.begin(), arr.end(), &result);
+        print(result);
+    }
+    print(std::chrono::system_clock::now() - t);
+
+    let arr2 = array<int,1,opencl>(range(100000));
+    t = std::chrono::system_clock::now();
+    for ( int i in range(3) )
+        print(arr2.sum());
+    print(std::chrono::system_clock::now() - t);
+
+    let arr3 = array<int,1,cpu>(range(100000));
+    t = std::chrono::system_clock::now();
+    for ( int i in range(3) )
+        print(arr3.sum());
+    print(std::chrono::system_clock::now() - t);
 }
 
 //     print("begin");
@@ -27,20 +57,6 @@ int main ( )
 
 
 // TODO:
-// 1. row()限定为只有dim==2.
-// 3. array<nd>.resize().
+// 1. 所有的pointer(3个stride, 1个opencl::pointer)都要typedef 5个性质, operator+(ptrdiff_t).
 // 4. 先开启io, 然后适配线性代数。
-
-
-/*
-[[[ 1,  2,  3,  4],
-  [ 5,  6,  7,  8],
-  [ 9, 10, 11, 12]],
-  
- [[13, 14, 15, 16],
-  [17, 18, 19, 20],
-  [21, 22, 23, 24]]]
-
-[1, 13, 5, 17, 9, 21, 2, 14, 6, 18, 10, 22, 3, 15, 7, 19, 11, 23, 4, 16, 8, 20, 12, 24]
-[1, 1]
-*/
+// 5. boost::compute::plus改为, 双重继承std/boost::compute, 然后两个using operator(). 试试加上plus<void>

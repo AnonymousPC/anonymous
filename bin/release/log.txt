@@ -1,0 +1,10 @@
+[1mmain.cpp:27:15: [0m[0;1;35mwarning: [0m[1munused variable 'i' [-Wunused-variable][0m
+   27 |     [0;34mfor[0m ( [0;34mint[0m i in range([0;32m3[0m) )[0m
+      | [0;1;32m              ^
+[0m[1mmain.cpp:37:15: [0m[0;1;35mwarning: [0m[1munused variable 'i' [-Wunused-variable][0m
+   37 |     [0;34mfor[0m ( [0;34mint[0m i in range([0;32m3[0m) )[0m
+      | [0;1;32m              ^
+[0m[1mmain.cpp:43:15: [0m[0;1;35mwarning: [0m[1munused variable 'i' [-Wunused-variable][0m
+   43 |     [0;34mfor[0m ( [0;34mint[0m i in range([0;32m3[0m) )[0m
+      | [0;1;32m              ^
+[0m3 warnings generated.

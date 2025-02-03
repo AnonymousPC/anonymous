@@ -68,7 +68,7 @@ namespace detail
     };
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     class array_upper<type,dim,device>
     {
         private: // Data
@@ -196,5 +196,3 @@ namespace detail
     };
 
 } // namespace detail
-
-#include "array_upper.ipp"

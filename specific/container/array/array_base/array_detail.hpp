@@ -258,18 +258,18 @@ namespace detail
     }
     
     template < class device, int axis, int depth = 1 >
-    constexpr void md_slice_push ( auto& arr, const auto& shp, auto&& new_value )
+    constexpr void md_push ( auto& arr, const auto& shp, auto&& new_value )
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
         if constexpr ( axis == 1 )
             arr[-1] = std::move(new_value);
         else
             for ( int i in range(shp[depth]) )
-                md_slice_push<device,axis-1,depth+1>(arr[i], shp, std::move(new_value[i]));
+                md_push<device,axis-1,depth+1>(arr[i], shp, std::move(new_value[i]));
     }
 
     template < class device, int axis, int depth = 1 >
-    constexpr void md_slice_pop ( auto& arr, const auto& shp, int pos )
+    constexpr void md_pop ( auto& arr, const auto& shp, int pos )
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
         [[assume(pos >= 1)]];
@@ -277,11 +277,11 @@ namespace detail
             device::move(arr.begin() + pos, arr.end(), arr.begin() + pos - 1);
         else
             for ( int i in range(shp[depth]) )
-                md_slice_pop<device,axis-1,depth+1>(arr[i], shp, pos); 
+                md_pop<device,axis-1,depth+1>(arr[i], shp, pos); 
     }
 
     template < class device, int axis, int depth = 1 >
-    constexpr void md_slice_insert ( auto& arr, const auto& shp, int pos, auto&& new_value )
+    constexpr void md_insert ( auto& arr, const auto& shp, int pos, auto&& new_value )
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
         [[assume(pos >= 1)]];
@@ -292,11 +292,11 @@ namespace detail
         }
         else
             for ( int i in range(shp[depth]) )
-                md_slice_insert<device,axis-1,depth+1>(arr[i], shp, pos, std::move(new_value[i]));
+                md_insert<device,axis-1,depth+1>(arr[i], shp, pos, std::move(new_value[i]));
     }
 
     template < class device, int axis, int depth = 1 >
-    constexpr void md_slice_erase ( auto& arr, const auto& shp, int pos_1, int pos_2 )
+    constexpr void md_erase ( auto& arr, const auto& shp, int pos_1, int pos_2 )
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
         [[assume(pos_1 >= 1 and pos_2 >= 1)]];
@@ -304,7 +304,30 @@ namespace detail
             device::move(arr.begin() + pos_2, arr.end(), arr.begin() + pos_1 - 1);
         else
             for ( int i in range(shp[depth]) )
-                md_slice_erase<device,axis-1,depth+1>(arr[i], shp, pos_1, pos_2); 
+                md_erase<device,axis-1,depth+1>(arr[i], shp, pos_1, pos_2); 
+    }
+
+    template < class device, int axis, int depth = 1 >
+    constexpr void md_reverse ( auto& arr, const auto& shp )
+    {
+        static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
+        if constexpr ( axis == 1 )
+            device::reverse(arr.begin(), arr.end());
+        else
+            for ( int i in range(shp[depth]) )
+                md_reverse<device,axis-1,depth+1>(arr[i], shp);
+    }
+
+    template < class device, int axis, int depth = 1 >
+    constexpr void md_rotate ( auto& arr, const auto& shp, int n )
+    {
+        static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
+        if constexpr ( axis == 1 )
+            n > 0 ? device::rotate(arr.begin(), arr.end() - n, arr.end()) otherwise
+                    device::rotate(arr.begin(), arr.begin() - n, arr.end());
+        else
+            for ( int i in range(shp[depth]) )
+                md_rotate<device,axis-1,depth+1>(arr[i], shp, n);
     }
 
     enum array_attribute

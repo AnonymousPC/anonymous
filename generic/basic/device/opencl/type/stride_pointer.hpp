@@ -18,6 +18,10 @@ class opencl::stride_pointer
         constexpr stride_pointer ( ) = default;
         constexpr stride_pointer ( opencl::template pointer<type> init_ptr, int init_step ) extends ptr ( init_ptr ), step ( init_step ) { }; 
 
+    public: // Const
+        constexpr explicit stride_pointer ( const_stride_pointer<type> cvt ) extends ptr ( cvt.ptr ), step ( cvt.step ) { }
+        constexpr stride_pointer& operator = ( const_stride_pointer<type> ) = delete;
+
     public: // Operator.member
         constexpr reference operator *  ( )                   const { return *ptr;    }
         constexpr pointer   operator -> ( )                   const { return  ptr;    }
@@ -38,26 +42,15 @@ class opencl::stride_pointer
         friend constexpr stride_pointer&      operator -=  (       stride_pointer& left,       difference_type right ) { left.ptr -= left.step * right; return left; }
 
     public: // Extension
-        template < class expr >
-        struct index_expr
-        {
-            boost::compute::buffer                             buf;
-            size_t                                             idx;
-            int                                                stp;
-            boost::compute::detail::meta_kernel_variable<expr> var; 
+        type read  (              boost::compute::command_queue& ) const;
+        void write ( const type&, boost::compute::command_queue& ) const;
+        template < class index > struct index_expr;
+        template < class... expr > constexpr auto operator [] ( const boost::compute::detail::meta_kernel_variable      <expr...>& ) const;
+        template < class... expr > constexpr auto operator [] ( const boost::compute::detail::buffer_iterator_index_expr<expr...>& ) const;
+        template < class... expr > constexpr auto operator [] ( const boost::compute::detail::device_ptr_index_expr     <expr...>& ) const;
 
-            friend boost::compute::detail::meta_kernel& operator << ( boost::compute::detail::meta_kernel& left, const index_expr& right )
-            {
-                return left << left.get_buffer_identifier<type>(right.buf, boost::compute::memory_object::global_memory)
-                              << '[' << right.idx << '+' << right.stp << "*(" << right.var << ")]";
-            }                    
-        };
-
-        template < class expr >
-        constexpr index_expr<expr> operator [] ( const boost::compute::detail::meta_kernel_variable<expr>& ex )
-        {
-            return index_expr<expr>(ptr.get_buffer(), ptr.get_index(), step, ex);
-        }
+    public: // Friend
+        friend class const_stride_pointer<type>;
 };
 
 template < class type >
@@ -77,6 +70,10 @@ class opencl::const_stride_pointer
     public: // Core
         constexpr const_stride_pointer ( ) = default;
         constexpr const_stride_pointer ( opencl::template const_pointer<type> init_ptr, int init_step ) extends ptr ( init_ptr ), step ( init_step ) { }; 
+
+    public: // Const
+        constexpr const_stride_pointer ( stride_pointer<type> cvt ) extends ptr ( cvt.ptr ), step ( cvt.step ) { }
+        constexpr const_stride_pointer& operator = ( stride_pointer<type> cvt ) { ptr = cvt.ptr; step = cvt.step; return self; }
 
     public: // Operator.member
         constexpr reference operator *  ( )                   const { return *ptr;    }
@@ -98,24 +95,15 @@ class opencl::const_stride_pointer
         friend constexpr const_stride_pointer& operator -=  (       const_stride_pointer& left,       difference_type       right ) { left.ptr -= left.step * right; return left; }
 
     public: // Extension
-        template < class expr >
-        struct index_expr
-        {
-            boost::compute::buffer                             buf;
-            size_t                                             idx;
-            int                                                stp;
-            boost::compute::detail::meta_kernel_variable<expr> var; 
+        type read  (              boost::compute::command_queue& ) const;
+        void write ( const type&, boost::compute::command_queue& ) const = delete;
+        template < class index > struct index_expr;
+        template < class... expr > constexpr auto operator [] ( const boost::compute::detail::meta_kernel_variable      <expr...>& ) const;
+        template < class... expr > constexpr auto operator [] ( const boost::compute::detail::buffer_iterator_index_expr<expr...>& ) const;
+        template < class... expr > constexpr auto operator [] ( const boost::compute::detail::device_ptr_index_expr     <expr...>& ) const;
 
-            friend boost::compute::detail::meta_kernel& operator << ( boost::compute::detail::meta_kernel& left, const index_expr& right )
-            {
-                return left << left.get_buffer_identifier<type>(right.buf, boost::compute::memory_object::global_memory)
-                              << '[' << right.idx << '+' << right.stp << "*(" << right.var << ")]";
-            }                    
-        };
-
-        template < class expr >
-        constexpr index_expr<expr> operator [] ( const boost::compute::detail::meta_kernel_variable<expr>& ex )
-        {
-            return index_expr<expr>(ptr.get_buffer(), ptr.get_index(), step, ex);
-        }
+    public: // Friend
+        friend class stride_pointer<type>;
 };
+
+#include "stride_pointer.ipp"

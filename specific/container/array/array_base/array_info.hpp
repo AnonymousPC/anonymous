@@ -43,6 +43,4 @@ namespace detail
             template < int axis > constexpr int get_size_axis ( ) const;
           
     };
-} // namespace detail
-
-#include "array_info.ipp"
+}

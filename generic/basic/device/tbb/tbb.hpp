@@ -10,13 +10,13 @@ class tbb
         static execution_context_type execution_context;
 
     public: // Type
-        template < class type > using value_type      = type;
-        template < class type > using reference       = type&;
-        template < class type > using const_reference = const type&;
-        template < class type > using pointer         = type*;
-        template < class type > using const_pointer   = const type*;
-        template < class type > class stride_pointer;
-        template < class type > class const_stride_pointer;
+        template < class type > using value_type           = type;
+        template < class type > using reference            = type&;
+        template < class type > using const_reference      = const type&;
+        template < class type > using pointer              = type*;
+        template < class type > using const_pointer        = const type*;
+        template < class type > using stride_pointer       = cpu::template stride_pointer      <type>;
+        template < class type > using const_stride_pointer = cpu::template const_stride_pointer<type>;
 
     public: // Allocator
         template < class type > using allocator = std::allocator<type>;
@@ -155,8 +155,6 @@ class tbb
         constexpr static decltype(auto) unique_copy                       ( auto&&... args ) { return std::unique_copy                      (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) upper_bound                       ( auto&&... args ) { return std::upper_bound                      (std::forward<decltype(args)>(args)...); }
 };
-
-#include "type/stride_pointer.hpp"
 
 #include "container/priority_queue.hpp"
 #include "container/queue.hpp"

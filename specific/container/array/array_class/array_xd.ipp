@@ -164,7 +164,20 @@ template < class type, class device >
 constexpr array<type,max_dim,device>::array ( std::initializer_list<array<type,max_dim-1,device>> init )
     requires copyable<type>
 {
-    static_assert(false, "not coded yet. notice the shape is known till here");
+    let shp = static_array<int,max_dim>();
+    shp[1] = init.size();
+
+    if ( init.size() != 0 )
+    {
+        #if debug
+            if ( not std::ranges::all_of(init | std::views::adjacent<2>, [] (const auto& adj) { const auto& [a, b] = adj; return a.shape() == b.shape(); }) )
+                throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), init | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,max_dim-1>>>());
+        #endif
+        let sub_shp = init.begin()[0].shape();
+        detail::for_constexpr<2,max_dim>([&] <int index> { shp[index] = sub_shp[index-1]; });
+        resize(shp);
+        device::copy(init.begin(), init.end(), self./*line-wise*/begin());
+    }
 }
 
 template < class type, class device >
@@ -417,9 +430,9 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::push ( array<t
             self.transpose()[-1] = std::move(new_value.transpose());
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_push<device,axis>          (self, shape(), std::move(new_value));
+            detail::md_push<device,axis>          (self, shape(), std::move(new_value));
         else
-            detail::md_slice_push<device,axis+max_dim+1>(self, shape(), std::move(new_value));
+            detail::md_push<device,axis+max_dim+1>(self, shape(), std::move(new_value));
     
     return self;
 }
@@ -446,9 +459,9 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::pop ( int old_
         device::move(self.transpose().begin() + abs_pos, self.transpose().end(), self.transpose().begin() + abs_pos - 1);
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_pop<device,axis>          (self, shape(), abs_pos);
+            detail::md_pop<device,axis>          (self, shape(), abs_pos);
         else 
-            detail::md_slice_pop<device,axis+max_dim+1>(self, shape(), abs_pos);
+            detail::md_pop<device,axis+max_dim+1>(self, shape(), abs_pos);
 
     resize(new_shape);
     return self;
@@ -488,9 +501,9 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::insert ( int n
     }
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_insert<device,axis>          (self, shape(), abs_pos, std::move(new_value));
+            detail::md_insert<device,axis>          (self, shape(), abs_pos, std::move(new_value));
         else
-            detail::md_slice_insert<device,axis+max_dim+1>(self, shape(), abs_pos, std::move(new_value));
+            detail::md_insert<device,axis+max_dim+1>(self, shape(), abs_pos, std::move(new_value));
     
     return self;
 }
@@ -523,9 +536,9 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::erase ( int ol
         device::move(self.transpose().begin() + abs_pos_2, self.transpose().end(), self.transpose().begin() + abs_pos_1 - 1);
     else
         if constexpr ( axis > 0 )
-            detail::md_slice_erase<device,axis>          (self, shape(), abs_pos_1, abs_pos_2);
+            detail::md_erase<device,axis>          (self, shape(), abs_pos_1, abs_pos_2);
         else 
-            detail::md_slice_erase<device,axis+max_dim+1>(self, shape(), abs_pos_1, abs_pos_2);
+            detail::md_erase<device,axis+max_dim+1>(self, shape(), abs_pos_1, abs_pos_2);
 
     resize(new_shape);
     return self;

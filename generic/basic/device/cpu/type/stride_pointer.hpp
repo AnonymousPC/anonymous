@@ -9,14 +9,18 @@ class cpu::stride_pointer
 
     public: // Typedef
         using iterator_category = std::random_access_iterator_tag;
-        using value_type        = type;
-        using reference         = type&;
-        using pointer           = type*;
+        using value_type        = cpu::template value_type<type>;
+        using reference         = cpu::template reference <type>;
+        using pointer           = cpu::template pointer   <type>;
         using difference_type   = std::ptrdiff_t;
 
     public: // Core
         constexpr stride_pointer ( ) = default;
         constexpr stride_pointer ( type* init_ptr, int init_step ) extends ptr ( init_ptr ), step ( init_step ) { }; 
+
+    public: // Const
+        constexpr explicit stride_pointer ( const_stride_pointer<type> cvt ) extends ptr ( cvt.ptr ), step ( cvt.step ) { }
+        constexpr stride_pointer& operator = ( const_stride_pointer<type> ) = delete;
 
     public: // Operator.member
         constexpr reference operator *  ( )                   const { return *ptr;    }
@@ -36,6 +40,9 @@ class cpu::stride_pointer
         friend constexpr stride_pointer       operator --  (       stride_pointer& left,       int                   ) { let it = left; --left;         return it;   }
         friend constexpr stride_pointer&      operator +=  (       stride_pointer& left,       difference_type right ) { left.ptr += left.step * right; return left; }
         friend constexpr stride_pointer&      operator -=  (       stride_pointer& left,       difference_type right ) { left.ptr -= left.step * right; return left; }
+
+    public: // Friend
+        friend class const_stride_pointer<type>;
 };
     
 template < class type >
@@ -47,14 +54,18 @@ class cpu::const_stride_pointer
 
     public: // Typedef
         using iterator_category = std::random_access_iterator_tag;
-        using value_type        = type;
-        using reference         = const type&;
-        using pointer           = const type*;
+        using value_type        = cpu::template value_type     <type>;
+        using reference         = cpu::template const_reference<type>;
+        using pointer           = cpu::template const_pointer  <type>;
         using difference_type   = std::ptrdiff_t;
 
     public: // Core
         constexpr const_stride_pointer ( ) = default;
         constexpr const_stride_pointer ( const type* init_ptr, int init_step ) extends ptr ( init_ptr ), step ( init_step ) { }; 
+
+    public: // Const
+        constexpr const_stride_pointer ( stride_pointer<type> cvt ) extends ptr ( cvt.ptr ), step ( cvt.step ) { }
+        constexpr const_stride_pointer& operator = ( stride_pointer<type> cvt ) { ptr = cvt.ptr; step = cvt.step; return self; }
 
     public: // Operator.member
         constexpr reference operator *  ( )                   const { return *ptr;    }
@@ -74,4 +85,7 @@ class cpu::const_stride_pointer
         friend constexpr const_stride_pointer  operator --  (       const_stride_pointer& left,       int                         ) { let it = left; --left;         return it;   }
         friend constexpr const_stride_pointer& operator +=  (       const_stride_pointer& left,       difference_type       right ) { left.ptr += left.step * right; return left; }
         friend constexpr const_stride_pointer& operator -=  (       const_stride_pointer& left,       difference_type       right ) { left.ptr -= left.step * right; return left; }
+
+    public: // Friend
+        friend class stride_pointer<type>;
 };

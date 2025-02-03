@@ -8,21 +8,22 @@ class opencl::pointer
         size_t                 idx = 0;
 
     public: // Typedef
-        using value_type = type;
+        using iterator_category = std::contiguous_iterator_tag;
+        using value_type        = opencl::template value_type<type>;
+        using reference         = opencl::template reference <type>;
+     // using pointer           = opencl::template pointer   <type>;
+        using difference_type   = std::ptrdiff_t;
 
     public: // Core 
-        pointer ( )                            = default;
-        pointer ( const pointer& )             = default;
-        pointer& operator = ( const pointer& ) = default;
+        pointer ( ) = default;
 
-    public: // Assign
-     // pointer& operator = (       pointer<type> );
+    public: // Const
+        explicit pointer ( const_pointer<type> cvt ) extends buf ( cvt.buf ), idx ( cvt.idx ) { };
         pointer& operator = ( const_pointer<type> ) = delete;
 
-    public: // Member
-        explicit pointer ( const_pointer<type> );
-        reference<type> operator *  ( )     const;
-        reference<type> operator [] ( int ) const;
+    public: // Operator
+        reference operator *  ( )                   const { return reference(buf, idx); };
+        reference operator [] ( difference_type t ) const { return reference(buf, idx + t); };
 
     public: // Boost.compute
         pointer ( boost::compute::buffer, size_t );
@@ -30,11 +31,16 @@ class opencl::pointer
         operator  boost::compute::buffer_iterator<type> ( ) const;
         pointer ( boost::compute::detail::device_ptr<type> );
         operator  boost::compute::detail::device_ptr<type> ( ) const;
-        template < class expr > auto operator [] ( const boost::compute::detail::meta_kernel_variable<expr>& ) const;
-
-    public: // Member
+        type read  (              boost::compute::command_queue& ) const;
+        void write ( const type&, boost::compute::command_queue& ) const;
+        template < class... expr > auto operator [] ( const boost::compute::detail::meta_kernel_variable      <expr...>& ) const;
+        template < class... expr > auto operator [] ( const boost::compute::detail::buffer_iterator_index_expr<expr...>& ) const;
+        template < class... expr > auto operator [] ( const boost::compute::detail::device_ptr_index_expr     <expr...>& ) const;
         boost::compute::buffer get_buffer ( ) const;
         size_t                 get_index  ( ) const;
+
+    public: // Friend
+        friend class const_pointer<type>;
 };
 
 template < class type >
@@ -45,21 +51,22 @@ class opencl::const_pointer
         size_t                 idx = 0;
     
     public: // Typedef
-        using value_type = type;
+        using iterator_category = std::contiguous_iterator_tag;
+        using value_type        = opencl::template value_type     <type>;
+        using reference         = opencl::template const_reference<type>;
+     // using pointer           = opencl::template const_pointer  <type>;
+        using difference_type   = std::ptrdiff_t;
 
     public: // Core 
-        const_pointer ( )                                  = default;
-        const_pointer ( const const_pointer& )             = default;
-        const_pointer& operator = ( const const_pointer& ) = default;
+        const_pointer ( ) = default;
 
-    public: // Assign
-        const_pointer& operator = (       pointer<type> );
-     // const_pointer& operator = ( const_pointer<type> );
+    public: // Const
+        const_pointer ( pointer<type> cvt ) extends buf ( cvt.buf ), idx ( cvt.idx ) { };
+        const_pointer& operator = ( pointer<type> cvt ) { buf = cvt.buf; idx = cvt.idx; return self; };
 
-    public: // Member
-        const_pointer ( pointer<type> );
-        const_reference<type> operator *  ( )     const;
-        const_reference<type> operator [] ( int ) const;
+    public: // Operator
+        reference operator *  ( )                   const { return reference(buf, idx); };
+        reference operator [] ( difference_type t ) const { return reference(buf, idx + t); };
 
     public: // Boost.compute
         const_pointer ( boost::compute::buffer, size_t );
@@ -67,11 +74,16 @@ class opencl::const_pointer
         operator        boost::compute::buffer_iterator<type> ( ) const = delete;
         const_pointer ( boost::compute::detail::device_ptr<type> );
         operator        boost::compute::detail::device_ptr<type> ( ) const = delete; 
-        template < class expr > auto operator [] ( const boost::compute::detail::meta_kernel_variable<expr>& ) const;
-
-    public: // Member
+        type read  (              boost::compute::command_queue& ) const;
+        void write ( const type&, boost::compute::command_queue& ) const = delete;
+        template < class... expr > auto operator [] ( const boost::compute::detail::meta_kernel_variable      <expr...>& ) const;
+        template < class... expr > auto operator [] ( const boost::compute::detail::buffer_iterator_index_expr<expr...>& ) const;
+        template < class... expr > auto operator [] ( const boost::compute::detail::device_ptr_index_expr     <expr...>& ) const;
         boost::compute::buffer get_buffer ( ) const;
         size_t                 get_index  ( ) const;
+
+    public: // Friend
+        friend class pointer<type>;
 };
 
 template < class type > bool                                  operator ==  ( opencl::template       pointer<type>,  opencl::template       pointer<type> );
@@ -82,20 +94,20 @@ template < class type > std::partial_ordering                 operator <=> ( ope
 template < class type > std::partial_ordering                 operator <=> ( opencl::template       pointer<type>,  opencl::template const_pointer<type> );
 template < class type > std::partial_ordering                 operator <=> ( opencl::template const_pointer<type>,  opencl::template       pointer<type> );
 template < class type > std::partial_ordering                 operator <=> ( opencl::template const_pointer<type>,  opencl::template const_pointer<type> );
-template < class type > opencl::template       pointer<type>  operator  +  ( opencl::template       pointer<type>,  int                                  );
-template < class type > opencl::template const_pointer<type>  operator  +  ( opencl::template const_pointer<type>,  int                                  );
-template < class type > opencl::template       pointer<type>  operator  +  ( int,                                   opencl::template       pointer<type> );
-template < class type > opencl::template const_pointer<type>  operator  +  ( int,                                   opencl::template const_pointer<type> );
-template < class type > opencl::template       pointer<type>  operator  -  ( opencl::template       pointer<type>,  int                                  );
-template < class type > opencl::template const_pointer<type>  operator  -  ( opencl::template const_pointer<type>,  int                                  );
-template < class type > int                                   operator  -  ( opencl::template       pointer<type>,  opencl::template       pointer<type> );
-template < class type > int                                   operator  -  ( opencl::template       pointer<type>,  opencl::template const_pointer<type> );
-template < class type > int                                   operator  -  ( opencl::template const_pointer<type>,  opencl::template       pointer<type> );
-template < class type > int                                   operator  -  ( opencl::template const_pointer<type>,  opencl::template const_pointer<type> );
-template < class type > opencl::template       pointer<type>& operator  += ( opencl::template       pointer<type>&, int                                  );
-template < class type > opencl::template const_pointer<type>& operator  += ( opencl::template const_pointer<type>&, int                                  );
-template < class type > opencl::template       pointer<type>& operator  -= ( opencl::template       pointer<type>&, int                                  );
-template < class type > opencl::template const_pointer<type>& operator  -= ( opencl::template const_pointer<type>&, int                                  );
+template < class type > opencl::template       pointer<type>  operator  +  ( opencl::template       pointer<type>,  std::ptrdiff_t                       );
+template < class type > opencl::template const_pointer<type>  operator  +  ( opencl::template const_pointer<type>,  std::ptrdiff_t                       );
+template < class type > opencl::template       pointer<type>  operator  +  ( std::ptrdiff_t,                        opencl::template       pointer<type> );
+template < class type > opencl::template const_pointer<type>  operator  +  ( std::ptrdiff_t,                        opencl::template const_pointer<type> );
+template < class type > opencl::template       pointer<type>  operator  -  ( opencl::template       pointer<type>,  std::ptrdiff_t                       );
+template < class type > opencl::template const_pointer<type>  operator  -  ( opencl::template const_pointer<type>,  std::ptrdiff_t                       );
+template < class type > std::ptrdiff_t                        operator  -  ( opencl::template       pointer<type>,  opencl::template       pointer<type> );
+template < class type > std::ptrdiff_t                        operator  -  ( opencl::template       pointer<type>,  opencl::template const_pointer<type> );
+template < class type > std::ptrdiff_t                        operator  -  ( opencl::template const_pointer<type>,  opencl::template       pointer<type> );
+template < class type > std::ptrdiff_t                        operator  -  ( opencl::template const_pointer<type>,  opencl::template const_pointer<type> );
+template < class type > opencl::template       pointer<type>& operator  += ( opencl::template       pointer<type>&, std::ptrdiff_t                       );
+template < class type > opencl::template const_pointer<type>& operator  += ( opencl::template const_pointer<type>&, std::ptrdiff_t                       );
+template < class type > opencl::template       pointer<type>& operator  -= ( opencl::template       pointer<type>&, std::ptrdiff_t                       );
+template < class type > opencl::template const_pointer<type>& operator  -= ( opencl::template const_pointer<type>&, std::ptrdiff_t                       );
 template < class type > opencl::template       pointer<type>& operator  ++ ( opencl::template       pointer<type>&                                       );
 template < class type > opencl::template const_pointer<type>& operator  ++ ( opencl::template const_pointer<type>&                                       );
 template < class type > opencl::template       pointer<type>  operator  ++ ( opencl::template       pointer<type>&, int                                  );

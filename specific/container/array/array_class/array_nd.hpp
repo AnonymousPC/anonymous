@@ -1,13 +1,14 @@
 #pragma once
 
 template < class type, int dim, class device >
-    requires ( dim >= 2 )
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 class array<type,dim,device>
     extends public  device::template vector<type>,
             private detail::array_upper<type,1,  device>, // Make abi compatible with array<type,1>, required from as_flat().
             private detail::array_info <type,dim,device>,
             private detail::array_upper<type,dim,device>,
-            private detail::array_lower<type,dim,device>
+            private detail::array_lower<type,dim,device>,
+            public  array_algo<array<type,dim,device>,type,dim,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -110,5 +111,3 @@ class array<type,dim,device>
         template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
         template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
 };
-
-#include "array_nd.ipp"

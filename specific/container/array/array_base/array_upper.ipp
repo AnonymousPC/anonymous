@@ -183,7 +183,7 @@ namespace detail
 
     
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::array_upper ( array<type,dim+1,device>& init_host, array_attribute init_atr, int init_ofs )
         extends ptr1 ( &init_host ),
                 atr  ( init_atr ),
@@ -193,7 +193,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::array_upper ( const array<type,dim+1,device>& init_host, array_attribute init_atr, int init_ofs )
         extends ptr1 ( &const_cast<array_upper<type,dim+1,device>&>(init_host) ),
                 atr  ( init_atr ),
@@ -203,7 +203,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::array_upper ( array<type,dim,device>& init_host )
         extends ptr2 ( &init_host ),
                 atr  ( transpose_attribute )
@@ -212,7 +212,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::array_upper ( const array<type,dim,device>& init_host )
         extends ptr2 ( &const_cast<array_upper<type,dim,device>&>(init_host) ),
                 atr  ( transpose_attribute )
@@ -221,7 +221,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr int array_upper<type,dim,device>::size ( ) const
     {
         let s = 1;
@@ -230,7 +230,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr static_array<int,dim> array_upper<type,dim,device>::shape ( ) const
     {
         let s = static_array<int,dim>();
@@ -239,14 +239,14 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr int array_upper<type,dim,device>::row ( ) const
     {
         return get_size_axis<1>();
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr int array_upper<type,dim,device>::column ( ) const    
         requires ( dim == 2 )
     {
@@ -254,7 +254,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr bool array_upper<type,dim,device>::empty ( ) const
     {
         return get_attribute() == rows_attribute or get_attribute() == columns_attribute ? get_host<1>().empty() otherwise
@@ -262,7 +262,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::pointer array_upper<type,dim,device>::data ( )
     {
         #if debug
@@ -273,7 +273,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::const_pointer array_upper<type,dim,device>::data ( ) const
     {
         #if debug
@@ -284,7 +284,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::iterator array_upper<type,dim,device>::begin ( )
     {
         return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset()).begin() otherwise
@@ -293,7 +293,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::const_iterator array_upper<type,dim,device>::begin ( ) const
     {
         return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset()).begin() otherwise
@@ -302,7 +302,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::iterator array_upper<type,dim,device>::end ( )
     {
         return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset() + 1).begin() otherwise
@@ -311,7 +311,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::const_iterator array_upper<type,dim,device>::end ( ) const
     {
         return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset() + 1).begin() otherwise
@@ -320,7 +320,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int offset )
     {
         return get_attribute() == rows_attribute    ? static_cast<array<type,dim-1,device>&>(get_host<1>().template get_rows   <dim-1>(get_offset())[offset]) otherwise
@@ -329,7 +329,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr const array<type,dim-1,device>& array_upper<type,dim,device>::operator [] ( int offset ) const
     {
         return get_attribute() == rows_attribute    ? static_cast<const array<type,dim-1,device>&>(get_host<1>().template get_rows   <dim-1>(get_offset())[offset]) otherwise
@@ -338,7 +338,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr bool array_upper<type,dim,device>::ownership ( ) const
     {
         [[assume((ptr1 == nullptr and ptr2 == nullptr) == (atr == no_attribute))]];
@@ -346,7 +346,7 @@ namespace detail
     }
     
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr bool array_upper<type,dim,device>::contiguous ( ) const
     {
         return ( get_attribute() == rows_attribute    and same_as<typename device::layout_type,std::layout_right> ) or 
@@ -360,14 +360,14 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_attribute array_upper<type,dim,device>::get_attribute ( ) const
     {
         return atr;
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr int array_upper<type,dim,device>::get_offset ( ) const
     {
         #if debug
@@ -378,7 +378,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int attr >
     constexpr array<type,dim+1,device>& array_upper<type,dim,device>::get_host ( )
         requires ( attr == 1 )
@@ -387,7 +387,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int attr >
     constexpr const array<type,dim+1,device>& array_upper<type,dim,device>::get_host ( ) const
         requires ( attr == 1 )
@@ -396,7 +396,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int attr >
     constexpr array<type,dim,device>& array_upper<type,dim,device>::get_host ( )
         requires ( attr == 2 )
@@ -405,7 +405,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int attr >
     constexpr const array<type,dim,device>& array_upper<type,dim,device>::get_host ( ) const
         requires ( attr == 2 )
@@ -414,7 +414,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr int array_upper<type,dim,device>::get_size_top ( ) const
     {
         return get_attribute() == rows_attribute or get_attribute() == columns_attribute ? get_host<1>().get_size_top() otherwise
@@ -422,7 +422,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int axis >
     constexpr int array_upper<type,dim,device>::get_size_axis ( ) const
     {
@@ -433,7 +433,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int dim2 >
     constexpr std::span<array_upper<type,dim2,device>> array_upper<type,dim,device>::get_rows ( int_type auto... offsets )
     {
@@ -445,7 +445,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int dim2 >
     constexpr const std::span<array_upper<type,dim2,device>> array_upper<type,dim,device>::get_rows ( int_type auto... offsets ) const
     {
@@ -457,7 +457,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int dim2 >
     constexpr std::span<array_upper<type,dim2,device>> array_upper<type,dim,device>::get_columns ( int_type auto... offsets )
     {
@@ -469,7 +469,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     template < int dim2 >
     constexpr const std::span<array_upper<type,dim2,device>> array_upper<type,dim,device>::get_columns ( int_type auto... offsets ) const
     {
@@ -481,7 +481,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::reference array_upper<type,dim,device>::get_value ( int_type auto... offsets )
     {
         static_assert ( sizeof...(offsets) == dim );
@@ -494,7 +494,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::const_reference array_upper<type,dim,device>::get_value ( int_type auto... offsets ) const
     {
         static_assert ( sizeof...(offsets) == dim );
@@ -507,7 +507,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::pointer array_upper<type,dim,device>::get_pointer ( int_type auto... offsets )
     {
         static_assert ( sizeof...(offsets) == dim );
@@ -520,7 +520,7 @@ namespace detail
     }
 
     template < class type, int dim, class device >
-        requires ( dim >= 2 )
+        requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::const_pointer array_upper<type,dim,device>::get_pointer ( int_type auto... offsets ) const
     {
         static_assert ( sizeof...(offsets) == dim );

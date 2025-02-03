@@ -7,6 +7,9 @@ class opencl::reference
         boost::compute::buffer buf = boost::compute::buffer();
         size_t                 idx = 0;
 
+    public: // Typedef
+        using value_type = type;
+
     public: // Core 
         reference ( )                             = delete;
         reference ( const reference& )            = default;
@@ -38,6 +41,9 @@ class opencl::const_reference
     private: // Data
         boost::compute::buffer buf = boost::compute::buffer();
         size_t                 idx = 0;
+
+    public: // Typedef
+        using value_type = type;
 
     public: // Core
         const_reference ( )                                   = delete;

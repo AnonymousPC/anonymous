@@ -1,26 +1,6 @@
 #pragma once
 
 template < class type >
-opencl::pointer<type>::pointer ( opencl::template const_pointer<type> cvt )
-    extends buf ( cvt.get_buffer() ),
-            idx ( cvt.get_index() )
-{
-
-}
-
-template < class type > 
-opencl::template reference<type> opencl::pointer<type>::operator * ( ) const
-{
-    return opencl::template reference<type>(get_buffer(), get_index());
-}
-
-template < class type > 
-opencl::template reference<type> opencl::pointer<type>::operator [] ( int ofs ) const
-{
-    return opencl::template reference<type>(get_buffer(), get_index() + ofs);
-}
-
-template < class type >
 opencl::pointer<type>::pointer ( boost::compute::buffer cvt_buf, size_t cvt_idx )
     extends buf ( cvt_buf ),
             idx ( cvt_idx )
@@ -55,8 +35,34 @@ opencl::pointer<type>::operator boost::compute::detail::device_ptr<type> ( ) con
 }
 
 template < class type >
-template < class expr >
-auto opencl::pointer<type>::operator [] ( const boost::compute::detail::meta_kernel_variable<expr>& idx ) const
+type opencl::pointer<type>::read ( boost::compute::command_queue& cmd_queue ) const
+{
+    return boost::compute::detail::read_single_value<type>(get_buffer(), get_index(), cmd_queue);
+}
+
+template < class type >
+void opencl::pointer<type>::write ( const type& val, boost::compute::command_queue& cmd_queue ) const
+{
+    boost::compute::detail::write_single_value<type>(val, get_buffer(), get_index(), cmd_queue);
+}
+
+template < class type >
+template < class... expr >
+auto opencl::pointer<type>::operator [] ( const boost::compute::detail::meta_kernel_variable<expr...>& idx ) const
+{
+    return boost::compute::buffer_iterator<type>(get_buffer(), get_index())[idx];
+}
+
+template < class type >
+template < class... expr >
+auto opencl::pointer<type>::operator [] ( const boost::compute::detail::buffer_iterator_index_expr<expr...>& idx ) const
+{
+    return boost::compute::buffer_iterator<type>(get_buffer(), get_index())[idx];
+}
+
+template < class type >
+template < class... expr >
+auto opencl::pointer<type>::operator [] ( const boost::compute::detail::device_ptr_index_expr<expr...>& idx ) const
 {
     return boost::compute::buffer_iterator<type>(get_buffer(), get_index())[idx];
 }
@@ -76,31 +82,6 @@ size_t opencl::pointer<type>::get_index ( ) const
 
 
 
-template < class type >
-opencl::const_pointer<type>::const_pointer ( opencl::template pointer<type> cvt )
-    extends buf ( cvt.get_buffer() ),
-            idx ( cvt.get_index() )
-{
-
-}
-
-template < class type >
-opencl::template const_pointer<type>& opencl::const_pointer<type>::operator = ( opencl::template pointer<type> cvt )
-{
-    return self = opencl::template const_pointer<type>(cvt);
-}
-
-template < class type > 
-opencl::template const_reference<type> opencl::const_pointer<type>::operator * ( ) const
-{
-    return opencl::template const_reference<type>(get_buffer(), get_index());
-}
-
-template < class type > 
-opencl::template const_reference<type> opencl::const_pointer<type>::operator [] ( int ofs ) const
-{
-    return opencl::template const_reference<type>(get_buffer(), get_index() + ofs);
-}
 
 template < class type >
 opencl::const_pointer<type>::const_pointer ( boost::compute::buffer cvt_buf, size_t cvt_idx )
@@ -125,8 +106,28 @@ opencl::const_pointer<type>::const_pointer ( boost::compute::detail::device_ptr<
 }
 
 template < class type >
-template < class expr >
-auto opencl::const_pointer<type>::operator [] ( const boost::compute::detail::meta_kernel_variable<expr>& idx ) const
+type opencl::const_pointer<type>::read ( boost::compute::command_queue& cmd_queue ) const
+{
+    return boost::compute::detail::read_single_value<type>(get_buffer(), get_index(), cmd_queue);
+}
+
+template < class type >
+template < class... expr >
+auto opencl::const_pointer<type>::operator [] ( const boost::compute::detail::meta_kernel_variable<expr...>& idx ) const
+{
+    return boost::compute::buffer_iterator<type>(get_buffer(), get_index())[idx];
+}
+
+template < class type >
+template < class... expr >
+auto opencl::const_pointer<type>::operator [] ( const boost::compute::detail::buffer_iterator_index_expr<expr...>& idx ) const
+{
+    return boost::compute::buffer_iterator<type>(get_buffer(), get_index())[idx];
+}
+
+template < class type >
+template < class... expr >
+auto opencl::const_pointer<type>::operator [] ( const boost::compute::detail::device_ptr_index_expr<expr...>& idx ) const
 {
     return boost::compute::buffer_iterator<type>(get_buffer(), get_index())[idx];
 }
@@ -203,89 +204,89 @@ std::partial_ordering operator <=> ( opencl::template const_pointer<type> left, 
 }
 
 template < class type >
-opencl::template pointer<type> operator + ( opencl::template pointer<type> left, int right )
+opencl::template pointer<type> operator + ( opencl::template pointer<type> left, std::ptrdiff_t right )
 {
     return opencl::template pointer<type>(left.get_buffer(), left.get_index() + right);
 }
 
 template < class type >
-opencl::template const_pointer<type> operator + ( opencl::template const_pointer<type> left, int right )
+opencl::template const_pointer<type> operator + ( opencl::template const_pointer<type> left, std::ptrdiff_t right )
 {
     return opencl::template const_pointer<type>(left.get_buffer(), left.get_index() + right);
 }
 
 template < class type >
-opencl::template pointer<type> operator + ( int left, opencl::template pointer<type> right )
+opencl::template pointer<type> operator + ( std::ptrdiff_t left, opencl::template pointer<type> right )
 {
     return opencl::template pointer<type>(right.get_buffer(), left + right.get_index());
 }
 
 template < class type >
-opencl::template const_pointer<type> operator + ( int left, opencl::template const_pointer<type> right )
+opencl::template const_pointer<type> operator + ( std::ptrdiff_t left, opencl::template const_pointer<type> right )
 {
     return opencl::template const_pointer<type>(right.get_buffer(), left + right.get_index());
 }
 
 template < class type >
-opencl::template pointer<type> operator - ( opencl::template pointer<type> left, int right )
+opencl::template pointer<type> operator - ( opencl::template pointer<type> left, std::ptrdiff_t right )
 {
     return opencl::template pointer<type>(left.get_buffer(), left.get_index() - right);
 }
 
 template < class type >
-opencl::template const_pointer<type> operator - ( opencl::template const_pointer<type> left, int right )
+opencl::template const_pointer<type> operator - ( opencl::template const_pointer<type> left, std::ptrdiff_t right )
 {
     return opencl::template const_pointer<type>(left.get_buffer(), left.get_index() - right);
 }
 
 template < class type >
-int operator - ( opencl::template pointer<type> left, opencl::template pointer<type> right )
+std::ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template pointer<type> right )
 {
     [[assume(left.get_buffer() == right.get_buffer())]];
     return left.get_index() - right.get_index();
 }
 
 template < class type >
-int operator - ( opencl::template pointer<type> left, opencl::template const_pointer<type> right )
+std::ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template const_pointer<type> right )
 {
     [[assume(left.get_buffer() == right.get_buffer())]];
     return left.get_index() - right.get_index();
 }
 
 template < class type >
-int operator - ( opencl::template const_pointer<type> left, opencl::template pointer<type> right )
+std::ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template pointer<type> right )
 {
     [[assume(left.get_buffer() == right.get_buffer())]];
     return left.get_index() - right.get_index();
 }
 
 template < class type >
-int operator - ( opencl::template const_pointer<type> left, opencl::template const_pointer<type> right )
+std::ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template const_pointer<type> right )
 {
     [[assume(left.get_buffer() == right.get_buffer())]];
     return left.get_index() - right.get_index();
 }
 
 template < class type >
-opencl::template pointer<type>& operator += ( opencl::template pointer<type>& left, int right )
+opencl::template pointer<type>& operator += ( opencl::template pointer<type>& left, std::ptrdiff_t right )
 {
     return left = left + right;
 }
 
 template < class type >
-opencl::template const_pointer<type>& operator += ( opencl::template const_pointer<type>& left, int right )
+opencl::template const_pointer<type>& operator += ( opencl::template const_pointer<type>& left, std::ptrdiff_t right )
 {
     return left = left + right;
 }
 
 template < class type >
-opencl::template pointer<type>& operator -= ( opencl::template pointer<type>& left, int right )
+opencl::template pointer<type>& operator -= ( opencl::template pointer<type>& left, std::ptrdiff_t right )
 {
     return left = left - right;
 }
 
 template < class type >
-opencl::template const_pointer<type>& operator -= ( opencl::template const_pointer<type>& left, int right )
+opencl::template const_pointer<type>& operator -= ( opencl::template const_pointer<type>& left, std::ptrdiff_t right )
 {
     return left = left - right;
 }

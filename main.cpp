@@ -7,6 +7,7 @@
 // #include "specific/neural/interface.hpp"
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
+#include <boost/compute/functional/operator.hpp>
 using namespace ap;
 
 struct my_plus
@@ -22,27 +23,12 @@ struct my_plus
 
 int main ( )
 {
-    let arr = boost::compute::vector<int>(100000);
-    let t = std::chrono::system_clock::now();
-    for ( int i in range(3) )
-    {
-        let result = 0;
-        boost::compute::reduce(arr.begin(), arr.end(), &result);
-        print(result);
-    }
-    print(std::chrono::system_clock::now() - t);
+    let context = boost::compute::system::default_context();
+    let c2 = context;
+    print(context == c2);
 
-    let arr2 = array<int,1,opencl>(range(100000));
-    t = std::chrono::system_clock::now();
-    for ( int i in range(3) )
-        print(arr2.sum());
-    print(std::chrono::system_clock::now() - t);
-
-    let arr3 = array<int,1,cpu>(range(100000));
-    t = std::chrono::system_clock::now();
-    for ( int i in range(3) )
-        print(arr3.sum());
-    print(std::chrono::system_clock::now() - t);
+//    let arr = array<int,1,opencl>(range(100000));
+  //  print(opencl::reduce(arr.begin(), arr.end(), 0, typename opencl::template plus<void>()));
 }
 
 //     print("begin");

@@ -10,7 +10,7 @@ namespace detail
 
 
 template < class type >
-class opencl::plus<type>
+class opencl::plus
     extends public boost::compute::plus<type>,
             public std::plus<type>
 {

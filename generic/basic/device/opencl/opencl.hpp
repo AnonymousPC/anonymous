@@ -29,7 +29,7 @@ class opencl
         template < class type > class accessor_type;
 
     public: // Operator
-        template < class type = void > using plus          = boost::compute::plus         <type>;
+        template < class type = void > class plus;
         template < class type = void > using minus         = boost::compute::minus        <type>;
         template < class type = void > using multiplies    = boost::compute::multiplies   <type>;
         template < class type = void > using divides       = boost::compute::divides      <type>;
@@ -163,6 +163,8 @@ class opencl
 #include "type/pointer.hpp"
 #include "type/stride_pointer.hpp"
 #include "type/type_traits.hpp"
+
+#include "operator/operator.hpp"
 
 #include "memory/accessor_type.hpp"
 

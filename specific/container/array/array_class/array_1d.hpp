@@ -8,7 +8,7 @@ class array<type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
-      //  static_assert ( default_initializable<type> and ( movable<type> or string_type<type> ) );
+        static_assert ( default_initializable<type> and ( movable<type> or string_type<type> ) );
         static_assert ( not ( same_as<type,bool> and same_as<device,cpu> ) ); // std::vector<bool>
 
     public: // Base

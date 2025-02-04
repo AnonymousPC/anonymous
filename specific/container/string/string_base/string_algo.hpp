@@ -71,7 +71,7 @@ class string_algo
 
         constexpr container&  encode          ( code, code )                  requires same_as<type,char>;
         constexpr container&  format          ( auto&&... f )                 requires ( ( std::formattable<decay<decltype(f)>,char> or constructible_from<container,decay<decltype(f)>> ) and ... );
-        constexpr container&  join            ( input_range auto&& r )        requires string_type<range_value<decltype(r)>>;
+        constexpr container&  join            ( string_type auto&&... );
 
     public: // Array
         constexpr bool        contains        ( view )                  const;

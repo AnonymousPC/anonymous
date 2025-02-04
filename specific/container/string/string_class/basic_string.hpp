@@ -86,7 +86,17 @@ class basic_string
 
     public: // Algo
         using array_algo ::partition;
-        using string_algo::partition;
+
+        using string_algo::partition,
+              string_algo::contains,
+              string_algo::count,
+              string_algo::exist,
+              string_algo::find,
+              string_algo::none,
+              string_algo::remove,
+              string_algo::replace,
+              string_algo::right_find,
+              string_algo::where;
 };
 
 template < char_type type >               basic_string ( type )                           -> basic_string<type>;

@@ -23,13 +23,11 @@ class basic_string_view
         struct string_tag { };
 
     public: // Core
+        constexpr basic_string_view ( )                                       = delete;
         constexpr basic_string_view ( const basic_string_view&  )             = default;
         constexpr basic_string_view (       basic_string_view&& )             = default;
-
-    private: // Core
-        constexpr basic_string_view ( )                                       = default;
-        constexpr basic_string_view& operator = ( const basic_string_view&  ) = default;
-        constexpr basic_string_view& operator = (       basic_string_view&& ) = default;
+        constexpr basic_string_view& operator = ( const basic_string_view&  ) = delete;
+        constexpr basic_string_view& operator = (       basic_string_view&& ) = delete;
 
     public: // Constructor
         constexpr basic_string_view ( const_reference );

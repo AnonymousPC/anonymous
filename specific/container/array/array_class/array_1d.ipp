@@ -358,6 +358,7 @@ constexpr array<type,1,device>& array<type,1,device>::pop ( int old_pos )
     #endif
 
     base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 otherwise base::begin() + old_pos + base::size());
+    return self;
 }
 
 template < class type, class device >
@@ -371,6 +372,7 @@ constexpr array<type,1,device>& array<type,1,device>::insert ( int new_pos, type
     #endif
     
     base::insert(new_pos >= 0 ? base::begin() + new_pos - 1 otherwise base::begin() + new_pos + base::size(), std::move(new_value));
+    return self;
 }
 
 template < class type, class device >
@@ -392,6 +394,7 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int
     #endif
 
     base::erase(base::begin() + abs_pos_1 - 1, base::begin() + abs_pos_2 - 1);
+    return self;
 }
 
 template < class type, class device >

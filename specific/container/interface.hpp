@@ -201,13 +201,13 @@ namespace ap
             return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else if constexpr ( not is_void<value_type> )
-            return char_type<type> or 
-                   char_type<remove_extent<type>> or
-                   char_type<remove_pointer<type>>;
+            return same_as<remove_cvref<type>,value_type> or
+                   same_as<remove_extent<remove_cvref<type>>,value_type> or
+                   same_as<remove_pointer<remove_cvref<type>>,value_type>;
         else
-            return same_as<remove_cv<type>,value_type> or
-                   same_as<remove_cv<remove_extent<type>>,value_type> or
-                   same_as<remove_cv<remove_pointer<type>>,value_type>;
+            return char_type<remove_cvref<type>> or 
+                   char_type<remove_extent<remove_cvref<type>>> or
+                   char_type<remove_pointer<remove_cvref<type>>>;
     } ();
 
     namespace detail

@@ -325,34 +325,61 @@ class terminate_signal
 
 
 
+namespace detail
+{
+    enum { implicit_mode, explicit_mode, default_mode };
+
+    constexpr auto get_format_mode ( const char* str )
+    {
+        let b = str;
+        let e = str;
+        while ( *e != '\0' )
+            e++;
+
+        while ( true )
+        {
+            let p = std::find(b, e, '{');
+
+            if ( p == e )
+                return default_mode;
+            else if ( *(p+1) >= '0' and *(p+1) <= '9' )
+                return explicit_mode;
+            else if ( p+1 < e and *(p+1) != '{' )
+                return implicit_mode;
+            else
+                { b = p + 2; continue; }
+        }
+    }
+
+    constexpr decltype(auto) make_formattable ( auto&& f )
+    {
+        if constexpr ( std::formattable<decay<decltype(f)>,char> )
+            return f;
+        else if constexpr ( printable<decltype(f)> )
+            return (std::stringstream()<<f).str();
+        else if constexpr ( same_as<decltype(f),const std::type_info&> )
+            return demangle(f);
+        else
+            return std::format("[[{} object at {}]]", demangle(typeid(f)), static_cast<const void*>(&f));
+    } 
+}
 
 template < class... types >
 class exception::format_string
 {
-    private: // Mode
-        enum class mode { implicit_mode, explicit_mode, default_mode };
-
     private: // Data
         const char* str = nullptr;
 
     public: // Core
         consteval format_string ( const char* );
-
-    public: // Member
         constexpr std::string format ( types&&... ) const;
-        constexpr mode        parse  ( )            const;
-
-    private: // Detail
-        constexpr static decltype(auto) make_const_ref   ( const auto& );
-        constexpr static decltype(auto) make_formattable ( const auto& );
-        constexpr static decltype(auto) make_format_args ( const auto&... );
 };
 
 template < class... types >
 consteval exception::format_string<types...>::format_string ( const char* init_str )
     extends str ( init_str )
 {
-    if ( parse() == mode::explicit_mode )
+    if ( detail::get_format_mode(str) == detail::explicit_mode )
         /*check-only*/ (void) std::format_string<const char*,conditional<std::formattable<types,char>,types,std::string>...>(std::string("{0}") + str);
     else
         /*check-only*/ (void) std::format_string<const char*,conditional<std::formattable<types,char>,types,std::string>...>(std::string("{}" ) + str);
@@ -361,51 +388,15 @@ consteval exception::format_string<types...>::format_string ( const char* init_s
 template < class... types >
 constexpr std::string exception::format_string<types...>::format ( types&&... args ) const
 {
-    switch ( parse() )
+    switch ( detail::get_format_mode(str) )
     {
-        case mode::implicit_mode:
-            return std::format(std::runtime_format(str), make_formattable(args)...);
-        case mode::explicit_mode:
-            return std::format(std::runtime_format(std::string("{0}") + str), "", make_formattable(args)...);
-        case mode::default_mode:
+        case detail::explicit_mode:
+            return std::format(std::runtime_format(std::string("{0}") + str), "", detail::make_formattable(args)...);
+        case detail::implicit_mode:
+            return std::format(std::runtime_format(                     str),     detail::make_formattable(args)...);
+        case detail::default_mode:
             return str;
         default:
             return str;
     }
 }
-
-template < class... types >
-constexpr exception::format_string<types...>::mode exception::format_string<types...>::parse ( ) const
-{
-    let b = str;
-    let e = str;
-    while ( *e != '\0' )
-        e++;
-
-    while ( true )
-    {
-        let p = std::find(b, e, '{');
-
-        if ( p == e )
-            return mode::default_mode;
-        else if ( *(p+1) >= '0' and *(p+1) <= '9' )
-            return mode::explicit_mode;
-        else if ( p+1 < e and *(p+1) != '{' )
-            return mode::implicit_mode;
-        else
-            { b = p + 2; continue; }
-    }
-}
-
-template < class... types >
-constexpr decltype(auto) exception::format_string<types...>::make_formattable ( const auto& args )
-{
-    if constexpr ( std::formattable<decay<decltype(args)>,char> ) // std::formattable
-        return args;
-    else if constexpr ( printable<decltype(args)> )
-        return (std::stringstream()<<args).str();
-    else if constexpr ( same_as<decltype(args),const std::type_info&> )
-        return demangle(args);
-    else
-        return std::format("[[{} object at {}]]", demangle(typeid(args)), static_cast<const void*>(&args));
-} 

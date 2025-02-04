@@ -104,5 +104,3 @@ class basic_regex
               string_algo::all,
               string_algo::match;
 };
-
-#include "regex.ipp"

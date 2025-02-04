@@ -7,7 +7,7 @@ class basic_string_view
     private: // Precondition
         static_assert ( char_type<type> );
 
-    private: // Typedef
+    private: // Base
         using base   = device::template basic_string_view<type>;
         using string = basic_string<type,device>; 
 
@@ -19,8 +19,6 @@ class basic_string_view
         using  const_pointer   = device::template const_pointer  <type>;
         using  iterator        = base::iterator;
         using  const_iterator  = base::const_iterator;
-     // using  array_algo      = array_algo <basic_string_view,type>;
-     // using  string_algo     = string_algo<basic_string_view,type>;
         using  device_type     = device;  
         struct string_tag { };
 
@@ -51,88 +49,10 @@ class basic_string_view
         constexpr basic_string_view operator [] ( int, int ) const;
 
     public: // Memory
-        constexpr static bool ownership ( );
-
-    public: // Algo
-        // using array_algo::clear,
-        //       array_algo::erase,
-        //    // array_algo::insert,
-        //       array_algo::pop,
-        //    // array_algo::push,
-
-        //       array_algo::adjacent_find,
-        //       array_algo::adjacent_where,
-        //       array_algo::all,
-        //    // array_algo::contains,
-        //    // array_algo::count,
-        //       array_algo::each,
-        //    // array_algo::exist,
-        //       array_algo::fill,
-        //    // array_algo::find,
-        //       array_algo::is_partitioned,
-        //       array_algo::is_sorted,
-        //       array_algo::max,
-        //       array_algo::min,
-        //       array_algo::next_permutation,
-        //    // array_algo::none,
-        //       array_algo::partition,
-        //       array_algo::prev_permutation,
-        //       array_algo::product,
-        //    // array_algo::remove,
-        //    // array_algo::replace,
-        //       array_algo::reverse,
-        //       array_algo::right_adjacent_find,
-        //    // array_algo::right_find,
-        //       array_algo::rotate,
-        //       array_algo::sort,
-        //       array_algo::sum,
-        //       array_algo::transform,
-        //       array_algo::unique;
-        //    // array_algo::where;
-
-        // using string_algo::insert,
-        //       string_algo::push,
-
-        //       string_algo::begins_with,
-        //       string_algo::capitalize,
-        //       string_algo::center,
-        //       string_algo::ends_with,
-        //       string_algo::expand_tabs,
-        //       string_algo::format,
-        //       string_algo::join,
-        //       string_algo::left_justify,
-        //       string_algo::lower,
-        //       string_algo::left_strip,
-        //       string_algo::partition,
-        //       string_algo::right_justify,
-        //       string_algo::right_partition,
-        //       string_algo::right_split,
-        //       string_algo::right_strip,
-        //       string_algo::split,
-        //       string_algo::split_lines,
-        //       string_algo::starts_with,
-        //       string_algo::strip,
-        //       string_algo::swap_case,
-        //       string_algo::title,
-        //       string_algo::upper,
-        //       string_algo::zero_fill,
-
-        //       string_algo::contains,
-        //       string_algo::count,
-        //       string_algo::exist,
-        //       string_algo::find,
-        //       string_algo::none,
-        //       string_algo::replace,
-        //       string_algo::remove,
-        //       string_algo::right_find,
-        //       string_algo::where,
-
-        //       string_algo::all,
-        //       string_algo::match;
+        constexpr static bool ownership  ( );
+        constexpr static bool contiguous ( );
 };
 
 template < char_type type >               basic_string_view ( type )                      -> basic_string_view<type>;
 template < char_type type >               basic_string_view ( const type* )               -> basic_string_view<type>;
 template < char_type type, class device > basic_string_view ( basic_string<type,device> ) -> basic_string_view<type,device>;
-
-#include "basic_string_view.ipp"

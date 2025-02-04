@@ -50,7 +50,8 @@ class opencl::vector
         }
 
         vector ( auto&&... args )
-            requires constructible_from<base,decltype(args)...,boost::compute::command_queue&>
+            requires constructible_from<base,decltype(args)...,boost::compute::command_queue&> but
+                     ( not constructible_from<base,decltype(args)...,const boost::compute::context&> )
             extends base ( std::forward<decltype(args)>(args)..., opencl::execution_context.command_queue() )
         {
             opencl::execution_context.command_queue().finish();

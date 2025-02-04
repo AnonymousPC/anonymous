@@ -3,16 +3,16 @@
 template < class type, class device >
 class array<type,max_dim,device>
     extends public  device::template vector<type>,
-            private detail::array_upper<type,1,      device>, // Make abi compatible with array<type,1>, required from as_flat().
+            private detail::array_upper<type,1,      device>, // Make abi compatible with array<type,1,device>, required from flatten().
             private detail::array_info <type,max_dim,device>,
-            private detail::array_upper<type,max_dim,device>, // Never a view of higher array, only transposable.
+            private detail::array_upper<type,max_dim,device>, // Only transposable.
             private detail::array_lower<type,max_dim,device>,
             public  array_algo<array<type,max_dim,device>,type,max_dim,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> and movable<type> );
-        static_assert ( not same_as<type,bool> );
+        static_assert ( not ( same_as<type,bool> and same_as<device,cpu> ) ); // std::vector<bool>
 
     private: // Base
         using base   = device::template vector<type>;
@@ -52,7 +52,7 @@ class array<type,max_dim,device>
         template < class type2 > constexpr explicit array ( const array<type2,max_dim,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
 
     public: // Conversion (device)
-        template < class device2 > constexpr array ( const array<type,max_dim,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
+        template < class device2 > constexpr explicit array ( const array<type,max_dim,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
 
     public: // Member
         constexpr static int                           dimension     ( );

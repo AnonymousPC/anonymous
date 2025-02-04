@@ -2,15 +2,15 @@
 
 #define result_type invoke_result<decltype(op),type>
 
-template < class array_type,
+template < class container,
            class type,
            class type,
            int   dim >
     requires ( dim == 1 )
-class array_algo<array_type,type,type,dim>
+class array_algo<container,type,type,dim>
 {
     private: // Traits
-        constexpr static const bool is_view = not requires { &array_type::resize; } and not requires { &array_type::template resize<int>; };
+        constexpr static const bool is_view = not requires { &container::resize; } and not requires { &container::template resize<int>; };
 
     private: // Abbreviation
         constexpr void           row         ( ) = delete;
@@ -44,12 +44,12 @@ class array_algo<array_type,type,type,dim>
         template < class type2 > constexpr const auto     as_type     ( )                             const requires ( not std::same_as<type,type2> ) and std::convertible_to<type,type2>;
 
     public: // Memory operation
-        constexpr array_type& clear   ( )                                                                                                                                            requires ( not is_view );
-        constexpr array_type& erase   ( int, int )                                                                                                                                   requires ( not is_view );
-        constexpr array_type& insert  ( aux::array_type_dim_range<int,0,1> auto, aux::array_type_dim_range<type,0,1> auto, aux::array_type_dim_range<type,0,1> auto... ) requires ( not is_view );
-        constexpr array_type& push    (                                          aux::array_type_dim_range<type,0,1> auto, aux::array_type_dim_range<type,0,1> auto... ) requires ( not is_view );
-        constexpr array_type& pop     ( )                                                                                                                                            requires ( not is_view );
-        constexpr array_type& pop     ( aux::array_type_dim_range<int,0,1> auto, aux::array_type_dim_range<int,0,1> auto... )                                                        requires ( not is_view );
+        constexpr container& clear   ( )                                                                                                                                            requires ( not is_view );
+        constexpr container& erase   ( int, int )                                                                                                                                   requires ( not is_view );
+        constexpr container& insert  ( aux::container_dim_range<int,0,1> auto, aux::container_dim_range<type,0,1> auto, aux::container_dim_range<type,0,1> auto... ) requires ( not is_view );
+        constexpr container& push    (                                          aux::container_dim_range<type,0,1> auto, aux::container_dim_range<type,0,1> auto... ) requires ( not is_view );
+        constexpr container& pop     ( )                                                                                                                                            requires ( not is_view );
+        constexpr container& pop     ( aux::container_dim_range<int,0,1> auto, aux::container_dim_range<int,0,1> auto... )                                                        requires ( not is_view );
 
     public: // Linear algorithm
         constexpr       int            adjacent_find       (                                        ) const requires equalable<type>;
@@ -74,32 +74,32 @@ class array_algo<array_type,type,type,dim>
         constexpr const type&  max                 (       relation    <type,type> auto  ) const;
         constexpr const type&  min                 (                                        ) const requires comparable<type>;
         constexpr const type&  min                 (       relation    <type,type> auto  ) const;
-        constexpr       array_type&    next_permutation    (                                        )       requires comparable<type>;
-        constexpr       array_type&    next_permutation    (       relation    <type,type> auto  );
+        constexpr       container&    next_permutation    (                                        )       requires comparable<type>;
+        constexpr       container&    next_permutation    (       relation    <type,type> auto  );
         constexpr       bool           none                ( const equalable_to<type> auto& ) const;
         constexpr       bool           none                (       predicate   <type>auto  ) const;
-        constexpr       array_type&    partial_sort        ( int                                    )       requires comparable<type>;
-        constexpr       array_type&    partial_sort        ( int,  relation    <type,type> auto  );
-     // constexpr       array_type&    partition           (                                        );
-        constexpr       array_type&    partition           (       predicate   <type>auto  );
-        constexpr       array_type&    prev_permutation    (                                        )       requires comparable<type>;
-        constexpr       array_type&    prev_permutation    (       relation    <type,type> auto  );
-        constexpr       array_type&    remove              ( const equalable_to<type> auto& )       requires ( not is_view );
-        constexpr       array_type&    remove              (       predicate   <type>auto  )       requires ( not is_view );
-        constexpr       array_type&    reverse             (                                        );
+        constexpr       container&    partial_sort        ( int                                    )       requires comparable<type>;
+        constexpr       container&    partial_sort        ( int,  relation    <type,type> auto  );
+     // constexpr       container&    partition           (                                        );
+        constexpr       container&    partition           (       predicate   <type>auto  );
+        constexpr       container&    prev_permutation    (                                        )       requires comparable<type>;
+        constexpr       container&    prev_permutation    (       relation    <type,type> auto  );
+        constexpr       container&    remove              ( const equalable_to<type> auto& )       requires ( not is_view );
+        constexpr       container&    remove              (       predicate   <type>auto  )       requires ( not is_view );
+        constexpr       container&    reverse             (                                        );
         constexpr       int            right_adjacent_find (                                        ) const requires equalable<type>;
         constexpr       int            right_adjacent_find (       relation    <type,type> auto  ) const;
         constexpr       int            right_find          ( const equalable_to<type> auto& ) const;
         constexpr       int            right_find          (       predicate   <type>auto  ) const;
-        constexpr       array_type&    rotate              (       int                              );
-        constexpr       array_type&    stable_partition    ( const equalable_to<type> auto& )       requires comparable<type>;
-        constexpr       array_type&    stable_partition    (       predicate   <type>auto  );
-        constexpr       array_type&    stable_sort         (                                        )       requires comparable<type>;
-        constexpr       array_type&    stable_sort         (       relation    <type,type> auto  );
-        constexpr       array_type&    sort                (                                        )       requires comparable<type>;
-        constexpr       array_type&    sort                (       relation    <type,type> auto  );
-        constexpr       array_type&    unique              (                                        )       requires ( not is_view ) and equalable<type>;
-        constexpr       array_type&    unique              (       relation    <type,type> auto  )       requires ( not is_view );
+        constexpr       container&    rotate              (       int                              );
+        constexpr       container&    stable_partition    ( const equalable_to<type> auto& )       requires comparable<type>;
+        constexpr       container&    stable_partition    (       predicate   <type>auto  );
+        constexpr       container&    stable_sort         (                                        )       requires comparable<type>;
+        constexpr       container&    stable_sort         (       relation    <type,type> auto  );
+        constexpr       container&    sort                (                                        )       requires comparable<type>;
+        constexpr       container&    sort                (       relation    <type,type> auto  );
+        constexpr       container&    unique              (                                        )       requires ( not is_view ) and equalable<type>;
+        constexpr       container&    unique              (       relation    <type,type> auto  )       requires ( not is_view );
         constexpr       array<int>     where               ( const equalable_to<type> auto& ) const;
         constexpr       array<int>     where               (       predicate   <type>auto  ) const;
 
@@ -110,20 +110,20 @@ class array_algo<array_type,type,type,dim>
         constexpr       auto           product             (                                            ) const requires std::convertible_to<int,type>     and multipliable<type>;
         constexpr       auto           product             (       std::invocable<type> auto op ) const requires std::convertible_to<int,result_type>    and multipliable<result_type>;
 
-        constexpr       array_type&    each                (       std::invocable     <type&> auto  );
-        constexpr const array_type&    each                (       std::invocable     <type>  auto  ) const;
-        constexpr       array_type&    fill                ( const std::convertible_to<type>  auto& );
-        constexpr       array_type&    generate            (       function_type      <type()>auto  );
-        constexpr       array_type&    transform           (       unary_op           <type>  auto  );
-        constexpr       array_type&    replace             ( const equalable_to       <type>  auto&, const std::convertible_to<type> auto& );
-        constexpr       array_type&    replace             (       unary_pred         <type>  auto,  const std::convertible_to<type> auto& );
+        constexpr       container&    each                (       std::invocable     <type&> auto  );
+        constexpr const container&    each                (       std::invocable     <type>  auto  ) const;
+        constexpr       container&    fill                ( const std::convertible_to<type>  auto& );
+        constexpr       container&    generate            (       function_type      <type()>auto  );
+        constexpr       container&    transform           (       unary_op           <type>  auto  );
+        constexpr       container&    replace             ( const equalable_to       <type>  auto&, const std::convertible_to<type> auto& );
+        constexpr       container&    replace             (       unary_pred         <type>  auto,  const std::convertible_to<type> auto& );
 
         // Implemented in "root/math/random/container/array.cpp"
-        constexpr       array_type&    sample              ( int )                                             requires ( not is_view ) and std::copyable<type>;
-        constexpr       array_type&    shuffle             ( );
+        constexpr       container&    sample              ( int )                                             requires ( not is_view ) and std::copyable<type>;
+        constexpr       container&    shuffle             ( );
 
     private: // Auxiliary
-        constexpr array_type& insert_aux ( int, int ); // Inputs pos and step. Notice that pos must be positive;
+        constexpr container& insert_aux ( int, int ); // Inputs pos and step. Notice that pos must be positive;
 };
 
 #undef result_type // Redefine it in .hpp

@@ -1,100 +1,100 @@
 #pragma once
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::begin ( )
+constexpr decltype(auto) array_algo<container,type,dim,device>::begin ( )
 {
-    return static_cast<array_type&>(self).begin();
+    return static_cast<container&>(self).begin();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::begin ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::begin ( ) const
 {
-    return static_cast<const array_type&>(self).begin();
+    return static_cast<const container&>(self).begin();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::end ( )
+constexpr decltype(auto) array_algo<container,type,dim,device>::end ( )
 {
-    return static_cast<array_type&>(self).end();
+    return static_cast<container&>(self).end();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::end ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::end ( ) const
 {
-    return static_cast<const array_type&>(self).end();
+    return static_cast<const container&>(self).end();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::data ( )
+constexpr decltype(auto) array_algo<container,type,dim,device>::data ( )
 {
-    return static_cast<array_type&>(self).data();
+    return static_cast<container&>(self).data();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::data ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::data ( ) const
 {
-    return static_cast<const array_type&>(self).data();
+    return static_cast<const container&>(self).data();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::size ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::size ( ) const
 {
-    return static_cast<const array_type&>(self).size();
+    return static_cast<const container&>(self).size();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::shape ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::shape ( ) const
 {
-    return static_cast<const array_type&>(self).shape();
+    return static_cast<const container&>(self).shape();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::empty ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::empty ( ) const
 {
-    return static_cast<const array_type&>(self).empty();
+    return static_cast<const container&>(self).empty();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::ownership ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::ownership ( ) const
 {
-    return static_cast<const array_type&>(self).ownership();
+    return static_cast<const container&>(self).ownership();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::contiguous ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::contiguous ( ) const
 {
-    return static_cast<const array_type&>(self).contiguous();
+    return static_cast<const container&>(self).contiguous();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::transpose ( )
+constexpr decltype(auto) array_algo<container,type,dim,device>::transpose ( )
 {
-    return static_cast<array_type&>(self).transpose();
+    return static_cast<container&>(self).transpose();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<array_type,type,dim,device>::transpose ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::transpose ( ) const
 {
-    return static_cast<const array_type&>(self).transpose();
+    return static_cast<const container&>(self).transpose();
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
 template < int axis >
-constexpr array_type& array_algo<array_type,type,dim,device>::reverse ( )
+constexpr container& array_algo<container,type,dim,device>::reverse ( )
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) )
 {
     if constexpr ( axis == 1 or axis == -dim )
@@ -103,16 +103,16 @@ constexpr array_type& array_algo<array_type,type,dim,device>::reverse ( )
         device::reverse(transpose().begin(), transpose().end());
     else
         if constexpr ( axis > 0 )
-            detail::md_reverse<device,axis>      (static_cast<array_type&>(self), shape());
+            detail::md_reverse<device,axis>      (static_cast<container&>(self), shape());
         else
-            detail::md_reverse<device,axis+dim+1>(static_cast<array_type&>(self), shape());
-    return static_cast<array_type&>(self);
+            detail::md_reverse<device,axis+dim+1>(static_cast<container&>(self), shape());
+    return static_cast<container&>(self);
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
 template < int axis >
-constexpr array_type& array_algo<array_type,type,dim,device>::rotate ( int n )
+constexpr container& array_algo<container,type,dim,device>::rotate ( int n )
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) )
 {
     #if debug
@@ -128,16 +128,16 @@ constexpr array_type& array_algo<array_type,type,dim,device>::rotate ( int n )
                 device::rotate(transpose().begin(), transpose().begin() - n, transpose().end());
     else
         if constexpr ( axis > 0 )
-            detail::md_rotate<device,axis>      (static_cast<array_type&>(self), shape(), n);
+            detail::md_rotate<device,axis>      (static_cast<container&>(self), shape(), n);
         else
-            detail::md_rotate<device,axis+dim+1>(static_cast<array_type&>(self), shape(), n);
-    return static_cast<array_type&>(self);
+            detail::md_rotate<device,axis+dim+1>(static_cast<container&>(self), shape(), n);
+    return static_cast<container&>(self);
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
 template < int axis >
-constexpr array<type,dim-1,device> array_algo<array_type,type,dim,device>::average ( ) const
+constexpr array<type,dim-1,device> array_algo<container,type,dim,device>::average ( ) const
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) ) and
              default_initializable<type> and plusable<type> and dividable_to<type,int>
 {
@@ -148,10 +148,10 @@ constexpr array<type,dim-1,device> array_algo<array_type,type,dim,device>::avera
     return sum<axis>() / shape()[axis];
 }
 
-template < class array_type, class type, int dim, class device >
+template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
 template < int axis >
-constexpr array<type,dim-1,device> array_algo<array_type,type,dim,device>::sum ( ) const
+constexpr array<type,dim-1,device> array_algo<container,type,dim,device>::sum ( ) const
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) ) and
              default_initializable<type> and plusable<type>
 {

@@ -30,23 +30,23 @@ class opencl
 
     public: // Operator
         template < class type = void > class plus;
-        template < class type = void > using minus         = boost::compute::minus        <type>;
-        template < class type = void > using multiplies    = boost::compute::multiplies   <type>;
-        template < class type = void > using divides       = boost::compute::divides      <type>;
-     // template < class type = void > using negate        = unsupported;
-        template < class type = void > using equal_to      = boost::compute::equal_to     <type>;
-        template < class type = void > using not_equal_to  = boost::compute::not_equal_to <type>;
-        template < class type = void > using less          = boost::compute::less         <type>;
-        template < class type = void > using less_equal    = boost::compute::less_equal   <type>;
-        template < class type = void > using greater       = boost::compute::greater      <type>;
-        template < class type = void > using greater_equal = boost::compute::greater_equal<type>; 
-        template < class type = void > using logical_and   = boost::compute::logical_and  <type>;
-        template < class type = void > using logical_or    = boost::compute::logical_or   <type>;
-        template < class type = void > using logical_not   = boost::compute::logical_not  <type>;
-        template < class type = void > using bit_and       = boost::compute::bit_and      <type>;
-        template < class type = void > using bit_or        = boost::compute::bit_or       <type>;
-        template < class type = void > using bit_xor       = boost::compute::bit_xor      <type>;
-     // template < class type = void > using bit_not       = unsupported;
+        template < class type = void > class minus;
+        template < class type = void > class multiplies;
+        template < class type = void > class divides;
+        template < class type = void > class negate;//////////
+        template < class type = void > class equal_to;
+        template < class type = void > class not_equal_to;
+        template < class type = void > class less;
+        template < class type = void > class less_equal;
+        template < class type = void > class greater;
+        template < class type = void > class greater_equal;
+        template < class type = void > class logical_and;
+        template < class type = void > class logical_or;
+        template < class type = void > class logical_not;
+        template < class type = void > class bit_and;
+        template < class type = void > class bit_or;
+        template < class type = void > class bit_xor;
+        template < class type = void > class bit_not; /////
 
     public: // Hash
         template < class type > using hash = boost::compute::hash<type>;
@@ -165,6 +165,7 @@ class opencl
 #include "type/type_traits.hpp"
 
 #include "operator/operator.hpp"
+#include "operator/type_traits.hpp"
 
 #include "memory/accessor_type.hpp"
 

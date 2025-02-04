@@ -19,14 +19,6 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -std=c++26 -g -Wall -fdiagnostics-color=always -flarge-source-files -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
-                "options": {
-                    "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
-                        ]
-                    }
-                }
             },
             "osx": {
                 "command": "clang++ -std=c++26 -g -fdiagnostics-color=always -Wall -fdiagnostics-color=always -O0 -fno-inline -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
@@ -44,11 +36,6 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
-                "options": {
-                    "env": {
-                        "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
-                    }
-                }
             },
             "osx": {
                 "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
@@ -109,14 +96,6 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -std=c++26 -g -Wall -fdiagnostics-color=always -flarge-source-files -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
-                "options": {
-                    "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
-                        ]
-                    }
-                }
             },
             "osx": {
                 "command": "clang++ -std=c++26 -g -Wall -fdiagnostics-color=always -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
@@ -134,11 +113,6 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
-                "options": {
-                    "env": {
-                        "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
-                    }
-                }
             },
             "osx": {
                 "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
@@ -202,14 +176,6 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -std=c++26 -g -Wall -fdiagnostics-color=always -flarge-source-files -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
-                "options": {
-                    "env": {
-                        "CPLUS_INCLUDE_PATH": [
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
-                            "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
-                        ]
-                    }
-                }
             },
             "osx": {
                 "command": "clang++ -std=c++26 -g -Wall -fdiagnostics-color=always -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
@@ -227,11 +193,6 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
-                "options": {
-                    "env": {
-                        "LIBRARY_PATH": "D:/My Passport/My Passport - Application/MSYS/ucrt64/lib"
-                    }
-                }
             },
             "osx": {
                 "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",

@@ -119,3 +119,9 @@ constexpr bool basic_string_view<type,device>::ownership ( )
 {
     return false;
 }
+
+template < class type, class device >
+constexpr bool basic_string_view<type,device>::contiguous ( )
+{
+    return true;
+}

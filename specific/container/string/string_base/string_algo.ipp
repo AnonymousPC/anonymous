@@ -1,280 +1,193 @@
 #pragma once
-#include "../string_class/string.hpp"
 
-#define templates            template < class string_type, class char_type >
-#define string_algo          string_algo<string_type,char_type>
-#define derive_of_self       static_cast<string_type&>(self)
-#define const_derive_of_self static_cast<const string_type&>(self)
-
-// Abbreviation
-
-templates
-constexpr int string_algo::size ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::begin ( )
 {
-    return const_derive_of_self.size();
+    return static_cast<container&>(self).begin();
 }
 
-templates
-constexpr bool string_algo::empty ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::begin ( ) const
 {
-    return const_derive_of_self.empty();
+    return static_cast<const container&>(self).begin();
 }
 
-templates
-constexpr decltype(auto) string_algo::begin ( )
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::end ( )
 {
-    return derive_of_self.begin();
+    return static_cast<container&>(self).end();
 }
 
-templates
-constexpr decltype(auto) string_algo::begin ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::end ( ) const
 {
-    return const_derive_of_self.begin();
+    return static_cast<const container&>(self).end();
 }
 
-templates
-constexpr decltype(auto) string_algo::end ( )
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::size ( ) const
 {
-    return derive_of_self.end();
+    return static_cast<const container&>(self).size();
 }
 
-templates
-constexpr decltype(auto) string_algo::end ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::empty ( ) const
 {
-    return const_derive_of_self.end();
+    return static_cast<const container&>(self).empty();
 }
 
-templates
-constexpr decltype(auto) string_algo::operator [] ( int pos )
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::c_str ( ) const
 {
-    return derive_of_self[pos];
+    return static_cast<const container&>(self).c_str();
 }
 
-templates
-constexpr decltype(auto) string_algo::operator [] ( int pos ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::begins_with ( view str ) const
 {
-    return const_derive_of_self[pos];
+    return self.size() >= str.size() and
+           device::equal(self.begin(), self.begin() + str.size(), str.begin(), str.end());
 }
 
-
-
-// Array algo
-
-templates
-constexpr string_type& string_algo::insert ( aux::array_type_dim_range<int,0,1> auto pos, const aux::char_type_or_general_string_type<char_type> auto& item, const aux::char_type_or_general_string_type<char_type> auto&... args )
-    requires ( not is_view )
-{
-    return derive_of_self.string_type::array_algo::insert(std::move(pos), basic_string_view<char_type>(item), basic_string_view<char_type>(args)...);
-}
-
-templates
-constexpr string_type& string_algo::push ( const aux::char_type_or_general_string_type<char_type> auto& item, const aux::char_type_or_general_string_type<char_type> auto&... args )
-    requires ( not is_view )
-{
-    return derive_of_self.string_type::array_algo::push(basic_string_view<char_type>(item), basic_string_view<char_type>(args)...);
-}
-
-
-
-
-// String algo
-
-templates
-constexpr bool string_algo::begins_with ( const general_string_type auto& str ) const
-{
-    let sv = basic_string_view<char_type>(str);
-    return size() >= sv.size() ? std::equal ( begin(), begin() + sv.size(), sv.begin(), sv.end() ) otherwise false;
-}
-
-templates
-constexpr string_type& string_algo::capitalize ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::capitalize ( )
 {
     if ( not empty() )
-        self[1] = ap::upper ( self[1] );
-
-    return derive_of_self;
+        self[1] = std::isupper(self[1]);
+    return static_cast<container_type&>(self);
 }
 
-templates
-constexpr string_type& string_algo::center ( int len, char_type ch )
-    requires ( not is_view )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::center ( int len, type ch )
 {
     if ( len <= size() )
-        return derive_of_self;
+        return static_cast<container_type&>(self);
     else
     {
-        int old_size    = size();
-        int left_space  = ( len - old_size )     / 2;
-        int right_space = ( len - old_size + 1 ) / 2;
-
-        derive_of_self.resize ( len );
-
-        std::copy_backward ( begin(), begin() + old_size, end() - right_space );
-        std::fill_n        ( begin(),             left_space,  ch );
-        std::fill_n        ( end() - right_space, right_space, ch );
-
-        return derive_of_self;
+        let old_sz   = size();
+        let left_ws  = (len - old_size )    / 2;
+        let right_ws = (len - old_size + 1) / 2;
+        static_cast<container_type&>(self).resize(len);
+        device::copy_backward(begin(), begin() + old_sz, end() - right_ws);
+        device::fill(begin(), begin() + left_ws, ch);
+        device::fill(end() - right_ws, end(), ch);
+        return static_cast<container_type&>(self);
     }
 }
 
-templates
-constexpr string_type& string_algo::encode ( std::text_encoding from, std::text_encoding to )
-    requires ( not is_view ) and std::same_as<char_type,char>
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::encode ( code old_encode, code new_encode )
+    requires std::same_as<char_type,char>
 {
-    if ( from != to )
+    if ( old_encode != new_encode )
         try
         {
-            return derive_of_self = string_type(boost::locale::conv::between(std::basic_string<char_type>(derive_of_self), to.name(), from.name(), boost::locale::conv::stop));
+            return static_cast<container&>(self) =
+                       boost::locale::conv::between(
+                           std::basic_string<char_type>(derive_of_self),
+                           new_encode.name(),
+                           old_encode.name(),
+                           boost::locale::conv::stop
+                       );
         }
         catch ( const boost::locale::conv::conversion_error& e )
         {
-            throw encode_error("cannot encode string {} from {} into {} [[caused by {}: {}]]", const_derive_of_self, from.name(), to.name(), typeid(e), e.what());
+            throw encode_error("cannot encode string {} from {} into {}", static_cast<const container_type&>(self), old_encode.name(), new_encode.name()).from(e);
         }
         catch ( const boost::locale::conv::invalid_charset_error& e )
         {
-            throw encode_error("cannot encode string {} from {} into {} [[caused by {}: {}]]", const_derive_of_self, from.name(), to.name(), typeid(e), e.what());
+            throw encode_error("cannot encode string {} from {} into {}", static_cast<const container_type&>(self), old_encode.name(), new_encode.name()).from(e);
         }
-    else
-        return derive_of_self;
 }
 
-templates
-constexpr bool string_algo::ends_with ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::ends_with ( view str ) const
 {
-    let sv = basic_string_view<char_type>(str);
-    if ( size() >= sv.size() )
-        return std::equal ( end() - sv.size(), end(), sv.begin(), sv.end() );
-    else
-        return false;
+    return self.size() >= str.size() and
+           device::equal(self.end() - str.size(), self.end(), str.begin(), str.end());
 }
 
-templates
-constexpr string_type& string_algo::expand_tabs ( int tabs )
-    requires ( not is_view )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::expand_tabs ( int len )
 {
     #if debug
-        if ( tabs < 0 )
-            throw value_error("expand-tab string with negative times {}", tabs);
+        if ( len < 0 )
+            throw value_error("expand string with negative tabs {}", len);
     #endif
-    return derive_of_self.replace ( '\t', string_type(tabs, ' ') );
+    return replace('\t', basic_string<type,device>(tabs,' '));
 }
 
-templates
-constexpr string_type& string_algo::format ( const auto&... args )
-    requires ( not is_view ) and ( ( std::formattable<decay<decltype(args)>,char> or std::constructible_from<string_type,decay<decltype(args)>> ) and ... )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::format ( auto&&... f )
+    requires ( ( std::formattable<decay<decltype(f)>,char> or constructible_from<container_type,decay<decltype(f)>> ) and ... )
 {
     try
     {
-        let b = begin();
-        let e = end();
-        let explicit_mode = false;
-
-        while ( true )
-        {
-            let p = std::find(b, e, '{');
-            if ( p == e )
-                explicit_mode = false;            // Default mode.
-            else if ( std::isdigit(*(p+1)) )
-                explicit_mode = true;             // Explicit mode.
-            else if ( p+1 < e and *(p+1) != '{' )
-                explicit_mode = false;            // Implicit mode.
-            else
-                { b = p + 2; continue; }          // "{{"
-            break;
-        }
-
-        if ( explicit_mode )
-            return derive_of_self = std::vformat(("{0}" + derive_of_self).c_str(), std::make_format_args("", make_const_ref(make_formattable(args))...)).c_str();
-
-        else /* implicit_mode or default_mode */
-            return derive_of_self = std::vformat(derive_of_self.c_str(), std::make_format_args(make_const_ref(make_formattable(args))...)).c_str();
+        return detail::get_format_mode(c_str()) == detail::explicit_mode ?
+                   static_cast<container_type&>(self) = std::format(std::runtime_format(std::string("{0}") + c_str()), "", detail::make_formattable(args)...) otherwise
+                   static_cast<container_type&>(self) = std::format(std::runtime_format(                     c_str()),     detail::make_formattable(args)...));
     }
-
     catch ( const std::format_error& e )
     {
-        throw format_error("cannot format string \"{}\" with args {} [[caused by {}: {}]]", derive_of_self, tuple(string(typeid(args))...), typeid(e), e.what());
+        throw format_error("cannot format string {} with args {}", static_cast<const container&>(self), tuple(string(typeid(args))...)).from(e);
     }
 }
 
-templates
-constexpr bool string_algo::is_alnum ( ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::is_alnum ( ) const
 {
-    return ap::is_alnum ( const_derive_of_self );
+    return device::all_of(begin(), end(), std::isalnum<type>);
 }
 
-templates
-constexpr bool string_algo::is_alpha ( ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::is_alpha ( ) const
 {
-    return ap::is_alpha ( const_derive_of_self );
+    return device::all_of(begin(), end(), std::isalpha<type>);
 }
 
-templates
-constexpr bool string_algo::is_ascii ( ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::is_digit ( ) const
 {
-    return ap::is_ascii ( const_derive_of_self );
+    return device::all_of(begin(), end(), std::isdigit<type>);
 }
 
-templates
-constexpr bool string_algo::is_decimal ( ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::is_lower ( ) const
 {
-    return ap::is_decimal ( const_derive_of_self );
+    return device::all_of(begin(), end(), std::islower<type>);
 }
 
-templates
-constexpr bool string_algo::is_digit ( ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::is_space ( ) const
 {
-    return ap::is_digit ( const_derive_of_self );
+    return device::all_of(begin(), end(), std::isspace<type>);
 }
 
-templates
-constexpr bool string_algo::is_identifier ( ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::is_upper ( ) const
 {
-    return ap::is_identifier ( const_derive_of_self );
+    return device::all_of(begin(), end(), std::isupper<type>);
 }
 
-templates
-constexpr bool string_algo::is_lower ( ) const
-{
-    return ap::is_lower ( const_derive_of_self );
-}
-
-templates
-constexpr bool string_algo::is_space ( ) const
-{
-    return ap::is_space ( const_derive_of_self );
-}
-
-templates
-constexpr bool string_algo::is_title ( ) const
-{
-    return ap::is_title ( const_derive_of_self );
-}
-
-templates
-constexpr bool string_algo::is_upper ( ) const
-{
-    return ap::is_upper ( const_derive_of_self );
-}
-
-templates
-constexpr string_type& string_algo::join ( const auto& args )
-    requires ( not is_view ) and requires { std::declval<string_type>().push(*std::ranges::begin(args)); }
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::join ( const auto& args )
+    requires ( not is_view ) and requires { std::declval<container_type>().push(*std::ranges::begin(args)); }
 {
     if constexpr ( requires { args.size(); } )
         return derive_of_self = args
                               | std::views::transform([] (const auto& str) { return basic_string_view<char_type>(str); })
                               | std::views::join_with(derive_of_self)
-                              | std::ranges::to<string_type>(std::accumulate(args.begin(), args.end(), 0,
+                              | std::ranges::to<container_type>(std::accumulate(args.begin(), args.end(), 0,
                                                                              [] (const auto& result, const auto& str) { return result + basic_string_view<char_type>(str).size(); }) + (args.size()-1) * size());
     else
         return derive_of_self = args
                               | std::views::transform([] (const auto& str) { return basic_string_view<char_type>(str); })
                               | std::views::join_with(derive_of_self)
-                              | std::ranges::to<string_type>();
+                              | std::ranges::to<container_type>();
 }
 
-templates
-constexpr string_type& string_algo::left_justify ( int len, char_type ch )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::left_justify ( int len, char_type ch )
     requires ( not is_view )
 {
     if ( len <= size() )
@@ -288,38 +201,38 @@ constexpr string_type& string_algo::left_justify ( int len, char_type ch )
     }
 }
 
-templates
-constexpr string_type& string_algo::left_strip ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::left_strip ( )
     requires ( not is_view )
 {
     return left_strip(' ');
 }
 
-templates
-constexpr string_type& string_algo::left_strip ( const general_string_type auto& chars )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::left_strip ( const general_string_type auto& chars )
     requires ( not is_view )
 {
     let sv = basic_string_view<char_type>(chars);
 
-    int pos = derive_of_self.string_type::array_algo::find([&] (char_type ch) { return not sv.contains(ch); });
+    int pos = derive_of_self.container_type::array_algo::find([&] (char_type ch) { return not sv.contains(ch); });
     return pos != 0 ? derive_of_self.erase ( 1, pos - 1 ) otherwise
                       derive_of_self.clear(); // Every letter matches.
 }
 
-templates
-constexpr string_type& string_algo::lower ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::lower ( )
 {
     return derive_of_self.each ( ap::lower<char_type> );
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::partition ( const general_string_type auto& str )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::partition ( const general_string_type auto& str )
 {
-    return const_cast<const string_algo&>(self).partition(str);
+    return const_cast<const string_algo<container,type,device>&>(self).partition(str);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::partition ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::partition ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -332,14 +245,14 @@ constexpr const array<typename string_algo::string_view_type> string_algo::parti
 
 
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::right_partition ( const general_string_type auto& str )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_partition ( const general_string_type auto& str )
 {
-    return const_cast<const string_algo&>(self).right_partition(str);
+    return const_cast<const string_algo<container,type,device>&>(self).right_partition(str);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::right_partition ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_partition ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -350,8 +263,8 @@ constexpr const array<typename string_algo::string_view_type> string_algo::right
         return { const_derive_of_self[1,0], const_derive_of_self[1,0], const_derive_of_self[1,-1] };
 }
 
-templates
-constexpr string_type& string_algo::right_justify ( int len, char_type ch )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::right_justify ( int len, char_type ch )
     requires ( not is_view )
 {
     if ( len <= size() )
@@ -366,26 +279,26 @@ constexpr string_type& string_algo::right_justify ( int len, char_type ch )
     }
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::right_split ( )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_split ( )
 {
-    return const_cast<const string_algo&>(self).right_split();
+    return const_cast<const string_algo<container,type,device>&>(self).right_split();
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::right_split ( ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_split ( ) const
 {
     return right_split(' ');
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::right_split ( const general_string_type auto& str )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_split ( const general_string_type auto& str )
 {
-    return const_cast<const string_algo&>(self).right_split(str);
+    return const_cast<const string_algo<container,type,device>&>(self).right_split(str);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::right_split ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_split ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -394,14 +307,14 @@ constexpr const array<typename string_algo::string_view_type> string_algo::right
     return array<string_view_type> ( edges.size() - 1, [&] ( int i ) { return const_derive_of_self[edges[i]+sv.size(), edges[i+1]-1]; } );
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::right_split ( const general_string_type auto& str, int times )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_split ( const general_string_type auto& str, int times )
 {
-    return const_cast<const string_algo&>(self).right_split(str, times);
+    return const_cast<const string_algo<container,type,device>&>(self).right_split(str, times);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::right_split ( const general_string_type auto& str, int times ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::right_split ( const general_string_type auto& str, int times ) const
 {
     #if debug
         if ( times < 0 )
@@ -417,44 +330,44 @@ constexpr const array<typename string_algo::string_view_type> string_algo::right
     return array<string_view_type> ( edges.size() - 1, [&] ( int i ) { return const_derive_of_self[edges[i]+sv.size(), edges[i+1]-1]; } );
 }
 
-templates
-constexpr string_type& string_algo::right_strip ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::right_strip ( )
     requires ( not is_view )
 {
     return right_strip(' ');
 }
 
-templates
-constexpr string_type& string_algo::right_strip ( const general_string_type auto& chars )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::right_strip ( const general_string_type auto& chars )
     requires ( not is_view )
 {
     let sv = basic_string_view<char_type>(chars);
 
-    int pos = derive_of_self.string_type::array_algo::right_find([&] (char_type ch) { return not sv.contains(ch); });
+    int pos = derive_of_self.container_type::array_algo::right_find([&] (char_type ch) { return not sv.contains(ch); });
     return pos != 0 ? derive_of_self.erase ( pos+1, -1 ) otherwise
                       derive_of_self.clear(); // All match to chars.
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::split ( )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( )
 {
-    return const_cast<const string_algo&>(self).split();
+    return const_cast<const string_algo<container,type,device>&>(self).split();
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::split ( ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( ) const
 {
     return split(' ');
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::split ( const general_string_type auto& str )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( const general_string_type auto& str )
 {
-    return const_cast<const string_algo&>(self).split(str);
+    return const_cast<const string_algo<container,type,device>&>(self).split(str);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::split ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -463,14 +376,14 @@ constexpr const array<typename string_algo::string_view_type> string_algo::split
     return array<string_view_type> ( edges.size() - 1, [&] ( int i ) { return const_derive_of_self[edges[i]+sv.size(), edges[i+1]-1]; } );
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::split ( const general_string_type auto& str, int times )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( const general_string_type auto& str, int times )
 {
-    return const_cast<const string_algo&>(self).split(str, times);
+    return const_cast<const string_algo<container,type,device>&>(self).split(str, times);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::split ( const general_string_type auto& str, int times ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( const general_string_type auto& str, int times ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -483,16 +396,16 @@ constexpr const array<typename string_algo::string_view_type> string_algo::split
     return array<string_view_type> ( edges.size() - 1, [&] ( int i ) { return const_derive_of_self[edges[i]+sv.size(), edges[i+1]-1]; } );
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::split_lines ( )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split_lines ( )
 {
-    return const_cast<const string_algo&>(self).split_lines();
+    return const_cast<const string_algo<container,type,device>&>(self).split_lines();
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::split_lines ( ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split_lines ( ) const
 {
-    vector<int> edges = vector<int>().push   ( const_derive_of_self.string_type::array_algo::where([] (auto ch) { return ch == '\n' or ch == '\r' or ch == '\f'; }) )
+    vector<int> edges = vector<int>().push   ( const_derive_of_self.container_type::array_algo::where([] (auto ch) { return ch == '\n' or ch == '\r' or ch == '\f'; }) )
                                      .unique ( [&] ( auto pos1, auto pos2 ) { return pos1 + 1 == pos2 and self[pos1] == '\r' and self[pos2] == '\n'; } )
                                      .insert ( 1, 0 );
 
@@ -512,30 +425,30 @@ constexpr const array<typename string_algo::string_view_type> string_algo::split
     } );
 }
 
-templates
-constexpr bool string_algo::starts_with ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::starts_with ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
     return begins_with(sv);
 }
 
-templates
-constexpr string_type& string_algo::strip ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::strip ( )
     requires ( not is_view )
 {
     return strip(' ');
 }
 
-templates
-constexpr string_type& string_algo::strip ( const general_string_type auto& chars )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::strip ( const general_string_type auto& chars )
     requires ( not is_view )
 {
     let sv = basic_string_view<char_type>(chars);
     return derive_of_self.left_strip(sv).right_strip(sv);
 }
 
-templates
-constexpr string_type& string_algo::swap_case ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::swap_case ( )
 {
     return derive_of_self.each ( [] ( char_type& ch )
     {
@@ -547,8 +460,8 @@ constexpr string_type& string_algo::swap_case ( )
     } );
 }
 
-templates
-constexpr string_type& string_algo::title ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::title ( )
 {
     let poses = derive_of_self.adjacent_where([] (auto ch1, auto ch2) { return not ap::is_alpha(ch1) and ap::is_alpha(ch2); })
                               .each([] (int& pos) { ++pos; });
@@ -562,14 +475,14 @@ constexpr string_type& string_algo::title ( )
     return derive_of_self;
 }
 
-templates
-constexpr string_type& string_algo::upper ( )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::upper ( )
 {
     return derive_of_self.transform ( ap::upper<char_type> );
 }
 
-templates
-constexpr string_type& string_algo::zero_fill ( int len )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::zero_fill ( int len )
     requires ( not is_view )
 {
     return derive_of_self.right_justify(len,'0');
@@ -582,15 +495,15 @@ constexpr string_type& string_algo::zero_fill ( int len )
 
 // Array algo (update)
 
-templates
-constexpr bool string_algo::contains ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::contains ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
     return std::search ( begin(), end(), sv.begin(), sv.end() ) != end();
 }
 
-templates
-constexpr int string_algo::count ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr int string_algo<container,type,device>::count ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -603,30 +516,30 @@ constexpr int string_algo::count ( const general_string_type auto& str ) const
     return times - 1;
 }
 
-templates
-constexpr bool string_algo::exist ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::exist ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
     return std::search ( begin(), end(), sv.begin(), sv.end() ) != end();
 }
 
-templates
-constexpr int string_algo::find ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr int string_algo<container,type,device>::find ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
     int pos = std::search ( begin(), end(), sv.begin(), sv.end() ) - begin() + 1;
     return pos <= size() ? pos otherwise 0;
 }
 
-templates
-constexpr bool string_algo::none ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::none ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
     return std::search ( begin(), end(), sv.begin(), sv.end() ) == end();
 }
 
-templates
-constexpr string_type& string_algo::remove ( const general_string_type auto& str )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::remove ( const general_string_type auto& str )
     requires ( not is_view )
 {
     let sv = basic_string_view<char_type>(str);
@@ -643,8 +556,8 @@ constexpr string_type& string_algo::remove ( const general_string_type auto& str
     return derive_of_self;
 }
 
-templates
-constexpr string_type& string_algo::replace ( const general_string_type auto& str1, const general_string_type auto& str2 )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::replace ( const general_string_type auto& str1, const general_string_type auto& str2 )
     requires ( not is_view )
 {
     let sv1 = basic_string_view<char_type>(str1);
@@ -666,8 +579,8 @@ constexpr string_type& string_algo::replace ( const general_string_type auto& st
     return derive_of_self;
 }
 
-templates
-constexpr int string_algo::right_find ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr int string_algo<container,type,device>::right_find ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -681,8 +594,8 @@ constexpr int string_algo::right_find ( const general_string_type auto& str ) co
     return 0;
 }
 
-templates
-constexpr array<int> string_algo::where ( const general_string_type auto& str ) const
+template < class container, class type, class device >
+constexpr array<int> string_algo<container,type,device>::where ( const general_string_type auto& str ) const
 {
     let sv = basic_string_view<char_type>(str);
 
@@ -701,78 +614,78 @@ constexpr array<int> string_algo::where ( const general_string_type auto& str ) 
 
 // Regex
 
-templates
-constexpr bool string_algo::all ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::all ( const regex& rgx ) const
 {
     return std::regex_match ( begin(), end(), std::basic_regex<char_type>(rgx) );
 }
 
-templates
-constexpr bool string_algo::contains ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::contains ( const regex& rgx ) const
 {
     return std::regex_search ( begin(), end(), std::basic_regex<char_type>(rgx) );
 }
 
-templates
-constexpr int string_algo::count ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr int string_algo<container,type,device>::count ( const regex& rgx ) const
 {
     return std::distance ( std::regex_iterator<const char_type*>(begin(), end(), std::basic_regex<char_type>(rgx)), std::regex_iterator<const char_type*>() );
 }
 
-templates
-constexpr bool string_algo::exist ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::exist ( const regex& rgx ) const
 {
     return std::regex_search ( begin(), end(), std::basic_regex<char_type>(rgx) );
 }
 
-templates
-constexpr string_algo::string_view_type string_algo::find ( const regex& rgx )
+template < class container, class type, class device >
+constexpr string_algo<container,type,device>::string_view_type string_algo<container,type,device>::find ( const regex& rgx )
 {
-    return const_cast<const string_algo&>(self).find(rgx);
+    return const_cast<const string_algo<container,type,device>&>(self).find(rgx);
 }
 
-templates
-constexpr const string_algo::string_view_type string_algo::find ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr const string_algo<container,type,device>::string_view_type string_algo<container,type,device>::find ( const regex& rgx ) const
 {
     let mtc   = std::match_results<const char_type*>();
     let found = std::regex_search ( begin(), end(), mtc, std::basic_regex<char_type>(rgx) );
     return found ? const_derive_of_self[mtc.position()+1, mtc.position()+mtc.length()] otherwise const_derive_of_self[1,0];
 }
 
-templates
-constexpr bool string_algo::match ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::match ( const regex& rgx ) const
 {
     return std::regex_match ( begin(), end(), std::basic_regex<char_type>(rgx) );
 }
 
-templates
-constexpr bool string_algo::none ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr bool string_algo<container,type,device>::none ( const regex& rgx ) const
 {
     return not std::regex_search ( begin(), end(), std::basic_regex<char_type>(rgx) );
 }
 
-templates
-constexpr string_type& string_algo::remove ( const regex& rgx )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::remove ( const regex& rgx )
     requires ( not is_view )
 {
-    return derive_of_self = string_type ( std::regex_replace ( std::basic_string<char_type>(derive_of_self), std::basic_regex<char_type>(rgx), std::basic_string<char_type>() ) );
+    return derive_of_self = container_type ( std::regex_replace ( std::basic_string<char_type>(derive_of_self), std::basic_regex<char_type>(rgx), std::basic_string<char_type>() ) );
 }
 
-templates
-constexpr string_type& string_algo::replace ( const regex& rgx, const general_string_type auto& str )
+template < class container, class type, class device >
+constexpr container_type& string_algo<container,type,device>::replace ( const regex& rgx, const general_string_type auto& str )
     requires ( not is_view )
 {
-    return derive_of_self = string_type ( std::regex_replace ( std::basic_string<char_type>(derive_of_self), std::basic_regex<char_type>(rgx), std::basic_string<char_type>(str) ) );
+    return derive_of_self = container_type ( std::regex_replace ( std::basic_string<char_type>(derive_of_self), std::basic_regex<char_type>(rgx), std::basic_string<char_type>(str) ) );
 }
 
-templates
-constexpr string_algo::string_view_type string_algo::right_find ( const regex& rgx )
+template < class container, class type, class device >
+constexpr string_algo<container,type,device>::string_view_type string_algo<container,type,device>::right_find ( const regex& rgx )
 {
-    return const_cast<const string_algo&>(self).right_find(std::basic_regex<char_type>(rgx));
+    return const_cast<const string_algo<container,type,device>&>(self).right_find(std::basic_regex<char_type>(rgx));
 }
 
-templates
-constexpr const string_algo::string_view_type string_algo::right_find ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr const string_algo<container,type,device>::string_view_type string_algo<container,type,device>::right_find ( const regex& rgx ) const
 {
     let mtc = std::match_results<const char_type*>();
     for ( let it = std::regex_iterator<const char_type*>(begin(), end(), std::basic_regex<char_type>(rgx)); it != std::regex_iterator<const char_type*>(); ++it )
@@ -781,14 +694,14 @@ constexpr const string_algo::string_view_type string_algo::right_find ( const re
     return found ? const_derive_of_self[mtc.position()+1, mtc.position()+mtc.length()] otherwise const_derive_of_self[1,0];
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::split ( const regex& rgx )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( const regex& rgx )
 {
-    return const_cast<const string_algo&>(self).split(rgx);
+    return const_cast<const string_algo<container,type,device>&>(self).split(rgx);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::split ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::split ( const regex& rgx ) const
 {
     if ( std::basic_regex<char_type>(rgx).mark_count() == 0 )
         throw regex_error("cannot split string \"{}\" with regex \"{}\": regex always capture none groups", const_derive_of_self, rgx);
@@ -804,14 +717,14 @@ constexpr const array<typename string_algo::string_view_type> string_algo::split
                | std::ranges::to<array<string_view_type>>();
 }
 
-templates
-constexpr array<typename string_algo::string_view_type> string_algo::where ( const regex& rgx )
+template < class container, class type, class device >
+constexpr array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::where ( const regex& rgx )
 {
-    return const_cast<const string_algo&>(self).where(rgx);
+    return const_cast<const string_algo<container,type,device>&>(self).where(rgx);
 }
 
-templates
-constexpr const array<typename string_algo::string_view_type> string_algo::where ( const regex& rgx ) const
+template < class container, class type, class device >
+constexpr const array<typename string_algo<container,type,device>::string_view_type> string_algo<container,type,device>::where ( const regex& rgx ) const
 {
     let std_regex = std::basic_regex<char_type>(rgx);
     return std::views::iota     (std::regex_iterator<const char_type*>(begin(), end(), std_regex), std::regex_iterator<const char_type*>())
@@ -822,8 +735,8 @@ constexpr const array<typename string_algo::string_view_type> string_algo::where
 
 // Strlen
 
-templates
-constexpr int string_algo::strlen ( const char_type* addr )
+template < class container, class type, class device >
+constexpr int string_algo<container,type,device>::strlen ( const char_type* addr )
 {
     let p = addr;
     while ( *p != char_type('\0') )
@@ -838,14 +751,14 @@ constexpr int string_algo::strlen ( const char_type* addr )
 
 // Auxiliary
 
-templates
-constexpr decltype(auto) string_algo::make_const_ref ( const auto& item )
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::make_const_ref ( const auto& item )
 {
     return item;
 }
 
-templates
-constexpr decltype(auto) string_algo::make_formattable ( const auto& item )
+template < class container, class type, class device >
+constexpr decltype(auto) string_algo<container,type,device>::make_formattable ( const auto& item )
 {
     if constexpr ( std::formattable<decltype(item),char_type> )
         return item;
@@ -923,25 +836,25 @@ constexpr auto upper ( char_type auto ch )
 
 
 
-constexpr bool is_alnum ( const string_type auto& str )
+constexpr bool is_alnum ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_alnum(ch); } );
 }
 
-constexpr bool is_alpha ( const string_type auto& str )
+constexpr bool is_alpha ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_alpha(ch); } );
 }
 
-constexpr bool is_ascii ( const string_type auto& str )
+constexpr bool is_ascii ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_ascii(ch); } );
 }
 
-constexpr bool is_decimal ( const string_type auto& str )
+constexpr bool is_decimal ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_decimal(ch); } )
@@ -949,32 +862,32 @@ constexpr bool is_decimal ( const string_type auto& str )
                           and std::count  ( sv.begin(), sv.end(), '-' ) <= 1;
 }
 
-constexpr bool is_digit ( const string_type auto& str )
+constexpr bool is_digit ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_digit(ch); } );
 }
 
-constexpr bool is_identifier ( const string_type auto& str )
+constexpr bool is_identifier ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_alnum(ch) or ch == '_'; } )
                           and ( is_alpha ( sv[1] ) or sv[1] == '_' );
 }
 
-constexpr bool is_lower ( const string_type auto& str )
+constexpr bool is_lower ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_lower(ch); } );
 }
 
-constexpr bool is_space ( const string_type auto& str )
+constexpr bool is_space ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_space(ch); } );
 }
 
-constexpr bool is_title ( const string_type auto& str )
+constexpr bool is_title ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
 
@@ -982,18 +895,18 @@ constexpr bool is_title ( const string_type auto& str )
                           and std::any_of        ( sv.begin(), sv.end(), [] ( auto ch )            { return ap::is_upper(ch); } );
 }
 
-constexpr bool is_upper ( const string_type auto& str )
+constexpr bool is_upper ( const container_type auto& str )
 {
     auto sv = basic_string_view ( str );
     return not sv.empty() and std::all_of ( sv.begin(), sv.end(), [] ( auto ch ) { return ap::is_upper(ch); } );
 }
 
-constexpr auto lower ( const string_type auto& str )
+constexpr auto lower ( const container_type auto& str )
 {
     return basic_string(str).lower();
 }
 
-constexpr auto upper ( const string_type auto& str )
+constexpr auto upper ( const container_type auto& str )
 {
     return basic_string(str).upper();
 }
@@ -1005,7 +918,7 @@ constexpr auto upper ( const string_type auto& str )
 
 
 
-#undef templates
-#undef string_algo
+#undef template < class container, class type, class device >
+#undef string_algo<container,type,device>
 #undef derive_of_self
 #undef const_derive_of_self

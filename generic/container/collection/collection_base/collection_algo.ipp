@@ -1,9 +1,9 @@
 #pragma once
 
-#define templates            template < class collection_type, class iterate_type >
-#define collection_algo      collection_algo<collection_type,iterate_type>
-#define derive_of_self       static_cast<collection_type&>(self)
-#define const_derive_of_self static_cast<const collection_type&>(self)
+#define templates            template < class container, class iterate_type >
+#define collection_algo      collection_algo<container,iterate_type>
+#define derive_of_self       static_cast<container&>(self)
+#define const_derive_of_self static_cast<const container&>(self)
 
 // Abbreviation
 
@@ -72,14 +72,14 @@ constexpr bool collection_algo::none ( unary_pred<iterate_type> auto pred ) cons
 }
 
 templates
-constexpr collection_type& collection_algo::each ( std::invocable<iterate_type&> auto op )
+constexpr container& collection_algo::each ( std::invocable<iterate_type&> auto op )
 {
     std::for_each ( begin(), end(), op );
     return derive_of_self;
 }
 
 templates
-constexpr const collection_type& collection_algo::each ( std::invocable<iterate_type> auto op ) const
+constexpr const container& collection_algo::each ( std::invocable<iterate_type> auto op ) const
 {
     std::for_each ( begin(), end(), op );
     return const_derive_of_self;

@@ -3,15 +3,15 @@
 #define template_int_axis template < int axis = 1 > requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
 #define result_type       invoke_result<decltype(op),iterate_type>
 
-template < class array_type,
+template < class container,
            class value_type,
            class iterate_type,
            int   dim >
     requires ( dim >= 2 )
-class array_algo<array_type,value_type,iterate_type,dim>
+class array_algo<container,value_type,iterate_type,dim>
 {
     private: // Traits
-        constexpr static const bool is_view = not requires { &array_type::resize; } and not requires { &array_type::template resize<1>; };
+        constexpr static const bool is_view = not requires { &container::resize; } and not requires { &container::template resize<1>; };
 
     private: // Abbreviation
         constexpr int            row   ( ) const;
@@ -54,12 +54,12 @@ class array_algo<array_type,value_type,iterate_type,dim>
         template_int_axis constexpr const auto     view_by_axis ( ) const requires ( axis != 1 and axis != -dimension() );
 
     public: // Memory Operation
-        template_int_axis constexpr array_type& clear  ( )                                                                                                                                                        requires ( not is_view );
-        template_int_axis constexpr array_type& erase  ( int, int )                                                                                                                                               requires ( not is_view );
-        template_int_axis constexpr array_type& insert ( aux::array_type_dim_range<int,0,1> auto, aux::array_type_dim_range<value_type,dim-1,dim> auto, aux::array_type_dim_range<value_type,dim-1,dim> auto... ) requires ( not is_view );
-        template_int_axis constexpr array_type& push   (                                          aux::array_type_dim_range<value_type,dim-1,dim> auto, aux::array_type_dim_range<value_type,dim-1,dim> auto... ) requires ( not is_view );
-        template_int_axis constexpr array_type& pop    ( )                                                                                                                                                        requires ( not is_view );
-        template_int_axis constexpr array_type& pop    ( aux::array_type_dim_range<int,0,1> auto, aux::array_type_dim_range<int,0,1> auto... )                                                                    requires ( not is_view );
+        template_int_axis constexpr container& clear  ( )                                                                                                                                                        requires ( not is_view );
+        template_int_axis constexpr container& erase  ( int, int )                                                                                                                                               requires ( not is_view );
+        template_int_axis constexpr container& insert ( aux::container_dim_range<int,0,1> auto, aux::container_dim_range<value_type,dim-1,dim> auto, aux::container_dim_range<value_type,dim-1,dim> auto... ) requires ( not is_view );
+        template_int_axis constexpr container& push   (                                          aux::container_dim_range<value_type,dim-1,dim> auto, aux::container_dim_range<value_type,dim-1,dim> auto... ) requires ( not is_view );
+        template_int_axis constexpr container& pop    ( )                                                                                                                                                        requires ( not is_view );
+        template_int_axis constexpr container& pop    ( aux::container_dim_range<int,0,1> auto, aux::container_dim_range<int,0,1> auto... )                                                                    requires ( not is_view );
 
     public: // Linear Algorithm
         template_int_axis constexpr       int            adjacent_find       (                                        ) const requires equalable<value_type>;
@@ -84,32 +84,32 @@ class array_algo<array_type,value_type,iterate_type,dim>
         template_int_axis constexpr       decltype(auto) max                 (       binary_pred <iterate_type> auto  ) const;                                 // If axis == 1 return const auto&; otherwise return auto&&.
         template_int_axis constexpr       decltype(auto) min                 (                                        ) const requires comparable<value_type>; // If axis == 1 return const auto&; otherwise return auto&&.
         template_int_axis constexpr       decltype(auto) min                 (       binary_pred <iterate_type> auto  ) const;                                 // If axis == 1 return const auto&; otherwise return auto&&.
-        template_int_axis constexpr       array_type&    next_permutation    (                                        )       requires comparable<value_type>;
-        template_int_axis constexpr       array_type&    next_permutation    (       binary_pred <iterate_type> auto  );
+        template_int_axis constexpr       container&    next_permutation    (                                        )       requires comparable<value_type>;
+        template_int_axis constexpr       container&    next_permutation    (       binary_pred <iterate_type> auto  );
         template_int_axis constexpr       bool           none                ( const equalable_to<iterate_type> auto& ) const;
         template_int_axis constexpr       bool           none                (       unary_pred  <iterate_type> auto  ) const;
-        template_int_axis constexpr       array_type&    partial_sort        ( int                                    )       requires comparable<value_type>;
-        template_int_axis constexpr       array_type&    partial_sort        ( int,  binary_pred <iterate_type> auto  );
-     // template_int_axis constexpr       array_type&    partition           (                                        );
-        template_int_axis constexpr       array_type&    partition           (       unary_pred  <iterate_type> auto  );
-        template_int_axis constexpr       array_type&    prev_permutation    (                                        )       requires comparable<value_type>;
-        template_int_axis constexpr       array_type&    prev_permutation    (       binary_pred <iterate_type> auto  );
-        template_int_axis constexpr       array_type&    remove              ( const equalable_to<iterate_type> auto& )       requires ( not is_view );
-        template_int_axis constexpr       array_type&    remove              (       unary_pred  <iterate_type> auto  )       requires ( not is_view );
-        template_int_axis constexpr       array_type&    reverse             (                                        );
+        template_int_axis constexpr       container&    partial_sort        ( int                                    )       requires comparable<value_type>;
+        template_int_axis constexpr       container&    partial_sort        ( int,  binary_pred <iterate_type> auto  );
+     // template_int_axis constexpr       container&    partition           (                                        );
+        template_int_axis constexpr       container&    partition           (       unary_pred  <iterate_type> auto  );
+        template_int_axis constexpr       container&    prev_permutation    (                                        )       requires comparable<value_type>;
+        template_int_axis constexpr       container&    prev_permutation    (       binary_pred <iterate_type> auto  );
+        template_int_axis constexpr       container&    remove              ( const equalable_to<iterate_type> auto& )       requires ( not is_view );
+        template_int_axis constexpr       container&    remove              (       unary_pred  <iterate_type> auto  )       requires ( not is_view );
+        template_int_axis constexpr       container&    reverse             (                                        );
         template_int_axis constexpr       int            right_adjacent_find (                                        ) const requires equalable<value_type>;
         template_int_axis constexpr       int            right_adjacent_find (       binary_pred <iterate_type> auto  ) const;
         template_int_axis constexpr       int            right_find          ( const equalable_to<iterate_type> auto& ) const;
         template_int_axis constexpr       int            right_find          (       unary_pred  <iterate_type> auto  ) const;
-        template_int_axis constexpr       array_type&    rotate              (       int                              );
-        template_int_axis constexpr       array_type&    stable_partition    ( const equalable_to<iterate_type> auto& )       requires comparable<value_type>;
-        template_int_axis constexpr       array_type&    stable_partition    (       unary_pred  <iterate_type> auto  );
-        template_int_axis constexpr       array_type&    stable_sort         (                                        )       requires comparable<value_type>;
-        template_int_axis constexpr       array_type&    stable_sort         (       binary_pred <iterate_type> auto  );
-        template_int_axis constexpr       array_type&    sort                (                                        )       requires comparable<value_type>;
-        template_int_axis constexpr       array_type&    sort                (       binary_pred <iterate_type> auto  );
-        template_int_axis constexpr       array_type&    unique              (                                        )       requires ( not is_view ) and equalable<value_type>;
-        template_int_axis constexpr       array_type&    unique              (       binary_pred <iterate_type> auto  )       requires ( not is_view );
+        template_int_axis constexpr       container&    rotate              (       int                              );
+        template_int_axis constexpr       container&    stable_partition    ( const equalable_to<iterate_type> auto& )       requires comparable<value_type>;
+        template_int_axis constexpr       container&    stable_partition    (       unary_pred  <iterate_type> auto  );
+        template_int_axis constexpr       container&    stable_sort         (                                        )       requires comparable<value_type>;
+        template_int_axis constexpr       container&    stable_sort         (       binary_pred <iterate_type> auto  );
+        template_int_axis constexpr       container&    sort                (                                        )       requires comparable<value_type>;
+        template_int_axis constexpr       container&    sort                (       binary_pred <iterate_type> auto  );
+        template_int_axis constexpr       container&    unique              (                                        )       requires ( not is_view ) and equalable<value_type>;
+        template_int_axis constexpr       container&    unique              (       binary_pred <iterate_type> auto  )       requires ( not is_view );
         template_int_axis constexpr       array<int>     where               ( const equalable_to<iterate_type> auto& ) const;
         template_int_axis constexpr       array<int>     where               (       unary_pred  <iterate_type> auto  ) const;
 
@@ -120,17 +120,17 @@ class array_algo<array_type,value_type,iterate_type,dim>
         template_int_axis constexpr       auto           product             (                                            ) const = delete;
         template_int_axis constexpr       auto           product             (       std::invocable<iterate_type> auto op ) const requires std::convertible_to<int,result_type>    and multipliable<result_type>;
 
-        template_int_axis constexpr       array_type&    each                (       std::invocable     <iterate_type&> auto  );
-        template_int_axis constexpr const array_type&    each                (       std::invocable     <iterate_type>  auto  ) const;
-        template_int_axis constexpr       array_type&    fill                ( const std::convertible_to<iterate_type>  auto& );
-        template_int_axis constexpr       array_type&    generate            (       function_type      <iterate_type()>auto  );
-        template_int_axis constexpr       array_type&    transform           (       unary_op           <iterate_type>  auto  );
-        template_int_axis constexpr       array_type&    replace             ( const equalable_to       <iterate_type>  auto&, const std::convertible_to<iterate_type> auto& );
-        template_int_axis constexpr       array_type&    replace             (       unary_pred         <iterate_type>  auto,  const std::convertible_to<iterate_type> auto& );
+        template_int_axis constexpr       container&    each                (       std::invocable     <iterate_type&> auto  );
+        template_int_axis constexpr const container&    each                (       std::invocable     <iterate_type>  auto  ) const;
+        template_int_axis constexpr       container&    fill                ( const std::convertible_to<iterate_type>  auto& );
+        template_int_axis constexpr       container&    generate            (       function_type      <iterate_type()>auto  );
+        template_int_axis constexpr       container&    transform           (       unary_op           <iterate_type>  auto  );
+        template_int_axis constexpr       container&    replace             ( const equalable_to       <iterate_type>  auto&, const std::convertible_to<iterate_type> auto& );
+        template_int_axis constexpr       container&    replace             (       unary_pred         <iterate_type>  auto,  const std::convertible_to<iterate_type> auto& );
 
         // Implemented in "root/math/random/container/array.cpp"
-        template_int_axis constexpr       array_type&    sample              ( int )                                             requires ( not is_view ) and std::copyable<value_type>;
-        template_int_axis constexpr       array_type&    shuffle             ( );
+        template_int_axis constexpr       container&    sample              ( int )                                             requires ( not is_view ) and std::copyable<value_type>;
+        template_int_axis constexpr       container&    shuffle             ( );
 
     private: // Auxiliary
         constexpr static void tuple_shape_aux ( auto&, const auto& );

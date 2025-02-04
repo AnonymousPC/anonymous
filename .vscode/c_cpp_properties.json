@@ -9,7 +9,7 @@
             "cStandard": "c23",
             "cppStandard": "c++23",
             "includePath": [
-                "${workspaceFolder}",
+                "${workspaceFolder}/**",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
                 "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
             ],
@@ -19,8 +19,7 @@
             "name": "mac",
             "compilerPath": "/opt/homebrew/opt/llvm/bin/clang++",
             "compilerArgs": [
-                "-std=c++23",
-                "-stdlib=libc++"
+                "-std=c++23"
             ],
             "cStandard": "c23",
             "cppStandard": "c++23",

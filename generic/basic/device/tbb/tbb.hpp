@@ -1,6 +1,7 @@
 #pragma once
 
 class tbb
+    extends protected cpu
 {
     public: // Available
         constexpr static bool is_available ( ) { return true; }
@@ -10,59 +11,58 @@ class tbb
         static execution_context_type execution_context;
 
     public: // Type
-        template < class type > using value_type           = type;
-        template < class type > using reference            = type&;
-        template < class type > using const_reference      = const type&;
-        template < class type > using pointer              = type*;
-        template < class type > using const_pointer        = const type*;
-        template < class type > using stride_pointer       = cpu::template stride_pointer      <type>;
-        template < class type > using const_stride_pointer = cpu::template const_stride_pointer<type>;
+        using cpu::value_type;
+        using cpu::reference;
+        using cpu::const_reference;
+        using cpu::pointer;
+        using cpu::const_pointer;
+        using cpu::stride_pointer;
+        using cpu::const_stride_pointer;
 
     public: // Allocator
-        template < class type > using allocator = std::allocator<type>;
+        template < class type > using allocator = ::tbb::tbb_allocator<type>;
 
     public: // Memory
-                                using layout_type   = std::layout_left;
-        template < class type > using accessor_type = std::default_accessor<type>;
+        using cpu::layout_type;
+        using cpu::accessor_type;
 
     public: // Operator
-        template < class type = void > using plus          = std::plus         <type>;
-        template < class type = void > using minus         = std::minus        <type>;
-        template < class type = void > using multiplies    = std::multiplies   <type>;
-        template < class type = void > using divides       = std::divides      <type>;
-        template < class type = void > using negate        = std::negate       <type>;
-        template < class type = void > using equal_to      = std::equal_to     <type>;
-        template < class type = void > using not_equal_to  = std::not_equal_to <type>;
-        template < class type = void > using less          = std::less         <type>;
-        template < class type = void > using less_equal    = std::less_equal   <type>;
-        template < class type = void > using greater       = std::greater      <type>;
-        template < class type = void > using greater_equal = std::greater_equal<type>; 
-        template < class type = void > using logical_and   = std::logical_and  <type>;
-        template < class type = void > using logical_or    = std::logical_or   <type>;
-        template < class type = void > using logical_not   = std::logical_not  <type>;
-        template < class type = void > using bit_and       = std::bit_and      <type>;
-        template < class type = void > using bit_or        = std::bit_or       <type>;
-        template < class type = void > using bit_xor       = std::bit_xor      <type>;
-        template < class type = void > using bit_not       = std::bit_not      <type>;
+        using cpu::plus;
+        using cpu::minus;
+        using cpu::divides;
+        using cpu::negate;
+        using cpu::equal_to;
+        using cpu::not_equal_to;
+        using cpu::less;
+        using cpu::less_equal;
+        using cpu::greater;
+        using cpu::greater_equal;
+        using cpu::logical_and;
+        using cpu::logical_or;
+        using cpu::logical_not;
+        using cpu::bit_and;
+        using cpu::bit_or;
+        using cpu::bit_xor;
+        using cpu::bit_not;
 
     public: // Hash
-        template < class type > using hash = std::hash<type>;
+        using cpu::hash;
         
     public: // Container
-     // template < class type, int len >                                                                                                                      using array             = unsupported;
-     // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                         using basic_string      = unsupported;
-     // template < class type, class traits = std::char_traits<type> >                                                                                        using basic_string_view = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                                using deque             = unsupported;
-     // template < class type, int len >                                                                                                                      using inplace_vector    = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                                using list              = unsupported;
-        template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>> >                             using map               = ::tbb::concurrent_map<type1,type2,compare,alloc>;
-        template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    class priority_queue;    // Override pop().
-        template < class type, class alloc = allocator<type> >                                                                                                class queue;             // Override size(), pop().
-        template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using set               = ::tbb::concurrent_set<type,compare,alloc>;
-     // template < class type, class alloc = allocator<type> >                                                                                                using stack             = unsupported;
-        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map     = ::tbb::concurrent_unordered_map<type1,type2,hash,equal>; // Use default allocator<std::pair>
-        template < class type, class hash = hash<type>, class equal = equal_to<type>,  class alloc = allocator<type> >                                        using unordered_set     = ::tbb::concurrent_unordered_set<type,hash,equal,alloc>;
-        template < class type, class alloc = allocator<type> >                                                                                                using vector            = ::tbb::concurrent_vector<type,alloc>;
+     // template < class type, int len >                                                                                                                 using array             = unsupported;
+     // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                    using basic_string      = unsupported;
+     // template < class type, class traits = std::char_traits<type> >                                                                                   using basic_string_view = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using deque             = unsupported;
+     // template < class type, int len >                                                                                                                 using inplace_vector    = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using list              = unsupported;
+        template < class type1, class type2, class compare = less<>, class alloc = allocator<std::pair<const type1,type2>> >                             using map               = ::tbb::concurrent_map<type1,type2,compare,alloc>;
+        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   class priority_queue;    // Override pop().
+        template < class type, class alloc = allocator<type> >                                                                                           class queue;             // Override size(), pop().
+        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using set               = ::tbb::concurrent_set<type,compare,alloc>;
+     // template < class type, class alloc = allocator<type> >                                                                                           using stack             = unsupported;
+        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map     = ::tbb::concurrent_unordered_map<type1,type2,hash,equal>; // Use default allocator<std::pair>
+        template < class type, class hash = hash<type>, class equal = equal_to<>,  class alloc = allocator<type> >                                       using unordered_set     = ::tbb::concurrent_unordered_set<type,hash,equal,alloc>;
+     // template < class type, class alloc = allocator<type> >                                                                                           using vector            = supported, but memory is not contiguous.
 
     public: // Algorithm
         constexpr static decltype(auto) accumulate                        ( auto&&... args ) { return std::accumulate                       (std::forward<decltype(args)>(args)...); }

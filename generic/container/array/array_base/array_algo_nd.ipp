@@ -1,10 +1,10 @@
 #pragma once
 
-#define templates             template < class array_type, class value_type, class iterate_type, int dim > requires ( dim >= 2 )
+#define templates             template < class container, class value_type, class iterate_type, int dim > requires ( dim >= 2 )
 #define template_int_axis     template < int axis > requires ( ( axis >= 1 and axis <= dim ) or ( axis >= -dim and axis <= -1 ) )
-#define array_algo            array_algo<array_type,value_type,iterate_type,dim>
-#define derive_of_self        static_cast<array_type&>(self)
-#define const_derive_of_self  static_cast<const array_type&>(self)
+#define array_algo            array_algo<container,value_type,iterate_type,dim>
+#define derive_of_self        static_cast<container&>(self)
+#define const_derive_of_self  static_cast<const container&>(self)
 #define result_type           typename std::invoke_result<decltype(op),iterate_type>::type
 
 // Abbreviation
@@ -100,7 +100,7 @@ constexpr auto array_algo::operator [] ( int from, int to )
 templates
 constexpr const auto array_algo::operator [] ( int from, int to ) const
 {
-    return array_range_view ( const_cast<array_type&>(const_derive_of_self), from, to );
+    return array_range_view ( const_cast<container&>(const_derive_of_self), from, to );
 }
 
 templates
@@ -112,7 +112,7 @@ constexpr auto array_algo::operator [] ( int from, int to, int step )
 templates
 constexpr const auto array_algo::operator [] ( int from, int to, int step ) const
 {
-    return array_range_view ( const_cast<array_type&>(const_derive_of_self), from, to, step );
+    return array_range_view ( const_cast<container&>(const_derive_of_self), from, to, step );
 }
 
 templates
@@ -126,7 +126,7 @@ templates
 constexpr const auto array_algo::operator [] ( pair<int> span1, pair<int> span2 ) const
     requires ( dimension() == 2 )
 {
-    return array_span_view ( const_cast<array_type&>(const_derive_of_self), span1, span2 );
+    return array_span_view ( const_cast<container&>(const_derive_of_self), span1, span2 );
 }
 
 templates
@@ -138,7 +138,7 @@ constexpr auto array_algo::operator [] ( unary_pred<value_type> auto pred )
 templates
 constexpr const auto array_algo::operator [] ( unary_pred<value_type> auto pred ) const
 {
-    return array_filter_view ( const_cast<array_type&>(const_derive_of_self), pred );
+    return array_filter_view ( const_cast<container&>(const_derive_of_self), pred );
 }
 
 
@@ -151,7 +151,7 @@ constexpr auto array_algo::reshape ( int_type auto... args )
             throw index_error("cannot reshape array of shape {} into shape {}", shape(), array{args...});
     #endif
 
-    return array_reshape_view<array_type,sizeof...(args)> ( derive_of_self, { args... } );
+    return array_reshape_view<container,sizeof...(args)> ( derive_of_self, { args... } );
 }
 
 templates
@@ -163,7 +163,7 @@ constexpr const auto array_algo::reshape ( int_type auto... args ) const
             throw index_error("cannot reshape array of shape {} into shape {}", shape(), array{args...});
     #endif
 
-    return array_reshape_view<array_type,sizeof...(args)> ( const_cast<array_type&>(const_derive_of_self), { args... } );
+    return array_reshape_view<container,sizeof...(args)> ( const_cast<container&>(const_derive_of_self), { args... } );
 }
 
 templates
@@ -175,7 +175,7 @@ constexpr auto array_algo::flatten ( )
 templates
 constexpr const auto array_algo::flatten ( ) const
 {
-    return array_flatten_view ( const_cast<array_type&>(const_derive_of_self) ) ;
+    return array_flatten_view ( const_cast<container&>(const_derive_of_self) ) ;
 }
 
 templates
@@ -191,7 +191,7 @@ template < class type2 >
 constexpr const auto array_algo::as_type ( ) const
     requires ( not std::same_as<value_type,type2> ) but std::convertible_to<value_type,type2>
 {
-    return array_type_view<array_type,type2> ( const_cast<array_type&>(const_derive_of_self) );
+    return container_view<container,type2> ( const_cast<container&>(const_derive_of_self) );
 }
 
 // Views (axis)
@@ -201,7 +201,7 @@ template_int_axis
 constexpr decltype(auto) array_algo::view_by_axis ( )
     requires ( axis == 1 or axis == -dimension() )
 {
-    return static_cast<array_type::base&> ( derive_of_self );
+    return static_cast<container::base&> ( derive_of_self );
 }
 
 templates
@@ -209,7 +209,7 @@ template_int_axis
 constexpr decltype(auto) array_algo::view_by_axis ( ) const
     requires ( axis == 1 or axis == -dimension() )
 {
-    return static_cast<const array_type::base&> ( const_cast<array_type&>(const_derive_of_self) );
+    return static_cast<const container::base&> ( const_cast<container&>(const_derive_of_self) );
 }
 
 templates
@@ -218,9 +218,9 @@ constexpr auto array_algo::view_by_axis ( )
     requires ( axis != 1 and axis != -dimension() )
 {
     if constexpr ( axis > 0 )
-        return array_axis_view<array_type,axis>               ( derive_of_self );
+        return array_axis_view<container,axis>               ( derive_of_self );
     else
-        return array_axis_view<array_type,axis+dimension()+1> ( derive_of_self );
+        return array_axis_view<container,axis+dimension()+1> ( derive_of_self );
 }
 
 templates
@@ -229,9 +229,9 @@ constexpr const auto array_algo::view_by_axis ( ) const
     requires ( axis != 1 and axis != -dimension() )
 {
     if constexpr ( axis > 0 )
-        return array_axis_view<array_type,axis>               ( const_cast<array_type&>(const_derive_of_self) );
+        return array_axis_view<container,axis>               ( const_cast<container&>(const_derive_of_self) );
     else
-        return array_axis_view<array_type,axis+dimension()+1> ( const_cast<array_type&>(const_derive_of_self) );
+        return array_axis_view<container,axis+dimension()+1> ( const_cast<container&>(const_derive_of_self) );
 }
 
 
@@ -239,7 +239,7 @@ constexpr const auto array_algo::view_by_axis ( ) const
 
 templates
 template_int_axis
-constexpr array_type& array_algo::clear ( )
+constexpr container& array_algo::clear ( )
     requires ( not is_view )
 {
     derive_of_self.base::clear();
@@ -248,10 +248,10 @@ constexpr array_type& array_algo::clear ( )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::erase ( int from, int to )
+constexpr container& array_algo::erase ( int from, int to )
     requires ( not is_view )
 {
-    // TODO: throw index_error while pos is_array_type.
+    // TODO: throw index_error while pos is_container.
 
     if constexpr ( axis == 1 or axis == -dim )
         derive_of_self.base::erase ( from, to );
@@ -274,7 +274,7 @@ constexpr array_type& array_algo::erase ( int from, int to )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::insert ( aux::array_type_dim_range<int,0,1> auto pos, aux::array_type_dim_range<value_type,dim-1,dim> auto arr, aux::array_type_dim_range<value_type,dim-1,dim> auto... args )
+constexpr container& array_algo::insert ( aux::container_dim_range<int,0,1> auto pos, aux::container_dim_range<value_type,dim-1,dim> auto arr, aux::container_dim_range<value_type,dim-1,dim> auto... args )
     requires ( not is_view )
 {
     if constexpr ( not std::convertible_to<decltype(pos),int> )
@@ -337,7 +337,7 @@ constexpr array_type& array_algo::insert ( aux::array_type_dim_range<int,0,1> au
 
 templates
 template_int_axis
-constexpr array_type& array_algo::push ( aux::array_type_dim_range<value_type,dim-1,dim> auto arr, aux::array_type_dim_range<value_type,dim-1,dim> auto... args )
+constexpr container& array_algo::push ( aux::container_dim_range<value_type,dim-1,dim> auto arr, aux::container_dim_range<value_type,dim-1,dim> auto... args )
     requires ( not is_view )
 {
     #if debug
@@ -382,7 +382,7 @@ constexpr array_type& array_algo::push ( aux::array_type_dim_range<value_type,di
 
 templates
 template_int_axis
-constexpr array_type& array_algo::pop ( )
+constexpr container& array_algo::pop ( )
     requires ( not is_view )
 {
     return pop<axis>(-1);
@@ -390,7 +390,7 @@ constexpr array_type& array_algo::pop ( )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::pop ( aux::array_type_dim_range<int,0,1> auto pos, aux::array_type_dim_range<int,0,1> auto... args )
+constexpr container& array_algo::pop ( aux::container_dim_range<int,0,1> auto pos, aux::container_dim_range<int,0,1> auto... args )
     requires ( not is_view )
 {
     if constexpr ( not std::convertible_to<decltype(pos),int> )
@@ -611,7 +611,7 @@ constexpr decltype(auto) array_algo::min ( binary_pred<iterate_type> auto pred )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::next_permutation ( )
+constexpr container& array_algo::next_permutation ( )
     requires comparable<value_type>
 {
     self.view_by_axis<axis>().next_permutation();
@@ -620,7 +620,7 @@ constexpr array_type& array_algo::next_permutation ( )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::next_permutation ( binary_pred<iterate_type> auto pred )
+constexpr container& array_algo::next_permutation ( binary_pred<iterate_type> auto pred )
 {
     self.view_by_axis<axis>().next_permutation(pred);
     return derive_of_self;
@@ -642,7 +642,7 @@ constexpr bool array_algo::none ( unary_pred<iterate_type> auto pred ) const
 
 templates
 template_int_axis
-constexpr array_type& array_algo::partial_sort ( int len )
+constexpr container& array_algo::partial_sort ( int len )
     requires comparable<value_type>
 {
     self.view_by_axis<axis>().partial_sort(len);
@@ -651,7 +651,7 @@ constexpr array_type& array_algo::partial_sort ( int len )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::partial_sort ( int len, binary_pred<iterate_type> auto pred )
+constexpr container& array_algo::partial_sort ( int len, binary_pred<iterate_type> auto pred )
 {
     self.view_by_axis<axis>().partial_sort(len,pred);
     return derive_of_self;
@@ -659,7 +659,7 @@ constexpr array_type& array_algo::partial_sort ( int len, binary_pred<iterate_ty
 
 templates
 template_int_axis
-constexpr array_type& array_algo::partition ( unary_pred<iterate_type> auto pred )
+constexpr container& array_algo::partition ( unary_pred<iterate_type> auto pred )
 {
     self.view_by_axis<axis>().partition(pred);
     return derive_of_self;
@@ -667,7 +667,7 @@ constexpr array_type& array_algo::partition ( unary_pred<iterate_type> auto pred
 
 templates
 template_int_axis
-constexpr array_type& array_algo::prev_permutation ( )
+constexpr container& array_algo::prev_permutation ( )
     requires comparable<value_type>
 {
     self.view_by_axis<axis>().prev_permutation();
@@ -676,7 +676,7 @@ constexpr array_type& array_algo::prev_permutation ( )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::prev_permutation ( binary_pred<iterate_type> auto pred )
+constexpr container& array_algo::prev_permutation ( binary_pred<iterate_type> auto pred )
 {
     self.view_by_axis<axis>().prev_permutation(pred);
     return derive_of_self;
@@ -684,7 +684,7 @@ constexpr array_type& array_algo::prev_permutation ( binary_pred<iterate_type> a
 
 templates
 template_int_axis
-constexpr array_type& array_algo::remove ( const equalable_to<iterate_type> auto& val )
+constexpr container& array_algo::remove ( const equalable_to<iterate_type> auto& val )
     requires ( not is_view )
 {
     let view = self.view_by_axis<axis>();
@@ -695,7 +695,7 @@ constexpr array_type& array_algo::remove ( const equalable_to<iterate_type> auto
 
 templates
 template_int_axis
-constexpr array_type& array_algo::remove ( unary_pred<iterate_type> auto pred )
+constexpr container& array_algo::remove ( unary_pred<iterate_type> auto pred )
     requires ( not is_view )
 {
     let view = self.view_by_axis<axis>();
@@ -706,7 +706,7 @@ constexpr array_type& array_algo::remove ( unary_pred<iterate_type> auto pred )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::reverse ( )
+constexpr container& array_algo::reverse ( )
 {
     self.view_by_axis<axis>().reverse();
     return derive_of_self;
@@ -743,7 +743,7 @@ constexpr int array_algo::right_find ( unary_pred<iterate_type> auto pred ) cons
 
 templates
 template_int_axis
-constexpr array_type& array_algo::rotate ( int step )
+constexpr container& array_algo::rotate ( int step )
 {
     self.view_by_axis<axis>().rotate(step);
     return derive_of_self;
@@ -751,7 +751,7 @@ constexpr array_type& array_algo::rotate ( int step )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::stable_partition ( const equalable_to<iterate_type> auto& val )
+constexpr container& array_algo::stable_partition ( const equalable_to<iterate_type> auto& val )
     requires comparable<value_type>
 {
     self.view_by_axis<axis>().stable_partition(val);
@@ -760,7 +760,7 @@ constexpr array_type& array_algo::stable_partition ( const equalable_to<iterate_
 
 templates
 template_int_axis
-constexpr array_type& array_algo::stable_partition ( unary_pred<iterate_type> auto pred )
+constexpr container& array_algo::stable_partition ( unary_pred<iterate_type> auto pred )
 {
     self.view_by_axis<axis>().stable_partition(pred);
     return derive_of_self;
@@ -768,7 +768,7 @@ constexpr array_type& array_algo::stable_partition ( unary_pred<iterate_type> au
 
 templates
 template_int_axis
-constexpr array_type& array_algo::stable_sort ( )
+constexpr container& array_algo::stable_sort ( )
     requires comparable<value_type>
 {
     self.view_by_axis<axis>().stable_sort();
@@ -777,7 +777,7 @@ constexpr array_type& array_algo::stable_sort ( )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::stable_sort ( binary_pred<iterate_type> auto pred )
+constexpr container& array_algo::stable_sort ( binary_pred<iterate_type> auto pred )
 {
     self.view_by_axis<axis>().stable_sort(pred);
     return derive_of_self;
@@ -785,7 +785,7 @@ constexpr array_type& array_algo::stable_sort ( binary_pred<iterate_type> auto p
 
 templates
 template_int_axis
-constexpr array_type& array_algo::sort ( )
+constexpr container& array_algo::sort ( )
     requires comparable<value_type>
 {
     if ( self.view_by_axis<axis>().is_sorted() )
@@ -797,7 +797,7 @@ constexpr array_type& array_algo::sort ( )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::sort ( binary_pred<iterate_type> auto pred )
+constexpr container& array_algo::sort ( binary_pred<iterate_type> auto pred )
 {
     if ( self.view_by_axis<axis>().is_sorted(pred) )
         return derive_of_self; // For unknown reason its essential.
@@ -808,7 +808,7 @@ constexpr array_type& array_algo::sort ( binary_pred<iterate_type> auto pred )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::unique ( )
+constexpr container& array_algo::unique ( )
     requires ( not is_view ) and equalable<value_type>
 {
     let view = self.view_by_axis<axis>();
@@ -818,7 +818,7 @@ constexpr array_type& array_algo::unique ( )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::unique ( binary_pred<iterate_type> auto pred )
+constexpr container& array_algo::unique ( binary_pred<iterate_type> auto pred )
     requires ( not is_view )
 {
     let view = self.view_by_axis<axis>();
@@ -892,7 +892,7 @@ constexpr auto array_algo::product ( std::invocable<iterate_type> auto op ) cons
 
 templates
 template_int_axis
-constexpr array_type& array_algo::each ( std::invocable<iterate_type&> auto op )
+constexpr container& array_algo::each ( std::invocable<iterate_type&> auto op )
 {
     self.view_by_axis<axis>().each ( op );
     return derive_of_self;
@@ -900,7 +900,7 @@ constexpr array_type& array_algo::each ( std::invocable<iterate_type&> auto op )
 
 templates
 template_int_axis
-constexpr const array_type& array_algo::each ( std::invocable<iterate_type> auto op ) const
+constexpr const container& array_algo::each ( std::invocable<iterate_type> auto op ) const
 {
     self.view_by_axis<axis>().each ( op );
     return derive_of_self;
@@ -908,7 +908,7 @@ constexpr const array_type& array_algo::each ( std::invocable<iterate_type> auto
 
 templates
 template_int_axis
-constexpr array_type& array_algo::fill ( const std::convertible_to<iterate_type> auto& val )
+constexpr container& array_algo::fill ( const std::convertible_to<iterate_type> auto& val )
 {
     self.view_by_axis<axis>().fill ( val );
     return derive_of_self;
@@ -916,7 +916,7 @@ constexpr array_type& array_algo::fill ( const std::convertible_to<iterate_type>
 
 templates
 template_int_axis
-constexpr array_type& array_algo::generate ( function_type<iterate_type()> auto gen )
+constexpr container& array_algo::generate ( function_type<iterate_type()> auto gen )
 {
     self.view_by_axis<axis>().generate ( gen );
     #if debug // generate() in axis 1 can change it's shape, which will cause potential inalignment.
@@ -931,7 +931,7 @@ constexpr array_type& array_algo::generate ( function_type<iterate_type()> auto 
 
 templates
 template_int_axis
-constexpr array_type& array_algo::transform ( unary_op<iterate_type> auto op )
+constexpr container& array_algo::transform ( unary_op<iterate_type> auto op )
 {
     self.view_by_axis<axis>().transform ( op );
     return derive_of_self;
@@ -939,7 +939,7 @@ constexpr array_type& array_algo::transform ( unary_op<iterate_type> auto op )
 
 templates
 template_int_axis
-constexpr array_type& array_algo::replace ( const equalable_to<iterate_type> auto& val1, const std::convertible_to<iterate_type> auto& val2 )
+constexpr container& array_algo::replace ( const equalable_to<iterate_type> auto& val1, const std::convertible_to<iterate_type> auto& val2 )
 {
     self.view_by_axis<axis>().replace ( val1, val2 );
     return derive_of_self;
@@ -947,7 +947,7 @@ constexpr array_type& array_algo::replace ( const equalable_to<iterate_type> aut
 
 templates
 template_int_axis
-constexpr array_type& array_algo::replace ( unary_pred<iterate_type> auto pred, const std::convertible_to<iterate_type> auto& val )
+constexpr container& array_algo::replace ( unary_pred<iterate_type> auto pred, const std::convertible_to<iterate_type> auto& val )
 {
     self.view_by_axis<axis>().replace ( pred, val );
     return derive_of_self;

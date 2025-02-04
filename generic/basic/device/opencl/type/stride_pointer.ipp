@@ -21,6 +21,8 @@ struct opencl::stride_pointer<type>::index_expr
     int                    stp;
     index                  ex; 
 
+    using result_type = type;
+
     friend boost::compute::detail::meta_kernel& operator << ( boost::compute::detail::meta_kernel& left, const index_expr& right )
     {
         return left << left.get_buffer_identifier<type>(right.buf, boost::compute::memory_object::global_memory)
@@ -70,6 +72,8 @@ struct opencl::const_stride_pointer<type>::index_expr
     size_t                 idx;
     int                    stp;
     index                  ex; 
+
+    using result_type = type;
 
     friend boost::compute::detail::meta_kernel& operator << ( boost::compute::detail::meta_kernel& left, const index_expr& right )
     {

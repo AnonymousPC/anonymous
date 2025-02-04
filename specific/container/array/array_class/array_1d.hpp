@@ -9,7 +9,7 @@ class array<type,1,device>
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> and movable<type> );
-        static_assert ( not same_as<type,bool> ); // std::vector<bool>
+        static_assert ( not ( same_as<type,bool> and same_as<device,cpu> ) ); // std::vector<bool>
 
     public: // Base
         using base  = device::template vector<type>;
@@ -50,7 +50,7 @@ class array<type,1,device>
         template < class type2 > constexpr explicit array ( const array<type2,1,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
 
     public: // Conversion (device)
-        template < class device2 > constexpr array ( const array<type,1,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>; 
+        template < class device2 > constexpr explicit array ( const array<type,1,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>; 
 
     public: // Memebr
         constexpr static int                  dimension     ( );

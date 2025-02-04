@@ -1,14 +1,14 @@
 #pragma once
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( type init )
+constexpr basic_string<type,device>::basic_string ( const type& init )
     extends base ( 1, init )
 {
     
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( int init_size, type init_char )
+constexpr basic_string<type,device>::basic_string ( int init_size, const type& init_char )
     extends base ( init_size, init_char )
 {
     
@@ -22,16 +22,16 @@ constexpr basic_string<type,device>::basic_string ( const type* init )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( string_view cvt )
+constexpr basic_string<type,device>::basic_string ( const view& cvt )
     extends base ( cvt.data(), cvt.size() )
 {
 
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::operator string_view ( ) const
+constexpr basic_string<type,device>::operator view ( ) const
 {
-    return string_view(data(), size());
+    return view(data(), size());
 }
 
 template < class type, class device >
@@ -270,7 +270,7 @@ constexpr basic_string<type,device>::const_reference basic_string<type,device>::
 }   
 
 template < class type, class device >
-constexpr basic_string<type,device>::string_view basic_string<type,device>::operator[] ( int pos_1, int pos_2 ) const
+constexpr basic_string<type,device>::view basic_string<type,device>::operator[] ( int pos_1, int pos_2 ) const
 {
     let abs_pos_1 = pos_1 >= 0 ? pos_1 otherwise pos_1 + size();
     let abs_pos_2 = pos_2 >= 0 ? pos_2 otherwise pos_2 + size();
@@ -283,7 +283,7 @@ constexpr basic_string<type,device>::string_view basic_string<type,device>::oper
         throw index_error("index [{}, {}] is out of range with size {}", pos_1, pos_2, size());
     #endif
 
-    return string_view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
+    return view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
 }
 
 template < class type, class device >
@@ -312,7 +312,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::erase ( int old_
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new_pos, string_view new_value )
+constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new_pos, view new_value )
 {
     #if debug
     if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
@@ -323,7 +323,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>& basic_string<type,device>::push ( string_view new_value )
+constexpr basic_string<type,device>& basic_string<type,device>::push ( view new_value )
 {
     base::append(new_value.data(), new_value.size());
     return self;
@@ -342,6 +342,12 @@ constexpr basic_string<type,device>& basic_string<type,device>::pop ( int old_po
 
 template < class type, class device >
 constexpr bool basic_string<type,device>::ownership ( )
+{
+    return true;
+}
+
+template < class type, class device >
+constexpr bool basic_string<type,device>::contiguous ( )
 {
     return true;
 }

@@ -1,72 +1,76 @@
 #pragma once
-#define derive_of_self       static_cast<      collection_type&>(self)
-#define const_derive_of_self static_cast<const collection_type&>(self)
 
-template < class collection_type, class type, class device > 
-constexpr bool collection_algo<collection_type,type,device>::all ( predicate<type> auto pred ) const
+template < class container, class type, class device > 
+constexpr decltype(auto) collection_algo<container,type,device>::begin ( )
 {
-    return device::all_of ( const_derive_of_self.begin(), const_derive_of_self.end(), pred );
+    return static_cast<container&>(self).begin();
 }
 
-template < class collection_type, class type, class device > 
-constexpr int collection_algo<collection_type,type,device>::count ( predicate<type> auto pred ) const
+template < class container, class type, class device > 
+constexpr decltype(auto) collection_algo<container,type,device>::begin ( ) const
 {
-    return device::count_if ( const_derive_of_self.begin(), const_derive_of_self.end(), pred );
+    return static_cast<const container&>(self).begin();
 }
 
-template < class collection_type, class type, class device > 
-constexpr bool collection_algo<collection_type,type,device>::exist ( predicate<type> auto pred ) const
+template < class container, class type, class device > 
+constexpr decltype(auto) collection_algo<container,type,device>::end ( )
 {
-    return device::any_of ( const_derive_of_self.begin(), const_derive_of_self.end(), pred );
+    return static_cast<container&>(self).end();
 }
 
-template < class collection_type, class type, class device > 
-constexpr bool collection_algo<collection_type,type,device>::none ( predicate<type> auto pred ) const
+template < class container, class type, class device > 
+constexpr decltype(auto) collection_algo<container,type,device>::end ( ) const
 {
-    return device::none_of ( const_derive_of_self.begin(), const_derive_of_self.end(), pred );
+    return static_cast<const container&>(self).end();
 }
 
-template < class collection_type, class type, class device > 
-constexpr collection_type& collection_algo<collection_type,type,device>::each ( invocable<type&> auto op )
+template < class container, class type, class device > 
+constexpr decltype(auto) collection_algo<container,type,device>::size ( ) const
 {
-    device::for_each ( derive_of_self.begin(), derive_of_self.end(), op );
-    return derive_of_self;
+    return static_cast<const container&>(self).size();
 }
 
-template < class collection_type, class type, class device > 
-constexpr const collection_type& collection_algo<collection_type,type,device>::each ( invocable<const type&> auto op ) const
+template < class container, class type, class device > 
+constexpr auto collection_algo<container,type,device>::average ( ) const
+    requires default_initializable<type> and plusable<type> and dividable_to<type,int>
 {
-    device::for_each ( const_derive_of_self.begin(), const_derive_of_self.end(), op );
-    return const_derive_of_self;
+    return sum() / size();
 }
 
-template < class collection_type, class type, class device > 
-constexpr auto collection_algo<collection_type,type,device>::sum ( ) const
+template < class container, class type, class device > 
+constexpr auto collection_algo<container,type,device>::sum ( ) const
     requires default_initializable<type> and plusable<type>
 {
-    return device::accumulate ( const_derive_of_self.begin(), const_derive_of_self.end(), type() );
+    if constexpr ( number_type<type> )
+        return device::reduce(begin(), end(), type(0));
+    else
+        return device::accumulate(begin(), end(), type(0));
 }
 
-template < class collection_type, class type, class device > 
-constexpr auto collection_algo<collection_type,type,device>::sum ( invocable<type> auto op ) const
-    requires default_initializable<invoke_result<decltype(op),type>> and plusable<invoke_result<decltype(op),type>>
-{
-    return device::accumulate ( const_derive_of_self.begin(), const_derive_of_self.end(), invoke_result<decltype(op),type>(), [&] ( const auto& a, const auto& b ) { return a + op(b); } );
-}
-
-template < class collection_type, class type, class device > 
-constexpr auto collection_algo<collection_type,type,device>::product ( ) const
+template < class container, class type, class device > 
+constexpr auto collection_algo<container,type,device>::product ( ) const
     requires convertible_to<int,type> and multipliable<type>
 {
-    return device::accumulate ( const_derive_of_self.begin(), const_derive_of_self.end(), type(1), [] ( const auto& a, const auto& b ) { return a * b; } );
+    if constexpr ( number_type<type> )
+        return device::reduce(begin(), end(), type(1), typename device::template multiplies<type>());
+    else
+        return device::accumulate(begin(), end(), type(1), typename device::template multiplies<type>());
 }
 
-template < class collection_type, class type, class device > 
-constexpr auto collection_algo<collection_type,type,device>::product ( invocable<type> auto op ) const
-    requires convertible_to<int,invoke_result<decltype(op),type>> and multipliable<invoke_result<decltype(op),type>>
+template < class container, class type, class device > 
+constexpr container& collection_algo<container,type,device>::for_each ( invocable<type&> auto op )
 {
-    return device::accumulate ( const_derive_of_self.begin(), const_derive_of_self.end(), invoke_result<decltype(op),type>(1), [&] ( const auto& a, const auto& b ) { return a * op(b); } );
+    device::for_each(begin(), end(), op);
+    return static_cast<container&>(self);
 }
+
+template < class container, class type, class device > 
+constexpr const container& collection_algo<container,type,device>::for_each ( invocable<type> auto op ) const
+{
+    device::for_each(begin(), end(), op);
+    return static_cast<const container&>(self);
+}
+
 
 #undef derive_of_self
 #undef const_derive_of_self

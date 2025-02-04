@@ -11,11 +11,11 @@ using namespace ap;
 
 int main ( )
 {
-    print("hello");
-    throw exception("{}", "oh no");
+    print("hello,world"s.partition(','));
 }
 
 // TODO:
+// 0. array default-initialzable / movable
 // 1. string_algo. string view should extends, protected array_algo protected string_algo and use part of it.
 //  尝试把: ap::is_alnum, operator+都改为string_view接口。
 // 4. 先开启io, 然后适配线性代数。

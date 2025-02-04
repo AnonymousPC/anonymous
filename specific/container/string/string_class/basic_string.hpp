@@ -2,14 +2,18 @@
 
 template < class type, class device >
 class basic_string
-    extends public device::template basic_string<type>
+    extends public device::template basic_string<type>,
+            public array_algo <basic_string<type,device>,type,1,device>,
+            public string_algo<basic_string<type,device>,type,  device>
 {
     private: // Precondition
         static_assert ( char_type<type> );
 
     private: // Base
-        using base = device::template basic_string<type>;
-        using view = basic_string_view<type,device>; 
+        using base        = device::template basic_string<type>;
+        using view        = basic_string_view<type,device>; 
+        using array_algo  = array_algo <basic_string<type,device>,type,1,device>;
+        using string_algo = string_algo<basic_string<type,device>,type,  device>;
 
     public: // Typedef
         using  value_type      = device::template value_type     <type>;
@@ -79,6 +83,10 @@ class basic_string
     public: // Memory 
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
+
+    public: // Algo
+        using array_algo ::partition;
+        using string_algo::partition;
 };
 
 template < char_type type >               basic_string ( type )                           -> basic_string<type>;

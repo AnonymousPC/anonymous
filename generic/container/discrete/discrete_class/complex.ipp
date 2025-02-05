@@ -1,14 +1,21 @@
 #pragma once
 
 template < class type >
-constexpr cpu::complex<type>::complex ( type r, type i )
+constexpr complex<type>::complex ( type r )
+    extends std::complex<type>(std::move(r))
+{
+
+}
+
+template < class type >
+constexpr complex<type>::complex ( type r, type i )
     extends std::complex<type>(std::move(r), std::move(i))
 {
 
 }
 
 template < class type >
-constexpr type& cpu::complex<type>::real ( )
+constexpr type& complex<type>::real ( )
 {
     struct raw_complex { type r; type i; };
     static_assert(layout_compatible_with<complex,raw_complex>);
@@ -16,7 +23,7 @@ constexpr type& cpu::complex<type>::real ( )
 }
 
 template < class type >
-constexpr const type& cpu::complex<type>::real ( ) const
+constexpr const type& complex<type>::real ( ) const
 {
     struct raw_complex { type r; type i; };
     static_assert(layout_compatible_with<complex,raw_complex>);
@@ -24,7 +31,7 @@ constexpr const type& cpu::complex<type>::real ( ) const
 }
 
 template < class type >
-constexpr type& cpu::complex<type>::imag ( )
+constexpr type& complex<type>::imag ( )
 {
     struct raw_complex { type r; type i; };
     static_assert(layout_compatible_with<complex,raw_complex>);
@@ -32,7 +39,7 @@ constexpr type& cpu::complex<type>::imag ( )
 }
 
 template < class type >
-constexpr const type& cpu::complex<type>::imag ( ) const
+constexpr const type& complex<type>::imag ( ) const
 {
     struct raw_complex { type r; type i; };
     static_assert(layout_compatible_with<complex,raw_complex>);

@@ -1,17 +1,16 @@
 #pragma once
 
 template < class type1, class type2 >
-class cpu::pair
+class pair
     extends public std::pair<type1,type2>
 {
     public: // Typedef
-        using  key_type    = type1;
-        using  value_type  = type2;
-        using  device_type = cpu;
+        using  key_type   = type1;
+        using  value_type = type2;
         struct pair_tag { };
 
     public: // Core
-        constexpr pair ( );         
+        constexpr pair ( ) = default;         
         constexpr pair ( type1, type2 );
 
     public: // Member

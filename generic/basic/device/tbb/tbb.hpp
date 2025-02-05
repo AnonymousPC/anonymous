@@ -3,8 +3,8 @@
 class tbb
     extends protected cpu
 {
-    public: // Available
-        constexpr static bool is_available ( ) { return true; }
+    public: // Trait
+        struct device_tag { };
 
     public: // Execution
         using  execution_context_type = execpools::tbb_thread_pool;

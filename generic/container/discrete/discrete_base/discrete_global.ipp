@@ -357,7 +357,7 @@ constexpr auto operator <=> ( const pair_type auto& left, const pair_type auto& 
 constexpr pair_type auto operator + ( const pair_type auto& left, const pair_type auto& right )
     requires plusable_to<left_key_type,right_key_type> and plusable_to<left_value_type,right_value_type>
 {
-    return cpu::pair ( left.key() + right.key(), left.value() + right.value() );
+    return pair ( left.key() + right.key(), left.value() + right.value() );
 }
 
 constexpr pair_type auto operator - ( const pair_type auto& left, const pair_type auto& right )

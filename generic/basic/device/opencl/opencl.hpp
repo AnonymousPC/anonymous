@@ -5,8 +5,8 @@
 
 class opencl
 {
-    public: // Available
-        constexpr static bool is_available ( ) { return true; }
+    public: // Trait
+        struct device_tag { };
 
     public: // Execution
         using  execution_context_type = detail::opencl_queue_context;
@@ -33,7 +33,7 @@ class opencl
         template < class type = void > class minus;
         template < class type = void > class multiplies;
         template < class type = void > class divides;
-        template < class type = void > class negate;//////////
+        template < class type = void > class negate;
         template < class type = void > class equal_to;
         template < class type = void > class not_equal_to;
         template < class type = void > class less;
@@ -46,7 +46,7 @@ class opencl
         template < class type = void > class bit_and;
         template < class type = void > class bit_or;
         template < class type = void > class bit_xor;
-        template < class type = void > class bit_not; /////
+        template < class type = void > class bit_not;
 
     public: // Hash
         template < class type > using hash = boost::compute::hash<type>;

@@ -112,6 +112,7 @@
         "target": "cpp",
         "csetjmp": "cpp",
         "inplace_vector": "cpp",
-        "stream_ref": "cpp"
+        "stream_ref": "cpp",
+        "ccomplex": "cpp"
     }
 }

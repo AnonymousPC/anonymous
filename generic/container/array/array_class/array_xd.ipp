@@ -184,8 +184,8 @@ template < class type, class device >
 template < class type2 >
 constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device>& cvt )
     requires convertible_to<type2,type> but ( not same_as<type,type2> )
-    extends array ( cvt.shape() )
 {
+    resize(cvt.shape());
     if ( cvt.ownership() )
         device::transform(cvt.array<type2,max_dim,device>::base::begin(), cvt.array<type2,max_dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
     else
@@ -196,8 +196,8 @@ template < class type, class device >
 template < class type2 >
 constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device>& cvt )
     requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
-    extends array ( cvt.shape() )
 {
+    resize(cvt.shape());
     if ( cvt.ownership() )
         device::transform(cvt.array<type2,max_dim,device>::base::begin(), cvt.array<type2,max_dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
     else
@@ -208,11 +208,11 @@ template < class type, class device >
 template < class device2 >
 constexpr array<type,max_dim,device>::array ( const array<type,max_dim,device2>& cvt )
     requires same_as<device,cpu> or same_as<device2,cpu>
-    extends array ( cvt.shape() )
 {
     static_assert(same_as<typename device ::layout_type,std::layout_right> or same_as<typename device ::layout_type,std::layout_left>);
     static_assert(same_as<typename device2::layout_type,std::layout_right> or same_as<typename device2::layout_type,std::layout_left>);
 
+    resize(cvt.shape());
     if constexpr ( not same_as<device,cpu> )
         if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
             if ( cvt.ownership() )

@@ -6,79 +6,56 @@ namespace ap
     /// Constant
     namespace constants
     {
-        constexpr const long double e   = std::numbers::e_v <long double>;
-        constexpr const long double pi  = std::numbers::pi_v<long double>;
-        constexpr const long double inf = std::numeric_limits<long double>::infinity();
+        constexpr const double e   = std::numbers::e_v  <double>;
+        constexpr const double pi  = std::numbers::pi_v <double>;
+        constexpr const double inf = std::numeric_limits<double>::infinity();
     }
+
+    /// Arithmetic
+    constexpr number_type auto abs   ( number_type auto );
+    constexpr number_type auto mod   ( number_type auto, number_type auto );
+    constexpr number_type auto hypot ( number_type auto, number_type auto );
+    constexpr number_type auto pow   ( number_type auto, number_type auto );
+    constexpr number_type auto exp   ( number_type auto );
+    constexpr number_type auto sqrt  ( number_type auto );
+    constexpr number_type auto cbrt  ( number_type auto );
+    constexpr number_type auto log   ( number_type auto, number_type auto );
+    constexpr number_type auto ln    ( number_type auto );
+    constexpr float_type  auto ceil  ( float_type  auto );
+    constexpr float_type  auto floor ( float_type  auto );
+    constexpr float_type  auto round ( float_type  auto );
+
+    /// Complex
+    template < class type > concept complex_type  = requires { typename type::complex_tag;  };
+    template < number_type type > class complex;
+    constexpr number_type auto abs  ( complex_type auto );
+    constexpr number_type auto pow  ( complex_type auto, complex_type auto );
+    constexpr number_type auto exp  ( complex_type auto );
+    constexpr number_type auto sqrt ( complex_type auto );
+    constexpr number_type auto log  ( complex_type auto );
+    constexpr number_type auto ln   ( complex_type auto );
+    constexpr number_type auto conj ( complex_type auto );
 
     /// Geometric
     template < class type > concept angle_type    = requires { typename type::angle_tag;    };
     template < class type > concept degree_type   = requires { typename type::degree_tag;   } and angle_type<type>;
     template < class type > concept radian_type   = requires { typename type::radian_tag;   } and angle_type<type>;
-    template < class type > concept complex_type  = requires { typename type::complex_tag;  };
-
-    /// Geometric 
     template < float_type  type = double > class degree;
     template < float_type  type = double > class radian;
-    template < number_type type >          class complex;
-
-    /// Arithmetic
-    constexpr int_type     auto abs    ( int_type           auto );
-    constexpr int_type     auto log    ( int_type           auto, int_type     auto );
-    constexpr int_type     auto log2   ( int_type           auto );
-    constexpr int_type     auto log10  ( int_type           auto );
-    constexpr int_type     auto ln     ( int_type           auto );
-    constexpr int_type     auto mod    ( int_type           auto, int_type     auto );
-    constexpr int_type     auto pow    ( int_type           auto, int_type     auto );
-    constexpr int_type     auto sqrt   ( int_type           auto );
-    constexpr int_type     auto exp    ( int_type           auto );
-    constexpr float_type   auto abs    ( float_type         auto );
-    constexpr float_type   auto floor  ( float_type         auto );
-    constexpr float_type   auto ceil   ( float_type         auto );
-    constexpr float_type   auto round  ( float_type         auto );
-    constexpr float_type   auto log    ( float_type         auto, float_type   auto );
-    constexpr float_type   auto log    ( float_type         auto, int_type     auto );
-    constexpr float_type   auto log    ( int_type           auto, float_type   auto );
-    constexpr float_type   auto log2   ( float_type         auto );
-    constexpr float_type   auto log10  ( float_type         auto );
-    constexpr float_type   auto ln     ( float_type         auto );
-    constexpr float_type   auto mod    ( float_type         auto, float_type   auto );
-    constexpr float_type   auto mod    ( float_type         auto, int_type     auto );
-    constexpr float_type   auto mod    ( int_type           auto, float_type   auto );
-    constexpr float_type   auto pow    ( float_type         auto, float_type   auto );
-    constexpr float_type   auto pow    ( float_type         auto, int_type     auto );
-    constexpr float_type   auto pow    ( int_type           auto, float_type   auto );
-    constexpr float_type   auto sqrt   ( float_type         auto );
-    constexpr float_type   auto exp    ( float_type         auto );
-    constexpr angle_type   auto abs    ( angle_type         auto );
-    constexpr float_type   auto sin    ( angle_type         auto );
-    constexpr float_type   auto cos    ( angle_type         auto );
-    constexpr float_type   auto tan    ( angle_type         auto );
-    constexpr float_type   auto cot    ( angle_type         auto );
-    constexpr float_type   auto sec    ( angle_type         auto );
-    constexpr float_type   auto csc    ( angle_type         auto );
-    constexpr angle_type   auto mod    ( angle_type         auto, angle_type   auto );
-    constexpr angle_type   auto arcsin ( float_type         auto );
-    constexpr angle_type   auto arccos ( float_type         auto );
-    constexpr angle_type   auto arctan ( float_type         auto );
-    constexpr angle_type   auto arccot ( float_type         auto );
-    constexpr angle_type   auto arcsec ( float_type         auto );
-    constexpr angle_type   auto arccsc ( float_type         auto );
-    constexpr number_type  auto abs    ( complex_type       auto );
-    constexpr number_type  auto norm   ( complex_type       auto );
-    constexpr complex_type auto conj   ( complex_type       auto );
-    constexpr complex_type auto log    ( complex_type       auto, complex_type auto );
-    constexpr complex_type auto log    ( complex_type       auto, number_type  auto );
-    constexpr complex_type auto log    ( number_type        auto, complex_type auto );
-    constexpr complex_type auto log2   ( complex_type       auto );
-    constexpr complex_type auto log10  ( complex_type       auto );
-    constexpr complex_type auto ln     ( complex_type       auto );
-    constexpr complex_type auto pow    ( complex_type       auto, complex_type auto );
-    constexpr complex_type auto pow    ( complex_type       auto, number_type  auto );
-    constexpr complex_type auto pow    ( number_type        auto, complex_type auto );
-    constexpr complex_type auto sqrt   ( complex_type       auto );
-    constexpr complex_type auto exp    ( complex_type       auto );
-    constexpr complex_type auto exp2   ( complex_type       auto );
+    constexpr angle_type   auto abs    ( angle_type auto )
+    constexpr angle_type   auto mod    ( angle_type auto, angle_type auto );
+    constexpr float_type   auto sin    ( angle_type auto );
+    constexpr float_type   auto cos    ( angle_type auto );
+    constexpr float_type   auto tan    ( angle_type auto );
+    constexpr float_type   auto cot    ( angle_type auto );
+    constexpr float_type   auto sec    ( angle_type auto );
+    constexpr float_type   auto csc    ( angle_type auto );
+    constexpr angle_type   auto arcsin ( float_type auto );
+    constexpr angle_type   auto arccos ( float_type auto );
+    constexpr angle_type   auto arctan ( float_type auto );
+    constexpr angle_type   auto arccot ( float_type auto );
+    constexpr angle_type   auto arcsec ( float_type auto );
+    constexpr angle_type   auto arccsc ( float_type auto );
 
     // /// Linear
     // #define left_type                         decay<decltype(left)>

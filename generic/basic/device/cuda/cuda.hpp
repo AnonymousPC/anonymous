@@ -36,10 +36,4 @@
 
     };
     cuda::execution_context_type cuda::execution_context = cuda::execution_context_type();
-#else
-    class cuda
-    {
-        public: // Available
-            constexpr static bool is_available ( ) { return false; }
-    };
 #endif

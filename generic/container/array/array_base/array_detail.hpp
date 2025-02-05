@@ -396,17 +396,17 @@ namespace detail
                        buff.copyfmt(stream);
                        buff.setf(stream.flags());
                        buff << item;
-                       return string(buff.str()); 
+                       return buff.str(); 
                    });
     }
 
     auto stringalize_array ( auto& stream, const auto& arr, const auto& stringalizer )
     {
         if constexpr ( decay<decltype(arr)>::dimension() == 1 )
-            return array<string,decay<decltype(arr)>::dimension()>(arr.size(), [&] (int i) { return stringalizer(arr[i]); } );
+            return array<std::string,decay<decltype(arr)>::dimension()>(arr.size(), [&] (int i) { return stringalizer(arr[i]); } );
         else
         {
-            let string_array = array<string,decay<decltype(arr)>::dimension()>();
+            let string_array = array<std::string,decay<decltype(arr)>::dimension()>();
             string_array.resize(arr.shape());
             for ( int i in range(arr.shape()[1]) )
                 string_array[i] = stringalize_array(stream,arr[i],stringalizer);
@@ -421,12 +421,12 @@ namespace detail
         if constexpr ( decay<decltype(arr)>::dimension() == 1 )
         {
             let align = arr.empty() ? 0 otherwise arr.max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
-            arr.for_each([&] (auto& str) { str.left_justify(align); });
+            arr.for_each([&] (auto& str) { str.resize(align, ' '); });
         }
         else
         {
             let align = arr.empty() ? 0 otherwise arr.flatten().max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
-            arr.flatten().for_each([&] (auto& str) { str.left_justify(align); });
+            arr.flatten().for_each([&] (auto& str) { str.resize(align, ' '); });
         }
     }
 

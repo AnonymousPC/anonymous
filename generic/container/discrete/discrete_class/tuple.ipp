@@ -1,92 +1,52 @@
 #pragma once
 
-
-/// Tuple with size() == 0
-
-// Core
-
-constexpr int tuple<>::size ( )
+template < class... types >
+constexpr int tuple<types...>::size ( )
 {
-    return 0;
+    return sizeof...(types);
 }
 
-
-
-/// Tuple with size() == 1
-// Core
-
-template < class type >
-constexpr tuple<type>::tuple ( type init )
-    extends first ( std::forward<decltype(init)>(init) )
+template < class... types >
+constexpr tuple<types...>::tuple ( types... inits )
+    extends std::tuple<types...>(std::move(inits)...)
 {
 
 }
 
-template < class type >
-constexpr int tuple<type>::size ( )
+template < class... types >
+template < class... types2 >
+constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
+    requires ( convertible_to<types2,types> and ... ) but ( not ( same_as<types,types2> and ... ) )
 {
-    return 1;
+    detail::for_constexpr<1,size()>([&] <int index> { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
 }
 
-template < class type >
-constexpr decltype(auto) tuple<type>::operator [] ( auto index )
-    requires ( index.value == 1 or index.value == -1 )
+template < class... types >
+template < class... types2 >
+constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
+    requires ( constructible_from<types,types2> and ... ) but ( not ( convertible_to<types2,types> and ... ) )
 {
-    return static_cast<type&> ( first );
+    detail::for_constexpr<1,size()>([&] <int index> { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
 }
 
-template < class type >
-constexpr decltype(auto) tuple<type>::operator [] ( auto index ) const
-    requires ( index.value == 1 or index.value == -1 )
+template < class... types >
+template < int index >
+constexpr index_type_of<index,types...>& tuple<types...>::value ( )
+    requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() )
 {
-    return static_cast<const type&> ( first );
-}
-
-
-
-
-/// Tuple with size() >= 2
-
-// Core
-
-template < class type, class... types >
-constexpr tuple<type,types...>::tuple ( type init, types... args )
-    extends first ( std::forward<decltype(init)>(init) ),
-            other ( std::forward<decltype(args)>(args)... )
-{
-
-}
-
-template < class type, class... types >
-constexpr int tuple<type,types...>::size ( )
-{
-    return sizeof...(types) + 1;
-}
-
-template < class type, class... types >
-constexpr decltype(auto) tuple<type,types...>::operator [] ( auto index )
-    requires ( ( index.value >= -size() and index.value <= -1 ) or ( index.value >= 1 and index.value <= size() ) )
-{
-    if constexpr ( index.value == 1 or index.value == -size() )
-        return static_cast<type&> ( first );
-
-    else if constexpr ( index.value > 0 )
-        return other [ constexpr_index<index.value-1> () ];
-
+    if constexpr ( index > 0 )
+        return std::get<index-1>(static_cast<std::tuple<types...>&>(self));
     else
-        return other [ constexpr_index<index.value>   () ];
+        return std::get<index+size()>(static_cast<std::tuple<types...>&>(self));
 }
 
-template < class type, class... types >
-constexpr decltype(auto) tuple<type,types...>::operator [] ( auto index ) const
-    requires ( ( index.value >= -size() and index.value <= -1 ) or ( index.value >= 1 and index.value <= size() ) )
+template < class... types >
+template < int index >
+constexpr const index_type_of<index,types...>& tuple<types...>::value ( ) const
+    requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() )
 {
-    if constexpr ( index.value == 1 or index.value == -size() )
-        return static_cast<const type&> ( first );
-
-    else if constexpr ( index.value > 0 )
-        return other [ constexpr_index<index.value-1> () ];
-
+    if constexpr ( index > 0 )
+        return std::get<index-1>(static_cast<const std::tuple<types...>&>(self));
     else
-        return other [ constexpr_index<index.value>   () ];
+        return std::get<index+size()>(static_cast<const std::tuple<types...>&>(self));
 }

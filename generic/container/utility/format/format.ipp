@@ -23,8 +23,8 @@ template < class parse_context >
 constexpr parse_context::iterator std::formatter<type>::parse ( parse_context& ctx )
 {
     let b = ctx.begin();
-    let e = std::formatter<typename type::value_type>().parse ( ctx );
-    parse_ctx = "{:" + ap::string(ap::string_view(b, e)) + '}'; // Try parsing and return to end of format-braces... if error occured then throw exception.
+    let e = std::formatter<typename type::value_type>().parse(ctx);
+    parse_ctx = "{:" + ap::string(ap::string_view(b, e-b)) + '}'; // Try parsing and return to end of format-braces... if error occured then throw exception.
     return e;
 }
 
@@ -40,9 +40,9 @@ constexpr format_context::iterator std::formatter<type>::format ( const type& ar
     let stringalizer = [this] ( const typename type::value_type& item ) { return ap::string(parse_ctx).format(item); };
 
     std::stringstream buff;
-    let strarr = ap::aux::stringalize_array(buff, arr, stringalizer);
-    ap::aux::align_array(strarr);
-    ap::aux::print_array(buff, strarr);
+    let strarr = ap::detail::stringalize_array(buff, arr, stringalizer);
+    ap::detail::align_array(strarr);
+    ap::detail::print_array(buff, strarr);
 
     return std::formatter<std::string_view>().format(buff.view(), ctx);
 }
@@ -65,14 +65,14 @@ template < ap::string_type type >
 template < class parse_context >
 constexpr parse_context::iterator std::formatter<type,typename type::value_type>::parse ( parse_context& ctx )
 {
-    return std_fmt.parse ( ctx );
+    return std_fmt.parse(ctx);
 }
 
 template < ap::string_type type >
 template < class format_context >
 constexpr format_context::iterator std::formatter<type,typename type::value_type>::format ( const type& str, format_context& ctx ) const
 {
-    return std_fmt.format ( std::basic_string_view<typename type::value_type>(str.begin(), str.end()), ctx );
+    return std_fmt.format(std::basic_string_view<typename type::value_type>(str.data(), str.size()), ctx);
 }
 
 namespace ap { // Back into namespace ap.

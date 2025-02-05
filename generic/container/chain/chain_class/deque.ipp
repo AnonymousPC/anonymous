@@ -1,146 +1,143 @@
 #pragma once
 
-/// Class deque
-
-// Core
-
-template < class type >
-constexpr deque<type>::deque ( deque&& init )
-    extends arr         ( std::move     ( arr ) ),
-            index_first ( std::exchange ( init.index_first,  1 ) ),
-            index_last  ( std::exchange ( init.index_last,  -1 ) )
+template < class type, class device >
+constexpr int deque<type,device>::size ( ) const
 {
-
+    return base::size();
 }
 
-template < class type >
-constexpr deque<type>& deque<type>::operator = ( deque<type>&& right )
+template < class type, class device >
+constexpr bool deque<type,device>::empty ( ) const
 {
-    // We know nothing about how vector moves, so swap is the always-ok method.
-    std::swap ( self.arr,         right.arr         );
-    std::swap ( self.index_first, right.index_first );
-    std::swap ( self.index_last,  right.index_last  );
-
-    return self;
+    return base::empty();
 }
 
-// Interface
-
-template < class type >
-constexpr int deque<type>::size ( ) const
+template < class type, class device >
+constexpr deque<type,device>::iterator deque<type,device>::begin ( )
 {
-    return arr.size() * chunk - ( index_first - 1 ) - ( chunk - index_last );
+    return base::begin();
 }
 
-template < class type >
-constexpr bool deque<type>::empty ( ) const
+template < class type, class device >
+constexpr deque<type,device>::const_iterator deque<type,device>::begin ( ) const
 {
-    return size() == 0;
+    return base::begin();
 }
 
-template < class type >
-constexpr type& deque<type>::front ( )
+template < class type, class device >
+constexpr deque<type,device>::iterator deque<type,device>::end ( )
+{
+    return base::end();
+}
+
+template < class type, class device >
+constexpr deque<type,device>::const_iterator deque<type,device>::end ( ) const
+{
+    return base::end();
+}
+
+template < class type, class device >
+constexpr deque<type,device>::reference deque<type,device>::operator [] ( int pos )
+{
+    #if debug
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
+    #endif        
+    return base::operator[](pos >= 0 ? pos-1 otherwise pos+size());
+}
+
+template < class type, class device >
+constexpr deque<type,device>::const_reference deque<type,device>::operator [] ( int pos ) const
+{
+    #if debug
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
+    #endif        
+    return base::operator[](pos >= 0 ? pos-1 otherwise pos+size());
+}
+
+template < class type, class device >
+constexpr deque<type,device>::reference deque<type,device>::front ( )
 {
     #if debug
         if ( empty() )
-            throw index_error("cannot get front from deque with size {}", size());
+            throw value_error("cannot access front of an empty deque");
     #endif
-    return arr[1][index_first];
+    return base::front();
 }
 
-template < class type >
-constexpr const type& deque<type>::front ( ) const
+template < class type, class device >
+constexpr deque<type,device>::const_reference deque<type,device>::front ( ) const
 {
     #if debug
         if ( empty() )
-            throw index_error("cannot get front from deque with size {}", size());
+            throw value_error("cannot access front of an empty deque");
     #endif
-    return arr[1][index_first];
+    return base::front();
 }
 
-template < class type >
-constexpr type& deque<type>::back ( )
+template < class type, class device >
+constexpr deque<type,device>::reference deque<type,device>::back ( )
 {
     #if debug
         if ( empty() )
-            throw index_error("cannot get back from deque with size {}", size());
+            throw value_error("cannot access back of an empty deque");
     #endif
-    return arr[-1][index_last];
+    return base::back();
 }
 
-template < class type >
-constexpr const type& deque<type>::back ( ) const
+template < class type, class device >
+constexpr deque<type,device>::const_reference deque<type,device>::back ( ) const
 {
     #if debug
         if ( empty() )
-            throw index_error("cannot get back from deque with size {}", size());
+            throw value_error("cannot access back of an empty deque");
     #endif
-    return arr[-1][index_first];
+    return base::back();
 }
 
-template < class type >
-constexpr void deque<type>::push_front ( type val )
+template < class type, class device >
+constexpr void deque<type,device>::push_front ( type val )
 {
-    if ( index_first != 1 )
-        arr[1][--index_first] = std::move(val);
+    base::push_front(std::move(val));
+}
+
+template < class type, class device >
+constexpr void deque<type,device>::push_back ( type val )
+{
+    base::push_back(std::move(val));
+}
+
+template < class type, class device >
+constexpr type deque<type,device>::pop_front ( )
+{
+    #if debug
+        if ( empty() )
+            throw value_error("cannot pop_front from an empty deque");
+    #endif
+    if constexpr ( requires { { base::pop_front() } -> convertible_to<type>; } )
+        return base::pop_front();
     else
     {
-        arr.insert(1, vector<type>(chunk));
-        arr[1][chunk] = std::move(val);
-        index_first = chunk;
-    }
-}
-
-template < class type >
-constexpr void deque<type>::push_back ( type val )
-{
-    if ( index_last != chunk )
-        arr[-1][++index_last] = std::move(val);
-    else
-    {
-        arr.push(vector<type>(chunk));
-        arr[-1][1] = std::move(val);
-        index_last = 1;
-    }
-}
-
-template < class type >
-constexpr type deque<type>::pop_front ( )
-{
-    #if debug
-        if ( empty() )
-            throw index_error("cannot pop front from deque with size {}", size());
-    #endif
-
-    if ( index_first != chunk )
-        return std::move(arr[1][index_first++]);
-    else
-    {
-        type poped = std::move(arr[1][chunk]);
-        arr.pop(1);
-        index_first = 1;
+        let poped = type(std::move(front()));
+        base::pop_front();
         return poped;
     }
 }
 
-template < class type >
-constexpr type deque<type>::pop_back ( )
+template < class type, class device >
+constexpr type deque<type,device>::pop_back ( )
 {
     #if debug
         if ( empty() )
-            throw index_error("cannot pop back from deque with size {}", size());
+            throw value_error("cannot pop_back from an empty deque");
     #endif
-
-    if ( index_last != 1 )
-        return std::move(arr[-1][index_last--]);
+    if constexpr ( requires { { base::pop_back() } -> convertible_to<type>; } )
+        return base::pop();
     else
     {
-        type poped = std::move(arr[-1][1]);
-        arr.pop();
-        index_last = chunk;
+        let poped = type(std::move(front()));
+        base::pop_back();
         return poped;
     }
 }
-
-
-// Interface

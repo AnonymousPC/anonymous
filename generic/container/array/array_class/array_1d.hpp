@@ -1,110 +1,109 @@
 #pragma once
 
-/// Class array
-
-template < class type >
-class array<type>
-    extends public array_algo<array<type>,type>
+template < class type, class device >
+class array<type,1,device>
+    extends public  device::template vector<type>,
+            private detail::array_upper<type,1,device>,
+            public  array_algo<array<type,1,device>,type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
-        static_assert ( std::default_initializable<type> or requires { type(); } );                    // Sometimes default-constructor are only friend to array.
-        static_assert ( std::movable<type> or requires { type(std::move(std::declval<type&&>())); } ); // Sometimes move-assignor       are only friend to array.
+        static_assert ( default_initializable<type> and ( movable<type> or string_type<type> ) );
+        static_assert ( not ( same_as<type,bool> and same_as<device,cpu> ) ); // std::vector<bool>
 
-    private: // Data
-        int   m   = 0;
-        type* arr = allocate ( size() );
+    public: // Base
+        using base  = device::template vector<type>;
+        using upper = detail::array_upper<type,1,device>;
 
     public: // Typedef
-        using  value_type     = type;
-        using  iterate_type   = type;
-        using  iterator       = type*;
-        using  const_iterator = const type*;
-        using  array_algo     = array_algo<array<type>,type>;
+        using  value_type      = device::template value_type          <type>;
+        using  reference       = device::template reference           <type>;
+        using  const_reference = device::template const_reference     <type>;
+        using  pointer         = device::template pointer             <type>;
+        using  const_pointer   = device::template const_pointer       <type>;
+        using  iterator        = device::template stride_pointer      <type>;
+        using  const_iterator  = device::template const_stride_pointer<type>;
+        using  device_type     = device;
         struct array_tag { };
 
     public: // Core
         constexpr          array ( ) = default;
-        constexpr          array ( const array&  )                                             requires std::copyable<type>;
+        constexpr          array ( const array&  )             requires copyable<type>;
         constexpr          array (       array&& );
-        constexpr explicit array ( int );
-        constexpr          array ( int,  const type& )                                         requires std::copyable<type>;
-        constexpr          array ( int,  function_type<type()   > auto );
-        constexpr          array ( int,  function_type<type(int)> auto );
-        constexpr          array (       std::initializer_list<type>&& );
-        constexpr          array ( const array_type<type,1> auto& )                            requires std::copyable<type>;
-        constexpr          array ( const range_type<type>   auto& )                            requires std::copyable<type>;
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r )      requires requires { std::declval<array>().push(*std::ranges::begin(r)); };
-        constexpr          array ( std::from_range_t, std::ranges::input_range auto&& r, int ) requires requires { std::declval<array>().push(*std::ranges::begin(r)); };
-        constexpr         ~array ( );
-        constexpr          array& operator = ( const array&  )                                 requires std::copyable<type>;
+        constexpr          array& operator = ( const array&  ) requires copyable<type>;
         constexpr          array& operator = (       array&& );
 
-    public: // Conversion
-        template < class type2 > constexpr          array ( const array<type2>& )              requires std::convertible_to<type2,type>     but ( not std::same_as<type,type2> );
-        template < class type2 > constexpr explicit array ( const array<type2>& )              requires std::constructible_from<type,type2> but ( not std::convertible_to<type2,type> );
+    public: // Constructor
+        constexpr explicit array ( int );
+        constexpr          array ( int, const type& )                   requires copyable<type>;
+        constexpr          array ( int, function_type<type()   > auto );
+        constexpr          array ( int, function_type<type(int)> auto );
+        constexpr          array ( std::initializer_list<type> )        requires copyable<type>;
+        constexpr          array ( range<type> )                        requires copyable<type> and number_type<type>;
 
-   public: // Interface
-        constexpr       void   row         ( )    = delete;
-        constexpr       int    size        ( )      const;
-        constexpr       bool   empty       ( )      const;
-        constexpr       array& resize      ( int );
-        constexpr       type*  data        ( );
-        constexpr const type*  data        ( )      const;
-        constexpr       type*  begin       ( );
-        constexpr const type*  begin       ( )      const;
-        constexpr       type*  end         ( );
-        constexpr const type*  end         ( )      const;
-        constexpr       type&  operator [] ( int );
-        constexpr const type&  operator [] ( int )  const;
+    public: // Conversion (size)
+        template < int len > constexpr array ( const inplace_array<type,len,device>& );
+        template < int len > constexpr array ( const static_array <type,len,device>& );
 
-    public: // Views
-        using array_algo::operator[],
-              array_algo::reshape,
-              array_algo::flatten;
+    public: // Conversion (type)
+        template < class type2 > constexpr          array ( const array<type2,1,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2>        );
+        template < class type2 > constexpr explicit array ( const array<type2,1,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
 
-    private: // Auxiliary
-        constexpr static type* allocate   ( int   );
-        constexpr static void  deallocate ( type* );
-        constexpr static int   capacity   ( int   );
+    public: // Conversion (device)
+        template < class device2 > constexpr explicit array ( const array<type,1,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>; 
+
+    public: // Memebr
+        constexpr static int                  dimension     ( );
+        constexpr        int                  size          ( )     const;
+        constexpr        int                  capacity      ( )     const;
+        constexpr        static_array<int,1>  shape         ( )     const;
+        constexpr        int                  row           ( )     const = delete;
+        constexpr        int                  column        ( )     const = delete;
+        constexpr        bool                 empty         ( )     const;
+        constexpr        pointer              data          ( );
+        constexpr        const_pointer        data          ( )     const;
+        constexpr        iterator             begin         ( );
+        constexpr        const_iterator       begin         ( )     const;
+        constexpr        iterator             end           ( );
+        constexpr        const_iterator       end           ( )     const;
+        constexpr        reference            operator []   ( int );
+        constexpr        const_reference      operator []   ( int ) const;
+
+    public: // Member
+        constexpr array& clear  ( );
+        constexpr array& resize ( int );
+        constexpr array& resize ( static_array<int,1> );
+        constexpr array& push   ( type );
+        constexpr array& pop    ( int = -1 );
+        constexpr array& insert ( int, type );
+        constexpr array& erase  ( int, int );
+    public: // View
+        constexpr       array<type,1,device>& flatten   ( )       = delete;
+        constexpr const array<type,1,device>& flatten   ( ) const = delete;
+        constexpr       array<type,1,device>& transpose ( )       = delete;
+        constexpr const array<type,1,device>& transpose ( ) const = delete;
+
+    public: // Memory
+        constexpr bool ownership  ( ) const;
+        constexpr bool contiguous ( ) const;
+
+    private: // Detail
+                              constexpr       int                                              get_size_top  ( )                  const = delete;
+        template < int axis > constexpr       int                                              get_size_axis ( )                  const = delete;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... )       = delete;
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... ) const = delete;
+        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... )       = delete;
+        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const = delete;
+                              constexpr       reference                                        get_value     ( int_type auto... )       = delete;
+                              constexpr       const_reference                                  get_value     ( int_type auto... ) const = delete;
+                              constexpr       pointer                                          get_pointer   ( int_type auto... )       = delete;
+                              constexpr       const_pointer                                    get_pointer   ( int_type auto... ) const = delete;
+
+    private: // Friend
+        template < class type2, int dim2, class device2 > friend class array;
+        template < class type2, int dim2, class device2 > friend class detail::array_lower;
+        template < class type2, int dim2, class device2 > friend class detail::array_upper;
+        template < class type2, int dim2, class device2 > friend class detail::tuple_upper;
+        template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
+        template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
 };
-
-
-
-/// Template deduction
-
-array ( array_type auto arr )                                -> array<typename decltype(arr)::value_type,decltype(arr)::dimension()>;
-
-array ( auto... args )                                       -> array<last_type_of<decltype(args)...>,sizeof...(args)-1>
-                                                                    requires ( sizeof...(args) >= 2 ) and
-                                                                             aux::ints_until_last_type<void,decltype(args)...> and
-                                                                             ( not std::convertible_to<last_type_of<decltype(args)...>,int> ); // Last_type = int is ambiguous.
-
-array ( auto... args )                                       -> array<invoke_result<last_type_of<decltype(args)...>>,sizeof...(args)-1>
-                                                                    requires ( sizeof...(args) >= 2 ) and
-                                                                             aux::ints_until_last_func<void,decltype(args)...>;
-
-array ( auto... args )                                       -> array<aux::invoke_result_by_n_ints<last_type_of<decltype(args)...>,sizeof...(args)-1>,sizeof...(args)-1>
-                                                                    requires ( sizeof...(args) >= 2 ) and
-                                                                             aux::ints_until_last_func_ints<void,decltype(args)...>;
-
-template < class type >
-array ( std::initializer_list<type> )                        -> array<type>;
-
-template < class type >
-array ( std::initializer_list<std::initializer_list<type>> ) -> array<type,2>;
-
-template < class type, int dim >
-array ( std::initializer_list<array<type,dim>> )             -> array<type,dim+1>;
-
-template < class type, bool continuous >
-array ( range<type,continuous> )                             -> array<type>;
-
-template < std::ranges::input_range type >
-array ( std::from_range_t, type )                            -> array<decay<decltype(*std::ranges::begin(std::declval<type>()))>>;
-
-template < std::ranges::input_range type >
-array ( std::from_range_t, type, int )                       -> array<decay<decltype(*std::ranges::begin(std::declval<type>()))>>;
-
-
-#include "array_1d.ipp"

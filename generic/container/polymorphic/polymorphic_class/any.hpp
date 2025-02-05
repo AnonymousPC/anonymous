@@ -1,29 +1,23 @@
 #pragma once
 
 class any
+    extends public std::any
 {
-    private: // Base
-                                 class static_obj;
-        template < class types > class dynamic_obj;
-
-    private: // Data
-        static_obj*           ptr  = nullptr;
-        const std::type_info* rtti = nullptr;
-
+    private: // Typedef
+        using base = std::any;
+    
     public: // Core
-        constexpr  any ( )                    = default;
-        constexpr  any ( const any&  );
-        constexpr  any (       any&& );
-        constexpr  any ( std::movable auto );
+        constexpr  any ( ) = default;
+        constexpr  any ( copyable auto );
         constexpr ~any ( );
         constexpr  any& operator = ( const any&  );
         constexpr  any& operator = (       any&& );
 
     public: // Member
-                                       constexpr       bool            empty ( ) const;
-                                       constexpr const std::type_info& type  ( ) const;
-        template < class output_type > constexpr       output_type&    value ( );
-        template < class output_type > constexpr const output_type&    value ( ) const;
+                                      constexpr       bool            empty ( ) const;
+                                      constexpr const std::type_info& type  ( ) const;
+        template < class value_type > constexpr       value_type&     value ( );
+        template < class value_type > constexpr const value_type&     value ( ) const;
 };
 
 #include "any.ipp"

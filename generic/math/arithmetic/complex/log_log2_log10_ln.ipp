@@ -8,7 +8,7 @@ constexpr complex_type auto log ( complex_type auto a, complex_type auto b )
     let d = std::complex<type> ( b.real(), b.imag() );
     let e = std::log(d) / std::log(c);
 
-    return complex<type> ( e.real(), e.imag() );
+    return complex<type>(e.real(), e.imag());
 }
 
 constexpr complex_type auto log ( complex_type auto a, number_type auto b )

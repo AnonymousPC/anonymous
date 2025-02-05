@@ -1,325 +1,289 @@
 #pragma once
 
-/// Class basic_map
-
-// Core
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::basic_map ( std::initializer_list<pair<type1,type2>>&& init )
+template < class type1, class type2, class compare, class device >
+constexpr map<type1,type2,compare,device>::map ( std::initializer_list<pair<const type1,type2>> init )
+    requires copyable<type1> and copyable<type2>
 {
-    for ( const pair<type1,type2>& p in init )
-    {
-        let it = cont.locate(p.key());
-
-        if ( empty() or it->key() != p.key() )
-            cont.push ( std::move ( const_cast<pair<type1,type2>&>(p) ), it );
-
-        #if debug
-            else if constexpr ( equalable<type2> ) // it->key() == p.key().
-                if ( not empty() and it->value() != p.value() )
-                    throw key_error("key {} with conflicing values {} and {}", p.key(), p.value(), it->value());
-        #endif
-    }
+    for ( const auto& [k, v] in init )
+        self[k] = v;
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::basic_map ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires requires { std::declval<basic_map>()[get<0>(*std::ranges::begin(r))] = get<1>(*std::ranges::begin(r)); }
+template < class type1, class type2, class compare, class device >
+constexpr int map<type1,type2,compare,device>::size ( ) const
 {
-    for ( auto&& p in r )
-        self[std::forward<decltype(get<0>(p))>(get<0>(p))] = std::forward<decltype(get<1>(p))>(get<1>(p));
+    return base::size();
 }
 
-// Interface
-
-template < class type1, class type2, class key_less, class container >
-constexpr int basic_map<type1,type2,key_less,container>::size ( ) const
+template < class type1, class type2, class compare, class device >
+constexpr bool map<type1,type2,compare,device>::empty ( ) const
 {
-    return cont.size();
+    return base::empty();
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr bool basic_map<type1,type2,key_less,container>::empty ( ) const
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>::iterator map<type1,type2,compare,device>::begin ( )
 {
-    return size() == 0;
+    return base::begin();
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr auto& basic_map<type1,type2,key_less,container>::data ( )
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>::const_iterator map<type1,type2,compare,device>::begin ( ) const
 {
-    if constexpr ( requires { typename container::collection_type_recursive_data; } )
-        return cont.data();
+    return base::begin();
+}
+
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>::iterator map<type1,type2,compare,device>::end ( )
+{
+    return base::end();
+}
+
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>::const_iterator map<type1,type2,compare,device>::end ( ) const
+{
+    return base::end();
+}
+
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>::value_reference map<type1,type2,compare,device>::operator[] ( const type1& k )
+{
+    return base::operator[](k);
+}
+
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>::value_reference map<type1,type2,compare,device>::operator[] ( type1&& k )
+{
+    return base::operator[](std::move(k));
+}
+
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>::const_value_reference map<type1,type2,compare,device>::operator[] ( const type1& k ) const
+{
+    let it = base::find(k);
+    if ( it != base::end() )
+        return get<1>(*it);
     else
-        return cont;
+        throw key_error("key {} not found", k);
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr const auto& basic_map<type1,type2,key_less,container>::data ( ) const
+template < class type1, class type2, class compare, class device > 
+constexpr bool map<type1,type2,compare,device>::contains ( const type1& k ) const
 {
-    if constexpr ( requires { typename container::collection_type_recursive_data; } )
-        return cont.data();
+    if constexpr ( requires { base::contains(k); } )
+        return base::contains(k);
     else
-        return cont;
+        return base::find(k) != base::end();
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator basic_map<type1,type2,key_less,container>::begin ( )
+template < class type1, class type2, class compare, class device > 
+constexpr const auto& map<type1,type2,compare,device>::keys ( ) const
 {
-    return iterator ( cont.begin() );
+    return static_cast<const detail::map_keys<map,type1,device>&>(self);
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator basic_map<type1,type2,key_less,container>::begin ( ) const
+template < class type1, class type2, class compare, class device > 
+constexpr auto& map<type1,type2,compare,device>::values ( )
 {
-    return const_iterator ( cont.begin() );
+    return static_cast<detail::map_values<map,type2,device>&>(self);
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator basic_map<type1,type2,key_less,container>::end ( )
+template < class type1, class type2, class compare, class device > 
+constexpr const auto& map<type1,type2,compare,device>::values ( ) const
 {
-    return iterator ( cont.end() );
+    return static_cast<const detail::map_values<map,type2,device>&>(self);
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator basic_map<type1,type2,key_less,container>::end ( ) const
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::clear ( )
 {
-    return const_iterator ( cont.end() );
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr type2& basic_map<type1,type2,key_less,container>::operator [] ( type1&& k )
-{
-    let it = cont.locate(k);
-
-    if ( empty() or it->key() != k )
-        it = cont.push ( pair<type1&&,type2&&> ( std::move(k), type2() ), it );
-
-    return const_cast<type2&> ( it->value() );
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr type2& basic_map<type1,type2,key_less,container>::operator [] ( const type1& k )
-{
-    let it = cont.locate(k);
-
-    if ( empty() or it->key() != k )
-        it = cont.push ( pair<const type1&,type2&&> ( k, type2() ), it );
-
-    return const_cast<type2&> ( it->value() );
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr const type2& basic_map<type1,type2,key_less,container>::operator [] ( const type1& k ) const
-{
-    let it = cont.locate(k);
-
-    if ( empty() or it->key() != k )
-        #if debug
-            throw index_error("key {} does not exist", k);
-        #else
-            return end()->value(); // Undefined behaviour, which matches the behaviour of index_error.
-        #endif                     // Imaging you are operating an std::vector with invalid index, the result
-                                   // might be segfault, invalid_but_no_segfault(e.x. out of size but in capacity), ...
-    return it->value();            // No matter which case happens, it must satisfy the following 2 predicts:
-}                                  // 1.Nobody can predict what happens. 2.It acts in same way as *end().
-
-template < class type1, class type2, class key_less, class container >
-constexpr const auto basic_map<type1,type2,key_less,container>::keys ( ) const
-{
-    return collection_keys_view ( const_cast<basic_map&>(self) );
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr auto basic_map<type1,type2,key_less,container>::values ( )
-{
-    return collection_values_view ( self );
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr const auto basic_map<type1,type2,key_less,container>::values ( ) const
-{
-    return collection_values_view ( const_cast<basic_map&>(self) );
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>& basic_map<type1,type2,key_less,container>::clear ( )
-{
-    cont.clear();
+    base::clear();
     return self;
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr bool basic_map<type1,type2,key_less,container>::contains ( const type1& k ) const
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::pop ( const type1& k )
 {
-    return not empty() and cont.locate(k)->key() == k;
+    let pop_count = base::erase(k);
+    if ( pop_count >= 1 )
+        return self;
+    else
+        throw key_error("key {} not found", k);
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>& basic_map<type1,type2,key_less,container>::pop ( const type1& k )
+template < class type1, class type2, class compare, class device > 
+constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::update ( const map& m )
 {
-    let it = cont.locate(k);
-
-    #if debug
-        if ( empty() or it->key() != k )
-            throw key_error("key {} does not exist", k);
-    #endif
-
-    cont.pop ( k, it );
+    for ( const auto& [k, v] in m )
+        self[k] = v;
 
     return self;
 }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>& basic_map<type1,type2,key_less,container>::update ( const map_type<type1,type2> auto& upd )
+template < class type1, class type2, class compare, class device >
+class map<type1,type2,compare,device>::iterator
+    extends public device::template map<type1,type2,compare>::iterator
 {
-    for ( const auto& [k,v] in upd )
-        self[k] = upd[k];
+    private: // Typedef
+        using base = device::template map<type1,type2,compare>::iterator;
 
-    return self;
-}
+    public: // Typedef
+        using value_type = device::template value_type<pair<const type1,type2>>;
+        using reference  = device::template reference <pair<const type1,type2>>;
+        using pointer    = device::template pointer   <pair<const type1,type2>>;
 
+    public: // Override
+        constexpr iterator ( base init_b )
+            extends base ( std::move(init_b) )
+        {
 
+        }
+        
+        constexpr reference operator * ( ) const
+        {
+            return static_cast<reference>(base::operator*());
+        }
 
-/// Class basic_map::iterator
+        constexpr pointer operator -> ( ) const
+        {
+            return static_cast<pointer>(base::operator->());
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator::iterator ( const container::const_iterator& init )
-    extends it ( init )
+        constexpr reference operator [] ( int p ) const
+            requires requires ( int i ) { base::operator[](i); }
+        {
+            return static_cast<reference>(base::operator[](p));
+        }
+        
+        constexpr friend iterator operator + ( const iterator& left, int right )
+            requires requires ( base b, int i ) { b + i; }
+        {
+            return static_cast<const base&>(left) + right;
+        }
+
+        constexpr friend iterator operator + ( int left, const iterator& right )
+            requires requires ( int i, base b ) { i + b; }
+        {
+            return left + static_cast<const base&>(right);
+        }
+    
+        constexpr friend iterator operator - ( const iterator& left, int right )
+            requires requires ( base b, int i ) { b - i; }
+        {
+            return static_cast<const base&>(left) - right;
+        }
+
+        constexpr friend iterator& operator ++ ( iterator& left )
+            requires requires ( base b ) { ++b; }
+        {
+            ++static_cast<base&>(left);
+            return left;
+        }
+
+        constexpr friend iterator operator ++ ( iterator& left, int )
+            requires requires ( base b ) { b++; }
+        {
+            let it = left;
+            ++left;
+            return it;
+        }
+
+        constexpr friend iterator& operator -- ( iterator& left )
+            requires requires ( base b ) { --b; }
+        {
+            --static_cast<base&>(left);
+            return left;
+        }
+
+        constexpr friend iterator operator -- ( iterator& left, int )
+            requires requires ( base b ) { b--; }
+        {
+            let it = left;
+            --left;
+            return it;
+        }
+};
+
+template < class type1, class type2, class compare, class device >
+class map<type1,type2,compare,device>::const_iterator
+    extends public device::template map<type1,type2,compare>::const_iterator
 {
+    private: // Typedef
+        using base = device::template map<type1,type2,compare>::const_iterator;
 
-}
+    public: // Typedef
+        using value_type = device::template value_type     <pair<const type1,type2>>;
+        using reference  = device::template const_reference<pair<const type1,type2>>;
+        using pointer    = device::template const_pointer  <pair<const type1,type2>>;
 
-template < class type1, class type2, class key_less, class container >
-constexpr pair<const type1,type2>& basic_map<type1,type2,key_less,container>::iterator::operator * ( ) const
-{
-    return const_cast<pair<const type1,type2>&> ( static_cast<const pair<const type1,type2>&> ( *it ) );
-}
+    public: // Override
+        constexpr const_iterator ( base init_b )
+            extends base ( std::move(init_b) )
+        {
 
-template < class type1, class type2, class key_less, class container >
-constexpr pair<const type1,type2>* basic_map<type1,type2,key_less,container>::iterator::operator -> ( ) const
-{
-    return &operator*();
-}
+        }
+        
+        constexpr reference operator * ( ) const
+        {
+            return static_cast<reference>(base::operator*());
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator& basic_map<type1,type2,key_less,container>::iterator::operator ++ ( )
-{
-    ++it;
-    return self;
-}
+        constexpr pointer operator -> ( ) const
+        {
+            return static_cast<pointer>(base::operator->());
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator basic_map<type1,type2,key_less,container>::iterator::operator ++ ( int )
-{
-    let it2 = self;
-    ++self;
-    return it2;
-}
+        constexpr reference operator [] ( int p ) const
+            requires requires ( int i ) { base::operator[](i); }
+        {
+            return static_cast<reference>(base::operator[](p));
+        }
+        
+        constexpr friend const_iterator operator + ( const const_iterator& left, int right )
+            requires requires ( base b, int i ) { b + i; }
+        {
+            return static_cast<const base&>(left) + right;
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator& basic_map<type1,type2,key_less,container>::iterator::operator -- ( )
-{
-    --it;
-    return self;
-}
+        constexpr friend const_iterator operator + ( int left, const const_iterator& right )
+            requires requires ( int i, base b ) { i + b; }
+        {
+            return left + static_cast<const base&>(right);
+        }
+    
+        constexpr friend const_iterator operator - ( const const_iterator& left, int right )
+            requires requires ( base b, int i ) { b - i; }
+        {
+            return static_cast<const base&>(left) - right;
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator basic_map<type1,type2,key_less,container>::iterator::operator -- ( int )
-{
-    let it2 = self;
-    --self;
-    return it2;
-}
+        constexpr friend const_iterator& operator ++ ( const_iterator& left )
+            requires requires ( base b ) { ++b; }
+        {
+            ++static_cast<base&>(left);
+            return left;
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator basic_map<type1,type2,key_less,container>::iterator::operator + ( int offset ) const
-    requires std::random_access_iterator<typename container::const_iterator>
-{
-    return it + offset;
-}
+        constexpr friend const_iterator operator ++ ( const_iterator& left, int )
+            requires requires ( base b ) { b++; }
+        {
+            let it = left;
+            ++left;
+            return it;
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::iterator basic_map<type1,type2,key_less,container>::iterator::operator - ( int offset ) const
-    requires std::random_access_iterator<typename container::const_iterator>
-{
-    return it - offset;
-}
+        constexpr friend const_iterator& operator -- ( const_iterator& left )
+            requires requires ( base b ) { --b; }
+        {
+            --static_cast<base&>(left);
+            return left;
+        }
 
-template < class type1, class type2, class key_less, class container >
-constexpr int basic_map<type1,type2,key_less,container>::iterator::operator - ( const iterator& right ) const
-    requires std::random_access_iterator<typename container::const_iterator>
-{
-    return it - right.it;
-}
+        constexpr friend const_iterator operator -- ( const_iterator& left, int )
+            requires requires ( base b ) { b--; }
+        {
+            let it = left;
+            --left;
+            return it;
+        }
+};
 
-/// Class basic_map::const_iterator
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator::const_iterator ( const container::const_iterator& init )
-    extends it ( init )
-{
-
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr const pair<const type1,type2>& basic_map<type1,type2,key_less,container>::const_iterator::operator * ( ) const
-{
-    return static_cast<const pair<const type1,type2>&> ( *it );
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr const pair<const type1,type2>* basic_map<type1,type2,key_less,container>::const_iterator::operator -> ( ) const
-{
-    return &operator*();
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator& basic_map<type1,type2,key_less,container>::const_iterator::operator ++ ( )
-{
-    ++it;
-    return self;
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator basic_map<type1,type2,key_less,container>::const_iterator::operator ++ ( int )
-{
-    let it2 = self;
-    ++self;
-    return it2;
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator& basic_map<type1,type2,key_less,container>::const_iterator::operator -- ( )
-{
-    --it;
-    return self;
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator basic_map<type1,type2,key_less,container>::const_iterator::operator -- ( int )
-{
-    let it2 = self;
-    --self;
-    return it2;
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator basic_map<type1,type2,key_less,container>::const_iterator::operator + ( int offset ) const
-    requires std::random_access_iterator<typename container::const_iterator>
-{
-    return it + offset;
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr basic_map<type1,type2,key_less,container>::const_iterator basic_map<type1,type2,key_less,container>::const_iterator::operator - ( int offset ) const
-    requires std::random_access_iterator<typename container::const_iterator>
-{
-    return it - offset;
-}
-
-template < class type1, class type2, class key_less, class container >
-constexpr int basic_map<type1,type2,key_less,container>::const_iterator::operator - ( const const_iterator& right ) const
-    requires std::random_access_iterator<typename container::const_iterator>
-{
-    return it - right.it;
-}

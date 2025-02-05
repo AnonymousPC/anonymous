@@ -1,57 +1,50 @@
 #pragma once
 
-template < class type, class less, class container >
-class basic_set
-    extends public collection_algo<basic_set<type,less,container>,type>
+template < class type, class compare, class device >
+class set
+    extends public device::template set<type,compare>,
+            public collection_algo<set<type,compare,device>,type,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
-        static_assert ( std::default_initializable<type> and std::movable<type> );
-        static_assert ( function_type<less,bool(type,type)> );
+        static_assert ( default_initializable<type> and movable<type> );
+        static_assert ( [] { if constexpr ( same_as<device,cpu> ) return relation<compare,type,type>; else return true; } () );
 
-    private: // Data
-        container cont = container();
+    private: // Typedef
+        using base = device::template set<type,compare>;
 
     public: // Typedef
-        using  key_type       = type;
-        using  value_type     = type;
-        using  iterate_type   = type;
-        using  compare_type   = less;
-        using  container_type = container;
-        using  const_iterator = container::const_iterator;
+        using  value_type      = device::template value_type     <type>;
+        using  reference       = device::template reference      <type>;
+        using  const_reference = device::template const_reference<type>;
+        using  pointer         = device::template pointer        <type>;
+        using  const_pointer   = device::template const_pointer  <type>;
+        using  const_iterator  = base::const_iterator;
+        using  compare_type    = compare;
+        using  device_type     = device;
         struct set_tag { };
 
     public: // Core
-        constexpr          basic_set ( ) = default;
-        constexpr          basic_set ( std::initializer_list<type>&& );
-        constexpr explicit basic_set ( std::from_range_t, std::ranges::input_range auto&& r ) requires requires { std::declval<basic_set>().push(*std::ranges::begin(r)); };
+        constexpr set ( )                                                 = default;
+        constexpr set ( const set&  )             requires copyable<type> = default;
+        constexpr set (       set&& )                                     = default;
+        constexpr set& operator = ( const set&  ) requires copyable<type> = default;
+        constexpr set& operator = (       set&& )                         = default;
 
-    public: // Interface
-        constexpr        int              size        ( )                            const;
-        constexpr        bool             empty       ( )                            const;
-        constexpr        auto&            data        ( );
-        constexpr  const auto&            data        ( )                            const;
-        constexpr        const_iterator   begin       ( )                            const;
-        constexpr        const_iterator   end         ( )                            const;
+    public: // Constructor
+        constexpr set ( std::initializer_list<type> ) requires copyable<type>;
 
-        constexpr        basic_set&       clear       ( );
-        constexpr        bool             contains    ( const type& )                const;
-        constexpr        basic_set&       push        (       type  );
-        constexpr        basic_set&       pop         ( const type& );
-        constexpr        basic_set&       update      ( const set_type<type> auto& );
+    public: // Member
+        constexpr int            size     ( )             const;
+        constexpr bool           empty    ( )             const;
+        constexpr const_iterator begin    ( )             const;
+        constexpr const_iterator end      ( )             const;
+        constexpr bool           contains ( const type& ) const;
+
+        constexpr set&           clear    ( );
+        constexpr set&           push     (       type  );
+        constexpr set&           pop      ( const type& );
+        constexpr set&           update   ( const set&  );
 };
-
-
-
-
-/// Template deduction
-
-basic_set ( set_type auto s ) -> basic_set<typename decltype(s)::value_type,typename decltype(s)::compare_type,typename decltype(s)::container_type>;
-
-template < class type >
-basic_set ( std::initializer_list<type> ) -> set<type>;
-
-template < std::ranges::input_range type >
-basic_set ( std::from_range_t, type ) -> set<decay<decltype(*std::ranges::begin(std::declval<type>()))>>;
 
 #include "set.ipp"

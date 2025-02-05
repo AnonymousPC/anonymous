@@ -8,6 +8,6 @@ constexpr angle_type auto mod ( angle_type auto a, angle_type auto b )
     else
     {
         using type = common_type<decltype(a),decltype(b)>;
-        return mod ( type(a), type(b) );
+        return mod(type(a), type(b));
     }
 }

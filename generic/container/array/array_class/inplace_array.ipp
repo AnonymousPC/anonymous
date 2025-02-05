@@ -1,262 +1,244 @@
 #pragma once
 
-/// Class inplace_array
-
-// Core
-
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( const inplace_array& init )
-    requires std::copyable<type>
-    extends m ( init.m )
-{
-    std::copy ( init.begin(), init.end(), begin() );
-}
-
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( inplace_array&& init )
-    extends m ( init.m )
-{
-    std::move ( init.begin(), init.end(), begin() );
-}
-
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( int init_size )
-    extends m ( init_size )
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::inplace_array ( int init_size )
+    extends base ( init_size )
 {
     #if debug
-        if ( size() < 0 or size() > capacity() )
-            throw value_error("initialize inplace_array with size {} out of capacity {}", size(), capacity());
+    if ( init_size < 0 )
+        throw value_error("initialize inplace_array with negative size {}", init_size);
+    if ( init_size > capacity() )
+        throw value_error("initialize inplace_array with size {} out of capacity {}", init_size, capacity());
     #endif
 }
 
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( int init_size, const type& init_arr )
-    requires std::copyable<type>
-    extends inplace_array ( init_size )
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::inplace_array ( int init_size, const type& init_value )
+    requires copyable<type>
+    extends base ( init_size, init_value )
 {
-    std::fill ( begin(), end(), init_arr );
+    #if debug
+    if ( init_size < 0 )
+        throw value_error("initialize inplace_array with negative size {}", init_size);
+    if ( init_size > capacity() )
+        throw value_error("initialize inplace_array with size {} out of capacity {}", init_size, capacity());
+    #endif
 }
 
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( int init_size, function_type<type()> auto init_arr )
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::inplace_array ( int init_size, function_type<type()> auto init_value )
+    requires movable<type>
     extends inplace_array ( init_size )
 {
-    std::generate ( begin(), end(), init_arr );
+    device::generate(begin(), end(), init_value);
 }
 
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( int init_size, function_type<type(int)> auto init_arr )
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::inplace_array ( int init_size, function_type<type(int)> auto init_value )
+    requires movable<type>
     extends inplace_array ( init_size )
 {
     for ( int i in range(size()) )
-        self[i] = init_arr(i);
+        self[i] = init_value(i);
 }
 
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( std::initializer_list<type>&& init )
-    extends inplace_array ( init.size() )
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::inplace_array ( std::initializer_list<type> init )
+    requires copyable<type>
+    extends base ( std::forward<decltype(init)>(init) )
 {
-    std::move ( const_cast<type*>(init.begin()), const_cast<type*>(init.end()), begin() );
-}
-
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( const array_type<type> auto& init )
-    requires std::copyable<type>
-    extends inplace_array ( init.size() )
-{
-    std::copy ( init.begin(), init.end(), begin() );
-}
-
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( const range_type<type> auto& init )
-    requires std::copyable<type>
-    extends inplace_array ( init.size() )
-{
-    std::copy ( init.begin(), init.end(), begin() );
-}
-
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires requires { std::declval<inplace_array>().push(*std::ranges::begin(r)); }
-{
-    if constexpr ( requires { std::ranges::size(r); self[1] = *std::ranges::begin(r); } )
-    {
-        resize ( std::ranges::size(r) );
-        std::move ( std::ranges::begin(r), std::ranges::end(r), begin() );
-    }
-
-    else
-        for ( auto&& v in r )
-            self.push(std::forward<decltype(v)>(v));
-}
-
-template < class type, int len >
-constexpr inplace_array<type,len>::inplace_array ( std::from_range_t, std::ranges::input_range auto&& r, int init_size )
-    requires ( requires { std::declval<inplace_array>().push(*std::ranges::begin(r)); } )
-    extends inplace_array ( init_size )
-{
-    int i = 0;
-    for ( auto&& v in r )
-    {
-        i++;
-
-        #if debug
-            if ( i > size() )
-                throw value_error("cannot move range of size >= {} into inplace_array of size {}", i, size());
-        #endif
-        self[i] = std::forward<decltype(v)>(v);
-    }
-
     #if debug
-        if ( i < size() )
-            throw value_error("cannot move range of size {} into inplace_array of size {}", i, size());
+    if ( int(init.size()) > capacity() )
+        throw value_error("initialize inplace_array with size {} out of capacity {}", init.size(), size());
     #endif
 }
 
-template < class type, int len >
-constexpr inplace_array<type,len>& inplace_array<type,len>::operator = ( const inplace_array& right )
-    requires std::copyable<type>
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::inplace_array ( range<type> init )
+    requires copyable<type>
+    extends base ( init.begin(), init.end() )
 {
-    resize ( right.size() );
-    std::copy ( right.begin(), right.end(), begin() );
-    return self;
 }
 
-template < class type, int len >
-constexpr inplace_array<type,len>& inplace_array<type,len>::operator = ( inplace_array&& right )
+template < class type, int len, class device >
+constexpr int inplace_array<type,len,device>::dimension ( )
 {
-    resize ( right.size() );
-    std::move ( right.begin(), right.end(), begin() );
-    return self;
+    return 1;
 }
 
-
-
-// Conversion
-
-template < class type, int len >
-template < int len2 >
-constexpr inplace_array<type,len>::inplace_array ( const inplace_array<type,len2>& cvt )
-    requires ( len != len2 ) and std::copyable<type>
+template < class type, int len, class device >
+constexpr int inplace_array<type,len,device>::size ( ) const
 {
-    resize ( cvt.size() );
-    std::copy ( cvt.begin(), cvt.end(), begin() );
+    return base::size();
 }
 
-template < class type, int len >
-template < int len2 >
-constexpr inplace_array<type,len>::inplace_array ( inplace_array<type,len2>&& cvt )
-    requires ( len != len2 )
-{
-    resize ( cvt.size() );
-    std::move ( cvt.begin(), cvt.end(), begin() );
-}
-
-template < class type, int len >
-template < class type2, int len2 >
-constexpr inplace_array<type,len>::inplace_array ( const inplace_array<type2,len2>& cvt )
-    requires std::convertible_to<type2,type> but ( not std::same_as<type,type2> )
-{
-    resize ( cvt.size() );
-    std::transform ( cvt.begin(), cvt.end(), begin(), [] (const type2& arr) { return type1(arr); } );
-}
-
-template < class type, int len >
-template < class type2, int len2 >
-constexpr inplace_array<type,len>::inplace_array ( const inplace_array<type2,len2>& cvt )
-    requires std::constructible_from<type,type2> but ( not std::convertible_to<type2,type> )
-{
-    resize ( cvt.size() );
-    std::transform ( cvt.begin(), cvt.end(), begin(), [] (const type2& arr) { return type1(arr); } );
-}
-
-// Interface
-
-template < class type, int len >
-constexpr int inplace_array<type,len>::size ( ) const
-{
-    return m;
-}
-
-template < class type, int len >
-constexpr int inplace_array<type,len>::capacity ( )
+template < class type, int len, class device >
+constexpr int inplace_array<type,len,device>::capacity ( )
 {
     return len;
 }
 
-template < class type, int len >
-constexpr bool inplace_array<type,len>::empty ( ) const
+template < class type, int len, class device >
+constexpr static_array<int,1> inplace_array<type,len,device>::shape ( ) const
 {
-    return size() == 0;
+    return { size() };
 }
 
-template < class type, int len >
-constexpr inplace_array<type,len>& inplace_array<type,len>::resize ( int new_size )
+template < class type, int len, class device >
+constexpr bool inplace_array<type,len,device>::empty ( ) const
+{
+    return base::empty();
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::pointer inplace_array<type,len,device>::data ( ) 
+{
+    return base::data();
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::const_pointer inplace_array<type,len,device>::data ( ) const
+{
+    return base::data();
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::iterator inplace_array<type,len,device>::begin ( ) 
+{
+    return base::begin();
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::const_iterator inplace_array<type,len,device>::begin ( ) const
+{
+    return base::begin();
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::iterator inplace_array<type,len,device>::end ( ) 
+{
+    return base::end();
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::const_iterator inplace_array<type,len,device>::end ( ) const
+{
+    return base::end();
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::reference inplace_array<type,len,device>::operator[] ( int pos )
 {
     #if debug
-        if ( new_size < 0 or new_size > capacity() )
-            throw value_error("cannot resize inplace_array of size {} capacity {} into size {}", size(), capacity(), new_size);
+    if ( pos < -size() or pos == 0 or pos > size() )
+        throw index_error("index {} is out of range with size {}", pos, size());
     #endif
+    
+    return pos >= 0 ? base::operator[](pos-1) otherwise
+                      base::operator[](pos+size());
+}
 
-    std::fill ( begin() + new_size, begin() + size(), type() );
-    m = new_size;
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>::const_reference inplace_array<type,len,device>::operator[] ( int pos ) const
+{
+    #if debug
+    if ( pos < -size() or pos == 0 or pos > size() )
+        throw index_error("index {} is out of range with size {}", pos, size());
+    #endif
+    
+    return pos >= 0 ? base::operator[](pos-1) otherwise
+                      base::operator[](pos+size());
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::clear ( )
+{
+    base::clear();
     return self;
 }
 
-template < class type, int len >
-constexpr type* inplace_array<type,len>::data ( )
-{
-    return arr;
-}
-
-template < class type, int len >
-constexpr const type* inplace_array<type,len>::data ( ) const
-{
-    return arr;
-}
-
-template < class type, int len >
-constexpr type* inplace_array<type,len>::begin ( )
-{
-    return arr;
-}
-
-template < class type, int len >
-constexpr const type* inplace_array<type,len>::begin ( ) const
-{
-    return arr;
-}
-
-template < class type, int len >
-constexpr type* inplace_array<type,len>::end ( )
-{
-    return arr + size();
-}
-
-template < class type, int len >
-constexpr const type* inplace_array<type,len>::end ( ) const
-{
-    return arr + size();
-}
-
-template < class type, int len >
-constexpr type& inplace_array<type,len>::operator [] ( int pos )
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::resize ( int new_size )
 {
     #if debug
-        if ( pos < -size() or pos == 0 or pos > size() )
-            throw index_error("index {} is out of range with size {}", pos, size());
+    if ( new_size < 0 )
+        throw value_error("resize inplace_array with negative size {}", new_size);
+    if ( new_size > capacity() )
+        throw value_error("resize inplace_array with size {} out of capacity {}", new_size, capacity());
     #endif
 
-    return pos > 0 ? arr[pos-1] otherwise arr[pos+size()];
+    base::resize(new_size);
+    return self;
 }
 
-template < class type, int len >
-constexpr const type& inplace_array<type,len>::operator [] ( int pos ) const
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::push ( type new_value )
+    requires movable<type>
 {
     #if debug
-        if ( pos < -size() or pos == 0 or pos > size() )
-            throw index_error("index {} is out of range with size {}", pos, size());
+    if ( size() == capacity() )
+        throw value_error("cannot push into inplace_array: size has already reached capacity");
     #endif
 
-    return pos > 0 ? arr[pos-1] otherwise arr[pos+size()];
+    base::push(std::move(new_value));
+    return self;
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::pop ( int old_pos )
+    requires movable<type>
+{
+    #if debug
+    if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
+        throw value_error("index {} is out of range with size {}", old_pos, size());
+    #endif
+
+    base::erase(old_pos >= 0 ? begin() + old_pos - 1 otherwise begin() + old_pos + size());
+    return self;
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::insert ( int new_pos, type new_value )
+    requires movable<type>
+{
+    #if debug
+    if ( size() == capacity() )
+        throw value_error("cannot insert into inplace_array: size has already reached capacity");
+    if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
+        throw value_error("index {} is out of range with size {}", new_pos, size());
+    #endif
+
+    base::insert(new_pos >= 0 ? begin() + new_pos - 1 otherwise begin() + new_pos + size(), std::move(new_value));
+    return self;
+}
+
+template < class type, int len, class device >
+constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::erase ( int old_pos_1, int old_pos_2 )
+    requires movable<type>
+{
+    let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size();
+    let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size();
+
+    #if debug
+    if ( ( ( p1 < 1 or p1 > size() ) or
+           ( p2 < 1 or p2 > size() ) )
+    and not // Except for below:
+         ( ( p1 == size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
+        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
+    #endif
+
+    base::erase(begin() + p1 - 1, begin() + p2 - 1);
+    return self;
+}
+
+template < class type, int len, class device >
+constexpr bool inplace_array<type,len,device>::ownership ( )
+{
+    return true;
+}
+
+template < class type, int len, class device >
+constexpr bool inplace_array<type,len,device>::contiguous ( )
+{
+    return true;
 }

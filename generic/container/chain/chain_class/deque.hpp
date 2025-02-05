@@ -1,44 +1,51 @@
 #pragma once
 
-template < class type >
+template < class type, class device >
 class deque
+    extends public device::template deque<type>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
-        static_assert ( std::default_initializable<type> and std::movable<type> );
+        static_assert ( default_initializable<type> and movable<type> );
 
-    private: // Settings
-        constexpr static const int chunk = 8;
-
-    private: // Data
-        vector<vector<type>> arr         = vector<vector<type>>();
-        int                  index_first = 1;
-        int                  index_last  = chunk; // As initialization it's equal to chunk, and after first push() it becomes 1.
+    private: // Typedef
+        using base = device::template deque<type>;
 
     public: // Typedef
-        using  value_type = type;
+        using  value_type      = device::template value_type     <type>;
+        using  reference       = device::template reference      <type>;
+        using  const_reference = device::template const_reference<type>;
+        using  pointer         = device::template pointer        <type>;
+        using  const_pointer   = device::template const_pointer  <type>;
+        using  iterator        = base::iterator;
+        using  const_iterator  = base::const_iterator;
+        using  device_type     = device;
         struct deque_tag { };
 
     public: // Core
-        constexpr deque ( )                                                        = default;
-        constexpr deque ( const deque&  )             requires std::copyable<type> = default;
-        constexpr deque (       deque&& );
-        constexpr deque& operator = ( const deque&  ) requires std::copyable<type> = default;
-        constexpr deque& operator = (       deque&& );
+        constexpr deque ( )                                                   = default;
+        constexpr deque ( const deque&  )             requires copyable<type> = default;
+        constexpr deque (       deque&& )                                     = default;
+        constexpr deque& operator = ( const deque&  ) requires copyable<type> = default;
+        constexpr deque& operator = (       deque&& )                         = default;
 
-    public: // Interface
-        constexpr       int   size       ( ) const;
-        constexpr       bool  empty      ( ) const;
-
-        constexpr       type& front      ( );
-        constexpr const type& front      ( ) const;
-        constexpr       type& back       ( );
-        constexpr const type& back       ( ) const;
-
-        constexpr       void  push_front ( type );
-        constexpr       void  push_back  ( type );
-        constexpr       type  pop_front  ( );
-        constexpr       type  pop_back   ( );
+    public: // Member
+        constexpr int             size        ( )      const;
+        constexpr bool            empty       ( )      const;
+        constexpr iterator        begin       ( );
+        constexpr const_iterator  begin       ( )      const;
+        constexpr iterator        end         ( );
+        constexpr const_iterator  end         ( )      const;
+        constexpr reference       operator [] ( int );
+        constexpr const_reference operator [] ( int )  const;
+        constexpr reference       front       ( );
+        constexpr const_reference front       ( )      const;
+        constexpr reference       back        ( );
+        constexpr const_reference back        ( )      const;
+        constexpr void            push_front  ( type );
+        constexpr void            push_back   ( type );
+        constexpr type            pop_front   ( );
+        constexpr type            pop_back    ( );
 };
 
 

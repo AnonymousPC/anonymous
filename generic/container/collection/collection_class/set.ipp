@@ -1,114 +1,78 @@
 #pragma once
 
-/// Class basic_set
-
-// Core
-
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>::basic_set ( std::initializer_list<type>&& init )
+template < class type, class compare, class device >
+constexpr set<type,compare,device>::set ( std::initializer_list<type> init )
+    requires copyable<type>
+    extends base ( std::forward<decltype(init)>(init) )
 {
-    for ( const type& v in init )
-        self.push ( std::move ( const_cast<type&> ( v ) ) );
+
 }
 
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>::basic_set ( std::from_range_t, std::ranges::input_range auto&& r )
-    requires requires { std::declval<basic_set>().push(*std::ranges::begin(r)); }
+template < class type, class compare, class device >
+constexpr int set<type,compare,device>::size ( ) const
 {
-    for ( auto&& v in r )
-        self.push ( std::forward<decltype(v)>(v) );
+    return base::size();
 }
 
-// Interface
-
-template < class type, class less, class container >
-constexpr int basic_set<type,less,container>::size ( ) const
+template < class type, class compare, class device >
+constexpr bool set<type,compare,device>::empty ( ) const
 {
-    return cont.size();
+    return base::empty();
 }
 
-template < class type, class less, class container >
-constexpr bool basic_set<type,less,container>::empty ( ) const
+template < class type, class compare, class device >
+constexpr set<type,compare,device>::const_iterator set<type,compare,device>::begin ( ) const
 {
-    return size() == 0;
+    return base::begin();
 }
 
-template < class type, class less, class container >
-constexpr auto& basic_set<type,less,container>::data ( )
+template < class type, class compare, class device >
+constexpr set<type,compare,device>::const_iterator set<type,compare,device>::end ( ) const
 {
-    if constexpr ( requires { typename container::collection_type_recursive_data; } )
-        return cont.data();
+    return base::end();
+}
+
+template < class type, class compare, class device >
+constexpr bool set<type,compare,device>::contains ( const type& k ) const
+{
+    if constexpr ( requires { base::contains(k); } )
+        return base::contains(k);
     else
-        return cont;
+        return base::find(k) != base::end();
 }
 
-template < class type, class less, class container >
-constexpr const auto& basic_set<type,less,container>::data ( ) const
+template < class type, class compare, class device >
+constexpr set<type,compare,device>& set<type,compare,device>::clear ( )
 {
-    if constexpr ( requires { typename container::collection_type_recursive_data; } )
-        return cont.data();
-    else
-        return cont;
-}
-
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>::const_iterator basic_set<type,less,container>::begin ( ) const
-{
-    return cont.begin();
-}
-
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>::const_iterator basic_set<type,less,container>::end ( ) const
-{
-    return cont.end();
-}
-
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>& basic_set<type,less,container>::clear ( )
-{
-    cont.clear();
+    base::clear();
     return self;
 }
 
-template < class type, class less, class container >
-constexpr bool basic_set<type,less,container>::contains ( const type& val ) const
+template < class type, class compare, class device >
+constexpr set<type,compare,device>& set<type,compare,device>::push ( type k )
 {
-    return not empty() and *cont.locate(val) == val;
+    let result = base::insert(k);
+    if ( result.second == true )
+        return self;
+    else
+        throw key_error("key {} already exists", k);
 }
 
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>& basic_set<type,less,container>::push ( type val )
+template < class type, class compare, class device >
+constexpr set<type,compare,device>& set<type,compare,device>::pop ( const type& k )
 {
-    auto it = cont.locate(val);
-    if ( empty() or *it != val ) // Not contains.
-        cont.push ( std::move ( val ), it );
+    let pop_count = base::erase(k);
+    if ( pop_count >= 1 )
+        return self;
+    else
+        throw key_error("key {} not found", k);
+}
+
+template < class type, class compare, class device >
+constexpr set<type,compare,device>& set<type,compare,device>::update ( const set& s )
+{
+    for ( const auto& k in s )
+        push(k);
 
     return self;
-}
-
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>& basic_set<type,less,container>::pop ( const type& val )
-{
-    auto it = cont.locate(val);
-    #if debug
-        if ( empty() or *it != val )
-            throw key_error("key {} does not exist", val);
-    #endif
-    cont.pop ( val, it );
-
-    return val;
-}
-
-template < class type, class less, class container >
-constexpr basic_set<type,less,container>& basic_set<type,less,container>::update ( const set_type<type> auto& upd )
-{
-    // TODO: Optimizable if less is same.
-
-    for ( const auto& val in upd )
-    {
-        let it = cont.locate(val);
-
-        if ( empty() or *it != val ) // Update if not contains.
-            cont.push ( val, it );
-    }
 }

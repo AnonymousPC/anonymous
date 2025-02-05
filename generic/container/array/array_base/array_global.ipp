@@ -1,83 +1,63 @@
 #pragma once
 
-/// Global ( For linear math, see "root/math/linear". )
-
-namespace aux
-{
-    // Specialize one of these to create custom formatters.
-    auto stringalize_array ( auto&, const auto& );
-    auto stringalize_array ( auto&, const auto&, const auto& ); // Use custom stringalizer.
-    void align_array       ( auto& );
-    void print_array       ( auto&, const auto&, int = 1 );
-}
-
-
+#define left_value_type   typename decay<decltype(left )>::value_type
+#define right_value_type  typename decay<decltype(right)>::value_type
+#define left_dimension             decay<decltype(left )>::dimension()
+#define right_dimension            decay<decltype(left )>::dimension()
+#define left_device_type  typename decay<decltype(left )>::device_type
+#define right_device_type typename decay<decltype(left )>::device_type
 
 constexpr std::ostream& operator << ( std::ostream& left, const array_type auto& right )
     requires printable<right_value_type>
 {
-    let strarr = aux::stringalize_array(left, right);
-    aux::align_array(strarr);
-    aux::print_array(left, strarr);
-
+    let string_array = detail::stringalize_array(left, right);
+    detail::align_array(string_array);
+    detail::print_array(left, string_array);
     return left;
 }
 
-auto aux::stringalize_array ( auto& left, const auto& right )
+constexpr bool operator == ( const array_type auto& left, const array_type auto& right )
+    requires equalable_to<left_value_type,right_value_type> and
+             (left_dimension == right_dimension) and
+             same_as<left_device_type,right_device_type>
 {
-    return stringalize_array ( left, right, [&] ( const auto& item ) { let stream = std::stringstream(); stream.copyfmt(left); stream.setf(left.flags()); stream << item; return string(stream.view()); } );
-}
-
-auto aux::stringalize_array ( auto& left, const auto& right, const auto& stringalizer )
-{
-    if constexpr ( right.dimension() == 1 or right.dimension() == -1 )
-        return array<string,right.dimension()> ( right.size(), [&] ( int i ) { return stringalizer(right[i]); } );
+    using device = left_device_type;
+    if constexpr ( left_dimension == 1 )
+        if ( left.contiguous() and right.contiguous() )
+            return device::equal_to(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
+        else
+            return device::equal_to(left.begin(), left.end(), right.begin(), right.end());
     else
-        return array<string,right.dimension()> ( right.row(), [&] ( int i ) { return stringalize_array(left,right[i],stringalizer); } );
+        if ( left.contiguous() and right.contiguous() )
+            return left.shape() == right.shape() and device::equal_to(left.data(), left.data() + left.size(), right.data(), right.data() + right.size()); // Shape should be checked explicitly.
+        else
+            return device::equal_to(left.begin(), left.end(), right.begin(), right.end());
 }
 
-void aux::align_array ( auto& right )
+constexpr auto operator <=> ( const array_type auto& left, const array_type auto& right )
+    requires comparable_to<left_value_type,right_value_type> and
+             (left_dimension == right_dimension) and
+             same_as<left_device_type,right_device_type>
 {
-    if constexpr ( right.dimension() == 1 or right.dimension() == -1 )
-    {
-        let align = right.empty() ? 0 otherwise right.max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
-        right.each([&] (auto& str) { str.left_justify(align); });
-    }
+    using device = left_device_type;
+    if constexpr ( left_dimension == 1 )
+        if ( left.contiguous() and right.contiguous() )
+            return device::lexicographical_compare_three_way(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
+        else
+            return device::lexicographical_compare_three_way(left.begin(), left.end(), right.begin(), right.end());
     else
-    {
-        let align = right.empty() ? 0 otherwise right.flatten().max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
-        right.flatten().each([&] (auto& str) { str.left_justify(align); });
-    }
+        if ( same_as<left_device_type::layout_type,std::layout_right> and
+             left.contiguous() and right.contiguous() and 
+             left.shape() == right.shape() )
+            return device::lexicographical_compare_three_way(left.data(), left.data() + left.size(), right.data(), right.data() + right.size()); // Shape should be checked explicitly.
+        else
+            return device::lexicographical_compare_three_way(left.begin(), left.end(), right.begin(), right.end()); // Cannot flatten as shape might not equals.
 }
 
-void aux::print_array ( auto& left, const auto& right, int depth /* =1 */ )
-{
-    left << '{';
 
-    if constexpr ( right.dimension() == 1 or right.dimension() == -1 )
-        for ( int i in range ( right.size() ) )
-        {
-            if ( i != 1 )
-                left << ' ';
-            left << right[i];
-        }
-
-    else
-        for ( int i in range ( right.row() ) )
-        {
-            if ( i != 1 )
-            {
-                left << ' ';
-                for ( int _ in range ( right.dimension() - 1 ) )
-                    left << '\n';
-                for ( int _ in range ( depth ) )
-                    left << ' ';
-            }
-            print_array ( left, right[i], depth + 1 );
-        }
-
-    left << '}';
-
-    if constexpr ( right.dimension() == -1 )
-        left << 'T';
-}
+#undef left_value_type
+#undef right_value_type
+#undef left_dimension
+#undef right_dimension
+#undef left_device_type
+#undef right_device_type

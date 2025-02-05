@@ -1,44 +1,33 @@
 #pragma once
 
-/// Class complex
-
 template < number_type type >
 class complex
+    extends public std::complex<type>
 {
-    private: // Data
-        type x = 0;
-        type y = 0;
-
     public: // Typedef
         using value_type = type;
         struct complex_tag { };
 
     public: // Core
         constexpr complex ( ) = default;
-        constexpr complex ( type );
         constexpr complex ( type, type );
         constexpr const type& real ( ) const;
         constexpr const type& imag ( ) const;
 
     public: // Conversion
-        constexpr complex ( number_type      auto );
-        constexpr complex ( complex_type     auto );
-        constexpr complex ( polar_float_type auto ) requires float_type<type>;
+        constexpr complex ( number_type  auto );
+        constexpr complex ( complex_type auto );
 };
 
-// Core
+
+
+
+
+
 
 template < number_type type >
-constexpr complex<type>::complex ( type init_x )
-    extends x ( init_x )
-{
-
-}
-
-template < number_type type >
-constexpr complex<type>::complex ( type init_x, type init_y )
-    extends x ( init_x ),
-            y ( init_y )
+constexpr complex<type>::complex ( type r, type i )
+    extends std::complex<type> ( r, i )
 {
 
 }
@@ -46,35 +35,25 @@ constexpr complex<type>::complex ( type init_x, type init_y )
 template < number_type type >
 constexpr const type& complex<type>::real ( ) const
 {
-    return x;
+    return std::complex<type>::real();
 }
 
 template < number_type type >
 constexpr const type& complex<type>::imag ( ) const
 {
-    return y;
+    return std::complex<type>::imag();
 }
-
-// Conversion
 
 template < number_type type >
 constexpr complex<type>::complex ( number_type auto cvt )
-    extends complex ( static_cast<type> ( cvt ) )
+    extends complex ( type(cvt), type(0) )
 {
 
 }
 
 template < number_type type >
 constexpr complex<type>::complex ( complex_type auto cvt )
-    extends complex ( static_cast<type> ( cvt.real() ), static_cast<type> ( cvt.imag() ) )
-{
-
-}
-
-template < number_type type >
-constexpr complex<type>::complex ( polar_float_type auto cvt )
-    requires float_type<type>
-    extends complex ( cvt.abs() * cos ( cvt.arg() ), cvt.abs() * sin ( cvt.arg() ) )
+    extends complex ( type(cvt.real()), type(cvt.imag()) )
 {
 
 }
@@ -83,9 +62,9 @@ constexpr complex<type>::complex ( polar_float_type auto cvt )
 
 
 
-/// Global
 
-std::ostream& operator << ( std::ostream& left, const complex_type auto& right )
+
+constexpr std::ostream& operator << ( std::ostream& left, const complex_type auto& right )
 {
     if ( right.real() == 0 )
         if ( right.imag() == 0 )

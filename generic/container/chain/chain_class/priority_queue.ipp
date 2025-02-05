@@ -1,35 +1,46 @@
 #pragma once
 
-template < class type, class compare >
-constexpr int priority_queue<type,compare>::size ( ) const
+template < class type, class compare, class device >
+constexpr int priority_queue<type,compare,device>::size ( ) const
 {
-    return vector<type>::size();
+    return base::size();
 }
 
-template < class type, class compare >
-constexpr bool priority_queue<type,compare>::empty ( ) const
+template < class type, class compare, class device >
+constexpr bool priority_queue<type,compare,device>::empty ( ) const
 {
-    return vector<type>::empty();
+    return base::empty();
 }
 
-template < class type, class compare >
-constexpr const type& priority_queue<type,compare>::top ( ) const
+template < class type, class compare, class device >
+constexpr priority_queue<type,compare,device>::const_reference priority_queue<type,compare,device>::top ( ) const
 {
-    return vector<type>::operator[] ( 1 );
+    #if debug
+        if ( empty() )
+            throw value_error("cannot access top of an empty priority_queue");
+    #endif
+    return base::top();
 }
 
-template < class type, class compare >
-constexpr void priority_queue<type,compare>::push ( type val )
+template < class type, class compare, class device >
+constexpr void priority_queue<type,compare,device>::push ( type val )
 {
-    vector<type>::push ( std::move ( val ) );
-    std::push_heap ( vector<type>::begin(), vector<type>::end(), reverse );
+    base::push(std::move(val));
 }
 
-template < class type, class compare >
-constexpr type priority_queue<type,compare>::pop ( )
+template < class type, class compare, class device >
+constexpr type priority_queue<type,compare,device>::pop ( )
 {
-    type ret = std::move ( const_cast<type&> ( top() ) );
-    std::pop_heap ( vector<type>::begin(), vector<type>::end(), reverse );
-    vector<type>::pop();
-    return ret;
+    #if debug
+        if ( empty() )
+            throw value_error("cannot pop from an empty priority_queue");
+    #endif
+    if constexpr ( requires { { base::pop() } -> convertible_to<type>; } )
+        return base::pop();
+    else
+    {
+        let poped = type(std::move(top()));
+        base::pop();
+        return poped;
+    }
 }

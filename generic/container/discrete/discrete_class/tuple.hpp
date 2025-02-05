@@ -3,71 +3,28 @@
 /// Declaration
 
 template < class... types >
-class tuple;
-
-
-
-/// Tuple with size() == 0
-
-template < >
-class tuple<>
+class tuple
+    extends public std::tuple<types...>
 {
-    public: // Core
-        constexpr tuple ( ) = default;
+    public: // Traits
         constexpr static int size ( );
-};
 
-
-
-/// Tuple with size() == 1
-
-template < class type >
-class tuple<type>
-{
-    public: // Data
-        type first = type();
-
-    public: // Core
-        constexpr tuple ( )                                       requires std::default_initializable<type> = default;
-        constexpr tuple ( type );
-        constexpr static int size ( );
-        constexpr decltype(auto) operator [] ( auto index )       requires ( index.value == 1 or index.value == -1 );
-        constexpr decltype(auto) operator [] ( auto index ) const requires ( index.value == 1 or index.value == -1 );
-
-    public: // Typedef ( declared after size() )
-        template < int index > requires ( index == 1 or index == -1 ) using value_type = type;
+    public: // Typedef
+        template < int index > requires ( ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() ) )
+        using value_type = index_type_of<index,types...>;
         struct tuple_tag { };
-};
-
-
-
-/// Tuple with size() >= 2
-
-template < class type, class... types >
-class tuple<type,types...>
-{
-    private: // Data
-        type            first = type();
-        tuple<types...> other = tuple<types...>();
 
     public: // Core
-        constexpr tuple ( )                                       requires ( std::default_initializable<type> and ... and std::default_initializable<types> ) = default;
-        constexpr tuple ( type, types... );
-        constexpr static int size ( );
-        constexpr decltype(auto) operator [] ( auto index )       requires ( ( index.value >= -size() and index.value <= -1 ) or ( index.value >= 1 and index.value <= size() ) );
-        constexpr decltype(auto) operator [] ( auto index ) const requires ( ( index.value >= -size() and index.value <= -1 ) or ( index.value >= 1 and index.value <= size() ) );
+        constexpr tuple ( )                                                      requires ( default_initializable<remove_cv<types>> and ... ) = default;  // Remove_cv is essential, as default_initializable<const int> == false (which requires "new const int()").
+        constexpr tuple ( types... );
 
-    public: // Typedef ( declared after size() )
-        template < int index > requires ( ( index >= - size() and index <= -1 ) or ( index >= 1 and index <= size() ) ) using value_type = index_type_of<index,type,types...>;
-        struct tuple_tag { };
+    public: // Conversion
+        template < class... types2 > constexpr tuple ( const tuple<types2...>& ) requires ( convertible_to    <types2,types> and ... ) but ( not ( same_as       <types,types2> and ... ) );
+        template < class... types2 > constexpr tuple ( const tuple<types2...>& ) requires ( constructible_from<types,types2> and ... ) but ( not ( convertible_to<types2,types> and ... ) );
+
+    public: // Member
+        template < int index > constexpr       index_type_of<index,types...>& value ( )       requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() );
+        template < int index > constexpr const index_type_of<index,types...>& value ( ) const requires ( index >= -size() and index <= -1 ) or ( index >= 1 and index <= size() );
 };
-
-/// Template deduction
-
-template < class    type  > tuple ( type )            -> tuple<type>     requires ( not tuple_type<type> );
-template < class... types > tuple ( tuple<types...> ) -> tuple<types...>;
-template < class... types > tuple ( types... )        -> tuple<types...> requires ( sizeof...(types) >= 2 );
-
-
 
 #include "tuple.ipp"

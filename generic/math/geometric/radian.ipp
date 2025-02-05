@@ -1,7 +1,5 @@
 #pragma once
 
-/// Class radian
-
 template < float_type type >
 class radian
 {
@@ -31,7 +29,13 @@ template < int_type   type > radian ( type )         -> radian<>;
 template < float_type type > radian ( type )         -> radian<type>;
 template < float_type type > radian ( degree<type> ) -> radian<type>;
 
-// Core
+
+
+
+
+
+
+
 
 template < float_type type >
 constexpr radian<type>::radian ( type init )
@@ -45,8 +49,6 @@ constexpr const type& radian<type>::value ( ) const
 {
     return t;
 }
-
-// Conversion
 
 template < float_type type >
 constexpr radian<type>::radian ( degree_type auto cvt )
@@ -64,7 +66,7 @@ constexpr radian<type>::radian ( radian_type auto cvt )
 
 
 
-/// Global
+
 
 std::ostream& operator << ( std::ostream& left, const radian_type auto& right )
 {

@@ -1,40 +1,28 @@
 #pragma once
 
-/// Declaration
-
-class nullopt_t { };
-constexpr nullopt_t nullopt = nullopt_t();
-
-
-
+using std::nullopt;
+using std::nullopt_t;
 
 template < class types >
 class optional
+    extends public std::optional<types>
 {
     private: // Precondition
         static_assert ( not is_const<types> and not is_volatile<types> and not is_reference<types> );
 
-    private: // Base
-        union union_obj;
-
-    private: // Data
-        union_obj storage;
-        bool      flag = false;
-
-    public: // Typedef
-        using value_type = types;
+    private: // Typedef
+        using base = std::optional<types>;
 
     public: // Core
-        constexpr  optional ( );
-        constexpr  optional ( const optional&  )             requires std::copyable<types>;
-        constexpr  optional (       optional&& )             requires std::movable <types>;
-        constexpr  optional ( types )                        requires std::movable <types>;
-        constexpr  optional ( nullopt_t );
-        constexpr ~optional ( );
-        constexpr  optional& operator = ( const optional&  ) requires std::copyable<types>;
-        constexpr  optional& operator = (       optional&& ) requires std::movable <types>;
-        constexpr  optional& operator = ( types )            requires std::movable <types>;
-        constexpr  optional& operator = ( nullopt_t );
+        constexpr optional ( )                                                       = default;
+        constexpr optional ( const optional&  )             requires copyable<types> = default;
+        constexpr optional (       optional&& )             requires movable <types> = default;
+        constexpr optional& operator = ( const optional&  ) requires copyable<types> = default;
+        constexpr optional& operator = (       optional&& ) requires movable <types> = default;
+        
+    public: // Constructor
+        constexpr optional ( types );
+        constexpr optional ( nullopt_t );
 
     public: // Member
         constexpr       bool            empty ( ) const;

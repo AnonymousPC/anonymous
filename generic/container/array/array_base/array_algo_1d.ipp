@@ -1,810 +1,633 @@
 #pragma once
 
-#include "../array_class/array_1d.hpp"
-#include "../array_class/inplace_array.hpp"
-
-#define templates            template < class container, class value_type, class iterate_type, int dim > requires ( dim == 1 )
-#define array_algo           array_algo<container,value_type,iterate_type,dim>
-#define derive_of_self       static_cast<container&>(self)
-#define const_derive_of_self static_cast<const container&>(self)
-#define result_type invoke_result<decltype(op),iterate_type>
-
-// Abbreviation
-
-templates
-constexpr int array_algo::size ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::begin ( )
 {
-    return size();
+    return static_cast<container&>(self).begin();
 }
 
-templates
-constexpr bool array_algo::empty ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::begin ( ) const
 {
-    return empty();
+    return static_cast<const container&>(self).begin();
 }
 
-templates
-constexpr decltype(auto) array_algo::begin ( )
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::end ( )
 {
-    return derive_of_self.begin();
+    return static_cast<container&>(self).end();
 }
 
-templates
-constexpr decltype(auto) array_algo::begin ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::end ( ) const
 {
-    return begin();
+    return static_cast<const container&>(self).end();
 }
 
-templates
-constexpr decltype(auto) array_algo::end ( )
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::data ( )
 {
-    return derive_of_self.end();
+    return static_cast<container&>(self).data();
 }
 
-templates
-constexpr decltype(auto) array_algo::end ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::data ( ) const
 {
-    return end();
+    return static_cast<const container&>(self).data();
 }
 
-// N-dimension
-
-templates
-constexpr int array_algo::dimension ( )
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::size ( ) const
 {
-    return 1;
+    return static_cast<const container&>(self).size();
 }
 
-templates
-[[nodiscard]]
-constexpr array<int> array_algo::shape ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::empty ( ) const
 {
-    return array<int> { size() };
+    return static_cast<const container&>(self).empty();
 }
 
-templates
-constexpr auto array_algo::tuple_shape ( ) const
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::ownership ( ) const
 {
-    return array_coordinate<1> ( size() );
+    return static_cast<const container&>(self).ownership();
 }
 
-// Views
-
-templates
-constexpr decltype(auto) array_algo::operator [] ( int pos )
+template < class container, class type, class device >
+constexpr decltype(auto) array_algo<container,type,1,device>::contiguous ( ) const
 {
-    return derive_of_self [pos];
+    return static_cast<const container&>(self).contiguous();
 }
 
-templates
-constexpr decltype(auto) array_algo::operator [] ( int pos ) const
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::adjacent_find ( ) const
+    requires equalable<type>
 {
-    return const_derive_of_self [pos];
-}
-
-templates
-constexpr auto array_algo::operator [] ( int from, int to )
-{
-    return array_range_view ( derive_of_self, from, to );
-}
-
-templates
-constexpr const auto array_algo::operator [] ( int from, int to ) const
-{
-    return array_range_view ( const_cast<container&>(const_derive_of_self), from, to );
-}
-
-templates
-constexpr auto array_algo::operator [] ( int from, int to, int step )
-{
-    return array_range_view ( derive_of_self, from, to, step );
-}
-
-templates
-constexpr const auto array_algo::operator [] ( int from, int to, int step ) const
-{
-    return array_range_view ( const_cast<container&>(const_derive_of_self), from, to, step );
-}
-
-templates
-constexpr auto array_algo::operator [] ( unary_pred<value_type> auto pred )
-{
-    return array_filter_view ( derive_of_self, pred );
-}
-
-templates
-constexpr const auto array_algo::operator [] ( unary_pred<value_type> auto pred ) const
-{
-    return array_filter_view ( const_cast<container&>(const_derive_of_self), pred );
-}
-
-templates
-constexpr auto array_algo::reshape ( int_type auto... args )
-    requires ( sizeof...(args) >= 2 )
-{
-    #if debug
-        if ( size() != ( ... * args ) )
-            throw value_error("cannot reshape array of size {} into shape {}", size(), array{args...});
-    #endif
-
-    return array_reshape_view<container,sizeof...(args)> ( derive_of_self, { args... } );
-}
-
-
-templates
-constexpr const auto array_algo::reshape ( int_type auto... args ) const
-    requires ( sizeof...(args) >= 2 )
-{
-    #if debug
-        if ( size() != ( ... * args ) )
-            throw value_error("cannot reshape array of size {} into shape {}", size(), array{args...});
-    #endif
-
-    return array_reshape_view<container,sizeof...(args)> ( const_cast<container&>(const_derive_of_self), { args... } );
-}
-
-templates
-template < class type2 >
-constexpr const auto& array_algo::as_type ( ) const
-    requires std::same_as<value_type,type2>
-{
-    return const_derive_of_self;
-}
-
-templates
-template < class type2 >
-constexpr const auto array_algo::as_type ( ) const
-    requires ( not std::same_as<value_type,type2> ) but std::convertible_to<value_type,type2>
-{
-    return container_view<container,type2> ( const_cast<container&>(const_derive_of_self) );
-}
-
-
-
-
-// Memory operation
-
-templates
-constexpr container& array_algo::clear ( )
-    requires ( not is_view )
-{
-    return derive_of_self.resize(0);
-}
-
-templates
-constexpr container& array_algo::erase ( int from, int to )
-    requires ( not is_view )
-{
-    int pos_1 = from >  0 ? from otherwise from + size() + 1;
-    int pos_2 = to   >= 0 ? to   otherwise to   + size() + 1;
-
-    #if debug
-        if ( ( ( pos_1 < 1 or pos_1 > size() ) or
-               ( pos_2 < 1 or pos_2 > size() ) )
-        and not // Except for below:
-             ( pos_1 == pos_2 + 1 and ( pos_1 == size() + 1 or pos_2 == 0 ) ) )
-            throw index_error("index [{},{}] is out of range with size {}", from, to, size());
-    #endif
-
-    int erase_len = pos_2 - pos_1 + 1;
-
-    std::move_backward ( begin() + pos_2, end(), end() - erase_len );
-    return derive_of_self.resize ( size() - erase_len );
-}
-
-templates
-constexpr container& array_algo::insert ( aux::container_dim_range<int,0,1> auto pos, aux::container_dim_range<value_type,0,1> auto item, aux::container_dim_range<value_type,0,1> auto... args )
-    requires ( not is_view )
-{
-    if constexpr ( std::convertible_to<decltype(pos),int> )
-    {
-        #if debug
-            if ( pos < -size() or pos == 0 or pos > size() + 1 )
-                throw index_error("index {} is out of range with size {}", pos, size());
-        #endif
-
-        int step = [&] { if constexpr ( std::convertible_to<decltype(item),value_type> ) return 1; else return item.size(); } ();
-
-        if ( pos < 0 )
-            pos += size() + 1;
-
-        if constexpr ( std::convertible_to<decltype(item),value_type> )
-        {
-            insert_aux ( pos, 1 );
-            self[pos] = std::move ( item );
-        }
-        else
-        {
-            insert_aux ( pos, item.size() );
-            std::move ( item.begin(), item.end(), begin() + pos - 1 );
-        }
-
-        if constexpr ( sizeof...(args) >= 1 )
-            return insert ( pos + step, std::forward<decltype(args)>(args)... );
-        else
-            return derive_of_self;
-    }
-
-    else
-    {
-        pos.each ( [&] ( int& p ) { if ( p < 0 ) p += ( size() + 1 ); } )
-           .sort ();
-
-        #if debug
-            if ( pos.exist ( [&] ( int p ) { return p < 1 or p > size(); } ) )
-                throw index_error("index {} is out of range with size {}", pos, size());
-            if ( pos.adjacent_find() != 0 )
-                throw index_error("index {} is not unique", pos);
-        #endif
-
-        auto items = container().push(std::move(item), std::forward<decltype(args)>(args)...);
-
-        for ( int each_pos in pos )
-        {
-            insert ( each_pos, items );
-            pos.each ( [&] ( int& p ) { p += items.size(); } );
-        }
-
-        return derive_of_self;
-    }
-}
-
-templates
-constexpr container& array_algo::push ( aux::container_dim_range<value_type,0,1> auto item, aux::container_dim_range<value_type,0,1> auto... args )
-    requires ( not is_view )
-{
-    if constexpr ( std::convertible_to<decltype(item),value_type> )
-    {
-        derive_of_self.resize ( size() + 1 );
-        self[-1] = std::move ( item );
-    }
-    else
-    {
-        derive_of_self.resize ( size() + item.size() );
-        std::move ( item.begin(), item.end(), end() - item.size() );
-    }
-
-    if constexpr ( sizeof...(args) >= 1 )
-        return push ( std::forward<decltype(args)>(args)... );
-    else
-        return derive_of_self;
-}
-
-templates
-constexpr container& array_algo::pop ( )
-    requires ( not is_view )
-{
-    return pop(-1);
-}
-
-templates
-constexpr container& array_algo::pop ( aux::container_dim_range<int,0,1> auto pos, aux::container_dim_range<int,0,1> auto... args )
-    requires ( not is_view )
-{
-    if constexpr ( sizeof...(args) == 0 )
-        if constexpr ( std::convertible_to<decltype(pos),int> )
-        {
-            #if debug
-                if ( pos < -size() or pos == 0 or pos > size() )
-                    throw index_error("index {} is out of range with size {}", pos, size());
-            #endif
-
-            if ( pos < 0 )
-                pos += ( size() + 1 );
-
-            std::move ( begin() + pos, end(), begin() + pos - 1 ); // Cannot be paralelled.
-            return derive_of_self.resize ( size() - 1 );
-        }
-
-        else
-        {
-            pos.each ( [&] ( int& p ) { if ( p < 0 ) p += ( size() + 1 ); } )
-               .sort ();
-
-            #if debug
-                if ( pos.exist ( [&] ( int p ) { return p < 1 or p > size(); } ) )
-                    throw index_error("index {} is out of range with size {}", pos, size());
-                if ( pos.adjacent_find() != 0 )
-                    throw index_error("index {} is not unique", pos);
-            #endif
-
-            auto pred = [&] ( const value_type& val ) { return pos.contains ( &val - &self[1] + 1 ); };
-            return derive_of_self.resize ( std::remove_if ( begin(), end(), pred ) - begin() );
-        }
-
-    else
-        return derive_of_self.pop ( array<int>().push(std::move(pos), std::forward<decltype(args)>(args)...) );
-}
-
-
-// Linear algorithm
-
-templates
-constexpr int array_algo::adjacent_find ( ) const
-    requires equalable<value_type>
-{
-    int pos = std::adjacent_find ( begin(), end() ) - begin() + 1;
+    let pos = contiguous() ? device::adjacent_find(data(), data() + size()) - data() + 1 otherwise
+                             device::adjacent_find(begin(), end()) - begin() + 1;
     return pos <= size() ? pos otherwise 0;
 }
 
-templates
-constexpr int array_algo::adjacent_find ( binary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::adjacent_find ( relation<type,type> auto pred ) const
 {
-    int pos = std::adjacent_find ( begin(), end(), pred ) - begin() + 1;
+    let pos = contiguous() ? device::adjacent_find(data(), data() + size(), pred) - data() + 1 otherwise
+                             device::adjacent_find(begin(), end(), pred) - begin() + 1;
     return pos <= size() ? pos otherwise 0;
 }
 
-templates
-constexpr array<int> array_algo::adjacent_where ( ) const
-    requires equalable<value_type>
+template < class container, class type, class device >
+constexpr array<int> array_algo<container,type,1,device>::adjacent_where ( ) const
+    requires equalable<type>
 {
-    array<int> poses;
-    for ( auto it = begin(); it != end() + 1; it++ )
-    {
-        it = std::adjacent_find ( it, end() );
-        if ( it != end() )
-            poses.push ( it - begin() + 1 );
-    }
-
-    return poses;
+    let pos = array<int>();
+    if ( contiguous() )
+        for ( let it = data(); ; )
+            if ( (it = device::adjacent_find(it, data() + size())) != data() + size() )
+                pos.push((it++) - data() + 1);
+            else   
+                break;
+    else
+        for ( let it = begin(); ; )
+            if ( (it = device::adjacent_find(it, end())) != end() )
+                pos.push((it++) - begin() + 1);
+            else   
+                break;
+    return pos;
 }
 
-templates
-constexpr array<int> array_algo::adjacent_where ( binary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr array<int> array_algo<container,type,1,device>::adjacent_where ( relation<type,type> auto pred ) const
 {
-    array<int> poses;
-    for ( auto it = begin(); it != end() + 1; it++ )
-    {
-        it = std::adjacent_find ( it, end(), pred );
-        if ( it != end() )
-            poses.push ( it - begin() + 1 );
-    }
-
-    return poses;
+    let pos = array<int>();
+    if ( contiguous() )
+        for ( let it = data(); ; )
+            if ( (it = device::adjacent_find(it, data() + size(), pred)) != data() + size() )
+                pos.push((it++) - data() + 1);
+            else   
+                break;
+    else
+        for ( let it = begin(); ; )
+            if ( (it = device::adjacent_find(it, end(), pred)) != end() )
+                pos.push((it++) - begin() + 1);
+            else   
+                break;
+    return pos;
 }
 
-
-templates
-constexpr bool array_algo::all ( const equalable_to<iterate_type> auto& val ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::all ( const equalable_to<type> auto& val ) const
 {
-    return std::all_of ( begin(), end(), [&] ( const auto& item ) { return item == val; } );
+    return contiguous() ? device::all_of(data(), data() + size(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); }) otherwise
+                          device::all_of(begin(), end(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); });
 }
 
-
-templates
-constexpr bool array_algo::all ( unary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::all ( predicate<type> auto pred ) const
 {
-    return std::all_of ( begin(), end(), pred );
+    return contiguous() ? device::all_of(data(), data() + size(), pred) otherwise
+                          device::all_of(begin(), end(), pred);
 }
 
-templates
-constexpr bool array_algo::contains ( const equalable_to<iterate_type> auto& val ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::contains ( const equalable_to<type> auto& val ) const
 {
-    return std::any_of ( begin(), end(), [&] ( const auto& item ) { return item == val; } );
+    return contiguous() ? device::any_of(data(), data() + size(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); }) otherwise
+                          device::any_of(begin(), end(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); });
 }
 
-
-templates
-constexpr bool array_algo::contains ( unary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::contains ( predicate<type> auto pred ) const
 {
-    return std::any_of ( begin(), end(), pred );
+    return contiguous() ? device::any_of(data(), data() + size(), pred) otherwise
+                          device::any_of(begin(), end(), pred);
 }
 
-templates
-constexpr int array_algo::count ( const equalable_to<iterate_type> auto& val ) const
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::count ( const equalable_to<type> auto& val ) const
 {
-    return std::count ( begin(), end(), val );
+    return contiguous() ? device::count(data(), data() + size(), val) otherwise
+                          device::count(begin(), end(), val);
 }
 
-
-templates
-constexpr int array_algo::count ( unary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::count ( predicate<type> auto pred ) const
 {
-    return std::count_if ( begin(), end(), pred );
+    return contiguous() ? device::count(data(), data() + size(), pred) otherwise
+                          device::count(begin(), end(), pred);
 }
 
-templates
-constexpr bool array_algo::exist ( const equalable_to<iterate_type> auto& val ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::exist ( const equalable_to<type> auto& val ) const
 {
-    return std::any_of ( begin(), end(), [&] ( const auto& item ) { return item == val; } );
+    return contiguous() ? device::any_of(data(), data() + size(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); }) otherwise
+                          device::any_of(begin(), end(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); });
 }
 
-
-templates
-constexpr bool array_algo::exist ( unary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::exist ( predicate<type> auto pred ) const
 {
-    return std::any_of ( begin(), end(), pred );
+    return contiguous() ? device::any_of(data(), data() + size(), pred) otherwise
+                          device::any_of(begin(), end(), pred);
 }
 
-templates
-constexpr int array_algo::find ( const equalable_to<iterate_type> auto& val ) const
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::find ( const equalable_to<type> auto& val ) const
 {
-    int pos = std::find ( begin(), end(), val ) - begin() + 1;
+    let pos = contiguous() ? device::find(data(), data() + size(), val) - data() + 1 otherwise
+                             device::find(begin(), end(), val) - begin() + 1;
     return pos <= size() ? pos otherwise 0;
 }
 
-templates
-constexpr int array_algo::find ( unary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::find ( predicate<type> auto pred ) const
 {
-    int pos = std::find_if ( begin(), end(), pred ) - begin() + 1;
+    let pos = contiguous() ? device::find_if(data(), data() + size(), pred) - data() + 1 otherwise
+                             device::find_if(begin(), end(), pred) - begin() + 1;
     return pos <= size() ? pos otherwise 0;
 }
 
-templates
-constexpr bool array_algo::is_partitioned ( unary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::is_partitioned ( predicate<type> auto pred ) const
 {
-    return std::is_partitioned ( begin(), end(), pred );
+    return contiguous() ? device::is_partitioned(data(), data() + size(), pred) otherwise
+                          device::is_partitioned(begin(), end(), pred);
 }
 
-templates
-constexpr bool array_algo::is_sorted ( ) const
-    requires comparable<value_type>
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::is_sorted ( ) const
+    requires comparable<type>
 {
-    return std::is_sorted ( begin(), end() );
+    return is_sorted() ? device::is_sorted(data(), data() + size()) otherwise
+                         device::is_sorted(begin(), end());
 }
 
-templates
-constexpr bool array_algo::is_sorted ( binary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::is_sorted ( relation<type,type> auto pred ) const
 {
-    return std::is_sorted ( begin(), end(), pred );
+    return is_sorted() ? device::is_sorted(data(), data() + size(), pred) otherwise
+                         device::is_sorted(begin(), end(), pred);
 }
 
-templates
-constexpr const iterate_type& array_algo::max ( ) const
-    requires comparable<value_type>
+template < class container, class type, class device >
+constexpr array_algo<container,type,1,device>::reference array_algo<container,type,1,device>::max ( )
+    requires comparable<type>
 {
     #if debug
         if ( empty() )
-            throw value_error("get max() from empty array");
+            throw value_error("get max element from an empty array");
     #endif
-
-    return *std::max_element ( begin(), end() );
+    return contiguous() ? *device::max_element(data(), data() + size()) otherwise
+                          *device::max_element(begin(), end());
 }
 
-templates
-constexpr const iterate_type& array_algo::max ( binary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr array_algo<container,type,1,device>::const_reference array_algo<container,type,1,device>::max ( relation<type,type> auto pred ) const
 {
     #if debug
         if ( empty() )
-            throw value_error("get max() from empty array");
+            throw value_error("get max element from an empty array");
     #endif
-
-    return *std::max_element ( begin(), end(), pred );
+    return contiguous() ? *device::max_element(data(), data() + size(), pred) otherwise
+                          *device::max_element(begin(), end(), pred);
 }
 
-templates
-constexpr const iterate_type& array_algo::min ( ) const
-    requires comparable<value_type>
+template < class container, class type, class device >
+constexpr array_algo<container,type,1,device>::reference array_algo<container,type,1,device>::min ( )
+    requires comparable<type>
 {
     #if debug
         if ( empty() )
-            throw value_error("get min() from empty array");
+            throw value_error("get min element from an empty array");
     #endif
-
-    return *std::min_element ( begin(), end() );
+    return contiguous() ? *device::min_element(data(), data() + size()) otherwise
+                          *device::min_element(begin(), end());
 }
 
-templates
-constexpr const iterate_type& array_algo::min ( binary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr array_algo<container,type,1,device>::const_reference array_algo<container,type,1,device>::min ( relation<type,type> auto pred ) const
 {
     #if debug
         if ( empty() )
-            throw value_error("get min() from empty array");
+            throw value_error("get min element from an empty array");
     #endif
-
-    return *std::min_element ( begin(), end(), pred );
+    return contiguous() ? *device::min_element(data(), data() + size(), pred) otherwise
+                          *device::min_element(begin(), end(), pred);
 }
 
-templates
-constexpr container& array_algo::next_permutation ( )
-    requires comparable<value_type>
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::next_permutation ( )
+    requires comparable<type>
 {
-    std::next_permutation ( begin(), end() );
-    return derive_of_self;
+    contiguous() ? device::next_permutation(data(), data() + size()) otherwise
+                   device::next_permutation(begin(), end());
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::next_permutation ( binary_pred<iterate_type> auto pred )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::next_permutation ( relation<type,type> auto pred )
 {
-    std::next_permutation ( begin(), end(), pred );
-    return derive_of_self;
+    contiguous() ? device::next_permutation(data(), data() + size(), pred) otherwise
+                   device::next_permutation(begin(), end(), pred);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr bool array_algo::none ( const equalable_to<iterate_type> auto& val ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::none ( const equalable_to<type> auto& val ) const
 {
-    return std::none_of ( begin(), end(), [&] ( const value_type& item ) { return item == val; } );
+    return contiguous() ? device::none_of(data(), data() + size(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); }) otherwise
+                          device::none_of(begin(), end(), [&] (const auto& item) { return device::template equal_to<type>()(item, val); });
 }
 
-templates
-constexpr bool array_algo::none ( unary_pred<iterate_type> auto pred ) const
+template < class container, class type, class device >
+constexpr bool array_algo<container,type,1,device>::none ( predicate<type> auto pred ) const
 {
-    return std::none_of ( begin(), end(), pred );
+    return contiguous() ? device::none_of(data(), data() + size(), pred) otherwise
+                          device::none_of(begin(), end(), pred);
 }
 
-templates
-constexpr container& array_algo::partial_sort ( int len )
-    requires comparable<value_type>
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::partial_sort ( int n )
+    requires comparable<type>
 {
     #if debug
-        if ( len < 0 or len > size() )
-            throw value_error("partial_sort {} elements is out of range with size {}", len, size());
+        if ( n < 0 )
+            throw value_error("partial_sort array with middle {} out of range with size {}", n, size());
     #endif
-    std::partial_sort ( begin(), begin() + len, end() );
-    return derive_of_self;
+    contiguous() ? (void) device::partial_sort(data(), data() + n, data() + size()) otherwise
+                   (void) device::partial_sort(begin(), begin() + n, end());
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::partial_sort ( int len, binary_pred<iterate_type> auto pred )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::partial_sort ( int n, relation<type,type> auto pred )
 {
     #if debug
-        if ( len < 0 or len > size() )
-            throw value_error("partial_sort {} elements is out of range with size {}", len, size());
+        if ( n < 0 )
+            throw value_error("partial_sort array with middle {} out of range with size {}", n, size());
     #endif
-    std::partial_sort ( begin(), begin() + len, end(), pred );
-    return derive_of_self;
+    contiguous() ? (void) device::partial_sort(data(), data() + n, data() + size(), pred) otherwise
+                   (void) device::partial_sort(begin(), begin() + n, end(), pred);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::partition ( unary_pred<iterate_type> auto pred )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::partition ( predicate<type> auto pred )
 {
-    std::partition ( begin(), end(), pred );
-    return derive_of_self;
+    contiguous() ? (void) device::partition(data(), data() + size(), pred) otherwise
+                   (void) device::partition(begin(), end(), pred);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::prev_permutation ( )
-    requires comparable<value_type>
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::prev_permutation ( )
+    requires comparable<type>
 {
-    std::prev_permutation ( begin(), end() );
-    return derive_of_self;
+    contiguous() ? device::prev_permutation(data(), data() + size()) otherwise
+                   device::prev_permutation(begin(), end());
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::prev_permutation ( binary_pred<iterate_type> auto pred )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::prev_permutation ( relation<type,type> auto pred )
 {
-    std::next_permutation ( begin(), end(), pred );
-    return derive_of_self;
+    contiguous() ? device::prev_permutation(data(), data() + size(), pred) otherwise
+                   device::prev_permutation(begin(), end(), pred);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::remove ( const equalable_to<iterate_type> auto& val )
-    requires ( not is_view )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::remove ( const equalable_to<type> auto& val )
 {
-    return derive_of_self.resize ( std::remove ( begin(), end(), val ) - begin() );
+    return static_cast<container&>(self).resize(contiguous() ? device::remove(data(), data() + size(), val) - data() otherwise
+                                                                device::remove(begin(), end(), val) - begin());
 }
 
-templates
-constexpr container& array_algo::remove ( unary_pred<iterate_type> auto pred )
-    requires ( not is_view )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::remove ( predicate<type> auto pred )
 {
-    return derive_of_self.resize ( std::remove_if ( begin(), end(), pred ) - begin() );
+    return static_cast<container&>(self).resize(contiguous() ? device::remove_if(data(), data() + size(), pred) - data() otherwise
+                                                                device::remove_if(begin(), end(), pred) - begin());
 }
 
-templates
-constexpr container& array_algo::reverse ( )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::reverse ( )
 {
-    std::reverse ( begin(), end() );
-    return derive_of_self;
+    contiguous() ? device::reverse(data(), data() + size()) otherwise
+                   device::reverse(begin(), end());
 }
 
-templates
-constexpr int array_algo::right_adjacent_find ( ) const
-    requires equalable<value_type>
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::right_adjacent_find ( ) const
+    requires equalable<type>
 {
-    for ( auto it = end() - 1; it != begin(); it-- )
-        if ( *it == *(it-1) )
-            return it - begin();
-    return 0;
-}
-
-templates
-constexpr int array_algo::right_adjacent_find ( binary_pred<iterate_type> auto pred ) const
-{
-    for ( auto it = end() - 1; it != begin(); it-- )
-        if ( pred ( *it, *(it-1) ) )
-            return it - begin();
-    return 0;
-}
-
-templates
-constexpr int array_algo::right_find ( const equalable_to<iterate_type> auto& val ) const
-{
-    for ( auto it = end() - 1; it != begin() - 1; it-- )
-        if ( *it == val )
-            return it - begin() + 1;
-    return 0;
-}
-
-templates
-constexpr int array_algo::right_find ( unary_pred<iterate_type> auto pred ) const
-{
-    for ( auto it = end() - 1; it != begin() - 1; it-- )
-        if ( pred ( *it ) )
-            return it - begin() + 1;
-    return 0;
-}
-
-templates
-constexpr container& array_algo::rotate ( int step )
-{
-    if ( step > 0 )
-        std::rotate ( begin(), begin() + size() - step, end() );
-    else if ( step < 0 )
-        std::rotate ( begin(), begin()          - step, end() );
-
-    return derive_of_self;
-}
-
-templates
-constexpr container& array_algo::sort ( )
-    requires comparable<value_type>
-{
-    std::sort ( begin(), end() );
-    return derive_of_self;
-}
-
-templates
-constexpr container& array_algo::sort ( binary_pred<iterate_type> auto pred )
-{
-    std::sort ( begin(), end(), pred );
-    return derive_of_self;
-}
-
-templates
-constexpr container& array_algo::unique ( )
-    requires ( not is_view ) and equalable<value_type>
-{
-    return derive_of_self.resize ( std::unique ( begin(), end() ) - begin() );
-}
-
-templates
-constexpr container& array_algo::unique ( binary_pred<iterate_type> auto pred )
-    requires ( not is_view )
-{
-    return derive_of_self.resize ( std::unique ( begin(), end(), pred ) - begin() );
-}
-
-templates
-constexpr array<int> array_algo::where ( const equalable_to<iterate_type> auto& val ) const
-{
-    array<int> poses;
-    for ( auto it = begin(); it != end() + 1; it++ )
+    if ( contiguous() )
     {
-        it = std::find ( it, end(), val );
-        if ( it != end() )
-            poses.push ( it - begin() + 1 );
+        for ( let it = data() + size() - 1; it != data(); it-- )
+            if ( device::template equal_to<type>()(*(it-1), *it) )
+                return it - data();
     }
-
-    return poses;
-}
-
-templates
-constexpr array<int> array_algo::where ( unary_pred<iterate_type> auto pred ) const
-{
-    array<int> poses;
-    for ( auto it = begin(); it != end() + 1; it++ )
+    else
     {
-        it = std::find_if ( it, end(), pred );
-        if ( it != end() )
-            poses.push ( it - begin() + 1 );
+        for ( let it = end() - 1; it != begin(); it-- )
+            if ( device::template equal_to<type>()(*(it-1), *it) )
+                return it - begin();
     }
-
-    return poses;
+    return 0;
 }
 
-templates
-constexpr auto array_algo::average ( ) const
-    requires std::default_initializable<value_type> and addable<value_type> and dividable_to<value_type,int>
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::right_adjacent_find ( relation<type,type> auto pred ) const
 {
+    if ( contiguous() )
+    {
+        for ( let it = data() + size() - 1; it != data(); it-- )
+            if ( pred(*(it-1), *it) )
+                return it - data();
+    }
+    else
+    {
+        for ( let it = end() - 1; it != begin(); it-- )
+            if ( pred(*(it-1), *it) )
+                return it - begin();
+    }
+    return 0;
+}
+
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::right_find ( const equalable_to<type> auto& val ) const
+{
+    if ( contiguous() )
+    {
+        for ( let it = data() + size() - 1; it != data(); it-- )
+            if ( device::template equal_to<type>()(*it, val) )
+                return it - data() + 1;
+    }
+    else
+    {
+        for ( let it = end() - 1; it != begin(); it-- )
+            if ( device::template equal_to<type>()(*it, val) )
+                return it - begin() + 1;
+    }
+    return 0;
+}
+
+template < class container, class type, class device >
+constexpr int array_algo<container,type,1,device>::right_find ( predicate<type> auto pred ) const
+{
+    if ( contiguous() )
+    {
+        for ( let it = data() + size() - 1; it != data(); it-- )
+            if ( pred(*it) )
+                return it - data() + 1;
+    }
+    else
+    {
+        for ( let it = end() - 1; it != begin(); it-- )
+            if ( pred(*it) )
+                return it - begin() + 1;
+    }
+    return 0;
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::rotate ( int n )
+{
+    #if debug
+        if ( n <= -size() or n >= size() )
+            throw value_error("rotate array with step {} out of range with size {}", n, size());
+    #endif
+    contiguous() ? n > 0 ? (void) device::rotate(data(), data() + size() - n, data() + size()) otherwise
+                           (void) device::rotate(data(), data() - n, data() + size())          otherwise
+                   n > 0 ? (void) device::rotate(begin(), end() - n, end())                    otherwise
+                           (void) device::rotate(begin(), begin() - n, end());
+    return static_cast<container&>(self);
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::stable_partition ( predicate<type> auto pred )
+{
+    contiguous() ? (void) device::stable_partition(data(), data() + size(), pred) otherwise
+                   (void) device::stable_partition(begin(), end(), pred);
+    return static_cast<container&>(self);
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::stable_sort ( )
+    requires comparable<type>
+{
+    contiguous() ? device::stable_sort(data(), data() + size()) otherwise 
+                   device::stable_sort(begin(), end());
+    return static_cast<container&>(self);
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::stable_sort ( relation<type,type> auto pred )
+{
+    contiguous() ? device::stable_sort(data(), data() + size(), pred) otherwise 
+                   device::stable_sort(begin(), end(), pred);
+    return static_cast<container&>(self);
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::sort ( )
+    requires comparable<type>
+{
+    contiguous() ? device::sort(data(), data() + size()) otherwise 
+                   device::sort(begin(), end());
+    return static_cast<container&>(self);
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::sort ( relation<type,type> auto pred )
+{    
+    contiguous() ? device::sort(data(), data() + size(), pred) otherwise 
+                   device::sort(begin(), end(), pred);
+    return static_cast<container&>(self);
+
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::unique ( )
+    requires equalable<type>
+{
+    return static_cast<container&>(self).resize(contiguous() ? device::unique(data(), data() + size()) - data() otherwise 
+                                                                device::unique(begin(), end()) - begin());
+}
+
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::unique ( relation<type,type> auto pred )
+{
+    return static_cast<container&>(self).resize(contiguous() ? device::unique(data(), data() + size(), pred) - data() otherwise 
+                                                                device::unique(begin(), end()) - begin(), pred);
+}
+
+template < class container, class type, class device >
+constexpr array<int> array_algo<container,type,1,device>::where ( const equalable_to<type> auto& val ) const
+{
+    let pos = array<int>();
+    if ( contiguous() )
+        for ( let it = data(); ; )
+            if ( (it = device::find(it, data() + size(), val)) != data() + size() )
+                pos.push((it++) - data() + 1);
+            else   
+                break;
+    else
+        for ( let it = begin(); ; )
+            if ( (it = device::find(it, end(), val)) != end() )
+                pos.push((it++) - begin() + 1);
+            else   
+                break;
+    return pos;
+}
+
+template < class container, class type, class device >
+constexpr array<int> array_algo<container,type,1,device>::where ( predicate<type> auto pred ) const
+{
+    let pos = array<int>();
+    if ( contiguous() )
+        for ( let it = data(); ; )
+            if ( (it = device::find_if(it, data() + size(), pred)) != data() + size() )
+                pos.push((it++) - data() + 1);
+            else   
+                break;
+    else
+        for ( let it = begin(); ; )
+            if ( (it = device::find_if(it, end(), pred)) != end() )
+                pos.push((it++) - begin() + 1);
+            else   
+                break;
+    return pos;
+}
+
+template < class container, class type, class device >
+constexpr type array_algo<container,type,1,device>::average ( ) const
+    requires default_initializable<type> and plusable<type> and dividable_to<type,int>
+{
+    #if debug
+        if ( empty() )
+            throw value_error("get average from an empty array");
+    #endif
     return sum() / size();
 }
 
-templates
-constexpr auto array_algo::average ( std::invocable<iterate_type> auto op ) const
-    requires std::default_initializable<result_type> and addable<result_type> and dividable_to<result_type,int>
+template < class container, class type, class device >
+constexpr type array_algo<container,type,1,device>::sum ( ) const
+    requires default_initializable<type> and plusable<type>
 {
-    return sum(op) / size();
+    if constexpr ( number_type<type> )
+        return contiguous() ? device::reduce(data(), data() + size(), type()) otherwise
+                              device::reduce(begin(), end(), type());
+    else    
+        return contiguous() ? device::accumulate(data(), data() + size(), type()) otherwise
+                              device::accumulate(begin(), end(), type());
 }
 
-templates
-constexpr auto array_algo::sum ( ) const
-    requires std::default_initializable<value_type> and addable<value_type>
+template < class container, class type, class device >
+constexpr type array_algo<container,type,1,device>::product ( ) const
+    requires convertible_to<int,type> and multipliable<type>
 {
-    return std::accumulate ( begin(), end(), iterate_type() );
+    if constexpr ( number_type<type> )
+        return contiguous() ? device::reduce(data(), data() + size(), type(1), typename device::template multiplies<type>()) otherwise
+                              device::reduce(begin(), end(), type(1), typename device::template multiplies<type>());
+    else    
+        return contiguous() ? device::accumulate(data(), data() + size(), type(1), typename device::template multiplies<type>()) otherwise
+                              device::accumulate(begin(), end(), type(1), typename device::template multiplies<type>());
 }
 
-templates
-constexpr auto array_algo::sum ( std::invocable<iterate_type> auto op ) const
-    requires std::default_initializable<result_type> and addable<result_type>
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::for_each ( invocable<reference> auto op )
 {
-    return std::accumulate ( begin(), end(), result_type(), [&] ( const auto& a, const auto& b ) { return a + op(b); } );
+    contiguous() ? (void) device::for_each(data(), data() + size(), op) otherwise
+                   (void) device::for_each(begin(), end(), op);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr auto array_algo::product ( ) const
-    requires std::convertible_to<int,value_type> and multipliable<value_type>
+template < class container, class type, class device >
+constexpr const container& array_algo<container,type,1,device>::for_each ( invocable<type> auto op ) const
 {
-    return std::accumulate ( begin(), end(), iterate_type(1), [] ( const auto& a, const auto& b ) { return a * b; } );
+    contiguous() ? (void) device::for_each(data(), data() + size(), op) otherwise
+                   (void) device::for_each(begin(), end(), op);
+    return static_cast<const container&>(self);
 }
 
-templates
-constexpr auto array_algo::product ( std::invocable<iterate_type> auto op ) const
-    requires std::convertible_to<int,result_type> and multipliable<result_type>
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::fill ( const convertible_to<type> auto& val )
 {
-    return std::accumulate ( begin(), end(), result_type(1), [&] ( const auto& a, const auto& b ) { return a * op(b); } );
+    contiguous() ? device::fill(data(), data() + size(), val) otherwise
+                   device::fill(begin(), end(), val);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::each ( std::invocable<iterate_type&> auto op )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::generate ( invocable_r<type> auto op )
 {
-    std::for_each ( begin(), end(), op );
-    return derive_of_self;
+    contiguous() ? device::generate(data(), data() + size(), op) otherwise
+                   device::generate(begin(), end(), op);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr const container& array_algo::each ( std::invocable<iterate_type> auto op ) const
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::transform ( invocable_r<type,type> auto op )
 {
-    std::for_each ( begin(), end(), op );
-    return const_derive_of_self;
+    contiguous() ? (void) device::transform(data(), data() + size(), data(), op) otherwise
+                   (void) device::transform(begin(), end(), begin(), op);
+    return static_cast<container&>(self);
 }
 
-templates
-constexpr container& array_algo::fill ( const std::convertible_to<iterate_type> auto& val )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::replace ( const equalable_to<type> auto& old_val, const convertible_to<type> auto& new_val )
 {
-    std::fill ( begin(), end(), val );
-    return derive_of_self;
+    contiguous() ? device::replace(data(), data() + size(), old_val, new_val) otherwise
+                   device::replace(begin(), end(), old_val, new_val);
+    return static_cast<container&>(self);            
 }
 
-templates
-constexpr container& array_algo::generate ( function_type<iterate_type()> auto gen )
+template < class container, class type, class device >
+constexpr container& array_algo<container,type,1,device>::replace ( predicate<type> auto pred, const convertible_to<type> auto& new_val )
 {
-    std::generate ( begin(), end(), gen );
-    return derive_of_self;
+    contiguous() ? device::replace_if(data(), data() + size(), pred, new_val) otherwise
+                   device::replace_if(begin(), end(), pred, new_val);
+    return static_cast<container&>(self);  
 }
-
-templates
-constexpr container& array_algo::transform ( unary_op<iterate_type> auto op )
-{
-    std::transform ( begin(), end(), begin(), op );
-    return derive_of_self;
-}
-
-templates
-constexpr container& array_algo::replace ( const equalable_to<iterate_type> auto& val1, const std::convertible_to<iterate_type> auto& val2 )
-{
-    std::replace ( begin(), end(), val1, val2 );
-    return derive_of_self;
-}
-
-templates
-constexpr container& array_algo::replace ( unary_pred<iterate_type> auto pred, const std::convertible_to<iterate_type> auto& val )
-{
-    std::replace_if ( begin(), end(), pred, val );
-    return derive_of_self;
-}
-
-
-// Auxiliary
-
-templates
-constexpr container& array_algo::insert_aux ( int pos, int step )
-{
-    if ( pos < 0 )
-        pos += ( size() + 1 );
-
-    derive_of_self.resize ( size() + step );
-
-    std::move_backward ( begin() + pos - 1, end() - step, end() ); // Cannot be paralelled.
-
-    return derive_of_self;
-}
-
-
-
-
-
-#undef templates
-#undef array_algo
-#undef derive_of_self
-#undef const_derive_of_self

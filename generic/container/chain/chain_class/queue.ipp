@@ -1,53 +1,76 @@
 #pragma once
 
-/// Class queue
-
-// Interface
-
-template < class type >
-constexpr int queue<type>::size ( ) const
+template < class type, class device >
+constexpr int queue<type,device>::size ( ) const
 {
-    return deque<type>::size();
+    return base::size();
 }
 
-template < class type >
-constexpr bool queue<type>::empty ( ) const
+template < class type, class device >
+constexpr bool queue<type,device>::empty ( ) const
 {
-    return deque<type>::empty();
+    return base::empty();
 }
 
-template < class type >
-constexpr type& queue<type>::front ( )
+template < class type, class device >
+constexpr queue<type,device>::reference queue<type,device>::front ( )
 {
-    return deque<type>::front();
+    #if debug
+        if ( empty() )
+            throw value_error("cannot access front of an empty queue");
+    #endif
+    return base::front();
 }
 
-template < class type >
-constexpr const type& queue<type>::front ( ) const
+template < class type, class device >
+constexpr queue<type,device>::const_reference queue<type,device>::front ( ) const
 {
-    return deque<type>::front();
+    #if debug
+        if ( empty() )
+            throw value_error("cannot access front of an empty queue");
+    #endif
+    return base::front();
 }
 
-template < class type >
-constexpr type& queue<type>::back ( )
+template < class type, class device >
+constexpr queue<type,device>::reference queue<type,device>::back ( )
 {
-    return deque<type>::back();
+    #if debug
+        if ( empty() )
+            throw value_error("cannot access back of an empty queue");
+    #endif
+    return base::back();
 }
 
-template < class type >
-constexpr const type& queue<type>::back ( ) const
+template < class type, class device >
+constexpr queue<type,device>::const_reference queue<type,device>::back ( ) const
 {
-    return deque<type>::back();
+    #if debug
+        if ( empty() )
+            throw value_error("cannot access back of an empty queue");
+    #endif
+    return base::back();
 }
 
-template < class type >
-constexpr void queue<type>::push ( type val )
+template < class type, class device >
+constexpr void queue<type,device>::push ( type val )
 {
-    return deque<type>::push_back ( std::move ( val ) );
+    return base::push(std::move(val));
 }
 
-template < class type >
-constexpr type queue<type>::pop ( )
+template < class type, class device >
+constexpr type queue<type,device>::pop ( )
 {
-    return deque<type>::pop_front();
+    #if debug
+        if ( empty() )
+            throw value_error("cannot pop from an empty queue");
+    #endif
+    if constexpr ( requires { { base::pop() } -> convertible_to<type>; } )
+        return base::pop();
+    else
+    {
+        let poped = type(std::move(front()));
+        base::pop();
+        return poped;
+    }
 }

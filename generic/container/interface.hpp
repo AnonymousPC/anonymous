@@ -22,8 +22,9 @@ namespace ap
     template < class type,               class hash    = std::hash<type>,  class device = cpu > class unordered_set;
     template < class type1, class type2, class hash    = std::hash<type1>, class device = cpu > class unordered_map;
 
-    template < class type1, class type2 = type1 >                                               class pair;
-    template < class... types >                                                                 class tuple;
+    template < class type,                                                 class device = cpu > using complex = device::template complex<type>;
+    template < class type1, class type2 = type1,                           class device = cpu > using pair    = device::template pair<type1,type2>;
+    template < class... types >                                                                 using tuple   = cpu::template tuple<types...>;
 
                                                                                                 class any;
     template < class type >                                                                     class function;

@@ -64,6 +64,17 @@ class cpu
         template < class type, class hash = hash<type>, class equal = equal_to<>, class alloc = allocator<type> >                                        using unordered_set     = std::unordered_set    <type,hash,equal,alloc>;
         template < class type, class alloc = allocator<type> >                                                                                           using vector            = std::vector           <type,alloc>;
 
+    public: // Structure
+        template < class type >                                                                                                                          class complex;
+        template < class type1, class type2 = type1 >                                                                                                    class pair;
+        template < class... types >                                                                                                                      class tuple;
+
+    public: // Polymorphic
+        template < class types >                                                                                                                         class optional;
+        template < class... types >                                                                                                                      class variant;
+                                                                                                                                                         class any;
+        template < class type >                                                                                                                          class function;
+
     public: // Algorithm
         constexpr static decltype(auto) accumulate                        ( auto&&... args ) { return std::accumulate                       (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) adjacent_difference               ( auto&&... args ) { return std::adjacent_difference              (std::forward<decltype(args)>(args)...); }
@@ -159,3 +170,7 @@ class cpu
 cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());
 
 #include "type/stride_pointer.hpp"
+
+#include "structure/complex.hpp"
+#include "structure/pair.hpp"
+#include "structure/tuple.hpp"

@@ -166,10 +166,11 @@ template < class type >                                    concept        inputa
 /// Is...type
 
 template < class type >                                    concept        char_type                          = same_as<remove_cv<type>,char> or same_as<remove_cv<type>,wchar_t> or same_as<remove_cv<type>,char8_t> or same_as<remove_cv<type>,char16_t> or same_as<remove_cv<type>,char32_t> or requires { typename type::char_tag;         };
-template < class type >                                    concept        int_type                           = ( std::signed_integral  <type> and ( not char_type<type> ) ) or requires { typename type::int_tag;          };
-template < class type >                                    concept        unsigned_int_type                  = ( std::unsigned_integral<type> and ( not char_type<type> ) ) or requires { typename type::unsigned_int_tag; };
-template < class type >                                    concept        float_type                         = std::floating_point<type>                                    or requires { typename type::float_tag;        };
-template < class type >                                    concept        number_type                        = int_type<type> or float_type<type>                           or requires { typename type::number_tag;       };
+template < class type >                                    concept        int_type                           = ( std::signed_integral  <type> and ( not char_type<type> ) )                      or requires { typename type::int_tag;          };
+template < class type >                                    concept        unsigned_int_type                  = ( std::unsigned_integral<type> and ( not char_type<type> ) )                      or requires { typename type::unsigned_int_tag; };
+template < class type >                                    concept        float_type                         = std::floating_point<type>                                                         or requires { typename type::float_tag;        };
+template < class type >                                    concept        number_type                        = int_type<type> or float_type<type>                                                or requires { typename type::number_tag;       };
+template < class type >                                    concept        complex_type                       = requires ( type c ) { { c.real() } -> number_type; { c.imag() } -> number_type; } or requires { typename type::complex_tag;      };
 
 // Convertible since/until
 

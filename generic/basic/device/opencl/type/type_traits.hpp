@@ -38,6 +38,7 @@ namespace boost::compute
 
     namespace detail
     {
+        #ifdef __STDCPP_FLOAT16_T__
         template < >
         struct type_name_trait<ap::float16_t>
         {
@@ -47,6 +48,7 @@ namespace boost::compute
                 return name;
             }
         };
+        #endif
     } // namespace detail
     
 } // namespace boost::compute

@@ -25,6 +25,7 @@ class tbb
     public: // Memory
         using cpu::layout_type;
         using cpu::accessor_type;
+        using cpu::const_accessor_type;
 
     public: // Operator
         using cpu::plus;

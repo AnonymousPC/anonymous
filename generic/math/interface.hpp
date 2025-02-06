@@ -4,7 +4,7 @@
 namespace ap
 {
     /// Constant
-    namespace constants
+    inline namespace constants
     {
         constexpr const double          e   = std::numbers::e_v  <double>;
         constexpr const double          pi  = std::numbers::pi_v <double>;

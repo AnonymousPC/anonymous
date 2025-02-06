@@ -72,7 +72,7 @@ constexpr const type& complex<type>::imag ( ) const
 
 
 
-namespace constants
+inline namespace constants
 {
     constexpr const complex<double> i = complex<double>(0, 1);
 }

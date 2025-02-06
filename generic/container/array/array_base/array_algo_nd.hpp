@@ -16,19 +16,19 @@ class array_algo<container,type,dim,device>
         using const_pointer   = device::template const_pointer  <type>;
 
     private: // Abbreviation
-        constexpr decltype(auto) begin      ( );
-        constexpr decltype(auto) begin      ( ) const;
-        constexpr decltype(auto) end        ( );
-        constexpr decltype(auto) end        ( ) const;
-        constexpr decltype(auto) data       ( );
-        constexpr decltype(auto) data       ( ) const;
-        constexpr decltype(auto) size       ( ) const;
-        constexpr decltype(auto) shape      ( ) const;
-        constexpr decltype(auto) empty      ( ) const;
-        constexpr decltype(auto) ownership  ( ) const;
-        constexpr decltype(auto) contiguous ( ) const;
-        constexpr decltype(auto) transpose  ( );
-        constexpr decltype(auto) transpose  ( ) const;
+        constexpr decltype(auto) begin         ( );
+        constexpr decltype(auto) begin         ( ) const;
+        constexpr decltype(auto) end           ( );
+        constexpr decltype(auto) end           ( ) const;
+        constexpr decltype(auto) data          ( );
+        constexpr decltype(auto) data          ( ) const;
+        constexpr decltype(auto) size          ( ) const;
+        constexpr decltype(auto) shape         ( ) const;
+        constexpr decltype(auto) empty         ( ) const;
+        constexpr decltype(auto) ownership     ( ) const;
+        constexpr decltype(auto) is_contiguous ( ) const;
+        constexpr decltype(auto) transpose     ( );
+        constexpr decltype(auto) transpose     ( ) const;
 
     public: // Member
         template < int axis > constexpr container&              reverse ( )           requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );

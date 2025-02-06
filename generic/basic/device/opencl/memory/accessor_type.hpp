@@ -21,4 +21,26 @@ class opencl::accessor_type
         }
 };
 
+template < class type >
+class opencl::const_accessor_type
+{
+    public: // Typedef
+        using offset_policy    = const_accessor_type;
+        using element_type     = type;
+        using reference        = opencl::template const_reference<type>;
+        using data_handle_type = opencl::template const_pointer  <type>;
+
+    public: // Member
+        constexpr reference access ( data_handle_type p, std::size_t i ) const
+        {
+            return *(p + i);
+        }
+
+        constexpr data_handle_type offset ( data_handle_type p, std::size_t i ) const
+        {
+            return p + i;
+        }
+};
+
+
 

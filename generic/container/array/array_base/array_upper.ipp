@@ -42,8 +42,8 @@ namespace detail
     constexpr array_upper<type,1,device>::pointer array_upper<type,1,device>::data ( )
     {
         #if debug
-        if ( not contiguous() )
-            throw logic_error("cannot get native data from a non-contiguous view");
+        if ( not is_contiguous() )
+            throw logic_error("cannot get native data from a non-is_contiguous view");
         #endif
         return get_host().data() + get_offset() * size();
     }
@@ -52,8 +52,8 @@ namespace detail
     constexpr array_upper<type,1,device>::const_pointer array_upper<type,1,device>::data ( ) const
     {
         #if debug
-        if ( not contiguous() )
-            throw logic_error("cannot get native data from a non-contiguous view");
+        if ( not is_contiguous() )
+            throw logic_error("cannot get native data from a non-is_contiguous view");
         #endif
         return get_host().data() + get_offset() * size();
     }
@@ -61,37 +61,37 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::begin ( )
     {
-        return contiguous() ? iterator(data(), 1) otherwise iterator(get_pointer(0), get_size_top()/size());
+        return is_contiguous() ? iterator(data(), 1) otherwise iterator(get_pointer(0), get_size_top()/size());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_iterator array_upper<type,1,device>::begin ( ) const
     {
-        return contiguous() ? const_iterator(data(), 1) otherwise const_iterator(get_pointer(0), get_size_top()/size());
+        return is_contiguous() ? const_iterator(data(), 1) otherwise const_iterator(get_pointer(0), get_size_top()/size());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::end ( )
     {
-        return contiguous() ? iterator(data()+size(), 1) otherwise iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
+        return is_contiguous() ? iterator(data()+size(), 1) otherwise iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_iterator array_upper<type,1,device>::end ( ) const
     {
-        return contiguous() ? const_iterator(data()+size(), 1) otherwise const_iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
+        return is_contiguous() ? const_iterator(data()+size(), 1) otherwise const_iterator(get_pointer(0)+get_size_top(), get_size_top()/size());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::reference array_upper<type,1,device>::operator [] ( int offset )
     {
-        return contiguous() ? data()[offset] otherwise get_value(offset);
+        return is_contiguous() ? data()[offset] otherwise get_value(offset);
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_reference array_upper<type,1,device>::operator [] ( int offset ) const
     {
-        return contiguous() ? data()[offset] otherwise get_value(offset);
+        return is_contiguous() ? data()[offset] otherwise get_value(offset);
     }
 
     template < class type, class device >
@@ -102,10 +102,23 @@ namespace detail
     }
 
     template < class type, class device >
-    constexpr bool array_upper<type,1,device>::contiguous ( ) const
+    constexpr bool array_upper<type,1,device>::is_contiguous ( ) const
     {
         return ( get_attribute() == rows_attribute    and same_as<typename device::layout_type,std::layout_right> ) or 
                ( get_attribute() == columns_attribute and same_as<typename device::layout_type,std::layout_left > );
+    }
+
+    template < class type, class device >
+    constexpr bool array_upper<type,1,device>::is_strided ( ) const
+    {
+        return ( get_attribute() == rows_attribute    and same_as<typename device::layout_type,std::layout_left > ) or 
+               ( get_attribute() == columns_attribute and same_as<typename device::layout_type,std::layout_right> );
+    }
+
+    template < class type, class device >
+    constexpr bool array_upper<type,1,device>::is_transposed ( ) const
+    {
+        return false;
     }
 
     template < class type, class device >
@@ -266,8 +279,8 @@ namespace detail
     constexpr array_upper<type,dim,device>::pointer array_upper<type,dim,device>::data ( )
     {
         #if debug
-        if ( not contiguous() )
-            throw logic_error("cannot get native data from a non-contiguous view");
+        if ( not is_contiguous() )
+            throw logic_error("cannot get native data from a non-is_contiguous view");
         #endif
         return get_host<1>().data() + get_offset() * size();
     }
@@ -277,8 +290,8 @@ namespace detail
     constexpr array_upper<type,dim,device>::const_pointer array_upper<type,dim,device>::data ( ) const
     {
         #if debug
-        if ( not contiguous() )
-            throw logic_error("cannot get native data from a non-contiguous view");
+        if ( not is_contiguous() )
+            throw logic_error("cannot get native data from a non-is_contiguous view");
         #endif
         return get_host<1>().data() + get_offset() * size();
     }
@@ -347,16 +360,31 @@ namespace detail
     
     template < class type, int dim, class device >
         requires ( dim >= 2 and dim <= max_dim - 1 )
-    constexpr bool array_upper<type,dim,device>::contiguous ( ) const
+    constexpr bool array_upper<type,dim,device>::is_contiguous ( ) const
     {
         return ( get_attribute() == rows_attribute    and same_as<typename device::layout_type,std::layout_right> ) or 
                ( get_attribute() == columns_attribute and same_as<typename device::layout_type,std::layout_left > );
 
-        /* Transpose-view is never considered contiguous.
-         * A contiguous array means that:
+        /* Transpose-view is never considered is_contiguous.
+         * A is_contiguous array means that:
          * - std::mdspan can directly apply on array.data() (with correct device::layout_type).
-         * - Two array which equals to each other and are both contiguous must be memcpy-able.
+         * - Two array which equals to each other and are both is_contiguous must be memcpy-able.
          */
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 and dim <= max_dim - 1 )
+    constexpr bool array_upper<type,dim,device>::is_strided ( ) const
+    {
+        return ( get_attribute() == rows_attribute    and same_as<typename device::layout_type,std::layout_left > ) or 
+               ( get_attribute() == columns_attribute and same_as<typename device::layout_type,std::layout_right> );
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 and dim <= max_dim - 1 )
+    constexpr bool array_upper<type,dim,device>::is_transposed ( ) const
+    {
+        return get_attribute() == transpose_attribute;
     }
 
     template < class type, int dim, class device >

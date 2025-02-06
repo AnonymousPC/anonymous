@@ -84,10 +84,18 @@ class array<type,1,device>
         constexpr const array<type,1,device>& transpose ( ) const = delete;
 
     public: // Memory
-        constexpr bool memory_ownership  ( ) const;
-        constexpr bool memory_contiguous ( ) const;
-        constexpr bool memory_strided ( ) const;
-        constexpr bool memory_transposed ( ) const;
+        constexpr bool ownership     ( ) const;
+        constexpr bool is_contiguous ( ) const;
+        constexpr bool is_strided    ( ) const;
+        constexpr bool is_transposed ( ) const;
+
+    public: // Mdspan
+        constexpr       auto mdspan            ( );
+        constexpr const auto mdspan            ( ) const;
+        constexpr       auto mdspan_strided    ( );
+        constexpr const auto mdspan_strided    ( ) const;
+        constexpr       auto mdspan_transposed ( )       = delete;
+        constexpr const auto mdspan_transposed ( ) const = delete;
 
     private: // Detail
                               constexpr       int                                              get_size_top  ( )                  const = delete;

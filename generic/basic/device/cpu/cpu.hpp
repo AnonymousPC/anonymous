@@ -22,8 +22,9 @@ class cpu
         template < class type > using allocator = std::allocator<type>;
 
     public: // Memory
-                                using layout_type   = std::layout_right;
-        template < class type > using accessor_type = std::default_accessor<type>;
+                                using layout_type         = std::layout_right;
+        template < class type > class accessor_type;
+        template < class type > class const_accessor_type;
 
     public: // Operator
         template < class type = void > using plus          = std::plus         <type>;
@@ -156,11 +157,43 @@ class cpu
         constexpr static decltype(auto) upper_bound                       ( auto&&... args ) { return std::upper_bound                      (std::forward<decltype(args)>(args)...); }
 
     public: // Linalg
-        constexpr static void linalg_matrix_product ( const auto&, const auto& , auto& );
+        struct linalg
+        {
+            constexpr static void plus            ( auto, auto, auto );
+            constexpr static void minus           ( auto, auto, auto );
+            constexpr static void multiply        ( auto, auto, auto );
+            constexpr static void dot             ( auto, auto, auto );
+            constexpr static void cross           ( auto, auto, auto );
+            constexpr static void convolve        ( auto, auto, auto );
+
+            constexpr static auto transpose       ( auto, auto );
+            constexpr static auto hermitian       ( auto, auto );
+
+            constexpr static void det             ( auto, auto& );
+            constexpr static void eigen           ( auto, auto, auto );
+            constexpr static void eigen_value     ( auto, auto );
+            constexpr static void eigen_vector    ( auto, auto );
+            constexpr static void evd             ( auto, auto, auto, auto );
+            constexpr static void inverse         ( auto, auto );
+            constexpr static void lu              ( auto, auto, auto, auto );
+            constexpr static void qr              ( auto, auto, auto );
+            constexpr static void rank            ( auto, int& );
+            constexpr static void singular        ( auto, auto, auto, auto );
+            constexpr static void singular_value  ( auto, auto );
+            constexpr static void singular_vector ( auto, auto, auto );
+            constexpr static void svd             ( auto, auto, auto, auto );
+            constexpr static void tr              ( auto, auto& );
+
+            constexpr static void fft             ( auto, auto );
+            constexpr static void ifft            ( auto, auto );
+        };
+
 };
 
 cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());
 
 #include "type/stride_pointer.hpp"
 
-#include "linalg/linalg.hpp"
+#include "memory/accessor_type.hpp"
+
+//#include "linalg/linalg.hpp"

@@ -21,16 +21,16 @@ class array_algo<container,type,1,device>
         using const_pointer   = device::template const_pointer  <type>;
 
     private: // Abbreviation
-        constexpr decltype(auto) begin      ( );
-        constexpr decltype(auto) begin      ( ) const;
-        constexpr decltype(auto) end        ( );
-        constexpr decltype(auto) end        ( ) const;
-        constexpr decltype(auto) data       ( );
-        constexpr decltype(auto) data       ( ) const;
-        constexpr decltype(auto) size       ( ) const;
-        constexpr decltype(auto) empty      ( ) const;
-        constexpr decltype(auto) ownership  ( ) const;
-        constexpr decltype(auto) contiguous ( ) const;
+        constexpr decltype(auto) begin         ( );
+        constexpr decltype(auto) begin         ( ) const;
+        constexpr decltype(auto) end           ( );
+        constexpr decltype(auto) end           ( ) const;
+        constexpr decltype(auto) data          ( );
+        constexpr decltype(auto) data          ( ) const;
+        constexpr decltype(auto) size          ( ) const;
+        constexpr decltype(auto) empty         ( ) const;
+        constexpr decltype(auto) ownership     ( ) const;
+        constexpr decltype(auto) is_contiguous ( ) const;
 
     public: // Member
         constexpr       int             adjacent_find       (                                       ) const requires equalable<type>;

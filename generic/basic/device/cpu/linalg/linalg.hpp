@@ -1,69 +1,97 @@
 #pragma once
 
-constexpr void cpu::linalg_matrix_product ( const auto& A, const auto& B, auto& C )
+constexpr array_type auto operator * ( const array_type auto& left, const array_type auto& right )
 {
-    using AV  = decay<decltype(A)>::value_type;
-    using BV  = decay<decltype(B)>::value_type;
-    using CV  = decay<decltype(C)>::value_type;
-    using ABV = common_type<AV,BV>;
+    using device = left_device_type;
+    let output = array<multiply_result<left_value_type,right_value_type>,2,device>;
+    
+    int left_tag = left.is_contiguous() ? 0 otherwise left.is_strided() ? 1 otherwise 2;
+    int right_tag 
 
-   // if ( not A.transposed() and not B.transposed() )
+    if ( left.is_contiguous() and right.is_contiguous() )
+        device::linalg::multiply(left.mdspan(), right.mdspan(), output.mdspan());
+
+    else if ( left.is_contiguous() and not right.is_contiguous() )
+        if ( right.is_strided() )
+            device::linalg::multiply(left.mdspan(), right.mdspan_strided(), output.mdspan());
+        else // if ( not right.is_strided() )
+            device::linalg::multiply(left.mdspan(), right.mdspan_transposed(), output.mdspan());
+
+    else if ( not left.is_contiguous() and right.is_contiguous() )
+        if ( left.is_strided() )
+            device::linalg::multiply(left.mdspan_strided(), right.mdspan(), output.mdspan());
+        else // if ( not left.is_strided() )
+            device::linalg::multiply(left.mdspan_transposed(), right.mdspan(), output.mdspan());
+
+    else // if ( not left.is_contiguous() and not right.is_contiguous() )
+        if ( left.is_strided() and right.is_strided() )
+            device::linalg::multiply(left.mdspan_strided(), right.mdspan_strided(), output.mdspan());
+        else if ( left.is_strided() and not right.is_strided() )
+            device::linalg::multiply(left.mdspan_strided(), right.mdspan_transposed(), output.mdspan());
+        else if ( not left.is_strided() and right.is_strided() )
+            device::linalg::multiply(left.mdspan_transposed(), right.mdspan_strided(), output.mdspan());
+        else // if ( not left.is_strided() and not right.tranposed() )
+            device::linalg::multiply(left.mdspan_transposed(), right.mdspan_transposed(), output.mdspan());
+
+    return output;
+}
+
+constexpr void cpu::linalg::multiply ( auto left, auto right, auto output )
+{
+    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) * detail::eigen_map<output_value_type>(right);
+}
+
+constexpr void opencl::linalg::multiply ( auto left, auto right, auto output )
+{
+    // Check
+    static_assert ( same_as<output_value_type,float16_t> or 
+                    same_as<output_value_type,float32_t> or
+                    same_as<output_value_type,float64_t> or
+                    same_as<detail::opencl_nativize<output_value_type>,std::complex<float32_t>> or
+                    same_as<detail::opencl_nativize<output_value_type>,std::complex<float64_t>>,
+                    "value_type not supported on this device" );
+    
+    if constexpr ( not same_as<left_value_type,output_value_type> or detail::is_layout_stride<left_layout_type> )
     {
-        let AM = Eigen::Map<const Eigen::Matrix<AV,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(A.data(), A.shape()[1], A.shape()[2]);
-        let BM = Eigen::Map<const Eigen::Matrix<BV,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(B.data(), B.shape()[1], B.shape()[2]);
-        let CM = Eigen::Map<      Eigen::Matrix<CV,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(C.data(), C.shape()[1], C.shape()[2]);
-        if constexpr ( same_as<AV,BV> )
-            CM = AM * BM;
-        else if constexpr ( same_as<AV,ABV> )
-            CM = AM * BM.template cast<ABV>();
-        else if constexpr ( same_as<BV,ABV> )   
-            CM = AM.template cast<ABV>() * BM;
+        vector<output_value_type> left_copy;
+        if constexpr ( not detail::is_layout_stride<left_layout_type> )
+            copy(left.data_handle(), left.size(), left_copy.data());
         else
-            CM = AM.template cast<ABV>() * BM.template cast<ABV>();
+            copy(stride_pointer(left.data_handle(), left.stride(0)), stride_pointer(left.data_handle() + left.size() * left.stride(0)), left_copy.data());
+        return multiply(std::mdspan<output_value_type,std::dextents<2,int>>,layout_type,accessor_type<output_value_type>>(left_copy.data(), left.extents()), right, output);
+    }
+    else if constexpr ( not same_as<right_value_type,output_value_type> or detail::is_layout_stride<right_layout_type> )
+    {
+        vector<output_value_type> right_copy;
+        if constexpr ( not detail::is_layout_stride<right_layout_type> )
+            copy(right.data_handle(), right.size(), right_copy.data());
+        else
+            copy(stride_pointer(right.data_handle(), right.stride(0)), stride_pointer(right.data_handle() + right.size() * right.stride(0)), right_copy.data());
+        return multiply(left, std::mdspan<output_value_type,std::dextents<2,int>>,layout_type,accessor_type<output_value_type>>(right_copy.data(), right.extents()), output);
     }
 
-    
-}
-
-
-
-// 方法一 直接处理
-
-auto operator * ( const auto& A, const auto& B )
-    requires matrix...
-{
-    using device = ...;
-
-    if constexpr ( not device::linalg::requires_same_value_type() )
-        if ( ( A.memory_contiguous() or A.memory_transposed() ) and 
-             ( B.memory_contiguous() or B.memory_transposed() ) )
-            if constexpr ( same_as<AV,BV> )
-            {
-                let C = array<AV,2,device>(A.row(), A.column());
-                device::linalg::matrix_product(A, B, C);
-                return C;
-            }
-            else
-            {
-                let C = array<ABV,2,device>(A.row(), A.column());
-                device::linalg::matrix_product(A, B, C);
-                return C;
-            }
-        else if ( A.memory_contiguous() or A.memory_transposed() )
-            return A * decay<decltype(B)>(B);
-        else if ( B.memory_contiguous() or B.memory_transposed() )
-            return decay<decltype(A)>(A) * B;
-        else
-            return decay<decltype(A)>(A) * decay<decltype(B)>(B);
-    
+    // Run
     else
-        if constexpr ( same_as<AV,ABV> )
-            return A * array<ABV,2,device>(B);
-        else if constexpr ( same_as<BV,ABV> )
-            return array<ABV,2,device>(A) * B;
-        else
-            return array<ABV,2,device>(A) * array<ABV,2,device>(B);
+    {
+        let status = 
+            clblast::Gemm<detail::opencl_nativize<output_value_type>>(
+                clblast::layout::kColMajor,
+                not detail::is_layout_transpose<left_layout_type > ? clblast::Transpose::kNo otherwise clblast::Transpose::kYes,
+                not detail::is_layout_transpose<right_layout_type> ? clblast::Transpose::kNo otherwise clblast::Transpose::kYes,
+                left.row(), left.column(), right.row(),
+                1,
+                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), left  .extents(0),
+                right .data_handle().get_buffer().get(), right .data_handle().get_index(), right .extents(0),
+                0,
+                output.data_handle().get_buffer().get(), output.data_handle().get_index(), output.extents(0),
+                &opencl::execution_context.command_queue().get()
+            );
+        if ( status != clblast::StatusCode::kSuccess )
+            throw linalg_error("linalg failed");
+    }
+
 }
 
 
-// 方法二 mdspan 逐个 if constexpr ( requires { device::linalg::... } ) then use it, else to weaker...
+
+

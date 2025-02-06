@@ -25,8 +25,9 @@ class opencl
         template < class type > using allocator = boost::compute::buffer_allocator<type>;
 
     public: // Memory
-                                using layout_type   = std::layout_left;
+                                using layout_type         = std::layout_left;
         template < class type > class accessor_type;
+        template < class type > class const_accessor_type;
 
     public: // Operator
         template < class type = void > class plus;
@@ -157,6 +158,38 @@ class opencl
         static decltype(auto) unique                            ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::unique                  (std::forward<decltype(args)>(args)..., scope.command_queue()); }
         static decltype(auto) unique_copy                       ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::unique_copy             (std::forward<decltype(args)>(args)..., scope.command_queue()); }
         static decltype(auto) upper_bound                       ( auto&&... args ) { let scope = detail::opencl_queue_scope(); return boost::compute::upper_bound             (std::forward<decltype(args)>(args)..., scope.command_queue()); }
+
+    public: // Linalg
+        struct linalg
+        {
+            static void plus            ( auto, auto, auto );
+            static void minus           ( auto, auto, auto );
+            static void multiply        ( auto, auto, auto );
+            static void dot             ( auto, auto, auto );
+            static void cross           ( auto, auto, auto );
+            static void convolve        ( auto, auto, auto );
+
+            static auto transpose       ( auto, auto );
+            static auto hermitian       ( auto, auto );
+
+            static auto det             ( auto );
+            static void eigen           ( auto, auto, auto );
+            static void eigen_value     ( auto, auto );
+            static void eigen_vector    ( auto, auto );
+            static void evd             ( auto, auto, auto, auto );
+            static void inverse         ( auto, auto );
+            static void lu              ( auto, auto, auto, auto );
+            static void qr              ( auto, auto, auto );
+            static int  rank            ( auto );
+            static void singular        ( auto, auto, auto, auto );
+            static void singular_value  ( auto, auto );
+            static void singular_vector ( auto, auto, auto );
+            static void svd             ( auto, auto, auto, auto );
+            static auto tr              ( auto );
+
+            static void fft             ( auto, auto );
+            static void ifft            ( auto, auto );
+        };
 };
 
 #include "type/reference.hpp"

@@ -23,12 +23,12 @@ constexpr bool operator == ( const array_type auto& left, const array_type auto&
 {
     using device = left_device_type;
     if constexpr ( left_dimension == 1 )
-        if ( left.contiguous() and right.contiguous() )
+        if ( left.is_contiguous() and right.is_contiguous() )
             return device::equal(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
         else
             return device::equal(left.begin(), left.end(), right.begin(), right.end());
     else
-        if ( left.contiguous() and right.contiguous() )
+        if ( left.is_contiguous() and right.is_contiguous() )
             return left.shape() == right.shape() and device::equal(left.data(), left.data() + left.size(), right.data(), right.data() + right.size()); // Shape should be checked explicitly.
         else
             return device::equal(left.begin(), left.end(), right.begin(), right.end());
@@ -41,13 +41,13 @@ constexpr auto operator <=> ( const array_type auto& left, const array_type auto
 {
     using device = left_device_type;
     if constexpr ( left_dimension == 1 )
-        if ( left.contiguous() and right.contiguous() )
+        if ( left.is_contiguous() and right.is_contiguous() )
             return device::lexicographical_compare_three_way(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
         else
             return device::lexicographical_compare_three_way(left.begin(), left.end(), right.begin(), right.end());
     else
         if ( same_as<left_device_type::layout_type,std::layout_right> and
-             left.contiguous() and right.contiguous() and 
+             left.is_contiguous() and right.is_contiguous() and 
              left.shape() == right.shape() )
             return device::lexicographical_compare_three_way(left.data(), left.data() + left.size(), right.data(), right.data() + right.size()); // Shape should be checked explicitly.
         else

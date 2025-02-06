@@ -154,8 +154,13 @@ class cpu
         constexpr static decltype(auto) unique                            ( auto&&... args ) { return std::unique                           (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) unique_copy                       ( auto&&... args ) { return std::unique_copy                      (std::forward<decltype(args)>(args)...); }
         constexpr static decltype(auto) upper_bound                       ( auto&&... args ) { return std::upper_bound                      (std::forward<decltype(args)>(args)...); }
+
+    public: // Linalg
+        constexpr static void linalg_matrix_product ( const auto&, const auto& , auto& );
 };
 
 cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());
 
 #include "type/stride_pointer.hpp"
+
+#include "linalg/linalg.hpp"

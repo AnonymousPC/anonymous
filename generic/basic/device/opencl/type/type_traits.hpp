@@ -35,6 +35,20 @@ namespace boost::compute
     {
         
     };
+
+    namespace detail
+    {
+        template < >
+        struct type_name_trait<ap::float16_t>
+        {
+            static const char* value ( )
+            {
+                static const char* name = "half";
+                return name;
+            }
+        };
+    } // namespace detail
+    
 } // namespace boost::compute
 
 namespace ap { // Back into namespace ap

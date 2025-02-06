@@ -6,12 +6,14 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
-#include <ccomplex>
+#include <linalg
+
 int main ( )
 {
-    Eigen::Matrix<complex<double>,Eigen::Dynamic,Eigen::Dynamic> A(2, 2);
-
-    print((A * A).eval());
+    let A = array<int,2>{ {1, 2}, {3, 4} };
+    let B = array<int,2>(2, 2);
+    cpu::linalg_matrix_product(A, A, B);
+    print(B);
 
 
     // let A = array<int,2,opencl>(10, 10);

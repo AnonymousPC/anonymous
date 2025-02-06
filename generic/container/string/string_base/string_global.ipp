@@ -10,7 +10,7 @@
 /// Global
 
 constexpr std::istream& operator >> ( std::istream& left, string_type auto& right )
-    requires ( right_type::ownership() )
+    requires is_class<right_type> and ( right_type::ownership() )
 {
     right.clear();
     [[maybe_unused]] let entry = std::istream::sentry(left, false);
@@ -29,6 +29,7 @@ constexpr std::istream& operator >> ( std::istream& left, string_type auto& righ
 }
 
 constexpr std::ostream& operator << ( std::ostream& left, const string_type auto& right )
+    requires is_class<right_type>
 {
     using device = right_device_type;
     [[maybe_unused]] let entry = std::ostream::sentry(left);

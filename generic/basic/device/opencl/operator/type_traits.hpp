@@ -2,116 +2,46 @@
 
 } // Out of namespace ap
 
-namespace boost::compute
-{
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::plus<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() + std::declval<type2>());
-    };
+#define OPENCL_DEFINE_RESULT_OF_UNARY_OPERATOR($operator, $functor)                       \
+    namespace boost::compute                                                              \
+    {                                                                                     \
+        template < class type1 >                                                          \
+        struct result_of<ap::opencl::$functor<void>(type1)>                               \
+        {                                                                                 \
+            using type = decltype($operator std::declval<type1>());                       \
+        };                                                                                \
+    }
 
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::minus<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() - std::declval<type2>());
-    };
+#define OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR($operator, $functor)                      \
+    namespace boost::compute                                                              \
+    {                                                                                     \
+        template < class type1, class type2 >                                             \
+        struct result_of<ap::opencl::$functor<void>(type1,type2)>                         \
+        {                                                                                 \
+            using type = decltype(std::declval<type1>() $operator std::declval<type2>()); \
+        };                                                                                \
+    }
 
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::multiplies<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() * std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::divides<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() / std::declval<type2>());
-    };
-
-    template < class type1 >
-    struct result_of<ap::opencl::negate<void>(type1)>
-    {
-        using type = decltype(-std::declval<type1>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::equal_to<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() == std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::not_equal_to<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() != std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::less<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() < std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::less_equal<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() <= std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::greater<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() > std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::greater_equal<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() >= std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::logical_and<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() && std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::logical_or<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() || std::declval<type2>());
-    };
-
-    template < class type1 >
-    struct result_of<ap::opencl::logical_not<void>(type1)>
-    {
-        using type = decltype(!std::declval<type1>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::bit_and<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() & std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::bit_or<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() | std::declval<type2>());
-    };
-
-    template < class type1, class type2 >
-    struct result_of<ap::opencl::bit_xor<void>(type1,type2)>
-    {
-        using type = decltype(std::declval<type1>() ^ std::declval<type2>());
-    };
-
-    template < class type1 >
-    struct result_of<ap::opencl::bit_not<void>(type1)>
-    {
-        using type = decltype(~std::declval<type1>());
-    };
-
-} // namespace boost::compute
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(+,  plus         )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(-,  minus        )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(*,  multiplies   )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(/,  divides      )
+OPENCL_DEFINE_RESULT_OF_UNARY_OPERATOR (-,  negate       )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(==, equal_to     )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(!=, not_equal_to )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(<,  less         )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(<=, less_equal   )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(>,  greater      )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(>=, greater_equal)
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(&&, logical_and  )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(||, logical_or   )
+OPENCL_DEFINE_RESULT_OF_UNARY_OPERATOR (!,  logical_not  )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(&,  bit_and      )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(|,  bit_or       )
+OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR(^,  bit_xor      )
+OPENCL_DEFINE_RESULT_OF_UNARY_OPERATOR (~,  bit_not      ) 
+    
+#undef OPENCL_DEFINE_RESULT_OF_UNARY_OPERATOR
+#undef OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR
 
 namespace ap { // Back into namespace ap

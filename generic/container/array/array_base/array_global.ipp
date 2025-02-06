@@ -24,14 +24,14 @@ constexpr bool operator == ( const array_type auto& left, const array_type auto&
     using device = left_device_type;
     if constexpr ( left_dimension == 1 )
         if ( left.contiguous() and right.contiguous() )
-            return device::equal_to(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
+            return device::equal(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
         else
-            return device::equal_to(left.begin(), left.end(), right.begin(), right.end());
+            return device::equal(left.begin(), left.end(), right.begin(), right.end());
     else
         if ( left.contiguous() and right.contiguous() )
-            return left.shape() == right.shape() and device::equal_to(left.data(), left.data() + left.size(), right.data(), right.data() + right.size()); // Shape should be checked explicitly.
+            return left.shape() == right.shape() and device::equal(left.data(), left.data() + left.size(), right.data(), right.data() + right.size()); // Shape should be checked explicitly.
         else
-            return device::equal_to(left.begin(), left.end(), right.begin(), right.end());
+            return device::equal(left.begin(), left.end(), right.begin(), right.end());
 }
 
 constexpr auto operator <=> ( const array_type auto& left, const array_type auto& right )

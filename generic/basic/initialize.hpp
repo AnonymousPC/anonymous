@@ -110,7 +110,6 @@ namespace detail
             sigemptyset(&sa_segv.sa_mask);
             sigaction  (SIGSEGV, &sa_segv, nullptr);
             #endif
-
         }
 
         void basic_initializer_t::signal_handler ( int, const char* msg )

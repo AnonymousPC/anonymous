@@ -47,8 +47,10 @@ namespace detail
             constexpr const_reference      operator []   ( int ) const;
         
         public: // Memory
-            constexpr bool ownership  ( ) const;
-            constexpr bool contiguous ( ) const;
+            constexpr bool ownership     ( ) const;
+            constexpr bool is_contiguous ( ) const;
+            constexpr bool is_strided    ( ) const;
+            constexpr bool is_transposed ( ) const;
     
         public: // Detail
                                   constexpr       array_attribute       get_attribute ( )     const;
@@ -113,8 +115,10 @@ namespace detail
             constexpr const array<type,dim-1,device>& operator []   ( int ) const;
 
         public: // Memory
-            constexpr bool ownership  ( ) const;
-            constexpr bool contiguous ( ) const;
+            constexpr bool ownership     ( ) const;
+            constexpr bool is_contiguous ( ) const;
+            constexpr bool is_strided    ( ) const;
+            constexpr bool is_transposed ( ) const;
 
         public: // Detail
                                   constexpr       array_attribute                          get_attribute ( )                  const;
@@ -175,8 +179,10 @@ namespace detail
             constexpr const array<type,max_dim-1,device>& operator []   ( int ) const;
 
         public: // Memory
-            constexpr bool ownership  ( ) const;
-            constexpr bool contiguous ( ) const = delete;
+            constexpr bool ownership     ( ) const;
+            constexpr bool is_contiguous ( ) const = delete;
+            constexpr bool is_strided    ( ) const = delete;
+            constexpr bool is_transposed ( ) const = delete;
 
         public: // Detail
                                   constexpr       array_attribute                          get_attribute ( )                  const;

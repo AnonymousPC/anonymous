@@ -286,14 +286,14 @@ template < class type, class device >
 constexpr array<type,max_dim,device>::pointer array<type,max_dim,device>::data ( )
 {
     return ownership() ? base::data() otherwise
-                         throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not is_contiguous");
+                         throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::data ( ) const
 {
     return ownership() ? base::data() otherwise
-                         throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not is_contiguous");
+                         throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
@@ -579,21 +579,9 @@ constexpr bool array<type,max_dim,device>::ownership ( ) const
 }
 
 template < class type, class device >
-constexpr bool array<type,max_dim,device>::is_contiguous ( ) const
+constexpr bool array<type,max_dim,device>::contiguous ( ) const
 {
     return ownership();
-}
-
-template < class type, class device >
-constexpr bool array<type,max_dim,device>::is_strided ( ) const
-{
-    return false;
-}
-
-template < class type, class device >
-constexpr bool array<type,max_dim,device>::is_transposed ( ) const
-{
-    return not ownership();
 }
 
 template < class type, class device >
@@ -670,19 +658,13 @@ constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::pointer array<type,max_dim,device>::get_pointer ( int_type auto... offsets )
+constexpr array<type,max_dim,device>::pointer array<type,max_dim,device>::get_pointer ( )
 {
-    static_assert ( sizeof...(offsets) == max_dim );
-    using mdspan = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>;
-    [[assume(ownership())]];
-    return base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...);
+    return base::data();
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::get_pointer ( int_type auto... offsets ) const
+constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::get_pointer ( ) const
 {
-    static_assert ( sizeof...(offsets) == max_dim );
-    using mdspan = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
-    [[assume(ownership())]];
-    return base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...);
+    return base::data();
 }

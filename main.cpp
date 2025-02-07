@@ -6,15 +6,19 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
-#include <mdspan>
 int main ( )
 {
     array<int,2,cpu> arr = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
-    auto& slice = arr.transpose()[1];
-    print(slice);
-    let mds = slice.mdspan_strided();
-    print(mds.size());
-    print(mds[2]);
+    auto& flat = arr.flatten();
+    let mds = flat.mdspan();
+    print(string(typeid(mds)));
+    // auto& slice = arr.transpose()[1];
+    // print(slice);
+    // let mds = slice.mdspan_strided();
+    // print(mds.size());
+    // print(mds[2]);
+
+    
 
 
     // let A = array<int,2,opencl>(10, 10);

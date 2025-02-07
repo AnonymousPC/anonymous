@@ -15,7 +15,7 @@ constexpr array<type,dim,device>::array ( const array& init )
     else // if ( not init.ownership() )
     {
         self.resize(init.upper::shape());
-        if ( init.upper::is_contiguous() )
+        if ( init.upper::contiguous() )
             device::copy(init.upper::data(), init.upper::data() + init.upper::size(), self.base::data());
         else
             device::copy(init.upper::begin(), init.upper::end(), self./*line-wise*/begin());
@@ -35,7 +35,7 @@ constexpr array<type,dim,device>::array ( array&& init )
     else // if ( not init.owenrship() )
     {
         self.resize(init.upper::shape());
-        if ( init.upper::is_contiguous() ) 
+        if ( init.upper::contiguous() ) 
             device::move(init.upper::data(), init.upper::data() + init.upper::size(), self.base::data());
         else
             device::move(init.upper::begin(), init.upper::end(), self./*line-wise*/begin());
@@ -56,7 +56,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
     else if ( self.ownership() and not right.ownership() )
     {
         self.resize(right.upper::shape());
-        if ( right.upper::is_contiguous() ) 
+        if ( right.upper::contiguous() ) 
             device::copy(right.upper::data(), right.upper::data() + right.upper::size(), self.base::data());
         else
             device::copy(right.upper::begin(), right.upper::end(), self./*line-wise*/begin());
@@ -67,7 +67,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
         if ( self.upper::shape() != right.info::shape() )
             throw value_error("copy assign array with inconsistent shape (with left_ownership = false, left_shape = {}, right_shape = {})", self.shape(), right.shape());
         #endif
-        if ( self.upper::is_contiguous() )
+        if ( self.upper::contiguous() )
             device::copy(right.base::data(), right.base::data() + right.base::size(), self.upper::data());
         else
             device::copy(right./*line-wise*/begin(), right./*line-wise*/end(), self.upper::begin());
@@ -78,7 +78,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( const arr
         if ( self.upper::shape() != right.upper::shape() )
             throw value_error("copy assign array with inconsistent shape (with left_ownership = false, left_shape = {}, right_shape = {})", self.shape(), right.shape());
         #endif
-        if ( self.upper::is_contiguous() and right.upper::is_contiguous() ) 
+        if ( self.upper::contiguous() and right.upper::contiguous() ) 
             device::copy(right.upper::data(), right.upper::data() + right.upper::size(), self.upper::data());
         else
             device::copy(right.upper::begin(), right.upper::end(), self.upper::begin());
@@ -100,7 +100,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( array&& r
     else if ( self.ownership() and not right.ownership() )
     {
         self.resize(right.upper::shape());
-        if ( right.upper::is_contiguous() ) 
+        if ( right.upper::contiguous() ) 
             device::move(right.upper::data(), right.upper::data() + right.upper::size(), self.base::data());
         else
             device::move(right.upper::begin(), right.upper::end(), self./*line-wise*/begin());
@@ -111,7 +111,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( array&& r
         if ( self.upper::shape() != right.info::shape() )
             throw value_error("move assign array with inconsistent shape (with left_ownership = false, left_shape = {}, right_shape = {})", self.shape(), right.shape());
         #endif
-        if ( self.upper::is_contiguous() )
+        if ( self.upper::contiguous() )
             device::move(right.base::data(), right.base::data() + right.base::size(), self.upper::data());
         else
             device::move(right./*line-wise*/begin(), right./*line-wise*/end(), self.upper::begin());
@@ -122,7 +122,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( array&& r
         if ( self.upper::shape() != right.upper::shape() )
             throw value_error("move assign array with inconsistent shape (with left_ownership = false, left_shape = {}, right_shape = {})", self.shape(), right.shape());
         #endif
-        if ( self.upper::is_contiguous() and right.upper::is_contiguous() ) 
+        if ( self.upper::contiguous() and right.upper::contiguous() ) 
             device::move(right.upper::data(), right.upper::data() + right.upper::size(), self.upper::data());
         else
             device::move(right.upper::begin(), right.upper::end(), self.upper::begin());
@@ -223,7 +223,7 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
     resize(cvt.shape());
     if ( cvt.ownership() )
         device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
-    else if ( cvt.is_contiguous() )
+    else if ( cvt.contiguous() )
         device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type2(val); });
     else
         device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin());
@@ -238,7 +238,7 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
     resize(cvt.shape());
     if ( cvt.ownership() )
         device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
-    else if ( cvt.is_contiguous() )
+    else if ( cvt.contiguous() )
         device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type2(val); });
     else
         device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin());
@@ -258,7 +258,7 @@ constexpr array<type,dim,device>::array ( const array<type,dim,device2>& cvt )
         if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
             if ( cvt.ownership() )
                 device::copy(cvt.array<type,dim,device2>::base::begin(), cvt.array<type,dim,device2>::base::end(), self.base::begin());
-            else if ( cvt.is_contiguous() )
+            else if ( cvt.contiguous() )
                 device::copy(cvt.array<type,dim,device2>::upper::data(), cvt.array<type,dim,device2>::upper::data() + cvt.array<type,dim,device2>::upper::size(), self.base::data());
             else
                 device::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
@@ -268,7 +268,7 @@ constexpr array<type,dim,device>::array ( const array<type,dim,device2>& cvt )
         if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
             if ( cvt.ownership() )
                 device2::copy(cvt.array<type,dim,device2>::base::begin(), cvt.array<type,dim,device2>::base::end(), self.base::begin());
-            else if ( cvt.is_contiguous() )
+            else if ( cvt.contiguous() )
                 device2::copy(cvt.array<type,dim,device2>::upper::data(), cvt.array<type,dim,device2>::upper::data() + cvt.array<type,dim,device2>::upper::size(), self.base::data());
             else
                 device2::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
@@ -331,18 +331,18 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::pointer array<type,dim,device>::data ( )
 {
-    return ownership()     ? base::data()  otherwise
-           is_contiguous() ? upper::data() otherwise
-                             throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not is_contiguous");
+    return ownership()  ? base::data()  otherwise
+           contiguous() ? upper::data() otherwise
+                             throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::const_pointer array<type,dim,device>::data ( ) const
 {
-    return ownership()     ? base::data()  otherwise
-           is_contiguous() ? upper::data() otherwise
-                             throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not is_contiguous");
+    return ownership()  ? base::data()  otherwise
+           contiguous() ? upper::data() otherwise
+                             throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, int dim, class device >
@@ -649,73 +649,59 @@ constexpr bool array<type,dim,device>::ownership ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr bool array<type,dim,device>::is_contiguous ( ) const
+constexpr bool array<type,dim,device>::contiguous ( ) const
 {
-    return ownership() or upper::is_contiguous();
+    return ownership() or upper::contiguous();
 }
 
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr bool array<type,dim,device>::is_strided ( ) const
-{
-    return not ownership() and upper::is_strided();
-}
+// template < class type, int dim, class device >
+//     requires ( dim >= 2 and dim <= max_dim - 1 )
+// constexpr auto array<type,dim,device>::mdspan ( )
+// {
+//     #if debug
+//     if ( not contiguous() )
+//         throw logic_error("applying a contiguous mdspan on a non-contiguous array");
+//     #endif
+//     using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
+//     return mdspan(data(), shape());
+// }
 
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr bool array<type,dim,device>::is_transposed ( ) const
-{
-    return not ownership() and upper::is_transposed();
-}
+// template < class type, int dim, class device >
+//     requires ( dim >= 2 and dim <= max_dim - 1 )
+// constexpr const auto array<type,dim,device>::mdspan ( ) const
+// {
+//     #if debug
+//     if ( not contiguous() )
+//         throw logic_error("applying a contiguous mdspan on a non-contiguous array");
+//     #endif
+//     using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+//     return mdspan(data(), shape());
+// }
 
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr auto array<type,dim,device>::mdspan ( )
-{
-    #if debug
-    if ( not is_contiguous() )
-        throw logic_error("applying a contiguous mdspan on a non-contiguous array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
-    return mdspan(data(), shape());
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr const auto array<type,dim,device>::mdspan ( ) const
-{
-    #if debug
-    if ( not is_contiguous() )
-        throw logic_error("applying a contiguous mdspan on a non-contiguous array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
-    return mdspan(data(), shape());
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr auto array<type,dim,device>::mdspan_strided ( )
-{
-    #if debug
-    if ( not is_strided() )
-        throw logic_error("applying a strided mdspan on a non-strided array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
-    let raw = device::layout_type::template mapping<std::dextents<int,dim>>(shape());
+// template < class type, int dim, class device >
+//     requires ( dim >= 2 and dim <= max_dim - 1 )
+// constexpr auto array<type,dim,device>::mdspan_strided ( )
+// {
+//     #if debug
+//     if ( not is_strided() )
+//         throw logic_error("applying a strided mdspan on a non-strided array");
+//     #endif
+//     using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
+//     let raw = device::layout_type::template mapping<std::dextents<int,dim>>(shape());
     
-}
+// }
 
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr const auto array<type,dim,device>::mdspan_strided ( ) const
-{
-    #if debug
-    if ( not is_strided() )
-        throw logic_error("applying a strided mdspan on a non-strided array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
-    return mdspan(data(), shape());
-}
+// template < class type, int dim, class device >
+//     requires ( dim >= 2 and dim <= max_dim - 1 )
+// constexpr const auto array<type,dim,device>::mdspan_strided ( ) const
+// {
+//     #if debug
+//     if ( not is_strided() )
+//         throw logic_error("applying a strided mdspan on a non-strided array");
+//     #endif
+//     using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+//     return mdspan(data(), shape());
+// }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
@@ -801,20 +787,14 @@ constexpr array<type,dim,device>::const_reference array<type,dim,device>::get_va
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>::pointer array<type,dim,device>::get_pointer ( int_type auto... offsets )
+constexpr array<type,dim,device>::pointer array<type,dim,device>::get_pointer ( )
 {
-    static_assert ( sizeof...(offsets) == dim );
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
-    return ownership() ? base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...) otherwise
-                         upper::get_pointer(offsets...);
+    return ownership() ? base::data() otherwise upper::get_pointer();
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>::const_pointer array<type,dim,device>::get_pointer ( int_type auto... offsets ) const
+constexpr array<type,dim,device>::const_pointer array<type,dim,device>::get_pointer ( ) const
 {
-    static_assert ( sizeof...(offsets) == dim );
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
-    return ownership() ? base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...) otherwise
-                         upper::get_pointer(offsets...);
+    return ownership() ? base::data() otherwise upper::get_pointer();
 }

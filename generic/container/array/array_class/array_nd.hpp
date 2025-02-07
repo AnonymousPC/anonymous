@@ -86,18 +86,13 @@ class array<type,dim,device>
         constexpr const array<type,dim,device>& transpose ( ) const;
 
     public: // Memory
-        constexpr bool ownership     ( ) const;
-        constexpr bool is_contiguous ( ) const;
-        constexpr bool is_strided    ( ) const;
-        constexpr bool is_transposed ( ) const;
+        constexpr bool ownership  ( ) const;
+        constexpr bool contiguous ( ) const;
 
     public: // Mdspan
-        constexpr       auto mdspan            ( );
-        constexpr const auto mdspan            ( ) const;
-        constexpr       auto mdspan_strided    ( );
-        constexpr const auto mdspan_strided    ( ) const;
-        constexpr       auto mdspan_transposed ( );
-        constexpr const auto mdspan_transposed ( ) const;
+        constexpr       auto mdspan ( );
+        constexpr const auto mdspan ( ) const;
+        
     private: // Detail
                               constexpr       int                                              get_size_top  ( )                  const;
         template < int axis > constexpr       int                                              get_size_axis ( )                  const;
@@ -107,8 +102,8 @@ class array<type,dim,device>
         template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
                               constexpr       reference                                        get_value     ( int_type auto... );
                               constexpr       const_reference                                  get_value     ( int_type auto... ) const;
-                              constexpr       pointer                                          get_pointer   ( int_type auto... );
-                              constexpr       const_pointer                                    get_pointer   ( int_type auto... ) const;
+                              constexpr       pointer                                          get_pointer   ( );
+                              constexpr       const_pointer                                    get_pointer   ( )                  const;
 
     private: // Friend
         template < class type2, int dim2, class device2 > friend class array;

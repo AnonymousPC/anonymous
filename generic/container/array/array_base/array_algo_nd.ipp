@@ -72,9 +72,9 @@ constexpr decltype(auto) array_algo<container,type,dim,device>::ownership ( ) co
 
 template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr decltype(auto) array_algo<container,type,dim,device>::is_contiguous ( ) const
+constexpr decltype(auto) array_algo<container,type,dim,device>::contiguous ( ) const
 {
-    return static_cast<const container&>(self).is_contiguous();
+    return static_cast<const container&>(self).contiguous();
 }
 
 template < class container, class type, int dim, class device >

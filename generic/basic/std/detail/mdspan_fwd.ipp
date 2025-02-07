@@ -21,4 +21,11 @@ struct layout_stride {
   class mapping;
 };
 
+// Layout policy added by user
+template <class _Layout>
+struct layout_transpose {
+    template <class _Extents>
+    class mapping;
+};
+
 } // namespace std

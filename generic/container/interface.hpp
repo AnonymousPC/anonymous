@@ -223,11 +223,11 @@ namespace ap
     concept function_type = detail::function_type_helper<type,attribute_type>::value;
 
     // /// Include
-    #include "discrete/discrete.hpp" // First.
+    #include "discrete/discrete.hpp"
+    #include "polymorphic/polymorphic.hpp"
     #include "array/array.hpp"
     #include "chain/chain.hpp"
     #include "collection/collection.hpp"
-    #include "polymorphic/polymorphic.hpp"
     #include "string/string.hpp"
     #include "utility/utility.hpp"
 

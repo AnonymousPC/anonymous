@@ -8,4 +8,5 @@
 #include "detail/mdspan_layout_left.ipp"
 #include "detail/mdspan_layout_right.ipp"
 #include "detail/mdspan_layout_stride.ipp"
+#include "detail/mdspan_layout_transpose.ipp"
 #include "detail/mdspan.ipp"

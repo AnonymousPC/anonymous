@@ -47,10 +47,8 @@ namespace detail
             constexpr const_reference      operator []   ( int ) const;
         
         public: // Memory
-            constexpr bool ownership     ( ) const;
-            constexpr bool is_contiguous ( ) const;
-            constexpr bool is_strided    ( ) const;
-            constexpr bool is_transposed ( ) const;
+            constexpr bool ownership  ( ) const;
+            constexpr bool contiguous ( ) const;
     
         public: // Detail
                                   constexpr       array_attribute       get_attribute ( )     const;
@@ -65,8 +63,9 @@ namespace detail
             template < int dim2 > constexpr const auto                  get_columns   ( )     const = delete;
                                   constexpr       reference             get_value     ( int );
                                   constexpr       const_reference       get_value     ( int ) const;
-                                  constexpr       pointer               get_pointer   ( int );
-                                  constexpr       const_pointer         get_pointer   ( int ) const;
+                                  constexpr       pointer               get_pointer   ( );
+                                  constexpr       const_pointer         get_pointer   ( )     const;
+                                  constexpr       int                   get_stride    ( )     const;
     };
 
     template < class type, int dim, class device >
@@ -115,10 +114,8 @@ namespace detail
             constexpr const array<type,dim-1,device>& operator []   ( int ) const;
 
         public: // Memory
-            constexpr bool ownership     ( ) const;
-            constexpr bool is_contiguous ( ) const;
-            constexpr bool is_strided    ( ) const;
-            constexpr bool is_transposed ( ) const;
+            constexpr bool ownership  ( ) const;
+            constexpr bool contiguous ( ) const;
 
         public: // Detail
                                   constexpr       array_attribute                          get_attribute ( )                  const;
@@ -135,8 +132,9 @@ namespace detail
             template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
                                   constexpr       reference                                get_value     ( int_type auto... );
                                   constexpr       const_reference                          get_value     ( int_type auto... ) const;
-                                  constexpr       pointer                                  get_pointer   ( int_type auto... );
-                                  constexpr       const_pointer                            get_pointer   ( int_type auto... ) const;
+                                  constexpr       pointer                                  get_pointer   ( );
+                                  constexpr       const_pointer                            get_pointer   ( )                  const;
+                                  constexpr       int                                      get_stride    ( )                  const;
     };
 
     template < class type, class device >
@@ -179,10 +177,8 @@ namespace detail
             constexpr const array<type,max_dim-1,device>& operator []   ( int ) const;
 
         public: // Memory
-            constexpr bool ownership     ( ) const;
-            constexpr bool is_contiguous ( ) const = delete;
-            constexpr bool is_strided    ( ) const = delete;
-            constexpr bool is_transposed ( ) const = delete;
+            constexpr bool ownership  ( ) const;
+            constexpr bool contiguous ( ) const = delete;
 
         public: // Detail
                                   constexpr       array_attribute                          get_attribute ( )                  const;
@@ -197,8 +193,9 @@ namespace detail
             template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
                                   constexpr       reference                                get_value     ( int_type auto... )       = delete;
                                   constexpr       const_reference                          get_value     ( int_type auto... ) const = delete;
-                                  constexpr       pointer                                  get_pointer   ( int_type auto... )       = delete;
-                                  constexpr       const_pointer                            get_pointer   ( int_type auto... ) const = delete;
+                                  constexpr       pointer                                  get_pointer   ( )                        = delete;
+                                  constexpr       const_pointer                            get_pointer   ( )                  const = delete;
+                                  constexpr       int                                      get_stride    ( )                  const = delete;
     };
 
 } // namespace detail

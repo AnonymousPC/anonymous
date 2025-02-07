@@ -196,4 +196,4 @@ cpu::execution_context_type cpu::execution_context = cpu::execution_context_type
 
 #include "memory/accessor_type.hpp"
 
-//#include "linalg/linalg.hpp"
+#include "linalg/linalg.hpp"

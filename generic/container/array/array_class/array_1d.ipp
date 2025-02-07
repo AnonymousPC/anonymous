@@ -233,17 +233,17 @@ constexpr bool array<type,1,device>::empty ( ) const
 template < class type, class device >
 constexpr array<type,1,device>::pointer array<type,1,device>::data ( )
 {
-    return ownership()     ? base::data() otherwise
-           is_contiguous() ? upper::data() otherwise
-                             throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
+    return ownership()  ? base::data() otherwise
+           contiguous() ? upper::data() otherwise
+                          throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_pointer array<type,1,device>::data ( ) const
 {
-    return ownership()     ? base::data() otherwise
-           is_contiguous() ? upper::data() otherwise
-                             throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
+    return ownership()  ? base::data() otherwise
+           contiguous() ? upper::data() otherwise
+                          throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
@@ -404,63 +404,65 @@ constexpr bool array<type,1,device>::ownership ( ) const
 }
 
 template < class type, class device >
-constexpr bool array<type,1,device>::is_contiguous ( ) const
+constexpr bool array<type,1,device>::contiguous ( ) const
 {
-    return ownership() or upper::is_contiguous();
-}
-
-template < class type, class device >
-constexpr bool array<type,1,device>::is_strided ( ) const
-{
-    return not ownership() and upper::is_strided();
-}
-
-template < class type, class device >
-constexpr bool array<type,1,device>::is_transposed ( ) const
-{
-    return not ownership() and upper::is_transposed();
+    return ownership() or upper::contiguous();
 }
 
 template < class type, class device >
 constexpr auto array<type,1,device>::mdspan ( )
 {
-    #if debug
-    if ( not is_contiguous() )
-        throw logic_error("applying a contiguous mdspan on a non-contiguous array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,typename device::template accessor_type<type>>;
-    return mdspan(data(), size());
+    using type1 = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,typename device::template accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,1>,std::layout_stride,          typename device::template accessor_type<type>>;
+    using variant = variant<type1,type2>;
+    if ( contiguous() )
+    {
+        let ptr = data();
+        let shp = shape();
+        let mds = type1(ptr, shp);
+    }
+        return variant(type1(data(), size()));
+    else
+    {
+        let ptr     = upper::get_pointer();
+        let shp     = std::dextents<int,1>{size()};
+        let strd    = std::array<int,1>{upper::get_stride()};
+        let mapping = typename type2::mapping_type(shp, strd);
+        let mds     = type2(ptr, mapping);
+        return variant(mds);   
+    }
 }
 
 template < class type, class device >
 constexpr const auto array<type,1,device>::mdspan ( ) const
 {
-    #if debug
-    if ( not is_contiguous() )
-        throw logic_error("applying a contiguous mdspan on a non-contiguous array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,typename device::template const_accessor_type<type>>;
-    return mdspan(data(), size());
+    using type1 = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,1>,std::layout_stride,          typename device::template const_accessor_type<type>>;
+    using variant = variant<type1,type2>;
+    if ( contiguous() )
+        return variant(type1(data(), size()));
+    else 
+        return variant(type2(upper::get_pointer(), type2::template mapping<std::dextents<int,1>>(size(), upper::get_stride())));
 }
 
-template < class type, class device >
-constexpr auto array<type,1,device>::mdspan_strided ( )
-{
-    #if debug
-    if ( not is_strided() )
-        throw logic_error("applying a strided mdspan on a non-strided array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template accessor_type<type>>;
-    return mdspan(upper::get_pointer(0), std::layout_stride::template mapping<std::dextents<int,1>>(std::dextents<int,1>(upper::size()), std::array<int,1>{upper::get_size_top()/upper::size()}));
-}
+// template < class type, class device >
+// constexpr auto array<type,1,device>::mdspan_strided ( )
+// {
+//     #if debug
+//     if ( not is_strided() )
+//         throw logic_error("applying a strided mdspan on a non-strided array");
+//     #endif
+//     using mdspan = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template accessor_type<type>>;
+//     return mdspan(upper::get_pointer(0), std::layout_stride::template mapping<std::dextents<int,1>>(std::dextents<int,1>(upper::size()), std::array<int,1>{upper::get_size_top()/upper::size()}));
+// }
 
-template < class type, class device >
-constexpr const auto array<type,1,device>::mdspan_strided ( ) const
-{
-    #if debug
-    if ( not is_strided() )
-        throw logic_error("applying a strided mdspan on a non-strided array");
-    #endif
-    using mdspan = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template const_accessor_type<type>>;
-    return mdspan(upper::get_pointer(0), std::layout_stride::template mapping<std::dextents<int,1>>(std::dextents<int,1>(upper::size()), std::array<int,1>{upper::get_size_top()/upper::size()}));
-}
+// template < class type, class device >
+// constexpr const auto array<type,1,device>::mdspan_strided ( ) const
+// {
+//     #if debug
+//     if ( not is_strided() )
+//         throw logic_error("applying a strided mdspan on a non-strided array");
+//     #endif
+//     using mdspan = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template const_accessor_type<type>>;
+//     return mdspan(upper::get_pointer(0), std::layout_stride::template mapping<std::dextents<int,1>>(std::dextents<int,1>(upper::size()), std::array<int,1>{upper::get_size_top()/upper::size()}));
+// }

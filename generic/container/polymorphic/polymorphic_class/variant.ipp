@@ -101,7 +101,7 @@ constexpr value_type& variant<types...>::value ( )
     if ( index() == detail::index_of_unique_same_type<value_type,types...> )
         return std::get<value_type>(static_cast<base&>(self));
     else
-        throw type_error("bad variant access: cannot access {} in {} (whose type = {}, index = {})", typeid(value_type), typeid(self), type(), index());
+        throw type_error("bad variant access: cannot access {}-th type {} in {} (whose type = {}, index = {})", detail::index_of_unique_same_type<value_type,types...>, typeid(value_type), typeid(self), type(), index());
 }
 
 template < class... types >
@@ -112,7 +112,7 @@ constexpr const value_type& variant<types...>::value ( ) const
     if ( index() == detail::index_of_unique_same_type<value_type,types...> )
         return std::get<value_type>(static_cast<const base&>(self));
     else
-        throw type_error("bad variant access: cannot access {} in {} (whose type = {}, index = {})", typeid(value_type), typeid(self), type(), index());
+        throw type_error("bad variant access: cannot access {}-th type {} in {} (whose type = {}, index = {})", detail::index_of_unique_same_type<value_type,types...>, typeid(value_type), typeid(self), type(), index());
 }
 
 template < class... types >
@@ -123,7 +123,7 @@ constexpr index_type_of<value_index,types...>& variant<types...>::value ( )
     if ( index() == value_index )
         return std::get<value_index-1>(static_cast<base&>(self));
     else
-        throw type_error("bad variant access: cannot access {} in {} (whose type = {}, index = {})", typeid(index_type_of<value_index,types...>), typeid(self), type(), index());
+        throw type_error("bad variant access: cannot access {}-th type {} in {} (whose type = {}, index = {})", value_index, typeid(index_type_of<value_index,types...>), typeid(self), type(), index());
 }
 
 template < class... types >
@@ -134,7 +134,7 @@ constexpr const index_type_of<value_index,types...>& variant<types...>::value ( 
     if ( index() == value_index )
         return std::get<value_index-1>(static_cast<const base&>(self));
     else
-        throw type_error("bad variant access: cannot access {} in {} (whose type = {}, index = {})", typeid(index_type_of<value_index,types...>), typeid(self), type(), index());
+        throw type_error("bad variant access: cannot access {}-th type {} in {} (whose type = {}, index = {})", value_index, typeid(index_type_of<value_index,types...>), typeid(self), type(), index());
 }
 
 template < class... types >
@@ -149,4 +149,10 @@ constexpr decltype(auto) variant<types...>::visit ( auto&& v ) const
     requires detail::all_invocable_and_returns_same_type<decltype(v),types...>
 {
     return base::visit(std::forward<decltype(v)>(v));
+}
+
+template < class... types >
+constexpr int variant<types...>::size ( )
+{
+    return sizeof...(types);
 }

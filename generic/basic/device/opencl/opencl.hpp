@@ -162,33 +162,33 @@ class opencl
     public: // Linalg
         struct linalg
         {
-            static void plus            ( auto, auto, auto );
-            static void minus           ( auto, auto, auto );
-            static void multiply        ( auto, auto, auto );
-            static void dot             ( auto, auto, auto );
-            static void cross           ( auto, auto, auto );
-            static void convolve        ( auto, auto, auto );
+            constexpr static void plus            ( const auto, const auto, auto );
+            constexpr static void minus           ( const auto, const auto, auto );
+            constexpr static void multiply        ( const auto, const auto, auto );
+            constexpr static void dot             ( const auto, const auto, auto );
+            constexpr static void cross           ( const auto, const auto, auto );
+            constexpr static void convolve        ( const auto, const auto, auto );
 
-            static auto transpose       ( auto, auto );
-            static auto hermitian       ( auto, auto );
+            constexpr static auto transpose       ( const auto,             auto );
+            constexpr static auto hermitian       ( const auto,             auto );
 
-            static auto det             ( auto );
-            static void eigen           ( auto, auto, auto );
-            static void eigen_value     ( auto, auto );
-            static void eigen_vector    ( auto, auto );
-            static void evd             ( auto, auto, auto, auto );
-            static void inverse         ( auto, auto );
-            static void lu              ( auto, auto, auto, auto );
-            static void qr              ( auto, auto, auto );
-            static int  rank            ( auto );
-            static void singular        ( auto, auto, auto, auto );
-            static void singular_value  ( auto, auto );
-            static void singular_vector ( auto, auto, auto );
-            static void svd             ( auto, auto, auto, auto );
-            static auto tr              ( auto );
+            constexpr static void det             ( const auto,             auto& );
+            constexpr static void eigen           ( const auto,             auto, auto );
+            constexpr static void eigen_value     ( const auto,             auto );
+            constexpr static void eigen_vector    ( const auto,             auto );
+            constexpr static void evd             ( const auto,             auto, auto, auto );
+            constexpr static void inverse         ( const auto,             auto );
+            constexpr static void lu              ( const auto,             auto, auto, auto );
+            constexpr static void qr              ( const auto,             auto, auto );
+            constexpr static void rank            ( const auto,             int& );
+            constexpr static void singular        ( const auto,             auto, auto, auto );
+            constexpr static void singular_value  ( const auto,             auto );
+            constexpr static void singular_vector ( const auto,             auto, auto );
+            constexpr static void svd             ( const auto,             auto, auto, auto );
+            constexpr static void tr              ( const auto,             auto& );
 
-            static void fft             ( auto, auto );
-            static void ifft            ( auto, auto );
+            constexpr static void fft             ( auto,                   auto );
+            constexpr static void ifft            ( auto,                   auto );
         };
 };
 
@@ -210,6 +210,8 @@ class opencl
 #include "container/vector.hpp"
 
 #include "algorithm/reduce.hpp"
+
+#include "linalg/linalg.hpp"
 
 opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());
 

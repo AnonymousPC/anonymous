@@ -45,6 +45,9 @@ class variant
         template < int   value_index > constexpr const index_type_of<value_index,types...>& value ( )          const requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) );
                                        constexpr       decltype(auto)                       visit ( auto&& v )       requires detail::all_invocable_and_returns_same_type<decltype(v),types...>;
                                        constexpr       decltype(auto)                       visit ( auto&& v ) const requires detail::all_invocable_and_returns_same_type<decltype(v),types...>;
+
+    public: // Traits
+        constexpr static int size ( );
 };
 
 #include "variant.ipp"

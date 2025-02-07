@@ -1,7 +1,0 @@
-[1mmain.cpp:12:12: [0m[0;1;31merror: [0m[1mtype constraint differs in template redeclaration[0m
-   12 | [0;34mtemplate[0m < float_type type > [0;34musing[0m test = [0;34mfloat[0m;[0m
-      | [0;1;32m           ^
-[0m[1mmain.cpp:11:12: [0m[0;1;36mnote: [0mprevious template declaration is here[0m
-   11 | [0;34mtemplate[0m < [0;34mclass[0m type > [0;34musing[0m test = [0;34mint[0m;[0m
-      | [0;1;32m           ^
-[0m1 error generated.

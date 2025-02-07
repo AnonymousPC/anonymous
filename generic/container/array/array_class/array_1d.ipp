@@ -414,22 +414,21 @@ constexpr auto array<type,1,device>::mdspan ( )
 {
     using type1 = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,typename device::template accessor_type<type>>;
     using type2 = std::mdspan<type,std::dextents<int,1>,std::layout_stride,          typename device::template accessor_type<type>>;
-    using variant = variant<type1,type2>;
     if ( contiguous() )
     {
         let ptr = data();
-        let shp = shape();
+        let shp = std::dextents<int,1>{size()};
         let mds = type1(ptr, shp);
+        return variant<type1,type2>(mds);
     }
-        return variant(type1(data(), size()));
-    else
+    else // if ( upper::get_attribute() == rows_attribute or upper::get_attribute() == columns_attribute )
     {
-        let ptr     = upper::get_pointer();
+        let ptr     = upper::get_pointer(0);
         let shp     = std::dextents<int,1>{size()};
-        let strd    = std::array<int,1>{upper::get_stride()};
+        let strd    = std::array   <int,1>{upper::get_stride()};
         let mapping = typename type2::mapping_type(shp, strd);
         let mds     = type2(ptr, mapping);
-        return variant(mds);   
+        return variant<type1,type2>(mds);   
     }
 }
 
@@ -438,31 +437,20 @@ constexpr const auto array<type,1,device>::mdspan ( ) const
 {
     using type1 = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,typename device::template const_accessor_type<type>>;
     using type2 = std::mdspan<type,std::dextents<int,1>,std::layout_stride,          typename device::template const_accessor_type<type>>;
-    using variant = variant<type1,type2>;
     if ( contiguous() )
-        return variant(type1(data(), size()));
-    else 
-        return variant(type2(upper::get_pointer(), type2::template mapping<std::dextents<int,1>>(size(), upper::get_stride())));
+    {
+        let ptr = data();
+        let shp = std::dextents<int,1>{size()};
+        let mds = type1(ptr, shp);
+        return variant<type1,type2>(mds);
+    }
+    else // if ( upper::get_attribute() == rows_attribute or upper::get_attribute() == columns_attribute )
+    {
+        let ptr     = upper::get_pointer(0);
+        let shp     = std::dextents<int,1>{size()};
+        let strd    = std::array   <int,1>{upper::get_stride()};
+        let mapping = typename type2::mapping_type(shp, strd);
+        let mds     = type2(ptr, mapping);
+        return variant<type1,type2>(mds);   
+    }
 }
-
-// template < class type, class device >
-// constexpr auto array<type,1,device>::mdspan_strided ( )
-// {
-//     #if debug
-//     if ( not is_strided() )
-//         throw logic_error("applying a strided mdspan on a non-strided array");
-//     #endif
-//     using mdspan = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template accessor_type<type>>;
-//     return mdspan(upper::get_pointer(0), std::layout_stride::template mapping<std::dextents<int,1>>(std::dextents<int,1>(upper::size()), std::array<int,1>{upper::get_size_top()/upper::size()}));
-// }
-
-// template < class type, class device >
-// constexpr const auto array<type,1,device>::mdspan_strided ( ) const
-// {
-//     #if debug
-//     if ( not is_strided() )
-//         throw logic_error("applying a strided mdspan on a non-strided array");
-//     #endif
-//     using mdspan = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template const_accessor_type<type>>;
-//     return mdspan(upper::get_pointer(0), std::layout_stride::template mapping<std::dextents<int,1>>(std::dextents<int,1>(upper::size()), std::array<int,1>{upper::get_size_top()/upper::size()}));
-// }

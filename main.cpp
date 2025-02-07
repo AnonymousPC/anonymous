@@ -6,33 +6,17 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
+let engine = std::mt19937();
+int n = 100;
+
 int main ( )
 {
-    array<int,2,cpu> arr = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
-    auto& flat = arr.flatten();
-    let mds = flat.mdspan();
-    print(string(typeid(mds)));
-    // auto& slice = arr.transpose()[1];
-    // print(slice);
-    // let mds = slice.mdspan_strided();
-    // print(mds.size());
-    // print(mds[2]);
+    let A = array<float,2,cpu>(n, n);
+    for ( cpu::template reference<float> val in A.flatten() )
+        val = engine();
 
-    
+    let t = std::chrono::system_clock::now();
+    A = A * A;
+    print(std::chrono::system_clock::now() - t);
 
-
-    // let A = array<int,2,opencl>(10, 10);
-    // let B = array<int,2,opencl>(10, 10);
-    // let C = array<int,2,opencl>(10, 10);
-
-    // clblast::Gemm<int>(
-    //     clblast::Layout::kColMajor, clblast::Transpose::kNo, clblast::Transpose::kNo,
-    //     10, 10, 10,
-    //     1,
-    //     A.data().get_buffer().get(), A.data().get_index(), 10,
-    //     B.data().get_buffer().get(), B.data().get_index(), 10,
-    //     0,
-    //     C.data().get_buffer().get(), C.data().get_index(), 10,
-    //     &opencl::execution_context.command_queue().get()
-    // );
 }

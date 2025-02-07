@@ -585,6 +585,50 @@ constexpr bool array<type,max_dim,device>::contiguous ( ) const
 }
 
 template < class type, class device >
+constexpr auto array<type,max_dim,device>::mdspan ( )
+{
+    using type1 = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_stride,                                 typename device::template accessor_type<type>>;
+    using type3 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<type>>;
+    if ( contiguous() )
+    {
+        let ptr = data();
+        let shp = std::dextents<int,max_dim>(shape());
+        let mds = type1(ptr, shp);
+        return variant<type1,type2,type3>(mds);
+    }
+    else // if ( upper::attribute() == detail::transpose_attribute )
+    {
+        let ptr = upper::get_host().data();
+        let shp = std::dextents<int,max_dim>(shape());
+        let mds = type3(ptr, shp);
+        return variant<type1,type2,type3>(mds);
+    }
+}
+
+template < class type, class device >
+constexpr const auto array<type,max_dim,device>::mdspan ( ) const
+{
+    using type1 = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template const_accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_stride,                                 typename device::template const_accessor_type<type>>;
+    using type3 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template const_accessor_type<type>>;
+    if ( contiguous() )
+    {
+        let ptr = data();
+        let shp = std::dextents<int,max_dim>(shape());
+        let mds = type1(ptr, shp);
+        return variant<type1,type2,type3>(mds);
+    }
+    else // if ( upper::attribute() == detail::transpose_attribute )
+    {
+        let ptr = upper::get_host().data();
+        let shp = std::dextents<int,max_dim>(shape());
+        let mds = type3(ptr, shp);
+        return variant<type1,type2,type3>(mds);
+    }
+}
+
+template < class type, class device >
 constexpr int array<type,max_dim,device>::get_size_top ( ) const
 {
     return info::size();
@@ -658,13 +702,19 @@ constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::pointer array<type,max_dim,device>::get_pointer ( )
+constexpr array<type,max_dim,device>::pointer array<type,max_dim,device>::get_pointer ( int_type auto... offsets )
 {
-    return base::data();
+    static_assert ( sizeof...(offsets) == max_dim );
+    using mdspan = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>;
+    [[assume(ownership())]];
+    return base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...);
 }
 
 template < class type, class device >
-constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::get_pointer ( ) const
+constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::get_pointer ( int_type auto... offsets ) const
 {
-    return base::data();
+    static_assert ( sizeof...(offsets) == max_dim );
+    using mdspan = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+    [[assume(ownership())]];
+    return base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...);
 }

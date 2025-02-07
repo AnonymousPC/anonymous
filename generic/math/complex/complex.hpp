@@ -181,28 +181,31 @@ constexpr complex_type auto operator * ( const number_type auto& left, const com
 
 constexpr complex_type auto operator / ( const complex_type auto& left, const complex_type auto& right )
 {
+    #if debug
     if ( right == 0 )
         throw math_error("{} / {}", left, right);
+    #endif
 
     let div = right.real() * right.real() + right.imag() * right.imag();
-
     return complex((left.real() * right.real() + left.imag() * right.imag()) / div,
                    (left.imag() * right.real() - left.real() * right.imag()) / div);
 }
 
 constexpr complex_type auto operator / ( const complex_type auto& left, const number_type auto& right )
 {
+    #if debug
     if ( right == 0 )
         throw math_error("{} / {}", left, right);
-
+    #endif
     return complex(left.real() / right, left.imag() / right);
 }
 
 constexpr complex_type auto operator / ( const number_type auto& left, const complex_type auto& right )
 {
+    #if debug
     if ( right == 0 )
         throw math_error("{} / {}", left, right);
-
+    #endif
     return complex(left) / right;
 }
 

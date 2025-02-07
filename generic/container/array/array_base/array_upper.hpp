@@ -51,21 +51,21 @@ namespace detail
             constexpr bool contiguous ( ) const;
     
         public: // Detail
-                                  constexpr       array_attribute       get_attribute ( )     const;
-                                  constexpr       int                   get_offset    ( )     const;
-                                  constexpr       array<type,2,device>& get_host      ( );
-                                  constexpr const array<type,2,device>& get_host      ( )     const;
-                                  constexpr       int                   get_size_top  ( )     const;
-            template < int axis > constexpr       int                   get_size_axis ( )     const;
-            template < int dim2 > constexpr       auto                  get_rows      ( )           = delete;
-            template < int dim2 > constexpr const auto                  get_rows      ( )     const = delete;
-            template < int dim2 > constexpr       auto                  get_columns   ( )           = delete;
-            template < int dim2 > constexpr const auto                  get_columns   ( )     const = delete;
-                                  constexpr       reference             get_value     ( int );
-                                  constexpr       const_reference       get_value     ( int ) const;
-                                  constexpr       pointer               get_pointer   ( );
-                                  constexpr       const_pointer         get_pointer   ( )     const;
-                                  constexpr       int                   get_stride    ( )     const;
+                                  constexpr       array_attribute       get_attribute   ( )     const;
+                                  constexpr       int                   get_offset      ( )     const;
+                                  constexpr       array<type,2,device>& get_host        ( );
+                                  constexpr const array<type,2,device>& get_host        ( )     const;
+                                  constexpr       int                   get_size_top    ( )     const;
+            template < int axis > constexpr       int                   get_size_axis   ( )     const;
+            template < int dim2 > constexpr       auto                  get_rows        ( )           = delete;
+            template < int dim2 > constexpr const auto                  get_rows        ( )     const = delete;
+            template < int dim2 > constexpr       auto                  get_columns     ( )           = delete;
+            template < int dim2 > constexpr const auto                  get_columns     ( )     const = delete;
+                                  constexpr       reference             get_value       ( int );
+                                  constexpr       const_reference       get_value       ( int ) const;
+                                  constexpr       pointer               get_pointer     ( int );
+                                  constexpr       const_pointer         get_pointer     ( int ) const;
+                                  constexpr       int                   get_stride      ( )     const;
     };
 
     template < class type, int dim, class device >
@@ -118,23 +118,23 @@ namespace detail
             constexpr bool contiguous ( ) const;
 
         public: // Detail
-                                  constexpr       array_attribute                          get_attribute ( )                  const;
-                                  constexpr       int                                      get_offset    ( )                  const;
-            template < int attr > constexpr       array<type,dim+1,device>&                get_host      ( )                        requires ( attr == 1 );
-            template < int attr > constexpr const array<type,dim+1,device>&                get_host      ( )                  const requires ( attr == 1 );
-            template < int attr > constexpr       array<type,dim,  device>&                get_host      ( )                        requires ( attr == 2 );
-            template < int attr > constexpr const array<type,dim,  device>&                get_host      ( )                  const requires ( attr == 2 );
-                                  constexpr       int                                      get_size_top  ( )                  const;
-            template < int axis > constexpr       int                                      get_size_axis ( )                  const;
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... ) const;
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
-                                  constexpr       reference                                get_value     ( int_type auto... );
-                                  constexpr       const_reference                          get_value     ( int_type auto... ) const;
-                                  constexpr       pointer                                  get_pointer   ( );
-                                  constexpr       const_pointer                            get_pointer   ( )                  const;
-                                  constexpr       int                                      get_stride    ( )                  const;
+                                  constexpr       array_attribute                          get_attribute   ( )                  const;
+                                  constexpr       int                                      get_offset      ( )                  const;
+            template < int attr > constexpr       array<type,dim+1,device>&                get_host        ( )                        requires ( attr == 1 );
+            template < int attr > constexpr const array<type,dim+1,device>&                get_host        ( )                  const requires ( attr == 1 );
+            template < int attr > constexpr       array<type,dim,  device>&                get_host        ( )                        requires ( attr == 2 );
+            template < int attr > constexpr const array<type,dim,  device>&                get_host        ( )                  const requires ( attr == 2 );
+                                  constexpr       int                                      get_size_top    ( )                  const;
+            template < int axis > constexpr       int                                      get_size_axis   ( )                  const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_rows        ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_rows        ( int_type auto... ) const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_columns     ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns     ( int_type auto... ) const;
+                                  constexpr       reference                                get_value       ( int_type auto... );
+                                  constexpr       const_reference                          get_value       ( int_type auto... ) const;
+                                  constexpr       pointer                                  get_pointer     ( int_type auto... );
+                                  constexpr       const_pointer                            get_pointer     ( int_type auto... ) const;
+                                  constexpr       int                                      get_stride      ( )                  const;
     };
 
     template < class type, class device >
@@ -181,21 +181,21 @@ namespace detail
             constexpr bool contiguous ( ) const = delete;
 
         public: // Detail
-                                  constexpr       array_attribute                          get_attribute ( )                  const;
-                                  constexpr       int                                      get_offset    ( )                  const;
-                                  constexpr       array<type,max_dim,device>&              get_host      ( );
-                                  constexpr const array<type,max_dim,device>&              get_host      ( )                  const;
-                                  constexpr       int                                      get_size_top  ( )                  const = delete;
-            template < int axis > constexpr       int                                      get_size_axis ( )                  const;
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_rows      ( int_type auto... ) const;
-            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... );
-            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns   ( int_type auto... ) const;
-                                  constexpr       reference                                get_value     ( int_type auto... )       = delete;
-                                  constexpr       const_reference                          get_value     ( int_type auto... ) const = delete;
-                                  constexpr       pointer                                  get_pointer   ( )                        = delete;
-                                  constexpr       const_pointer                            get_pointer   ( )                  const = delete;
-                                  constexpr       int                                      get_stride    ( )                  const = delete;
+                                  constexpr       array_attribute                          get_attribute   ( )                  const;
+                                  constexpr       int                                      get_offset      ( )                  const;
+                                  constexpr       array<type,max_dim,device>&              get_host        ( );
+                                  constexpr const array<type,max_dim,device>&              get_host        ( )                  const;
+                                  constexpr       int                                      get_size_top    ( )                  const = delete;
+            template < int axis > constexpr       int                                      get_size_axis   ( )                  const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_rows        ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_rows        ( int_type auto... ) const;
+            template < int dim2 > constexpr       std::span<array_upper<type,dim2,device>> get_columns     ( int_type auto... );
+            template < int dim2 > constexpr const std::span<array_upper<type,dim2,device>> get_columns     ( int_type auto... ) const;
+                                  constexpr       reference                                get_value       ( int_type auto... )       = delete;
+                                  constexpr       const_reference                          get_value       ( int_type auto... ) const = delete;
+                                  constexpr       pointer                                  get_pointer     ( int_type auto... )       = delete;
+                                  constexpr       const_pointer                            get_pointer     ( int_type auto... ) const = delete;
+                                  constexpr       int                                      get_stride      ( )                  const = delete;
     };
 
 } // namespace detail

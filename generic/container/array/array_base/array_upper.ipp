@@ -61,25 +61,25 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::begin ( )
     {
-        return contiguous() ? iterator(data(), 1) otherwise iterator(get_pointer(), get_stride());
+        return contiguous() ? iterator(data(), 1) otherwise iterator(get_pointer(0), get_stride());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_iterator array_upper<type,1,device>::begin ( ) const
     {
-        return contiguous() ? const_iterator(data(), 1) otherwise const_iterator(get_pointer(), get_stride());
+        return contiguous() ? const_iterator(data(), 1) otherwise const_iterator(get_pointer(0), get_stride());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::iterator array_upper<type,1,device>::end ( )
     {
-        return contiguous() ? iterator(data()+size(), 1) otherwise iterator(get_pointer()+get_size_top(), get_stride());
+        return contiguous() ? iterator(data()+size(), 1) otherwise iterator(get_pointer(0)+get_size_top(), get_stride());
     }
 
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_iterator array_upper<type,1,device>::end ( ) const
     {
-        return contiguous() ? const_iterator(data()+size(), 1) otherwise const_iterator(get_pointer()+get_size_top(), get_stride());
+        return contiguous() ? const_iterator(data()+size(), 1) otherwise const_iterator(get_pointer(0)+get_size_top(), get_stride());
     }
 
     template < class type, class device >
@@ -163,15 +163,17 @@ namespace detail
     }
 
     template < class type, class device >
-    constexpr array_upper<type,1,device>::pointer array_upper<type,1,device>::get_pointer ( )
+    constexpr array_upper<type,1,device>::pointer array_upper<type,1,device>::get_pointer ( int offset )
     {
-        return get_host().get_pointer();
+        return get_attribute() == rows_attribute ? get_host().get_pointer(get_offset(), offset) otherwise
+                                                   get_host().get_pointer(offset, get_offset());
     }
 
     template < class type, class device >
-    constexpr array_upper<type,1,device>::const_pointer array_upper<type,1,device>::get_pointer ( ) const
+    constexpr array_upper<type,1,device>::const_pointer array_upper<type,1,device>::get_pointer ( int offset ) const
     {
-        return get_host().get_pointer();
+        return get_attribute() == rows_attribute ? get_host().get_pointer(get_offset(), offset) otherwise
+                                                   get_host().get_pointer(offset, get_offset());
     }
 
     template < class type, class device >
@@ -512,24 +514,26 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 and dim <= max_dim - 1 )
-    constexpr array_upper<type,dim,device>::pointer array_upper<type,dim,device>::get_pointer ( )
+    constexpr array_upper<type,dim,device>::pointer array_upper<type,dim,device>::get_pointer ( int_type auto... offsets )
     {
         #if debug
         if ( get_attribute() == transpose_attribute )
             throw logic_error("using get_pointer() on a transposed array");
         #endif
-        return get_host<1>().get_pointer();
+        return get_attribute() == rows_attribute ? get_host<1>().get_pointer(get_offset(), offsets...) otherwise
+                                                   get_host<1>().get_pointer(offsets..., get_offset());
     }
 
     template < class type, int dim, class device >
         requires ( dim >= 2 and dim <= max_dim - 1 )
-    constexpr array_upper<type,dim,device>::const_pointer array_upper<type,dim,device>::get_pointer ( ) const
+    constexpr array_upper<type,dim,device>::const_pointer array_upper<type,dim,device>::get_pointer ( int_type auto... offsets ) const
     {
         #if debug
         if ( get_attribute() == transpose_attribute )
             throw logic_error("using get_pointer() from a transposed array");
         #endif
-        return get_host<1>().get_pointer();
+        return get_attribute() == rows_attribute ? get_host<1>().get_pointer(get_offset(), offsets...) otherwise
+                                                   get_host<1>().get_pointer(offsets..., get_offset());
     }
 
     template < class type, int dim, class device >

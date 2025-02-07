@@ -60,6 +60,7 @@
 #endif
 #ifdef __cpp_lib_mdspan // #
     #include <mdspan>
+    #include "std/detail/mdspan_layout_transpose.ipp"
 #else
     #include "std/mdspan.hpp"
 #endif

@@ -159,35 +159,34 @@ class cpu
     public: // Linalg
         struct linalg
         {
-            constexpr static void plus            ( auto, auto, auto );
-            constexpr static void minus           ( auto, auto, auto );
-            constexpr static void multiply        ( auto, auto, auto );
-            constexpr static void dot             ( auto, auto, auto );
-            constexpr static void cross           ( auto, auto, auto );
-            constexpr static void convolve        ( auto, auto, auto );
+            constexpr static void plus            ( const auto, const auto, auto );
+            constexpr static void minus           ( const auto, const auto, auto );
+            constexpr static void multiply        ( const auto, const auto, auto );
+            constexpr static void dot             ( const auto, const auto, auto );
+            constexpr static void cross           ( const auto, const auto, auto );
+            constexpr static void convolve        ( const auto, const auto, auto );
 
-            constexpr static auto transpose       ( auto, auto );
-            constexpr static auto hermitian       ( auto, auto );
+            constexpr static auto transpose       ( const auto,             auto );
+            constexpr static auto hermitian       ( const auto,             auto );
 
-            constexpr static void det             ( auto, auto& );
-            constexpr static void eigen           ( auto, auto, auto );
-            constexpr static void eigen_value     ( auto, auto );
-            constexpr static void eigen_vector    ( auto, auto );
-            constexpr static void evd             ( auto, auto, auto, auto );
-            constexpr static void inverse         ( auto, auto );
-            constexpr static void lu              ( auto, auto, auto, auto );
-            constexpr static void qr              ( auto, auto, auto );
-            constexpr static void rank            ( auto, int& );
-            constexpr static void singular        ( auto, auto, auto, auto );
-            constexpr static void singular_value  ( auto, auto );
-            constexpr static void singular_vector ( auto, auto, auto );
-            constexpr static void svd             ( auto, auto, auto, auto );
-            constexpr static void tr              ( auto, auto& );
+            constexpr static void det             ( const auto,             auto& );
+            constexpr static void eigen           ( const auto,             auto, auto );
+            constexpr static void eigen_value     ( const auto,             auto );
+            constexpr static void eigen_vector    ( const auto,             auto );
+            constexpr static void evd             ( const auto,             auto, auto, auto );
+            constexpr static void inverse         ( const auto,             auto );
+            constexpr static void lu              ( const auto,             auto, auto, auto );
+            constexpr static void qr              ( const auto,             auto, auto );
+            constexpr static void rank            ( const auto,             int& );
+            constexpr static void singular        ( const auto,             auto, auto, auto );
+            constexpr static void singular_value  ( const auto,             auto );
+            constexpr static void singular_vector ( const auto,             auto, auto );
+            constexpr static void svd             ( const auto,             auto, auto, auto );
+            constexpr static void tr              ( const auto,             auto& );
 
-            constexpr static void fft             ( auto, auto );
-            constexpr static void ifft            ( auto, auto );
+            constexpr static void fft             ( auto,                   auto );
+            constexpr static void ifft            ( auto,                   auto );
         };
-
 };
 
 cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());

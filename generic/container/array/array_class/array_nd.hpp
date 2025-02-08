@@ -86,8 +86,7 @@ class array<type,dim,device>
         constexpr const array<type,dim,device>& transpose ( ) const;
 
     public: // Memory
-        constexpr bool ownership  ( ) const;
-        constexpr bool contiguous ( ) const;
+        constexpr bool ownership ( ) const;
 
     public: // Mdspan
         constexpr       auto mdspan ( );

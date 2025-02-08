@@ -332,9 +332,7 @@ namespace detail
 
     enum array_attribute
     {
-        no_attribute,
-        rows_attribute,
-        columns_attribute,
+        slice_attribute,
         transpose_attribute 
     };
 

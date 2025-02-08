@@ -7,6 +7,24 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+/* 每个ndarray(assume shape = [2, 3, 4])
+   能分解出2个matrix, 2个T->matrix
+   能分解出6个vector, 6个matrix->T->vector, 6个T->matrix->vector, 6个T->matrix->T->vector
+
+   考察下列矩阵
+   [[[1, 2, 3, 4]
+     [5, 6, 7, 8]
+     [9,10,11,12]],
+     
+     [13,14,15,16],
+     [17,18,19,20],
+     [21,22,23,24]]]
+    
+    每个matrix不仅有transpose(), 还会有对应的flatten()
+    其变化无穷无尽。故：
+    1. 当前view需要new时, 只有ownership()才能transpose(), flatten(), reshape().
+    2. 直到可以栈变量&引用(每个ndarray唯一对应一个mdspan)。
+
 auto& test(std::string&& val)
 {
     val = "hello, world! out of bound";

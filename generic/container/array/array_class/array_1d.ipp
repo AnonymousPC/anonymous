@@ -233,17 +233,15 @@ constexpr bool array<type,1,device>::empty ( ) const
 template < class type, class device >
 constexpr array<type,1,device>::pointer array<type,1,device>::data ( )
 {
-    return ownership()  ? base::data() otherwise
-           contiguous() ? upper::data() otherwise
-                          throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
+    return ownership() ? base::data() otherwise
+                         throw logic_error("cannot get native data from array: it does not own its data");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_pointer array<type,1,device>::data ( ) const
 {
-    return ownership()  ? base::data() otherwise
-           contiguous() ? upper::data() otherwise
-                          throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
+    return ownership() ? base::data() otherwise
+                         throw logic_error("cannot get native data from array: it does not own its data");
 }
 
 template < class type, class device >
@@ -404,18 +402,12 @@ constexpr bool array<type,1,device>::ownership ( ) const
 }
 
 template < class type, class device >
-constexpr bool array<type,1,device>::contiguous ( ) const
-{
-    return ownership() or upper::contiguous();
-}
-
-template < class type, class device >
 constexpr auto array<type,1,device>::mdspan ( )
 {
     using mdspan_type = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template accessor_type<type>>;
-    let ptr     = contiguous() ? data() otherwise upper::get_pointer(0);
+    let ptr     = ownership() ? data() otherwise upper::get_pointer(0);
     let shp     = std::dextents<int,1> { size() };
-    let strd    = std::array   <int,1> { contiguous() ? 1 otherwise upper::get_stride() };
+    let strd    = std::array   <int,1> { ownership() ? 1 otherwise upper::get_stride() };
     let mapping = typename mdspan_type::mapping_type(shp, strd);
     let mds     = mdspan_type(ptr, mapping);
     return mds;  
@@ -425,9 +417,9 @@ template < class type, class device >
 constexpr const auto array<type,1,device>::mdspan ( ) const
 {
     using mdspan_type = std::mdspan<const type,std::dextents<int,1>,std::layout_stride,typename device::template accessor_type<type>>;
-    let ptr     = contiguous() ? data() otherwise upper::get_pointer(0);
+    let ptr     = ownership() ? data() otherwise upper::get_pointer(0);
     let shp     = std::dextents<int,1> { size() };
-    let strd    = std::array   <int,1> { contiguous() ? 1 otherwise upper::get_stride() };
+    let strd    = std::array   <int,1> { ownership() ? 1 otherwise upper::get_stride() };
     let mapping = typename mdspan_type::mapping_type(shp, strd);
     let mds     = mdspan_type(ptr, mapping);
     return mds;  

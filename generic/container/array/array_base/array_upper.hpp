@@ -10,7 +10,7 @@ namespace detail
     {
         public: // Data
             array<type,2,device>* ptr = nullptr;
-            array_attribute       atr = no_attribute;
+            array_attribute       atr = slice_attribute;
             int                   ofs = 0;
 
         public: // Typedef
@@ -37,21 +37,17 @@ namespace detail
             constexpr int                  row           ( )     const = delete;
             constexpr int                  column        ( )     const = delete;
             constexpr bool                 empty         ( )     const;
-            constexpr pointer              data          ( );
-            constexpr const_pointer        data          ( )     const;
+            constexpr pointer              data          ( )           = delete;
+            constexpr const_pointer        data          ( )     const = delete;
             constexpr iterator             begin         ( );
             constexpr const_iterator       begin         ( )     const;
             constexpr iterator             end           ( );
             constexpr const_iterator       end           ( )     const;
             constexpr reference            operator []   ( int );
             constexpr const_reference      operator []   ( int ) const;
-        
-        public: // Memory
-            constexpr bool ownership  ( ) const;
-            constexpr bool contiguous ( ) const;
     
         public: // Detail
-                                  constexpr       array_attribute       get_attribute   ( )     const;
+                                  constexpr       array_attribute       get_attribute   ( )     const = delete; // Always returns slice_attribute
                                   constexpr       int                   get_offset      ( )     const;
                                   constexpr       array<type,2,device>& get_host        ( );
                                   constexpr const array<type,2,device>& get_host        ( )     const;
@@ -75,7 +71,7 @@ namespace detail
         private: // Data
             array<type,dim+1,device>* ptr1 = nullptr;
             array<type,dim,  device>* ptr2 = nullptr;
-            array_attribute           atr  = no_attribute;
+            array_attribute           atr  = slice_attribute;
             int                       ofs  = 0;
 
         public: // Typedef
@@ -104,18 +100,14 @@ namespace detail
             constexpr       int                       row           ( )     const;
             constexpr       int                       column        ( )     const requires ( dim == 2 );
             constexpr       bool                      empty         ( )     const;
-            constexpr       pointer                   data          ( );
-            constexpr       const_pointer             data          ( )     const;
+            constexpr       pointer                   data          ( )           = delete;
+            constexpr       const_pointer             data          ( )     const = delete;
             constexpr       iterator                  begin         ( );
             constexpr       const_iterator            begin         ( )     const;
             constexpr       iterator                  end           ( );
             constexpr       const_iterator            end           ( )     const;
             constexpr       array<type,dim-1,device>& operator []   ( int );
             constexpr const array<type,dim-1,device>& operator []   ( int ) const;
-
-        public: // Memory
-            constexpr bool ownership  ( ) const;
-            constexpr bool contiguous ( ) const;
 
         public: // Detail
                                   constexpr       array_attribute                          get_attribute   ( )                  const;

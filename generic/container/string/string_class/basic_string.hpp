@@ -78,14 +78,16 @@ class basic_string
         constexpr basic_string&   erase       ( int, int );
         constexpr basic_string&   insert      ( int, view );
         constexpr basic_string&   push        (      view );
-        constexpr basic_string&   pop         ( int );
+        constexpr basic_string&   pop         ( int = -1 );
 
     public: // Memory 
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
 
     public: // Algo (disambiguation)
-        using string_algo::all,
+        using string_algo::ends_with,
+        
+              string_algo::all,
               string_algo::contains,
               string_algo::count,
               string_algo::exist,

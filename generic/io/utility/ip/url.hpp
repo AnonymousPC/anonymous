@@ -17,7 +17,7 @@ class url
         string fragment      ( ) const;
 
     public: // Regex
-        static const ap::regex regex;
+        static const std::regex regex;
 };
 
 

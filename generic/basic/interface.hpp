@@ -284,25 +284,26 @@ namespace ap
     class exception;
         class logic_error;
             class value_error;
-            class index_error;
-            class key_error;
-            class nullptr_error;
-
-        class runtime_error;
+                class index_error;
+                class key_error;
             class type_error;
-            class format_error;
-            class regex_error;
-            class file_error;
-            class network_error;
+        class runtime_error;
+            class string_error;
+                class encode_error;
+                class format_error;
+                class parse_error;
+                class regex_error;
+            class io_error;
+                class file_error;
+                class network_error;
+                class pipe_error;
+                class sql_error;
+            class device_error;
+                class cuda_error;
+                class opencl_error;
+                class tbb_error;
             class math_error;
-
-        class signal;
-            class abort_signal;
-            class floating_point_exception_signal;
-            class illegal_instruction_signal;
-            class interrupt_signal;
-            class segmentation_violation_signal;
-            class terminate_signal;
+                class linalg_error;
 
     /// Function
     /* lambda function */ // void print ( const printable auto&... );

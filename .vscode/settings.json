@@ -113,6 +113,7 @@
         "csetjmp": "cpp",
         "inplace_vector": "cpp",
         "stream_ref": "cpp",
-        "ccomplex": "cpp"
+        "ccomplex": "cpp",
+        "tensor": "cpp"
     }
 }

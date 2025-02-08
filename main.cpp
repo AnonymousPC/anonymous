@@ -6,17 +6,17 @@
 // #include "specific/spirit/interface.hpp"
 // #include "specific/stock/interface.hpp"
 using namespace ap;
-let engine = std::mt19937();
-int n = 100;
 
 int main ( )
 {
-    let A = array<float,2,cpu>(n, n);
-    for ( cpu::template reference<float> val in A.flatten() )
-        val = engine();
+    let a = array<float,2,opencl>(10, 20);
+    for ( int i in range(a.size()) )    
+        a.flatten()[i] = i * 0.11;
 
-    let t = std::chrono::system_clock::now();
-    A = A * A;
-    print(std::chrono::system_clock::now() - t);
-
+    print(a+a);
 }
+
+
+
+// TODO
+// 1. array里声明using vector = array<self> 因为file_scv extents matrix<string> extends cpu::vector extents ... 

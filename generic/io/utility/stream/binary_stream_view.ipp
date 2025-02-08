@@ -74,8 +74,8 @@ constexpr ranges::binary_istream_view<stream_type,input_type,endian>::iterator& 
 {
     v_ptr->s_ptr->read(reinterpret_cast<char*>(&v_ptr->t), sizeof(input_type));
 
-    if constexpr ( aux::requires_byteswap<endian,input_type> )
-        aux::byteswap(v_ptr->t);
+    if constexpr ( detail::requires_byteswap<endian,input_type> )
+        detail::byteswap(v_ptr->t);
 
     return self;
 }
@@ -85,8 +85,8 @@ constexpr ranges::binary_istream_view<stream_type,input_type,endian>::iterator& 
 {
     v_ptr->s_ptr->read(reinterpret_cast<char*>(&v_ptr->t), sizeof(input_type));
 
-    if constexpr ( aux::requires_byteswap<endian,input_type> )
-        aux::byteswap(v_ptr->t);
+    if constexpr ( detail::requires_byteswap<endian,input_type> )
+        detail::byteswap(v_ptr->t);
 
     return self;
 }
@@ -119,12 +119,12 @@ constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_os
     requires std::same_as<output_type,decay<decltype(*r.begin())>>
 {
     for ( auto&& t in r )
-        if constexpr ( not aux::requires_byteswap<endian,output_type> )
+        if constexpr ( not detail::requires_byteswap<endian,output_type> )
             s.write(reinterpret_cast<const char*>(&t), sizeof(output_type));
         else
         {
             let t2 = t;
-            aux::byteswap(t2);
+            detail::byteswap(t2);
             s.write(reinterpret_cast<const char*>(&t2), sizeof(output_type));
         }
 }
@@ -134,19 +134,19 @@ constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_os
 template < class stream_type, class output_type, std::endian endian >
 constexpr ranges::binary_ostream_view<stream_type,output_type,endian>& ranges::binary_ostream_view<stream_type,output_type,endian>::operator << ( const std::same_as<output_type> auto& p )
 {
-    if constexpr ( not aux::requires_byteswap<endian,output_type> )
+    if constexpr ( not detail::requires_byteswap<endian,output_type> )
         s_ptr->write(reinterpret_cast<const char*>(&p), sizeof(output_type));
     else
     {
         let p2 = p;
-        aux::byteswap(p2);
+        detail::byteswap(p2);
         s_ptr->write(reinterpret_cast<const char*>(&p2), sizeof(output_type));
     }
 
     return self;
 }
 
-// As-stream-aux
+// As-stream-detail
 
 template < class stream_type, class output_type, std::endian endian >
 constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_ostream_view ( stream_type& init_s )

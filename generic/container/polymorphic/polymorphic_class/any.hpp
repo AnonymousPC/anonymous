@@ -7,11 +7,8 @@ class any
         using base = std::any;
     
     public: // Core
-        constexpr  any ( ) = default;
-        constexpr  any ( copyable auto );
-        constexpr ~any ( );
-        constexpr  any& operator = ( const any&  );
-        constexpr  any& operator = (       any&& );
+        constexpr any ( ) = default;
+        constexpr any ( copyable auto );
 
     public: // Member
                                       constexpr       bool            empty ( ) const;

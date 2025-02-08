@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     constexpr bool is_same_sign                ( auto, auto... );
     constexpr void regularize_same_signed_time ( int&, int&, int&, int&, int&, int& );
@@ -17,7 +17,7 @@ constexpr duration::duration ( int_type auto hh, int_type auto mm, int_type auto
     extends tuple<int,int,int,int,int,int> ( int(hh), int(mm), int(ss), int(ms), int(us), int(ns) )
 {
     #if debug
-        if ( abs(mm) >= 60 or abs(ss) >= 60 or abs(ms) >= 1000 or abs(us) >= 1000 or abs(ns) >= 1000 or not aux::is_same_sign(hh, mm, ss, ms, us, ns) )
+        if ( abs(mm) >= 60 or abs(ss) >= 60 or abs(ms) >= 1000 or abs(us) >= 1000 or abs(ns) >= 1000 or not detail::is_same_sign(hh, mm, ss, ms, us, ns) )
             throw value_error("duration {} is out of domain [(R), (+-60), (+-60), (+-1000), (+-1000), (+-1000)] or not same-signed",
                               "{:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d}"s.format(hour(), minute(), second(), millisecond(), microsecond(), nanosecond()));
     #endif
@@ -48,62 +48,62 @@ constexpr duration::operator std::chrono::duration<data_type,ratio_type> ( ) con
 
 constexpr int& duration::hour ( )
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 constexpr const int& duration::hour ( ) const
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 constexpr int& duration::minute ( )
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 constexpr const int& duration::minute ( ) const
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 constexpr int& duration::second ( )
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 constexpr const int& duration::second ( ) const
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 constexpr int& duration::millisecond ( )
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 constexpr const int& duration::millisecond ( ) const
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 constexpr int& duration::microsecond ( )
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 constexpr const int& duration::microsecond ( ) const
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 constexpr int& duration::nanosecond ( )
 {
-    return self[6c];
+    return self.template value<6>();
 }
 
 constexpr const int& duration::nanosecond ( ) const
 {
-    return self[6c];
+    return self.template value<6>();
 }
 
 
@@ -189,7 +189,7 @@ constexpr duration operator + ( const duration& left, const duration& right )
 {
     using tuple = tuple<int,int,int,int,int,int>;
     let [hh, mm, ss, ms, us, ns] = static_cast<const tuple&>(left) + static_cast<const tuple&>(right);
-    aux::regularize_same_signed_time(hh, mm, ss, ms, us, ns);
+    detail::regularize_same_signed_time(hh, mm, ss, ms, us, ns);
     return duration(hh, mm, ss, ms, us, ns);
 }
 
@@ -197,7 +197,7 @@ constexpr duration operator - ( const duration& left, const duration& right )
 {
     using tuple = tuple<int,int,int,int,int,int>;
     let [hh, mm, ss, ms, us, ns] = static_cast<const tuple&>(left) - static_cast<const tuple&>(right);
-    aux::regularize_diff_signed_time(hh, mm, ss, ms, us, ns);
+    detail::regularize_diff_signed_time(hh, mm, ss, ms, us, ns);
     return duration(hh, mm, ss, ms, us, ns);
 }
 
@@ -205,7 +205,7 @@ constexpr duration operator * ( const duration& left, const number_type auto& ri
 {
     using tuple = tuple<int,int,int,int,int,int>;
     let [hh, mm, ss, ms, us, ns] = tuple(static_cast<const tuple&>(left) * right);
-    aux::regularize_same_signed_time(hh, mm, ss, ms, us, ns);
+    detail::regularize_same_signed_time(hh, mm, ss, ms, us, ns);
     return duration(hh, mm, ss, ms, us, ns);
 }
 
@@ -213,7 +213,7 @@ constexpr duration operator * ( const number_type auto& left, const duration& ri
 {
     using tuple = tuple<int,int,int,int,int,int>;
     let [hh, mm, ss, ms, us, ns] = tuple(left * static_cast<const tuple&>(right));
-    aux::regularize_same_signed_time(hh, mm, ss, ms, us, ns);
+    detail::regularize_same_signed_time(hh, mm, ss, ms, us, ns);
     return duration(hh, mm, ss, ms, us, ns);
 }
 
@@ -277,7 +277,7 @@ constexpr void sleep_for ( duration time )
 
 // Auxiliary
 
-constexpr bool aux::is_same_sign ( auto a, auto... args )
+constexpr bool detail::is_same_sign ( auto a, auto... args )
 {
     if constexpr ( sizeof...(args) == 0 )
         return true;
@@ -287,7 +287,7 @@ constexpr bool aux::is_same_sign ( auto a, auto... args )
                is_same_sign ( args... );
 }
 
-constexpr void aux::regularize_same_signed_time ( int& hh, int& mm, int& ss, int& ms, int& us, int& ns )
+constexpr void detail::regularize_same_signed_time ( int& hh, int& mm, int& ss, int& ms, int& us, int& ns )
 {
     us += ns / 1000;
     ns %= 1000;
@@ -305,7 +305,7 @@ constexpr void aux::regularize_same_signed_time ( int& hh, int& mm, int& ss, int
     mm %= 60;
 }
 
-constexpr void aux::regularize_diff_signed_time ( int& hh, int& mm, int& ss, int& ms, int& us, int& ns )
+constexpr void detail::regularize_diff_signed_time ( int& hh, int& mm, int& ss, int& ms, int& us, int& ns )
 {
     // This function is only called in operator - (duration, duration),
     // which guarantees every int is in range [+=limit].

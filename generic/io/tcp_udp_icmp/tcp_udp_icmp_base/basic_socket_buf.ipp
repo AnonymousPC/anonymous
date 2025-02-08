@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     template < class protocol >
     concept connection_oriented = std::same_as<protocol,boost::asio::ip::tcp>;
@@ -30,7 +30,7 @@ void basic_socket_buf<protocol>::connect ( url website )
         throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol_name(), website);
 
     // Connect.
-    aux::try_for_each(resolve(website),
+    detail::try_for_each(resolve(website),
         [&] (const auto& ip)
         {
             try
@@ -62,16 +62,16 @@ void basic_socket_buf<protocol>::listen ( url portal )
         throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol_name(), portal);
 
     // Listen.
-    aux::try_for_each(resolve(portal),
+    detail::try_for_each(resolve(portal),
         [&] (const auto& ip)
         {
             try
             {
-                if constexpr ( aux::connection_oriented<protocol> )
+                if constexpr ( detail::connection_oriented<protocol> )
                     // Accept a connection.
                     boost::asio::basic_socket_acceptor<protocol>(io_context, ip).accept(socket);
 
-                else if constexpr ( aux::connectionless<protocol> )
+                else if constexpr ( detail::connectionless<protocol> )
                 {
                     // Bind the local endpoint.
                     if ( ip.endpoint().address().is_v4() )
@@ -88,9 +88,9 @@ void basic_socket_buf<protocol>::listen ( url portal )
                     received = true;
 
                     // Set get area.
-                    setg(receive_buff.begin(),
-                         receive_buff.begin(),
-                         receive_buff.begin() + bytes);
+                    setg(receive_buff.data(),
+                         receive_buff.data(),
+                         receive_buff.data() + bytes);
                 }
             }
             catch ( const boost::system::system_error& e )
@@ -173,7 +173,7 @@ url basic_socket_buf<protocol>::remote_endpoint ( ) const
 template < class protocol >
 int basic_socket_buf<protocol>::underflow ( )
 {
-    if constexpr ( aux::connection_oriented<protocol> )
+    if constexpr ( detail::connection_oriented<protocol> )
         try
         {
             // Receive message.
@@ -182,9 +182,9 @@ int basic_socket_buf<protocol>::underflow ( )
             int bytes = socket.receive(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
 
             // Set get area.
-            setg(receive_buff.begin(),
-                 receive_buff.begin(),
-                 receive_buff.begin() + bytes);
+            setg(receive_buff.data(),
+                 receive_buff.data(),
+                 receive_buff.data() + bytes);
             return traits_type::to_int_type(*gptr());
         }
         catch ( const boost::system::system_error& e )
@@ -197,7 +197,7 @@ int basic_socket_buf<protocol>::underflow ( )
                                     typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
         }
 
-    else if constexpr ( aux::connectionless<protocol> )
+    else if constexpr ( detail::connectionless<protocol> )
         try
         {
             if ( not received ) // Datagram has not been received: then receive new message.
@@ -208,9 +208,9 @@ int basic_socket_buf<protocol>::underflow ( )
                 received = true;
 
                 // Set get area.
-                setg(receive_buff.begin(),
-                     receive_buff.begin(),
-                     receive_buff.begin() + bytes);
+                setg(receive_buff.data(),
+                     receive_buff.data(),
+                     receive_buff.data() + bytes);
                 return traits_type::to_int_type(*gptr());
             }
 
@@ -232,7 +232,7 @@ int basic_socket_buf<protocol>::underflow ( )
 template < class protocol >
 int basic_socket_buf<protocol>::overflow ( int c )
 {
-    if constexpr ( aux::connection_oriented<protocol> )
+    if constexpr ( detail::connection_oriented<protocol> )
         try
         {
             // Send message if buffer is full, or create buffer space at first for further writing. Connection-oriented protocol allows chunk message.
@@ -242,8 +242,8 @@ int basic_socket_buf<protocol>::overflow ( int c )
                 socket.send(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
 
             // Set put area.
-            setp(send_buff.begin(),
-                 send_buff.end());
+            setp(send_buff.data(),
+                 send_buff.data() + send_buff.size());
             *pptr() = traits_type::to_int_type(c);
             pbump(1);
             return traits_type::to_int_type(c);
@@ -255,14 +255,14 @@ int basic_socket_buf<protocol>::overflow ( int c )
                                 typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
         }
 
-    else if constexpr ( aux::connectionless<protocol> )
+    else if constexpr ( detail::connectionless<protocol> )
     {
         // Prepare more buffer. Connectionless protocol demands the whole message to be sent in once.
         send_buff.resize(send_buff.size() + default_buffer_size);
 
         // Set put area.
-        setp(send_buff.begin(),
-             send_buff.end());
+        setp(send_buff.data(),
+             send_buff.data() + send_buff.size());
         pbump(send_buff.size() - default_buffer_size);
         *pptr() = traits_type::to_int_type(c);
         pbump(1);
@@ -276,11 +276,11 @@ int basic_socket_buf<protocol>::sync ( )
     try
     {
         // Send message.
-        socket.send(boost::asio::const_buffer(send_buff.begin(), pptr() - send_buff.begin()));
+        socket.send(boost::asio::const_buffer(send_buff.data(), pptr() - send_buff.data()));
 
         // Set put area.
-        setp(send_buff.begin(),
-             send_buff.end());
+        setp(send_buff.data(),
+             send_buff.data() + send_buff.size());
         return 0;
     }
     catch ( const boost::system::system_error& e )

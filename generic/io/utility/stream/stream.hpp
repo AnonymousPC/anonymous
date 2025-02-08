@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     template < std::endian endian, class type = void >
     constexpr bool requires_byteswap =

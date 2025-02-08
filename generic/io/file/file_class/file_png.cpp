@@ -22,7 +22,7 @@ file_png& file_png::open ( const path& pth )
     file_interface::open(pth);
 
     // Read data.
-    aux::read_from_boost_gil(self, path(self), boost::gil::png_tag(), depth());
+    detail::read_from_boost_gil(self, path(self), boost::gil::png_tag(), depth());
 
     return self;
 }
@@ -33,7 +33,7 @@ file_png& file_png::save ( )
     file_interface::save();
 
     // Write data.
-    aux::write_to_boost_gil(self, path(self), boost::gil::png_tag(), depth());
+    detail::write_to_boost_gil(self, path(self), boost::gil::png_tag(), depth());
 
     return self;
 }

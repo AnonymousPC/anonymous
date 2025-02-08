@@ -18,7 +18,7 @@ namespace detail
     using opencl_nativize = opencl_nativize_helper<type>::type;
 
     template < class type >
-    auto opencl_copy_mdspan ( auto mds )
+    auto opencl_clone_mdspan ( auto mds )
     {
         using vector_type = opencl::template vector<type>;
         using mdspan_type = std::mdspan<type,std::dextents<int,2>,typename opencl::layout_type,conditional<is_non_const_accessor<typename decltype(mds)::accessor_type>,opencl::template accessor_type<type>,opencl::template const_accessor_type<type>>>;
@@ -35,4 +35,10 @@ namespace detail
         return result;
     }
 
+    std::string clblast_error_message ( clblast::StatusCode c ); // See detail.cpp
+
 } // namespace detail
+
+#if dll
+    #include "detail.cpp"
+#endif

@@ -92,7 +92,8 @@ class basic_string_view
            // string_algo::split,
            // string_algo::where;
 
-              
+    public: // Friend
+        friend string_algo;
 };
 
 template < char_type type >               basic_string_view ( type )                      -> basic_string_view<type>;

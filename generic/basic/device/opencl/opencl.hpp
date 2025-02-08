@@ -162,6 +162,8 @@ class opencl
     public: // Linalg
         struct linalg
         {
+            constexpr static void unary_plus      ( const auto,             auto );
+            constexpr static void unary_minus     ( const auto,             auto );
             constexpr static void plus            ( const auto, const auto, auto );
             constexpr static void minus           ( const auto, const auto, auto );
             constexpr static void multiply        ( const auto, const auto, auto );

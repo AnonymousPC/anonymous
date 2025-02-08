@@ -29,92 +29,92 @@ ipv6::ipv6 ( int init_1, int init_2, int init_3, int init_4, int init_5, int ini
 
 int& ipv6::first ( )
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 const int& ipv6::first ( ) const
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 int& ipv6::second ( )
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 const int& ipv6::second ( ) const
 {
-  return self[2c];
+    return self.template value<2>();
 }
 
 int& ipv6::third ( )
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 const int& ipv6::third ( ) const
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 int& ipv6::fourth ( )
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 const int& ipv6::fourth ( ) const
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 int& ipv6::fifth ( )
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 const int& ipv6::fifth ( ) const
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 int& ipv6::sixth ( )
 {
-    return self[6c];
+    return self.template value<6>();
 }
 
 const int& ipv6::sixth ( ) const
 {
-    return self[6c];
+    return self.template value<6>();
 }
 
 int& ipv6::seventh ( )
 {
-    return self[7c];
+    return self.template value<7>();
 }
 
 const int& ipv6::seventh ( ) const
 {
-    return self[7c];
+    return self.template value<7>();
 }
 
 int& ipv6::eighth ( )
 {
-    return self[8c];
+    return self.template value<8>();
 }
 
 const int& ipv6::eighth ( ) const
 {
-    return self[8c];
+    return self.template value<8>();
 }
 
 int& ipv6::port ( )
 {
-    return self[9c];
+    return self.template value<9>();
 }
 
 const int& ipv6::port ( ) const
 {
-    return self[9c];
+    return self.template value<9>();
 }
 
 
@@ -122,15 +122,6 @@ const int& ipv6::port ( ) const
 
 
 std::ostream& operator << ( std::ostream& left, const ipv6& right )
-{
-    let str      = "[{}:{}:{}:{}:{}:{}:{}:{}]:{}"s.format(right[1c], right[2c], right[3c], right[4c], right[5c], right[6c], right[7c], right[8c], right.port());
-    let compress = str.find("(:|^)(0(?::0)*)(?::|$)"rgx);
-
-    if ( compress != "" )
-    {
-        let pos = str.find(compress);
-        str.erase(pos, pos + compress.size() - 1).insert(pos, "::");
-    }
-
-    return left << str;
+{ 
+    return left << "[{}:{}:{}:{}:{}:{}:{}:{}]:{}"s.format(right.first(), right.second(), right.third(), right.fourth(), right.fifth(), right.sixth(), right.seventh(), right.eighth(), right.port());
 }

@@ -79,8 +79,8 @@ class opencl::const_pointer
         template < class... expr > auto operator [] ( const boost::compute::detail::meta_kernel_variable      <expr...>& ) const;
         template < class... expr > auto operator [] ( const boost::compute::detail::buffer_iterator_index_expr<expr...>& ) const;
         template < class... expr > auto operator [] ( const boost::compute::detail::device_ptr_index_expr     <expr...>& ) const;
-        boost::compute::buffer get_buffer ( ) const;
-        size_t                 get_index  ( ) const;
+        const boost::compute::buffer get_buffer ( ) const;
+        size_t                       get_index  ( ) const;
 
     public: // Friend
         friend class pointer<type>;

@@ -8,7 +8,6 @@ class exception;
             class index_error;
             class key_error;
         class type_error;
-
     class runtime_error;
         class string_error;
             class encode_error;

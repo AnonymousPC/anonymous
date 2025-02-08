@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     struct io_initializer_t
     {

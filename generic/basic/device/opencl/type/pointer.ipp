@@ -133,7 +133,7 @@ auto opencl::const_pointer<type>::operator [] ( const boost::compute::detail::de
 }
 
 template < class type >
-boost::compute::buffer opencl::const_pointer<type>::get_buffer ( ) const
+const boost::compute::buffer opencl::const_pointer<type>::get_buffer ( ) const
 {
     return buf;
 }

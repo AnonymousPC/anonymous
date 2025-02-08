@@ -51,7 +51,7 @@ void file_stream::open ( path pth, file_mode auto... args )
 file_stream::mode_type file_stream::make_mode ( auto prm, auto... args )
 {
     // Check.
-    static_assert(aux::all_different<decltype(prm),decltype(args)...>, "modes must be unique");
+    static_assert(detail::all_different<decltype(prm),decltype(args)...>, "modes must be unique");
     return make_mode(mode_type(), prm, args...);
 }
 

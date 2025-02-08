@@ -1,0 +1,113 @@
+In file included from [01m[Kgeneric/io/file/file_class/file_csv.hpp:33[m[K,
+                 from [01m[Kgeneric/io/file/file.hpp:13[m[K,
+                 from [01m[Kgeneric/io/interface.hpp:121[m[K,
+                 from [01m[Kmain.cpp:3[m[K:
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:[m[K In member function '[01m[Kap::file_csv& ap::file_csv::[01;32m[Kopen[m[K(const ap::path&)[m[K':
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:227:25:[m[K [01;31m[Kerror: [m[K'[01m[Kclass std::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' has no member named '[01m[Kmax[m[K'
+  227 |         let align = raw.[01;31m[Kmax[m[K([] (const auto& line1, const auto& line2) { return line1.size() < line2.size(); }).size();
+      |                         [01;31m[K^~~[m[K
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:228:13:[m[K [01;31m[Kerror: [m[K'[01m[Kclass std::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' has no member named '[01m[Keach[m[K'
+  228 |         raw.[01;31m[Keach[m[K([&] (auto& line) { line.resize(align); });
+      |             [01;31m[K^~~~[m[K
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K [01;31m[Kerror: [m[Kno matching function for call to '[01m[Kap::array<ap::basic_string<char>, 2, ap::cpu>::array(std::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >&)[m[K'
+  230 |     self = matrix<string>(raw[01;31m[K)[m[K;
+      |                              [01;31m[K^[m[K
+In file included from [01m[Kgeneric/container/array/array.hpp:29[m[K,
+                 from [01m[Kgeneric/container/interface.hpp:227[m[K,
+                 from [01m[Kmain.cpp:2[m[K:
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:54:55:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class device2> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(const ap::array<type, dim, device2>&) requires (same_as<device, ap::cpu>) || (same_as<device2, ap::cpu>) [35m[K[with type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   54 |         template < class device2 > constexpr explicit [01;36m[Karray[m[K ( const array<type,dim,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
+      |                                                       [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:54:55:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' is not derived from '[01m[Kconst ap::array<ap::basic_string<char>, 2, device2>[m[K'
+  230 |     self = matrix<string>(raw[01;36m[K)[m[K;
+      |                              [01;36m[K^[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:51:53:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class type2> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(const ap::array<type2, dim, device>&) requires (constructible_from<type, type2>) && !(convertible_to<type2, type>) [35m[K[with type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   51 |         template < class type2 > constexpr explicit [01;36m[Karray[m[K ( const array<type2,dim,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
+      |                                                     [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:51:53:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' is not derived from '[01m[Kconst ap::array<type, 2>[m[K'
+  230 |     self = matrix<string>(raw[01;36m[K)[m[K;
+      |                              [01;36m[K^[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:50:53:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class type2> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(const ap::array<type2, dim, device>&) requires (convertible_to<type2, type>) && !(same_as<type, type2>) [35m[K[with type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   50 |         template < class type2 > constexpr          [01;36m[Karray[m[K ( const array<type2,dim,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2> );
+      |                                                     [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:50:53:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K [01;36m[Knote: [m[K  '[01m[Kstd::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' is not derived from '[01m[Kconst ap::array<type, 2>[m[K'
+  230 |     self = matrix<string>(raw[01;36m[K)[m[K;
+      |                              [01;36m[K^[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:46:28:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class ... auto:799> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:931 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_func_ints<type, decltype(ap::array<type, dim, device>::__ct ::args)...>) [35m[K[with auto:799 = {auto:931 ...}; type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   46 |         constexpr          [01;36m[Karray[m[K ( auto... args )                                      requires                    ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func_ints<type,decltype(args)...>;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:46:28:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:46:28:[m[K [01;36m[Knote: [m[Kconstraints not satisfied
+generic/container/array/array_class/array_nd.hpp: In substitution of '[01m[Ktemplate<class ... auto:799> constexpr ap::array<ap::basic_string<char>, 2, ap::cpu>::[01;32m[Karray[m[K(auto:931 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_func_ints<type, decltype(ap::array<type, dim, device>::__ct ::args)...>) [35m[K[with auto:799 = ap::basic_string<char>][m[K[m[K':
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K   required from here
+  230 |     self = matrix<string>(raw[01;36m[K)[m[K;
+      |                              [01;36m[K^[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:46:28:[m[K   required by the constraints of '[01m[Ktemplate<class type, int dim, class device> template<class ... auto:799> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:931 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_func_ints<type, decltype(ap::array<type, dim, device>::__ct ::args)...>)[m[K'
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:46:138:[m[K [01;36m[Knote: [m[Kthe expression '[01m[Ksizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim [with auto:799 = {std::vector<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > >, std::allocator<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > > > >}; dim = 2][m[K' evaluated to '[01m[Kfalse[m[K'
+   46 |         constexpr          array ( auto... args )                                      requires                    [01;36m[K( sizeof...(args) - 1 == dim )[m[K and detail::ints_until_last_func_ints<type,decltype(args)...>;
+      |                                                                                                                    [01;36m[K~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:45:28:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class ... auto:798> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:930 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_func<type, decltype(ap::array<type, dim, device>::__ct ::args)...>) [35m[K[with auto:798 = {auto:930 ...}; type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   45 |         constexpr          [01;36m[Karray[m[K ( auto... args )                                      requires                    ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func     <type,decltype(args)...>;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:45:28:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:45:28:[m[K [01;36m[Knote: [m[Kconstraints not satisfied
+generic/container/array/array_class/array_nd.hpp: In substitution of '[01m[Ktemplate<class ... auto:798> constexpr ap::array<ap::basic_string<char>, 2, ap::cpu>::[01;32m[Karray[m[K(auto:930 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_func<type, decltype(ap::array<type, dim, device>::__ct ::args)...>) [35m[K[with auto:798 = ap::basic_string<char>][m[K[m[K':
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K   required from here
+  230 |     self = matrix<string>(raw[01;36m[K)[m[K;
+      |                              [01;36m[K^[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:45:28:[m[K   required by the constraints of '[01m[Ktemplate<class type, int dim, class device> template<class ... auto:798> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:930 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_func<type, decltype(ap::array<type, dim, device>::__ct ::args)...>)[m[K'
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:45:138:[m[K [01;36m[Knote: [m[Kthe expression '[01m[Ksizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim [with auto:798 = {std::vector<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > >, std::allocator<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > > > >}; dim = 2][m[K' evaluated to '[01m[Kfalse[m[K'
+   45 |         constexpr          array ( auto... args )                                      requires                    [01;36m[K( sizeof...(args) - 1 == dim )[m[K and detail::ints_until_last_func     <type,decltype(args)...>;
+      |                                                                                                                    [01;36m[K~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:44:28:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class ... auto:797> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:929 ...) requires (copyable<type>) && sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_type<type, decltype(ap::array<type, dim, device>::__ct ::args)...>) [35m[K[with auto:797 = {auto:929 ...}; type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   44 |         constexpr          [01;36m[Karray[m[K ( auto... args )                                      requires copyable<type> and ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_type     <type,decltype(args)...>;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:44:28:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:44:28:[m[K [01;36m[Knote: [m[Kconstraints not satisfied
+generic/container/array/array_class/array_nd.hpp: In substitution of '[01m[Ktemplate<class ... auto:797> constexpr ap::array<ap::basic_string<char>, 2, ap::cpu>::[01;32m[Karray[m[K(auto:929 ...) requires (copyable<type>) && sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_type<type, decltype(ap::array<type, dim, device>::__ct ::args)...>) [35m[K[with auto:797 = ap::basic_string<char>][m[K[m[K':
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K   required from here
+  230 |     self = matrix<string>(raw[01;36m[K)[m[K;
+      |                              [01;36m[K^[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:44:28:[m[K   required by the constraints of '[01m[Ktemplate<class type, int dim, class device> template<class ... auto:797> constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:929 ...) requires (copyable<type>) && sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim && (ints_until_last_type<type, decltype(ap::array<type, dim, device>::__ct ::args)...>)[m[K'
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:44:138:[m[K [01;36m[Knote: [m[Kthe expression '[01m[Ksizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) - 1 == dim [with auto:797 = {std::vector<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > >, std::allocator<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > > > >}; dim = 2][m[K' evaluated to '[01m[Kfalse[m[K'
+   44 |         constexpr          array ( auto... args )                                      requires copyable<type> and [01;36m[K( sizeof...(args) - 1 == dim )[m[K and detail::ints_until_last_type     <type,decltype(args)...>;
+      |                                                                                                                    [01;36m[K~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:43:28:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Ktemplate<class ... auto:796>  requires (... && int_type<auto:796>) constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:928 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) == dim [35m[K[with auto:796 = {auto:928 ...}; type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   43 |         constexpr explicit [01;36m[Karray[m[K ( int_type auto... args )                             requires                    ( sizeof...(args)     == dim );
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:43:28:[m[K [01;36m[Knote: [m[K  template argument deduction/substitution failed:
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:43:28:[m[K [01;36m[Knote: [m[Kconstraints not satisfied
+generic/container/array/array_class/array_nd.hpp: In substitution of '[01m[Ktemplate<class ... auto:796>  requires (... && int_type<auto:796>) constexpr ap::array<ap::basic_string<char>, 2, ap::cpu>::[01;32m[Karray[m[K(auto:928 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) == dim [35m[K[with auto:796 = ap::basic_string<char>][m[K[m[K':
+[01m[Kgeneric/io/file/file_class/file_csv.cpp:230:30:[m[K   required from here
+  230 |     self = matrix<string>(raw[01;36m[K)[m[K;
+      |                              [01;36m[K^[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:43:28:[m[K   required by the constraints of '[01m[Ktemplate<class type, int dim, class device> template<class ... auto:796>  requires (... && int_type<auto:796>) constexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(auto:928 ...) requires  sizeof ... ((ap::array<type, dim, device>::__ct ::args ...)) == dim[m[K'
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:43:28:[m[K [01;36m[Knote: [m[Kthe expression '[01m[K(... && int_type<auto:796>) [with auto:796 = {std::vector<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > >, std::allocator<std::vector<ap::basic_string<char, ap::cpu>, std::allocator<ap::basic_string<char, ap::cpu> > > > >}][m[K' evaluated to '[01m[Kfalse[m[K'
+   43 |         constexpr explicit [01;36m[Karray[m[K ( int_type auto... args )                             requires                    ( sizeof...(args)     == dim );
+      |                            [01;36m[K^~~~~[m[K
+In file included from [01m[Kgeneric/container/array/array.hpp:47[m[K:
+[01m[Kgeneric/container/array/array_class/array_nd.ipp:198:11:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(std::initializer_list<ap::array<type, (dim - 1), device> >) requires  copyable<type> [35m[K[with type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+  198 | constexpr [01;36m[Karray<type,dim,device>[m[K::array ( std::initializer_list<array<type,dim-1,device>> init )
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.ipp:198:91:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' to '[01m[Kstd::initializer_list<ap::array<ap::basic_string<char>, 1, ap::cpu> >[m[K'
+  198 | constexpr array<type,dim,device>::array ( [01;36m[Kstd::initializer_list<array<type,dim-1,device>> init[m[K )
+      |                                           [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.ipp:27:11:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(ap::array<type, dim, device>&&) [35m[K[with type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   27 | constexpr [01;36m[Karray<type,dim,device>[m[K::array ( array&& init )
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.ipp:27:51:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' to '[01m[Kap::array<ap::basic_string<char>, 2, ap::cpu>&&[m[K'
+   27 | constexpr array<type,dim,device>::array ( [01;36m[Karray&& init[m[K )
+      |                                           [01;36m[K~~~~~~~~^~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.ipp:6:11:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr ap::array<type, dim, device>::[01;32m[Karray[m[K(const ap::array<type, dim, device>&) requires  copyable<type> [35m[K[with type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+    6 | constexpr [01;36m[Karray<type,dim,device>[m[K::array ( const array& init )
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.ipp:6:56:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from '[01m[Kstd::vector<std::vector<ap::basic_string<char>, std::allocator<ap::basic_string<char> > > >[m[K' to '[01m[Kconst ap::array<ap::basic_string<char>, 2, ap::cpu>&[m[K'
+    6 | constexpr array<type,dim,device>::array ( [01;36m[Kconst array& init[m[K )
+      |                                           [01;36m[K~~~~~~~~~~~~~^~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:36:28:[m[K [01;36m[Knote: [m[Kcandidate: '[01m[Kconstexpr ap::array<type, dim, device>::[01;32m[Karray[m[K() [35m[K[with type = ap::basic_string<char>; int dim = 2; device = ap::cpu][m[K[m[K'
+   36 |         constexpr          [01;36m[Karray[m[K ( ) = default;
+      |                            [01;36m[K^~~~~[m[K
+[01m[Kgeneric/container/array/array_class/array_nd.hpp:36:28:[m[K [01;36m[Knote: [m[K  candidate expects 0 arguments, 1 provided

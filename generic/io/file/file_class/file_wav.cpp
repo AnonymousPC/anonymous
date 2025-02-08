@@ -391,8 +391,8 @@ void file_wav::read ( file_stream& stream, file_wav::data_chunk& ck )
                              {
                                  float16_t n = 0;
                                  std::ranges::copy(val, reinterpret_cast<char*>(&n));
-                                 if constexpr ( aux::requires_byteswap<std::endian::little,int16_t> )
-                                    aux::byteswap(n);
+                                 if constexpr ( detail::requires_byteswap<std::endian::little,int16_t> )
+                                    detail::byteswap(n);
                                  return float(n);
                              }
 
@@ -400,8 +400,8 @@ void file_wav::read ( file_stream& stream, file_wav::data_chunk& ck )
                              {
                                  float32_t n = 0;
                                  std::ranges::copy(val, reinterpret_cast<char*>(&n));
-                                 if constexpr ( aux::requires_byteswap<std::endian::little,int16_t> )
-                                    aux::byteswap(n);
+                                 if constexpr ( detail::requires_byteswap<std::endian::little,int16_t> )
+                                    detail::byteswap(n);
                                  return float(n);
                              }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     constexpr int                date_to_int ( tuple<int,int,int> );
     constexpr tuple<int,int,int> int_to_date ( int );
@@ -17,8 +17,8 @@ constexpr time_point::time_point ( int_type auto YYYY, int_type auto MM, int_typ
     extends tuple<int,int,int,int,int,int,int,int,int> ( YYYY, MM, DD, hh, mm, ss, ms, us, ns )
 {
     #if debug
-        if ( aux::int_to_date(aux::date_to_int({YYYY, MM, DD})) != ap::tuple(YYYY, MM, DD) or
-             abs(hh) >= 24 or abs(mm) >= 60 or abs(ss) >= 60 or abs(ms) >= 1000 or abs(us) >= 1000 or abs(ns) >= 1000 or not aux::is_same_sign(hh, mm, ss, ms, us, ns) )
+        if ( detail::int_to_date(detail::date_to_int({YYYY, MM, DD})) != ap::tuple(YYYY, MM, DD) or
+             abs(hh) >= 24 or abs(mm) >= 60 or abs(ss) >= 60 or abs(ms) >= 1000 or abs(us) >= 1000 or abs(ns) >= 1000 or not detail::is_same_sign(hh, mm, ss, ms, us, ns) )
             throw value_error("date {} is out of domain [(Z), [1,12], [1,28|29|30|31], (+-24), (+-60), (+-60), (+-1000), (+-1000), (+-1000)",
                               "{:04d}-{:04d}-{:04d} {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d}"s.format(year(), month(), day(), hour(), minute(), second(), millisecond(), microsecond(), nanosecond()));
     #endif
@@ -45,97 +45,97 @@ constexpr time_point::operator std::chrono::time_point<clock_type> ( ) const
 
 constexpr int& time_point::year ( )
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 constexpr const int& time_point::year ( ) const
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 constexpr int& time_point::month ( )
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 constexpr const int& time_point::month ( ) const
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 constexpr int& time_point::day ( )
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 constexpr const int& time_point::day ( ) const
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 constexpr int& time_point::hour ( )
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 constexpr const int& time_point::hour ( ) const
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 constexpr int& time_point::minute ( )
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 constexpr const int& time_point::minute ( ) const
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 constexpr int& time_point::second ( )
 {
-    return self[6c];
+    return self.template value<6>();
 }
 
 constexpr const int& time_point::second ( ) const
 {
-    return self[6c];
+    return self.template value<6>();
 }
 
 constexpr int& time_point::millisecond ( )
 {
-    return self[7c];
+    return self.template value<7>();
 }
 
 constexpr const int& time_point::millisecond ( ) const
 {
-    return self[7c];
+    return self.template value<7>();
 }
 
 constexpr int& time_point::microsecond ( )
 {
-    return self[8c];
+    return self.template value<8>();
 }
 
 constexpr const int& time_point::microsecond ( ) const
 {
-    return self[8c];
+    return self.template value<8>();
 }
 
 constexpr int& time_point::nanosecond ( )
 {
-    return self[9c];
+    return self.template value<9>();
 }
 
 constexpr const int& time_point::nanosecond ( ) const
 {
-    return self[9c];
+    return self.template value<9>();
 }
 
 constexpr int time_point::weekday ( ) const
 {
-    return (aux::date_to_int(ap::tuple(year(), month(), day())) + 5) % 7 + 1;
+    return (detail::date_to_int(ap::tuple(year(), month(), day())) + 5) % 7 + 1;
 }
 
 
@@ -174,31 +174,31 @@ constexpr std::ostream& operator << ( std::ostream& left, const time_point& righ
 
 constexpr time_point operator + ( const time_point& left, const duration& right )
 {
-    let dur = hour(aux::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+    let dur = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
               duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond()) +
               right;
-    let dt = aux::int_to_date(dur.hour() / 24);
+    let dt = detail::int_to_date(dur.hour() / 24);
     dur.hour() %= 24;
 
-    return time_point(dt[1c], dt[2c], dt[3c], dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
+    return time_point(dt.template value<1>(), dt.template value<2>(), dt.template value<3>(), dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
 }
 
 constexpr time_point operator + ( const duration& left, const time_point& right )
 {
     let dur = left +
-              hour(aux::date_to_int({right.year(), right.month(), right.day()})) * 24 +
+              hour(detail::date_to_int({right.year(), right.month(), right.day()})) * 24 +
               duration(right.hour(), right.minute(), right.second(), right.millisecond(), right.microsecond(), right.nanosecond());
-    let dt = aux::int_to_date(dur.hour() / 24);
+    let dt = detail::int_to_date(dur.hour() / 24);
     dur.hour() %= 24;
 
-    return time_point(dt[1c], dt[2c], dt[3c], dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
+    return time_point(dt.template value<1>(), dt.template value<2>(), dt.template value<3>(), dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
 }
 
 constexpr duration operator - ( const time_point& left, const time_point& right )
 {
-    let dur1 = hour(aux::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+    let dur1 = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
                duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond());
-    let dur2 = hour(aux::date_to_int({right.year(), right.month(), right.day()})) * 24 +
+    let dur2 = hour(detail::date_to_int({right.year(), right.month(), right.day()})) * 24 +
                duration(right.hour(), right.minute(), right.second(), right.millisecond(), right.microsecond(), right.nanosecond());
 
     return dur1 - dur2;
@@ -206,13 +206,13 @@ constexpr duration operator - ( const time_point& left, const time_point& right 
 
 constexpr time_point operator - ( const time_point& left, const duration& right )
 {
-    let dur = hour(aux::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+    let dur = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
               duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond()) -
               right;
-    let dt = aux::int_to_date(dur.hour() / 24);
+    let dt = detail::int_to_date(dur.hour() / 24);
     dur.hour() %= 24;
 
-    return time_point(dt[1c], dt[2c], dt[3c], dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
+    return time_point(dt.template value<1>(), dt.template value<2>(), dt.template value<3>(), dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
 }
 
 constexpr time_point& operator += ( time_point& left, const duration& right )
@@ -247,7 +247,7 @@ constexpr int time_zone ( )
 
 // Auxiliary
 
-constexpr int aux::date_to_int ( tuple<int,int,int> date )
+constexpr int detail::date_to_int ( tuple<int,int,int> date )
 {
     using namespace literals;
 
@@ -265,7 +265,7 @@ constexpr int aux::date_to_int ( tuple<int,int,int> date )
            - 1;                                                                                             // Minus 0000.01.01.
 }
 
-constexpr tuple<int,int,int> aux::int_to_date ( int days )
+constexpr tuple<int,int,int> detail::int_to_date ( int days )
 {
     let y_400      = days / ( 303*365+97*366 ); // Chunk by 400 years.
     let y_400_more = days % ( 303*365+97*366 ); // Chunk by 400 years.

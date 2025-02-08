@@ -1,6 +1,4 @@
 #pragma once
-#include "../container/interface.hpp"
-#include "../math/interface.hpp"
 
 namespace ap
 {
@@ -121,13 +119,13 @@ namespace ap
     /// Include
     #include "utility/utility.hpp" // First.
     #include "file/file.hpp"
-    #include "http/http.hpp"
-    #include "pipe/pipe.hpp"
-    #include "tcp_udp_icmp/tcp_udp_icmp.hpp"
-    #include "serial_port/serial_port.hpp"
-    #include "usb/usb.hpp"
-    #include "websocket/websocket.hpp"
-    #include "initialize.hpp"
+    // #include "http/http.hpp"
+    // #include "pipe/pipe.hpp"
+    // #include "tcp_udp_icmp/tcp_udp_icmp.hpp"
+    // #include "serial_port/serial_port.hpp"
+    // #include "usb/usb.hpp"
+    // #include "websocket/websocket.hpp"
+    // #include "initialize.hpp"
 
     /// Literal
     namespace literals

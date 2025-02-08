@@ -178,7 +178,7 @@ http_buf::resolve_type http_buf::resolve ( const url& website )
 void http_buf::connect_without_proxy ( const url& website )
 {
     // Connect.
-    aux::try_for_each(resolve(website),
+    detail::try_for_each(resolve(website),
         [&] (const auto& ip)
         {
             try
@@ -317,7 +317,7 @@ void http_buf::disconnect ( )
 void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_website )
 {
     // Establish proxy tunnel.
-    aux::try_for_each(resolve(website),
+    detail::try_for_each(resolve(website),
         [&] (const auto& ip)
         {
             // Turn ip into string.
@@ -392,7 +392,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
 void http_buf::listen_to_port ( const url& portal )
 {
     // Listen.
-    aux::try_for_each(resolve(portal),
+    detail::try_for_each(resolve(portal),
         [&] (const auto& ip)
         {
             try

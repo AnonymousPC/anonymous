@@ -181,7 +181,7 @@ namespace detail
 
     // Implemention
 
-    template < int index >
+    template < int index = 1 >
     constexpr void tuplewise_print_impl ( auto& left, const auto& right )
     {
         if constexpr ( index == 1 )
@@ -196,7 +196,7 @@ namespace detail
             left << ')';
     }
 
-    template < int index >
+    template < int index = 1 >
     constexpr bool tuplewise_equal_impl ( const auto& left, const auto& right )
     {
         if constexpr ( index < tuple_size<left_type> )
@@ -205,7 +205,7 @@ namespace detail
             return get<index-1>(left) == get<index-1>(right);
     }
 
-    template < int index >
+    template < int index = 1 >
     constexpr auto tuplewise_compare_impl ( const auto& left, const auto& right )
     {
         if constexpr ( index < tuple_size<left_type> )
@@ -222,7 +222,7 @@ namespace detail
             return get<index-1>(left) <=> get<index-1>(right);
     }
 
-    template < int index >
+    template < int index = 1 >
     constexpr void tuplewise_plus_impl ( const auto& left, const auto& right, auto& t )
     {
         get<index-1>(t) = get<index-1>(left) + get<index-1>(right);
@@ -232,7 +232,7 @@ namespace detail
             tuplewise_plus_impl<index+1> ( left, right, t );
     }
 
-    template < int index >
+    template < int index = 1 >
     constexpr void tuplewise_minus_impl ( const auto& left, const auto& right, auto& t )
     {
         get<index-1>(t) = get<index-1>(left) - get<index-1>(right);
@@ -242,7 +242,7 @@ namespace detail
             tuplewise_minus_impl<index+1> ( left, right, t );
     }
 
-    template < int index >
+    template < int index = 1 >
     constexpr void tuplewise_each_multiply_impl ( const auto& left, const auto& right, auto& t )
     {
         get<index-1>(t) = get<index-1>(left) * right;
@@ -251,7 +251,7 @@ namespace detail
             tuplewise_each_multiply_impl<index+1> ( left, right, t );
     }
 
-    template < int index >
+    template < int index = 1 >
     constexpr void tuplewise_multiply_each_impl ( const auto& left, const auto& right, auto& t )
     {
         get<index-1>(t) = left * get<index-1>(right);
@@ -260,7 +260,7 @@ namespace detail
             tuplewise_multiply_each_impl<index+1> ( left, right, t );
     }
 
-    template < int index >
+    template < int index = 1 >
     constexpr void tuplewise_each_divide_impl ( const auto& left, const auto& right, auto& t )
     {
         get<index-1>(t) = get<index-1>(left) / right;
@@ -273,52 +273,52 @@ namespace detail
 
     constexpr auto& tuplewise_print ( auto& left, const auto& right )
     {
-        tuplewise_print_impl<1>(left, right);
+        tuplewise_print_impl(left, right);
         return left;
     }
 
     constexpr bool tuplewise_equal ( const auto& left, const auto& right )
     {
-        return tuplewise_equal_impl<1>(left, right);
+        return tuplewise_equal_impl(left, right);
     }
 
     constexpr auto tuplewise_compare ( const auto& left, const auto& right )
     {
-        return tuplesize_compare_impl<1>(left, right);
+        return tuplewise_compare_impl(left, right);
     }
 
     constexpr auto tuplewise_plus ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_plus_result<left_type,right_type>::type();
-        tuplewise_plus_impl ( left, right, t );
+        tuplewise_plus_impl(left, right, t);
         return t;
     }
 
     constexpr auto tuplewise_minus ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_minus_result<left_type,right_type>::type();
-        tuplewise_minus_impl ( left, right, t );
+        tuplewise_minus_impl(left, right, t);
         return t;
     }
 
     constexpr auto tuplewise_each_multiply ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_each_multiply_result<left_type,right_type>::type();
-        tuplewise_each_multiply_impl ( left, right, t );
+        tuplewise_each_multiply_impl(left, right, t);
         return t;
     }
 
     constexpr auto tuplewise_multiply_each ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_multiply_each_result<left_type,right_type>::type();
-        tuplewise_multiply_each_impl ( left, right, t );
+        tuplewise_multiply_each_impl(left, right, t);
         return t;
     }
 
     constexpr auto tuplewise_each_divide ( const auto& left, const auto& right )
     {
         let t = typename tuplewise_each_divide_result<left_type,right_type>::type();
-        tuplewise_each_divide_impl ( left, right, t );
+        tuplewise_each_divide_impl(left, right, t);
         return t;
     }
 

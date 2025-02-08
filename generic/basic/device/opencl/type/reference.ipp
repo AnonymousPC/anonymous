@@ -149,7 +149,7 @@ opencl::const_reference<type>::const_reference ( boost::compute::detail::buffer_
 }
 
 template < class type >
-boost::compute::buffer opencl::const_reference<type>::get_buffer ( ) const
+const boost::compute::buffer opencl::const_reference<type>::get_buffer ( ) const
 {
     return buf;
 }

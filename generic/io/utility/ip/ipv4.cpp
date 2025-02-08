@@ -25,52 +25,52 @@ ipv4::ipv4 ( int init_1, int init_2, int init_3, int init_4, int init_port )
 
 int& ipv4::first ( )
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 const int& ipv4::first ( ) const
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 int& ipv4::second ( )
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 const int& ipv4::second ( ) const
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 int& ipv4::third ( )
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 const int& ipv4::third ( ) const
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 int& ipv4::fourth ( )
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 const int& ipv4::fourth ( ) const
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 int& ipv4::port ( )
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 const int& ipv4::port ( ) const
 {
-    return self[5c];
+    return self.template value<5>();
 }
 
 
@@ -78,6 +78,5 @@ const int& ipv4::port ( ) const
 
 std::ostream& operator << ( std::ostream& left, const ipv4& right )
 {
-    return left << "{}.{}.{}.{}:{}"s
-                   .format(right.first(), right.second(), right.third(), right.fourth(), right.port());
+    return left << "{}.{}.{}.{}:{}"s.format(right.first(), right.second(), right.third(), right.fourth(), right.port());
 }

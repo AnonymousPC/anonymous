@@ -2,7 +2,7 @@
 
 /// Auxiliary
 
-namespace aux
+namespace detail
 {
     void try_for_each ( const auto&, auto, auto );
 }
@@ -181,7 +181,7 @@ void http_buf::set_client_request ( const url& website, const auto&... args )
 
 auto http_buf::make_client_mode ( const url& website, auto prm, auto... args )
 {
-    static_assert(aux::all_different<decltype(prm),decltype(args)...>, "modes must be unique");
+    static_assert(detail::all_different<decltype(prm),decltype(args)...>, "modes must be unique");
     return make_client_mode(client_mode_type(), website, std::forward<decltype(prm)>(prm), std::forward<decltype(args)>(args)...);
 }
 
@@ -292,7 +292,7 @@ void http_buf::set_server_response ( const url& portal, const auto&... args )
 
 auto http_buf::make_server_mode ( const url& portal, auto prm, auto... args )
 {
-    static_assert(aux::all_different<decltype(prm),decltype(args)...>, "modes must be unique");
+    static_assert(detail::all_different<decltype(prm),decltype(args)...>, "modes must be unique");
     return make_server_mode(client_mode_type(), portal, std::forward<decltype(prm)>(prm), std::forward<decltype(args)>(args)...);
 }
 
@@ -379,7 +379,7 @@ constexpr http_buf::mode_base<type>::mode_base ( type m )
 
 /// Auxiliary
 
-void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
+void detail::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
 {
     let success = false;
     let except  = array<string>();
@@ -407,7 +407,6 @@ void aux::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
     {
         let errors = '\n' +
                    ( except
-                   | std::views::transform([] (const auto& error) { return "    "s + abi::red + error + abi::white; })
                    | std::views::join_with('\n')
                    | std::ranges::to<string>()
                    );

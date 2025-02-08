@@ -67,8 +67,8 @@ constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::it
 {
     v_ptr->s_ptr->read(reinterpret_cast<char*>(v_ptr->buff.begin()), v_ptr->buff.size() * sizeof(input_type));
 
-    if constexpr ( aux::requires_byteswap<endian,input_type> )
-        v_ptr->buff.each([] (auto& val) { aux::byteswap(val); });
+    if constexpr ( detail::requires_byteswap<endian,input_type> )
+        v_ptr->buff.each([] (auto& val) { detail::byteswap(val); });
 
     return self;
 }
@@ -78,8 +78,8 @@ constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::it
 {
     v_ptr->s_ptr->read(reinterpret_cast<char*>(v_ptr->buff.begin()), v_ptr->buff.size() * sizeof(input_type));
 
-    if constexpr ( aux::requires_byteswap<endian,input_type> )
-        v_ptr->buff.each([] (auto& val) { aux::byteswap(val); });
+    if constexpr ( detail::requires_byteswap<endian,input_type> )
+        v_ptr->buff.each([] (auto& val) { detail::byteswap(val); });
 
     return self;
 }
@@ -117,8 +117,8 @@ constexpr ranges::chunked_binary_ostream_view<stream_type,output_type,endian>::c
     {
         std::ranges::move(t, buff.begin());
 
-        if constexpr ( aux::requires_byteswap<endian,output_type> )
-            buff.each([] (auto& val) { aux::byteswap(val); });
+        if constexpr ( detail::requires_byteswap<endian,output_type> )
+            buff.each([] (auto& val) { detail::byteswap(val); });
 
         s.write(reinterpret_cast<const char*>(buff.begin()), buff.size() * sizeof(output_type));
     }

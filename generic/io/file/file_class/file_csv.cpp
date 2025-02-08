@@ -212,9 +212,9 @@ file_csv& file_csv::open ( const path& pth )
                       {
                           let line = (stream_line
                                    | file_csv::views::lazy_split(',') // Only splits outside quotes.
-                                   | std::ranges::to<vector<string>>())
-                                   . each ([] (auto& str) { if ( str.begins_with('"') and str.ends_with('"') ) str.pop(1).pop(); })
-                                   . each ([] (auto& str) { str.replace("\"\"", '"'); });
+                                   | std::ranges::to<vector<string>>());
+                                   line. for_each ([] (auto& str) { if ( str.begins_with('"') and str.ends_with('"') ) str.pop(1).pop(); });
+                                   line. for_each ([] (auto& str) { str.replace("\"\"", '"'); });
                           if ( not line.empty() and line[-1].ends_with('\r') )
                               line[-1].pop();
                           return line;
@@ -242,8 +242,8 @@ file_csv& file_csv::save ( )
     // Write data.
     self | std::views::transform([] (auto line)
              {
-                 return line . each ([] (auto& str) { str.replace('"', "\"\""); })
-                             . each ([] (auto& str) { if ( str.contains('"') or str.contains(',') or str.contains('\n') ) str.insert(1,'"').push('"'); })
+                 return line . for_each ([] (auto& str) { str.replace('"', "\"\""); })
+                             . for_each ([] (auto& str) { if ( str.contains('"') or str.contains(',') or str.contains('\n') ) str.insert(1,'"').push('"'); })
                              | std::views::join_with(',')
                              | std::ranges::to<string>();
              })

@@ -27,7 +27,7 @@ void pipe_buf::open ( path pth, pipe_mode auto... args )
 {
     // Check.
     if constexpr ( sizeof...(args) >= 1 )
-        static_assert(aux::all_different<decltype(args)...>, "modes must be unique");
+        static_assert(detail::all_different<decltype(args)...>, "modes must be unique");
 
     // Find executable.
     let path_executable = boost::filesystem::path(pth.c_str());
@@ -50,8 +50,8 @@ void pipe_buf::open ( path pth, pipe_mode auto... args )
     }
 
     // Set put area.
-    setp(stdin_buff.begin(),
-         stdin_buff.begin() + stdin_buff.size());
+    setp(stdin_buff.data(),
+         stdin_buff.data() + stdin_buff.size());
 }
 
 

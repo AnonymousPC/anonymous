@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aux
+namespace detail
 {
     string get_boost_gil_tag_name ( auto );
 
@@ -11,7 +11,7 @@ namespace aux
     template < class value_type, class layout_type > void write_to_boost_gil_impl    ( const matrix<color>&, path, auto, int  );
 }
 
-string aux::get_boost_gil_tag_name ( auto tag )
+string detail::get_boost_gil_tag_name ( auto tag )
 {
     if constexpr ( std::same_as<decltype(tag),boost::gil::bmp_tag> )
         return "bmp";
@@ -29,7 +29,7 @@ string aux::get_boost_gil_tag_name ( auto tag )
         static_assert(false, "unrecognized tag");
 }
 
-void aux::read_from_boost_gil ( matrix<color>& image, path pth, auto tag, int& dep )
+void detail::read_from_boost_gil ( matrix<color>& image, path pth, auto tag, int& dep )
 {
     read_from_boost_gil_header(image, pth, tag, dep);
 
@@ -43,7 +43,7 @@ void aux::read_from_boost_gil ( matrix<color>& image, path pth, auto tag, int& d
                  throw file_error("cannot open {}-file {}: depth not supported (with read = {})", get_boost_gil_tag_name(tag), pth, dep);
 }
 
-void aux::read_from_boost_gil_header ( matrix<color>&, path pth, auto tag, int& dep )
+void detail::read_from_boost_gil_header ( matrix<color>&, path pth, auto tag, int& dep )
 {
     try
     {
@@ -89,7 +89,7 @@ void aux::read_from_boost_gil_header ( matrix<color>&, path pth, auto tag, int& 
 }
 
 template < class value_type, class layout_type >
-void aux::read_from_boost_gil_impl ( matrix<color>& image, path pth, auto tag, int dep )
+void detail::read_from_boost_gil_impl ( matrix<color>& image, path pth, auto tag, int dep )
 {
     using gil_pixel_type = boost::gil::pixel<value_type,layout_type>;
     using gil_image_type = boost::gil::image<gil_pixel_type,false,std::allocator<value_type>>;
@@ -138,7 +138,7 @@ void aux::read_from_boost_gil_impl ( matrix<color>& image, path pth, auto tag, i
         throw file_error("cannot open {}-file {}: depth not supported (with read = {})", get_boost_gil_tag_name(tag), pth, dep);
 }
 
-void aux::write_to_boost_gil ( const matrix<color>& image, path pth, auto tag, int dep )
+void detail::write_to_boost_gil ( const matrix<color>& image, path pth, auto tag, int dep )
 {
     dep == 1   ? write_to_boost_gil_impl<uint8_t, boost::gil::gray_layout_t>(image, pth, tag, dep) otherwise
     dep == 24  ? write_to_boost_gil_impl<uint8_t, boost::gil::rgb_layout_t >(image, pth, tag, dep) otherwise
@@ -151,7 +151,7 @@ void aux::write_to_boost_gil ( const matrix<color>& image, path pth, auto tag, i
 }
 
 template < class value_type, class layout_type >
-void aux::write_to_boost_gil_impl ( const matrix<color>& image, path pth, auto tag, int dep )
+void detail::write_to_boost_gil_impl ( const matrix<color>& image, path pth, auto tag, int dep )
 {
     using gil_pixel_type = boost::gil::pixel<value_type,layout_type>;
     using gil_image_type = boost::gil::image<gil_pixel_type,false,std::allocator<value_type>>;

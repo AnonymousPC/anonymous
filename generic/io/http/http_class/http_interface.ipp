@@ -173,7 +173,7 @@ void http_interface<type>::extract ( )
 template < class type >
 template < class result_type >
 auto& http_interface<type>::extract ( auto& arg1, auto&... args )
-    requires aux::same_as_only_one_of<result_type,decay<decltype(arg1)>,decay<decltype(args)>...>
+    requires ( same_as<result_type,decay<decltype(arg1)>> or ... or same_as<result_type,decay<decltype(args)>> )
 {
     if constexpr ( std::same_as<decay<decltype(arg1)>,result_type> )
         return arg1;
@@ -184,7 +184,7 @@ auto& http_interface<type>::extract ( auto& arg1, auto&... args )
 template < class type >
 template < class result_type >
 void http_interface<type>::extract ( auto& arg1, auto&... args )
-    requires ( not aux::same_as_only_one_of<result_type,decay<decltype(arg1)>,decay<decltype(args)>...> )
+    requires ( not ( same_as<result_type,decay<decltype(arg1)>> or ... or same_as<result_type,decay<decltype(args)>> ) )
 {
 
 }

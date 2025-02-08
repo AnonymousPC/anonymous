@@ -28,7 +28,7 @@ namespace detail
                 return static_cast<const collection_type&>(self).end();
             }
 
-            constexpr bool contains ( const type1& k )
+            constexpr bool contains ( const type1& k ) const
             {
                 return static_cast<const collection_type&>(self).contains(k);
             }

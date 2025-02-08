@@ -21,6 +21,56 @@
 #define ndarray_dimension                 decay<decltype(ndarray)>::dimension()
 #define ndarray_device_type      typename decay<decltype(ndarray)>::device_type
 
+constexpr array_type auto operator + ( const array_type auto& right )
+    requires requires { + std::declval<right_value_type>(); }
+{
+    using device     = left_device_type;
+    using value_type = decltype(+std::declval<right_value_type>());
+    let   output     = array<value_type,2,device>().resize(right.shape());
+
+    if constexpr ( right_dimension <= 2 )
+    {
+        let right_mdspan  = right .mdspan();
+        let output_mdspan = output.mdspan();
+        switch ( right_mdspan.index() )
+        {
+            case 1: device::linalg::unary_plus(right_mdspan.template value<1>(), output_mdspan.template value<1>()); break;
+            case 2: device::linalg::unary_plus(right_mdspan.template value<2>(), output_mdspan.template value<1>()); break;
+            default: throw linalg_error("invalid input");
+        }
+    }
+    else // Out of domain of linalg.
+        for ( int i in range(right.shape()[1]) )
+            output[i] = + right[i];
+
+    return output;
+}
+
+constexpr array_type auto operator - ( const array_type auto& right )
+    requires requires { + std::declval<right_value_type>(); }
+{
+    using device     = left_device_type;
+    using value_type = decltype(-std::declval<right_value_type>());
+    let   output     = array<value_type,2,device>().resize(right.shape());
+
+    if constexpr ( right_dimension <= 2 )
+    {
+        let right_mdspan  = right .mdspan();
+        let output_mdspan = output.mdspan();
+        switch ( right_mdspan.index() )
+        {
+            case 1: device::linalg::unary_minus(right_mdspan.template value<1>(), output_mdspan.template value<1>()); break;
+            case 2: device::linalg::unary_minus(right_mdspan.template value<2>(), output_mdspan.template value<1>()); break;
+            default: throw linalg_error("invalid input");
+        }
+    }
+    else // Out of domain of linalg.
+        for ( int i in range(right.shape()[1]) )
+            output[i] = - right[i];
+
+    return output;
+}
+
 constexpr array_type auto operator * ( const array_type auto& left, const array_type auto& right )
     requires ( ( number_type<left_value_type> or complex_type<left_value_type> ) and ( number_type<right_value_type> or complex_type<right_value_type> ) ) and
              ( left_dimension == 2 and right_dimension == 2 ) and
@@ -31,8 +81,9 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
         throw linalg_error("multiply matrix with inconsistent row and column (with left_shape = {}, right_shape = {})", left.shape(), right.shape());
     #endif
     
-    using device = left_device_type;
-    let output = array<multiply_result<left_value_type,right_value_type>,2,device>().resize(left.row(), right.column());
+    using device     = left_device_type;
+    using value_type = decltype(std::declval<left_value_type>() * std::declval<right_value_type>());
+    let   output     = array<value_type,2,device>(left.row(), right.column());
 
     let left_mdspan   = left  .mdspan();
     let right_mdspan  = right .mdspan();

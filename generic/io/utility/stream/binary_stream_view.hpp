@@ -46,10 +46,10 @@ class binary_ostream_view
     public: // As-stream
         constexpr binary_ostream_view& operator << ( const std::same_as<output_type> auto& );
 
-    public: // As-stream-aux
+    public: // As-stream-detail
         constexpr binary_ostream_view ( stream_type& );
 
-    private: // As-stream-aux
+    private: // As-stream-detail
         stream_type* s_ptr = nullptr; // Only in as-stream mode it will point to real stream.
 };
 

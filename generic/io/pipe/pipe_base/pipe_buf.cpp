@@ -68,38 +68,38 @@ int pipe_buf::underflow ( )
 
     // Post task.
     let stdout_error = boost::system::error_code();
-    stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
+    stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.data(), stdout_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
                                     if ( error == boost::system::error_code() )
                                     {
                                         stderr_pipe.cancel();
-                                        setg(stdout_buff.begin(),
-                                             stdout_buff.begin(),
-                                             stdout_buff.begin() + bytes);
+                                        setg(stdout_buff.data(),
+                                             stdout_buff.data(),
+                                             stdout_buff.data() + bytes);
                                     }
                                     else
                                         stdout_error = error;
                                 });
     let stderr_error = boost::system::error_code();
-    stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
+    stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.data(), stderr_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
                                     if ( error == boost::system::error_code() )
                                     {
                                         stdout_pipe.cancel();
-                                        setg(stderr_buff.begin(),
-                                             stderr_buff.begin(),
-                                             stderr_buff.begin() + bytes);
+                                        setg(stderr_buff.data(),
+                                             stderr_buff.data(),
+                                             stderr_buff.data() + bytes);
                                     }
                                     else
                                         stderr_error = error;
                                 });
 
     // Run task.
-    let stdout_task = std::execution::schedule(cpu_context.get_scheduler())
+    let stdout_task = std::execution::schedule(cpu::execution_context.get_scheduler())
                     | std::execution::then([&] { context_handle->run(); });
-    let stderr_task = std::execution::schedule(cpu_context.get_scheduler()) 
+    let stderr_task = std::execution::schedule(cpu::execution_context.get_scheduler()) 
                     | std::execution::then([&] { context_handle->run(); });
     std::execution::sync_wait(std::execution::when_all(stdout_task, stderr_task));
     context_handle->restart();
@@ -117,7 +117,7 @@ int pipe_buf::underflow ( )
         return traits_type::eof();
     else
     {
-        aux::try_for_each(std::views::iota(1, 3),
+        detail::try_for_each(std::views::iota(1, 3),
             [&] (int try_count)
             {
                 try_count == 1 ? throw pipe_error("failed to read from pipe (with stream = stdout) [[caused by {}: {}]]",
@@ -141,17 +141,17 @@ int pipe_buf::overflow ( int c )
         if ( stdin_buff == "" )
         {
             stdin_buff.resize(default_buffer_size);
-            setp(stdin_buff.begin(),
-                 stdin_buff.end());
+            setp(stdin_buff.data(),
+                 stdin_buff.data() + stdin_buff);
         }
         else
         {
             int bytes = stdin_pipe.write_some(boost::asio::const_buffer(stdin_buff.c_str(), stdin_buff.size()));
-            std::move(stdin_buff.begin() + bytes,
-                      stdin_buff.end(),
-                      stdin_buff.begin());
-            setp(stdin_buff.end() - bytes,
-                 stdin_buff.end());
+            std::move(stdin_buff.data() + bytes,
+                      stdin_buff.data() + stdin_buff.size(),
+                      stdin_buff.data());
+            setp(stdin_buff.data() + stdin_buff.size() - bytes,
+                 stdin_buff.data() + stdin_buff.size());
         }
 
         *pptr() = traits_type::to_int_type(c);
@@ -170,9 +170,9 @@ int pipe_buf::sync ( )
 {
     try
     {
-        boost::asio::write(stdin_pipe, boost::asio::const_buffer(stdin_buff.begin(), pptr() - stdin_buff.begin()));
-        setp(stdin_buff.begin(),
-             stdin_buff.end());
+        boost::asio::write(stdin_pipe, boost::asio::const_buffer(stdin_buff.data(), pptr() - stdin_buff.data()));
+        setp(stdin_buff.data(),
+             stdin_buff.data() + stdin_buff.size());
         return 0;
     }
     catch ( const boost::system::system_error& e )

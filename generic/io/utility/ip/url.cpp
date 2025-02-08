@@ -2,7 +2,7 @@
 
 /// Class url
 
-const ap::regex url::regex = ap::regex
+const std::regex url::regex = std::regex
 (
     R"(([a-z]+://))"                                                                                                                             // Essential: protocal.
     R"(([a-zA-Z0-9\-._~%]+:[a-zA-Z0-9\-._~%]+@)?)"                                                                                                      // Optional:  usermame-password.

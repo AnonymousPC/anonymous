@@ -43,8 +43,8 @@ class http_interface
 
     protected: // Auxiliary
         template < class result_type > static void  extract ( );
-        template < class result_type > static auto& extract ( auto& arg1, auto&... args ) requires       aux::same_as_only_one_of<result_type,decay<decltype(arg1)>,decay<decltype(args)>...>;
-        template < class result_type > static void  extract ( auto& arg1, auto&... args ) requires ( not aux::same_as_only_one_of<result_type,decay<decltype(arg1)>,decay<decltype(args)>...> );
+        template < class result_type > static auto& extract ( auto& arg1, auto&... args ) requires       ( same_as<result_type,decay<decltype(arg1)>> or ... or same_as<result_type,decay<decltype(args)>> );
+        template < class result_type > static void  extract ( auto& arg1, auto&... args ) requires ( not ( same_as<result_type,decay<decltype(arg1)>> or ... or same_as<result_type,decay<decltype(args)>> ) );
 
     private: // Data
         url  http_url  = "";

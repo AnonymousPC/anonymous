@@ -26,42 +26,42 @@ constexpr color::color ( float_type auto r, float_type auto g, float_type auto b
 
 constexpr float& color::red ( )
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 constexpr const float& color::red ( ) const
 {
-    return self[1c];
+    return self.template value<1>();
 }
 
 constexpr float& color::green ( )
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 constexpr const float& color::green ( ) const
 {
-    return self[2c];
+    return self.template value<2>();
 }
 
 constexpr float& color::blue ( )
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 constexpr const float& color::blue ( ) const
 {
-    return self[3c];
+    return self.template value<3>();
 }
 
 constexpr float& color::alpha ( )
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 constexpr const float& color::alpha ( ) const
 {
-    return self[4c];
+    return self.template value<4>();
 }
 
 

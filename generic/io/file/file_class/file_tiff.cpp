@@ -22,7 +22,7 @@ file_tiff& file_tiff::open ( const path& pth )
     file_interface::open(pth);
 
     // Read data.
-    aux::read_from_boost_gil(self, path(self), boost::gil::tiff_tag(), depth());
+    detail::read_from_boost_gil(self, path(self), boost::gil::tiff_tag(), depth());
 
     return self;
 }
@@ -33,7 +33,7 @@ file_tiff& file_tiff::save ( )
     file_interface::save();
 
     // Write data.
-    aux::write_to_boost_gil(self, path(self), boost::gil::tiff_tag(), depth());
+    detail::write_to_boost_gil(self, path(self), boost::gil::tiff_tag(), depth());
 
     return self;
 }

@@ -66,8 +66,8 @@ class opencl::const_reference
         const_reference ( boost::compute::buffer, size_t );
         const_reference ( boost::compute::detail::buffer_value<type> );
         operator          boost::compute::detail::buffer_value<type> ( ) const = delete;
-        boost::compute::buffer get_buffer ( ) const;
-        size_t                 get_index  ( ) const;
+        const boost::compute::buffer get_buffer ( ) const;
+        size_t                       get_index  ( ) const;
 };
 
 template < class type >               opencl::template       pointer<type> operator &   ( opencl::template       reference<type> );

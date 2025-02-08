@@ -12,15 +12,15 @@
 #define output_layout_type  typename decltype(output)::layout_type
 #define output_extents_type typename decltype(output)::extents_type
 
-constexpr void cpu::linalg::unary_plus ( const auto right, auto output )
-{
-    detail::eigen_map(output) = + detail::eigen_map<output_value_type>(right);
-}
+// constexpr void cpu::linalg::unary_plus ( const auto right, auto output )
+// {
+//     detail::eigen_map(output) = + detail::eigen_map<output_value_type>(right);
+// }
 
-constexpr void cpu::linalg::unary_minus ( const auto right, auto output )
-{
-    detail::eigen_map(output) = - detail::eigen_map<output_value_type>(right);
-}
+// constexpr void cpu::linalg::unary_minus ( const auto right, auto output )
+// {
+//     detail::eigen_map(output) = - detail::eigen_map<output_value_type>(right);
+// }
 
 constexpr void cpu::linalg::multiply ( const auto left, const auto right, auto output )
 {

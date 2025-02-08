@@ -5,9 +5,6 @@
 
 class opencl
 {
-    public: // Trait
-        struct device_tag { };
-
     public: // Execution
         using  execution_context_type = detail::opencl_queue_context;
         static execution_context_type execution_context;
@@ -27,7 +24,6 @@ class opencl
     public: // Memory
                                 using layout_type         = std::layout_left;
         template < class type > class accessor_type;
-        template < class type > class const_accessor_type;
 
     public: // Operator
         template < class type = void > class plus;
@@ -213,7 +209,7 @@ class opencl
 
 #include "algorithm/reduce.hpp"
 
-#include "linalg/linalg.hpp"
+//#include "linalg/linalg.hpp"
 
 opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());
 

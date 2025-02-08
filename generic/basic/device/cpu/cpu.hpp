@@ -2,9 +2,6 @@
 
 class cpu
 {
-    public: // Trait
-        struct device_tag { };
-
     public: // Execution
         using  execution_context_type = std::execution::static_thread_pool;
         static execution_context_type execution_context;
@@ -22,9 +19,8 @@ class cpu
         template < class type > using allocator = std::allocator<type>;
 
     public: // Memory
-                                using layout_type         = std::layout_right;
-        template < class type > class accessor_type;
-        template < class type > class const_accessor_type;
+                                using layout_type   = std::layout_right;
+        template < class type > using accessor_type = std::default_accessor<type>;
 
     public: // Operator
         template < class type = void > using plus          = std::plus         <type>;
@@ -195,6 +191,4 @@ cpu::execution_context_type cpu::execution_context = cpu::execution_context_type
 
 #include "type/stride_pointer.hpp"
 
-#include "memory/accessor_type.hpp"
-
-#include "linalg/linalg.hpp"
+//#include "linalg/linalg.hpp"

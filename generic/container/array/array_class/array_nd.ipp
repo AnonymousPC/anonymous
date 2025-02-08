@@ -658,68 +658,66 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr auto array<type,dim,device>::mdspan ( )
 {
-    using type1 = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,                       typename device::template accessor_type<type>>;
-    using type2 = std::mdspan<type,std::dextents<int,dim>,std::layout_stride,                                 typename device::template accessor_type<type>>;
-    using type3 = std::mdspan<type,std::dextents<int,dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<type>>;
-    if ( contiguous() )
-    {
-        let ptr = data();
-        let shp = std::dextents<int,dim>(shape());
-        let mds = type1(ptr, shp);
-        return variant<type1,type2,type3>(mds);
-    }
-    else if ( upper::get_attribute() == detail::rows_attribute or upper::get_attribute() == detail::columns_attribute )  
-    {
-        let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
-        let shp      = std::dextents<int,dim>(shape());
-        let strd     = std::array   <int,dim>();
-        let map_base = typename device::layout_type::template mapping<std::dextents<int,dim>>(shp);
-        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index-1) * upper::get_stride(); });
-        let mapping = typename type2::mapping_type(shp, strd);
-        let mds     = type2(ptr, mapping);
-        return variant<type1,type2,type3>(mds);   
-    }
-    else // if ( upper::attribute() == detail::transpose_attribute )
-    {
-        let ptr = upper::template get_host<2>().data();
-        let shp = std::dextents<int,dim>(shape());
-        let mds = type3(ptr, shp);
-        return variant<type1,type2,type3>(mds);
-    }
+    // using mdspan_type = std::mdspan<type,std::dextents<int,dim>,std::layout_stride,typename device::template accessor_type<type>>;
+    // let ptr = contiguous() ? data() otherwise 
+    //           upper::get_attribute() == rows_attribute or upper::get_attribute() == columns_attribute ? [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() ) otherwise
+              
+
+    //     let shp = std::dextents<int,dim>(shape());
+    //     let mds = type1(ptr, shp);
+    //     return variant<type1,type2,type3>(mds);
+    // }
+    // else if ( upper::get_attribute() == detail::rows_attribute or upper::get_attribute() == detail::columns_attribute )  
+    // {
+    //     let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
+    //     let shp      = std::dextents<int,dim>(shape());
+    //     let strd     = std::array   <int,dim>();
+    //     let map_base = typename device::layout_type::template mapping<std::dextents<int,dim>>(shp);
+    //     detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index-1) * upper::get_stride(); });
+    //     let mapping = typename type2::mapping_type(shp, strd);
+    //     let mds     = type2(ptr, mapping);
+    //     return variant<type1,type2,type3>(mds);   
+    // }
+    // else // if ( upper::attribute() == detail::transpose_attribute )
+    // {
+    //     let ptr = upper::template get_host<2>().data();
+    //     let shp = std::dextents<int,dim>(shape());
+    //     let mds = type3(ptr, shp);
+    //     return variant<type1,type2,type3>(mds);
+    // }
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr const auto array<type,dim,device>::mdspan ( ) const
 {
-    using type1 = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,                       typename device::template const_accessor_type<type>>;
-    using type2 = std::mdspan<type,std::dextents<int,dim>,std::layout_stride,                                 typename device::template const_accessor_type<type>>;
-    using type3 = std::mdspan<type,std::dextents<int,dim>,std::layout_transpose<typename device::layout_type>,typename device::template const_accessor_type<type>>;
-    if ( contiguous() )
-    {
-        let ptr = data();
-        let shp = std::dextents<int,dim>(shape());
-        let mds = type1(ptr, shp);
-        return variant<type1,type2,type3>(mds);
-    }
-    else if ( upper::get_attribute() == detail::rows_attribute or upper::get_attribute() == detail::columns_attribute )  
-    {
-        let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
-        let shp      = std::dextents<int,dim>(shape());
-        let strd     = std::array   <int,dim>();
-        let map_base = typename device::layout_type::template mapping<std::dextents<int,dim>>(shp);
-        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index-1) * upper::get_stride(); });
-        let mapping = typename type2::mapping_type(shp, strd);
-        let mds     = type2(ptr, mapping);
-        return variant<type1,type2,type3>(mds);   
-    }
-    else // if ( upper::attribute() == detail::transpose_attribute )
-    {
-        let ptr = upper::template get_host<2>().data();
-        let shp = std::dextents<int,dim>(shape());
-        let mds = type3(ptr, shp);
-        return variant<type1,type2,type3>(mds);
-    }
+    // using type1 = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+    // using type2 = std::mdspan<type,std::dextents<int,dim>,std::layout_stride,          typename device::template const_accessor_type<type>>;
+    // if ( contiguous() )
+    // {
+    //     let ptr = data();
+    //     let shp = std::dextents<int,dim>(shape());
+    //     let mds = type1(ptr, shp);
+    //     return variant<type1,type2,type3>(mds);
+    // }
+    // else if ( upper::get_attribute() == detail::rows_attribute or upper::get_attribute() == detail::columns_attribute )  
+    // {
+    //     let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
+    //     let shp      = std::dextents<int,dim>(shape());
+    //     let strd     = std::array   <int,dim>();
+    //     let map_base = typename device::layout_type::template mapping<std::dextents<int,dim>>(shp);
+    //     detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index-1) * upper::get_stride(); });
+    //     let mapping = typename type2::mapping_type(shp, strd);
+    //     let mds     = type2(ptr, mapping);
+    //     return variant<type1,type2,type3>(mds);   
+    // }
+    // else // if ( upper::attribute() == detail::transpose_attribute )
+    // {
+    //     let ptr = upper::template get_host<2>().data();
+    //     let shp = std::dextents<int,dim>(shape());
+    //     let mds = type3(ptr, shp);
+    //     return variant<type1,type2,type3>(mds);
+    // }
 }
 
 template < class type, int dim, class device >
@@ -799,7 +797,7 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>::const_reference array<type,dim,device>::get_value ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == dim );
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+    using mdspan = std::mdspan<const type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
     return ownership() ? mdspan(base::data(), info::shape())[offsets...] otherwise
                          upper::get_value(offsets...);
 }
@@ -819,7 +817,7 @@ template < class type, int dim, class device >
 constexpr array<type,dim,device>::const_pointer array<type,dim,device>::get_pointer ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == dim );
-    using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+    using mdspan = std::mdspan<const type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
     return ownership() ? base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...) otherwise
                          upper::get_pointer(offsets...);
 }

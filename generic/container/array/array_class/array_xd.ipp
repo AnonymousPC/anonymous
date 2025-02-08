@@ -696,7 +696,7 @@ template < class type, class device >
 constexpr array<type,max_dim,device>::const_reference array<type,max_dim,device>::get_value ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == max_dim );
-    using mdspan = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+    using mdspan = std::mdspan<const type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>;
     [[assume(ownership())]];
     return mdspan(base::data(), info::shape())[offsets...];
 }
@@ -714,7 +714,7 @@ template < class type, class device >
 constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::get_pointer ( int_type auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == max_dim );
-    using mdspan = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template const_accessor_type<type>>;
+    using mdspan = std::mdspan<const type,std::dextents<int,max_dim>,typename device::layout_type,typename device::template accessor_type<type>>;
     [[assume(ownership())]];
     return base::data() + mdspan(base::data(), info::shape()).mapping()(offsets...);
 }

@@ -22,10 +22,10 @@ class opencl::accessor_type
 };
 
 template < class type >
-class opencl::const_accessor_type
+class opencl::accessor_type<const type>
 {
     public: // Typedef
-        using offset_policy    = const_accessor_type;
+        using offset_policy    = accessor_type;
         using element_type     = type;
         using reference        = opencl::template const_reference<type>;
         using data_handle_type = opencl::template const_pointer  <type>;
@@ -41,6 +41,8 @@ class opencl::const_accessor_type
             return p + i;
         }
 };
+
+
 
 
 

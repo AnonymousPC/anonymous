@@ -3,9 +3,6 @@
 class tbb
     extends protected cpu
 {
-    public: // Trait
-        struct device_tag { };
-
     public: // Execution
         using  execution_context_type = execpools::tbb_thread_pool;
         static execution_context_type execution_context;
@@ -25,7 +22,6 @@ class tbb
     public: // Memory
         using cpu::layout_type;
         using cpu::accessor_type;
-        using cpu::const_accessor_type;
 
     public: // Operator
         using cpu::plus;

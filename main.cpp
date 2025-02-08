@@ -7,14 +7,29 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+auto& test(std::string&& val)
+{
+    val = "hello, world! out of bound";
+    return static_cast<std::string&>(val);
+}
+
 int main ( )
 {
-    let a = array<float,2,opencl>(10, 20);
-    for ( int i in range(a.size()) )    
-        a.flatten()[i] = i * 0.11;
-
-    print(a+a);
+    let str = std::string("Hello");
+    auto& result = test("hello");
+    print(result);
 }
+
+// ndarray<int,3> | ndarray<int,3>::transpose()
+// matrix1,       | matrix1::transpose()
+// matrix2,       | matrix2::transpose()
+// vector11
+// vector12
+// vector13
+
+
+// (2*3*4)
+// 2*matrix,
 
 
 

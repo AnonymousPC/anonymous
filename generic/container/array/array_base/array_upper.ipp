@@ -35,7 +35,7 @@ namespace detail
     template < class type, class device >
     constexpr bool array_upper<type,1,device>::empty ( ) const 
     {
-        return get_host().empty();
+        return size() == 0;
     }
 
     template < class type, class device >

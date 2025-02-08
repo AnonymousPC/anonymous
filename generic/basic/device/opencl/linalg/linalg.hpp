@@ -74,7 +74,7 @@ constexpr void opencl::linalg::plus ( const auto left, const auto right, auto ou
                 &opencl::execution_context.command_queue().get()
             );
         if ( status1 != clblast::StatusCode::kSuccess )
-            throw opencl_error("clblast error (with code = {}, message = {})", int(status1), detail::clblast_error_message(status));
+            throw opencl_error("clblast error (with code = {}, message = {})", int(status1), detail::clblast_error_message(status1));
 
         let status2 = 
             clblast::Omatcopy<detail::opencl_nativize<output_value_type>>(
@@ -87,7 +87,7 @@ constexpr void opencl::linalg::plus ( const auto left, const auto right, auto ou
                 &opencl::execution_context.command_queue().get()
             );
         if ( status2 != clblast::StatusCode::kSuccess )
-            throw opencl_error("clblast error (with code = {}, message = {})", int(status2), detail::clblast_error_message(status));
+            throw opencl_error("clblast error (with code = {}, message = {})", int(status2), detail::clblast_error_message(status2));
     }
 }
 

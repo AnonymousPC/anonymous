@@ -163,6 +163,7 @@ class opencl
             constexpr static void plus            ( const auto, const auto, auto );
             constexpr static void minus           ( const auto, const auto, auto );
             constexpr static void multiply        ( const auto, const auto, auto );
+            constexpr static void divide          ( const auto, const auto, auto );
             constexpr static void dot             ( const auto, const auto, auto );
             constexpr static void cross           ( const auto, const auto, auto );
             constexpr static void convolve        ( const auto, const auto, auto );
@@ -209,7 +210,7 @@ class opencl
 
 #include "algorithm/reduce.hpp"
 
-//#include "linalg/linalg.hpp"
+#include "linalg/linalg.hpp"
 
 opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());
 

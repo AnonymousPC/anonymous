@@ -160,6 +160,7 @@ class cpu
             constexpr static void plus            ( const auto, const auto, auto );
             constexpr static void minus           ( const auto, const auto, auto );
             constexpr static void multiply        ( const auto, const auto, auto );
+            constexpr static void divide          ( const auto, const auto, auto );
             constexpr static void dot             ( const auto, const auto, auto );
             constexpr static void cross           ( const auto, const auto, auto );
             constexpr static void convolve        ( const auto, const auto, auto );
@@ -191,4 +192,4 @@ cpu::execution_context_type cpu::execution_context = cpu::execution_context_type
 
 #include "type/stride_pointer.hpp"
 
-//#include "linalg/linalg.hpp"
+#include "linalg/linalg.hpp"

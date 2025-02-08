@@ -26,7 +26,7 @@ class opencl::accessor_type<const type>
 {
     public: // Typedef
         using offset_policy    = accessor_type;
-        using element_type     = type;
+        using element_type     = const type;
         using reference        = opencl::template const_reference<type>;
         using data_handle_type = opencl::template const_pointer  <type>;
 

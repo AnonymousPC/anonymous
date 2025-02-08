@@ -412,23 +412,51 @@ constexpr bool array<type,1,device>::contiguous ( ) const
 template < class type, class device >
 constexpr auto array<type,1,device>::mdspan ( )
 {
-    using mdspan_type = std::mdspan<type,std::dextents<int,1>,std::layout_stride,typename device::template accessor_type<type>>;
-    let ptr     = contiguous() ? data() otherwise upper::get_pointer(0);
-    let shp     = std::dextents<int,1> { size() };
-    let strd    = std::array   <int,1> { contiguous() ? 1 otherwise upper::get_stride() };
-    let mapping = typename mdspan_type::mapping_type(shp, strd);
-    let mds     = mdspan_type(ptr, mapping);
-    return mds;  
+    using type1 = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,                       typename device::template accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,1>,std::layout_stride,                                 typename device::template accessor_type<type>>;
+    using type3 = std::mdspan<type,std::dextents<int,1>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<type>>;
+
+    if ( contiguous() )
+    {
+        let ptr = data();
+        let shp = std::dextents<int,1> { size() };
+        let mds = type1(ptr, shp);
+        return variant<type1,type2,type3>(mds);
+    }
+
+    else
+    {
+        let ptr  = upper::get_pointer(0);
+        let shp  = std::dextents<int,1> { size() };
+        let strd = std::array   <int,1> { upper::get_stride() };
+        let mapping = typename type2::mapping_type(shp, strd);
+        let mds     = type2(ptr, mapping);
+        return variant<type1,type2,type3>(mds);
+    }
 }
 
 template < class type, class device >
 constexpr const auto array<type,1,device>::mdspan ( ) const
 {
-    using mdspan_type = std::mdspan<const type,std::dextents<int,1>,std::layout_stride,typename device::template accessor_type<type>>;
-    let ptr     = contiguous() ? data() otherwise upper::get_pointer(0);
-    let shp     = std::dextents<int,1> { size() };
-    let strd    = std::array   <int,1> { contiguous() ? 1 otherwise upper::get_stride() };
-    let mapping = typename mdspan_type::mapping_type(shp, strd);
-    let mds     = mdspan_type(ptr, mapping);
-    return mds;  
+    using type1 = std::mdspan<const type,std::dextents<int,1>,typename device::layout_type,                       typename device::template accessor_type<const type>>;
+    using type2 = std::mdspan<const type,std::dextents<int,1>,std::layout_stride,                                 typename device::template accessor_type<const type>>;
+    using type3 = std::mdspan<const type,std::dextents<int,1>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<const type>>;
+
+    if ( contiguous() )
+    {
+        let ptr = data();
+        let shp = std::dextents<int,1> { size() };
+        let mds = type1(ptr, shp);
+        return variant<type1,type2,type3>(mds);
+    }
+
+    else
+    {
+        let ptr  = upper::get_pointer(0);
+        let shp  = std::dextents<int,1> { size() };
+        let strd = std::array   <int,1> { upper::get_stride() };
+        let mapping = typename type2::mapping_type(shp, strd);
+        let mds     = type2(ptr, mapping);
+        return variant<type1,type2,type3>(mds);
+    }
 }

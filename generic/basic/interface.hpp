@@ -61,6 +61,7 @@
 #ifdef __cpp_lib_mdspan // #
     #include <mdspan>
     #include "std/detail/mdspan_layout_transpose.ipp"
+    #include "std/detail/mdspan_aligned_accessor.ipp"
 #else
     #include "std/mdspan.hpp"
 #endif
@@ -266,6 +267,7 @@ namespace ap
     /// Device
     class cpu;
     class cuda;
+    class eigen;
     class hip;
     class mps;
     class opencl;

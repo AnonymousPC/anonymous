@@ -170,7 +170,7 @@ template < class type >                                    concept        int_ty
 template < class type >                                    concept        unsigned_int_type                  = ( std::unsigned_integral<type> and ( not char_type<type> ) ) or requires { typename type::unsigned_int_tag; };
 template < class type >                                    concept        float_type                         = std::floating_point<type>                                    or requires { typename type::float_tag;        };
 template < class type >                                    concept        number_type                        = int_type<type> or float_type<type>                           or requires { typename type::number_tag;       };
-template < class type >                                    concept        complex_type                       = requires ( type c ) { c.real(); c.imag(); }                  or requires { typename type::complex_tag;      };
+template < class type >                                    concept        complex_type                       =                                                                 requires { typename type::complex_tag;      };
 
 
 

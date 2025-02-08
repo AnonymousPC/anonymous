@@ -3,6 +3,21 @@
 namespace detail
 {
     template < class type >
+    struct is_mdspan_helper
+    {
+        constexpr static const bool value = false;
+    };
+
+    template < class type, class extents_type, class layout_type, class accessor_type >
+    struct is_mdspan_helper<std::mdspan<type,extents_type,layout_type,accessor_type>>
+    {
+        constexpr static const bool value = true;
+    };
+
+    template < class type >
+    concept is_mdspan = is_mdspan_helper<remove_cvref<type>>::value;
+
+    template < class type >
     concept is_contiguous_layout = same_as<type,std::layout_right> or same_as<type,std::layout_left>;
 
     template < class type >
@@ -14,90 +29,32 @@ namespace detail
     template < class type >
     concept is_non_const_accessor = requires ( type::reference r, type::element_type e ) { r = e; };
 
-    template < class input_type >
-    struct cpu_nativize_helper
+    constexpr void trivial_linalg_unary_operator ( const auto right, auto output, auto op, int_type auto... idx )
     {
-        using type = input_type;
-    };
-
-    template < complex_type input_type >
-    struct cpu_nativize_helper<input_type>
-    {
-        using type = std::complex<typename input_type::value_type>;
-    };
-
-    template < class type >
-    using cpu_nativize = cpu_nativize_helper<type>::type;
-
-    template < class type = void >
-    constexpr auto eigen_map ( auto mds )
-    {
-        using value_type    = decltype(mds)::value_type;
-        using extents_type  = decltype(mds)::extents_type;
-        using layout_type   = decltype(mds)::layout_type;
-        using accessor_type = decltype(mds)::accessor_type; 
-
-        if constexpr ( is_void<type> or same_as<type,value_type> )
-            if constexpr ( extents_type::rank() == 1 )
-                if constexpr ( is_contiguous_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>>(mds.data_handle(), mds.size());
-                    else  
-                        return Eigen::Map<const Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>>(mds.data_handle(), mds.size());
-                else // if constexpr ( is_strided_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mds.data_handle(), mds.size(), mds.stride(0));
-                    else
-                        return Eigen::Map<const Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mds.data_handle(), mds.size(), mds.stride(0));
-            else if constexpr ( extents_type::rank() == 2 )
-                if constexpr ( is_contiguous_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1));
-                    else 
-                        return Eigen::Map<const Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1));
-                else if constexpr ( is_strided_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mds.stride(0), mds.stride(1)));
-                    else
-                        return Eigen::Map<const Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mds.stride(0), mds.stride(1)));
-                else // if constexpr ( is_transposed_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::ColMajor>>(mds.data_handle(), mds.extents().extent(1), mds.extents().extent(0));
-                    else
-                        return Eigen::Map<const Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::ColMajor>>(mds.data_handle(), mds.extents().extent(1), mds.extents().extent(0));
-            else // if constexpr ( extents_type::rank() >= 3 )
-                static_assert(false, "cannot map a mdspan with dimension >= 3 to eigen");
-
-        else   
-            if constexpr ( extents_type::rank() == 1 )
-                if constexpr ( is_contiguous_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>>(mds.data_handle(), mds.size()).template cast<type>();
-                    else  
-                        return Eigen::Map<const Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>>(mds.data_handle(), mds.size()).template cast<type>();
-                else // if constexpr ( is_strided_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mds.data_handle(), mds.size(), mds.stride(0)).template cast<type>();
-                    else
-                        return Eigen::Map<const Eigen::Vector<cpu_nativize<value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mds.data_handle(), mds.size(), mds.stride(0)).template cast<type>();
-            else if constexpr ( extents_type::rank() == 2 )
-                if constexpr ( is_contiguous_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1)).template cast<type>();
-                    else 
-                        return Eigen::Map<const Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1)).template cast<type>();
-                else if constexpr ( is_strided_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mds.stride(0), mds.stride(1))).template cast<type>();
-                    else
-                        return Eigen::Map<const Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mds.data_handle(), mds.extents().extent(0), mds.extents().extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mds.stride(0), mds.stride(1))).template cast<type>();
-                else // if constexpr ( is_transposed_layout<layout_type> )
-                    if constexpr ( is_non_const_accessor<accessor_type> )
-                        return Eigen::Map<      Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::ColMajor>>(mds.data_handle(), mds.extents().extent(1), mds.extents().extent(0)).template cast<type>();
-                    else
-                        return Eigen::Map<const Eigen::Matrix<cpu_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::ColMajor>>(mds.data_handle(), mds.extents().extent(1), mds.extents().extent(0)).template cast<type>();
-            else // if constexpr ( extents_type::rank() >= 3 )
-                static_assert(false, "cannot map a mdspan with dimension >= 3 to eigen");
+        if constexpr ( sizeof...(idx) == right_rank )   
+            output[idx...] = op(right[idx...]);
+        else
+            for ( int i in range(0, right.extents().extent(sizeof...(idx))-1) )
+                trivial_linalg_unary_operator(right, output, op, i);   
     }
+
+    constexpr void trivial_linalg_binary_operator ( const auto left, const auto right, auto output, auto op, int_type auto... idx )
+    {
+        if constexpr ( sizeof...(idx) == left_rank )
+            output[idx...] = op(left[idx...], right[idx...]);
+        else
+            for ( int i in range(0, left.extents().extent(sizeof...(idx))-1) )
+                trivial_linalg_binary_operator(left, right, output, op, i);
+    }
+
+    constexpr void trivial_linalg_matrix_multiply ( const auto left, const auto right, auto output )
+    {
+        static_assert ( left_rank == 2 and right_rank == 2 and output_rank == 2 );
+        for ( int i in range(0, left.extents().extent(0)-1) )
+            for ( int j in range(0, right.extents().extent(0)-1) )
+                for ( int k in range(0, left.extents().extent(1)-1) )
+                    output[i, j] += left[i, k] * right[k, j];            
+    }
+
     
 } // namespace detail

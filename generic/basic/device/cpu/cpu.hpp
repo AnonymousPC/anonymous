@@ -155,38 +155,45 @@ class cpu
     public: // Linalg
         struct linalg
         {
-            constexpr static void unary_plus      ( const auto,             auto );
-            constexpr static void unary_minus     ( const auto,             auto );
-            constexpr static void plus            ( const auto, const auto, auto );
-            constexpr static void minus           ( const auto, const auto, auto );
-            constexpr static void left_scale      ( const auto, const auto, auto );
-            constexpr static void right_scale     ( const auto, const auto, auto );
-            constexpr static void multiply        ( const auto, const auto, auto );
-            constexpr static void divide          ( const auto, const auto, auto );
-            constexpr static void dot             ( const auto, const auto, auto );
-            constexpr static void cross           ( const auto, const auto, auto );
-            constexpr static void convolve        ( const auto, const auto, auto );
+            constexpr static void unary_plus        ( const auto&,              auto& );
+            constexpr static void unary_minus       ( const auto&,              auto& );
+            constexpr static void plus              ( const auto&, const auto&, auto& );
+            constexpr static void minus             ( const auto&, const auto&, auto& );
+            constexpr static void left_scale        ( const auto&, const auto&, auto& );
+            constexpr static void right_scale       ( const auto&, const auto&, auto& );
+            constexpr static void multiply          ( const auto&, const auto&, auto& );
+            constexpr static void divide            ( const auto&, const auto&, auto& );
+            constexpr static void plus_equal        (       auto&, const auto& );
+            constexpr static void minus_equal       (       auto&, const auto& );
+            constexpr static void right_scale_equal (       auto&, const auto& );
+            constexpr static void multiply_equal    (       auto&, const auto& );
+            constexpr static void divide_equal      (       auto&, const auto& );
 
-            constexpr static auto transpose       ( const auto,             auto );
-            constexpr static auto hermitian       ( const auto,             auto );
+            constexpr static void dot               ( const auto&, const auto&, auto& );
+            constexpr static void cross             ( const auto&, const auto&, auto& );
+            constexpr static void tensor            ( const auto&, const auto&, auto& );
+            constexpr static void convolve          ( const auto&, const auto&, auto& );
 
-            constexpr static void det             ( const auto,             auto& );
-            constexpr static void eigen           ( const auto,             auto, auto );
-            constexpr static void eigen_value     ( const auto,             auto );
-            constexpr static void eigen_vector    ( const auto,             auto );
-            constexpr static void evd             ( const auto,             auto, auto, auto );
-            constexpr static void inverse         ( const auto,             auto );
-            constexpr static void lu              ( const auto,             auto, auto, auto );
-            constexpr static void qr              ( const auto,             auto, auto );
-            constexpr static void rank            ( const auto,             int& );
-            constexpr static void singular        ( const auto,             auto, auto, auto );
-            constexpr static void singular_value  ( const auto,             auto );
-            constexpr static void singular_vector ( const auto,             auto, auto );
-            constexpr static void svd             ( const auto,             auto, auto, auto );
-            constexpr static void tr              ( const auto,             auto& );
+            constexpr static auto transpose         ( const auto&,              auto& );
+            constexpr static auto hermitian         ( const auto&,              auto& );
 
-            constexpr static void fft             ( auto,                   auto );
-            constexpr static void ifft            ( auto,                   auto );
+            constexpr static void det               ( const auto&,              auto& );
+            constexpr static void eigen             ( const auto&,              auto&, auto& );
+            constexpr static void eigen_value       ( const auto&,              auto& );
+            constexpr static void eigen_vector      ( const auto&,              auto& );
+            constexpr static void evd               ( const auto&,              auto&, auto&, auto& );
+            constexpr static void inverse           ( const auto&,              auto );
+            constexpr static void lu                ( const auto&,              auto&, auto&, auto& );
+            constexpr static void qr                ( const auto&,              auto&, auto& );
+            constexpr static void rank              ( const auto&,              auto& );
+            constexpr static void singular          ( const auto&,              auto&, auto&, auto& );
+            constexpr static void singular_value    ( const auto&,              auto& );
+            constexpr static void singular_vector   ( const auto&,              auto&, auto& );
+            constexpr static void svd               ( const auto&,              auto&, auto&, auto& );
+            constexpr static void tr                ( const auto&,              auto& );
+
+            constexpr static void fft               ( auto,                     auto& );
+            constexpr static void ifft              ( auto,                     auto& );
         };
 };
 

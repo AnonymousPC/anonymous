@@ -1,98 +1,104 @@
 #pragma once
 
-#define left_type                     decltype(left  )
-#define left_value_type      typename decltype(left  )::value_type
-#define left_extents_type    typename decltype(left  )::extents_type
-#define left_layout_type     typename decltype(left  )::layout_type
-#define left_accessor_type   typename decltype(left  )::accessor_type
-#define left_rank                     decltype(left  )::extents_type::rank()
-#define right_type                    decltype(right )
-#define right_value_type     typename decltype(right )::value_type
-#define right_extents_type   typename decltype(right )::extents_type
-#define right_layout_type    typename decltype(right )::layout_type
-#define right_accessor_type  typename decltype(right )::accessor_type
-#define right_rank                    decltype(right )::rank()
-#define output_type                   decltype(output)
-#define output_value_type    typename decltype(output)::value_type
-#define output_layout_type   typename decltype(output)::layout_type
-#define output_extents_type  typename decltype(output)::extents_type
-#define output_rank                   decltype(output)::rank()
-#define output_accessor_type typename decltype(output)::accessor_type
+#define left_type                     decay<decltype(left  )>
+#define left_value_type      typename decay<decltype(left  )>::value_type
+#define left_extents_type    typename decay<decltype(left  )>::extents_type
+#define left_layout_type     typename decay<decltype(left  )>::layout_type
+#define left_accessor_type   typename decay<decltype(left  )>::accessor_type
+#define left_rank                     decay<decltype(left  )>::extents_type::rank()
+#define right_type                    decay<decltype(right )>
+#define right_value_type     typename decay<decltype(right )>::value_type
+#define right_extents_type   typename decay<decltype(right )>::extents_type
+#define right_layout_type    typename decay<decltype(right )>::layout_type
+#define right_accessor_type  typename decay<decltype(right )>::accessor_type
+#define right_rank                    decay<decltype(right )>::rank()
+#define output_type                   decay<decltype(output)>
+#define output_value_type    typename decay<decltype(output)>::value_type
+#define output_layout_type   typename decay<decltype(output)>::layout_type
+#define output_extents_type  typename decay<decltype(output)>::extents_type
+#define output_rank                   decay<decltype(output)>::rank()
+#define output_accessor_type typename decay<decltype(output)>::accessor_type
 
 #include "detail.hpp"
 
-constexpr void cpu::linalg::unary_plus ( const auto right, auto output )
+constexpr void cpu::linalg::unary_plus ( const auto& right, auto& output )
 {
-    if constexpr ( detail::is_contiguous_layout<right_layout_type > and
-                   detail::is_contiguous_layout<output_layout_type> )
-        std::transform(right.data_handle(), right.data_handle() + right.size(), output.data_handle(), [] (const auto& a) { return +a; });
-    else
-        detail::trivial_linalg_unary_operator(right, output, [] (const auto& a) { return +a; });
+    detail::eigen_map(output) = + detail::eigen_map<output_value_type>(right);
 }
 
-constexpr void cpu::linalg::unary_minus ( const auto right, auto output )
+constexpr void cpu::linalg::unary_minus ( const auto& right, auto& output )
 {
-    if constexpr ( detail::is_contiguous_layout<right_layout_type > and
-                   detail::is_contiguous_layout<output_layout_type> )
-        std::transform(right.data_handle(), right.data_handle() + right.size(), output.data_handle(), [] (const auto& a) { return -a; });
-    else
-        detail::trivial_linalg_unary_operator(right, output, [] (const auto& a) { return -a; });
+    detail::eigen_map(output) = - detail::eigen_map<output_value_type>(right);
 }
 
-constexpr void cpu::linalg::plus ( const auto left, const auto right, auto output )
+constexpr void cpu::linalg::plus ( const auto& left, const auto& right, auto& output )
 {
-    if constexpr ( detail::is_contiguous_layout<left_layout_type  > and
-                   detail::is_contiguous_layout<right_layout_type > and 
-                   detail::is_contiguous_layout<output_layout_type> )
-        std::transform(left.data_handle(), left.data_handle() + left.size(), right.data_handle(), output.data_handle(), std::plus<>());
-    else
-        detail::trivial_linalg_binary_operator(left, right, output, [] (const auto& a, const auto& b) { return a + b; });
+    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) + detail::eigen_map<output_value_type>(right);
 }
 
-constexpr void cpu::linalg::minus ( const auto left, const auto right, auto output )
+constexpr void cpu::linalg::minus ( const auto& left, const auto& right, auto& output )
 {
-    if constexpr ( detail::is_contiguous_layout<left_layout_type  > and
-                   detail::is_contiguous_layout<right_layout_type > and 
-                   detail::is_contiguous_layout<output_layout_type> )
-        std::transform(left.data_handle(), left.data_handle() + left.size(), right.data_handle(), output.data_handle(), std::minus<>());
-    else
-        detail::trivial_linalg_binary_operator(left, right, output, [] (const auto& a, const auto& b) { return a - b; });
+    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) - detail::eigen_map<output_value_type>(right);
 }
 
-constexpr void cpu::linalg::left_scale ( const auto left, const auto right, auto output )
+constexpr void cpu::linalg::left_scale ( const auto& left, const auto& right, auto& output )
 {
-    if constexpr ( detail::is_contiguous_layout<right_layout_type > and 
-                   detail::is_contiguous_layout<output_layout_type> )
-        std::transform(right.data_handle(), right.data_handle() + right.size(), output.data_handle(), [&] (const auto& a) { return left * a; });
-    else
-        detail::trivial_linalg_unary_operator(right, output, [&] (const auto& a) { return left * a; });
+    detail::eigen_map(output) = left * detail::eigen_map(right);
 }
 
-constexpr void cpu::linalg::right_scale ( const auto left, const auto right, auto output )
+constexpr void cpu::linalg::right_scale ( const auto& left, const auto& right, auto& output )
 {
-    if constexpr ( detail::is_contiguous_layout<left_layout_type  > and
-                  detail::is_contiguous_layout<output_layout_type> )
-        std::transform(left.data_handle(), left.data_handle() + left.size(), output.data_handle(), [&] (const auto& a) { return a * right; });
-    else
-        detail::trivial_linalg_unary_operator(left, output, [&] (const auto& a) { return a * right; });
+    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) * right;
 }
 
-constexpr void cpu::linalg::multiply ( const auto left, const auto right, auto output )
+constexpr void cpu::linalg::multiply ( const auto& left, const auto& right, auto& output )
 {
-    static_assert ( left_rank == 2 and ( right_rank == 1 or right_rank == 2 ) );
-    if constexpr ( right_rank == 1 )
-        detail::trivial_linalg_matrix_multiply_vector(left, right, output);
-    else
-        detail::trivial_linalg_matrix_multiply_matrix(left, right, output);
+    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) * detail::eigen_map<output_value_type>(right);
 }
 
-constexpr void cpu::linalg::divide ( const auto left, const auto right, auto output )
+constexpr void cpu::linalg::divide ( const auto& left, const auto& right, auto& output )
 {
-    if constexpr ( detail::is_contiguous_layout<right_layout_type > and
-                   detail::is_contiguous_layout<output_layout_type> )
-        std::transform(left.data_handle(), left.data_handle() + left.size(), output.data_handle(), [&] (const auto& a) { return a / right; });
-    else
-        detail::trivial_linalg_unary_operator(left, output, [&] (const auto& a) { return a / right; });
+    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) / right;
+}
+
+constexpr void cpu::linalg::plus_equal ( auto& left, const auto& right )
+{
+    detail::eigen_map(left) += detail::eigen_map<left_value_type>(right);
+}
+
+constexpr void cpu::linalg::minus_equal ( auto& left, const auto& right )
+{
+    detail::eigen_map(left) -= detail::eigen_map<left_value_type>(right);
+}
+
+constexpr void cpu::linalg::right_scale_equal ( auto& left, const auto& right )
+{
+    detail::eigen_map(left) *= right;
+}
+
+constexpr void cpu::linalg::multiply_equal ( auto& left, const auto& right )
+{
+    detail::eigen_map(left) *= detail::eigen_map<left_value_type>(right);
+}
+
+constexpr void cpu::linalg::divide_equal ( auto& left, const auto& right )
+{
+    detail::eigen_map(left) /= right;
+}
+
+constexpr void cpu::linalg::dot ( const auto& left, const auto& right, auto& output )
+{
+    output = detail::eigen_map<output_value_type>(left).dot(detail::eigen_map<output_value_type>(right));
+}
+
+constexpr void cpu::linalg::cross ( const auto& left, const auto& right, auto& output )
+{
+    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left).cross(detail::eigen_map<output_value_type>(right));
+}
+
+constexpr void cpu::linalg::convolve ( const auto& left, const auto& right, auto& output )
+{
+    static_assert(not true, "not coded yet");
 }
 
 #undef left_type

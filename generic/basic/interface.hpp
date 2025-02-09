@@ -188,26 +188,21 @@
 #include <boost/stacktrace.hpp>
 
 // Include [[third-party.eigen]]
+#ifdef debug_symbol
+    #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
+#else
+    #define eigen_assert(expr)
+#endif
 #if defined(__GNUC__) and not defined(__clang__)
-    #ifdef debug_symbol
-        #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
-    #else
-        #define eigen_assert(expr)
-    #endif
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wclass-memaccess"
     #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    #include <eigen3/Eigen/Eigen>
-    #include <eigen3/unsupported/Eigen/FFT>
+#endif
+#include <eigen3/Eigen/Eigen>
+#include <eigen3/unsupported/Eigen/FFT>
+#include <eigen3/unsupported/Eigen/CXX11/Tensor>
+#if defined(__GNUC__) and not defined(__clang__)
     #pragma GCC diagnostic pop
-#elifdef __clang__
-    #ifdef debug_symbol
-        #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
-    #else
-        #define eigen_assert(expr)
-    #endif
-    #include <eigen3/Eigen/Eigen>
-    #include <eigen3/unsupported/Eigen/FFT>
 #endif
 
 // Macro.end
@@ -267,7 +262,6 @@ namespace ap
     /// Device
     class cpu;
     class cuda;
-    class eigen;
     class hip;
     class mps;
     class opencl;

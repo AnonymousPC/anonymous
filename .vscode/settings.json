@@ -114,6 +114,7 @@
         "inplace_vector": "cpp",
         "stream_ref": "cpp",
         "ccomplex": "cpp",
-        "tensor": "cpp"
+        "tensor": "cpp",
+        "specialfunctions": "cpp"
     }
 }

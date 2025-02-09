@@ -222,11 +222,11 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
 {
     resize(cvt.shape());
     if ( cvt.ownership() )
-        device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
+        device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
     else if ( cvt.contiguous() )
-        device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type2(val); });
+        device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type(val); });
     else
-        device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin());
+        device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin(), [] (const auto& line) { return array<type,dim-1,device>(line); });
 }
 
 template < class type, int dim, class device >
@@ -237,11 +237,11 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
 {
     resize(cvt.shape());
     if ( cvt.ownership() )
-        device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
+        device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
     else if ( cvt.contiguous() )
-        device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type2(val); });
+        device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type(val); });
     else
-        device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin());
+        device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin(), [] (const auto& line) { return array<type,dim-1,device>(line); });
 }
 
 template < class type, int dim, class device >
@@ -668,18 +668,29 @@ constexpr auto array<type,dim,device>::mdspan ( )
         let mds = type1(ptr, shp);
         return variant<type1,type2,type3>(mds);
     }
-    else if ( upper::get_attribute() == detail::rows_attribute or upper::get_attribute() == detail::columns_attribute )  
+    else if ( upper::get_attribute() == detail::rows_attribute )  
     {
         let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
         let shp      = std::dextents<int,dim>(shape());
         let strd     = std::array   <int,dim>();
         let map_base = typename device::layout_type::template mapping<std::dextents<int,dim>>(shp);
-        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index-1) * upper::get_stride(); });
-        let mapping = typename type2::mapping_type(shp, strd);
-        let mds     = type2(ptr, mapping);
+        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index) * upper::get_stride(); });
+        let mp       = typename type2::mapping_type(shp, strd);
+        let mds      = type2(ptr, mp);
         return variant<type1,type2,type3>(mds);   
     }
-    else // if ( upper::attribute() == detail::transpose_attribute )
+    else if ( upper::get_attribute() == detail::columns_attribute )  
+    {
+        let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
+        let shp      = std::dextents<int,dim>(shape());
+        let strd     = std::array   <int,dim>();
+        let map_base = typename std::layout_transpose<typename device::layout_type>::template mapping<std::dextents<int,dim>>(shp);
+        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index) * upper::get_stride(); });
+        let mp      = typename type2::mapping_type(shp, strd);
+        let mds      = type2(ptr, mp);
+        return variant<type1,type2,type3>(mds);   
+    }
+    else // if ( upper::get_attribute() == detail::transpose_attribute )
     {
         let ptr = upper::template get_host<2>().data();
         let shp = std::dextents<int,dim>(shape());
@@ -702,18 +713,29 @@ constexpr const auto array<type,dim,device>::mdspan ( ) const
         let mds = type1(ptr, shp);
         return variant<type1,type2,type3>(mds);
     }
-    else if ( upper::get_attribute() == detail::rows_attribute or upper::get_attribute() == detail::columns_attribute )  
+    else if ( upper::get_attribute() == detail::rows_attribute )  
     {
         let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
         let shp      = std::dextents<int,dim>(shape());
         let strd     = std::array   <int,dim>();
         let map_base = typename device::layout_type::template mapping<std::dextents<int,dim>>(shp);
-        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index-1) * upper::get_stride(); });
-        let mapping = typename type2::mapping_type(shp, strd);
-        let mds     = type2(ptr, mapping);
+        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index) * upper::get_stride(); });
+        let mp       = typename type2::mapping_type(shp, strd);
+        let mds      = type2(ptr, mp);
         return variant<type1,type2,type3>(mds);   
     }
-    else // if ( upper::attribute() == detail::transpose_attribute )
+    else if ( upper::get_attribute() == detail::columns_attribute )  
+    {
+        let ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
+        let shp      = std::dextents<int,dim>(shape());
+        let strd     = std::array   <int,dim>();
+        let map_base = typename std::layout_transpose<typename device::layout_type>::template mapping<std::dextents<int,dim>>(shp);
+        detail::for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index) * upper::get_stride(); });
+        let mp       = typename type2::mapping_type(shp, strd);
+        let mds      = type2(ptr, mp);
+        return variant<type1,type2,type3>(mds);   
+    }
+    else // if ( upper::get_attribute() == detail::transpose_attribute )
     {
         let ptr = upper::template get_host<2>().data();
         let shp = std::dextents<int,dim>(shape());

@@ -187,9 +187,9 @@ constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device>&
 {
     resize(cvt.shape());
     if ( cvt.ownership() )
-        device::transform(cvt.array<type2,max_dim,device>::base::begin(), cvt.array<type2,max_dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
+        device::transform(cvt.array<type2,max_dim,device>::base::begin(), cvt.array<type2,max_dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
     else
-        device::transform(cvt.array<type2,max_dim,device>::upper::begin(), cvt.array<type2,max_dim,device>::upper::end(), self./*line-wise*/begin());
+        device::transform(cvt.array<type2,max_dim,device>::upper::begin(), cvt.array<type2,max_dim,device>::upper::end(), self./*line-wise*/begin(), [] (const auto& line) { return array<type,max_dim-1,device>(line); });
 }
 
 template < class type, class device >
@@ -201,7 +201,7 @@ constexpr array<type,max_dim,device>::array ( const array<type2,max_dim,device>&
     if ( cvt.ownership() )
         device::transform(cvt.array<type2,max_dim,device>::base::begin(), cvt.array<type2,max_dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type2(val); });
     else
-        device::transform(cvt.array<type2,max_dim,device>::upper::begin(), cvt.array<type2,max_dim,device>::upper::end(), self./*line-wise*/begin());
+        device::transform(cvt.array<type2,max_dim,device>::upper::begin(), cvt.array<type2,max_dim,device>::upper::end(), self./*line-wise*/begin(), [] (const auto& line) { return array<type,max_dim-1,device>(line); });
 }
 
 template < class type, class device >
@@ -609,9 +609,9 @@ constexpr auto array<type,max_dim,device>::mdspan ( )
 template < class type, class device >
 constexpr const auto array<type,max_dim,device>::mdspan ( ) const
 {
-    using type1 = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template accessor_type<const type>>;
-    using type2 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_stride,                                 typename device::template accessor_type<const type>>;
-    using type3 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<const type>>;
+    using type1 = std::mdspan<const type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template accessor_type<const type>>;
+    using type2 = std::mdspan<const type,std::dextents<int,max_dim>,std::layout_stride,                                 typename device::template accessor_type<const type>>;
+    using type3 = std::mdspan<const type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<const type>>;
     if ( contiguous() )
     {
         let ptr = data();

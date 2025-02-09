@@ -423,14 +423,13 @@ constexpr auto array<type,1,device>::mdspan ( )
         let mds = type1(ptr, shp);
         return variant<type1,type2,type3>(mds);
     }
-
     else
     {
         let ptr  = upper::get_pointer(0);
         let shp  = std::dextents<int,1> { size() };
         let strd = std::array   <int,1> { upper::get_stride() };
-        let mapping = typename type2::mapping_type(shp, strd);
-        let mds     = type2(ptr, mapping);
+        let mp   = typename type2::mapping_type(shp, strd);
+        let mds  = type2(ptr, mp);
         return variant<type1,type2,type3>(mds);
     }
 }
@@ -449,14 +448,13 @@ constexpr const auto array<type,1,device>::mdspan ( ) const
         let mds = type1(ptr, shp);
         return variant<type1,type2,type3>(mds);
     }
-
     else
     {
         let ptr  = upper::get_pointer(0);
         let shp  = std::dextents<int,1> { size() };
         let strd = std::array   <int,1> { upper::get_stride() };
-        let mapping = typename type2::mapping_type(shp, strd);
-        let mds     = type2(ptr, mapping);
+        let mp   = typename type2::mapping_type(shp, strd);
+        let mds  = type2(ptr, mp);
         return variant<type1,type2,type3>(mds);
     }
 }

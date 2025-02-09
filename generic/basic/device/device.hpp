@@ -2,7 +2,6 @@
 
 #include "cpu/cpu.hpp"
 #include "cuda/cuda.hpp"
-#include "eigen/eigen.hpp"
 #include "hip/hip.hpp"
 #include "mps/mps.hpp"
 #include "opencl/opencl.hpp"

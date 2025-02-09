@@ -9,11 +9,11 @@
 using namespace ap;
 int main ( )
 {
-    array<float,1,opencl> arr;
-    arr.resize(6);
-    for ( int i in range(6) )
-        arr[i] = i;
-    print(arr + arr);
+    array<float,2,opencl> arr;
+    arr.resize(2, 2);
+    for ( int i in range(4) )
+        arr.flatten()[i] = i;
+    print(arr * 10);
 }
 // TODO
 // 1. array里声明using vector = array<self> 因为file_scv extents matrix<string> extends cpu::vector extents ... 

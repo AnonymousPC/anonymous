@@ -174,9 +174,9 @@ constexpr array_type auto operator * ( const array_type auto& left, const auto& 
 
     switch ( left_mdspan.index() )
     {
-        case 1: device::linalg::multiply(left_mdspan.template value<1>(), right, output_mdspan.template value<1>()); break;
-        case 2: device::linalg::multiply(left_mdspan.template value<2>(), right, output_mdspan.template value<1>()); break;
-        case 3: device::linalg::multiply(left_mdspan.template value<3>(), right, output_mdspan.template value<1>()); break;
+        case 1: device::linalg::right_scale(left_mdspan.template value<1>(), right, output_mdspan.template value<1>()); break;
+        case 2: device::linalg::right_scale(left_mdspan.template value<2>(), right, output_mdspan.template value<1>()); break;
+        case 3: device::linalg::right_scale(left_mdspan.template value<3>(), right, output_mdspan.template value<1>()); break;
         default: throw linalg_error("invalid mdspan");
     }
 
@@ -194,9 +194,9 @@ constexpr array_type auto operator * ( const auto& left, const array_type auto& 
 
     switch ( right_mdspan.index() )
     {
-        case 1: device::linalg::multiply(left, right_mdspan.template value<1>(), output_mdspan.template value<1>()); break;
-        case 2: device::linalg::multiply(left, right_mdspan.template value<2>(), output_mdspan.template value<1>()); break;
-        case 3: device::linalg::multiply(left, right_mdspan.template value<3>(), output_mdspan.template value<1>()); break;
+        case 1: device::linalg::left_scale(left, right_mdspan.template value<1>(), output_mdspan.template value<1>()); break;
+        case 2: device::linalg::left_scale(left, right_mdspan.template value<2>(), output_mdspan.template value<1>()); break;
+        case 3: device::linalg::left_scale(left, right_mdspan.template value<3>(), output_mdspan.template value<1>()); break;
         default: throw linalg_error("invalid mdspan");
     }
 

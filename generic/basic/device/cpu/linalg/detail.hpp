@@ -47,7 +47,15 @@ namespace detail
                 trivial_linalg_binary_operator(left, right, output, op, i);
     }
 
-    constexpr void trivial_linalg_matrix_multiply ( const auto left, const auto right, auto output )
+    constexpr void trivial_linalg_matrix_multiply_vector ( const auto left, const auto right, auto output )
+    {
+        static_assert ( left_rank == 2 and right_rank == 1 and output_rank == 1 );
+        for ( int i in range(0, left.extents().extent(0)-1) )
+            for ( int j in range(left.extents().extent(1)-1) )  
+                output[i] += left[i, j] * right[j];
+    }
+
+    constexpr void trivial_linalg_matrix_multiply_matrix ( const auto left, const auto right, auto output )
     {
         static_assert ( left_rank == 2 and right_rank == 2 and output_rank == 2 );
         for ( int i in range(0, left.extents().extent(0)-1) )

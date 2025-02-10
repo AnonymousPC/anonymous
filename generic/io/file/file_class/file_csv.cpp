@@ -46,7 +46,7 @@ class file_csv::ranges::lazy_split_view<input_range,pattern>::iterator
 
 template < class input_range, class pattern >
 class file_csv::ranges::lazy_split_view<input_range,pattern>::iterator::value_type
-    extends public decltype(*std::declval<iterator>())
+    extends public decltype(*std::declval<iterator>()) // Only declaration to make value_type available.
 {
 
 };
@@ -212,9 +212,9 @@ file_csv& file_csv::open ( const path& pth )
                      {
                          let line = (stream_line
                                   | file_csv::views::lazy_split(',') // Only splits outside quotes.
-                                  | std::ranges::to<vector<string>>());
-                                  line. for_each ([] (auto& str) { if ( str.begins_with('"') and str.ends_with('"') ) str.pop(1).pop(); });
-                                  line. for_each ([] (auto& str) { str.replace("\"\"", '"'); });
+                                  | std::ranges::to<vector<string>>())
+                                  . for_each ([] (auto& str) { if ( str.begins_with('"') and str.ends_with('"') ) str.pop(1).pop(); })
+                                  . for_each ([] (auto& str) { str.replace("\"\"", '"'); });
                          if ( not line.empty() and line[-1].ends_with('\r') )
                              line[-1].pop();
                          return line;
@@ -223,13 +223,12 @@ file_csv& file_csv::open ( const path& pth )
 
     // Align.
     let align = 0;
-    if ( not raw.empty() )
-        align = raw.max([] (const auto& line1, const auto& line2) { return line1.size() < line2.size(); }).size();
+    if ( not raw_data.empty() )
+        align = raw_data.max([] (const auto& line1, const auto& line2) { return line1.size() < line2.size(); }).size();
 
     // Store.
-    self.resize(raw.size(), align);
-    for ( int i in range(raw.size()) )
-        self[i] = std::move(raw[i]);
+    self.resize(raw_data.size(), align);
+    std::ranges::move(raw_data | std::views::join, self.flatten().begin());
 
     return self;
 }

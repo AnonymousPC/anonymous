@@ -35,8 +35,8 @@ class ostream_view
         static_assert ( requires ( stream_type s, output_type t ) { s << t; } );
 
     public: // Interface
-        constexpr ostream_view ( std::from_range_t, std::ranges::input_range auto&& r, stream_type& )
-            requires std::same_as<output_type,decay<decltype(*r.begin())>>;
+        constexpr ostream_view ( std::from_range_t, input_range auto&& r, stream_type& )
+            requires same_as<output_type,range_value<decltype(r)>>;
 };
 
 
@@ -57,7 +57,7 @@ template < class output_type >
 class ostream
 {
     public:
-        constexpr ostream ( std::from_range_t, std::ranges::input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
+        constexpr ostream ( std::from_range_t, input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
             requires requires ( output_type t ) { s.get() << t; };
 };
 

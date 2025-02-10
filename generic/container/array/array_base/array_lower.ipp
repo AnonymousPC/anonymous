@@ -32,6 +32,16 @@ namespace detail
             static_assert(false, "invalid argument list");
     }
 
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
+    constexpr array_lower<type,dim,device>::array_lower ( const static_array<int,dim>& args )
+        extends transpose_view ( static_cast<array<type,dim,device>&>(self) )
+    {
+        rows_view   .template resize<rows_attribute   >(args, static_cast<array<type,dim,device>&>(self));
+        columns_view.template resize<columns_attribute>(args, static_cast<array<type,dim,device>&>(self));
+    }
+
+
     template < class type, int dim, class device > 
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>::iterator array_lower<type,dim,device>::begin ( )

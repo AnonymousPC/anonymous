@@ -35,7 +35,7 @@ constexpr basic_string<type,device>::operator view ( ) const
 }
 
 template < class type, class device >
-template < char_type type2 >
+template < class type2 >
 constexpr basic_string<type,device>::basic_string ( const basic_string<type2,device>& cvt )
 {
     try
@@ -62,7 +62,7 @@ constexpr basic_string<type,device>::basic_string ( const basic_string<type2,dev
 }
 
 template < class type, class device >
-template < char_type type2 >
+template < class type2 >
 constexpr basic_string<type,device>::basic_string ( const basic_string_view<type2,device>& cvt )
 {
     try

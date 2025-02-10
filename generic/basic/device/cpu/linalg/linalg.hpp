@@ -23,42 +23,42 @@
 
 constexpr void cpu::linalg::unary_plus ( const auto& right, auto& output )
 {
-    detail::eigen_map(output) = + detail::eigen_map<output_value_type>(right);
+    detail::eigen_map(output).noalias() = + detail::eigen_map<output_value_type>(right);
 }
 
 constexpr void cpu::linalg::unary_minus ( const auto& right, auto& output )
 {
-    detail::eigen_map(output) = - detail::eigen_map<output_value_type>(right);
+    detail::eigen_map(output).noalias() = - detail::eigen_map<output_value_type>(right);
 }
 
 constexpr void cpu::linalg::plus ( const auto& left, const auto& right, auto& output )
 {
-    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) + detail::eigen_map<output_value_type>(right);
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) + detail::eigen_map<output_value_type>(right);
 }
 
 constexpr void cpu::linalg::minus ( const auto& left, const auto& right, auto& output )
 {
-    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) - detail::eigen_map<output_value_type>(right);
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) - detail::eigen_map<output_value_type>(right);
 }
 
 constexpr void cpu::linalg::left_scale ( const auto& left, const auto& right, auto& output )
 {
-    detail::eigen_map(output) = left * detail::eigen_map(right);
+    detail::eigen_map(output).noalias() = left * detail::eigen_map(right);
 }
 
 constexpr void cpu::linalg::right_scale ( const auto& left, const auto& right, auto& output )
 {
-    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) * right;
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) * right;
 }
 
 constexpr void cpu::linalg::multiply ( const auto& left, const auto& right, auto& output )
 {
-    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) * detail::eigen_map<output_value_type>(right);
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) * detail::eigen_map<output_value_type>(right);
 }
 
 constexpr void cpu::linalg::divide ( const auto& left, const auto& right, auto& output )
 {
-    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left) / right;
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) / right;
 }
 
 constexpr void cpu::linalg::plus_equal ( auto& left, const auto& right )
@@ -93,7 +93,7 @@ constexpr void cpu::linalg::dot ( const auto& left, const auto& right, auto& out
 
 constexpr void cpu::linalg::cross ( const auto& left, const auto& right, auto& output )
 {
-    detail::eigen_map(output) = detail::eigen_map<output_value_type>(left).cross(detail::eigen_map<output_value_type>(right));
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left).cross(detail::eigen_map<output_value_type>(right));
 }
 
 constexpr void cpu::linalg::convolve ( const auto& left, const auto& right, auto& output )

@@ -4,6 +4,12 @@
 
 // Core
 
+path::path ( const char* p )
+    extends string ( p )
+{
+    
+}
+
 path::path ( string p )
     extends string ( std::move(p) )
 {

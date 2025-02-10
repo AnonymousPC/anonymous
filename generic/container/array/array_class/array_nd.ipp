@@ -141,7 +141,7 @@ constexpr array<type,dim,device>::array ( int_type auto... args )
 {
     #if debug
     if ( not detail::check_first_until_last_as_positive(args...) )
-        throw value_error("initialize array with negative shape {}", static_array<int,dim>{args...});
+        throw value_error("initialize array with negative shape {}", shape());
     #endif
 }
 
@@ -195,6 +195,61 @@ constexpr array<type,dim,device>::array ( auto... args )
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
+constexpr array<type,dim,device>::array ( static_array<int,dim> init_shape )
+    extends base  ( init_shape.product() ),
+            info  ( init_shape ),
+            lower ( init_shape )
+{
+    #if debug
+    if ( not init_shape.all([] (const auto& s) { return s >= 0; }) )
+        throw value_error("initialize array with negative shape {}", shape());
+    #endif
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 and dim <= max_dim - 1 )
+constexpr array<type,dim,device>::array ( static_array<int,dim> init_shape, const type& init_value )
+    requires copyable<type>
+    extends base  ( init_shape.product(), init_value ),
+            info  ( init_shape ),
+            lower ( init_shape )
+{
+    #if debug
+    if ( not init_shape.all([] (const auto& s) { return s >= 0; }) )
+        throw value_error("initialize array with negative shape {}", shape());
+    #endif
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 and dim <= max_dim - 1 )
+constexpr array<type,dim,device>::array ( static_array<int,dim> init_shape, function_type<type()> auto init_value )
+    extends base  ( init_shape.product() ),
+            info  ( init_shape ),
+            lower ( init_shape )
+{
+    #if debug
+    if ( not init_shape.all([] (const auto& s) { return s >= 0; }) )
+        throw value_error("initialize array with negative shape {}", shape());
+    #endif
+    device::generate(self.base::begin(), self.base::end(), init_value);
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 and dim <= max_dim - 1 )
+constexpr array<type,dim,device>::array ( static_array<int,dim> init_shape, detail::invocable_r_by_n_ints<type,dim> auto init_value )
+    extends base  ( init_shape.product() ),
+            info  ( init_shape ),
+            lower ( init_shape )
+{
+    #if debug
+    if ( not init_shape.all([] (const auto& s) { return s >= 0; }) )
+        throw value_error("initialize array with negative shape {}", shape());
+    #endif
+    detail::md_generate(self, shape(), init_value);
+}
+
+template < class type, int dim, class device >
+    requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1,device>> init )
     requires copyable<type>
 {
@@ -204,8 +259,8 @@ constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1
     if ( init.size() != 0 )
     {
         #if debug
-            if ( not std::ranges::all_of(init | std::views::adjacent<2>, [] (const auto& adj) { const auto& [a, b] = adj; return a.shape() == b.shape(); }) )
-                throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), init | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>>());
+        if ( not std::ranges::all_of(init | std::views::adjacent<2>, [] (const auto& adj) { const auto& [a, b] = adj; return a.shape() == b.shape(); }) )
+            throw value_error("initialize array with ambiguous shape (with initializer = {}, shape_list = {})", typeid(init), init | std::views::transform([] (const auto& subarr) { return subarr.shape(); }) | std::ranges::to<array<static_array<int,dim-1>>>());
         #endif
         let sub_shp = init.begin()[0].shape();
         detail::for_constexpr<2,dim>([&] <int index> { shp[index] = sub_shp[index-1]; });
@@ -216,64 +271,41 @@ constexpr array<type,dim,device>::array ( std::initializer_list<array<type,dim-1
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-template < class type2 >
-constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
-    requires convertible_to<type2,type> but ( not same_as<type,type2> )
-{
-    resize(cvt.shape());
-    if ( cvt.ownership() )
-        device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-    else if ( cvt.contiguous() )
-        device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type(val); });
-    else
-        device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin(), [] (const auto& line) { return array<type,dim-1,device>(line); });
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-template < class type2 >
-constexpr array<type,dim,device>::array ( const array<type2,dim,device>& cvt )
-    requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
-{
-    resize(cvt.shape());
-    if ( cvt.ownership() )
-        device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-    else if ( cvt.contiguous() )
-        device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type(val); });
-    else
-        device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin(), [] (const auto& line) { return array<type,dim-1,device>(line); });
-}
-
-template < class type, int dim, class device >
-    requires ( dim >= 2 and dim <= max_dim - 1 )
-template < class device2 >
-constexpr array<type,dim,device>::array ( const array<type,dim,device2>& cvt )
-    requires same_as<device,cpu> or same_as<device2,cpu>
-{
-    static_assert(same_as<typename device ::layout_type,std::layout_right> or same_as<typename device ::layout_type,std::layout_left>);
-    static_assert(same_as<typename device2::layout_type,std::layout_right> or same_as<typename device2::layout_type,std::layout_left>);
-
-    resize(cvt.shape());
-    if constexpr ( not same_as<device,cpu> )
-        if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
-            if ( cvt.ownership() )
-                device::copy(cvt.array<type,dim,device2>::base::begin(), cvt.array<type,dim,device2>::base::end(), self.base::begin());
-            else if ( cvt.contiguous() )
-                device::copy(cvt.array<type,dim,device2>::upper::data(), cvt.array<type,dim,device2>::upper::data() + cvt.array<type,dim,device2>::upper::size(), self.base::data());
-            else
-                device::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
-        else
-            device::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
-    else
-        if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
-            if ( cvt.ownership() )
-                device2::copy(cvt.array<type,dim,device2>::base::begin(), cvt.array<type,dim,device2>::base::end(), self.base::begin());
-            else if ( cvt.contiguous() )
-                device2::copy(cvt.array<type,dim,device2>::upper::data(), cvt.array<type,dim,device2>::upper::data() + cvt.array<type,dim,device2>::upper::size(), self.base::data());
+template < class type2, class device2 >
+constexpr array<type,dim,device>::array ( const array<type2,dim,device2>& cvt )
+    requires ( same_as<type,type2> or same_as<device,device2> ) and
+             convertible_to<type2,type> and
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
+    extends array ( cvt.shape() )
+{    
+    if constexpr ( same_as<type,type2> )
+        if constexpr ( same_as<device,cpu> )
+            if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
+                if ( cvt.ownership() )
+                    device2::copy(cvt.array<type,dim,device2>::base::begin(), cvt.array<type,dim,device2>::base::end(), self.base::begin());
+                else if ( cvt.contiguous() )
+                    device2::copy(cvt.array<type,dim,device2>::upper::data(), cvt.array<type,dim,device2>::upper::data() + cvt.array<type,dim,device2>::upper::size(), self.base::data());
+                else
+                    device2::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
             else
                 device2::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
         else
-            device2::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
+            if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
+                if ( cvt.ownership() )
+                    device::copy(cvt.array<type,dim,device2>::base::begin(), cvt.array<type,dim,device2>::base::end(), self.base::begin());
+                else if ( cvt.contiguous() )
+                    device::copy(cvt.array<type,dim,device2>::upper::data(), cvt.array<type,dim,device2>::upper::data() + cvt.array<type,dim,device2>::upper::size(), self.base::data());
+                else
+                    device::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
+            else
+                device::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
+    else
+        if ( cvt.ownership() )
+            device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+        else if ( cvt.contiguous() )
+            device::transform(cvt.array<type2,dim,device>::upper::data(), cvt.array<type2,dim,device>::upper::data() + cvt.array<type2,dim,device>::upper::size(), self.base::data(), [] (const auto& val) { return type(val); });
+        else
+            device::transform(cvt.array<type2,dim,device>::upper::begin(), cvt.array<type2,dim,device>::upper::end(), self./*line-wise*/begin(), [] (const auto& line) { return array<type,dim-1,device>(line); });
 }
 
 template < class type, int dim, class device >

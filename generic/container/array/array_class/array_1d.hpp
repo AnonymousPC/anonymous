@@ -35,22 +35,16 @@ class array<type,1,device>
 
     public: // Constructor
         constexpr explicit array ( int );
-        constexpr          array ( int, const type& )                        requires copyable<type>;
-        constexpr          array ( int, function_type<type()   > auto );
+        constexpr          array ( int, const type& )                   requires copyable<type>;
+        constexpr          array ( int, function_type<type()>    auto );
         constexpr          array ( int, function_type<type(int)> auto );
-        constexpr          array ( std::initializer_list<type> )             requires copyable<type>;
-        constexpr          array ( range<type> )                             requires copyable<type> and number_type<type>;
+        constexpr          array ( std::initializer_list<type> )        requires copyable<type>;
+        constexpr          array ( range<type> )                        requires copyable<type> and number_type<type>;
 
-    public: // Conversion (size)
-        template < int len > constexpr array ( const inplace_array<type,len,device>& );
-        template < int len > constexpr array ( const static_array <type,len,device>& );
-
-    public: // Conversion (type)
-        template < class type2 > constexpr          array ( const array<type2,1,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2>        );
-        template < class type2 > constexpr explicit array ( const array<type2,1,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
-
-    public: // Conversion (device)
-        template < class device2 > constexpr explicit array ( const array<type,1,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>; 
+    public: // Conversion
+        template < class type2,          class device2 > constexpr array ( const array        <type2,1,  device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
+        template < class type2, int len, class device2 > constexpr array ( const inplace_array<type2,len,device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
+        template < class type2, int len, class device2 > constexpr array ( const static_array <type2,len,device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
 
     public: // Memebr
         constexpr static int                  dimension     ( );
@@ -72,11 +66,11 @@ class array<type,1,device>
     public: // Member
         constexpr array& clear  ( );
         constexpr array& resize ( int );
-        constexpr array& resize ( static_array<int,1> );
         constexpr array& push   ( type );
         constexpr array& pop    ( int = -1 );
         constexpr array& insert ( int, type );
         constexpr array& erase  ( int, int );
+        
     public: // View
         constexpr       array<type,1,device>& flatten   ( )       = delete;
         constexpr const array<type,1,device>& flatten   ( ) const = delete;

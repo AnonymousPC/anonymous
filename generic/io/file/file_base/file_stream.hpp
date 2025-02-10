@@ -1,6 +1,7 @@
 #pragma once
 
-#define right_type typename std::decay<decltype(right)>::type
+template < class type >
+concept file_mode = requires { typename type::file_mode_tag; };
 
 class file_stream
     extends public std::fstream

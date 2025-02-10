@@ -109,14 +109,14 @@ constexpr array<type,1,device>::array ( int init_size, const type& init_value )
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( int init_size, const function_type<type()> auto init_value )
+constexpr array<type,1,device>::array ( int init_size, function_type<type()> auto init_value )
     extends array ( init_size )
 {
     device::generate(self.base::begin(), self.base::end(), init_value);
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( int init_size, const function_type<type(int)> auto init_value )
+constexpr array<type,1,device>::array ( int init_size, function_type<type(int)> auto init_value )
     extends array ( init_size )
 {
     for ( int i in range(init_size) )
@@ -140,61 +140,63 @@ constexpr array<type,1,device>::array ( range<type> init )
 }
 
 template < class type, class device >
-template < int len >
-constexpr array<type,1,device>::array ( const inplace_array<type,len,device>& cvt )
+template < class type2, class device2 >
+constexpr array<type,1,device>::array ( const array<type2,1,device2>& cvt )
+    requires ( same_as<type,type2> or same_as<device,device2> ) and
+             convertible_to<type2,type> and  
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
     extends array ( cvt.size() )
 {
-    device::copy(cvt.begin(), cvt.end(), self.base::begin());
-}
-
-template < class type, class device >
-template < int len >
-constexpr array<type,1,device>::array ( const static_array<type,len,device>& cvt )
-    extends array ( cvt.size() )
-{
-    device::copy(cvt.begin(), cvt.end(), self.base::begin());
-}
-
-template < class type, class device >
-template < class type2 >
-constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
-    requires convertible_to<type2,type> but ( not same_as<type,type2> )
-    extends array ( cvt.size() )
-{
-    if ( cvt.ownership() )
-        device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-    else
-        device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-}
-
-template < class type, class device >
-template < class type2 >
-constexpr array<type,1,device>::array ( const array<type2,1,device>& cvt )
-    requires constructible_from<type,type2> but ( not convertible_to<type2,type> )
-    extends array ( cvt.size() )
-{
-    if ( cvt.ownership() )
-        device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-    else
-        device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
-}
-
-template < class type, class device >
-template < class device2 >
-constexpr array<type,1,device>::array ( const array<type,1,device2>& cvt )
-    requires same_as<device,cpu> or same_as<device2,cpu>
-    extends array ( cvt.size() )
-{
-    if constexpr ( not same_as<device,cpu> )
+    if constexpr ( same_as<type,type2> )
+        if constexpr ( same_as<device,cpu> )
+            if ( cvt.ownership() )
+                device2::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
+            else
+                device2::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+        else // if constexpr ( same_as<device2,cpu> )
+            if ( cvt.ownership() )
+                device::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
+            else
+                device::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+    else // if constexpr ( not same_as<type,type2> )
         if ( cvt.ownership() )
-            device::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
+            device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
         else
-            device::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
-    else
-        if ( cvt.ownership() )
-            device2::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
-        else
-            device2::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+            device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+}
+
+template < class type, class device >
+template < class type2, int len, class device2 >
+constexpr array<type,1,device>::array ( const inplace_array<type2,len,device2>& cvt )
+    requires ( same_as<type,type2> or same_as<device,device2> ) and
+             convertible_to<type2,type> and  
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
+    extends array ( cvt.size() )
+{
+    if constexpr ( same_as<type,type2> )
+        if constexpr ( same_as<device,cpu> )
+            device2::copy(cvt.begin(), cvt.end(), self.base::begin());
+        else // if constexpr ( same_as<device2,cpu> )
+            device::copy(cvt.begin(), cvt.end(), self.base::begin());
+    else // if constexpr ( not same_as<type,type2> )
+        device::transform(cvt.begin(), cvt.end(), self.base::begin(), [] (const auto& val) { return type(val); });
+}
+
+template < class type, class device >
+template < class type2, int len, class device2 >
+constexpr array<type,1,device>::array ( const static_array<type2,len,device2>& cvt )
+    requires ( same_as<type,type2> or same_as<device,device2> ) and
+             convertible_to<type2,type> and  
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
+    extends array ( cvt.size() )
+{
+    if constexpr ( same_as<type,type2> )
+        if constexpr ( same_as<device,cpu> )
+            device2::copy(cvt.begin(), cvt.end(), self.base::begin());
+        else // if constexpr ( same_as<device2,cpu> )
+            device::copy(cvt.begin(), cvt.end(), self.base::begin());
+    else // if constexpr ( not same_as<type,type2> )
+        device::transform(cvt.begin(), cvt.end(), self.base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
@@ -327,12 +329,6 @@ constexpr array<type,1,device>& array<type,1,device>::resize ( int new_size )
 
     base::resize(new_size);
     return self;
-}
-
-template < class type, class device >
-constexpr array<type,1,device>& array<type,1,device>::resize ( static_array<int,1> new_shape )
-{
-    return resize(new_shape[1]);
 }
 
 template < class type, class device >

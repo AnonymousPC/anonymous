@@ -12,6 +12,14 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
+    constexpr array_info<type,dim,device>::array_info ( const static_array<int,dim>& args )
+        extends shp ( args )
+    {
+
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
     constexpr int array_info<type,dim,device>::size ( ) const
     {
         let s = 1;

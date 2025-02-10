@@ -30,6 +30,7 @@ namespace detail
 
         public: // Consturctor
             constexpr array_info ( const auto&... /*shape*/ );
+            constexpr array_info ( const static_array<int,dim>& /*shape*/ );
 
         public: // Member
             constexpr int                    size          ( ) const;

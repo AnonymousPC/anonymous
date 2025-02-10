@@ -43,8 +43,8 @@ class basic_string
         constexpr operator             view ( ) const;
 
     public: // Conversion (type)
-        template < char_type type2 > constexpr explicit basic_string ( const basic_string     <type2,device>& );
-        template < char_type type2 > constexpr explicit basic_string ( const basic_string_view<type2,device>& );
+        template < class type2 > constexpr explicit basic_string ( const basic_string     <type2,device>& );
+        template < class type2 > constexpr explicit basic_string ( const basic_string_view<type2,device>& );
 
     public: // Conversion (device)
         template < class device2 > constexpr explicit basic_string ( const basic_string     <type,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;

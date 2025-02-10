@@ -32,7 +32,7 @@ namespace ranges {
     [[no_unique_address]]
       __maybe_present<!forward_range<_Vp>,
 	__non_propagating_cache<iterator_t<_Vp>>> _M_outer_it; // See libc++/ranges_chunk.ipp
-    __non_propagating_cache<remove_cv_t<_InnerRange>> _M_inner; // See libc++/ranges_chunk.ipp
+    __non_propagating_cache<remove_cvref_t<_InnerRange>> _M_inner; // See libc++/ranges_chunk.ipp
     _Pattern _M_pattern = _Pattern();
 
     template<bool _Const> using _Base = __maybe_const<_Const, _Vp>;

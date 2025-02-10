@@ -40,18 +40,18 @@ class array<type,dim,device>
         constexpr          array& operator = (       array&& );
 
     public: // Constructor
-        constexpr explicit array ( int_type auto... args )                             requires                    ( sizeof...(args)     == dim );
-        constexpr          array ( auto... args )                                      requires copyable<type> and ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_type     <type,decltype(args)...>;
-        constexpr          array ( auto... args )                                      requires                    ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func     <type,decltype(args)...>;
-        constexpr          array ( auto... args )                                      requires                    ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func_ints<type,decltype(args)...>;
-        constexpr          array ( std::initializer_list<array<type,dim-1,device>> )   requires copyable<type>;
+        constexpr explicit array ( int_type auto... args )                                               requires                    ( sizeof...(args)     == dim );
+        constexpr          array ( auto... args )                                                        requires copyable<type> and ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_type     <type,decltype(args)...>;
+        constexpr          array ( auto... args )                                                        requires                    ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func     <type,decltype(args)...>;
+        constexpr          array ( auto... args )                                                        requires                    ( sizeof...(args) - 1 == dim ) and detail::ints_until_last_func_ints<type,decltype(args)...>;
+        constexpr          array ( static_array<int,dim> );
+        constexpr          array ( static_array<int,dim>, const type& )                                  requires copyable<type>;
+        constexpr          array ( static_array<int,dim>, function_type<type()> auto );
+        constexpr          array ( static_array<int,dim>, detail::invocable_r_by_n_ints<type,dim> auto );
+        constexpr          array ( std::initializer_list<array<type,dim-1,device>> )                     requires copyable<type>;
 
-    public: // Conversion (type)
-        template < class type2 > constexpr          array ( const array<type2,dim,device>& ) requires convertible_to<type2,type>     but ( not same_as<type,type2> );
-        template < class type2 > constexpr explicit array ( const array<type2,dim,device>& ) requires constructible_from<type,type2> but ( not convertible_to<type2,type> );
-
-    public: // Conversion (device)
-        template < class device2 > constexpr explicit array ( const array<type,dim,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
+    public: // Conversion
+        template < class type2, class device2 > constexpr array ( const array<type2,dim,device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
 
     public: // Member
         constexpr static int                       dimension     ( );
@@ -114,6 +114,6 @@ class array<type,dim,device>
         template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
 
     public: // ADL
-    template < class type2, class device2 = cpu > using vector = array<type2,1,device2>;
-    template < class type2, class device2 = cpu > using matrix = array<type2,2,device2>;
+        template < class type2, class device2 = cpu > using vector = array<type2,1,device2>;
+        template < class type2, class device2 = cpu > using matrix = array<type2,2,device2>;
 };

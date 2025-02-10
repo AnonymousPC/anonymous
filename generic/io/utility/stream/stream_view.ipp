@@ -100,8 +100,8 @@ constexpr bool ranges::istream_view<stream_type,input_type>::iterator::operator 
 // Interface
 
 template < class stream_type, class output_type >
-constexpr ranges::ostream_view<stream_type,output_type>::ostream_view ( std::from_range_t, std::ranges::input_range auto&& r, stream_type& s )
-    requires ( std::same_as<output_type,decay<decltype(*r.begin())>> )
+constexpr ranges::ostream_view<stream_type,output_type>::ostream_view ( std::from_range_t, input_range auto&& r, stream_type& s )
+    requires same_as<output_type,range_value<decltype(r)>>
 {
     for ( auto&& t in r )
         s << std::move(t);
@@ -122,7 +122,7 @@ constexpr auto views::istream ( auto& s )
 }
 
 template < class output_type >
-constexpr views::ostream<output_type>::ostream ( std::from_range_t, std::ranges::input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
+constexpr views::ostream<output_type>::ostream ( std::from_range_t, input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
     requires requires ( output_type t ) { s.get() << t; }
 {
     ranges::ostream_view<typename decay<decltype(s)>/*reference_wrapper*/::type/*stream_type*/,output_type>(std::from_range, std::move(r), s);

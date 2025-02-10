@@ -19,8 +19,7 @@ constexpr time_point::time_point ( int_type auto YYYY, int_type auto MM, int_typ
     #if debug
         if ( detail::int_to_date(detail::date_to_int({YYYY, MM, DD})) != ap::tuple(YYYY, MM, DD) or
              abs(hh) >= 24 or abs(mm) >= 60 or abs(ss) >= 60 or abs(ms) >= 1000 or abs(us) >= 1000 or abs(ns) >= 1000 or not detail::is_same_sign(hh, mm, ss, ms, us, ns) )
-            throw value_error("date {} is out of domain [(Z), [1,12], [1,28|29|30|31], (+-24), (+-60), (+-60), (+-1000), (+-1000), (+-1000)",
-                              "{:04d}-{:04d}-{:04d} {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d}"s.format(year(), month(), day(), hour(), minute(), second(), millisecond(), microsecond(), nanosecond()));
+            throw value_error("date {} is invalid", "{:04d}-{:04d}-{:04d} {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d}"s.format(year(), month(), day(), hour(), minute(), second(), millisecond(), microsecond(), nanosecond()));
     #endif
 }
 
@@ -37,7 +36,7 @@ constexpr time_point::time_point ( std::chrono::time_point<clock_type> cvt )
 template < class clock_type >
 constexpr time_point::operator std::chrono::time_point<clock_type> ( ) const
 {
-    return std::chrono::time_point<std::chrono::system_clock> ( std::chrono::nanoseconds ( self - date(1970, 1, 1) - ap::hour(time_zone()) ) );
+    return std::chrono::time_point<std::chrono::system_clock>(typename std::chrono::system_clock::duration(self - date(1970, 1, 1) - ap::hour(time_zone())));
 }
 
 

@@ -162,33 +162,35 @@ array<type,dimension> file_idx::read ( auto&& stream, const auto& shp )
     {
         if constexpr ( first )
             return views::binary_istream<type,std::endian::big>(stream/*non-view*/)
-                 | std::ranges::to<array<type>>(shp[1]);
+                 | std::ranges::to<array<type>>();
 
         else
             return stream/*chunked-binary-istream-view*/
-                 | std::ranges::to<array<type>>(shp[1]);
+                 | std::ranges::to<array<type>>();
     }
 
     else if constexpr ( dimension >= 2 )
     {
+        let sub_shp = vector(shp).pop(1);
+        let arr = array<type,dimension>(static_array<type,dimension-1>(shp);
+
         if constexpr ( first )
-            return array<type,dimension>(
-                   views::chunked_binary_istream<type,std::endian::big>(stream/*non-view*/, shp[2,-1].product())
+            std::ranges::copy(views::chunked_binary_istream<type,std::endian::big>(stream/*non-view*/, sub_shp.product())
                  | std::views::transform([&] (const auto& chunked_stream)
                      {
-                         return read<type,dimension-1,false>(chunked_stream, shp[2,-1]);
+                         return read<type,dimension-1,false>(chunked_stream, sub_shp);
                      })
-                 | std::ranges::to<array<array<type,dimension-1>>>(shp[1]));
+                 | std::ranges::to<array<array<type,dimension-1>>>());
 
         else
             return array<type,dimension>(
                    stream/*chunked-binary-istream-view*/
-                 | std::views::chunk(shp[2,-1].product())
+                 | std::views::chunk(sub_shp.product())
                  | std::views::transform([&] (const auto& chunked_stream)
                      {
-                         return read<type,dimension-1,false>(chunked_stream, shp[2,-1]);
+                         return read<type,dimension-1,false>(chunked_stream, sub_shp.product());
                      })
-                 | std::ranges::to<array<array<type,dimension-1>>>(shp[1]));
+                 | std::ranges::to<array<array<type,dimension-1>>>());
     }
 }
 
@@ -216,7 +218,7 @@ void file_idx::write ( auto&& stream, const auto& arr )
                 {
                     return write_aux(chunked_data);
                 })
-            | std::ranges::to<views::chunked_binary_ostream<type,std::endian::big>>(std::ref(stream), arr.shape()[2,-1].product());
+            | std::ranges::to<views::chunked_binary_ostream<type,std::endian::big>>(std::ref(stream), vector(arr.shape()).pop(1).product());
 }
 
 decltype(auto) file_idx::write_aux ( const auto& arr )

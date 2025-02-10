@@ -38,6 +38,7 @@ namespace detail
 
         public: // Constructor
             constexpr array_lower ( const auto&... /*shape*/ );
+            constexpr array_lower ( const static_array<int,dim>& /*shape*/ );
 
         public: // Member
             constexpr       iterator                  begin        ( );

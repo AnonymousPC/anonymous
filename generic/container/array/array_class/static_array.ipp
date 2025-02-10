@@ -74,25 +74,25 @@ constexpr static_array<type,len,device>::const_pointer static_array<type,len,dev
 template < class type, int len, class device >
 constexpr static_array<type,len,device>::iterator static_array<type,len,device>::begin ( ) 
 {
-    return base::begin();
+    return data();
 }
 
 template < class type, int len, class device >
 constexpr static_array<type,len,device>::const_iterator static_array<type,len,device>::begin ( ) const
 {
-    return base::begin();
+    return data();
 }
 
 template < class type, int len, class device >
 constexpr static_array<type,len,device>::iterator static_array<type,len,device>::end ( ) 
 {
-    return base::end();
+    return data() + size();
 }
 
 template < class type, int len, class device >
 constexpr static_array<type,len,device>::const_iterator static_array<type,len,device>::end ( ) const
 {
-    return base::end();
+    return data() + size();
 }
 
 template < class type, int len, class device >

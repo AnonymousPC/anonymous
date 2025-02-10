@@ -58,7 +58,11 @@ constexpr inplace_array<type,len,device>::inplace_array ( range<type> init )
     requires copyable<type>
     extends base ( init.begin(), init.end() )
 {
+
 }
+
+template < class type2, class device2 >
+
 
 template < class type, int len, class device >
 constexpr int inplace_array<type,len,device>::dimension ( )
@@ -105,25 +109,25 @@ constexpr inplace_array<type,len,device>::const_pointer inplace_array<type,len,d
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::iterator inplace_array<type,len,device>::begin ( ) 
 {
-    return base::begin();
+    return data();
 }
 
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::const_iterator inplace_array<type,len,device>::begin ( ) const
 {
-    return base::begin();
+    return data();
 }
 
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::iterator inplace_array<type,len,device>::end ( ) 
 {
-    return base::end();
+    return data() + size();
 }
 
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::const_iterator inplace_array<type,len,device>::end ( ) const
 {
-    return base::end();
+    return data() + size();
 }
 
 template < class type, int len, class device >

@@ -42,7 +42,7 @@ void file_stream::open ( path pth, file_mode auto... args )
 
     // Exception.
     if ( not std::fstream::good() )
-        throw file_error("failed to open file {}", pth);
+        throw file_error("cannot open file {}", pth);
 }
 
 
@@ -58,13 +58,13 @@ file_stream::mode_type file_stream::make_mode ( auto prm, auto... args )
 file_stream::mode_type file_stream::make_mode ( mode_type modes, auto prm, auto... args )
 {
     // Set.
-    if constexpr ( std::same_as<decltype(prm),read_only> )
+    if constexpr ( same_as<decltype(prm),read_only> )
         modes.read_only = prm.value;
-    else if constexpr ( std::same_as<decltype(prm),write_only> )
+    else if constexpr ( same_as<decltype(prm),write_only> )
         modes.write_only = prm.value;
-    else if constexpr ( std::same_as<decltype(prm),erase> )
+    else if constexpr ( same_as<decltype(prm),erase> )
         modes.erase = prm.value;
-    else if constexpr ( std::same_as<decltype(prm),append> )
+    else if constexpr ( same_as<decltype(prm),append> )
         modes.append = prm.value;
 
     // Continue.

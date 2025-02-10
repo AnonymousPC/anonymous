@@ -1,3 +1,4 @@
+#define dll 1
 #include "generic/basic/interface.hpp"
 #include "generic/container/interface.hpp"
 #include "generic/io/interface.hpp"
@@ -9,11 +10,8 @@ using namespace ap;
 
 int main ( )
 {
-    file_bmp f;
-    f.resize(1000, 2000);
-    for ( auto& val in f.flatten() )
-        val = red();
-    f.save();
+
+
 }
 // TODO
-// 1. array里声明using vector = array<self> 因为file_scv extents matrix<string> extends cpu::vector extents ... 
+// boost::compute能否跨设备copy不同类型数据

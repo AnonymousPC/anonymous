@@ -2,7 +2,8 @@
 
 template < class type, int len, class device >
 class inplace_array
-    extends public device::template inplace_vector<type,len>
+    extends public device::template inplace_vector<type,len>,
+            public array_algo<inplace_array<type,len,device>,type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -18,8 +19,8 @@ class inplace_array
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = base::iterator;
-        using  const_iterator  = base::const_iterator;
+        using  iterator        = pointer;
+        using  const_iterator  = const_pointer;
         using  device_type     = device;
         struct array_tag { };
 
@@ -37,6 +38,11 @@ class inplace_array
         constexpr          inplace_array ( int, function_type<type(int)> auto ) requires movable <type>;
         constexpr          inplace_array ( std::initializer_list<type> )        requires copyable<type>;
         constexpr          inplace_array ( range<type> )                        requires copyable<type>;
+
+    public: // Conversion
+        template < class type2,           class device2 > constexpr inplace_array ( const array        <type2,1,   device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
+        template < class type2, int len2, class device2 > constexpr inplace_array ( const inplace_array<type2,len2,device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
+        template < class type2, int len2, class device2 > constexpr inplace_array ( const static_array <type2,len2,device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
 
     public: // Memebr
         constexpr static int                  dimension     ( );
@@ -63,7 +69,17 @@ class inplace_array
         constexpr inplace_array& insert ( int, type ) requires movable<type>;
         constexpr inplace_array& erase  ( int, int )  requires movable<type>;
 
+    public: // View
+        constexpr       array<type,1,device>& flatten   ( )       = delete;
+        constexpr const array<type,1,device>& flatten   ( ) const = delete;
+        constexpr       array<type,1,device>& transpose ( )       = delete;
+        constexpr const array<type,1,device>& transpose ( ) const = delete;
+
     public: // Memory
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
+
+    public: // Mdspan
+        constexpr       auto mdspan ( );
+        constexpr const auto mdspan ( ) const;
 };

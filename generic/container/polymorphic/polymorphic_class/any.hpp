@@ -8,7 +8,7 @@ class any
     
     public: // Core
         constexpr any ( ) = default;
-        constexpr any ( copyable auto );
+        constexpr any ( auto );
 
     public: // Member
                                       constexpr       bool            empty ( ) const;

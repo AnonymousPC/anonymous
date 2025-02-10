@@ -5,7 +5,7 @@ constexpr array_type auto operator + ( const array_type auto& right )
 {
     using device        = right_device_type;
     using value_type    = decltype(+std::declval<right_value_type>());
-    let   output        = array<value_type,right_dimension,device>().resize(right.shape());
+    let   output        = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
     let   right_mdspan  = right .mdspan();
     let   output_mdspan = output.mdspan();
 
@@ -25,7 +25,7 @@ constexpr array_type auto operator - ( const array_type auto& right )
 {
     using device        = right_device_type;
     using value_type    = decltype(-std::declval<right_value_type>());
-    let   output        = array<value_type,right_dimension,device>().resize(right.shape());
+    let   output        = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
     let   right_mdspan  = right .mdspan();
     let   output_mdspan = output.mdspan();
 
@@ -52,7 +52,7 @@ constexpr array_type auto operator + ( const array_type auto& left, const array_
     
     using device        = left_device_type;
     using value_type    = decltype(std::declval<left_value_type>() + std::declval<right_value_type>());
-    let   output        = array<value_type,left_dimension,device>().resize(left.shape());
+    let   output        = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     let   left_mdspan   = left  .mdspan();
     let   right_mdspan  = right .mdspan();
     let   output_mdspan = output.mdspan();
@@ -86,7 +86,7 @@ constexpr array_type auto operator - ( const array_type auto& left, const array_
     
     using device        = left_device_type;
     using value_type    = decltype(std::declval<left_value_type>() - std::declval<right_value_type>());
-    let   output        = array<value_type,left_dimension,device>().resize(left.shape());
+    let   output        = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     let   left_mdspan   = left  .mdspan();
     let   right_mdspan  = right .mdspan();
     let   output_mdspan = output.mdspan();
@@ -113,7 +113,7 @@ constexpr array_type auto operator * ( const auto& left, const array_type auto& 
 {    
     using device        = right_device_type;
     using value_type    = decltype(std::declval<left_type>() * std::declval<right_value_type>());
-    let   output        = array<value_type,right_dimension,device>().resize(right.shape());
+    let   output        = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
     let   right_mdspan  = right .mdspan();
     let   output_mdspan = output.mdspan();
 
@@ -133,7 +133,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const auto& 
 {    
     using device        = left_device_type;
     using value_type    = decltype(std::declval<left_value_type>() * std::declval<right_type>());
-    let   output        = array<value_type,left_dimension,device>().resize(left.shape());
+    let   output        = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     let   left_mdspan   = left  .mdspan();
     let   output_mdspan = output.mdspan();
 
@@ -187,7 +187,7 @@ constexpr array_type auto operator / ( const array_type auto& left, const auto& 
 {    
     using device        = left_device_type;
     using value_type    = decltype(std::declval<left_value_type>() / std::declval<right_type>());
-    let   output        = array<value_type,left_dimension,device>().resize(left.shape());
+    let   output        = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     let   left_mdspan   = left  .mdspan();
     let   output_mdspan = output.mdspan();
 
@@ -282,7 +282,7 @@ constexpr array_type auto& operator *= ( array_type auto& left, const auto& righ
     return left;
 }
 
-constexpr array_type auto& operator * ( array_type auto& left, const array_type auto& right )
+constexpr array_type auto& operator *= ( array_type auto& left, const array_type auto& right )
     requires ( ( number_type<left_value_type> or complex_type<left_value_type> ) and ( number_type<right_value_type> or complex_type<right_value_type> ) ) and
              ( left_dimension == 2 and right_dimension == 2 ) and
              same_as<left_device_type,right_device_type>

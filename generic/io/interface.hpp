@@ -46,8 +46,6 @@ namespace ap
     path     try_rename_directory ( const path&, const path& );
     intmax_t size_of_directory    ( const path& );
 
-    template < class type > concept file_mode = requires { typename type::file_mode_tag; };
-
     /// Http
     class http_get;
     class http_post;
@@ -112,9 +110,9 @@ namespace ap
     constexpr int        time_zone   ( );
 
     /// Global
-    boost::asio::io_context    io_context         = boost::asio::io_context();
-    boost::asio::ssl::context  ssl_client_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_client);
-    boost::asio::ssl::context  ssl_server_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_server);
+    boost::asio::io_context   io_context         = boost::asio::io_context();
+    boost::asio::ssl::context ssl_client_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_client);
+    boost::asio::ssl::context ssl_server_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_server);
 
     /// Include
     #include "utility/utility.hpp" // First.
@@ -128,12 +126,12 @@ namespace ap
     // #include "initialize.hpp"
 
     /// Literal
-    namespace literals
+    inline namespace literals
     {
         constexpr duration operator ""h   ( unsigned long long val ) { return hour        ( static_cast<long long>(val) ); }
         constexpr duration operator ""h   ( long double        val ) { return hour        ( val ); }
-        constexpr duration operator ""m   ( unsigned long long val ) { return minute      ( static_cast<long long>(val) ); }
-        constexpr duration operator ""m   ( long double        val ) { return minute      ( val ); }
+        constexpr duration operator ""min ( unsigned long long val ) { return minute      ( static_cast<long long>(val) ); }
+        constexpr duration operator ""min ( long double        val ) { return minute      ( val ); }
         constexpr duration operator ""s   ( unsigned long long val ) { return second      ( static_cast<long long>(val) ); }
         constexpr duration operator ""s   ( long double        val ) { return second      ( val ); }
         constexpr duration operator ""ms  ( unsigned long long val ) { return millisecond ( static_cast<long long>(val) ); }

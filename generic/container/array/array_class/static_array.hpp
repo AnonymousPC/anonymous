@@ -2,7 +2,8 @@
 
 template < class type, int len, class device >
 class static_array
-    extends public device::template array<type,len>
+    extends public device::template array<type,len>,
+            public array_algo<static_array<type,len,device>,type,1,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -18,8 +19,8 @@ class static_array
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = base::iterator;
-        using  const_iterator  = base::const_iterator;
+        using  iterator        = pointer;
+        using  const_iterator  = const_pointer;
         using  device_type     = device;
         struct array_tag { };
 

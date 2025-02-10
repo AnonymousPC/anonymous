@@ -4,7 +4,8 @@ class path
     extends public string
 {
     public: // Core
-        using string::string;
+        path ( ) = default;
+        path ( const char* );
         path ( string );
 
     public: // Conversion

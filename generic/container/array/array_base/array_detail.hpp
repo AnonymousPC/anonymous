@@ -11,23 +11,23 @@ namespace detail
             return convertible_until<int,-2,types...> and function_type<last_type_of<types...>,type()>;
     } ();
 
-    template < class result_type, class input_type, int count, class... types >
+    template < class input_type, class result_type, int count, class... types >
     constexpr bool invocable_r_by_n_ints_helper = []
     {
         if constexpr ( count >= 1 )
-            return invocable_r_by_n_ints_helper<result_type,input_type,count-1,int,types...>;
+            return invocable_r_by_n_ints_helper<input_type,result_type,count-1,int,types...>;
         else
             if constexpr ( is_void<result_type> )
-                return std::invocable<input_type,types...>;
+                return invocable<input_type,types...>;
             else
                 return function_type<input_type,result_type(types...)>;
     } ();
 
-    template < class result_type, class input_type, int count >
-    constexpr bool invocable_r_by_n_ints = invocable_r_by_n_ints_helper<result_type,input_type,count>;
+    template < class input_type, class result_type, int count >
+    concept invocable_r_by_n_ints = invocable_r_by_n_ints_helper<input_type,result_type,count>;
 
     template < class type, class... types >
-    constexpr bool ints_until_last_func_ints = convertible_until<int,-2,types...> and invocable_r_by_n_ints<type,last_type_of<types...>,sizeof...(types)-1>; // No need to check <void,...>, as it forwards to invocable_r_by_n_ints_helper.
+    constexpr bool ints_until_last_func_ints = convertible_until<int,-2,types...> and invocable_r_by_n_ints<last_type_of<types...>,type,sizeof...(types)-1>; // No need to check <void,...>, as it forwards to invocable_r_by_n_ints_helper.
 
     template < class type, class... types >
     constexpr bool ints_until_last_type = convertible_until<int,-2,types...> and []
@@ -189,7 +189,12 @@ namespace detail
                     md_relayout_strict_smaller(arr, old_shape, new_shape, idx..., i);
             else
                 for ( int i in range(new_shape[-1]) )
-                    mdspan(arr.data(), new_shape)[adjust(idx)..., adjust(i)] = std::move(mdspan(arr.data(), old_shape)[adjust(idx)..., adjust(i)]);
+                {
+                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(idx)..., adjust(i)); 
+                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(idx)..., adjust(i));
+                    if ( old_offset != new_offset )
+                        arr.data()[new_offset] = std::move(arr.data()[old_offset]);
+                }
         }
         
         else if constexpr ( same_as<layout_type,std::layout_left> )
@@ -199,7 +204,12 @@ namespace detail
                     md_relayout_strict_smaller(arr, old_shape, new_shape, i, idx...);
             else
                 for ( int i in range(new_shape[1]) )
-                    mdspan(arr.data(), new_shape)[adjust(i), adjust(idx)...] = std::move(mdspan(arr.data(), old_shape)[adjust(i), adjust(idx)...]);
+                {
+                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(i), adjust(idx)...); 
+                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(i), adjust(idx)...);
+                    if ( old_offset != new_offset )
+                        arr.data()[new_offset] = std::move(arr.data()[old_offset]);
+                }
         }
     }
 
@@ -210,7 +220,6 @@ namespace detail
         constexpr int dim   = decay<decltype(arr)>::dimension();
         using layout_type   = device_type::layout_type;
         using accessor_type = device_type::template accessor_type<value_type>;
-        using reference     = device_type::template reference<value_type>;
         using mdspan        = std::mdspan<value_type,std::dextents<int,dim>,layout_type,accessor_type>;
 
         let adjust = [] (int x) { return x - 1; };
@@ -228,10 +237,8 @@ namespace detail
                     let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(idx)..., adjust(i));
                     if ( old_offset != new_offset )
                     {
-                        reference new_value = arr.data()[new_offset];
-                        reference old_value = arr.data()[old_offset];
-                        new_value = std::move(old_value);
-                        old_value = value_type();
+                        arr.data()[new_offset] = std::move(arr.data()[old_offset]);
+                        arr.data()[old_offset] = value_type();
                     }
                 }
         }
@@ -248,10 +255,8 @@ namespace detail
                     let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(i), adjust(idx)...);
                     if ( old_offset != new_offset )
                     {
-                        reference new_value = arr.data()[new_offset];
-                        reference old_value = arr.data()[old_offset];
-                        new_value = std::move(old_value);
-                        old_value = value_type();
+                        arr.data()[new_offset] = std::move(arr.data()[old_offset]);
+                        arr.data()[old_offset] = value_type();
                     }
                 }
         }

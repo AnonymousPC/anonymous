@@ -10,7 +10,7 @@ constexpr parse_context::iterator std::formatter<ap::color>::parse ( parse_conte
     let b = ctx.begin();
     let e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
 
-    parse_ctx = ap::string(ap::string_view(b, e));
+    parse_ctx = ap::string(ap::string_view(b, e-b));
     return e;
 }
 
@@ -46,7 +46,7 @@ constexpr parse_context::iterator std::formatter<ap::time_point>::parse ( parse_
     let b = ctx.begin();
     let e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
 
-    parse_ctx = ap::string(ap::string_view(b, e));
+    parse_ctx = ap::string(ap::string_view(b, e-b));
     return e;
 }
 
@@ -100,7 +100,7 @@ constexpr parse_context::iterator std::formatter<ap::duration>::parse ( parse_co
     let b = ctx.begin();
     let e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
 
-    parse_ctx = ap::string(ap::string_view(b, e));
+    parse_ctx = ap::string(ap::string_view(b, e-b));
     return e;
 }
 

@@ -123,5 +123,7 @@ const int& ipv6::port ( ) const
 
 std::ostream& operator << ( std::ostream& left, const ipv6& right )
 { 
-    return left << "[{}:{}:{}:{}:{}:{}:{}:{}]:{}"s.format(right.first(), right.second(), right.third(), right.fourth(), right.fifth(), right.sixth(), right.seventh(), right.eighth(), right.port());
+    return left << "[{:x}:{:x}:{:x}:{:x}:{:x}:{:x}:{:x}:{:x}]:{}"s
+                   .format(right.first(), right.second(), right.third(), right.fourth(), right.fifth(), right.sixth(), right.seventh(), right.eighth(), right.port())
+                   .replace(std::regex("(:0)+:"), "::");
 }

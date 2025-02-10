@@ -140,19 +140,13 @@ namespace detail
                     return Eigen::TensorMap<const Eigen::Tensor<eigen_nativize<value_type>,extents_type::rank(),Eigen::RowMajor>>(mds.data_handle(), eigen_make_transpose_extents(mds.extents())).shuffle(eigen_make_transpose_shuffle<extents_type::rank()>());
     }
 
-    template < class type = void, bool unique = true >
+    template < class type = void >
     constexpr auto eigen_map ( const auto& mds )
     {
         using value_type = decay<decltype(mds)>::value_type;
 
         if constexpr ( is_void<type> or same_as<type,value_type> )
-            if constexpr ( unique == true )
-                if constexpr ( requires { eigen_map_helper(mds).noalias(); } )
-                    return eigen_map_helper(mds).noalias();
-                else
-                    return eigen_map_helper(mds);
-            else
-                return eigen_map_helper(mds);
+            return eigen_map_helper(mds);
         else
             return eigen_map_helper(mds).template cast<type>();
 

@@ -36,8 +36,8 @@ constexpr basic_string_view<type,device>::operator type2 ( ) const
     requires same_as<type,char>
 {
     let cvt = type2();
-    auto [p, ec] = std::from_chars ( begin(), end(), cvt );
-    if ( p != end() or ec != std::errc() )
+    auto [p, ec] = std::from_chars ( data(), data() + size(), cvt );
+    if ( p != data() + size() or ec != std::errc() )
         throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
     return cvt;
 }
@@ -72,13 +72,13 @@ constexpr bool basic_string_view<type,device>::empty ( ) const
 template < class type, class device >
 constexpr basic_string_view<type,device>::const_iterator basic_string_view<type,device>::begin ( ) const
 {
-    return base::begin();
+    return data();
 }
 
 template < class type, class device >
 constexpr basic_string_view<type,device>::const_iterator basic_string_view<type,device>::end ( ) const
 {
-    return base::end();
+    return data() + size();
 }
 
 template < class type, class device >

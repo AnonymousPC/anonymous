@@ -206,28 +206,30 @@ file_csv& file_csv::open ( const path& pth )
     let stream = file_stream(path(self), file_stream::read_only(true));
 
     // Read data.
-    let raw = ap::views::binary_istream<char>(stream)
-                  | file_csv::views::lazy_split('\n') // Only splits outside quotes.
-                  | std::views::transform([] (const auto& stream_line)
-                      {
-                          let line = (stream_line
-                                   | file_csv::views::lazy_split(',') // Only splits outside quotes.
-                                   | std::ranges::to<vector<string>>());
-                                   line. for_each ([] (auto& str) { if ( str.begins_with('"') and str.ends_with('"') ) str.pop(1).pop(); });
-                                   line. for_each ([] (auto& str) { str.replace("\"\"", '"'); });
-                          if ( not line.empty() and line[-1].ends_with('\r') )
-                              line[-1].pop();
-                          return line;
-                      })
-                  | std::ranges::to<vector<vector<string>>>();
+    let raw_data = ap::views::binary_istream<char>(stream)
+                 | file_csv::views::lazy_split('\n') // Only splits outside quotes.
+                 | std::views::transform([] (const auto& stream_line)
+                     {
+                         let line = (stream_line
+                                  | file_csv::views::lazy_split(',') // Only splits outside quotes.
+                                  | std::ranges::to<vector<string>>());
+                                  line. for_each ([] (auto& str) { if ( str.begins_with('"') and str.ends_with('"') ) str.pop(1).pop(); });
+                                  line. for_each ([] (auto& str) { str.replace("\"\"", '"'); });
+                         if ( not line.empty() and line[-1].ends_with('\r') )
+                             line[-1].pop();
+                         return line;
+                     })
+                 | std::ranges::to<vector<vector<string>>>();
 
     // Align.
-    if ( not self.empty() )
-    {
-        let align = raw.max([] (const auto& line1, const auto& line2) { return line1.size() < line2.size(); }).size();
-        raw.each([&] (auto& line) { line.resize(align); });
-    }
-    self = matrix<string>(raw);
+    let align = 0;
+    if ( not raw.empty() )
+        align = raw.max([] (const auto& line1, const auto& line2) { return line1.size() < line2.size(); }).size();
+
+    // Store.
+    self.resize(raw.size(), align);
+    for ( int i in range(raw.size()) )
+        self[i] = std::move(raw[i]);
 
     return self;
 }

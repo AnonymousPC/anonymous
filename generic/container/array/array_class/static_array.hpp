@@ -54,4 +54,7 @@ class static_array
     public: // Memory
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
+
+    public: // ADL
+        template < class type2, int dim2, class device2 = cpu > using array = array<type2,dim2,device2>;
 };

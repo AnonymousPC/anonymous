@@ -135,10 +135,10 @@ constexpr basic_string<type,device>::basic_string ( const type2& cvt )
     requires same_as<type,char>
 {
     resize(64);
-    auto [p, ec] = std::to_chars ( begin(), end(), cvt );
+    auto [p, ec] = std::to_chars ( data(), data() + size(), cvt );
     if ( ec != std::errc() )
         throw value_error("cannot convert {} from {} into {}", cvt, typeid(cvt), typeid(self));
-    resize(p - begin());
+    resize(p - data());
 }
 
 template < class type, class device >
@@ -147,8 +147,8 @@ constexpr basic_string<type,device>::operator type2 ( ) const
     requires same_as<type,char>
 {
     let cvt = type2();
-    auto [p, ec] = std::from_chars ( begin(), end(), cvt );
-    if ( p != end() or ec != std::errc() )
+    auto [p, ec] = std::from_chars ( data(), data() + size(), cvt );
+    if ( p != data() + size() or ec != std::errc() )
         throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
     return cvt;
 }
@@ -210,25 +210,25 @@ constexpr bool basic_string<type,device>::empty ( ) const
 template < class type, class device >
 constexpr basic_string<type,device>::iterator basic_string<type,device>::begin ( )
 {
-    return base::begin();
+    return data();
 }
 
 template < class type, class device >
 constexpr basic_string<type,device>::const_iterator basic_string<type,device>::begin ( ) const
 {
-    return base::begin();
+    return data();
 }
 
 template < class type, class device >
 constexpr basic_string<type,device>::iterator basic_string<type,device>::end ( )
 {
-    return base::end();
+    return data() + size();
 }
 
 template < class type, class device >
 constexpr basic_string<type,device>::const_iterator basic_string<type,device>::end ( ) const
 {
-    return base::end();
+    return data() + size();
 }  
 
 template < class type, class device >

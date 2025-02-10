@@ -21,8 +21,8 @@ class basic_string
         using  const_reference = device::template const_reference<type>;
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = base::iterator;
-        using  const_iterator  = base::const_iterator;
+        using  iterator        = pointer;
+        using  const_iterator  = const_pointer;
         using  device_type     = device;
         struct string_tag { };
 

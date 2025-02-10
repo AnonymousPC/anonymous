@@ -112,4 +112,8 @@ class array<type,dim,device>
         template < class type2, int dim2, class device2 > friend class detail::tuple_upper;
         template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
         template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
+
+    public: // ADL
+    template < class type2, class device2 = cpu > using vector = array<type2,1,device2>;
+    template < class type2, class device2 = cpu > using matrix = array<type2,2,device2>;
 };

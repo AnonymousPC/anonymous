@@ -4,7 +4,7 @@
 
 const std::regex url::regex = std::regex
 (
-    R"(([a-z]+://))"                                                                                                                             // Essential: protocal.
+    R"(([a-z]+://))"                                                                                                                                    // Essential: protocal.
     R"(([a-zA-Z0-9\-._~%]+:[a-zA-Z0-9\-._~%]+@)?)"                                                                                                      // Optional:  usermame-password.
     R"(([a-zA-Z0-9\-._~%]+|\[[a-fA-F0-9:.]+\]))"                                                                                                        // Essential: domain/ipv4/ipv6.
     R"((:\d{1,5}?)?)"                                                                                                                                   // Optional:  port.

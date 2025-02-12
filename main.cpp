@@ -10,8 +10,7 @@ using namespace ap;
 
 int main ( )
 {
-
+    let A = array<int,2>(2, 3);
+    print(A+A);
 
 }
-// TODO
-// boost::compute能否跨设备copy不同类型数据

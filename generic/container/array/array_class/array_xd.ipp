@@ -622,21 +622,20 @@ template < class type, class device >
 constexpr auto array<type,max_dim,device>::mdspan ( )
 {
     using type1 = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template accessor_type<type>>;
-    using type2 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_stride,                                 typename device::template accessor_type<type>>;
-    using type3 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<type>>;
     if ( contiguous() )
     {
         let ptr = data();
         let shp = std::dextents<int,max_dim>(shape());
         let mds = type1(ptr, shp);
-        return variant<type1,type2,type3>(mds);
+        return variant<type1,type2>(mds);
     }
     else // if ( upper::attribute() == detail::transpose_attribute )
     {
         let ptr = upper::get_host().data();
         let shp = std::dextents<int,max_dim>(shape());
-        let mds = type3(ptr, shp);
-        return variant<type1,type2,type3>(mds);
+        let mds = type2(ptr, shp);
+        return variant<type1,type2>(mds);
     }
 }
 
@@ -644,21 +643,20 @@ template < class type, class device >
 constexpr const auto array<type,max_dim,device>::mdspan ( ) const
 {
     using type1 = std::mdspan<const type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template accessor_type<const type>>;
-    using type2 = std::mdspan<const type,std::dextents<int,max_dim>,std::layout_stride,                                 typename device::template accessor_type<const type>>;
-    using type3 = std::mdspan<const type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<const type>>;
+    using type2 = std::mdspan<const type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<const type>>;
     if ( contiguous() )
     {
         let ptr = data();
         let shp = std::dextents<int,max_dim>(shape());
         let mds = type1(ptr, shp);
-        return variant<type1,type2,type3>(mds);
+        return variant<type1,type2>(mds);
     }
     else // if ( upper::attribute() == detail::transpose_attribute )
     {
         let ptr = upper::get_host().data();
         let shp = std::dextents<int,max_dim>(shape());
-        let mds = type3(ptr, shp);
-        return variant<type1,type2,type3>(mds);
+        let mds = type2(ptr, shp);
+        return variant<type1,type2>(mds);
     }
 }
 

@@ -61,27 +61,27 @@ constexpr void cpu::linalg::divide ( const auto& left, const auto& right, auto& 
     detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) / right;
 }
 
-constexpr void cpu::linalg::plus_equal ( auto& left, const auto& right )
+constexpr void cpu::linalg::plus_equal ( auto& left, const auto& right, auto& /*output*/ )
 {
     detail::eigen_map(left) += detail::eigen_map<left_value_type>(right);
 }
 
-constexpr void cpu::linalg::minus_equal ( auto& left, const auto& right )
+constexpr void cpu::linalg::minus_equal ( auto& left, const auto& right, auto& /*output*/ )
 {
     detail::eigen_map(left) -= detail::eigen_map<left_value_type>(right);
 }
 
-constexpr void cpu::linalg::right_scale_equal ( auto& left, const auto& right )
+constexpr void cpu::linalg::right_scale_equal ( auto& left, const auto& right, auto& /*output*/ )
 {
     detail::eigen_map(left) *= right;
 }
 
-constexpr void cpu::linalg::multiply_equal ( auto& left, const auto& right )
+constexpr void cpu::linalg::multiply_equal ( auto& left, const auto& right, auto& /*output*/ )
 {
     detail::eigen_map(left) *= detail::eigen_map<left_value_type>(right);
 }
 
-constexpr void cpu::linalg::divide_equal ( auto& left, const auto& right )
+constexpr void cpu::linalg::divide_equal ( auto& left, const auto& right, auto& /*output*/ )
 {
     detail::eigen_map(left) /= right;
 }

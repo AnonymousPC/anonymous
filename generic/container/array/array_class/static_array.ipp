@@ -208,3 +208,25 @@ constexpr bool static_array<type,len,device>::contiguous ( )
 {
     return true;
 }
+
+template < class type, int len, class device >
+constexpr auto static_array<type,len,device>::mdspan ( )
+{
+    using type1 = std::mdspan<type,std::extents<int,1>,typename device::layout_type,typename device::template accessor_type<type>>;
+
+    let ptr = data();
+    let shp = std::extents<int,1> { size() };
+    let mds = type1(ptr, shp);
+    return variant<type1>(mds);
+}
+
+template < class type, int len, class device >
+constexpr const auto static_array<type,len,device>::mdspan ( ) const
+{
+    using type1 = std::mdspan<const type,std::extents<int,1>,typename device::layout_type,typename device::template accessor_type<const type>>;
+
+    let ptr = data();
+    let shp = std::extents<int,1> { size() };
+    let mds = type1(ptr, shp);
+    return variant<type1>(mds);
+}

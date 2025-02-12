@@ -61,6 +61,15 @@ class static_array
         constexpr static bool ownership  ( );
         constexpr static bool contiguous ( );
 
+    public: // Mdspan
+        constexpr       auto mdspan ( );
+        constexpr const auto mdspan ( ) const;
+
+    private: // Friend
+        template < class type2, int dim2, class device2 > friend class array;
+        template < class type2, int len2, class device2 > friend class inplace_array;
+        template < class type2, int len2, class device2 > friend class static_array;
+
     public: // ADL
         template < class type2, int dim2, class device2 = cpu > using array = array<type2,dim2,device2>;
 };

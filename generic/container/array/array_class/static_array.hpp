@@ -35,6 +35,11 @@ class static_array
         constexpr static_array ( std::initializer_list<type> ) requires copyable<type>;
         constexpr static_array ( range<type> )                 requires copyable<type>;
 
+    public: // Conversion
+        template < class type2,           class device2 > constexpr static_array ( const array        <type2,1,   device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
+        template < class type2, int len2, class device2 > constexpr static_array ( const inplace_array<type2,len2,device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> ) and ( len2 >= len );
+        template < class type2, int len2, class device2 > constexpr static_array ( const static_array <type2,len2,device2>& ) requires ( same_as<type,type2> or same_as<device,device2> ) and convertible_to<type2,type> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> ) and ( len2 == len );
+
     public: // Memebr
         constexpr static int                  dimension     ( );
         constexpr static int                  size          ( );

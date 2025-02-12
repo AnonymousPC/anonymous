@@ -30,6 +30,84 @@ constexpr static_array<type,len,device>::static_array ( range<type> init )
 }
 
 template < class type, int len, class device >
+template < class type2, class device2 >
+constexpr static_array<type,len,device>::static_array ( const array<type2,1,device2>& cvt )
+    requires ( same_as<type,type2> or same_as<device,device2> ) and 
+             convertible_to<type2,type> and
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
+{
+    #if debug
+    if ( cvt.size() != size() )
+        throw value_error("initialize static_array with size {} inconsistent with fixed_size {}", cvt.size(), size());
+    #endif
+        
+    if constexpr ( same_as<type,type2> )
+        if constexpr ( same_as<device,device2> )
+            if ( cvt.ownership() )
+                device::copy(cvt.array<type2,1,device2>::base::begin(), cvt.array<type2,1,device2>::base::end(), self.begin());
+            else
+                device::copy(cvt.begin(), cvt.end(), self.begin());
+        else if constexpr ( same_as<device,cpu> )
+            if ( cvt.ownership() )
+                device2::copy(cvt.array<type2,1,device2>::base::begin(), cvt.array<type2,1,device2>::base::end(), self.begin());
+            else 
+                device2::copy(cvt.begin(), cvt.end(), self.begin());
+        else // if constexpr ( same_as<device2,cpu> )
+            if ( cvt.ownership() )
+                device::copy(cvt.array<type2,1,device2>::base::begin(), cvt.array<type2,1,device2>::base::end(), self.begin());
+            else
+                device::copy(cvt.begin(), cvt.end(), self.begin());
+    else // if constexpr ( same_as<device,device2> )
+        if ( cvt.ownership() )
+            device::transform(cvt.array<type2,1,device2>::base::begin(), cvt.array<type2,1,device2>::base::end(), self.begin(), [] (const auto& val) { return type(val); });
+        else
+            device::transform(cvt.begin(), cvt.end(), self.begin(), [] (const auto& val) { return type(val); });
+}
+
+template < class type, int len, class device >
+template < class type2, int len2, class device2 >
+constexpr static_array<type,len,device>::static_array ( const inplace_array<type2,len2,device2>& cvt )
+    requires ( same_as<type,type2> or same_as<device,device2> ) and 
+             convertible_to<type2,type> and
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> ) and
+             ( len2 >= len )
+{
+    #if debug
+    if ( cvt.size() != size() )
+        throw value_error("initialize static_array with size {} inconsistent with fixed_size {}", cvt.size(), size());
+    #endif
+
+    if constexpr ( same_as<type,type2> )
+        if constexpr ( same_as<device,device2> )
+            device::copy(cvt.begin(), cvt.end(), self.begin());
+        else if constexpr ( same_as<device,cpu> )
+            device2::copy(cvt.begin(), cvt.end(), self.begin());
+        else // if constexpr ( same_as<device2,cpu> )
+            device::copy(cvt.begin(), cvt.end(), self.begin());
+    else // if constexpr ( same_as<device,device2> )
+        device::transform(cvt.begin(), cvt.end(), self.begin(), [] (const auto& val) { return type(val); });
+}
+
+template < class type, int len, class device >
+template < class type2, int len2, class device2 >
+constexpr static_array<type,len,device>::static_array ( const static_array<type2,len2,device2>& cvt )
+    requires ( same_as<type,type2> or same_as<device,device2> ) and 
+             convertible_to<type2,type> and
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> ) and
+             ( len2 == len )
+{
+    if constexpr ( same_as<type,type2> )
+        if constexpr ( same_as<device,device2> )
+            /*copy constructor*/;
+        else if constexpr ( same_as<device,cpu> )
+            device2::copy(cvt.begin(), cvt.end(), self.begin());
+        else // if constexpr ( same_as<device2,cpu> )
+            device::copy(cvt.begin(), cvt.end(), self.begin());
+    else // if constexpr ( same_as<device,device2> )
+        device::transform(cvt.begin(), cvt.end(), self.begin(), [] (const auto& val) { return type(val); });
+}
+
+template < class type, int len, class device >
 constexpr int static_array<type,len,device>::dimension ( )
 {
     return 1;

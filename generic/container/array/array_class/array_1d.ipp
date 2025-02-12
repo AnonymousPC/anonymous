@@ -148,7 +148,9 @@ constexpr array<type,1,device>::array ( const array<type2,1,device2>& cvt )
     extends array ( cvt.size() )
 {
     if constexpr ( same_as<type,type2> )
-        if constexpr ( same_as<device,cpu> )
+        if constexpr ( same_as<device,device2> )
+            /*copy constructor*/;
+        else if constexpr ( same_as<device,cpu> )
             if ( cvt.ownership() )
                 device2::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
             else
@@ -174,7 +176,9 @@ constexpr array<type,1,device>::array ( const inplace_array<type2,len,device2>& 
     extends array ( cvt.size() )
 {
     if constexpr ( same_as<type,type2> )
-        if constexpr ( same_as<device,cpu> )
+        if constexpr ( same_as<device,device2> )
+            device::copy(cvt.begin(), cvt.end(), self.base::begin());
+        else if constexpr ( same_as<device,cpu> )
             device2::copy(cvt.begin(), cvt.end(), self.base::begin());
         else // if constexpr ( same_as<device2,cpu> )
             device::copy(cvt.begin(), cvt.end(), self.base::begin());
@@ -191,7 +195,9 @@ constexpr array<type,1,device>::array ( const static_array<type2,len,device2>& c
     extends array ( cvt.size() )
 {
     if constexpr ( same_as<type,type2> )
-        if constexpr ( same_as<device,cpu> )
+        if constexpr ( same_as<device,device2> )
+            device::copy(cvt.begin(), cvt.end(), self.base::begin());
+        else if constexpr ( same_as<device,cpu> )
             device2::copy(cvt.begin(), cvt.end(), self.base::begin());
         else // if constexpr ( same_as<device2,cpu> )
             device::copy(cvt.begin(), cvt.end(), self.base::begin());

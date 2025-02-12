@@ -279,7 +279,9 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device2>& cvt )
     extends array ( cvt.shape() )
 {    
     if constexpr ( same_as<type,type2> )
-        if constexpr ( same_as<device,cpu> )
+        if constexpr ( same_as<device,device2> )
+            /*copy constructor*/;
+        else if constexpr ( same_as<device,cpu> )
             if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
                 if ( cvt.ownership() )
                     device2::copy(cvt.array<type,dim,device2>::base::begin(), cvt.array<type,dim,device2>::base::end(), self.base::begin());

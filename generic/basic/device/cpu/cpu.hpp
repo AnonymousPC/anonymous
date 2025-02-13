@@ -172,8 +172,8 @@ class cpu
             constexpr static void convolve          ( const auto&, const auto&, auto& );
             constexpr static void cross             ( const auto&, const auto&, auto& );
             constexpr static void dot               ( const auto&, const auto&, auto& );
-            constexpr static void fft               ( auto,                     auto& );
-            constexpr static void ifft              ( auto,                     auto& );
+            constexpr static void fft               ( const auto&,              auto& );
+            constexpr static void ifft              ( const auto&,              auto& );
             constexpr static void tensor            ( const auto&, const auto&, auto& );
 
             constexpr static auto transpose         ( const auto&,              auto& );

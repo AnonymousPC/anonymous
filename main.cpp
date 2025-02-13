@@ -10,7 +10,11 @@ using namespace ap;
 
 int main ( )
 {
-    let A = array<int,2>(2, 3);
-    print(A+A);
+    let A = array<double>(range<float>(1, 6));
+    print(A);
+    let B = fft(A);
+    print(B);
+    let C = ifft(B);
+    print(C);
 
 }

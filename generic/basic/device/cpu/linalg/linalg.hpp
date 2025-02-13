@@ -1,23 +1,11 @@
 #pragma once
 
-#define left_type                     decay<decltype(left  )>
-#define left_value_type      typename decay<decltype(left  )>::value_type
-#define left_extents_type    typename decay<decltype(left  )>::extents_type
-#define left_layout_type     typename decay<decltype(left  )>::layout_type
-#define left_accessor_type   typename decay<decltype(left  )>::accessor_type
-#define left_rank                     decay<decltype(left  )>::extents_type::rank()
-#define right_type                    decay<decltype(right )>
-#define right_value_type     typename decay<decltype(right )>::value_type
-#define right_extents_type   typename decay<decltype(right )>::extents_type
-#define right_layout_type    typename decay<decltype(right )>::layout_type
-#define right_accessor_type  typename decay<decltype(right )>::accessor_type
-#define right_rank                    decay<decltype(right )>::rank()
-#define output_type                   decay<decltype(output)>
-#define output_value_type    typename decay<decltype(output)>::value_type
-#define output_layout_type   typename decay<decltype(output)>::layout_type
-#define output_extents_type  typename decay<decltype(output)>::extents_type
-#define output_rank                   decay<decltype(output)>::rank()
-#define output_accessor_type typename decay<decltype(output)>::accessor_type
+#define left_type                  decay<decltype(left  )>
+#define left_value_type   typename decay<decltype(left  )>::value_type
+#define vector_type                decay<decltype(vector)>
+#define vector_value_type typename decay<decltype(vector)>::value_type
+#define output_type                decay<decltype(output)>
+#define output_value_type typename decay<decltype(output)>::value_type
 
 #include "detail.hpp"
 
@@ -86,9 +74,26 @@ constexpr void cpu::linalg::divide_equal ( auto& left, const auto& right, auto& 
     detail::eigen_map(left) /= right;
 }
 
-constexpr void cpu::linalg::dot ( const auto& left, const auto& right, auto& output )
+
+
+
+constexpr void cpu::linalg::convolve ( const auto& left, const auto& right, auto& output )
 {
-    output = detail::eigen_map<output_value_type>(left).dot(detail::eigen_map<output_value_type>(right));
+    using complex_type = decltype(std::complex(detail::eigen_nativize<output_value_type>()));
+    using value_type   = complex_type::value_type;
+
+    let left_raw  = Eigen::Vector<detail::eigen_nativize<output_value_type>,Eigen::Dynamic>>(detail::eigen_map<output_value_type>(left ));
+    let right_raw = Eigen::Vector<detail::eigen_nativize<output_value_type>,Eigen::Dynamic>>(detail::eigen_map<output_value_type>(right));
+    if ( left_raw.size() < right_raw.size() )
+        left_vct.resize(right_vct.siz());
+    else if ( left_raw.size() > right_raw.size() )
+        right_raw.resize(left_raw.size());
+
+    let kernel = Eigen::FFT<value_type>();
+    let left_fft = Eigen::Vector<
+
+
+    detail::eigen_map(output) = kernel.inv(left_fft.cwiseProduct(right_fft));
 }
 
 constexpr void cpu::linalg::cross ( const auto& left, const auto& right, auto& output )
@@ -96,26 +101,53 @@ constexpr void cpu::linalg::cross ( const auto& left, const auto& right, auto& o
     detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left).cross(detail::eigen_map<output_value_type>(right));
 }
 
-constexpr void cpu::linalg::convolve ( const auto& left, const auto& right, auto& output )
+constexpr void cpu::linalg::dot ( const auto& left, const auto& right, auto& output )
 {
-    static_assert(not true, "not coded yet");
+    output = detail::eigen_map<output_type>(left).dot(detail::eigen_map<output_type>(right));
+}
+
+constexpr void cpu::linalg::fft ( const auto& vector, auto& output )
+{
+    /* Eigen::Map<const Eigen::Matrix> has bug in Eigen::FFT, as
+     * eigen_map[index] returns a rvalue instead of const lvalue&.
+     * So that we must map it manually.
+     */
+    let vector_map = [&]
+    {
+        if constexpr ( detail::is_contiguous_layout<typename decay<decltype(vector)>::layout_type> )
+            return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
+        else // if constexpr ( detail::is_strided_layout<typename decay<decltype(vector)>::layout_type> )
+            return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
+    } ();
+    let output_map = detail::eigen_map(output);
+    Eigen::FFT<detail::eigen_nativize<output_value_type::value_type>>().fwd(output_map, vector_map);
+}
+
+constexpr void cpu::linalg::ifft ( const auto& vector, auto& output )
+{
+    /* Eigen::Map<const Eigen::Matrix> has bug in Eigen::FFT, as
+     * eigen_map[index] returns a rvalue instead of const lvalue&.
+     * So that we must map it manually.
+     */
+    let vector_map = [&]
+    {
+        if constexpr ( detail::is_contiguous_layout<typename decay<decltype(vector)>::layout_type> )
+            return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
+        else // if constexpr ( detail::is_strided_layout<typename decay<decltype(vector)>::layout_type> )
+            return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
+    } ();
+    let output_map = detail::eigen_map(output);
+    Eigen::FFT<detail::eigen_nativize<output_value_type::value_type>>().inv(output_map, vector_map);
+}
+
+constexpr void cpu::linalg::tensor ( const auto& left, const auto& right, auto& output )
+{
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) * detail::eigen_map<output_value_type>(right).transpose();
 }
 
 #undef left_type
 #undef left_value_type
-#undef left_extents_type
-#undef left_layout_type
-#undef left_accessor_type
-#undef left_rank
-#undef right_type
-#undef right_value_type
-#undef right_extents_type
-#undef right_layout_type
-#undef right_accessor_type
-#undef right_rank
+#undef vector_type
+#undef vector_value_type
 #undef output_type
 #undef output_value_type
-#undef output_extents_type
-#undef output_layout_type
-#undef output_accessor_type
-#undef output_rank

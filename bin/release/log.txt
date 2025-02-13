@@ -1,0 +1,36 @@
+In file included from [01m[Kgeneric/basic/interface.hpp:202[m[K,
+                 from [01m[Kmain.cpp:2[m[K:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT: In instantiation of '[01m[Kvoid Eigen::FFT<T_Scalar, T_Impl>::[01;32m[Kfwd[m[K(Eigen::MatrixBase<OtherDerived>&, const Eigen::MatrixBase<OtherDerived>&, Index) [35m[K[with InputDerived = Eigen::Map<const Eigen::Matrix<int, -1, 1>, 0, Eigen::Stride<0, 0> >; ComplexDerived = Eigen::Map<Eigen::Matrix<std::complex<int>, -1, 1, 0, -1, 1>, 0, Eigen::Stride<0, 0> >; T_Scalar = int; T_Impl = Eigen::default_fft_impl<int>; Index = long long int][m[K[m[K':
+[01m[Kgeneric/basic/device/cpu/linalg/linalg.hpp:98:40:[m[K   required from '[01m[Kstatic constexpr void ap::cpu::linalg::[01;32m[Kfft[m[K(const auto:365&, auto:366&) [35m[K[with auto:262 = std::mdspan<const int, std::extents<int, 18446744073709551615>, std::layout_right, std::default_accessor<const int> >; auto:263 = std::mdspan<ap::complex<int>, std::extents<int, 18446744073709551615>, std::layout_right, std::default_accessor<ap::complex<int> > >][m[K[m[K'
+   98 |     [01;36m[KEigen::FFT<vector_value_type>().fwd(output_map, detail::eigen_map(vector))[m[K;
+      |     [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kgeneric/math/linalg/1d.ipp:56:5:[m[K   required from '[01m[Kconstexpr auto [requires ap::array_type<<placeholder>, void, 0>] ap::[01;32m[Kfft[m[K(const auto:1254&) requires ((number_type<typename std::decay<decltype(ap::fft::vector)>::type::value_type>) || (complex_type<typename std::decay<decltype(ap::fft::vector)>::type::value_type>)) && (std::decay<decltype(ap::fft::vector)>::decay<decltype(ap::fft::vector)>::dimension)() == 1 [35m[K[with auto:1254 = array<int>][m[K[m[K'
+   29 |         case 1: if constexpr (requires{input_mdspan.template value<1>();}) [01;36m[Kdevice::linalg::$function(input_mdspan.template value<1>(), output_mdspan.template value<1>())[m[K; else throw linalg_error("internal error"); break; \
+      |                                                                            [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kmain.cpp:15:14:[m[K   required from here
+   15 |     print([01;36m[Kfft(A)[m[K);
+      |           [01;36m[K~~~^~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT:221:23:[m[K [01;31m[Kerror: [m[Kstatic assertion failed
+  221 |         static_assert([01;31m[Kfalse[m[K);
+      |                       [01;31m[K^~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT:221:23:[m[K [01;36m[Knote: [m[K'[01m[Kfalse[m[K' evaluates to false
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT:250:26:[m[K [01;31m[Kerror: [m[Klvalue required as unary '[01m[K&[m[K' operand
+  250 |         fwd( &dst[0],&[01;31m[Ksrc[[m[K0],nfft );
+      |                       [01;31m[K~~~^[m[K
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT: In instantiation of '[01m[Kvoid Eigen::FFT<T_Scalar, T_Impl>::[01;32m[Kfwd[m[K(Eigen::MatrixBase<OtherDerived>&, const Eigen::MatrixBase<OtherDerived>&, Index) [35m[K[with InputDerived = Eigen::Map<const Eigen::Matrix<int, -1, 1>, 0, Eigen::InnerStride<> >; ComplexDerived = Eigen::Map<Eigen::Matrix<std::complex<int>, -1, 1, 0, -1, 1>, 0, Eigen::Stride<0, 0> >; T_Scalar = int; T_Impl = Eigen::default_fft_impl<int>; Index = long long int][m[K[m[K':
+[01m[Kgeneric/basic/device/cpu/linalg/linalg.hpp:98:40:[m[K   required from '[01m[Kstatic constexpr void ap::cpu::linalg::[01;32m[Kfft[m[K(const auto:365&, auto:366&) [35m[K[with auto:262 = std::mdspan<const int, std::extents<int, 18446744073709551615>, std::layout_stride, std::default_accessor<const int> >; auto:263 = std::mdspan<ap::complex<int>, std::extents<int, 18446744073709551615>, std::layout_right, std::default_accessor<ap::complex<int> > >][m[K[m[K'
+   98 |     [01;36m[KEigen::FFT<vector_value_type>().fwd(output_map, detail::eigen_map(vector))[m[K;
+      |     [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kgeneric/math/linalg/1d.ipp:56:5:[m[K   required from '[01m[Kconstexpr auto [requires ap::array_type<<placeholder>, void, 0>] ap::[01;32m[Kfft[m[K(const auto:1254&) requires ((number_type<typename std::decay<decltype(ap::fft::vector)>::type::value_type>) || (complex_type<typename std::decay<decltype(ap::fft::vector)>::type::value_type>)) && (std::decay<decltype(ap::fft::vector)>::decay<decltype(ap::fft::vector)>::dimension)() == 1 [35m[K[with auto:1254 = array<int>][m[K[m[K'
+   30 |         case 2: if constexpr (requires{input_mdspan.template value<2>();}) [01;36m[Kdevice::linalg::$function(input_mdspan.template value<2>(), output_mdspan.template value<1>())[m[K; else throw linalg_error("internal error"); break; \
+      |                                                                            [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kmain.cpp:15:14:[m[K   required from here
+   15 |     print([01;36m[Kfft(A)[m[K);
+      |           [01;36m[K~~~^~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT:221:23:[m[K [01;31m[Kerror: [m[Kstatic assertion failed
+  221 |         static_assert([01;31m[Kfalse[m[K);
+      |                       [01;31m[K^~~~~[m[K
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT:221:23:[m[K [01;36m[Knote: [m[K'[01m[Kfalse[m[K' evaluates to false
+[01m[KD:/My Passport/My Passport - Application/MSYS/ucrt64/include/eigen3/unsupported/Eigen/FFT:250:26:[m[K [01;31m[Kerror: [m[Klvalue required as unary '[01m[K&[m[K' operand
+  250 |         fwd( &dst[0],&[01;31m[Ksrc[[m[K0],nfft );
+      |                       [01;31m[K~~~^[m[K

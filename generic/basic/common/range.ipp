@@ -2,6 +2,7 @@
 
 template < class type >
 constexpr range<type>::range ( value_type init_high )
+    requires int_type<type>
     extends range ( 1, init_high )
 {
     
@@ -23,6 +24,18 @@ constexpr range<type>::range ( value_type init_low, value_type init_high, value_
              ( step < 0 and low - high < step ) )
             throw value_error("range from {} to {} with step {} is invalid", low, high, step);
     #endif
+}
+
+template < class type >
+template < class type2 >
+constexpr range<type>::range ( range<type2> cvt )
+    requires ( int_type  <type> and int_type  <type2> ) or
+             ( float_type<type> and float_type<type2> )
+    extends low  ( cvt.low  ),
+            high ( cvt.high ),
+            step ( cvt.step )
+{
+
 }
 
 template < class type >

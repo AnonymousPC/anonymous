@@ -149,7 +149,6 @@ namespace detail
             return eigen_map_helper(mds);
         else
             return eigen_map_helper(mds).template cast<type>();
-
     }
 } // namespace detail
 

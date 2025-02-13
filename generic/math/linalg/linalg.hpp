@@ -108,6 +108,7 @@
 #undef device_linalg_c1_1
 #undef device_linalg_1c_1
 #undef device_linalg_2_1
+#undef device_linalg_2_c
 
 #undef left_type
 #undef left_value_type

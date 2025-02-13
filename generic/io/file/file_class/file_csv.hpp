@@ -13,19 +13,6 @@ class file_csv
     public: // Interface (override)
         file_csv& open ( const path& );
         file_csv& save ( );
-
-    private: // Auxiliary: view
-        struct ranges
-        {
-            template < class input_range, class pattern >
-            class lazy_split_view;
-        };
-
-        struct views
-        {
-            template < class pattern >
-            class lazy_split;
-        };
 };
 
 

@@ -313,6 +313,6 @@ namespace ap
 
     /// Global
                  std::execution::static_thread_pool& execution_context = cpu::execution_context;
-    thread_local std::mt19937                        random_context    = std::mt19937(std::random_device()());
+    thread_local std::mt19937&                       random_context    = cpu::random_context;
 
 } // namespace ap

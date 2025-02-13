@@ -18,7 +18,7 @@ ipv4::ipv4 ( int init_1, int init_2, int init_3, int init_4, int init_port )
          self.third () < 0 or self.third () > 255 or
          self.fourth() < 0 or self.fourth() > 255 or
          self.port  () < 0 or self.port  () > 65535 )
-        throw network_error("ipv4 {} does not matches ipv4 domain (example: 192.168.1.1:80)", self);
+        throw network_error("ipv4 {} is invalid (example: 192.168.1.1:80)", self);
 }
 
 // Parse

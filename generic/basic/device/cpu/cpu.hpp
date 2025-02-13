@@ -176,9 +176,6 @@ class cpu
             constexpr static void ifft              ( const auto&,              auto& );
             constexpr static void tensor            ( const auto&, const auto&, auto& );
 
-            constexpr static auto transpose         ( const auto&,              auto& );
-            constexpr static auto hermitian         ( const auto&,              auto& );
-
             constexpr static void det               ( const auto&,              auto& );
             constexpr static void eigen             ( const auto&,              auto&, auto& );
             constexpr static void eigen_value       ( const auto&,              auto& );
@@ -194,10 +191,17 @@ class cpu
             constexpr static void svd               ( const auto&,              auto&, auto&, auto& );
             constexpr static void tr                ( const auto&,              auto& );
 
+            constexpr static auto transpose         ( const auto&,              auto& );
+            constexpr static auto hermitian         ( const auto&,              auto& );
         };
+
+    public: // Random
+        using random_context_type = std::mt19937;
+        static thread_local random_context_type random_context;
 };
 
-cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());
+             cpu::execution_context_type cpu::execution_context = cpu::execution_context_type(std::thread::hardware_concurrency());
+thread_local cpu::random_context_type    cpu::random_context    = cpu::random_context_type   (std::random_device()());
 
 #include "type/stride_pointer.hpp"
 

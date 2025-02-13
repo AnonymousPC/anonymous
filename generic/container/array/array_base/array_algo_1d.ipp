@@ -356,6 +356,7 @@ constexpr container& array_algo<container,type,1,device>::reverse ( )
 {
     contiguous() ? device::reverse(data(), data() + size()) otherwise
                    device::reverse(begin(), end());
+    return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >

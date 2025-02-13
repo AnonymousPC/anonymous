@@ -7,7 +7,7 @@
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::chunked_binary_istream_view ( stream_type& init_s, int chunk_len )
     extends s_ptr ( &init_s ),
-            buff  ( chunk_len )
+            t     ( chunk_len )
 {
 
 }
@@ -59,16 +59,16 @@ constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::it
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator::value_type& ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator::operator * ( ) const
 {
-    return v_ptr->buff;
+    return v_ptr->t;
 }
 
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator& ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator::operator ++ ( )
 {
-    v_ptr->s_ptr->read(reinterpret_cast<char*>(v_ptr->buff.begin()), v_ptr->buff.size() * sizeof(input_type));
+    v_ptr->s_ptr->read(reinterpret_cast<char*>(v_ptr->t.data()), v_ptr->t.size() * sizeof(input_type));
 
     if constexpr ( detail::requires_byteswap<endian,input_type> )
-        v_ptr->buff.each([] (auto& val) { detail::byteswap(val); });
+        v_ptr->t.for_each([] (auto& val) { detail::byteswap(val); });
 
     return self;
 }
@@ -76,10 +76,10 @@ constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::it
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator& ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator::operator ++ ( int )
 {
-    v_ptr->s_ptr->read(reinterpret_cast<char*>(v_ptr->buff.begin()), v_ptr->buff.size() * sizeof(input_type));
+    v_ptr->s_ptr->read(reinterpret_cast<char*>(v_ptr->t.data()), v_ptr->t.size() * sizeof(input_type));
 
     if constexpr ( detail::requires_byteswap<endian,input_type> )
-        v_ptr->buff.each([] (auto& val) { detail::byteswap(val); });
+        v_ptr->t.for_each([] (auto& val) { detail::byteswap(val); });
 
     return self;
 }
@@ -108,19 +108,19 @@ constexpr bool ranges::chunked_binary_istream_view<stream_type,input_type,endian
 // Interface
 
 template < class stream_type, class output_type, std::endian endian >
-constexpr ranges::chunked_binary_ostream_view<stream_type,output_type,endian>::chunked_binary_ostream_view ( std::from_range_t, std::ranges::input_range auto&& r, stream_type& s, int chunk_len )
-    requires std::same_as<output_type,decay<decltype(*(*r.begin()).begin())>>
+constexpr ranges::chunked_binary_ostream_view<stream_type,output_type,endian>::chunked_binary_ostream_view ( std::from_range_t, input_range auto&& r, stream_type& s, int chunk_len )
+    requires same_as<output_type,decay<decltype(*(*r.begin()).begin())>>
 {
-    let buff = vector<output_type>(chunk_len);
+    let t = vector<output_type>(chunk_len);
 
-    for ( auto&& t in r )
+    for ( auto&& e in r )
     {
-        std::ranges::move(t, buff.begin());
+        std::ranges::move(e, t.begin());
 
         if constexpr ( detail::requires_byteswap<endian,output_type> )
-            buff.each([] (auto& val) { detail::byteswap(val); });
+            t.for_each([] (auto& val) { detail::byteswap(val); });
 
-        s.write(reinterpret_cast<const char*>(buff.begin()), buff.size() * sizeof(output_type));
+        s.write(reinterpret_cast<const char*>(t.data()), t.size() * sizeof(output_type));
     }
 }
 
@@ -139,7 +139,7 @@ constexpr auto views::chunked_binary_istream ( auto& /*stream_type*/ s, int chun
 }
 
 template < class output_type, std::endian endian >
-constexpr views::chunked_binary_ostream<output_type,endian>::chunked_binary_ostream ( std::from_range_t, std::ranges::input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s, int chunk_len )
+constexpr views::chunked_binary_ostream<output_type,endian>::chunked_binary_ostream ( std::from_range_t, input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s, int chunk_len )
     requires requires ( output_type t ) { s.get().write(reinterpret_cast<const char*>(&t), sizeof(output_type)); }
 {
     ranges::chunked_binary_ostream_view<typename decay<decltype(s)>/*reference_wrapper*/::type/*stream_type*/,output_type,endian>(std::from_range, std::move(r), s.get(), chunk_len);

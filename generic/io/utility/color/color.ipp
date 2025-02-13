@@ -11,13 +11,13 @@ constexpr color::color ( )
 }
 
 constexpr color::color ( float_type auto r, float_type auto g, float_type auto b )
-    extends tuple<float,float,float,float> ( float(r), float(g), float(b), 1.0 )
+    extends tuple<float,float,float,float> ( r, g, b, 1.0 )
 {
 
 }
 
 constexpr color::color ( float_type auto r, float_type auto g, float_type auto b, float_type auto a )
-    extends tuple<float,float,float,float> ( float(r), float(g), float(b), float(a) )
+    extends tuple<float,float,float,float> ( r, g, b, a )
 {
 
 }

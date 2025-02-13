@@ -26,7 +26,7 @@ constexpr auto ranges::binary_istream_view<stream_type,input_type,endian>::end (
 // As-stream
 
 template < class stream_type, class input_type, std::endian endian >
-constexpr ranges::binary_istream_view<stream_type,input_type,endian>& ranges::binary_istream_view<stream_type,input_type,endian>::operator >> ( std::same_as<input_type> auto& p )
+constexpr ranges::binary_istream_view<stream_type,input_type,endian>& ranges::binary_istream_view<stream_type,input_type,endian>::operator >> ( same_as<input_type> auto& p )
 {
     p = *(++iterator(self));
     return self;
@@ -115,8 +115,8 @@ constexpr bool ranges::binary_istream_view<stream_type,input_type,endian>::itera
 // Interface
 
 template < class stream_type, class output_type, std::endian endian >
-constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_ostream_view ( std::from_range_t, std::ranges::input_range auto&& r, stream_type& s )
-    requires std::same_as<output_type,decay<decltype(*r.begin())>>
+constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_ostream_view ( std::from_range_t, input_range auto&& r, stream_type& s )
+    requires same_as<output_type,decay<decltype(*r.begin())>>
 {
     for ( auto&& t in r )
         if constexpr ( not detail::requires_byteswap<endian,output_type> )
@@ -132,7 +132,7 @@ constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_os
 // As-stream
 
 template < class stream_type, class output_type, std::endian endian >
-constexpr ranges::binary_ostream_view<stream_type,output_type,endian>& ranges::binary_ostream_view<stream_type,output_type,endian>::operator << ( const std::same_as<output_type> auto& p )
+constexpr ranges::binary_ostream_view<stream_type,output_type,endian>& ranges::binary_ostream_view<stream_type,output_type,endian>::operator << ( const same_as<output_type> auto& p )
 {
     if constexpr ( not detail::requires_byteswap<endian,output_type> )
         s_ptr->write(reinterpret_cast<const char*>(&p), sizeof(output_type));
@@ -171,7 +171,7 @@ constexpr auto views::binary_istream ( auto& /*stream_type*/ s )
 }
 
 template < class output_type, std::endian endian >
-constexpr views::binary_ostream<output_type,endian>::binary_ostream ( std::from_range_t, std::ranges::input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
+constexpr views::binary_ostream<output_type,endian>::binary_ostream ( std::from_range_t, input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
     requires requires ( output_type t ) { s.get().write(reinterpret_cast<const char*>(&t), sizeof(output_type)); }
 {
     ranges::binary_ostream_view<typename decay<decltype(s)>/*reference_wrapper*/::type/*stream_type*/,output_type,endian>(std::from_range, std::move(r), s.get());

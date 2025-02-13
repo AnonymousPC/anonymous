@@ -33,7 +33,7 @@ file_idx& file_idx::open ( const path& pth )
 {
     // Open file.
     file_interface::open(pth);
-    let stream = file_stream(self.file_interface<file_idx>::operator path(), file_stream::read_only(true)); // As base-class any is convertible to path.
+    let stream = file_stream(path(self), file_stream::read_only(true));
 
     // Read header.
     let info_head = info_header();
@@ -102,7 +102,7 @@ file_idx& file_idx::save ( )
 {
     // Save file.
     file_interface::save();
-    let stream = file_stream(self.file_interface<file_idx>::operator path(), file_stream::write_only(true), file_stream::erase(true)); // As base-class any is convertible to path.
+    let stream = file_stream(path(self), file_stream::write_only(true), file_stream::erase(true));
 
     // Write header and data
     if ( self.type() == typeid(array<uint8_t,1>) )
@@ -145,7 +145,8 @@ file_idx& file_idx::save ( )
         write<float64_t,3>(stream, self.value<array<float64_t,3>>());
 
     else
-        throw file_error("cannot save idx-file {}: type or dimension not supported (with write = {}, expected = [[array::value_type = uint8_t, int8_t, int16_t, int32_t, float32_t, float64_t, array::dimension = 1, 2, 3]])", path(self), self.type());
+        throw file_error("cannot save idx-file {}: type or dimension not supported (with write = {}, expected = [[array::value_type = uint8_t, int8_t, int16_t, int32_t, float32_t, float64_t, array::dimension = 1, 2, 3]])",
+                         path(self), self.type());
 
     return self;
 }
@@ -156,56 +157,52 @@ file_idx& file_idx::save ( )
 // Auxiliary
 
 template < class type, int dimension, bool first >
-array<type,dimension> file_idx::read ( auto&& stream, const auto& shp )
+array<type,dimension> file_idx::read ( auto&& stream, const static_array<int,dimension>& shp )
 {
     if constexpr ( dimension == 1 )
-    {
         if constexpr ( first )
             return views::binary_istream<type,std::endian::big>(stream/*non-view*/)
                  | std::ranges::to<array<type>>();
-
         else
             return stream/*chunked-binary-istream-view*/
                  | std::ranges::to<array<type>>();
-    }
 
     else if constexpr ( dimension >= 2 )
     {
-        let sub_shp = vector(shp).pop(1);
-        let arr = array<type,dimension>(static_array<type,dimension-1>(shp);
+        let arr = array<type,dimension>(shp);
+        let sub_shp = static_array<int,dimension-1>();
+        detail::for_constexpr<1,dimension-1>([&] <int index> { sub_shp[index] = shp[index+1]; });
 
         if constexpr ( first )
-            std::ranges::copy(views::chunked_binary_istream<type,std::endian::big>(stream/*non-view*/, sub_shp.product())
-                 | std::views::transform([&] (const auto& chunked_stream)
-                     {
-                         return read<type,dimension-1,false>(chunked_stream, sub_shp);
-                     })
-                 | std::ranges::to<array<array<type,dimension-1>>>());
-
+            std::ranges::move(
+                views::chunked_binary_istream<type,std::endian::big>(stream/*non-view*/, sub_shp.product())
+                    | std::views::transform([&] (const auto& chunked_stream) { return read<type,dimension-1,false>(chunked_stream, sub_shp); }),
+                arr.begin()
+            );
         else
-            return array<type,dimension>(
-                   stream/*chunked-binary-istream-view*/
-                 | std::views::chunk(sub_shp.product())
-                 | std::views::transform([&] (const auto& chunked_stream)
-                     {
-                         return read<type,dimension-1,false>(chunked_stream, sub_shp.product());
-                     })
-                 | std::ranges::to<array<array<type,dimension-1>>>());
+            std::ranges::move(
+                stream/*chunked-binary-istream-view*/
+                    | std::views::chunk(sub_shp.product())
+                    | std::views::transform([&] (const auto& chunked_stream) { return read<type,dimension-1,false>(chunked_stream, sub_shp); }),
+                arr.begin()
+            );
+
+        return arr;
     }
 }
 
 template < class type, int dimension, bool first >
-void file_idx::write ( auto&& stream, const auto& arr )
+void file_idx::write ( auto&& stream, const array<type,dimension>& arr )
 {
     if constexpr ( first )
         stream << info_header
         {
-            .type = std::same_as<type,uint8_t>   ? 0x08 otherwise
-                    std::same_as<type,int8_t>    ? 0x09 otherwise
-                    std::same_as<type,int16_t>   ? 0x0b otherwise
-                    std::same_as<type,int32_t>   ? 0x0c otherwise
-                    std::same_as<type,float32_t> ? 0x0d otherwise
-                  /*std::is_same<type,float64_t>*/ 0x0e,
+            .type = same_as<type,uint8_t>   ? 0x08 otherwise
+                    same_as<type,int8_t>    ? 0x09 otherwise
+                    same_as<type,int16_t>   ? 0x0b otherwise
+                    same_as<type,int32_t>   ? 0x0c otherwise
+                    same_as<type,float32_t> ? 0x0d otherwise
+                  /*same_as<type,float64_t>*/ 0x0e,
             .dimension = dimension,
             .shape = arr.shape()
         };
@@ -213,25 +210,19 @@ void file_idx::write ( auto&& stream, const auto& arr )
     if constexpr ( dimension == 1 )
         arr | std::ranges::to<views::binary_ostream<type,std::endian::big>>(std::ref(stream));
 
-    else if constexpr ( dimension >= 2 ) // Not good.
-        arr | std::views::transform([&] (const auto& chunked_data)
-                {
-                    return write_aux(chunked_data);
-                })
-            | std::ranges::to<views::chunked_binary_ostream<type,std::endian::big>>(std::ref(stream), vector(arr.shape()).pop(1).product());
+    else if constexpr ( dimension >= 2 )
+        arr | std::views::transform([] (const auto& chunked_data) { return write_aux(chunked_data); })
+            | std::ranges::to<views::chunked_binary_ostream<type,std::endian::big>>(std::ref(stream), arr.shape().product() / arr.shape()[1]);
 }
 
 decltype(auto) file_idx::write_aux ( const auto& arr )
 {
-    if constexpr ( arr.dimension() == 1 )
+    if constexpr ( decay<decltype(arr)>::dimension() == 1 )
         return arr;
-    else if constexpr ( arr.dimension() == 2 )
+    else if constexpr ( decay<decltype(arr)>::dimension() == 2 )
         return arr | std::views::join;
     else
-        return arr | std::views::transform([] (const auto& chunked_data)
-                       {
-                           return write_aux(chunked_data);
-                       })
+        return arr | std::views::transform([] (const auto& chunked_data) { return write_aux(chunked_data); })
                    | std::views::join;
 }
 

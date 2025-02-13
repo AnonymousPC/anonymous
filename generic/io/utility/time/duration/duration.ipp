@@ -17,9 +17,10 @@ constexpr duration::duration ( int_type auto hh, int_type auto mm, int_type auto
     extends tuple<int,int,int,int,int,int> ( int(hh), int(mm), int(ss), int(ms), int(us), int(ns) )
 {
     #if debug
-        if ( abs(mm) >= 60 or abs(ss) >= 60 or abs(ms) >= 1000 or abs(us) >= 1000 or abs(ns) >= 1000 or not detail::is_same_sign(hh, mm, ss, ms, us, ns) )
-            throw value_error("duration {} is out of domain [(R), (+-60), (+-60), (+-1000), (+-1000), (+-1000)] or not same-signed",
-                              "{:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d}"s.format(hour(), minute(), second(), millisecond(), microsecond(), nanosecond()));
+    if ( abs(mm) > 59 or abs(ss) > 59 or abs(ms) > 999 or abs(us) > 999 or abs(ns) > 999 )
+        throw value_error("duration {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d} is invalid: value out of domain", hour(), minute(), second(), millisecond(), microsecond(), nanosecond());
+    if ( not detail::is_same_sign(hh, mm, ss, ms, us, ns) )
+        throw value_error("duration {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d} is invalid: value signed inconsistently", hour(), minute(), second(), millisecond(), microsecond(), nanosecond());
     #endif
 }
 
@@ -33,7 +34,7 @@ constexpr duration::duration ( std::chrono::duration<data_type,ratio_type> cvt )
     let s1 = std::chrono::duration_cast<std::chrono::seconds>(cvt).count();
     let s2 = std::chrono::duration_cast<std::chrono::nanoseconds>(cvt - std::chrono::seconds(s1)).count();
 
-    self = second(s1) + nanosecond(s2);
+    self = ap::second(s1) + ap::nanosecond(s2);
 }
 
 template < class data_type, class ratio_type >

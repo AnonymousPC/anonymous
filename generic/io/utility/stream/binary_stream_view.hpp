@@ -24,7 +24,7 @@ class binary_istream_view
         constexpr auto end   ( );
 
     public: // As-stream
-        constexpr binary_istream_view& operator >> ( std::same_as<input_type> auto& );
+        constexpr binary_istream_view& operator >> ( same_as<input_type> auto& );
 };
 
 
@@ -40,11 +40,11 @@ class binary_ostream_view
         static_assert ( not is_class<output_type> );
 
     public: // Interface
-        constexpr binary_ostream_view ( std::from_range_t, std::ranges::input_range auto&& r, stream_type& )
-            requires std::same_as<output_type,decay<decltype(*r.begin())>>;
+        constexpr binary_ostream_view ( std::from_range_t, input_range auto&& r, stream_type& )
+            requires same_as<output_type,decay<decltype(*r.begin())>>;
 
     public: // As-stream
-        constexpr binary_ostream_view& operator << ( const std::same_as<output_type> auto& );
+        constexpr binary_ostream_view& operator << ( const same_as<output_type> auto& );
 
     public: // As-stream-detail
         constexpr binary_ostream_view ( stream_type& );
@@ -71,7 +71,7 @@ template < class output_type, std::endian endian = std::endian::native >
 class binary_ostream
 {
     public:
-        constexpr binary_ostream ( std::from_range_t, std::ranges::input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
+        constexpr binary_ostream ( std::from_range_t, input_range auto&& r, auto /*std::reference_wrapper<stream_type>*/ s )
             requires requires ( output_type t ) { s.get().write(reinterpret_cast<const char*>(&t), sizeof(output_type)); };
 };
 

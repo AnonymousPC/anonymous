@@ -115,6 +115,7 @@
         "stream_ref": "cpp",
         "ccomplex": "cpp",
         "tensor": "cpp",
-        "specialfunctions": "cpp"
+        "specialfunctions": "cpp",
+        "cfenv": "cpp"
     }
 }

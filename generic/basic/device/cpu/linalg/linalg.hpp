@@ -82,18 +82,23 @@ constexpr void cpu::linalg::convolve ( const auto& left, const auto& right, auto
     using complex_type = decltype(std::complex(detail::eigen_nativize<output_value_type>()));
     using value_type   = complex_type::value_type;
 
-    let left_raw  = Eigen::Vector<detail::eigen_nativize<output_value_type>,Eigen::Dynamic>>(detail::eigen_map<output_value_type>(left ));
-    let right_raw = Eigen::Vector<detail::eigen_nativize<output_value_type>,Eigen::Dynamic>>(detail::eigen_map<output_value_type>(right));
-    if ( left_raw.size() < right_raw.size() )
-        left_vct.resize(right_vct.siz());
-    else if ( left_raw.size() > right_raw.size() )
-        right_raw.resize(left_raw.size());
+    let nfft = left.size() + right.size() - 1;
+    let left_raw  = Eigen::Vector<detail::eigen_nativize<output_value_type>,Eigen::Dynamic>(nfft);
+    let right_raw = Eigen::Vector<detail::eigen_nativize<output_value_type>,Eigen::Dynamic>(nfft);
+    left_raw .head(left .size()) = detail::eigen_map<output_value_type>(left );
+    right_raw.head(right.size()) = detail::eigen_map<output_value_type>(right);
 
-    let kernel = Eigen::FFT<value_type>();
-    let left_fft = Eigen::Vector<
+    let fft_kernel = Eigen::FFT<value_type>();
+    let left_fft   = Eigen::Vector<complex_type,Eigen::Dynamic>(left_raw .size());
+    let right_fft  = Eigen::Vector<complex_type,Eigen::Dynamic>(right_raw.size());
+    fft_kernel.fwd(left_fft,  left_raw );
+    fft_kernel.fwd(right_fft, right_raw);
 
-
-    detail::eigen_map(output) = kernel.inv(left_fft.cwiseProduct(right_fft));
+    let output_fft = left_fft.cwiseProduct(right_fft).eval();
+    if constexpr ( number_type<output_value_type> )
+        detail::eigen_map<output_value_type>(output).noalias() = fft_kernel.inv(output_fft).real();
+    else
+        detail::eigen_map<output_value_type>(output).noalias() = fft_kernel.inv(output_fft);
 }
 
 constexpr void cpu::linalg::cross ( const auto& left, const auto& right, auto& output )

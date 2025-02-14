@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class file_tga
-
-// Core
-
 file_tga::file_tga ( const char* pth )
 {
     open(pth);
@@ -13,8 +9,6 @@ file_tga::file_tga ( const path& pth )
 {
     open(pth);
 }
-
-// Interface (override)
 
 file_tga& file_tga::open ( const path& pth )
 {
@@ -37,9 +31,6 @@ file_tga& file_tga::save ( )
 
     return self;
 }
-
-
-// Interface
 
 int& file_tga::depth ( )
 {

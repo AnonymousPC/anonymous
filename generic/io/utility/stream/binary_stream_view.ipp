@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class binary_istream_view
-
-// Interface
-
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::binary_istream_view<stream_type,input_type,endian>::binary_istream_view ( stream_type& init_s )
     extends s_ptr ( &init_s )
@@ -23,18 +19,12 @@ constexpr auto ranges::binary_istream_view<stream_type,input_type,endian>::end (
     return std::default_sentinel;
 }
 
-// As-stream
-
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::binary_istream_view<stream_type,input_type,endian>& ranges::binary_istream_view<stream_type,input_type,endian>::operator >> ( same_as<input_type> auto& p )
 {
     p = *(++iterator(self));
     return self;
 }
-
-
-
-/// Class binary_istream_view::iterator
 
 template < class stream_type, class input_type, std::endian endian >
 class ranges::binary_istream_view<stream_type,input_type,endian>::iterator
@@ -54,7 +44,6 @@ class ranges::binary_istream_view<stream_type,input_type,endian>::iterator
         constexpr iterator&   operator ++ ( int );
         constexpr bool        operator == ( std::default_sentinel_t ) const;
 };
-
 
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::binary_istream_view<stream_type,input_type,endian>::iterator::iterator ( binary_istream_view& init_v )
@@ -97,23 +86,6 @@ constexpr bool ranges::binary_istream_view<stream_type,input_type,endian>::itera
     return v_ptr->s_ptr->eof();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/// Class binary_ostream_view
-
-// Interface
-
 template < class stream_type, class output_type, std::endian endian >
 constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_ostream_view ( std::from_range_t, input_range auto&& r, stream_type& s )
     requires same_as<output_type,decay<decltype(*r.begin())>>
@@ -128,8 +100,6 @@ constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_os
             s.write(reinterpret_cast<const char*>(&t2), sizeof(output_type));
         }
 }
-
-// As-stream
 
 template < class stream_type, class output_type, std::endian endian >
 constexpr ranges::binary_ostream_view<stream_type,output_type,endian>& ranges::binary_ostream_view<stream_type,output_type,endian>::operator << ( const same_as<output_type> auto& p )
@@ -146,22 +116,12 @@ constexpr ranges::binary_ostream_view<stream_type,output_type,endian>& ranges::b
     return self;
 }
 
-// As-stream-detail
-
 template < class stream_type, class output_type, std::endian endian >
 constexpr ranges::binary_ostream_view<stream_type,output_type,endian>::binary_ostream_view ( stream_type& init_s )
     extends s_ptr ( &init_s )
 {
 
 }
-
-
-
-
-
-
-
-/// Views
 
 template < class input_type, std::endian endian >
 constexpr auto views::binary_istream ( auto& /*stream_type*/ s )

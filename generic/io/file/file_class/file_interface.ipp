@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class file_interface
-
-// Core
-
 template < class type >
 file_interface<type>::file_interface ( file_interface&& init )
     extends file_path ( std::exchange ( init.file_path, ""    ) ),
@@ -19,8 +15,6 @@ file_interface<type>& file_interface<type>::operator = ( file_interface&& right 
     file_open = std::exchange ( right.file_open, false );
     return self;
 }
-
-// Interface (override)
 
 template < class type >
 type& file_interface<type>::open ( const path& pth )
@@ -48,8 +42,6 @@ type& file_interface<type>::save ( )
 
     return static_cast<type&>(self);
 }
-
-// Interface (non-override)
 
 template < class type >
 type& file_interface<type>::save_as ( const path& pth )

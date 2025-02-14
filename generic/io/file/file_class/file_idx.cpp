@@ -1,7 +1,5 @@
 #pragma once
 
-// Header ( declaration )
-
 struct file_idx::info_header
 {
     uint16_t         magic_num = 0x0;  // Always set as 0.
@@ -9,13 +7,6 @@ struct file_idx::info_header
     uint8_t          dimension = 0;    // Shows the data-dimension.
     vector<uint32_t> shape     = {};   // Shows the data-shape.
 };
-
-
-
-
-/// Class file_idx
-
-// Core
 
 file_idx::file_idx ( const char* pth )
 {
@@ -26,8 +17,6 @@ file_idx::file_idx ( const path& pth )
 {
     open(pth);
 }
-
-// Interface (override)
 
 file_idx& file_idx::open ( const path& pth )
 {
@@ -151,11 +140,6 @@ file_idx& file_idx::save ( )
     return self;
 }
 
-
-
-
-// Auxiliary
-
 template < class value_type, int dimension, bool first >
 array<value_type,dimension> file_idx::read ( auto&& stream, const static_array<int,dimension>& shp )
 {
@@ -225,11 +209,6 @@ decltype(auto) file_idx::write_aux ( const auto& arr )
         return arr | std::views::transform([] (const auto& chunked_data) { return write_aux(chunked_data); })
                    | std::views::join;
 }
-
-
-
-
-// Header
 
 file_stream& operator >> ( file_stream& left, file_idx::info_header& right )
 {

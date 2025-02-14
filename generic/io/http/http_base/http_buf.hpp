@@ -82,12 +82,12 @@ class http_buf
         using resolve_type = boost::asio::ip::tcp::resolver::results_type;
 
         // In .hpp
-        void        set_client_request       (                   const url&, const auto&... );
-        auto        make_client_mode         (                   const url&, auto, auto... );
-        auto        make_client_mode         ( client_mode_type, const url&, auto, auto... );
-        void        set_server_response      (                   const url&, const auto&... );
-        auto        make_server_mode         (                   const url&, auto, auto... );
-        auto        make_server_mode         ( server_mode_type, const url&, auto, auto... );
+        void         set_client_request       (                   const url&, const auto&... );
+        auto         make_client_mode         (                   const url&, auto, auto... );
+        auto         make_client_mode         ( client_mode_type, const url&, auto, auto... );
+        void         set_server_response      (                   const url&, const auto&... );
+        auto         make_server_mode         (                   const url&, auto, auto... );
+        auto         make_server_mode         ( server_mode_type, const url&, auto, auto... );
 
         // In .cpp
         resolve_type resolve                  ( const url& );
@@ -106,7 +106,6 @@ class http_buf
         void         reset_param              ( );
         string       local_endpoint_noexcept  ( ) const;
         string       remote_endpoint_noexcept ( ) const;
-        string       encode_base64            ( const string& );
 };
 
 

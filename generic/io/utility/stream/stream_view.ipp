@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class istream_view
-
-// Interface
-
 template < class stream_type, class input_type >
 constexpr ranges::istream_view<stream_type,input_type>::istream_view ( stream_type& init_s )
     extends s_ptr ( &init_s )
@@ -24,11 +20,6 @@ constexpr auto ranges::istream_view<stream_type,input_type>::end ( )
     return std::default_sentinel;
 }
 
-
-
-
-/// Class istream_view::iterator
-
 template < class stream_type, class input_type >
 class ranges::istream_view<stream_type,input_type>::iterator
 {
@@ -47,7 +38,6 @@ class ranges::istream_view<stream_type,input_type>::iterator
         constexpr iterator&   operator ++ ( int );
         constexpr bool        operator == ( std::default_sentinel_t ) const;
 };
-
 
 template < class stream_type, class input_type >
 constexpr ranges::istream_view<stream_type,input_type>::iterator::iterator ( istream_view& init_v )
@@ -82,23 +72,6 @@ constexpr bool ranges::istream_view<stream_type,input_type>::iterator::operator 
     return v_ptr->s_ptr->eof();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/// Class ostream_view
-
-// Interface
-
 template < class stream_type, class output_type >
 constexpr ranges::ostream_view<stream_type,output_type>::ostream_view ( std::from_range_t, input_range auto&& r, stream_type& s )
     requires same_as<output_type,range_value<decltype(r)>>
@@ -106,13 +79,6 @@ constexpr ranges::ostream_view<stream_type,output_type>::ostream_view ( std::fro
     for ( auto&& t in r )
         s << std::move(t);
 }
-
-
-
-
-
-
-/// Views
 
 template < class input_type >
 constexpr auto views::istream ( auto& s )

@@ -2,7 +2,7 @@
 
 template < class type, class device >
 class array<basic_string_view<type,device>,1,cpu>
-    extends public array<typename device::template basic_string_view<type>,1,cpu>
+    extends protected array<typename device::template basic_string_view<type>,1,cpu>
 {
     public: // Typedef
         using value_type      = device::template value_type     <basic_string_view<type,device>>;

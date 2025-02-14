@@ -6,13 +6,6 @@ namespace detail
     constexpr tuple<int,int,int> int_to_date ( int );
 }
 
-
-
-
-/// Class time_point
-
-// Core
-
 constexpr time_point::time_point ( int_type auto YYYY, int_type auto MM, int_type auto DD, int_type auto hh, int_type auto mm, int_type auto ss, int_type auto ms, int_type auto us, int_type auto ns )
     extends tuple<int,int,int,int,int,int,int,int,int> ( YYYY, MM, DD, hh, mm, ss, ms, us, ns )
 {
@@ -23,9 +16,6 @@ constexpr time_point::time_point ( int_type auto YYYY, int_type auto MM, int_typ
         throw value_error("time_point {:04d}-{:04d}-{:04d} {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d} is invalid: value out of domain", year(), month(), day(), hour(), minute(), second(), millisecond(), microsecond(), nanosecond());
     #endif
 }
-
-
-// Conversion
 
 template < class clock_type >
 constexpr time_point::time_point ( std::chrono::time_point<clock_type> cvt )
@@ -43,9 +33,6 @@ constexpr time_point::operator std::chrono::time_point<clock_type> ( ) const
                )
            );
 }
-
-
-// Interface
 
 constexpr int& time_point::year ( )
 {
@@ -142,13 +129,6 @@ constexpr int time_point::weekday ( ) const
     return (detail::date_to_int(ap::tuple(year(), month(), day())) + 5) % 7 + 1;
 }
 
-
-
-
-
-
-/// Time_point: factory
-
 constexpr time_point now ( )
 {
     return time_point(std::chrono::system_clock::now());
@@ -163,10 +143,6 @@ constexpr time_point date ( int_type auto YYYY, int_type auto MM, int_type auto 
 {
     return time_point(YYYY, MM, DD, 0, 0, 0, 0, 0, 0);
 }
-
-
-
-/// Time_point: operator
 
 constexpr std::ostream& operator << ( std::ostream& left, const time_point& right )
 {
@@ -229,10 +205,6 @@ constexpr time_point& operator -= ( time_point& left, const duration& right )
     return left = left - right;
 }
 
-
-
-/// Time_point: other
-
 constexpr void sleep_until ( time_point time )
 {
     sleep_for(time - now());
@@ -242,14 +214,6 @@ constexpr int time_zone ( )
 {
     return (boost::posix_time::second_clock::local_time() - boost::posix_time::second_clock::universal_time()).hours();
 }
-
-
-
-
-
-
-
-// Auxiliary
 
 constexpr int detail::date_to_int ( tuple<int,int,int> date )
 {

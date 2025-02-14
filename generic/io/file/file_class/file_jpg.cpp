@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class file_jpg
-
-// Core
-
 file_jpg::file_jpg ( const char* pth )
 {
     open(pth);
@@ -13,8 +9,6 @@ file_jpg::file_jpg ( const path& pth )
 {
     open(pth);
 }
-
-// Interface (override)
 
 file_jpg& file_jpg::open ( const path& pth )
 {
@@ -37,9 +31,6 @@ file_jpg& file_jpg::save ( )
 
     return self;
 }
-
-
-// Interface
 
 int& file_jpg::depth ( )
 {

@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class file_bmp
-
-// Core
-
 file_bmp::file_bmp ( const char* pth )
 {
     open(pth);
@@ -13,8 +9,6 @@ file_bmp::file_bmp ( const path& pth )
 {
     open(pth);
 }
-
-// Interface (override)
 
 file_bmp& file_bmp::open ( const path& pth )
 {
@@ -37,9 +31,6 @@ file_bmp& file_bmp::save ( )
 
     return self;
 }
-
-
-// Interface
 
 int& file_bmp::depth ( )
 {

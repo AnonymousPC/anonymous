@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class path
-
-// Core
-
 path::path ( const char* p )
     extends string ( p )
 {
@@ -16,8 +12,6 @@ path::path ( string p )
 
 }
 
-// Conversion
-
 path::path ( std::filesystem::path pth )
     extends string ( pth.generic_string() )
 {
@@ -28,9 +22,6 @@ path::operator std::filesystem::path ( ) const
 {
     return std::filesystem::path(self.c_str());
 }
-
-
-// Member
 
 path path::absolute_path ( ) const
 {
@@ -93,10 +84,6 @@ path path::root_path ( ) const
     }
 }
 
-
-
-// Iterator
-
 const array<path> path::dir ( ) const
 {
     if ( not is_directory(self) )
@@ -126,9 +113,6 @@ const array<path> path::tree ( ) const
          | std::views::transform([] (const auto& entry) { return path(entry.path()); })
          | std::ranges::to<array<path>>();
 }
-
-
-// Operator
 
 bool operator == ( const path& p1, const path& p2 )
 {

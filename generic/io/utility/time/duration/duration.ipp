@@ -7,12 +7,6 @@ namespace detail
     constexpr void regularize_diff_signed_time ( int&, int&, int&, int&, int&, int& );
 }
 
-
-
-/// Class duratiom
-
-// Core
-
 constexpr duration::duration ( int_type auto hh, int_type auto mm, int_type auto ss, int_type auto ms, int_type auto us, int_type auto ns )
     extends tuple<int,int,int,int,int,int> ( int(hh), int(mm), int(ss), int(ms), int(us), int(ns) )
 {
@@ -23,10 +17,6 @@ constexpr duration::duration ( int_type auto hh, int_type auto mm, int_type auto
         throw value_error("duration {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d} is invalid: value signed inconsistently", hour(), minute(), second(), millisecond(), microsecond(), nanosecond());
     #endif
 }
-
-
-
-// Conversion
 
 template < class data_type, class ratio_type >
 constexpr duration::duration ( std::chrono::duration<data_type,ratio_type> cvt )
@@ -107,14 +97,6 @@ constexpr const int& duration::nanosecond ( ) const
     return self.template value<6>();
 }
 
-
-
-
-
-
-
-/// Duration: factory
-
 constexpr duration hour ( number_type auto hh )
 {
     if constexpr ( int_type<decltype(hh)> )
@@ -162,10 +144,6 @@ constexpr duration nanosecond ( number_type auto ns )
     else
         return nanosecond(int(ns));
 }
-
-
-
-/// Duration: operator
 
 constexpr std::ostream& operator << ( std::ostream& left, const duration& right )
 {
@@ -256,11 +234,6 @@ constexpr duration& operator /= ( duration& left, const number_type auto& right 
     return left = left / right;
 }
 
-
-
-
-/// Duration: other
-
 constexpr void sleep ( duration time )
 {
     sleep_for(time);
@@ -270,13 +243,6 @@ constexpr void sleep_for ( duration time )
 {
     std::this_thread::sleep_for(std::chrono::nanoseconds(time));
 }
-
-
-
-
-
-
-// Auxiliary
 
 constexpr bool detail::is_same_sign ( auto a, auto... args )
 {

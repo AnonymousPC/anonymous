@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class ipv4
-
-// Core
-
 ipv4::ipv4 ( int init_1, int init_2, int init_3, int init_4 )
     extends ipv4 ( init_1, init_2, init_3, init_4, 0 )
 {
@@ -20,8 +16,6 @@ ipv4::ipv4 ( int init_1, int init_2, int init_3, int init_4, int init_port )
          self.port  () < 0 or self.port  () > 65535 )
         throw network_error("ipv4 {} is invalid (example: 192.168.1.1:80)", self);
 }
-
-// Parse
 
 int& ipv4::first ( )
 {

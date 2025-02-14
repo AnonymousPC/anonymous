@@ -1,7 +1,5 @@
 #pragma once
 
-/// Subclass
-
 struct file_stream::mode_type
 {
     bool read_only  = false;
@@ -9,14 +7,6 @@ struct file_stream::mode_type
     bool erase      = false;
     bool append     = false;
 };
-
-
-
-
-
-/// Class file_stream
-
-// Core
 
 file_stream::file_stream ( path pth, file_mode auto... args )
 {
@@ -26,9 +16,6 @@ file_stream::file_stream ( path pth, file_mode auto... args )
     // Open
     open(pth, std::forward<decltype(args)>(args)...);
 }
-
-
-// Open
 
 void file_stream::open ( path pth, file_mode auto... args )
 {
@@ -44,9 +31,6 @@ void file_stream::open ( path pth, file_mode auto... args )
     if ( not std::fstream::good() )
         throw file_error("cannot open file {}", pth);
 }
-
-
-// Auxiliary
 
 file_stream::mode_type file_stream::make_mode ( auto prm, auto... args )
 {
@@ -82,10 +66,6 @@ file_stream::mode_type file_stream::make_mode ( mode_type modes, auto prm, auto.
         return modes;
     }
 }
-
-
-
-/// Class file_stream::mode_base
 
 constexpr file_stream::mode_base::mode_base ( bool init )
     extends value ( init )

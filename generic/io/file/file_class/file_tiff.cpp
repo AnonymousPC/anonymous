@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class file_tiff
-
-// Core
-
 file_tiff::file_tiff ( const char* pth )
 {
     open(pth);
@@ -13,8 +9,6 @@ file_tiff::file_tiff ( const path& pth )
 {
     open(pth);
 }
-
-// Interface (override)
 
 file_tiff& file_tiff::open ( const path& pth )
 {
@@ -37,9 +31,6 @@ file_tiff& file_tiff::save ( )
 
     return self;
 }
-
-
-// Interface
 
 int& file_tiff::depth ( )
 {

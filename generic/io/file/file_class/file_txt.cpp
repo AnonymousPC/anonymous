@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class file_txt
-
-// Core
-
 file_txt::file_txt ( const char* pth )
 {
     open(pth);
@@ -13,8 +9,6 @@ file_txt::file_txt ( const path& pth )
 {
     open(pth);
 }
-
-// Interface (override)
 
 file_txt& file_txt::open ( const path& pth )
 {

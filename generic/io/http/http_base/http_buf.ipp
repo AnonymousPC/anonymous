@@ -1,14 +1,10 @@
 #pragma once
 
-/// Auxiliary
-
 namespace detail
 {
-    void try_for_each ( const auto&, auto, auto );
-}
-
-
-/// Subclass
+    string encode_base64 ( const string& );
+    
+} // namespace detail
 
 struct http_buf::client_mode_type
 {
@@ -28,13 +24,6 @@ struct http_buf::server_mode_type
 {
 
 };
-
-
-
-
-/// Class http_buf
-
-// Interface
 
 void http_buf::connect ( url website, http_client_mode auto... args )
 {
@@ -72,7 +61,7 @@ void http_buf::listen ( url portal, http_server_mode auto... args )
 
     // Check scheme.
     if ( portal.scheme() != "http" and portal.scheme() != "https" )
-        throw network_error("unrecognized http scheme (with url = {}, expected = [[begins with http://, https://]])", portal);
+        throw network_error("unrecognized http scheme (with url = {}, expected = [[begins with http:// or https://]])", portal);
 
     // Create http handle.
     initialize_as(open_type::server);
@@ -111,9 +100,9 @@ void http_buf::set_client_request ( const url& website, const auto&... args )
 
         // Authorization
         if ( website.authorization() != "" )
-            request.set(boost::beast::http::field::authorization, "Basic {}"s.format(encode_base64(website.authorization())).c_str());
+            request.set(boost::beast::http::field::authorization, "Basic {}"s.format(detail::encode_base64(website.authorization())).c_str());
         else if ( modes.authorization != pair<string,string>{"", ""} )
-            request.set(boost::beast::http::field::authorization, "Basic {}"s.format(encode_base64("{}:{}"s.format(modes.authorization.key(), modes.authorization.value()))).c_str());
+            request.set(boost::beast::http::field::authorization, "Basic {}"s.format(detail::encode_base64("{}:{}"s.format(modes.authorization.key(), modes.authorization.value()))).c_str());
 
         // Cookie
         if ( not modes.cookie.empty() )
@@ -367,49 +356,4 @@ constexpr http_buf::mode_base<type>::mode_base ( type m )
     extends value ( std::move(m) )
 {
 
-}
-
-
-
-
-
-
-
-
-
-/// Auxiliary
-
-void detail::try_for_each ( const auto& inputs, auto on_operation, auto on_error )
-{
-    let success = false;
-    let except  = array<string>();
-
-    for ( const auto& val in inputs )
-    {
-        try
-        {
-            on_operation(val);
-            success = true;
-            break;
-        }
-        catch ( ap::exception& e )
-        {
-            e.stacktrace() = std::stacktrace();
-            except.push("try {} throws an exception {}: {}"s.format(except.size()+1, typeid(e), e.what()));
-        }
-        catch ( const std::exception& e )
-        {
-            except.push("try {} throws an exception {}: {}"s.format(except.size()+1, typeid(e), e.what()));
-        }
-    }
-
-    if ( not success )
-    {
-        let errors = '\n' +
-                   ( except
-                   | std::views::join_with('\n')
-                   | std::ranges::to<string>()
-                   );
-        on_error(errors);
-    }
 }

@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class color
-
-// Core
-
 constexpr color::color ( )
     extends color ( 0.0, 0.0, 0.0, 1.0 )
 {
@@ -21,8 +17,6 @@ constexpr color::color ( float_type auto r, float_type auto g, float_type auto b
 {
 
 }
-
-// Interface
 
 constexpr float& color::red ( )
 {

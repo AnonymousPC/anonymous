@@ -1,7 +1,5 @@
 #pragma once
 
-/// Class url
-
 const std::regex url::regex = std::regex
 (
     R"(([a-z]+://))"                                                                                                                                    // Essential: protocal.
@@ -13,17 +11,11 @@ const std::regex url::regex = std::regex
     R"((\#(?:[a-zA-Z0-9\-._~%!$&'()*+,;=:@/?]+)?)?)"                                                                                                    // Optional:  fragment.
 );
 
-
-
-// Core
-
 url::url ( string website )
     extends string ( std::move(website) )
 {
 
 }
-
-// Parse
 
 string url::scheme ( ) const
 {

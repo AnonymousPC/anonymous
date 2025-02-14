@@ -144,9 +144,6 @@ namespace detail
 
 
 
-/// Class file_csv
-
-// Core
 
 file_csv::file_csv ( const char* pth )
 {
@@ -157,8 +154,6 @@ file_csv::file_csv ( const path& pth )
 {
     open(pth);
 }
-
-// Interface (override)
 
 file_csv& file_csv::open ( const path& pth )
 {
@@ -197,7 +192,6 @@ file_csv& file_csv::open ( const path& pth )
 
     return self;
 }
-
 
 file_csv& file_csv::save ( )
 {

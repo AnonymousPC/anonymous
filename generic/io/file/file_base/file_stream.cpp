@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class file_stream
-
-// Core
-
 file_stream::file_stream ( )
 {
     // Set exception cases.
@@ -15,8 +11,6 @@ file_stream::~file_stream ( )
     // Reset exception cases.
     exceptions(std::ios::iostate());
 }
-
-// Auxiliary
 
 std::ios::openmode file_stream::make_std_openmode ( mode_type modes )
 {

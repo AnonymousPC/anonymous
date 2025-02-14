@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class chunked_binary_istream_view
-
-// Interface
-
 template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::chunked_binary_istream_view ( stream_type& init_s, int chunk_len )
     extends s_ptr ( &init_s ),
@@ -23,11 +19,6 @@ constexpr auto ranges::chunked_binary_istream_view<stream_type,input_type,endian
 {
     return std::default_sentinel;
 }
-
-
-
-
-/// Class chunked_binary_istream_view::iterator
 
 template < class stream_type, class input_type, std::endian endian >
 class ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator
@@ -90,23 +81,6 @@ constexpr bool ranges::chunked_binary_istream_view<stream_type,input_type,endian
     return v_ptr->s_ptr->eof();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/// Class chunked_binary_ostream_view
-
-// Interface
-
 template < class stream_type, class output_type, std::endian endian >
 constexpr ranges::chunked_binary_ostream_view<stream_type,output_type,endian>::chunked_binary_ostream_view ( std::from_range_t, input_range auto&& r, stream_type& s, int chunk_len )
     requires same_as<output_type,decay<decltype(*(*r.begin()).begin())>>
@@ -123,13 +97,6 @@ constexpr ranges::chunked_binary_ostream_view<stream_type,output_type,endian>::c
         s.write(reinterpret_cast<const char*>(t.data()), t.size() * sizeof(output_type));
     }
 }
-
-
-
-
-
-
-/// Views
 
 template < class input_type, std::endian endian >
 constexpr auto views::chunked_binary_istream ( auto& /*stream_type*/ s, int chunk_len )

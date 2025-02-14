@@ -1,7 +1,5 @@
 #pragma once
 
-/// File
-
 bool is_file ( const path& p )
 {
     return std::filesystem::is_regular_file(std::filesystem::path(p));
@@ -211,10 +209,6 @@ intmax_t size_of_file ( const path& p )
     }
 
 }
-
-
-
-/// Directory
 
 path current_directory ( )
 {

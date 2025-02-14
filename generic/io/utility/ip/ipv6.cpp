@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class ipv6
-
-// Core
-
 ipv6::ipv6 ( int init_1, int init_2, int init_3, int init_4, int init_5, int init_6, int init_7, int init_8 )
     extends ipv6 ( init_1, init_2, init_3, init_4, init_5, init_6, init_7, init_8, 0 )
 {
@@ -24,8 +20,6 @@ ipv6::ipv6 ( int init_1, int init_2, int init_3, int init_4, int init_5, int ini
          self.port   () < 0 or self.port   () > 65535 )
         throw network_error("ipv6 {} does not matches ipv6 domain (example: [fe80::1a2b:3c4d:5e6f:7g8h]:80)", self);
 }
-
-// Parse
 
 int& ipv6::first ( )
 {

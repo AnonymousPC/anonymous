@@ -40,8 +40,7 @@ url http_buf::local_endpoint ( ) const
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("bad local endpoint [[caused by {}: {}]]",
-                            typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+        throw network_error("bad local endpoint").from(detail::boost_system_error(e));
     }
 }
 
@@ -56,8 +55,7 @@ url http_buf::remote_endpoint ( ) const
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("bad remote endpoint [[caused by {}: {}]]",
-                            typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+        throw network_error("bad remote endpoint").from(detail::boost_system_error(e));
     }
 }
 
@@ -169,9 +167,7 @@ http_buf::resolve_type http_buf::resolve ( const url& website )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("resolution failed (with local-endpoint = {}, remote-url = {}, layer = http/tcp) [[caused by {}: {}]]",
-                            local_endpoint_noexcept(), website,
-                            typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+        throw network_error("resolution failed (with local_endpoint = {}, remote_url = {}, layer = http/tcp)", local_endpoint_noexcept(), website).from(detail::boost_system_error(e));
     }
 }
 
@@ -187,14 +183,12 @@ void http_buf::connect_without_proxy ( const url& website )
             }
             catch ( const boost::system::system_error& e )
             {
-                throw network_error("connection failed (with remote-endpoint = {}) [[caused by {}: {}]]",
-                                    ip.endpoint(), typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+                throw network_error("connection failed (with remote_endpoint = {})", ip.endpoint()).from(detail::boost_system_error(e));
             }
         },
         [&] (const auto& errors)
         {
-            throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, layer = http/tcp): {}",
-                                local_endpoint_noexcept(), website, errors);
+            throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, layer = http/tcp): {}", local_endpoint_noexcept(), website, errors);
         });
 
     // SSL.
@@ -206,9 +200,8 @@ void http_buf::connect_without_proxy ( const url& website )
         // SSL server name indication.
         let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
         if ( not sni_success )
-            throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, remote-endpoint = {}, layer = https/ssl) [[caused by {}: {}]]",
-                                local_endpoint_noexcept(), website, remote_endpoint_noexcept(),
-                                "openssl", boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category())).what());
+            throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, layer = https/ssl)", local_endpoint_noexcept(), website, remote_endpoint_noexcept())
+                                .from(detail::boost_system_error(boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category())).what()));
 
         // SSL handshake.
         try
@@ -217,9 +210,7 @@ void http_buf::connect_without_proxy ( const url& website )
         }
         catch ( const boost::system::system_error& e )
         {
-            throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, remote-endpoint = {}, layer = https/ssl) [[caused by {}: {}]]",
-                                local_endpoint_noexcept(), website, remote_endpoint_noexcept(),
-                                typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+            throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, layer = https/ssl)", local_endpoint_noexcept(), website, remote_endpoint_noexcept()).from(detail::boost_system_error(e));
         }
     }
 }
@@ -228,8 +219,7 @@ void http_buf::connect_through_proxy ( const url& website, const url& proxy_webs
 {
     // Status error.
     if ( opened != open_type::close )
-        throw network_error("connection failed: http_buf has been already opened (with mode = {}, local-endpoint = {}, remote-endpoint = {})",
-                            opened == open_type::client ? "client" otherwise "server", local_endpoint_noexcept(), remote_endpoint_noexcept());
+        throw network_error("connection failed: http_buf has been already opened (with mode = {}, local-endpoint = {}, remote-endpoint = {})", opened == open_type::client ? "client" otherwise "server", local_endpoint_noexcept(), remote_endpoint_noexcept());
 
     // Connect to proxy server.
     try
@@ -238,8 +228,7 @@ void http_buf::connect_through_proxy ( const url& website, const url& proxy_webs
     }
     catch ( const network_error& )
     {
-        throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, proxy-url = {}, layer = http/tcp): cannot connect to proxy server",
-                            local_endpoint_noexcept(), website, proxy_website);
+        throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, proxy-url = {}, layer = http/tcp): cannot connect to proxy server", local_endpoint_noexcept(), website, proxy_website);
     }
 
     // Http:  request into full url.
@@ -256,8 +245,7 @@ void http_buf::connect_through_proxy ( const url& website, const url& proxy_webs
         establish_proxy_tunnel(website, proxy_website);
 
     else
-        throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, proxy-url = {}): proxy on scheme {} is undefined",
-                            local_endpoint_noexcept(), website, proxy_website, website.scheme());
+        throw network_error("connection failed (with local-endpoint = {}, remote-url = {}, proxy-url = {}): proxy on scheme {} is undefined", local_endpoint_noexcept(), website, proxy_website, website.scheme());
 }
 
 
@@ -459,8 +447,8 @@ void http_buf::send_more ( int c, auto& serializer )
                                   boost::asio::write(*https_handle, boost::beast::http::make_chunk(boost::asio::buffer(serializer.get().body()))); // body() is always full.
 
         // Refresh put area.
-        setp(const_cast<char*>(serializer.get().body().data()),
-             const_cast<char*>(serializer.get().body().data()) + serializer.get().body().size());
+        setp(const_cast<char*>(serializer.get().body().begin()),
+             const_cast<char*>(serializer.get().body().end());
         *pptr() = traits_type::to_char_type(c);
         pbump(1);
     }
@@ -528,9 +516,9 @@ int http_buf::receive_more ( auto& parser )
                                                   boost::beast::http::read_some(*https_handle, *receive_buff, parser);
 
             // Refresh get area.
-            setg(const_cast<char*>(parser.get().body().data()),
-                 const_cast<char*>(parser.get().body().data()),
-                 const_cast<char*>(parser.get().body().data()) + bytes);
+            setg(const_cast<char*>(parser.get().body().begin()),
+                 const_cast<char*>(parser.get().body().begin()),
+                 const_cast<char*>(parser.get().body().begin()) + bytes);
 
             return traits_type::to_int_type(*gptr());
         }
@@ -591,8 +579,8 @@ void http_buf::initialize_as ( open_type open_mode )
         send_request_buff  = std::make_unique<boost::beast::http::request           <boost::beast::http::string_body>>();
         request_serializer = std::make_unique<boost::beast::http::request_serializer<boost::beast::http::string_body>>(*send_request_buff);
         const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(request_serializer->get()).body().resize(default_buffer_size);
-        setp(const_cast<char*>(request_serializer->get().body().data()),
-             const_cast<char*>(request_serializer->get().body().data()) + request_serializer->get().body().size());
+        setp(const_cast<char*>(request_serializer->get().body().begin()),
+             const_cast<char*>(request_serializer->get().body().end()));
 
         receive_buff    = std::make_unique<boost::beast::flat_buffer>();
         response_parser = std::make_unique<boost::beast::http::response_parser<boost::beast::http::string_body>>();
@@ -605,8 +593,8 @@ void http_buf::initialize_as ( open_type open_mode )
         send_response_buff  = std::make_unique<boost::beast::http::response           <boost::beast::http::string_body>>();
         response_serializer = std::make_unique<boost::beast::http::response_serializer<boost::beast::http::string_body>>(*send_response_buff);
         const_cast<boost::beast::http::response<boost::beast::http::string_body>&>(response_serializer->get()).body().resize(default_buffer_size);
-        setp(const_cast<char*>(response_serializer->get().body().data()),
-             const_cast<char*>(response_serializer->get().body().data()) + response_serializer->get().body().size());
+        setp(const_cast<char*>(response_serializer->get().body().begin()),
+             const_cast<char*>(response_serializer->get().body().end()));
 
         receive_buff   = std::make_unique<boost::beast::flat_buffer>();
         request_parser = std::make_unique<boost::beast::http::request_parser<boost::beast::http::string_body>>();
@@ -625,8 +613,8 @@ void http_buf::refresh_send ( )
         // Will not reset header (stored in send_request_buff).
         request_serializer = std::make_unique<boost::beast::http::request_serializer<boost::beast::http::string_body>>(*send_request_buff);
         const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(request_serializer->get()).body().resize(default_buffer_size);
-        setp(const_cast<char*>(request_serializer->get().body().data()),
-             const_cast<char*>(request_serializer->get().body().data()) + request_serializer->get().body().size());
+        setp(const_cast<char*>(request_serializer->get().body().begin()),
+             const_cast<char*>(request_serializer->get().body().end()));
     }
 
     else if ( opened == open_type::server )
@@ -634,8 +622,8 @@ void http_buf::refresh_send ( )
         // Will not reset header (stored in send_response_buff).
         response_serializer = std::make_unique<boost::beast::http::response_serializer<boost::beast::http::string_body>>(*send_response_buff);
         const_cast<boost::beast::http::response<boost::beast::http::string_body>&>(response_serializer->get()).body().resize(default_buffer_size);
-        setp(const_cast<char*>(response_serializer->get().body().data()),
-             const_cast<char*>(response_serializer->get().body().data()) + response_serializer->get().body().size());
+        setp(const_cast<char*>(response_serializer->get().body().begin()),
+             const_cast<char*>(response_serializer->get().body().end()));
     }
 
     else

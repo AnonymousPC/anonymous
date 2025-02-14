@@ -20,11 +20,11 @@ class file_idx
         struct info_header;
 
     private: // Auxiliary
-        template < class type, int dimension, bool first = true > static array<type,dimension> read        ( auto&& /*stream-or-chunked-binary-istream-view*/, const static_array<int, dimension>& /*shape*/ );
-        template < class type, int dimension, bool first = true > static void                  write       ( auto&& /*stream-or-chunked-binary-istream-view*/, const array       <type,dimension>& /*data*/  );
-                                                                  static decltype(auto)        write_aux   ( const auto& /*data*/ );
-                                                                  friend file_stream&          operator >> ( file_stream&,       file_idx::info_header& );
-                                                                  friend file_stream&          operator << ( file_stream&, const file_idx::info_header& );
+        template < class value_type, int dimension, bool first = true > static array<value_type,dimension> read  ( auto&&, const static_array<int, dimension>& );
+        template < class value_type, int dimension, bool first = true > static void                        write ( auto&&, const array<value_type,dimension>&  );
+        static decltype(auto) write_aux   ( const auto& /*data*/ );
+        friend file_stream& operator >> ( file_stream&,       file_idx::info_header& );
+        friend file_stream& operator << ( file_stream&, const file_idx::info_header& );
 };
 
 #if dll

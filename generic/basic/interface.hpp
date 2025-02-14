@@ -168,6 +168,7 @@
 #include <boost/compute/container/stack.hpp>
 #include <boost/container/container_fwd.hpp>
 #include <boost/date_time.hpp>
+#include <boost/dll.hpp>
 #include <boost/gil.hpp>
 #include <boost/gil/extension/io/bmp.hpp>
 #include <boost/gil/extension/io/jpeg.hpp>

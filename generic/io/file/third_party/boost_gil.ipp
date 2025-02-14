@@ -82,7 +82,7 @@ void detail::read_from_boost_gil ( matrix<color>& image, path pth, auto tag, int
     dep == 32  ? read_from_boost_gil_impl<uint8_t, boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
     dep == 48  ? read_from_boost_gil_impl<uint16_t,boost::gil::rgb_layout_t >(image, pth, tag, dep) otherwise
     dep == 64  ? read_from_boost_gil_impl<uint16_t,boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
-                 throw file_error("cannot open {}-file {}: depth not supported (with read = {})", get_boost_gil_tag_name(tag), pth, dep);
+                 throw file_error("cannot open {}-file {}: depth not supported (with depth = {})", get_boost_gil_tag_name(tag), pth, dep);
 }
 
 void detail::write_to_boost_gil ( const matrix<color>& image, path pth, auto tag, int dep )
@@ -91,7 +91,7 @@ void detail::write_to_boost_gil ( const matrix<color>& image, path pth, auto tag
     dep == 32  ? write_to_boost_gil_impl<uint8_t, boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
     dep == 48  ? write_to_boost_gil_impl<uint16_t,boost::gil::rgb_layout_t >(image, pth, tag, dep) otherwise
     dep == 64  ? write_to_boost_gil_impl<uint16_t,boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
-                 throw file_error("cannot save {}-file {}: depth not supported (with write = {})", get_boost_gil_tag_name(tag), pth, dep);;
+                 throw file_error("cannot save {}-file {}: depth not supported (with depth = {})", get_boost_gil_tag_name(tag), pth, dep);;
 }
 
 
@@ -147,7 +147,7 @@ void detail::read_from_boost_gil_impl ( matrix<color>& image, path pth, auto tag
     }
 
     else
-        throw file_error("cannot open {}-file {}: depth not supported (with read = {})", get_boost_gil_tag_name(tag), pth, dep);
+        throw file_error("cannot open {}-file {}: depth not supported (with depth = {})", get_boost_gil_tag_name(tag), pth, dep);
 }
 
 template < class value_type, class layout_type >
@@ -163,8 +163,14 @@ void detail::write_to_boost_gil_impl ( const matrix<color>& image, path pth, aut
         let gil_image_view = boost::gil::view(gil_image);
         std::ranges::copy(
             image.flatten()
-                | std::views::transform([] (const auto& pixel)
+                | std::views::transform([&] (const auto& pixel)
                     {
+                        if ( pixel.red()   < 0 or pixel.red()   > 1 or
+                             pixel.green() < 0 or pixel.green() > 1 or
+                             pixel.blue()  < 0 or pixel.blue()  > 1 or 
+                             pixel.alpha() < 0 or pixel.alpha() > 1 )
+                            throw file_error("cannot save {}-file {}: value out of range (with pixel.red = {}, pixel.green = {}, pixel.blue = {}, pixel.alpha = {})", get_boost_gil_tag_name(tag), pth, pixel.red(), pixel.green(), pixel.blue(), pixel.alpha());
+
                         if constexpr ( same_as<layout_type,boost::gil::gray_layout_t> )
                             return gil_pixel_type(std::round((pixel.red() + pixel.green() + pixel.blue()) * pixel.alpha() / 3 * std::numeric_limits<value_type>::max()));
         
@@ -194,7 +200,7 @@ void detail::write_to_boost_gil_impl ( const matrix<color>& image, path pth, aut
     }
 
     else
-        throw file_error("cannot save {}-file {}: depth not supported (with write = {})", get_boost_gil_tag_name(tag), pth, dep);
+        throw file_error("cannot save {}-file {}: depth not supported (with depth = {})", get_boost_gil_tag_name(tag), pth, dep);
 }
 
 

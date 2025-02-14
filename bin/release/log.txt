@@ -1,4 +1,0 @@
-[1mmain.cpp:15:15: [0m[0;1;35mwarning: [0m[1munused variable 'experiment' [-Wunused-variable][0m
-   15 |     [0;34mfor[0m ( [0;34mint[0m experiment in range([0;32m1000[0m) )[0m
-      | [0;1;32m              ^~~~~~~~~~
-[0m1 warning generated.

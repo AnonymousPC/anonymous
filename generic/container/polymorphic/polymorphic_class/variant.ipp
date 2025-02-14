@@ -141,14 +141,14 @@ template < class... types >
 constexpr decltype(auto) variant<types...>::visit ( auto&& v )
     requires detail::all_invocable_and_returns_same_type<decltype(v),types...>
 {
-    return base::visit(std::forward<decltype(v)>(v));
+    return std::visit(std::forward<decltype(v)>(v), static_cast<base&>(self));
 }
 
 template < class... types >
 constexpr decltype(auto) variant<types...>::visit ( auto&& v ) const
     requires detail::all_invocable_and_returns_same_type<decltype(v),types...>
 {
-    return base::visit(std::forward<decltype(v)>(v));
+    return std::visit(std::forward<decltype(v)>(v), static_cast<const base&>(self));
 }
 
 template < class... types >

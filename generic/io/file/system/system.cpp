@@ -26,7 +26,7 @@ path create_file ( const path& p )
     }
     catch ( const std::ios_base::failure& e )
     {
-        throw file_error("cannot create file {} [[caused by {}: {}]]", p, typeid(e), e.what());
+        throw file_error("cannot create file {}", p).from(e);
     }
 
     return p;
@@ -55,7 +55,7 @@ path remove_file ( const path& p )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot remove file {} [[caused by {}: {}]]", p, typeid(e), e.what());
+        throw file_error("cannot remove file {}", p).from(e);
     }
 
     return p;
@@ -96,7 +96,7 @@ path copy_file ( const path& p1, const path& p2 )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot copy file {} to {} [[caused by {}: {}]]", p1, p2, typeid(e), e.what());
+        throw file_error("cannot copy file {} to {}", p1, p2).from(e);
     }
 
     return p2;
@@ -137,7 +137,7 @@ path move_file ( const path& p1, const path& p2 )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot move file {} to {} [[caused by {}: {}]]", p1, p2, typeid(e), e.what());
+        throw file_error("cannot move file {} to {}", p1, p2).from(e);
     }
 
     return p2;
@@ -178,7 +178,7 @@ path rename_file ( const path& p1, const path& p2 )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot rename file {} to {} [[caused by {}: {}]]", p1, p2, typeid(e), e.what());
+        throw file_error("cannot rename file {} to {}", p1, p2).from(e);
     }
 
     return p2;
@@ -207,7 +207,7 @@ intmax_t size_of_file ( const path& p )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot query size of file {} [[caused by {}: {}]]", p, typeid(e), e.what());
+        throw file_error("cannot query size of file {}", p).from(e);
     }
 
 }
@@ -243,7 +243,7 @@ path create_directory ( const path& p )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot create directory {} [[caused by {}: {}]]", p, typeid(e), e.what());
+        throw file_error("cannot create directory {}", p).from(e);
     }
 
     return p;
@@ -272,7 +272,7 @@ path remove_directory ( const path& p )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot remove directory {} [[caused by {}: {}]]", p, typeid(e), e.what());
+        throw file_error("cannot remove directory {}", p).from(e);
     }
 
     return p;
@@ -302,7 +302,7 @@ path copy_directory ( const path& p1, const path& p2 )
         throw file_error("cannot copy directory {} to {}: the target directory's parent_path does not exist", p1, p2);
 
     if ( is_directory(p2) )
-        throw file_error("cannot copy direcory {} to {}: the target directory already exists", p1, p2);
+        throw file_error("cannot copy directory {} to {}: the target directory already exists", p1, p2);
 
     if ( is_file(p2) )
         throw file_error("cannot copy directory {} to {}: the target directory's path is already taken by a file", p1, p2);
@@ -313,7 +313,7 @@ path copy_directory ( const path& p1, const path& p2 )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot copy directory {} to {} [[caused by {}: {}]]", p1, p2, typeid(e), e.what());
+        throw file_error("cannot copy directory {} to {}", p1, p2).from(e);
     }
 
     return p2;
@@ -354,7 +354,7 @@ path move_directory ( const path& p1, const path& p2 )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot move directory {} to {} [[caused by {}: {}]]", p1, p2, typeid(e), e.what());
+        throw file_error("cannot move directory {} to {}", p1, p2).from(e);
     }
 
     return p2;
@@ -395,7 +395,7 @@ path rename_directory ( const path& p1, const path& p2 )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot rename directory {} to {} [[caused by {}: {}]]", p1, p2, typeid(e), e.what());
+        throw file_error("cannot rename directory {} to {}", p1, p2).from(e);
     }
 
     return p2;
@@ -426,6 +426,6 @@ intmax_t size_of_directory ( const path& p )
     }
     catch ( const std::filesystem::filesystem_error& e )
     {
-        throw file_error("cannot query size of directory {} [[caused by {}: {}]]", p, typeid(e), e.what());
+        throw file_error("cannot query size of directory {}", p).from(e);
     }
 }

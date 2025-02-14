@@ -29,7 +29,7 @@ void http_buf::connect ( url website, http_client_mode auto... args )
 {
     // Check state.
     if ( opened != open_type::close )
-        throw network_error("connection failed: http_buf has been already opened (with mode = {}, local-endpoint = {}, remote-endpoint = {})",
+        throw network_error("connection failed: http_buf has been already opened (with mode = {}, local_endpoint = {}, remote_endpoint = {})",
                             opened == open_type::client ? "client" otherwise "server", local_endpoint_noexcept(), remote_endpoint_noexcept());
 
     // Check scheme.
@@ -56,7 +56,7 @@ void http_buf::listen ( url portal, http_server_mode auto... args )
 {
     // Check state.
     if ( opened != open_type::close )
-        throw network_error("listening failed: http_buf has been already opened (with mode = {}, local-endpoint = {}, remote-endpoint = {})",
+        throw network_error("listening failed: http_buf has been already opened (with mode = {}, local_endpoint = {}, remote_endpoint = {})",
                             opened == open_type::client ? "client" otherwise "server", local_endpoint_noexcept(), remote_endpoint_noexcept());
 
     // Check scheme.

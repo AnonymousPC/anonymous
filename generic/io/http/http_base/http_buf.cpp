@@ -519,7 +519,7 @@ void http_buf::receive_begin ( auto& parser )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("receive {} failed (with local-endpoint = {}, remote-endpoint = {}, layer = {})",
+        throw network_error("receive {} failed (with local_endpoint = {}, remote_endpoint = {}, layer = {})",
                             decay<decltype(parser)>::value_type::is_request::value ? "request" otherwise "response",
                             local_endpoint_noexcept(), remote_endpoint_noexcept(), https_handle == nullptr ? "tcp" otherwise "ssl"
                            ).from(detail::system_error(e));

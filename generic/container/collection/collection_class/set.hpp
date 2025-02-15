@@ -47,7 +47,7 @@ class set
         constexpr set&           update   ( const set&  );
 
     public: // Extension 
-        constexpr void emplace_back ( auto&&... );
+        constexpr auto emplace ( auto&&... args ) requires constructible_from<typename base::value_type,decltype(args)...>;
 };
 
 #include "set.ipp"

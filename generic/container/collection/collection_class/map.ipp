@@ -120,9 +120,10 @@ constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::upda
 }
 
 template < class type1, class type2, class compare, class device >
-constexpr void map<type1,type2,compare,device>::emplace_back ( auto&&... args )
+constexpr auto map<type1,type2,compare,device>::emplace ( auto&&... args )
+    requires constructible_from<typename base::value_type,decltype(args)...>
 {
-    base::emplace(std::forward<decltype(args)>(args)...);
+    return base::emplace(std::forward<decltype(args)>(args)...);
 }
 
 template < class type1, class type2, class compare, class device >

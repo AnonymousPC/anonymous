@@ -78,7 +78,8 @@ constexpr set<type,compare,device>& set<type,compare,device>::update ( const set
 }
 
 template < class type, class compare, class device >
-constexpr void set<type,compare,device>::emplace_back ( auto&&... args )
+constexpr auto set<type,compare,device>::emplace ( auto&&... args )
+    requires constructible_from<typename base::value_type,decltype(args)...>
 {
-    base::emplace(std::forward<decltype(args)>(args)...);
+    return base::emplace(std::forward<decltype(args)>(args)...);
 }

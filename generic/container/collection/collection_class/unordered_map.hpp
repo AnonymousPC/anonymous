@@ -70,8 +70,8 @@ class unordered_map
         constexpr        unordered_map&        pop         ( const type1&  );
         constexpr        unordered_map&        update      ( const unordered_map& );
 
-    public: // Extension 
-        constexpr void emplace_back ( auto&&... );
+    public: // Override
+        constexpr auto emplace ( auto&&... args ) requires constructible_from<typename base::value_type,decltype(args)...>;
 };
 
 #include "unordered_map.ipp"

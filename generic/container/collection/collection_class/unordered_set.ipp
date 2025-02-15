@@ -78,7 +78,8 @@ constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::upda
 }
 
 template < class type, class hash, class device >
-constexpr void unordered_set<type,hash,device>::emplace_back ( auto&&... args )
+constexpr auto unordered_set<type,hash,device>::emplace ( auto&&... args )
+    requires constructible_from<typename base::value_type,decltype(args)...>
 {
-    base::emplace(std::forward<decltype(args)>(args)...);
+    return base::emplace(std::forward<decltype(args)>(args)...);
 }

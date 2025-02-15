@@ -46,8 +46,8 @@ class unordered_set
         constexpr unordered_set& pop      ( const type& );
         constexpr unordered_set& update   ( const unordered_set& );
 
-    public: // Extension 
-        constexpr void emplace_back ( auto&&... );
+    public: // Override
+        constexpr auto emplace ( auto&&... args ) requires constructible_from<typename base::value_type,decltype(args)...>;
 };
 
 #include "unordered_set.ipp"

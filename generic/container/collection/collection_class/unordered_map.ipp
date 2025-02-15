@@ -120,9 +120,10 @@ constexpr unordered_map<type1,type2,hash,device>& unordered_map<type1,type2,hash
 }
 
 template < class type1, class type2, class hash, class device >
-constexpr void unordered_map<type1,type2,hash,device>::emplace_back ( auto&&... args )
+constexpr auto unordered_map<type1,type2,hash,device>::emplace ( auto&&... args )
+    requires constructible_from<typename base::value_type,decltype(args)...>
 {
-    base::emplace(std::forward<decltype(args)>(args)...);
+    return base::emplace(std::forward<decltype(args)>(args)...);
 }
 
 template < class type1, class type2, class hash, class device >

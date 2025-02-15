@@ -70,8 +70,8 @@ class map
         constexpr        map&                  pop         ( const type1&  );
         constexpr        map&                  update      ( const map&    );
 
-    public: // Extension 
-        constexpr void emplace_back ( auto&&... );
+    public: // Override
+        constexpr auto emplace ( auto&&... args ) requires constructible_from<typename base::value_type,decltype(args)...>;
 };
 
 #include "map.ipp"

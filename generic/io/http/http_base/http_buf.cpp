@@ -184,13 +184,14 @@ void http_buf::connect_without_proxy ( const url& website )
         try
         {
             http_handle->connect(ip);
+            break;
         }
         catch ( const boost::system::system_error& e )
         {
             errpool.push(detail::system_error(e));
         }
     if ( not errpool.empty() )
-        throw network_error("connection failed (with remote_url = {}, remote_endpoint = {})", website, ip_list).from(detail::all_attempts_failure(errpool));
+        throw network_error("connection failed (with remote_url = {}, remote_endpoint = {})", website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failure(errpool));
 
     // SSL.
     if ( website.scheme() == "https" )
@@ -226,20 +227,20 @@ void http_buf::connect_through_proxy ( const url& website, const url& proxy_webs
     {
         connect_without_proxy(proxy_website);
     }
-    catch ( const network_error& )
+    catch ( const network_error& e )
     {
-        throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, proxy_url = {}, layer = http/tcp): cannot connect to proxy server", local_endpoint_noexcept(), website, proxy_website);
+        throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, proxy_url = {}, layer = http/tcp): cannot connect to proxy server", local_endpoint_noexcept(), website, proxy_website).from(e);
     }
 
     // Http:  request into full url.
     // Https: establish proxy tunnel.
     if ( website.scheme() == "http" )
         const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(request_serializer->get())
-        .target((website.scheme() + "://" +
-                 website.host() +
-                 (website.port() != "" ? ':' + website.port() otherwise "") +
-                 string(request_serializer->get().target())
-                ).c_str());
+            .target((website.scheme() + "://" +
+                     website.host() +
+                     (website.port() != "" ? ':' + website.port() otherwise "") +
+                     string(request_serializer->get().target())
+                    ).c_str());
 
     else if ( website.scheme() == "https" )
         establish_proxy_tunnel(website, proxy_website);
@@ -343,7 +344,10 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
             if ( not sni_success )
                 throw boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category()));
     
+            // SSL handshake.
             https_handle->handshake(boost::asio::ssl::stream_base::client);
+
+            break;
         }
         catch ( const boost::system::system_error& e )
         {
@@ -351,7 +355,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
         }
     }
     if ( not errpool.empty() )
-        throw network_error("establishment of proxy tunnel failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, proxy_url = {})", local_endpoint_noexcept(), website, ip_list, proxy_website).from(detail::all_attempts_failure(errpool));
+        throw network_error("establishment of proxy tunnel failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, proxy_url = {})", local_endpoint_noexcept(), website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>(), proxy_website).from(detail::all_attempts_failure(errpool));
 }
 
 void http_buf::listen_to_port ( const url& portal )
@@ -363,13 +367,14 @@ void http_buf::listen_to_port ( const url& portal )
         try
         {
             boost::asio::ip::tcp::acceptor(io_context, ip).accept(http_handle->socket());
+            break;
         }
         catch ( const boost::system::system_error& e )
         {
             errpool.push(detail::system_error(e));
         }
     if ( not errpool.empty() )
-        throw network_error("listening failed (with local_url = {}, local_endpoint = {}, layer = socket)", portal, ip_list).from(detail::all_attempts_failure(errpool));
+        throw network_error("listening failed (with local_url = {}, local_endpoint = {}, layer = socket)", portal, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failure(errpool));
 
     // SSL
     if ( portal.scheme() == "https" )

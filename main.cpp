@@ -7,10 +7,13 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
+class my_vector
+{
+    void emplace_back(auto&&...) { /*assume we do something here*/; }
+};
+
 int main ( )
 {
-    let v = vector<pair<int,double>>();
-    let m = v | std::ranges::to<map<int,double>>();
-    print(m);
+    auto my_vec = std::vector<int>() | std::ranges::to<my_vector>();
 
 }

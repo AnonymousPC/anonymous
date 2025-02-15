@@ -11,7 +11,6 @@ class basic_string
 
     private: // Base
         using base        = device::template basic_string<type>;
-        using view        = basic_string_view<type,device>; 
         using array_algo  = array_algo <basic_string<type,device>,type,1,device>;
         using string_algo = string_algo<basic_string<type,device>,type,  device>;
 
@@ -37,20 +36,12 @@ class basic_string
         constexpr basic_string (      const type& );
         constexpr basic_string ( int, const type& );
         constexpr basic_string (      const type* );
+        constexpr basic_string (      const basic_string_view<type,device>& );
 
-    public: // Conversion (view)
-        constexpr basic_string ( const view& );
-        constexpr operator             view ( ) const;
+    public: // Conversion
+        template < class type2, class device2 > constexpr basic_string ( const basic_string<type2,device2>& ) requires same_as<type,type2> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
 
-    public: // Conversion (type)
-        template < class type2 > constexpr explicit basic_string ( const basic_string     <type2,device>& );
-        template < class type2 > constexpr explicit basic_string ( const basic_string_view<type2,device>& );
-
-    public: // Conversion (device)
-        template < class device2 > constexpr explicit basic_string ( const basic_string     <type,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
-        template < class device2 > constexpr explicit basic_string ( const basic_string_view<type,device2>& ) requires same_as<device,cpu> or same_as<device2,cpu>;
-
-    public: // Conversion (other)
+    public: // Conversion
                                        constexpr explicit basic_string ( const bool& )                 requires same_as<type,char>;
                                        constexpr explicit operator             bool ( )          const requires same_as<type,char>;
         template < number_type type2 > constexpr explicit basic_string ( const type2& )                requires same_as<type,char>;
@@ -60,25 +51,25 @@ class basic_string
                                        constexpr explicit basic_string ( const std::type_info& )       requires same_as<type,char>;
 
     public: // Member
-        constexpr int             size        ( )                                    const;
-        constexpr basic_string&   resize      ( int );
-        constexpr bool            empty       ( )                                    const;
-        constexpr iterator        begin       ( );
-        constexpr const_iterator  begin       ( )                                    const;
-        constexpr iterator        end         ( );
-        constexpr const_iterator  end         ( )                                    const;
-        constexpr pointer         data        ( );
-        constexpr const_pointer   data        ( )                                    const;
-        constexpr const_pointer   c_str       ( )                                    const;
-        constexpr reference       operator [] ( int );
-        constexpr const_reference operator [] ( int )                                const;
-        constexpr view            operator [] ( int, int )                           const;
+        constexpr int                            size        ( )          const;
+        constexpr basic_string&                  resize      ( int );
+        constexpr bool                           empty       ( )          const;
+        constexpr iterator                       begin       ( );
+        constexpr const_iterator                 begin       ( )          const;
+        constexpr iterator                       end         ( );
+        constexpr const_iterator                 end         ( )          const;
+        constexpr pointer                        data        ( );
+        constexpr const_pointer                  data        ( )          const;
+        constexpr const_pointer                  c_str       ( )          const;
+        constexpr reference                      operator [] ( int );
+        constexpr const_reference                operator [] ( int )      const;
+        constexpr basic_string_view<type,device> operator [] ( int, int ) const;
 
-        constexpr basic_string&   clear       ( );
-        constexpr basic_string&   erase       ( int, int );
-        constexpr basic_string&   insert      ( int, view );
-        constexpr basic_string&   push        (      view );
-        constexpr basic_string&   pop         ( int = -1 );
+        constexpr basic_string&                  clear       ( );
+        constexpr basic_string&                  erase       ( int, int );
+        constexpr basic_string&                  insert      ( int, basic_string_view<type,device> );
+        constexpr basic_string&                  push        (      basic_string_view<type,device> );
+        constexpr basic_string&                  pop         ( int = -1 );
 
     public: // Memory 
         constexpr static bool ownership  ( );

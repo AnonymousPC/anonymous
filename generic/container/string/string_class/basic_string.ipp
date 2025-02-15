@@ -22,94 +22,25 @@ constexpr basic_string<type,device>::basic_string ( const type* init )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( const view& cvt )
+constexpr basic_string<type,device>::basic_string ( const basic_string_view<type,device>& cvt )
     extends base ( cvt.data(), cvt.size() )
 {
 
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::operator view ( ) const
+template < class type2, class device2 >
+constexpr basic_string<type,device>::basic_string ( const basic_string<type2,device2>& cvt )
+    requires same_as<type,type2> and 
+             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
+    extends basic_string ( cvt.size() )
 {
-    return view(data(), size());
-}
-
-template < class type, class device >
-template < class type2 >
-constexpr basic_string<type,device>::basic_string ( const basic_string<type2,device>& cvt )
-{
-    try
-    {
-        let converter = std::filesystem::path(cvt.c_str());
-
-        if constexpr ( same_as<type,char> )
-            self.base::operator=(converter.string());
-        else if constexpr ( same_as<type,wchar_t> )
-            self.base::operator=(converter.wstring());
-        else if constexpr ( same_as<type,char8_t> )
-            self.base::operator=(converter.u8string());
-        else if constexpr ( same_as<type,char16_t> )
-            self.base::operator=(converter.u16string());
-        else if constexpr ( same_as<type,char32_t> )
-            self.base::operator=(converter.u32string());
-        else
-            static_assert(false, "unknown encoding");
-    }
-    catch ( const std::filesystem::filesystem_error& /*unused*/ )
-    {
-        throw encode_error("cannot encode string \"{}\" from {} into {}", cvt, typeid(type2), typeid(type));
-    }
-}
-
-template < class type, class device >
-template < class type2 >
-constexpr basic_string<type,device>::basic_string ( const basic_string_view<type2,device>& cvt )
-{
-    try
-    {
-        let converter = std::filesystem::path(cvt.begin(), cvt.end());
-
-        if constexpr ( same_as<type,char> )
-            self.base::operator=(converter.string());
-        else if constexpr ( same_as<type,wchar_t> )
-            self.base::operator=(converter.wstring());
-        else if constexpr ( same_as<type,char8_t> )
-            self.base::operator=(converter.u8string());
-        else if constexpr ( same_as<type,char16_t> )
-            self.base::operator=(converter.u16string());
-        else if constexpr ( same_as<type,char32_t> )
-            self.base::operator=(converter.u32string());
-        else
-            static_assert(false, "unknown encoding");
-    }
-    catch ( const std::filesystem::filesystem_error& /*unused*/ )
-    {
-        throw encode_error("cannot encode string \"{}\" from {} into {}", cvt, typeid(type2), typeid(type));
-    }
-}
-
-template < class type, class device >
-template < class device2 >
-constexpr basic_string<type,device>::basic_string ( const basic_string<type,device2>& cvt )
-    requires same_as<device,cpu> or same_as<device2,cpu>
-    extends basic_string ( cvt.size(), '\0' )
-{
-    if constexpr ( not same_as<device,cpu> )
-        device::copy(cvt.begin(), cvt.end(), begin());
-    else
+    if constexpr ( same_as<device,device2> )
+        /*copy constructor*/;
+    else if constexpr ( same_as<device,cpu> )
         device2::copy(cvt.begin(), cvt.end(), begin());
-}
-
-template < class type, class device >
-template < class device2 >
-constexpr basic_string<type,device>::basic_string ( const basic_string_view<type,device2>& cvt )
-    requires same_as<device,cpu> or same_as<device2,cpu>
-    extends basic_string ( cvt.size(), '\0' )
-{
-    if constexpr ( not same_as<device,cpu> )
+    else // if constexpr ( same_as<device2,cpu> )
         device::copy(cvt.begin(), cvt.end(), begin());
-    else
-        device2::copy(cvt.begin(), cvt.end(), begin());
 }
 
 template < class type, class device >
@@ -270,7 +201,7 @@ constexpr basic_string<type,device>::const_reference basic_string<type,device>::
 }   
 
 template < class type, class device >
-constexpr basic_string<type,device>::view basic_string<type,device>::operator[] ( int pos_1, int pos_2 ) const
+constexpr basic_string_view<type,device> basic_string<type,device>::operator[] ( int pos_1, int pos_2 ) const
 {
     let abs_pos_1 = pos_1 >= 0 ? pos_1 otherwise pos_1 + size();
     let abs_pos_2 = pos_2 >= 0 ? pos_2 otherwise pos_2 + size();
@@ -283,7 +214,7 @@ constexpr basic_string<type,device>::view basic_string<type,device>::operator[] 
         throw index_error("index [{}, {}] is out of range with size {}", pos_1, pos_2, size());
     #endif
 
-    return view(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
+    return basic_string_view<type,device>(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
 }
 
 template < class type, class device >
@@ -312,7 +243,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::erase ( int old_
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new_pos, view new_value )
+constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new_pos, basic_string_view<type,device> new_value )
 {
     #if debug
     if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
@@ -323,7 +254,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>& basic_string<type,device>::push ( view new_value )
+constexpr basic_string<type,device>& basic_string<type,device>::push ( basic_string_view<type,device> new_value )
 {
     base::append(new_value.data(), new_value.size());
     return self;

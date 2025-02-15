@@ -13,12 +13,12 @@ class tuple
         constexpr tuple ( ) = default;
         constexpr tuple ( types... );
 
+    public: // Conversion
+        template < class... types2 > constexpr tuple ( const tuple<types2...>& ) requires ( convertible_to<types2,types> and ... );
+
     public: // Member
         template < int index > constexpr       auto& value ( )       requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
         template < int index > constexpr const auto& value ( ) const requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
-
-    public: // Traits
-        constexpr static int size ( );
 };
 
 #include "tuple.ipp"

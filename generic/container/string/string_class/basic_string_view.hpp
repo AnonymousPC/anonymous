@@ -10,7 +10,6 @@ class basic_string_view
 
     private: // Base
         using base        = device::template basic_string_view<type>;
-        using string      = basic_string<type,device>; 
         using string_algo = string_algo<basic_string_view<type,device>,type,device>;
 
     public: // Typedef
@@ -35,8 +34,9 @@ class basic_string_view
         constexpr basic_string_view ( const_reference );
         constexpr basic_string_view ( const_pointer );
         constexpr basic_string_view ( const_pointer, int );
+        constexpr basic_string_view ( const basic_string<type,device>& );
 
-    public: // Conversion (other)
+    public: // Conversion
                                        constexpr explicit operator bool  ( ) const requires same_as<type,char>;
         template < number_type type2 > constexpr explicit operator type2 ( ) const requires same_as<type,char>;
         template < inputable   type2 > constexpr explicit operator type2 ( ) const requires same_as<type,char> and ( not number_type<type2> ) and ( not string_type<type2> );

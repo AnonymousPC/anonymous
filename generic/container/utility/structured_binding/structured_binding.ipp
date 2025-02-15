@@ -56,16 +56,41 @@ namespace ap
 
 /// Tuple
 
+namespace ap::detail
+{
+    template < class input_type, int count >
+    struct tuple_size_probe;
+
+    template < class input_type, int count >
+        requires requires { typename input_type::template value_type<count>; }
+    struct tuple_size_probe<input_type,count>
+    {
+        constexpr static const int value = tuple_size_probe<input_type,count+1>::value;
+    };
+
+    template < class input_type, int count >
+        requires ( not requires { typename input_type::template value_type<count>; } )
+    struct tuple_size_probe<input_type,count>
+    {
+        constexpr static const int value = count - 1;
+    };
+
+    template < class input_type >
+    constexpr int tuple_size_helper = tuple_size_probe<input_type,1>::value;
+    
+} // namespace ap::detail
+
+
 namespace std 
 {
     template < ap::tuple_type input_type >
     struct tuple_size<input_type>
     {
-        constexpr static const int value = input_type::size();
+        constexpr static const int value = ap::detail::tuple_size_helper<input_type>;
     };
 
     template < size_t index, ap::tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value - 1 )
     struct tuple_element<index,input_type>
     {
         using type = typename input_type::template value_type<index+1>;
@@ -75,21 +100,21 @@ namespace std
 namespace ap
 {
     template < int index, tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value - 1 )
     constexpr decltype(auto) get ( input_type& t )
     {
         return t.template value<index+1>();
     }
 
     template < int index, tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value- 1 )
     constexpr decltype(auto) get ( const input_type& t )
     {
         return t.template value<index+1>();
     }
 
     template < int index, tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value - 1 )
     constexpr decltype(auto) get ( input_type&& t )
     {
         return std::move ( t.template value<index+1>() );

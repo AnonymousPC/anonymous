@@ -39,22 +39,22 @@ namespace std
     struct tuple_size<input_type>;
 
     template < size_t index, ap::tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value - 1 )
     struct tuple_element<index,input_type>;
 }
 
 namespace ap
 {
     template < int index, tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value - 1 )
     constexpr decltype(auto) get ( input_type& );
 
     template < int index, tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value - 1 )
     constexpr decltype(auto) get ( const input_type& );
 
     template < int index, tuple_type input_type >
-        requires ( index >= 0 and index <= input_type::size() - 1 )
+        requires ( index >= 0 and index <= std::tuple_size<input_type>::value - 1 )
     constexpr decltype(auto) get ( input_type&& );
 }
 

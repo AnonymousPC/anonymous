@@ -166,10 +166,10 @@ namespace ap
 
         template < class type, int count, class type1, class... value_types >
         constexpr bool tuple_type_helper<type,count,type1,value_types...> =
-            ( type::size() - count + 1 == 1 + sizeof...(value_types) ) and
-            ( convertible_to<typename type::template value_type<count>,type1> or is_void<type1> ) and []
+            ( tuple_size<type> - count + 1 == 1 + sizeof...(value_types) ) and
+            ( convertible_to<tuple_element<count,type>,type1> or is_void<type1> ) and []
             {
-                if constexpr ( count < type::size() )
+                if constexpr ( count < tuple_size<type> )
                     return tuple_type_helper<type,count+1,value_types...>;
                 else
                     return true;
@@ -181,7 +181,7 @@ namespace ap
     {
         if constexpr ( requires { typename type::tuple_tag; } )
         {
-            static_assert ( requires { typename type::template value_type<1>; typename type::template value_type<type::size()>; type::size(); }, "class provides tuple_tag but not provides value_type and size()" );
+            static_assert ( requires { typename type::template value_type<1>; }, "class provides tuple_tag but not provides value_type" );
             return detail::tuple_type_helper<type,1,value_types...>;
         }
         else

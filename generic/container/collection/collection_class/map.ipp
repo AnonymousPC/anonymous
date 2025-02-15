@@ -120,6 +120,12 @@ constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::upda
 }
 
 template < class type1, class type2, class compare, class device >
+constexpr void map<type1,type2,compare,device>::emplace_back ( auto&&... args )
+{
+    base::emplace(std::forward<decltype(args)>(args)...);
+}
+
+template < class type1, class type2, class compare, class device >
 class map<type1,type2,compare,device>::iterator
     extends public device::template map<type1,type2,compare>::iterator
 {
@@ -132,6 +138,8 @@ class map<type1,type2,compare,device>::iterator
         using pointer    = device::template pointer   <pair<const type1,type2>>;
 
     public: // Override
+        constexpr iterator ( ) = default;
+
         constexpr iterator ( base init_b )
             extends base ( std::move(init_b) )
         {
@@ -216,6 +224,8 @@ class map<type1,type2,compare,device>::const_iterator
         using pointer    = device::template const_pointer  <pair<const type1,type2>>;
 
     public: // Override
+        constexpr const_iterator ( ) = default;
+
         constexpr const_iterator ( base init_b )
             extends base ( std::move(init_b) )
         {

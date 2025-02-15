@@ -51,6 +51,8 @@ namespace detail
             using pointer    = device::template pointer   <type2>;
 
         public: // Override
+            constexpr iterator ( ) = default;
+
             constexpr iterator ( base init_b )
                 extends base ( std::move(init_b) )
             {
@@ -135,6 +137,8 @@ namespace detail
             using pointer    = device::template const_pointer  <type2>;
 
         public: // Override
+            constexpr const_iterator ( ) = default;
+
             constexpr const_iterator ( base init_b )
                 extends base ( std::move(init_b) )
             {

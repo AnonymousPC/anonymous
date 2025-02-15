@@ -69,6 +69,9 @@ class map
         constexpr        map&                  clear       ( );
         constexpr        map&                  pop         ( const type1&  );
         constexpr        map&                  update      ( const map&    );
+
+    public: // Extension 
+        constexpr void emplace_back ( auto&&... );
 };
 
 #include "map.ipp"

@@ -20,6 +20,29 @@ class array<basic_string_view<type,device>,1,cpu>
         using base::base;
 
     public: // Member
+        using base::size,
+              base::empty;
+
+        constexpr iterator begin ( )
+        {
+            return static_cast<pointer>(base::data());
+        }
+
+        constexpr const_iterator begin ( ) const
+        {
+            return static_cast<const_pointer>(base::data());
+        }
+
+        constexpr iterator end ( )
+        {
+            return static_cast<pointer>(base::data() + base::size());
+        }
+
+        constexpr const_iterator end ( ) const
+        {
+            return static_cast<const_pointer>(base::data() + base::size());
+        }
+
         constexpr reference operator [] ( int pos )
         {
             return static_cast<reference>(base::operator[](pos));
@@ -29,6 +52,12 @@ class array<basic_string_view<type,device>,1,cpu>
         {
             return static_cast<const reference>(base::operator[](pos));
         } 
+
+    public: // Extension
+        constexpr void push_back ( const value_type& new_value )
+        {
+            base::push_back(new_value);
+        }
 };
 
 template < class type, int dim, class device >

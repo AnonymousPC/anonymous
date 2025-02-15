@@ -133,7 +133,7 @@ void http_buf::set_client_request ( const url& website, const auto&... args )
             let cur_param = website.param();
 
             if ( modes.path != "" )
-                cur_path = not modes.path.begins_with('/') ? modes.path otherwise modes.path[2,-1];
+                cur_path = not modes.path.begins_with('/') ? modes.path otherwise string(modes.path[2,-1]);
             if ( not modes.param.empty() )
                 cur_param = modes.param | std::views::transform([] (const auto& kv) { return "{}={}"s.format(kv.key(), kv.value()); })
                                         | std::views::join_with('&')

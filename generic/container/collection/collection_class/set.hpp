@@ -45,6 +45,9 @@ class set
         constexpr set&           push     (       type  );
         constexpr set&           pop      ( const type& );
         constexpr set&           update   ( const set&  );
+
+    public: // Extension 
+        constexpr void emplace_back ( auto&&... );
 };
 
 #include "set.ipp"

@@ -69,6 +69,9 @@ class unordered_map
         constexpr        unordered_map&        clear       ( );
         constexpr        unordered_map&        pop         ( const type1&  );
         constexpr        unordered_map&        update      ( const unordered_map& );
+
+    public: // Extension 
+        constexpr void emplace_back ( auto&&... );
 };
 
 #include "unordered_map.ipp"

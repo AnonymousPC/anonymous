@@ -86,7 +86,6 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right
     return self;
 }
 
-
 template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size )
     extends base ( init_size )

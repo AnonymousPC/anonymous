@@ -2,6 +2,10 @@
 
 // Include
 
+#include "ip/ipv4.hpp"
+#include "ip/ipv6.hpp"
+#include "ip/url.hpp"
+
 #include "http_base/http_buf.hpp"
 #include "http_base/http_stream.hpp"
 

@@ -76,3 +76,9 @@ constexpr set<type,compare,device>& set<type,compare,device>::update ( const set
 
     return self;
 }
+
+template < class type, class compare, class device >
+constexpr void set<type,compare,device>::emplace_back ( auto&&... args )
+{
+    base::emplace(std::forward<decltype(args)>(args)...);
+}

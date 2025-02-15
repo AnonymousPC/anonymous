@@ -332,7 +332,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
                                       boost::beast::http::read(*https_handle, buff, tunnel_response);
     
             if ( tunnel_response.get().result_int() >= 300 and tunnel_response.get().result_int() <= 599 )
-                throw boost::system::system_error(boost::system::error_code(), std::format("received {} {} from proxy server", tunnel_response.get().result_int(), tunnel_response.get().reason()));
+                throw boost::system::system_error(boost::system::error_code(), "received {} {} from proxy server"s.format(tunnel_response.get().result_int(), tunnel_response.get().reason()));
     
             // Create SSL handle (might have been created in connect(proxy_website)).
             if ( https_handle == nullptr )
@@ -411,7 +411,7 @@ void http_buf::send_more ( int c, auto& serializer )
 
         // Refresh put area.
         setp(const_cast<char*>(serializer.get().body().data()),
-             const_cast<char*>(serializer.get().body().data()) + setializer.get().body().size());
+             const_cast<char*>(serializer.get().body().data()) + serializer.get().body().size());
         *pptr() = traits_type::to_char_type(c);
         pbump(1);
     }

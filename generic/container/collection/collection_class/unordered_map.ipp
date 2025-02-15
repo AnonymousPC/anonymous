@@ -120,6 +120,12 @@ constexpr unordered_map<type1,type2,hash,device>& unordered_map<type1,type2,hash
 }
 
 template < class type1, class type2, class hash, class device >
+constexpr void unordered_map<type1,type2,hash,device>::emplace_back ( auto&&... args )
+{
+    base::emplace(std::forward<decltype(args)>(args)...);
+}
+
+template < class type1, class type2, class hash, class device >
 class unordered_map<type1,type2,hash,device>::iterator
     extends public device::template unordered_map<type1,type2,hash>::iterator
 {
@@ -132,6 +138,8 @@ class unordered_map<type1,type2,hash,device>::iterator
         using pointer    = device::template pointer   <pair<const type1,type2>>;
 
     public: // Override
+        constexpr iterator ( ) = default;
+
         constexpr iterator ( base init_b )
             extends base ( std::move(init_b) )
         {
@@ -216,6 +224,8 @@ class unordered_map<type1,type2,hash,device>::const_iterator
         using pointer    = device::template const_pointer  <pair<const type1,type2>>;
 
     public: // Override
+        constexpr const_iterator ( ) = default;
+
         constexpr const_iterator ( base init_b )
             extends base ( std::move(init_b) )
         {

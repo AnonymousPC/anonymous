@@ -146,9 +146,11 @@ array<value_type,dimension> file_idx::read ( auto&& stream, const static_array<i
     if constexpr ( dimension == 1 )
         if constexpr ( first )
             return views::binary_istream<value_type,std::endian::big>(stream/*non-view*/)
+                 | std::views::take(shp[1]) // This is an optimize to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
                  | std::ranges::to<array<value_type>>();
         else
             return stream/*chunked-binary-istream-view*/
+                 | std::views::take(shp[1]) // This is an optimize to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
                  | std::ranges::to<array<value_type>>();
 
     else if constexpr ( dimension >= 2 )

@@ -76,3 +76,9 @@ constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::upda
 
     return self;
 }
+
+template < class type, class hash, class device >
+constexpr void unordered_set<type,hash,device>::emplace_back ( auto&&... args )
+{
+    base::emplace(std::forward<decltype(args)>(args)...);
+}

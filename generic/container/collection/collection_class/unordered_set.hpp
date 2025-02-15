@@ -45,6 +45,9 @@ class unordered_set
         constexpr unordered_set& push     (       type  );
         constexpr unordered_set& pop      ( const type& );
         constexpr unordered_set& update   ( const unordered_set& );
+
+    public: // Extension 
+        constexpr void emplace_back ( auto&&... );
 };
 
 #include "unordered_set.ipp"

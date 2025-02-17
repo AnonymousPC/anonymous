@@ -203,8 +203,8 @@ constexpr basic_string<type,device>::const_reference basic_string<type,device>::
 template < class type, class device >
 constexpr basic_string_view<type,device> basic_string<type,device>::operator[] ( int pos_1, int pos_2 ) const
 {
-    let abs_pos_1 = pos_1 >= 0 ? pos_1 otherwise pos_1 + size();
-    let abs_pos_2 = pos_2 >= 0 ? pos_2 otherwise pos_2 + size();
+    let abs_pos_1 = pos_1 >= 0 ? pos_1 otherwise pos_1 + size() + 1;
+    let abs_pos_2 = pos_2 >= 0 ? pos_2 otherwise pos_2 + size() + 1;
 
     #if debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
@@ -227,8 +227,8 @@ constexpr basic_string<type,device>& basic_string<type,device>::clear ( )
 template < class type, class device >
 constexpr basic_string<type,device>& basic_string<type,device>::erase ( int old_pos_1, int old_pos_2 )
 {
-    let abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size();
-    let abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size();
+    let abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size() + 1;
+    let abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size() + 1;
 
     #if debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or

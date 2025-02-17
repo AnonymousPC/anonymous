@@ -19,7 +19,7 @@ http_get::http_get ( const url& website, http_client_mode auto... args )
 http_get& http_get::connect ( const url& website, http_client_mode auto... args )
 {
     // Check args.
-    static_assert(((not std::same_as<decltype(args),method>) and ...), "method is fixed to get");
+    static_assert(((not same_as<decltype(args),method>) and ...), "method is fixed to get");
 
     // Connect website.
     http_interface::connect(website);

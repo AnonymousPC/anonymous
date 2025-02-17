@@ -15,8 +15,6 @@ class file_stream
         void open   ( path, file_mode auto... );
 
     public: // Modes
-        struct mode_base;
-
         struct read_only;
         struct write_only;
         struct erase;
@@ -24,6 +22,7 @@ class file_stream
 
     private: // Typedef
         struct mode_type;
+        struct mode_base;
 
     private: // Auxiliary
         static mode_type          make_mode         (            auto, auto... );

@@ -25,6 +25,7 @@ const char* exception::what ( ) const noexcept
     else
         error_what = detail::red   + error_message + '\n' + 
                      detail::white + detail::format_stacktrace(error_stacktrace) + '\n' + 
+                     '\n' +
                      detail::white + detail::format_nested_exception(*from_type, from_what);
         
     return error_what.c_str();

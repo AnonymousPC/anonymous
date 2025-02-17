@@ -86,28 +86,28 @@ url http_buf::remote_endpoint ( ) const
 
 string http_buf::request_method ( ) const
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_method() in unexpected state (with current = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
+    return opened != open_type::server ? throw network_error("call http_buf::request_method() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
            not cache_header_received   ? throw network_error("call http_buf::request_method() before request is received") otherwise
                                          string(boost::beast::http::to_string(request_parser->get().method()));
 }
 
 string http_buf::request_path ( ) const
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_path() in unexpected state (with current = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
+    return opened != open_type::server ? throw network_error("call http_buf::request_path() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
            not cache_header_received   ? throw network_error("call http_buf::request_path() before request is received") otherwise
                                          string(request_parser->get().target()).begins_with('/') ? string(string(request_parser->get().target())[2,-1]) otherwise string(request_parser->get().target()); // Get rid of beginning '/'.
 }
 
 float http_buf::request_version ( ) const
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_version() in unexpected state (with current = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
+    return opened != open_type::server ? throw network_error("call http_buf::request_version() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
            not cache_header_received   ? throw network_error("call http_buf::request_version() before request is received") otherwise
                                          float(request_parser->get().version()) / 10;
 }
 
 map<string,string> http_buf::request_header ( ) const
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_header() in unexpected state (with current = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
+    return opened != open_type::server ? throw network_error("call http_buf::request_header() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
            not cache_header_received   ? throw network_error("call http_buf::request_header() before request is received") otherwise
                                          request_parser->get() | std::views::transform([] (const auto& head) { return pair(string(head.name_string()), string(head.value())); })
                                                                | std::ranges::to<map<string,string>>();
@@ -115,21 +115,21 @@ map<string,string> http_buf::request_header ( ) const
 
 int http_buf::response_status_code ( ) const
 {
-    return opened != open_type::client ? throw network_error("call http_buf::response_status_code() in unexpected state (with current = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
+    return opened != open_type::client ? throw network_error("call http_buf::response_status_code() in unexpected state (with state = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
            not cache_header_received   ? throw network_error("call http_buf::response_status_code() before request is received") otherwise
                                          response_parser->get().result_int();
 }
 
 string http_buf::response_reason ( ) const
 {
-    return opened != open_type::client ? throw network_error("call http_buf::response_reason() in unexpected state (with current = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
+    return opened != open_type::client ? throw network_error("call http_buf::response_reason() in unexpected state (with state = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
            not cache_header_received   ? throw network_error("call http_buf::response_reason() before request is received") otherwise
                                          string(response_parser->get().reason());
 }
 
 map<string,string> http_buf::response_header ( ) const
 {
-    return opened != open_type::client ? throw network_error("call http_buf::response_header() in unexpected state (with current = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
+    return opened != open_type::client ? throw network_error("call http_buf::response_header() in unexpected state (with state = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
            not cache_header_received   ? throw network_error("call http_buf::response_header() before request is received") otherwise
                                          response_parser->get() | std::views::transform([] (const auto& head) { return pair(string(head.name_string()), string(head.value())); })
                                                                 | std::ranges::to<map<string,string>>();
@@ -191,13 +191,13 @@ void http_buf::connect_without_proxy ( const url& website )
             errpool.push(detail::system_error(e));
         }
     if ( not errpool.empty() )
-        throw network_error("connection failed (with remote_url = {}, remote_endpoint = {})", website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failure(errpool));
+        throw network_error("connection failed (with remote_url = {}, remote_endpoint = {})", website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failed(errpool));
 
     // SSL.
     if ( website.scheme() == "https" )
     {
         // Create SSL handle.
-        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_client_context);
+        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_context);
 
         // SSL server name indication.
         let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
@@ -223,14 +223,7 @@ void http_buf::connect_through_proxy ( const url& website, const url& proxy_webs
         throw network_error("connection failed: http_buf has been already opened (with mode = {}, local_endpoint = {}, remote_endpoint = {})", opened == open_type::client ? "client" otherwise "server", local_endpoint_noexcept(), remote_endpoint_noexcept());
 
     // Connect to proxy server.
-    try
-    {
-        connect_without_proxy(proxy_website);
-    }
-    catch ( const network_error& e )
-    {
-        throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, proxy_url = {}, layer = http/tcp): cannot connect to proxy server", local_endpoint_noexcept(), website, proxy_website).from(e);
-    }
+    connect_without_proxy(proxy_website);
 
     // Http:  request into full url.
     // Https: establish proxy tunnel.
@@ -255,7 +248,7 @@ void http_buf::disconnect ( )
     // Prepare error which logs the first exception.
     // As error may occur in this disconnect(), but 
     // no matter what happens, we shall insist clearing
-    // all the resources first and then finally throw
+    // all the resources first and finally throw
     // the error to caller function.
     let err = optional<network_error>(nullopt);
 
@@ -337,7 +330,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
     
             // Create SSL handle (might have been created in connect(proxy_website)).
             if ( https_handle == nullptr )
-                https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_client_context);
+                https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_context);
     
             // SSL server name indication.
             let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
@@ -355,7 +348,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
         }
     }
     if ( not errpool.empty() )
-        throw network_error("establishment of proxy tunnel failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, proxy_url = {})", local_endpoint_noexcept(), website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>(), proxy_website).from(detail::all_attempts_failure(errpool));
+        throw network_error("establishment of proxy tunnel failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, proxy_url = {})", local_endpoint_noexcept(), website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>(), proxy_website).from(detail::all_attempts_failed(errpool));
 }
 
 void http_buf::listen_to_port ( const url& portal )
@@ -374,13 +367,13 @@ void http_buf::listen_to_port ( const url& portal )
             errpool.push(detail::system_error(e));
         }
     if ( not errpool.empty() )
-        throw network_error("listening failed (with local_url = {}, local_endpoint = {}, layer = socket)", portal, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failure(errpool));
+        throw network_error("listening failed (with local_url = {}, local_endpoint = {}, layer = socket)", portal, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failed(errpool));
 
     // SSL
     if ( portal.scheme() == "https" )
     {
         // Create SSL handle.
-        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_server_context);
+        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_context);
 
         // SSL handshake.
         try

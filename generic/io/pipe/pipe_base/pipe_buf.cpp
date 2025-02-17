@@ -17,8 +17,7 @@ void pipe_buf::close ( )
         }
         catch ( const boost::system::system_error& e )
         {
-            throw pipe_error("failed to close pipe (with process-id = {}): cannot close stdin/stdout/stderr [[caused by {}: {}]]",
-                             process_handle->id(), typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+            throw pipe_error("failed to close pipe (with process_id = {}): cannot close stdin/stdout/stderr", process_handle->id()).from(detail::system_error(e));
         }
 
         try
@@ -28,8 +27,7 @@ void pipe_buf::close ( )
         }
         catch ( const boost::system::system_error& e )
         {
-            throw pipe_error("failed to close pipe (with process-id = {}): cannot terminate process [[caused by {}: {}]]",
-                             process_handle->id(), typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+            throw pipe_error("failed to close pipe (with process_id = {}): cannot terminate process", process_handle->id()).from(detail::system_error(e));
         }
     }
 
@@ -74,9 +72,9 @@ int pipe_buf::underflow ( )
                                     if ( error == boost::system::error_code() )
                                     {
                                         stderr_pipe.cancel();
-                                        setg(stdout_buff.data(),
-                                             stdout_buff.data(),
-                                             stdout_buff.data() + bytes);
+                                        setg(stdout_buff.begin(),
+                                             stdout_buff.begin(),
+                                             stdout_buff.begin() + bytes);
                                     }
                                     else
                                         stdout_error = error;
@@ -88,9 +86,9 @@ int pipe_buf::underflow ( )
                                     if ( error == boost::system::error_code() )
                                     {
                                         stdout_pipe.cancel();
-                                        setg(stderr_buff.data(),
-                                             stderr_buff.data(),
-                                             stderr_buff.data() + bytes);
+                                        setg(stderr_buff.begin(),
+                                             stderr_buff.begin(),
+                                             stderr_buff.begin() + bytes);
                                     }
                                     else
                                         stderr_error = error;
@@ -107,30 +105,13 @@ int pipe_buf::underflow ( )
     // Return
     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
         return traits_type::to_int_type(*gptr());
-    #ifdef _WIN32
-    else if ( stdout_error == boost::asio::error::broken_pipe and stderr_error == boost::asio::error::broken_pipe ) // Both meets eof.
-    #elifdef __linux__
-    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof ) // Both meets eof.
-    #elifdef __APPLE__
-    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof ) // Both meets eof.
-    #endif
+    else if ( ( stdout_error == boost::asio::error::broken_pipe and stderr_error == boost::asio::error::broken_pipe ) or
+              ( stdout_error == boost::asio::error::eof         and stderr_error == boost::asio::error::eof         ) )
         return traits_type::eof();
     else
     {
-        detail::try_for_each(std::views::iota(1, 3),
-            [&] (int try_count)
-            {
-                try_count == 1 ? throw pipe_error("failed to read from pipe (with stream = stdout) [[caused by {}: {}]]",
-                                                  typeid(boost::system::system_error), string(boost::system::system_error(stdout_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal())) otherwise
-                                 throw pipe_error("failed to read from pipe (with stream = stderr) [[caused by {}: {}]]",
-                                                  typeid(boost::system::system_error), string(boost::system::system_error(stderr_error).what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
-            },
-            [&] (const auto& errors)
-            {
-                throw pipe_error("failed to read from pipe (with process-id = {}): {}", 
-                                 process_handle->id(), errors);
-            });
-        return traits_type::eof();
+        let errpool = vector<detail::system_error>{detail::system_error(boost::system::system_error(stdout_error)), detail::system_error(boost::system::system_error(stderr_error))};
+        throw detail::all_attempts_failed(errpool);
     }
 }
 
@@ -141,17 +122,17 @@ int pipe_buf::overflow ( int c )
         if ( stdin_buff == "" )
         {
             stdin_buff.resize(default_buffer_size);
-            setp(stdin_buff.data(),
-                 stdin_buff.data() + stdin_buff);
+            setp(stdin_buff.begin(),
+                 stdin_buff.end());
         }
         else
         {
             int bytes = stdin_pipe.write_some(boost::asio::const_buffer(stdin_buff.c_str(), stdin_buff.size()));
-            std::move(stdin_buff.data() + bytes,
-                      stdin_buff.data() + stdin_buff.size(),
-                      stdin_buff.data());
-            setp(stdin_buff.data() + stdin_buff.size() - bytes,
-                 stdin_buff.data() + stdin_buff.size());
+            std::move(stdin_buff.begin() + bytes,
+                      stdin_buff.end(),
+                      stdin_buff.begin());
+            setp(stdin_buff.end() - bytes,
+                 stdin_buff.end());
         }
 
         *pptr() = traits_type::to_int_type(c);
@@ -160,9 +141,7 @@ int pipe_buf::overflow ( int c )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw pipe_error("failed to write to pipe.stdin (with process-id = {}) [[caused by {}: {}]]",
-                         process_handle->id(),
-                         typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", process_handle->id()).from(detail::system_error(e));
     }
 }
 
@@ -171,14 +150,12 @@ int pipe_buf::sync ( )
     try
     {
         boost::asio::write(stdin_pipe, boost::asio::const_buffer(stdin_buff.data(), pptr() - stdin_buff.data()));
-        setp(stdin_buff.data(),
-             stdin_buff.data() + stdin_buff.size());
+        setp(stdin_buff.begin(),
+             stdin_buff.end());
         return 0;
     }
     catch ( const boost::system::system_error& e )
     {
-        throw pipe_error("failed to write to pipe.stdin (with process-id = {}) [[caused by {}: {}]]",
-                         process_handle->id(),
-                         typeid(e), string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()));
+        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", process_handle->id()).from(detail::system_error(e));
     }
 }

@@ -19,10 +19,10 @@ http_post::http_post ( const url& website, const printable auto& body, http_clie
 http_post& http_post::connect ( const url& website, const printable auto& body, http_client_mode auto... args )
 {
     // Check args.
-    static_assert(((not std::same_as<decltype(args),method>) and ...), "method is fixed to post");
+    static_assert(((not same_as<decltype(args),method>) and ...), "method is fixed to post");
 
     // Content encoding.
-    optional<string> request_encoding = [&] -> optional<string>
+    let request_encoding = [&] -> optional<string>
     {
         if constexpr ( not is_void<decltype(extract<content_encoding>(args...))> )
             return extract<content_encoding>(args...).value;

@@ -3,10 +3,10 @@
 namespace detail
 {
     class system_error
-        extends public std::exception
+        extends public boost::system::system_error
     {
         public: // Core
-            system_error ( ) = default;
+            system_error ( );
             system_error ( const boost::system::system_error& );
 
         public: // What

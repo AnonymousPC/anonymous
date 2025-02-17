@@ -25,10 +25,6 @@ class http_buf
         virtual int overflow  ( int = traits_type::eof() ) override;
         virtual int sync      ( )                          override;
 
-    public: // Modes
-        template < class type >
-        struct mode_base;
-
     public: // Client modes
         struct authorization;
         struct cookie;
@@ -44,18 +40,16 @@ class http_buf
     public: // Server modes
 
     private: // Typedef (mode)
+        template < class type > struct mode_base;
         struct client_mode_type;
         struct server_mode_type;
-
-    private: // Typedef (data)
         enum class open_type
         {
             close  = 0,
             client = 1,
             server = 2
         };
-
-        constexpr static const int default_buffer_size = 3;
+        constexpr static const int default_buffer_size = 4096;
 
     private: // Data
         /* boost::beast::tcp_stream         is not movable. */
@@ -120,6 +114,7 @@ struct http_buf::mode_base
 {
     type value = type();
     constexpr mode_base ( type );
+    struct http_client_mode_tag { };
 };
 
 template < pair_type type >
@@ -128,6 +123,7 @@ struct http_buf::mode_base<type>
     type value = type();
     constexpr mode_base ( typename type::key_type, typename type::value_type );
     constexpr mode_base ( type );
+    struct http_client_mode_tag { };
 };
 
 template < map_type type >
@@ -137,19 +133,20 @@ struct http_buf::mode_base<type>
     constexpr mode_base ( type::key_type, type::value_type );
     constexpr mode_base ( pair<typename type::key_type,typename type::value_type> );
     constexpr mode_base ( type );
+    struct http_client_mode_tag { };
 };
 
 
-struct http_buf::authorization extends public http_buf::mode_base<pair<string,string>> { using mode_base::mode_base; struct http_client_mode_tag{}; };;
-struct http_buf::cookie        extends public http_buf::mode_base<map<string,string>>  { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::header        extends public http_buf::mode_base<map<string,string>>  { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::method        extends public http_buf::mode_base<string>              { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::param         extends public http_buf::mode_base<map<string,string>>  { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::path          extends public http_buf::mode_base<string>              { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::port          extends public http_buf::mode_base<int>                 { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::proxy         extends public http_buf::mode_base<url>                 { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::timeout       extends public http_buf::mode_base<duration>            { using mode_base::mode_base; struct http_client_mode_tag{}; };
-struct http_buf::version       extends public http_buf::mode_base<float>               { using mode_base::mode_base; struct http_client_mode_tag{}; };
+struct http_buf::authorization extends public http_buf::mode_base<pair<string,string>> { using mode_base::mode_base; };
+struct http_buf::cookie        extends public http_buf::mode_base<map<string,string>>  { using mode_base::mode_base; };
+struct http_buf::header        extends public http_buf::mode_base<map<string,string>>  { using mode_base::mode_base; };
+struct http_buf::method        extends public http_buf::mode_base<string>              { using mode_base::mode_base; };
+struct http_buf::param         extends public http_buf::mode_base<map<string,string>>  { using mode_base::mode_base; };
+struct http_buf::path          extends public http_buf::mode_base<string>              { using mode_base::mode_base; };
+struct http_buf::port          extends public http_buf::mode_base<int>                 { using mode_base::mode_base; };
+struct http_buf::proxy         extends public http_buf::mode_base<url>                 { using mode_base::mode_base; };
+struct http_buf::timeout       extends public http_buf::mode_base<duration>            { using mode_base::mode_base; };
+struct http_buf::version       extends public http_buf::mode_base<float>               { using mode_base::mode_base; };
 
 
 

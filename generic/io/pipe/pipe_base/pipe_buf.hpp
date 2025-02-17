@@ -15,17 +15,16 @@ class pipe_buf
         virtual int sync      ( )                          override;
 
     public: // Modes
-        template < class type >
-        struct mode_base;
-
         struct environment;
         struct param;
         struct start_directory;
 
     private: // Typedef
+        struct mode_type;
+        template < class type > struct mode_base;
         constexpr static const int default_buffer_size = 4096;
 
-    public: // Data
+    private: // Data
         /* boost::process::v2::process will immediate start once been constructed */
         /* boost::asio::io_context is not movable */
         std::unique_ptr<boost::process::v2::process> process_handle = nullptr;
@@ -37,13 +36,10 @@ class pipe_buf
         string                                       stdout_buff    = "";
         string                                       stderr_buff    = "";
 
-    private: // Typedef
-        struct mode_type;
-
     private: // Auxiliary
         // This is not similiar to http_buf.set_request(field_1, ...), http_buf.set_request(field_2, ...),
         // as all params must be forwarded at one time.
-        auto run_with_args ( boost::filesystem::path, std::vector<std::string>, const auto&, auto... );
+        auto run_with_args ( const boost::filesystem::path&, std::vector<std::string>, const auto&, auto... );
         template < class... types > struct tuple;
 };
 
@@ -58,6 +54,7 @@ struct pipe_buf::mode_base
 {
     type value = type();
     constexpr mode_base ( type );
+    struct pipe_mode_tag { };
 };
 
 template < array_type type >
@@ -67,9 +64,10 @@ struct pipe_buf::mode_base<type>
     constexpr mode_base ( type::value_type );
     constexpr mode_base ( type::value_type, std::convertible_to<typename type::value_type> auto... );
     constexpr mode_base ( type );
+    struct pipe_mode_tag { };
 };
 
-template < map_type type >
+template < map_type type > // map<string,array<string>>
 struct pipe_buf::mode_base<type>
 {
     type value = type();
@@ -78,12 +76,13 @@ struct pipe_buf::mode_base<type>
     constexpr mode_base ( pair<typename type::key_type,typename type::value_type::value_type> /*pair<string,string*/        );
     constexpr mode_base ( pair<typename type::key_type,typename type::value_type>             /*pair<string,array<string>>*/);
     constexpr mode_base ( map <typename type::key_type,typename type::value_type::value_type> /*map<string,string>*/        );
-    constexpr mode_base ( map <typename type::key_type,typename type::value_type>             /*map<string,array<string>>*/ );
+    constexpr mode_base ( type );
+    struct pipe_mode_tag { };
 };
 
-struct pipe_buf::environment     extends public pipe_buf::mode_base<map<string,array<string>>> { using mode_base::mode_base; struct pipe_mode_tag{}; };
-struct pipe_buf::param           extends public pipe_buf::mode_base<array<string>>             { using mode_base::mode_base; struct pipe_mode_tag{}; };
-struct pipe_buf::start_directory extends public pipe_buf::mode_base<path>                      { using mode_base::mode_base; struct pipe_mode_tag{}; };
+struct pipe_buf::environment     extends public pipe_buf::mode_base<map<string,array<string>>> { using mode_base::mode_base; };
+struct pipe_buf::param           extends public pipe_buf::mode_base<array<string>>             { using mode_base::mode_base; };
+struct pipe_buf::start_directory extends public pipe_buf::mode_base<path>                      { using mode_base::mode_base; };
 
 #include "pipe_buf.ipp"
 #if dll

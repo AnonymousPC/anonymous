@@ -2,6 +2,10 @@
 
 namespace ap
 {
+    /// Email
+    class email_send;
+    template < class type > concept email_mode = requires { typename type::email_mode_tag; };
+
     /// File
     class file_bmp;
     class file_csv;
@@ -66,13 +70,16 @@ namespace ap
     template < class type > concept pipe_mode = requires { typename type::pipe_mode_tag; };
 
     /// Socket
-    class icmp_ping;
-
+    class tcp;
+    class udp;
+    class icmp;
+    class ssl;
     template < class protocol > class basic_socket_buf;
     template < class protocol > class basic_socket_stream;
-    using tcp_stream  = basic_socket_stream<boost::asio::ip::tcp>;
-    using udp_stream  = basic_socket_stream<boost::asio::ip::udp>;
-    using icmp_stream = basic_socket_stream<boost::asio::ip::icmp>;
+    using tcp_stream  = basic_socket_stream<tcp>;
+    using udp_stream  = basic_socket_stream<udp>;
+    using icmp_stream = basic_socket_stream<icmp>;
+    using ssl_stream  = basic_socket_stream<ssl>;
 
     /// Utility
     class color;
@@ -110,19 +117,19 @@ namespace ap
     constexpr int        time_zone   ( );
 
     /// Global
-    boost::asio::io_context   io_context         = boost::asio::io_context();
-    boost::asio::ssl::context ssl_client_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_client);
-    boost::asio::ssl::context ssl_server_context = boost::asio::ssl::context(boost::asio::ssl::context::tlsv12_server);
-
+    boost::asio::io_context   io_context  = boost::asio::io_context();
+    boost::asio::ssl::context ssl_context = boost::asio::ssl::context(boost::asio::ssl::context::tls);
+    
     /// Include
     #include "utility/utility.hpp" // First.
     #include "file/file.hpp"
     #include "http/http.hpp"
-    // #include "pipe/pipe.hpp"
-    // #include "tcp_udp_icmp/tcp_udp_icmp.hpp"
+    #include "pipe/pipe.hpp"
     // #include "serial_port/serial_port.hpp"
+    #include "socket/socket.hpp"
     // #include "usb/usb.hpp"
     // #include "websocket/websocket.hpp"
+    #include "email/email.hpp"
     // #include "initialize.hpp"
 
     /// Literal

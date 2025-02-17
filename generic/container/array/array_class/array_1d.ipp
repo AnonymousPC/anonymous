@@ -384,8 +384,8 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int
         throw logic_error("cannot erase from array: it does not own its data");
     #endif
 
-    let abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + base::size();
-    let abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + base::size();
+    let abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + base::size() + 1;
+    let abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + base::size() + 1;
     #if debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
            ( abs_pos_2 < 1 or abs_pos_2 > size() ) )

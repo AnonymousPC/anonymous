@@ -20,7 +20,7 @@ class ssl::socket
     public:
         socket ( auto&&... args )
             extends tcp::socket ( std::forward<decltype(args)>(args)... ),
-                    boost::asio::ssl::stream<tcp::socket&> ( static_cast<tcp::socket&>(self), ssl_context )
+                    boost::asio::ssl::stream<tcp::socket&> ( static_cast<tcp::socket&>(self), ssl_client_context )
         {
             
         }

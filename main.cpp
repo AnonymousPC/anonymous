@@ -7,31 +7,46 @@
 // #include "specific/stock/interface.hpp"
 using namespace ap;
 
-void server()
+void server ( )
 {
-    let stream = ssl_stream();
-    stream.listen("ssl://127.0.0.1:8888");
+    let stream = http_stream();
+    stream.listen("https://127.0.0.1:8888");
     print("server listen ok!");
     views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
     stream.close();
 }
 
-void client()
+void client ( )
 {
     sleep(1s);
-    let stream = ssl_stream();
-    stream.connect("ssl://127.0.0.1:8888");
+    let stream = http_stream();
+    stream.connect("https://127.0.0.1:8888");
     print("client connect ok!");
     stream << "Hello,world!" << std::flush;
     stream.close();
 }
 
+void print_error ( std::exception_ptr ptr )
+{
+    try
+    {
+        std::rethrow_exception(ptr);
+    }
+    catch ( const std::exception& e )
+    {
+        print(e.what());
+    }
+}
+
 int main ( )
 {
+    
     let task1 = std::execution::schedule(cpu::execution_context.get_scheduler())
-              | std::execution::then(server);
+              | std::execution::then(server)
+              | std::execution::upon_error(print_error);
     let task2 = std::execution::schedule(cpu::execution_context.get_scheduler())
-              | std::execution::then(client);
+              | std::execution::then(client)
+              | std::execution::upon_error(print_error);
     std::execution::sync_wait(std::execution::when_all(task1, task2));
     
 

@@ -117,8 +117,9 @@ namespace ap
     constexpr int        time_zone   ( );
 
     /// Global
-    boost::asio::io_context   io_context  = boost::asio::io_context();
-    boost::asio::ssl::context ssl_context = boost::asio::ssl::context(boost::asio::ssl::context::tls);
+    boost::asio::io_context   io_context         = boost::asio::io_context();
+    boost::asio::ssl::context ssl_client_context = boost::asio::ssl::context(boost::asio::ssl::context_base::tls_client);
+    boost::asio::ssl::context ssl_server_context = boost::asio::ssl::context(boost::asio::ssl::context_base::tls_server);
     
     /// Include
     #include "utility/utility.hpp" // First.

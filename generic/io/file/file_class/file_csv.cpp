@@ -13,121 +13,180 @@ namespace detail
     {
         constexpr static const bool value = true;
     };
+}
 
+namespace ranges
+{
     template < class range, class pattern >
+        requires input_range<range> and 
+                 equalable_to<range_value<range>,pattern>
     class csv_lazy_split_view
         extends public std::ranges::view_interface<csv_lazy_split_view<range,pattern>>
     {
         private: // Data
             range   r;
             pattern p;
+            bool    q = false; // Log current cursor is in quotes or not.
     
         private: // Typedef
             class iterator;
+            using sentinel = range_sentinel<range>;
     
         public: // Interface
-            constexpr csv_lazy_split_view ( range init_r, pattern init_p )
-                extends r ( std::forward<decltype(init_r)>(init_r) ),
-                        p ( std::forward<decltype(init_p)>(init_p) )
-            {
-        
-            };
-
-            constexpr auto begin ( )
-            {
-                return iterator(self);
-            };
-
-            constexpr auto end ( )
-            {
-                return r.end();
-            }
-    };
-
-    template < class range, class pattern >
-    class csv_lazy_split_view<range,pattern>::iterator
-    {
-        private: // Typedef
-            using subrange = std::ranges::subrange<decltype(std::declval<range>().begin()),decltype(std::declval<range>().end())>;
-    
-        private: // Data
-            csv_lazy_split_view* v;
-            subrange             r;
-            mutable bool         q = false; // Log current cursor is in quotes or not.
-    
-        public: // Interface
-            constexpr iterator ( csv_lazy_split_view& init_v )
-                extends v ( &init_v ),
-                        r ( v->r.begin(), v->r.end() )
-            {
-
-            }
-
-            constexpr auto operator * ( ) const
-            {
-                q = false; // Maybe useless.
-                let ret = r | std::views::take_while([&] (auto ch) { if ( ch == '"' ) q = not q; return ch != v->p or q; });
-                return ret;
-            }
-
-            constexpr bool operator == ( auto ) const
-            {
-                if constexpr ( is_istream_view<range>::value )
-                    return r.begin() == r.end();
-                else
-                    return *r.begin() == '\n' or r.begin() == v->r.base().end();
-            }
-
-            constexpr iterator& operator ++ ( )
-            {
-                if constexpr ( is_istream_view<range>::value )
-                    ++r.begin();
-                else
-                    if ( *r.begin() != '\n' )
-                        ++r.begin();
-                return self;
-            }
-
-            constexpr iterator& operator ++ ( int )
-            {
-                return operator++();
-            }
-    
-        public: // Typedef
-            using iterator_concept = std::input_iterator_tag;
-            using difference_type  = std::ptrdiff_t;
-            class value_type;
+            constexpr csv_lazy_split_view ( range, pattern );
+            constexpr auto begin ( );
+            constexpr auto end   ( );
     };
     
-    template < class range, class pattern >
-    class csv_lazy_split_view<range,pattern>::iterator::value_type
-        extends public decltype(*std::declval<iterator>()) // Only a declaration to make value_type available.
-    {
-    
-    };
-    
+} // namespace ranges
+
+namespace views
+{   
     template < class pattern >
     class csv_lazy_split
         extends public std::ranges::range_adaptor_closure<csv_lazy_split<pattern>>
     {
         private: // Data
-            mutable pattern p;
+            pattern p;
     
         public: // Interface
-            constexpr csv_lazy_split ( pattern&& init_p )
-                extends p ( std::forward<decltype(init_p)>(init_p) )
-            {
-            
-            }
-
-            constexpr auto operator() ( input_range auto&& r ) const
-            {
-                return csv_lazy_split_view(std::forward<decltype(r)>(r), std::forward<decltype(p)>(p));
-            }
+            constexpr csv_lazy_split ( pattern&& );
+            constexpr auto operator() ( input_range auto&& r ) const requires equalable_to<range_value<decltype(r)>,pattern>;
     };
-} // namespace detail
+
+} // namespace views
 
 
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr ranges::csv_lazy_split_view<range,pattern>::csv_lazy_split_view ( range init_r, pattern init_p )
+extends r ( std::move(init_r) ),
+        p ( std::move(init_p) )
+{
+
+};
+
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr auto ranges::csv_lazy_split_view<range,pattern>::begin ( )
+{
+    return iterator(self);
+};
+
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr auto ranges::csv_lazy_split_view<range,pattern>::end ( )
+{
+    return r.end();
+}
+
+
+template < class range, class pattern >
+    requires input_range<range> and 
+                equalable_to<range_value<range>,pattern>
+class ranges::csv_lazy_split_view<range,pattern>::iterator
+{
+    private: // Data
+        csv_lazy_split_view*  v;
+        range_iterator<range> i;
+
+    public: // Interface
+        constexpr iterator ( csv_lazy_split_view& );
+        constexpr auto      operator *  ( )          const;
+        constexpr bool      operator == ( sentinel ) const;
+        constexpr iterator& operator ++ ( );
+        constexpr iterator& operator ++ ( int );
+
+    public: // Typedef
+        using iterator_concept = std::input_iterator_tag;
+        using difference_type  = std::ptrdiff_t;
+        class value_type;
+};
+
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr ranges::csv_lazy_split_view<range,pattern>::iterator::iterator ( csv_lazy_split_view& init_v )
+    extends v ( &init_v ),
+            i ( v->r.begin() )
+{
+
+}
+
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr auto ranges::csv_lazy_split_view<range,pattern>::iterator::operator * ( ) const
+{
+    v->q = false; // Maybe useless.
+    let r = std::views::iota(i, v->r.end())
+          | std::views::transform ([]  (const auto& i) { return *i; })
+          | std::views::take_while([&] (const auto& c)
+              {
+                  if ( c == '"' )
+                      v->q = not v->q;
+                  return (c != v->p and c != '\n') or v->q;
+              });
+    return r;
+}
+
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr bool ranges::csv_lazy_split_view<range,pattern>::iterator::operator == ( sentinel ) const
+{
+    if constexpr ( detail::is_istream_view<range>::value )
+        return i == v->r.end();
+    else
+        return *i == '\n' or i == v->r.end();
+}
+
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr ranges::csv_lazy_split_view<range,pattern>::iterator& ranges::csv_lazy_split_view<range,pattern>::iterator::operator ++ ( )
+{
+    if constexpr ( detail::is_istream_view<range>::value )
+        ++i;
+    else
+        if ( *i != '\n' )
+            ++i;
+    return self;
+}
+
+template < class range, class pattern >
+    requires input_range<range> and
+             equalable_to<range_value<range>,pattern>
+constexpr ranges::csv_lazy_split_view<range,pattern>::iterator& ranges::csv_lazy_split_view<range,pattern>::iterator::operator ++ ( int )
+{
+    return operator++();
+}
+
+template < class range, class pattern >
+    requires input_range<range> and 
+                equalable_to<range_value<range>,pattern>
+class ranges::csv_lazy_split_view<range,pattern>::iterator::value_type
+    extends public decltype(*std::declval<iterator>()) // Only a declaration to make value_type available.
+{
+
+};
+
+template < class pattern >
+constexpr views::csv_lazy_split<pattern>::csv_lazy_split ( pattern&& init_p )
+    extends p ( std::move(init_p) )
+{
+
+}
+
+template < class pattern >
+constexpr auto views::csv_lazy_split<pattern>::operator() ( input_range auto&& r ) const
+    requires equalable_to<range_value<decltype(r)>,pattern>
+{
+    return ranges::csv_lazy_split_view(std::forward<decltype(r)>(r), p);
+}
 
 
 
@@ -163,11 +222,11 @@ file_csv& file_csv::open ( const path& pth )
 
     // Read data.
     let raw_data = views::binary_istream<char>(stream)
-                 | detail::csv_lazy_split('\n') // Only splits outside quotes.
+                 | views::csv_lazy_split('\n') // Only splits outside quotes.
                  | std::views::transform([] (const auto& stream_line)
                      {
                          let line = (stream_line
-                                  | detail::csv_lazy_split(',') // Only splits outside quotes.
+                                  | views::csv_lazy_split(',') // Only splits outside quotes.
                                   | std::ranges::to<vector<string>>())
                                   . for_each ([] (auto& str)
                                       {

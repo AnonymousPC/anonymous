@@ -474,7 +474,7 @@ constexpr container& string_algo<container,type,device>::remove ( view str )
         if ( pos != self.end() )
         {
             let idx = pos - begin() + 1;
-            static_cast<container&>(self).erase(idx, idx+str.size()-1);
+            static_cast<container&>(self).erase(idx, idx + str.size() - 1);
             pos = begin() + idx - 1 + str.size();
         }
         else
@@ -493,7 +493,10 @@ constexpr container& string_algo<container,type,device>::replace ( view old_str,
         if ( pos != self.end() )
         {
             let idx = pos - begin() + 1;
-            static_cast<container&>(self).erase(idx, idx+old_str.size()-1).insert(idx, new_str);
+            if ( idx + old_str.size() - 1 != size() )
+                static_cast<container&>(self).erase(idx, idx + old_str.size() - 1).insert(idx, new_str);
+            else
+                static_cast<container&>(self).erase(idx, -1).push(new_str);
             pos = begin() + idx - 1 + new_str.size();
         }
         else

@@ -9,5 +9,12 @@ using namespace ap;
 
 int main ( )
 {    
+    string str = "hello,world!";
 
+    let str1 = detail::encode_base64(str);
+    let str2 = str | views::encode_base64 | std::ranges::to<string>();
+
+    std::ranges::take_while_view
+
+    std::ranges::
 }

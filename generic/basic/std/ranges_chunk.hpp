@@ -1,5 +1,67 @@
 #pragma once
 
+namespace std
+{
+    template <typename _Tp>
+    using iter_const_reference_t = std::common_reference_t<const std::iter_value_t<_Tp>&&,
+                                                                 std::iter_reference_t<_Tp>>;
+
+    namespace ranges
+    {
+        template<range _Range> using range_const_reference_t = iter_const_reference_t<iterator_t<_Range>>;
+    } 
+    
+    
+    template<typename _Tp>
+    struct __const_iterator
+    {
+        struct type : public _Tp
+        {
+            using _Tp::_Tp;
+            type (_Tp init) : _Tp(std::move(init)) { }
+        };
+    };
+
+    template<typename _Tp>
+    struct __const_iterator<_Tp*>
+    {
+        using type = const _Tp*;
+    };
+
+    template<typename _Tp> using const_iterator = __const_iterator<_Tp>::type;
+
+    namespace ranges
+    {
+        template<range _Range> using const_iterator_t = const_iterator<iterator_t<_Range>>;
+    }
+    
+
+    template<typename _Tp>
+    struct __const_sentinel
+    {
+        struct type : public _Tp
+        {
+            using _Tp::_Tp;
+            type (_Tp init) : _Tp(std::move(init)) { }
+        };
+    };
+
+    template<typename _Tp>
+    struct __const_sentinel<_Tp*>
+    {
+        using type = const _Tp*;
+    };
+
+    template<typename _Tp> using const_sentinel = __const_sentinel<_Tp>::type;
+
+    namespace ranges
+    {
+        template<range _Range> using const_sentinel_t = const_iterator<sentinel_t<_Range>>;
+    }
+    
+} // namespace std
+
+
 namespace std {
 namespace ranges {
 

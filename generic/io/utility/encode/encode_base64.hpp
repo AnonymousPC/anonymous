@@ -19,8 +19,7 @@ namespace ranges
 
         private: // Typedef
             struct iterator;
-            using  sentinel = range_sentinel<range>;
-
+            
         public: // Interface
             constexpr encode_base64_view ( range );
             constexpr auto begin ( ) const;

@@ -22,7 +22,7 @@ template < class range >
              same_as<range_value<range>,char>
 constexpr auto ranges::encode_base64_view<range>::end ( ) const
 {
-    return r.end();
+    return std::default_sentinel;
 }
 
 template < class range >
@@ -47,11 +47,16 @@ struct ranges::encode_base64_view<range>::iterator
         bool                        e = false;                         // Whether we reach the end.
         int                         t = 0;                             // Total size we had encoded to output. we should append '=' if output.size() % 4 != 0.
 
+    public: // Typedef
+        using iterator_concept = std::input_iterator_tag;
+        using value_type       = char;
+        using difference_type  = std::ptrdiff_t;
+
     public: // Interface
         constexpr iterator ( ) = default;
         constexpr iterator ( const encode_base64_view& );
-        constexpr char      operator *  ( )          const;
-        constexpr bool      operator == ( sentinel ) const;
+        constexpr char      operator *  ( )                         const;
+        constexpr bool      operator == ( std::default_sentinel_t ) const;
         constexpr iterator& operator ++ ( );
         constexpr iterator  operator ++ ( int );
 };
@@ -60,8 +65,8 @@ template < class range >
     requires input_range<range> and 
              same_as<range_value<range>,char>
 constexpr ranges::encode_base64_view<range>::iterator::iterator ( const encode_base64_view& init_v )
-    extends i ( init_v.r.begin() ),
-            s ( init_v.r.end() )
+    extends i ( const_cast<encode_base64_view&>(init_v).r.begin() ),
+            s ( const_cast<encode_base64_view&>(init_v).r.end() )
 {
 
 }
@@ -87,7 +92,7 @@ constexpr char ranges::encode_base64_view<range>::iterator::operator * ( ) const
 template < class range >
     requires input_range<range> and 
              same_as<range_value<range>,char>
-constexpr bool ranges::encode_base64_view<range>::iterator::operator == ( sentinel ) const
+constexpr bool ranges::encode_base64_view<range>::iterator::operator == ( std::default_sentinel_t ) const
 {
     return i == s and b == -6 and t % 4 == 0;
 }
@@ -98,7 +103,6 @@ template < class range >
 constexpr ranges::encode_base64_view<range>::iterator& ranges::encode_base64_view<range>::iterator::operator++ ( )
 {
     t++;
-
     if ( i != s ) [[likely]]
         if ( b >= 0 )
             b -= 6;
@@ -111,6 +115,8 @@ constexpr ranges::encode_base64_view<range>::iterator& ranges::encode_base64_vie
     else
         if ( b > -6 )
             b = -6;
+
+    return self;
 }
 
 template < class range >

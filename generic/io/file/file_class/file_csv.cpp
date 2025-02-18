@@ -30,7 +30,6 @@ namespace ranges
     
         private: // Typedef
             class iterator;
-            using sentinel = range_sentinel<range>;
     
         public: // Interface
             constexpr csv_lazy_split_view ( range, pattern );
@@ -80,7 +79,7 @@ template < class range, class pattern >
              equalable_to<range_value<range>,pattern>
 constexpr auto ranges::csv_lazy_split_view<range,pattern>::end ( )
 {
-    return r.end();
+    return std::default_sentinel;
 }
 
 
@@ -95,8 +94,8 @@ class ranges::csv_lazy_split_view<range,pattern>::iterator
 
     public: // Interface
         constexpr iterator ( csv_lazy_split_view& );
-        constexpr auto      operator *  ( )          const;
-        constexpr bool      operator == ( sentinel ) const;
+        constexpr auto      operator *  ( )                         const;
+        constexpr bool      operator == ( std::default_sentinel_t ) const;
         constexpr iterator& operator ++ ( );
         constexpr iterator& operator ++ ( int );
 
@@ -136,7 +135,7 @@ constexpr auto ranges::csv_lazy_split_view<range,pattern>::iterator::operator * 
 template < class range, class pattern >
     requires input_range<range> and
              equalable_to<range_value<range>,pattern>
-constexpr bool ranges::csv_lazy_split_view<range,pattern>::iterator::operator == ( sentinel ) const
+constexpr bool ranges::csv_lazy_split_view<range,pattern>::iterator::operator == ( std::default_sentinel_t ) const
 {
     if constexpr ( detail::is_istream_view<range>::value )
         return i == v->r.end();

@@ -1,0 +1,8 @@
+In file included from main.cpp:3:
+In file included from ./generic/io/interface.hpp:135:
+In file included from ./generic/io/email/email.hpp:3:
+In file included from ./generic/io/email/email_class/email_send.hpp:21:
+[1m./generic/io/email/email_class/email_send.ipp:120:74: [0m[0;1;31merror: [0m[1mno member named 'base64_encoder' in namespace 'ap::detail'[0m
+  120 |         views::binary_istream<[0;34mchar[0m>(pth) | std::views::transform(detail::base64_encoder()) | std::ranges::to<views::binary_ostream<[0;34mchar[0m>>(std::ref(stream)); stream << [0;32m"\r\n"[0m;[0m
+      | [0;1;32m                                                                 ~~~~~~~~^
+[0m1 error generated.

@@ -1,45 +1,132 @@
 #pragma once
 
+struct email_send::server     extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::username   extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::password   extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::from       extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::to         extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
+struct email_send::cc         extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
+struct email_send::bcc        extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
+struct email_send::title      extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::text       extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::attachment extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
+// Must use array<string> instead of array<path>, because "utility/io_mode.hpp" instantiates "array<path>" but is included before "file/path.hpp". 
+
 email_send::email_send ( email_mode auto... args )
 {
+    // Get params.
     static_assert ( ( same_as<decltype(args),server  > or ... ) and
                     ( same_as<decltype(args),username> or ... ) and
                     ( same_as<decltype(args),password> or ... ) and
-                    ( same_as<decltype(args),from    > or ... ) and
-                    ( same_as<decltype(args),to      > or ... ) and
-                    ( same_as<decltype(args),title   > or ... ) and
-                    ( same_as<decltype(args),data    > or ... ) and
-                    detail::all_different<decltype(args)...>,
-                    "you must provide all email params: server, username, password, from, to, title, data" );
-            
+                    "you must provide server, username and password" );
+    static_assert ( ( same_as<decltype(args),to      > or ... ) or
+                    ( same_as<decltype(args),cc      > or ... ) or
+                    ( same_as<decltype(args),bcc     > or ... ),
+                    "you must choose at least one receiver" );
+    static_assert ( detail::all_different<decltype(args)...>,
+                    "duplicated params" );
     let email_server   = index_value_of<detail::index_of_unique_same_type<server,  decltype(args)...>>(args...).value;
     let email_username = index_value_of<detail::index_of_unique_same_type<username,decltype(args)...>>(args...).value;
     let email_password = index_value_of<detail::index_of_unique_same_type<password,decltype(args)...>>(args...).value;
-    let email_from     = index_value_of<detail::index_of_unique_same_type<from,    decltype(args)...>>(args...).value;
-    let email_to       = index_value_of<detail::index_of_unique_same_type<to,      decltype(args)...>>(args...).value;
-    let email_title    = index_value_of<detail::index_of_unique_same_type<title,   decltype(args)...>>(args...).value;
-    let email_data     = index_value_of<detail::index_of_unique_same_type<data,    decltype(args)...>>(args...).value;
+    let email_from = [&] -> string
+        {
+            if constexpr ( ( same_as<from,decltype(args)> or ... ) ) 
+                return index_value_of<detail::index_of_unique_same_type<from,decltype(args)...>>(args...).value;
+            else
+                return email_username;
+        } ();
+    let email_to = [&] -> array<string>
+        {
+            if constexpr ( ( same_as<to,decltype(args)> or ... ) ) 
+                return index_value_of<detail::index_of_unique_same_type<to,decltype(args)...>>(args...).value;
+            else
+                return {};
+        } ();
+    let email_cc = [&] -> array<string>
+        {
+            if constexpr ( ( same_as<cc,decltype(args)> or ... ) ) 
+                return index_value_of<detail::index_of_unique_same_type<cc,decltype(args)...>>(args...).value;
+            else
+                return {};
+        } ();
+    let email_bcc = [&] -> array<string>
+        {
+            if constexpr ( ( same_as<bcc,decltype(args)> or ... ) ) 
+                return index_value_of<detail::index_of_unique_same_type<bcc,decltype(args)...>>(args...).value;
+            else
+                return {};
+        } ();
+    let email_title = [&] -> string
+        {
+            if constexpr ( ( same_as<title,decltype(args)> or ... ) ) 
+                return index_value_of<detail::index_of_unique_same_type<title,decltype(args)...>>(args...).value;
+            else
+                return "";
+        } ();
+    let email_text = [&] -> string
+        {
+            if constexpr ( ( same_as<text,decltype(args)> or ... ) ) 
+                return index_value_of<detail::index_of_unique_same_type<text,decltype(args)...>>(args...).value;
+            else
+                return "";
+        } ();
+    let email_attachment = [&] -> array<path>
+        {
+            if constexpr ( ( same_as<attachment,decltype(args)> or ... ) ) 
+                return index_value_of<detail::index_of_unique_same_type<attachment,decltype(args)...>>(args...).value | std::ranges::to<array<path>>();
+            else
+                return {};
+        } ();
+    if ( email_to.empty() and email_cc.empty() and email_bcc.empty() )
+        throw logic_error("send an email with no receivers");
+    let email_boundary = email_attachment.empty() ? "" otherwise string().resize(16).generate([] { return std::uniform_int_distribution<int>('a','z')(cpu::random_context); });
 
+    // Send email.
     let stream = ssl_stream(url(email_server));
     stream << "EHLO localhost\r\n"
            << "AUTH LOGIN\r\n"
-           << "{}\r\n"s            .format(detail::encode_base64(email_username))
-           << "{}\r\n"s            .format(detail::encode_base64(email_password))
-           << "MAIL FROM:<{}>\r\n"s.format(email_from)
-           << "RCPT TO:<{}>\r\n"s  .format(email_to)
+           << "{}\r\n"s                                             .format(detail::encode_base64(email_username))
+           << "{}\r\n"s                                             .format(detail::encode_base64(email_password))
+           << "MAIL FROM:<{}>\r\n"s                                 .format(email_from)
+           <</*RCPT TO:<{}>\r\n*/"{}"s                              .format(array<array<string>>{email_to, email_cc, email_bcc}
+                                                                               | std::views::join
+                                                                               | std::ranges::to<set<string>>()
+                                                                               | std::views::transform([] (const auto& rcpt) { return "RCPT TO:<{}>\r\n"s.format(rcpt); })
+                                                                               | std::views::join
+                                                                               | std::ranges::to<string>())
 
            << "DATA\r\n"
+           << "From: {}\r\n"s                            .format(email_from)
+           << "To: {}\r\n"s                              .format(email_to .empty() ? "" otherwise email_to | std::views::join_with(", "s) | std::ranges::to<string>())
+           << "Cc: {}\r\n"s                              .format(email_cc .empty() ? "" otherwise email_cc | std::views::join_with(", "s) | std::ranges::to<string>())
+           << "Subject: {}\r\n"s                         .format(email_title)
+           << "MIME-Version: 1.0\r\n"
+           <</*Content-Type: multipart/mixed; boundary={}\r\n*/
+             "{}"s                                       .format(email_attachment.empty() ? "" otherwise "Content-Type: multipart/mixed; boundary={}\r\n"s.format(email_boundary))
 
-           << "From: {}\r\n"s      .format(email_from)
-           << "To: {}\r\n"s        .format(email_to)
-           << "Subject: {}\r\n"s   .format(email_title)
+           <</*--boundary\r\n*/"{}"s                     .format(email_attachment.empty() ? "" otherwise "--{}\r\n"s.format(email_boundary))
+           << "Content-Type: text/plain; charset={}\r\n"s.format(std::text_encoding::literal().name())
            << "\r\n"
-           << "{}\r\n"s            .format(email_data)
-           << ".\r\n"
+           << "{}\r\n"s                                  .format(email_text)
+           << "\r\n";
 
+    // Send attachment
+    for ( const auto& pth in email_attachment )
+    {
+        stream << "--{}\r\n"s.format(email_boundary)
+               << "Content-Type: {}; name=\"{}\"\r\n"s   .format(get_content_type(pth), pth)
+               << "Content-Disposition: attachment; filename = \"{}\"\r\n"
+               << "\r\n";
+        views::binary_istream<char>(pth) | std::views::transform(detail::base64_encoder()) | std::ranges::to<views::binary_ostream<char>>(std::ref(stream)); stream << "\r\n";
+        stream << "\r\n";
+    }
+
+    // Send goodbye
+    stream << ".\r\n"
            << "QUIT\r\n"
            << std::flush;
-           
+
+    // Check response.
     let line_count = 1;
     let response = views::binary_istream<char>(stream)
                  | std::views::lazy_split('\n')
@@ -57,6 +144,6 @@ email_send::email_send ( email_mode auto... args )
         throw network_error("send email failed (with server_response = [[see_below]])\n"
                             "{}", response | std::views::join_with('\n') | std::ranges::to<string>());
     
-    stream.close();
-
+    // Exit.
+    try { stream.close(); } catch (...) { }
 }

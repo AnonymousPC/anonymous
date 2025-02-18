@@ -125,12 +125,14 @@ namespace ap
     #include "utility/utility.hpp" // First.
     #include "file/file.hpp"
     #include "http/http.hpp"
-    #include "pipe/pipe.hpp"
+    #ifndef _WIN32
+        #include "pipe/pipe.hpp"
+    #endif
     // #include "serial_port/serial_port.hpp"
     #include "socket/socket.hpp"
     // #include "usb/usb.hpp"
     // #include "websocket/websocket.hpp"
-    #include "email/email.hpp"
+    // #include "email/email.hpp"
     // #include "initialize.hpp"
 
     /// Literal

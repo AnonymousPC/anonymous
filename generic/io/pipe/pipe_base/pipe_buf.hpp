@@ -20,8 +20,6 @@ class pipe_buf
         struct start_directory;
 
     private: // Typedef
-        struct mode_type;
-        template < class type > struct mode_base;
         constexpr static const int default_buffer_size = 4096;
 
     private: // Data
@@ -44,45 +42,6 @@ class pipe_buf
 };
 
 
-
-
-/// Subclass
-
-
-template < class type >
-struct pipe_buf::mode_base
-{
-    type value = type();
-    constexpr mode_base ( type );
-    struct pipe_mode_tag { };
-};
-
-template < array_type type >
-struct pipe_buf::mode_base<type>
-{
-    type value = type();
-    constexpr mode_base ( type::value_type );
-    constexpr mode_base ( type::value_type, std::convertible_to<typename type::value_type> auto... );
-    constexpr mode_base ( type );
-    struct pipe_mode_tag { };
-};
-
-template < map_type type > // map<string,array<string>>
-struct pipe_buf::mode_base<type>
-{
-    type value = type();
-    constexpr mode_base ( type::key_type /*string*/, type::value_type::value_type /*string*/       );
-    constexpr mode_base ( type::key_type /*string*/, type::value_type             /*array<string>*/);
-    constexpr mode_base ( pair<typename type::key_type,typename type::value_type::value_type> /*pair<string,string*/        );
-    constexpr mode_base ( pair<typename type::key_type,typename type::value_type>             /*pair<string,array<string>>*/);
-    constexpr mode_base ( map <typename type::key_type,typename type::value_type::value_type> /*map<string,string>*/        );
-    constexpr mode_base ( type );
-    struct pipe_mode_tag { };
-};
-
-struct pipe_buf::environment     extends public pipe_buf::mode_base<map<string,array<string>>> { using mode_base::mode_base; };
-struct pipe_buf::param           extends public pipe_buf::mode_base<array<string>>             { using mode_base::mode_base; };
-struct pipe_buf::start_directory extends public pipe_buf::mode_base<path>                      { using mode_base::mode_base; };
 
 #include "pipe_buf.ipp"
 #if dll

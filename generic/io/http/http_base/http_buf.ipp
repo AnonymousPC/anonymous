@@ -1,10 +1,15 @@
 #pragma once
 
-namespace detail
-{
-    string encode_base64 ( const string& );
-    
-} // namespace detail
+struct http_buf::authorization extends public detail::io_mode<pair<string,string>> { using detail::io_mode<pair<string,string>>::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::cookie        extends public detail::io_mode<map<string,string>>  { using detail::io_mode<map<string,string>> ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::header        extends public detail::io_mode<map<string,string>>  { using detail::io_mode<map<string,string>> ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::method        extends public detail::io_mode<string>              { using detail::io_mode<string>             ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::param         extends public detail::io_mode<map<string,string>>  { using detail::io_mode<map<string,string>> ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::path          extends public detail::io_mode<string>              { using detail::io_mode<string>             ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::port          extends public detail::io_mode<int>                 { using detail::io_mode<int>                ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::proxy         extends public detail::io_mode<url>                 { using detail::io_mode<url>                ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::timeout       extends public detail::io_mode<duration>            { using detail::io_mode<duration>           ::io_mode; struct http_client_mode_tag { }; };
+struct http_buf::version       extends public detail::io_mode<float>               { using detail::io_mode<float>              ::io_mode; struct http_client_mode_tag { }; };
 
 struct http_buf::client_mode_type
 {
@@ -302,58 +307,4 @@ auto http_buf::make_server_mode ( server_mode_type modes, const url& portal, aut
 
         return modes;
     }
-}
-
-
-
-
-
-
-
-/// Class netstream::mode_base
-
-template < class type >
-constexpr http_buf::mode_base<type>::mode_base ( type v )
-    extends value ( std::move ( v ) )
-{
-
-}
-
-
-
-template < pair_type type >
-constexpr http_buf::mode_base<type>::mode_base ( type::key_type k, type::value_type v )
-    extends value ( { std::move(k), std::move(v) } )
-{
-
-}
-
-template < pair_type type >
-constexpr http_buf::mode_base<type>::mode_base ( type p )
-    extends value ( std::move(p) )
-{
-
-}
-
-
-
-template < map_type type >
-constexpr http_buf::mode_base<type>::mode_base ( type::key_type k, type::value_type v )
-    extends value ( { { std::move(k), std::move(v) } } )
-{
-
-}
-
-template < map_type type >
-constexpr http_buf::mode_base<type>::mode_base ( pair<typename type::key_type, typename type::value_type> kv )
-    extends value ( { std::move(kv) } )
-{
-
-}
-
-template < map_type type >
-constexpr http_buf::mode_base<type>::mode_base ( type m )
-    extends value ( std::move(m) )
-{
-
 }

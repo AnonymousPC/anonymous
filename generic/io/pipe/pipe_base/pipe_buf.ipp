@@ -1,6 +1,8 @@
 #pragma once
 
-/// Subclass
+struct pipe_buf::environment     extends public detail::io_mode<map<string,array<string>>> { using detail::io_mode<map<string,array<string>>>::io_mode; struct pipe_mode_tag { }; };
+struct pipe_buf::param           extends public detail::io_mode<array<string>>             { using detail::io_mode<array<string>>            ::io_mode; struct pipe_mode_tag { }; };
+struct pipe_buf::start_directory extends public detail::io_mode<path>                      { using detail::io_mode<path>                     ::io_mode; struct pipe_mode_tag { }; };
 
 template < >
 struct pipe_buf::tuple<>
@@ -16,12 +18,6 @@ struct pipe_buf::tuple<type,types...>
     constexpr tuple ( type, types... );
     constexpr static const int size = 1 + sizeof...(types);
 };
-
-
-
-/// Class pipe_buf
-
-// Interface
 
 void pipe_buf::open ( path exe, pipe_mode auto... args )
 {
@@ -88,89 +84,6 @@ auto pipe_buf::run_with_args ( const boost::filesystem::path& proc, std::vector<
     else
         return run_with_args(proc, params, inputs.other, outputs...);
 }
-
-
-
-
-
-/// Class pipe_buf::mode_base
-
-template < class type >
-constexpr pipe_buf::mode_base<type>::mode_base ( type init )
-    extends value ( std::move(init) )
-{
-
-}
-
-template < array_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( type::value_type init )
-    extends value ( {std::move(init)} )
-{
-
-}
-
-template < array_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( type::value_type init, std::convertible_to<typename type::value_type> auto... args )
-    extends value ( {std::forward<decltype(init)>(init), std::forward<decltype(args)>(args)...} )
-{
-
-}
-
-template < array_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( type init )
-    extends value ( std::move(init) )
-{
-
-}
-
-template < map_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( type::key_type k, type::value_type::value_type v )
-    extends value ( { { std::move(k), {std::move(v)} } } )
-{
-
-}
-
-template < map_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( type::key_type k, type::value_type v )
-    extends value ( { { std::move(k), std::move(v) } } )
-{
-
-}
-
-template < map_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( pair<typename type::key_type,typename type::value_type::value_type> kv )
-    extends value ( { { std::move(kv.key()), {std::move(kv.value())} } } )
-{
-
-}
-
-template < map_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( pair<typename type::key_type,typename type::value_type> kv )
-    extends value ( { { std::move(kv.key()), std::move(kv.value()) } } )
-{
-
-}
-
-template < map_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( map<typename type::key_type,typename type::value_type::value_type> m )
-    extends value ( m | std::views::transform([] (const auto& kv) { return pair<typename type::key_type,typename type::value_type>(kv.key(), {kv.value()}); })
-                      | std::ranges::to<map<typename type::key_type,typename type::value_type>>() )
-{
-
-}
-
-template < map_type type >
-constexpr pipe_buf::mode_base<type>::mode_base ( type m )
-    extends value ( std::move(m) )
-{
-
-}
-
-
-
-
-
-/// Class pipe_buf::tuple
 
 template < class type, class... types >
 constexpr pipe_buf::tuple<type,types...>::tuple ( type arg1, types... args )

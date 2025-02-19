@@ -47,7 +47,7 @@ http_stream& http_stream::operator = ( http_stream&& right )
 
 // Interface
 
-void http_stream::close ( )
+http_stream& http_stream::close ( )
 {
     let ptr = dynamic_cast<http_buf*>(rdbuf());
     if ( ptr != nullptr )
@@ -55,8 +55,9 @@ void http_stream::close ( )
     else
         throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
-
     clear();
+
+    return self;
 }
 
 bool http_stream::is_open ( ) const

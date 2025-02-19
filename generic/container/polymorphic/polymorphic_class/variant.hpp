@@ -1,15 +1,5 @@
 #pragma once
 
-/// Auxiliary
-
-namespace detail
-{
-    template <                   class... types > constexpr bool all_different                       = [] { static_assert(false, "you need to specialize it"); return false; } ();
-    template < class input_type, class... types > constexpr bool all_invocable_and_returns_same_type = [] { static_assert(false, "you need to specialize it"); return false; } ();
-}
-
-
-
 /// Declaration
 
 template < class... types >

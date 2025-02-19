@@ -1,11 +1,5 @@
 #pragma once
 
-namespace detail
-{
-    string encode_base64 ( const string& );    
-
-} // namespace detail
-
 namespace ranges
 {
     template < class range >
@@ -24,7 +18,7 @@ namespace ranges
             constexpr encode_base64_view ( range );
             constexpr auto begin ( ) const;
             constexpr auto end   ( ) const;
-            constexpr auto size  ( ) const requires std::ranges::sized_range<range>;
+        //    constexpr auto size  ( ) const requires std::ranges::sized_range<range>;
     };
 
 } // namespace ranges
@@ -42,6 +36,3 @@ namespace views
 } // namespace views
 
 #include "encode_base64.ipp"
-#if dll
-    #include "encode_base64.cpp"
-#endif

@@ -8,7 +8,7 @@ struct email_send::to         extends public detail::io_mode<array<string>> { us
 struct email_send::cc         extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
 struct email_send::bcc        extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
 struct email_send::title      extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
-struct email_send::text       extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::content    extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
 struct email_send::attachment extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
 // Must use array<string> instead of array<path>, because "utility/io_mode.hpp" instantiates "array<path>" but is included before "file/path.hpp". 
 
@@ -25,55 +25,55 @@ email_send::email_send ( email_mode auto... args )
                     "you must choose at least one receiver" );
     static_assert ( detail::all_different<decltype(args)...>,
                     "duplicated params" );
-    let email_server   = index_value_of<detail::index_of_unique_same_type<server,  decltype(args)...>>(args...).value;
-    let email_username = index_value_of<detail::index_of_unique_same_type<username,decltype(args)...>>(args...).value;
-    let email_password = index_value_of<detail::index_of_unique_same_type<password,decltype(args)...>>(args...).value;
+    let email_server   = index_value_of<detail::find_same_type<server,  decltype(args)...>>(args...).value;
+    let email_username = index_value_of<detail::find_same_type<username,decltype(args)...>>(args...).value;
+    let email_password = index_value_of<detail::find_same_type<password,decltype(args)...>>(args...).value;
     let email_from = [&] -> string
         {
             if constexpr ( ( same_as<from,decltype(args)> or ... ) ) 
-                return index_value_of<detail::index_of_unique_same_type<from,decltype(args)...>>(args...).value;
+                return index_value_of<detail::find_same_type<from,decltype(args)...>>(args...).value;
             else
                 return email_username;
         } ();
     let email_to = [&] -> array<string>
         {
             if constexpr ( ( same_as<to,decltype(args)> or ... ) ) 
-                return index_value_of<detail::index_of_unique_same_type<to,decltype(args)...>>(args...).value;
+                return index_value_of<detail::find_same_type<to,decltype(args)...>>(args...).value;
             else
                 return {};
         } ();
     let email_cc = [&] -> array<string>
         {
             if constexpr ( ( same_as<cc,decltype(args)> or ... ) ) 
-                return index_value_of<detail::index_of_unique_same_type<cc,decltype(args)...>>(args...).value;
+                return index_value_of<detail::find_same_type<cc,decltype(args)...>>(args...).value;
             else
                 return {};
         } ();
     let email_bcc = [&] -> array<string>
         {
             if constexpr ( ( same_as<bcc,decltype(args)> or ... ) ) 
-                return index_value_of<detail::index_of_unique_same_type<bcc,decltype(args)...>>(args...).value;
+                return index_value_of<detail::find_same_type<bcc,decltype(args)...>>(args...).value;
             else
                 return {};
         } ();
     let email_title = [&] -> string
         {
             if constexpr ( ( same_as<title,decltype(args)> or ... ) ) 
-                return index_value_of<detail::index_of_unique_same_type<title,decltype(args)...>>(args...).value;
+                return index_value_of<detail::find_same_type<title,decltype(args)...>>(args...).value;
             else
                 return "";
         } ();
-    let email_text = [&] -> string
+    let email_content = [&] -> string
         {
-            if constexpr ( ( same_as<text,decltype(args)> or ... ) ) 
-                return index_value_of<detail::index_of_unique_same_type<text,decltype(args)...>>(args...).value;
+            if constexpr ( ( same_as<content,decltype(args)> or ... ) ) 
+                return index_value_of<detail::find_same_type<content,decltype(args)...>>(args...).value;
             else
                 return "";
         } ();
     let email_attachment = [&] -> array<path>
         {
             if constexpr ( ( same_as<attachment,decltype(args)> or ... ) ) 
-                return index_value_of<detail::index_of_unique_same_type<attachment,decltype(args)...>>(args...).value | std::ranges::to<array<path>>();
+                return index_value_of<detail::find_same_type<attachment,decltype(args)...>>(args...).value | std::ranges::to<array<path>>();
             else
                 return {};
         } ();
@@ -85,8 +85,8 @@ email_send::email_send ( email_mode auto... args )
     let stream = ssl_stream(url(email_server));
     stream << "EHLO localhost\r\n"
            << "AUTH LOGIN\r\n"
-           << "{}\r\n"s                                             .format(detail::encode_base64(email_username))
-           << "{}\r\n"s                                             .format(detail::encode_base64(email_password))
+           << "{}\r\n"s                                             .format(email_username | views::encode_base64 | std::ranges::to<string>())
+           << "{}\r\n"s                                             .format(email_password | views::encode_base64 | std::ranges::to<string>())
            << "MAIL FROM:<{}>\r\n"s                                 .format(email_from)
            <</*RCPT TO:<{}>\r\n*/"{}"s                              .format(array<array<string>>{email_to, email_cc, email_bcc}
                                                                                | std::views::join
@@ -107,18 +107,23 @@ email_send::email_send ( email_mode auto... args )
            <</*--boundary\r\n*/"{}"s                     .format(email_attachment.empty() ? "" otherwise "--{}\r\n"s.format(email_boundary))
            << "Content-Type: text/plain; charset={}\r\n"s.format(std::text_encoding::literal().name())
            << "\r\n"
-           << "{}\r\n"s                                  .format(email_text)
+           << "{}\r\n"s                                  .format(email_content)
            << "\r\n";
 
     // Send attachment
-    for ( const auto& pth in email_attachment )
+    for ( const auto& atc in email_attachment )
     {
-        stream << "--{}\r\n"s.format(email_boundary)
-               << "Content-Type: {}; name=\"{}\"\r\n"s   .format(get_content_type(pth), pth)
-               << "Content-Disposition: attachment; filename = \"{}\"\r\n"
+        stream << "--{}\r\n"s                                               .format(email_boundary)
+               << "Content-Type: application/octet-stream; name=\"{}\"\r\n"s.format(atc)
+               << "Content-Transfer-Encoding: base64\r\n"
+               << "Content-Disposition: attachment; filename = \"{}\"\r\n"s .format(atc)
                << "\r\n";
-        views::binary_istream<char>(pth) | std::views::transform(detail::base64_encoder()) | std::ranges::to<views::binary_ostream<char>>(std::ref(stream)); stream << "\r\n";
-        stream << "\r\n";
+        let attach_stream = file_stream(atc, file_stream::read_only(true));
+        views::binary_istream<char>(attach_stream)
+            | views::encode_base64
+            | std::ranges::to<views::binary_ostream<char>>(std::ref(stream));
+        stream << "\r\n"
+               << "\r\n";
     }
 
     // Send goodbye
@@ -136,7 +141,7 @@ email_send::email_send ( email_mode auto... args )
                                  | std::ranges::to<string>();
                          if ( str.size() >= 4 and str[1,3].is_digit() and str[4,4].is_space() )
                              line_count++;
-                         return not str.ends_with('\r') ? str otherwise string(str[1,-2]);
+                         return not str.ends_with('\r') ? str otherwise str.pop();
                      })
                  | std::views::take_while([&] (const auto&) { return line_count <= 9; })
                  | std::ranges::to<vector<string>>();

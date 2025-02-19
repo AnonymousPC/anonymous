@@ -19,7 +19,7 @@ pipe_stream::pipe_stream ( path exe, pipe_mode auto... args )
 
 // Interface
 
-void pipe_stream::open ( path exe, pipe_mode auto... args )
+pipe_stream& pipe_stream::open ( path exe, pipe_mode auto... args )
 {
     // Connect.
     let ptr = dynamic_cast<pipe_buf*>(rdbuf());
@@ -28,4 +28,6 @@ void pipe_stream::open ( path exe, pipe_mode auto... args )
     else
         throw pipe_error("pipe_stream.rdbuf() does not points to a pipe_buf (with common = {}, current = {}, expected = {})",
                          typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(pipe_buf));
+
+    return self;
 }

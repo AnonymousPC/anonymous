@@ -1,5 +1,8 @@
 #pragma once
 
+template < class type > concept http_client_mode = requires { typename type::http_client_mode_tag; };
+template < class type > concept http_server_mode = requires { typename type::http_server_mode_tag; };
+
 class http_buf
     extends public std::streambuf
 {
@@ -39,13 +42,8 @@ class http_buf
 
     public: // Server modes
 
-    private: // Typedef (mode)
-        struct client_mode_type;
-        struct server_mode_type;
-        enum class open_type { close, client, server };
-        constexpr static const int default_buffer_size = 4096;
-
     private: // Data
+        enum class open_type { close, client, server };
         /* boost::beast::tcp_stream         is not movable. */
         /* boost::beast::http::basic_parser is not movable. */
         /* boost::beast::http::response     is movable, but has bug and actually moves nothing */
@@ -66,8 +64,11 @@ class http_buf
         bool                                                                                      cache_header_received    = false;
         int                                                                                       cache_message_receivable = 0;
 
-    private: // Auxiliary
+    private: // Detail
+        struct client_mode_type;
+        struct server_mode_type;
         using resolve_type = boost::asio::ip::tcp::resolver::results_type;
+        constexpr static const int default_buffer_size = 3;
 
         // In .hpp
         void         set_client_request       (                   const url&, const auto&... );

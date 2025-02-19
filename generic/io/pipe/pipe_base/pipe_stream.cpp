@@ -47,7 +47,7 @@ pipe_stream& pipe_stream::operator = ( pipe_stream&& right )
 
 // Interface
 
-void pipe_stream::close ( )
+pipe_stream& pipe_stream::close ( )
 {
     let ptr = dynamic_cast<pipe_buf*>(rdbuf());
     if ( ptr != nullptr )
@@ -55,8 +55,9 @@ void pipe_stream::close ( )
     else
         throw pipe_error("pipe_stream.rdbuf() does not point to a pipe_buf (with common = {}, current = {}, expected = {})",
                          typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(pipe_buf));
-
     clear();
+    
+    return self;
 }
 
 bool pipe_stream::is_open ( ) const

@@ -1,5 +1,8 @@
 #pragma once
 
+template < class type >
+concept pipe_mode = requires { typename type::pipe_mode_tag; };
+
 class pipe_buf
     extends public std::streambuf
 {
@@ -19,9 +22,6 @@ class pipe_buf
         struct param;
         struct start_directory;
 
-    private: // Typedef
-        constexpr static const int default_buffer_size = 4096;
-
     private: // Data
         /* boost::process::v2::process will immediate start once been constructed */
         /* boost::asio::io_context is not movable */
@@ -35,6 +35,7 @@ class pipe_buf
         string                                       stderr_buff    = "";
 
     private: // Auxiliary
+        constexpr static const int default_buffer_size = 4096;
         // This is not similiar to http_buf.set_request(field_1, ...), http_buf.set_request(field_2, ...),
         // as all params must be forwarded at one time.
         auto run_with_args ( const boost::filesystem::path&, std::vector<std::string>, const auto&, auto... );

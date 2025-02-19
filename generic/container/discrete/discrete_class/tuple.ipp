@@ -2,6 +2,7 @@
 
 template < class... types >
 constexpr tuple<types...>::tuple ( types... t )
+    requires ( sizeof...(types) >= 1 )
     extends std::tuple<types...>(std::move(t)...)
 {
 

@@ -105,9 +105,9 @@ void http_buf::set_client_request ( const url& website, const auto&... args )
 
         // Authorization
         if ( website.authorization() != "" )
-            request.set(boost::beast::http::field::authorization, "Basic {}"s.format(detail::encode_base64(website.authorization())).c_str());
+            request.set(boost::beast::http::field::authorization, "Basic {}"s.format(website.authorization() | views::encode_base64 | std::ranges::to<string>()).c_str());
         else if ( modes.authorization != pair<string,string>{"", ""} )
-            request.set(boost::beast::http::field::authorization, "Basic {}"s.format(detail::encode_base64("{}:{}"s.format(modes.authorization.key(), modes.authorization.value()))).c_str());
+            request.set(boost::beast::http::field::authorization, "Basic {}"s.format("{}:{}"s.format(modes.authorization.key(), modes.authorization.value()) | views::encode_base64 | std::ranges::to<string>()).c_str());
 
         // Cookie
         if ( not modes.cookie.empty() )
@@ -138,7 +138,7 @@ void http_buf::set_client_request ( const url& website, const auto&... args )
             let cur_param = website.param();
 
             if ( modes.path != "" )
-                cur_path = not modes.path.begins_with('/') ? modes.path otherwise string(modes.path[2,-1]);
+                cur_path = modes.path.begins_with('/') ? string(modes.path[2,-1]) otherwise modes.path;
             if ( not modes.param.empty() )
                 cur_param = modes.param | std::views::transform([] (const auto& kv) { return "{}={}"s.format(kv.key(), kv.value()); })
                                         | std::views::join_with('&')

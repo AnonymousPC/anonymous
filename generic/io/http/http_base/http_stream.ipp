@@ -19,7 +19,7 @@ http_stream::http_stream ( url website, http_client_mode auto... args )
 
 // Interface
 
-void http_stream::connect ( url website, http_client_mode auto... args )
+http_stream& http_stream::connect ( url website, http_client_mode auto... args )
 {
     // Connect.
     let ptr = dynamic_cast<http_buf*>(rdbuf());
@@ -28,9 +28,11 @@ void http_stream::connect ( url website, http_client_mode auto... args )
     else
         throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+
+    return self;
 }
 
-void http_stream::listen ( url portal, http_server_mode auto... args )
+http_stream& http_stream::listen ( url portal, http_server_mode auto... args )
 {
     // Listen.
     let ptr = dynamic_cast<http_buf*>(rdbuf());
@@ -39,4 +41,6 @@ void http_stream::listen ( url portal, http_server_mode auto... args )
     else
         throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+
+    return self;
 }

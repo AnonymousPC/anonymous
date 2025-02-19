@@ -1,0 +1,1 @@
+insert into stock_table (stock_name, price, time) values ({}, {}, {});

@@ -25,14 +25,14 @@ constexpr auto ranges::encode_base64_view<range>::end ( ) const
     return std::default_sentinel;
 }
 
-template < class range >
-    requires input_range<range> and 
-             same_as<range_value<range>,char>
-constexpr auto ranges::encode_base64_view<range>::size ( ) const
-    requires std::ranges::sized_range<range>
-{
-    return (std::ranges::size(r) + 2) / 3 * 4;
-}
+// template < class range >
+//     requires input_range<range> and 
+//              same_as<range_value<range>,char>
+// constexpr auto ranges::encode_base64_view<range>::size ( ) const
+//     requires std::ranges::sized_range<range>
+// {
+//     return (std::ranges::size(r) + 2) / 3 * 4;
+// }
 
 template < class range >
     requires input_range<range> and 
@@ -42,7 +42,7 @@ struct ranges::encode_base64_view<range>::iterator
     private: // Data
         range_const_iterator<range> i = range_const_iterator<range>(); // Iterator.
         range_const_sentinel<range> s = range_const_sentinel<range>(); // Sentinel.
-        int                         c = 0;                             // Current char.
+        uint32_t                    c = 0;                             // Current char.
         int                         b = 0;                             // Available bits, 8-bits per input char. When it becomes >= 6, a 6-bit base64-letter is available.
         bool                        e = false;                         // Whether we reach the end.
         int                         t = 0;                             // Total size we had encoded to output. we should append '=' if output.size() % 4 != 0.
@@ -68,7 +68,7 @@ constexpr ranges::encode_base64_view<range>::iterator::iterator ( const encode_b
     extends i ( const_cast<encode_base64_view&>(init_v).r.begin() ),
             s ( const_cast<encode_base64_view&>(init_v).r.end() )
 {
-
+    ++self;
 }
 
 template < class range >
@@ -82,9 +82,9 @@ constexpr char ranges::encode_base64_view<range>::iterator::operator * ( ) const
         "0123456789+/";
 
     if ( i != s ) [[likely]]
-        return alphabet[((c >> b) & 0x3F)];
+        return alphabet[(c >> b) & 0x3F];
     else if ( b > -6 )
-        return alphabet[(((c << 8) >> (b + 8)) & 0x3F)];
+        return alphabet[((c << 8) >> (b + 8)) & 0x3F];
     else
         return '=';
 }
@@ -94,27 +94,23 @@ template < class range >
              same_as<range_value<range>,char>
 constexpr bool ranges::encode_base64_view<range>::iterator::operator == ( std::default_sentinel_t ) const
 {
-    return i == s and b == -6 and t % 4 == 0;
+    // Notice when t % 4 == 0, the (last) char is stil valid, and we should run until t % 4 == 1 no notify the sentinel.
+    return i == s and b <= -6 and t % 4 == 1;
 }
 
 template < class range >
     requires input_range<range> and 
              same_as<range_value<range>,char>
 constexpr ranges::encode_base64_view<range>::iterator& ranges::encode_base64_view<range>::iterator::operator++ ( )
-{
+{  
+    if ( i != s and b < 6 ) [[likely]] // If there are less 6 bits, we need to read a new char.
+    {
+        c = (c << 8) + uint8_t(*i);    // We read a new char (8 bit) from the input. It is pushed into 'c' on the right.
+        i ++;                          // Step input iterator into next one.
+        b += 8;                        // We now have 8 more available bits.
+    }
+    b -= 6;                            // Now, we consume 6 bits into output as the iterator steps.
     t++;
-    if ( i != s ) [[likely]]
-        if ( b >= 0 )
-            b -= 6;
-        else
-        {
-            c = (c << 8) + *i;
-            b += 8;
-            ++i;
-        }
-    else
-        if ( b > -6 )
-            b = -6;
 
     return self;
 }

@@ -1,6 +1,44 @@
 #pragma once
 
-/* [[constomized-point-object]] string input ( );                       */
-/* [[constomized-point-object]] string input ( const printable auto& ); */
+namespace detail
+{
+    struct input_t
+    {
+        string operator() ( )                       const;
+        string operator() ( const printable auto& ) const;
+    };
 
-#include "input.ipp"
+    string input_t::operator() ( ) const
+    {
+        string str = "";
+        char   ch  = '\0';
+        while ( true )
+        {
+            std::cin.get(ch);
+            if ( ch != '\n' and ch != '\0' )
+                str.push(ch);
+            else
+                break;
+        }
+        return str;
+    }
+
+    string input_t::operator() ( const printable auto& prompt ) const
+    {
+
+        string str = "";
+        char   ch  = '\0';
+        std::cout << prompt;
+        while ( true )
+        {
+            std::cin.get(ch);
+            if ( ch != '\n' and ch != '\0' )
+                str.push(ch);
+            else
+                break;
+        } 
+        return str;
+    }  
+} 
+
+detail::input_t input;

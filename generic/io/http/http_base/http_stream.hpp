@@ -11,10 +11,10 @@ class http_stream
         http_stream& operator = ( http_stream&& );
 
     public: // Interface
-        void connect ( url, http_client_mode auto... );
-        void listen  ( url, http_server_mode auto... );
-        void close   ( );
-        bool is_open ( ) const;
+        http_stream& connect ( url, http_client_mode auto... );
+        http_stream& listen  ( url, http_server_mode auto... );
+        http_stream& close   ( );
+        bool         is_open ( ) const;
 
     public: // Interface (cache)
         url                local_endpoint       ( ) const;

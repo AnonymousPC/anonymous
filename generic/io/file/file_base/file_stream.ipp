@@ -1,5 +1,11 @@
 #pragma once
 
+struct file_stream::read_only  extends public detail::io_mode<bool> { using detail::io_mode<bool>::io_mode; struct file_mode_tag { }; };
+struct file_stream::write_only extends public detail::io_mode<bool> { using detail::io_mode<bool>::io_mode; struct file_mode_tag { }; };
+struct file_stream::erase      extends public detail::io_mode<bool> { using detail::io_mode<bool>::io_mode; struct file_mode_tag { }; };
+struct file_stream::append     extends public detail::io_mode<bool> { using detail::io_mode<bool>::io_mode; struct file_mode_tag { }; };
+
+
 struct file_stream::mode_type
 {
     bool read_only  = false;
@@ -17,7 +23,7 @@ file_stream::file_stream ( path pth, file_mode auto... args )
     open(pth, std::forward<decltype(args)>(args)...);
 }
 
-void file_stream::open ( path pth, file_mode auto... args )
+file_stream& file_stream::open ( path pth, file_mode auto... args )
 {
     // Open.
     if constexpr ( sizeof...(args) == 0 )
@@ -30,6 +36,8 @@ void file_stream::open ( path pth, file_mode auto... args )
     // Exception.
     if ( not std::fstream::good() )
         throw file_error("cannot open file {}", pth);
+
+    return self;
 }
 
 file_stream::mode_type file_stream::make_mode ( auto prm, auto... args )
@@ -65,10 +73,4 @@ file_stream::mode_type file_stream::make_mode ( mode_type modes, auto prm, auto.
 
         return modes;
     }
-}
-
-constexpr file_stream::mode_base::mode_base ( bool init )
-    extends value ( init )
-{
-
 }

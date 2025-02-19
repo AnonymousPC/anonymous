@@ -8,12 +8,8 @@
 using namespace ap;
 
 int main ( )
-{    
-    string str = "hello,world!";
+{
+    print(tuple(1, 2.0));
 
-    let str1 = detail::encode_base64(str);
-    let str2 = str | views::encode_base64 | std::views::all | std::ranges::to<string>();
-
-    print(str1);
-    print(str2);
+    boost::mysql::formatter
 }

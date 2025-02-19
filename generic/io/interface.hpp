@@ -4,9 +4,9 @@ namespace ap
 {
     /// Email
     class email_send;
-    template < class type > concept email_mode = requires { typename type::email_mode_tag; };
 
     /// File
+    class file_stream;
     class file_bmp;
     class file_csv;
     class file_html;
@@ -21,9 +21,7 @@ namespace ap
     class file_txt;
     class file_wav;
 
-    class file_stream;
     class path;
-
     bool     is_file              ( const path& );
     path     create_file          ( const path& );
     path     try_create_file      ( const path& );
@@ -51,23 +49,16 @@ namespace ap
     intmax_t size_of_directory    ( const path& );
 
     /// Http
+    class http_buf;
+    class http_stream;
     class http_get;
     class http_post;
     class http_server;
 
-    class http_buf;
-    class http_stream;
-
-    template < class type > concept http_client_mode = requires { typename type::http_client_mode_tag; };
-    template < class type > concept http_server_mode = requires { typename type::http_server_mode_tag; };
 
     /// Pipe
-    class pipe_command;
-
     class pipe_buf;
     class pipe_stream;
-
-    template < class type > concept pipe_mode = requires { typename type::pipe_mode_tag; };
 
     /// Socket
     class tcp;
@@ -80,6 +71,9 @@ namespace ap
     using udp_stream  = basic_socket_stream<udp>;
     using icmp_stream = basic_socket_stream<icmp>;
     using ssl_stream  = basic_socket_stream<ssl>;
+
+    // Sql
+    class sql_stream;
 
     /// Utility
     class color;
@@ -125,14 +119,13 @@ namespace ap
     #include "utility/utility.hpp" // First.
     #include "file/file.hpp"
     #include "http/http.hpp"
-    #ifndef _WIN32
-        #include "pipe/pipe.hpp"
-    #endif
+    #include "pipe/pipe.hpp"
     // #include "serial_port/serial_port.hpp"
     #include "socket/socket.hpp"
+    #include "sql/sql.hpp"
     // #include "usb/usb.hpp"
     // #include "websocket/websocket.hpp"
-    // #include "email/email.hpp"
+    #include "email/email.hpp"
     // #include "initialize.hpp"
 
     /// Literal

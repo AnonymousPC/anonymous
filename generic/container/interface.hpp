@@ -180,10 +180,7 @@ namespace ap
     concept tuple_type = []
     {
         if constexpr ( requires { typename type::tuple_tag; } )
-        {
-            static_assert ( requires { typename type::template value_type<1>; }, "class provides tuple_tag but not provides value_type" );
             return detail::tuple_type_helper<type,1,value_types...>;
-        }
         else
             return false;
     } ();

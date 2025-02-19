@@ -11,7 +11,7 @@ class tuple
     
     public: // Core
         constexpr tuple ( ) = default;
-        constexpr tuple ( types... );
+        constexpr tuple ( types... ) requires ( sizeof...(types) >= 1 );
 
     public: // Conversion
         template < class... types2 > constexpr tuple ( const tuple<types2...>& ) requires ( convertible_to<types2,types> and ... );

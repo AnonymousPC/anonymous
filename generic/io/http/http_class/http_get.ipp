@@ -23,7 +23,7 @@ http_get& http_get::connect ( const url& website, http_client_mode auto... args 
 
     // Connect website.
     http_interface::connect(website);
-    let stream = http_stream(url(self), method("get"), std::forward<decltype(args)>(args)...);
+    let stream = http_stream(url(self), method("GET"), std::forward<decltype(args)>(args)...);
 
     // Send request.
     stream.flush();

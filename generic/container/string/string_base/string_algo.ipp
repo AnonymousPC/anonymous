@@ -357,11 +357,11 @@ constexpr container& string_algo<container,type,device>::encode ( code old_encod
         }
         catch ( const boost::locale::conv::conversion_error& e )
         {
-            throw encode_error("cannot encode string {} from {} into {}", static_cast<const container&>(self), old_encode.name(), new_encode.name()).from(e);
+            throw encode_error("cannot encode string \"{}\" from {} into {}", static_cast<const container&>(self), old_encode.name(), new_encode.name()).from(e);
         }
         catch ( const boost::locale::conv::invalid_charset_error& e )
         {
-            throw encode_error("cannot encode string {} from {} into {}", static_cast<const container&>(self), old_encode.name(), new_encode.name()).from(e);
+            throw encode_error("cannot encode string \"{}\" from {} into {}", static_cast<const container&>(self), old_encode.name(), new_encode.name()).from(e);
         }
 
     return static_cast<container&>(self);
@@ -381,7 +381,7 @@ constexpr container& string_algo<container,type,device>::format ( auto&&... f )
     }
     catch ( const std::format_error& e )
     {
-        throw format_error("cannot format string {} with args {}", static_cast<const container&>(self), tuple(string(typeid(f))...)).from(e);
+        throw format_error("cannot format string \"{}\" with args {}", static_cast<const container&>(self), tuple(string(typeid(f))...)).from(e);
     }
 }
 

@@ -8,3 +8,4 @@
 #include "io_mode/io_mode.hpp"
 #include "time/time.hpp"
 #include "stream/stream.hpp"
+#include "format/format.hpp" // Last one.

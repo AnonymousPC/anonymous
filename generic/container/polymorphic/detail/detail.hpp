@@ -6,6 +6,9 @@ namespace detail
     template < class... types >
     constexpr bool all_different = [] { static_assert(false, "you need to specialize it"); return false; } ();
 
+    template < >
+    constexpr bool all_different<> = true;
+
     template < class type >
     constexpr bool all_different<type> = true;
 
@@ -67,7 +70,18 @@ namespace detail
     template < class input_type >
     constexpr decltype(auto) value_of_same_type ( auto&&... args )
     {
-        static_assert ((same_as<input_type,decay<decltype(args)>> or ...), "no same type fonud");
+        static_assert ( ( same_as<input_type,decay<decltype(args)>> or ... ), "no same type fonud" );
         return index_value_of<find_same_type<input_type,decay<decltype(args)>...>>(std::forward<decltype(args)>(args)...);
+    }
+
+    // value_of_same_type_or_default
+    template < class input_type >
+    constexpr decltype(auto) value_of_same_type_or ( auto&&... args )
+    {
+        if constexpr ( ( same_as<input_type,decay<decltype(args)>> or ... ) and
+                       find_same_type<input_type,decay<decltype(args)>...> != sizeof...(args) ) // Not the last one.
+            return value_of_same_type<input_type>(std::forward<decltype(args)>(args)...);
+        else
+            return last_value_of(std::forward<decltype(args)>(args)...);
     }
 }

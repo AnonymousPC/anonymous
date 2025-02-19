@@ -19,17 +19,9 @@ class file_stream
         struct write_only;
         struct erase;
         struct append;
-
-    private: // Detail
-        struct mode_type;
-        static mode_type          make_mode         (            auto, auto... );
-        static mode_type          make_mode         ( mode_type, auto, auto... );
-        static std::ios::openmode make_std_openmode ( mode_type );
 };
 
 #include "file_stream.ipp"
 #if dll
     #include "file_stream.cpp"
 #endif
-
-#undef right_type

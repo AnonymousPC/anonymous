@@ -14,7 +14,7 @@ class pipe_stream
         pipe_stream& open       ( path, pipe_mode auto... );
         pipe_stream& close      ( );
         bool         is_open    ( ) const;
-        bool          is_running ( ) const;
+        bool         is_running ( ) const;
 
     public: // Override
         std::ostream& flush ( );

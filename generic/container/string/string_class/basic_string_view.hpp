@@ -72,6 +72,10 @@ class basic_string_view
 
               string_algo::partition,
               string_algo::right_partition,
+              
+              string_algo::split,
+              string_algo::right_split,
+              string_algo::split_lines,
 
               string_algo::contains,
               string_algo::count,

@@ -35,6 +35,6 @@ class exception;
         class terminate_signal;
 
 #include "exception.ipp"
-//#if dll
+#if dll
     #include "exception.cpp"
-//#endif
+#endif

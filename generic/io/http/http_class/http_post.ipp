@@ -41,13 +41,13 @@ http_post& http_post::connect ( const url& website, const printable auto& body, 
             if constexpr ( not is_void<decltype(extract<header>(args...))> )
             {
                 extract<header>(args...).value["Content-Encoding"] = extract<content_encoding>(args...).value;
-                return http_stream(url(self), method("post"), std::forward<decltype(args)>(args)...);
+                return http_stream(url(self), method("POST"), std::forward<decltype(args)>(args)...);
             }
             else
-                return http_stream(url(self), method("post"), std::forward<decltype(args)>(args)..., header("Content-Encoding", extract<content_encoding>(args...).value));
+                return http_stream(url(self), method("POST"), std::forward<decltype(args)>(args)..., header("Content-Encoding", extract<content_encoding>(args...).value));
         }
         else
-            return http_stream(url(self), method("post"), std::forward<decltype(args)>(args)...);
+            return http_stream(url(self), method("POST"), std::forward<decltype(args)>(args)...);
     } ();
 
     // Send request.

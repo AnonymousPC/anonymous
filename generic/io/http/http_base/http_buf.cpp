@@ -52,55 +52,94 @@ url http_buf::remote_endpoint ( ) const
     }
 }
 
-string http_buf::request_method ( ) const
+string& http_buf::request_method ( )
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_method() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
-           not cache_header_received   ? throw network_error("call http_buf::request_method() before request is received") otherwise
-                                         string(boost::beast::http::to_string(request_parser->get().method()));
+    return current_request_method;
 }
 
-string http_buf::request_path ( ) const
+const string& http_buf::request_method ( ) const
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_path() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
-           not cache_header_received   ? throw network_error("call http_buf::request_path() before request is received") otherwise
-                                         string(request_parser->get().target()).begins_with('/') ? string(string(request_parser->get().target())[2,-1]) otherwise string(request_parser->get().target()); // Get rid of beginning '/'.
+    return current_request_method;
 }
 
-float http_buf::request_version ( ) const
+string& http_buf::request_path ( )
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_version() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
-           not cache_header_received   ? throw network_error("call http_buf::request_version() before request is received") otherwise
-                                         float(request_parser->get().version()) / 10;
+    return current_request_path;
 }
 
-map<string,string> http_buf::request_header ( ) const
+const string& http_buf::request_path ( ) const
 {
-    return opened != open_type::server ? throw network_error("call http_buf::request_header() in unexpected state (with state = {}, expected = server)", opened == open_type::client ? "client" otherwise "close") otherwise
-           not cache_header_received   ? throw network_error("call http_buf::request_header() before request is received") otherwise
-                                         request_parser->get() | std::views::transform([] (const auto& head) { return pair(string(head.name_string()), string(head.value())); })
-                                                               | std::ranges::to<map<string,string>>();
+    return current_request_path;
 }
 
-int http_buf::response_status_code ( ) const
+map<string,string>& http_buf::request_param ( )
 {
-    return opened != open_type::client ? throw network_error("call http_buf::response_status_code() in unexpected state (with state = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
-           not cache_header_received   ? throw network_error("call http_buf::response_status_code() before request is received") otherwise
-                                         response_parser->get().result_int();
+    return current_request_param;
 }
 
-string http_buf::response_reason ( ) const
+const map<string,string>& http_buf::request_param ( ) const
 {
-    return opened != open_type::client ? throw network_error("call http_buf::response_reason() in unexpected state (with state = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
-           not cache_header_received   ? throw network_error("call http_buf::response_reason() before request is received") otherwise
-                                         string(response_parser->get().reason());
+    return current_request_param;
 }
 
-map<string,string> http_buf::response_header ( ) const
+float& http_buf::request_version ( )
 {
-    return opened != open_type::client ? throw network_error("call http_buf::response_header() in unexpected state (with state = {}, expected = client)", opened == open_type::server ? "server" otherwise "close") otherwise
-           not cache_header_received   ? throw network_error("call http_buf::response_header() before request is received") otherwise
-                                         response_parser->get() | std::views::transform([] (const auto& head) { return pair(string(head.name_string()), string(head.value())); })
-                                                                | std::ranges::to<map<string,string>>();
+    return current_request_version;
+}
+
+const float& http_buf::request_version ( ) const
+{
+    return current_request_version;
+}
+
+map<string,string>& http_buf::request_header ( )
+{
+    return current_request_header;
+}
+
+const map<string,string>& http_buf::request_header ( ) const
+{
+    return current_request_header;
+}
+
+float& http_buf::response_version ( )
+{
+    return current_response_version;
+}
+
+const float& http_buf::response_version ( ) const
+{
+    return current_response_version;
+}
+
+int& http_buf::response_status_code ( )
+{
+    return current_response_status_code;
+}
+
+const int& http_buf::response_status_code ( ) const
+{
+    return current_response_status_code;
+}
+
+string& http_buf::response_reason ( )
+{
+    return current_response_reason;
+}
+
+const string& http_buf::response_reason ( ) const
+{
+    return current_response_reason;
+}
+
+map<string,string>& http_buf::response_header ( )
+{
+    return current_response_header;
+}
+
+const map<string,string>& http_buf::response_header ( ) const
+{
+    return current_response_header;
 }
 
 int http_buf::underflow ( )
@@ -134,8 +173,8 @@ http_buf::resolve_type http_buf::resolve ( const url& website )
         return boost::asio::ip::tcp::resolver(io_context).resolve(
                    website.host().c_str(),
                    (website.port() != ""  ? website.port()             otherwise
-                   not modes_port.empty() ? string(modes_port.value()) otherwise
-                                            website.scheme()).c_str());
+                   not optional_port.empty() ? string(optional_port.value()) otherwise
+                                               website.scheme()).c_str());
     }
     catch ( const boost::system::system_error& e )
     {
@@ -196,70 +235,13 @@ void http_buf::connect_through_proxy ( const url& website, const url& proxy_webs
     // Http:  request into full url.
     // Https: establish proxy tunnel.
     if ( website.scheme() == "http" )
-        const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(request_serializer->get())
-            .target((website.scheme() + "://" +
-                     website.host() +
-                     (website.port() != "" ? ':' + website.port() otherwise "") +
-                     string(request_serializer->get().target())
-                    ).c_str());
+        optional_proxy_target = website;
 
     else if ( website.scheme() == "https" )
         establish_proxy_tunnel(website, proxy_website);
 
     else
         throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, proxy_url = {}): proxy on scheme {} is undefined", local_endpoint_noexcept(), website, proxy_website, website.scheme());
-}
-
-
-void http_buf::disconnect ( )
-{
-    // Prepare error which logs the first exception.
-    // As error may occur in this disconnect(), but 
-    // no matter what happens, we shall insist clearing
-    // all the resources first and finally throw
-    // the error to caller function.
-    let err = optional<network_error>(nullopt);
-
-    // Shutdown https handle.
-    try
-    {
-        if ( https_handle != nullptr )
-            https_handle->shutdown();
-    }
-    catch ( const boost::system::system_error& e )
-    {
-        if ( err.empty() )
-            err = network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, layer = https/ssl)", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
-    }
-
-    // Shutdown http handle.
-    try
-    {
-        http_handle->socket().shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-    }
-    catch ( const boost::system::system_error& e )
-    {
-        if ( err.empty() )
-            err = network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, layer = http/tcp)", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
-    }
-
-    // Shutdown socket.
-    try
-    {
-        http_handle->socket().close();
-    }
-    catch ( const boost::system::system_error& e )
-    {
-        if ( err.empty() )
-            err = network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, layer = socket)", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
-    }
-
-    // Delete https_handle.
-    https_handle = nullptr;
-
-    // Throw exception if occured.
-    if ( not err.empty() )
-        throw err.value();
 }
 
 void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_website )
@@ -355,6 +337,58 @@ void http_buf::listen_to_port ( const url& portal )
     }
 }
 
+
+void http_buf::disconnect ( )
+{
+    // Prepare error which logs the first exception.
+    // As error may occur in this disconnect(), but 
+    // no matter what happens, we shall insist clearing
+    // all the resources first and finally throw
+    // the error to caller function.
+    let err = optional<network_error>(nullopt);
+
+    // Shutdown https handle.
+    try
+    {
+        if ( https_handle != nullptr )
+            https_handle->shutdown();
+    }
+    catch ( const boost::system::system_error& e )
+    {
+        if ( err.empty() )
+            err = network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, layer = https/ssl)", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
+    }
+
+    // Shutdown http handle.
+    try
+    {
+        http_handle->socket().shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+    }
+    catch ( const boost::system::system_error& e )
+    {
+        if ( err.empty() )
+            err = network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, layer = http/tcp)", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
+    }
+
+    // Shutdown socket.
+    try
+    {
+        http_handle->socket().close();
+    }
+    catch ( const boost::system::system_error& e )
+    {
+        if ( err.empty() )
+            err = network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, layer = socket)", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
+    }
+
+    // Delete https_handle.
+    https_handle = nullptr;
+
+    // Throw exception if occured.
+    if ( not err.empty() )
+        throw err.value();
+}
+
 void http_buf::send_more ( int c, auto& serializer )
 {
     using message_type = remove_const<typename decay<decltype(serializer)>::value_type>;
@@ -367,6 +401,7 @@ void http_buf::send_more ( int c, auto& serializer )
         // Send header (for the first time).
         if ( not serializer.is_header_done() )
         {
+            update_header_to(serializer);
             https_handle == nullptr ? boost::beast::http::write_header(*http_handle,  serializer) otherwise
                                       boost::beast::http::write_header(*https_handle, serializer);
         }
@@ -399,6 +434,7 @@ void http_buf::send_end ( auto& serializer )
         // Send the whole message.
         if ( not serializer.get().chunked() )
         {
+            update_header_to(serializer);
             const_cast<message_type&>(serializer.get()).body().resize(pptr() - pbase());
             const_cast<message_type&>(serializer.get()).prepare_payload();
             https_handle == nullptr ? boost::beast::http::write(*http_handle,  serializer.get()) otherwise
@@ -478,6 +514,7 @@ void http_buf::receive_begin ( auto& parser )
         // Receive header.
         https_handle == nullptr ? boost::beast::http::read_header(*http_handle,  *receive_buff, parser) otherwise
                                   boost::beast::http::read_header(*https_handle, *receive_buff, parser);
+        update_header_from(parser);
         cache_header_received = true;
 
         // Set cache.
@@ -490,42 +527,6 @@ void http_buf::receive_begin ( auto& parser )
                             local_endpoint_noexcept(), remote_endpoint_noexcept(), https_handle == nullptr ? "tcp" otherwise "ssl"
                            ).from(detail::system_error(e));
     }
-}
-
-void http_buf::initialize_as ( open_type open_mode )
-{
-    http_handle = std::make_unique<boost::beast::tcp_stream>(io_context);
-
-    if ( open_mode == open_type::client )
-    {
-        send_request_buff  = std::make_unique<boost::beast::http::request           <boost::beast::http::string_body>>();
-        request_serializer = std::make_unique<boost::beast::http::request_serializer<boost::beast::http::string_body>>(*send_request_buff);
-        const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(request_serializer->get()).body().resize(default_buffer_size);
-        setp(const_cast<char*>(request_serializer->get().body().data()),
-             const_cast<char*>(request_serializer->get().body().data()) + request_serializer->get().body().size());
-
-        receive_buff    = std::make_unique<boost::beast::flat_buffer>();
-        response_parser = std::make_unique<boost::beast::http::response_parser<boost::beast::http::string_body>>();
-        response_parser->body_limit(boost::none);
-        cache_header_received = false;
-    }
-
-    else if ( open_mode == open_type::server )
-    {
-        send_response_buff  = std::make_unique<boost::beast::http::response           <boost::beast::http::string_body>>();
-        response_serializer = std::make_unique<boost::beast::http::response_serializer<boost::beast::http::string_body>>(*send_response_buff);
-        const_cast<boost::beast::http::response<boost::beast::http::string_body>&>(response_serializer->get()).body().resize(default_buffer_size);
-        setp(const_cast<char*>(response_serializer->get().body().data()),
-             const_cast<char*>(response_serializer->get().body().data()) + response_serializer->get().body().size());
-
-        receive_buff   = std::make_unique<boost::beast::flat_buffer>();
-        request_parser = std::make_unique<boost::beast::http::request_parser<boost::beast::http::string_body>>();
-        request_parser->body_limit(boost::none);
-        cache_header_received = false;
-    }
-
-    else
-        throw network_error("initialize as open_mode::close");
 }
 
 void http_buf::refresh_send ( )
@@ -577,24 +578,131 @@ void http_buf::refresh_receive ( )
         throw network_error("refresh_receive as open_mode::close");
 }
 
+void http_buf::initialize_as ( open_type open_mode )
+{
+    http_handle = std::make_unique<boost::beast::tcp_stream>(io_context);
+
+    if ( open_mode == open_type::client )
+    {
+        send_request_buff  = std::make_unique<boost::beast::http::request           <boost::beast::http::string_body>>();
+        request_serializer = std::make_unique<boost::beast::http::request_serializer<boost::beast::http::string_body>>(*send_request_buff);
+        const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(request_serializer->get()).body().resize(default_buffer_size);
+        setp(const_cast<char*>(request_serializer->get().body().data()),
+             const_cast<char*>(request_serializer->get().body().data()) + request_serializer->get().body().size());
+
+        receive_buff    = std::make_unique<boost::beast::flat_buffer>();
+        response_parser = std::make_unique<boost::beast::http::response_parser<boost::beast::http::string_body>>();
+        response_parser->body_limit(boost::none);
+        cache_header_received = false;
+    }
+
+    else if ( open_mode == open_type::server )
+    {
+        send_response_buff  = std::make_unique<boost::beast::http::response           <boost::beast::http::string_body>>();
+        response_serializer = std::make_unique<boost::beast::http::response_serializer<boost::beast::http::string_body>>(*send_response_buff);
+        const_cast<boost::beast::http::response<boost::beast::http::string_body>&>(response_serializer->get()).body().resize(default_buffer_size);
+        setp(const_cast<char*>(response_serializer->get().body().data()),
+             const_cast<char*>(response_serializer->get().body().data()) + response_serializer->get().body().size());
+
+        receive_buff   = std::make_unique<boost::beast::flat_buffer>();
+        request_parser = std::make_unique<boost::beast::http::request_parser<boost::beast::http::string_body>>();
+        request_parser->body_limit(boost::none);
+        cache_header_received = false;
+    }
+
+    else
+        throw network_error("initialize as open_mode::close");
+}
+
+void http_buf::update_header_from ( auto& parser )
+{
+    if constexpr ( decay<decltype(parser.get())>::is_request::value )
+    {
+        current_request_method  = string(boost::beast::http::to_string(parser.get().method()));
+        current_request_path    = string(parser.get().target()).partition('?')[1][2,-1]; // Get rid of beginning '/'.
+        current_request_param   = string(parser.get().target()).partition('?')[3].split('&') | std::views::transform([] (const auto& kv) { return pair<string,string>(kv.partition('=')[1], kv.partition('=')[3]); }) | std::ranges::to<map<string,string>>();
+        current_request_version = parser.get().version() / 10.0f;
+        current_request_header  = parser.get() | std::views::transform([] (const auto& head) { return pair(string(head.name_string()), string(head.value())); })
+                                               | std::ranges::to<map<string,string>>();
+    }
+
+    else
+    {
+        current_response_status_code = parser.get().result_int();
+        current_response_reason      = string(parser.get().reason());
+        current_request_header       = parser.get() | std::views::transform([] (const auto& head) { return pair(string(head.name_string()), string(head.value())); })
+                                                    | std::ranges::to<map<string,string>>();
+    }
+}
+
+void http_buf::update_header_to ( auto& serializer )
+{
+
+    if constexpr ( decay<decltype(serializer.get())>::is_request::value )
+    {
+        let& request = const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(serializer.get());
+
+        request.method(boost::beast::http::string_to_verb(current_request_method.c_str()) != boost::beast::http::verb::unknown ?
+                       boost::beast::http::string_to_verb(current_request_method.c_str()) otherwise throw network_error("unrecognized http method {} (expected = GET, POST, ...)", current_request_method));
+        request.target("/{}{}{}"s.format(current_request_path, 
+                                         not current_request_param.empty() ? "?" otherwise "",
+                                         current_request_param | std::views::transform([] (const auto& kv) { return "{}={}"s.format(kv.key(), kv.value()); }) 
+                                                               | std::views::join_with('&')
+                                                               | std::ranges::to<string>()).c_str()); // "/path?key=value"
+        if ( not optional_proxy_relay.empty() and https_handle == nullptr ) // If we are using http proxy, then request.target() should be expanded into full url that we desire to access.
+            request.target("{}://{}{}{}"s.format(optional_proxy_target.value().scheme(),
+                                                 optional_proxy_target.value().host(), 
+                                                 optional_proxy_target.value().port() != "" ? ":{}"s.format(optional_proxy_target.value().port()) otherwise "",
+                                                 string(request.target())).c_str()); // "http://final_target.com/path?key=value"
+        request.version(int(current_request_version * 10));
+        for ( const auto& [k, v] in current_request_header )
+            boost::beast::http::string_to_field(k.c_str()) != boost::beast::http::field::unknown ? 
+                request.set(boost::beast::http::string_to_field(k.c_str()), v.c_str()) otherwise
+                request.set(k.c_str(), v.c_str());
+    }
+
+    else
+    {
+        let& response = const_cast<boost::beast::http::response<boost::beast::http::string_body>&>(serializer.get());
+
+        response.result(boost::beast::http::int_to_status(current_response_status_code) != boost::beast::http::status::unknown ? 
+                        boost::beast::http::int_to_status(current_response_status_code) otherwise throw network_error("unrecognized http status code {} (expected = 200, 404, ...)", current_response_status_code));
+        response.reason(current_response_reason.c_str());
+        for ( const auto& [k, v] in current_response_header )
+            boost::beast::http::string_to_field(k.c_str()) != boost::beast::http::field::unknown ? 
+                response.set(boost::beast::http::string_to_field(k.c_str()), v.c_str()) otherwise
+                response.set(k.c_str(), v.c_str());
+    }
+}
+
 void http_buf::reset_param ( )
 {
     // Reset params.
-    http_handle              = nullptr;
-    https_handle             = nullptr;
-    request_serializer       = nullptr;
-    request_parser           = nullptr;
-    response_serializer      = nullptr;
-    response_parser          = nullptr;
-    send_request_buff        = nullptr;
-    send_response_buff       = nullptr;
-    receive_buff             = nullptr;
+    http_handle                  = nullptr;
+    https_handle                 = nullptr;
+    request_serializer           = nullptr;
+    request_parser               = nullptr;
+    response_serializer          = nullptr;
+    response_parser              = nullptr;
+    send_request_buff            = nullptr;
+    send_response_buff           = nullptr;
+    receive_buff                 = nullptr;
 
     // Reset states.
-    modes_port               = nullopt;
-    modes_proxy              = nullopt;
-    cache_header_received    = false;
-    cache_message_receivable = 0;
+    optional_port                = nullopt;
+    optional_proxy_relay         = nullopt;
+    optional_proxy_target        = nullopt;
+    current_request_method       = "GET";
+    current_request_path         = "";
+    current_request_param        = map<string,string>();
+    current_request_version      = 1.1;
+    current_request_header       = map<string,string>();
+    current_response_version     = 1.1;
+    current_response_status_code = 200;
+    current_response_reason      = "OK";
+    current_response_header      = map<string,string>();
+    cache_header_received        = false;
+    cache_message_receivable     = 0;
 
     // Reset put/get area.
     setp(nullptr, nullptr);

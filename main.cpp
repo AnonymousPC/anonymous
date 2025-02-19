@@ -9,7 +9,10 @@ using namespace ap;
 
 int main ( )
 {
-    print(tuple(1, 2.0));
+    http_get("https://httpbin.org/get",
+             http_get::proxy("http://127.0.0.1:33210")
+            ).for_each(print);
 
-    boost::mysql::formatter
+
+
 }

@@ -77,7 +77,7 @@ url http_stream::local_endpoint ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
-        return dynamic_cast<http_buf*>(rdbuf())->local_endpoint();
+        return ptr->local_endpoint();
     else
         throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
@@ -87,23 +87,43 @@ url http_stream::remote_endpoint ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
-        return dynamic_cast<http_buf*>(rdbuf())->remote_endpoint();
+        return ptr->remote_endpoint();
     else
         throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
 }
 
-string http_stream::request_method ( ) const
+string& http_stream::request_method ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->request_method();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const string& http_stream::request_method ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
-        return dynamic_cast<http_buf*>(rdbuf())->request_method();
+        return ptr->request_method();
     else
         throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
 }
 
-string http_stream::request_path ( ) const
+string& http_stream::request_path ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->request_path();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const string& http_stream::request_path ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
@@ -113,7 +133,37 @@ string http_stream::request_path ( ) const
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
 }
 
-float http_stream::request_version ( ) const
+map<string,string>& http_stream::request_param ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->request_param();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const map<string,string>& http_stream::request_param ( ) const
+{
+    let ptr = dynamic_cast<const http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->request_param();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+float& http_stream::request_version ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->request_version();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const float& http_stream::request_version ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
@@ -123,7 +173,17 @@ float http_stream::request_version ( ) const
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
 }
 
-map<string,string> http_stream::request_header ( ) const
+map<string,string>& http_stream::request_header ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->request_header();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const map<string,string>& http_stream::request_header ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
@@ -133,7 +193,37 @@ map<string,string> http_stream::request_header ( ) const
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
 }
 
-int http_stream::response_status_code ( ) const
+float& http_stream::response_version ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->response_version();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const float& http_stream::response_version ( ) const
+{
+    let ptr = dynamic_cast<const http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->response_version();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+int& http_stream::response_status_code ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->response_status_code();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const int& http_stream::response_status_code ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
@@ -143,7 +233,17 @@ int http_stream::response_status_code ( ) const
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
 }
 
-string http_stream::response_reason ( ) const
+string& http_stream::response_reason ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->response_reason();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const string& http_stream::response_reason ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )
@@ -153,7 +253,17 @@ string http_stream::response_reason ( ) const
                             typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
 }
 
-map<string,string> http_stream::response_header ( ) const
+map<string,string>& http_stream::response_header ( )
+{
+    let ptr = dynamic_cast<http_buf*>(rdbuf());
+    if ( ptr != nullptr )
+        return ptr->response_header();
+    else
+        throw network_error("http_stream.rdbuf() does not point to a http_buf (with common = {}, current = {}, expected = {})",
+                            typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(http_buf));
+}
+
+const map<string,string>& http_stream::response_header ( ) const
 {
     let ptr = dynamic_cast<const http_buf*>(rdbuf());
     if ( ptr != nullptr )

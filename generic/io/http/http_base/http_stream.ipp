@@ -14,7 +14,7 @@ http_stream::http_stream ( url website, http_client_mode auto... args )
     exceptions(std::ios::badbit);
 
     // Connect.
-    connect(std::move(website), std::forward<decltype(args)>(args)... );
+    connect(std::move(website), std::forward<decltype(args)>(args)...);
 }
 
 // Interface

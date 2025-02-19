@@ -13,7 +13,7 @@ class sql_stream
         sql_stream ( url, sql_mode auto... );
 
     public: // Interface
-        sql_stream&        connect ( url, sql_mode auto... );
+        sql_stream&        open    ( url, sql_mode auto... );
         sql_stream&        close   ( );
         matrix<value_type> execute ( string, auto... );
 
@@ -23,9 +23,14 @@ class sql_stream
         struct database;
 
     private: // Data
-        boost::mysql::any_connection sql_handle = boost::mysql::any_connection(io_context);
+        boost::mysql::any_connection                  sql_handle      = boost::mysql::any_connection(io_context);
+        unordered_map<string,boost::mysql::statement> server_stmtpool = {};
+        unordered_set<string>                         client_stmtpool = {};
+
+    private: // Detail
+        matrix<value_type> execute_client_stmt     ( string, auto... );
+        matrix<value_type> try_execute_server_stmt ( string, auto... );
+        static auto        make_stmt_arg           ( const auto& );
 };
 
-// TODO: two tables, server_statement_pool(map), client_statement_pool(set)
-// hash<string>...
 #include "sql_stream.ipp"

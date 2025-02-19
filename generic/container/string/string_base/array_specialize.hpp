@@ -53,6 +53,13 @@ class array<basic_string_view<type,device>,1,cpu>
             return static_cast<const reference>(base::operator[](pos));
         } 
 
+    public: // Member
+        constexpr array& push ( const value_type& new_value )
+        {
+            base::push(new_value);
+            return self;
+        }
+
     public: // Extension
         constexpr void push_back ( const value_type& new_value )
         {

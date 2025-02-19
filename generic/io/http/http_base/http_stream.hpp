@@ -17,15 +17,26 @@ class http_stream
         bool         is_open ( ) const;
 
     public: // Interface (cache)
-        url                local_endpoint       ( ) const;
-        url                remote_endpoint      ( ) const;
-        string             request_method       ( ) const;
-        string             request_path         ( ) const;
-        float              request_version      ( ) const;
-        map<string,string> request_header       ( ) const;
-        int                response_status_code ( ) const;
-        string             response_reason      ( ) const;
-        map<string,string> response_header      ( ) const;
+              url                 local_endpoint       ( ) const;
+              url                 remote_endpoint      ( ) const;
+              string&             request_method       ( );
+        const string&             request_method       ( ) const;
+              string&             request_path         ( );
+        const string&             request_path         ( ) const;
+              map<string,string>& request_param        ( );
+        const map<string,string>& request_param        ( ) const;
+              float&              request_version      ( );
+        const float&              request_version      ( ) const;
+              map<string,string>& request_header       ( );
+        const map<string,string>& request_header       ( ) const;
+              float&              response_version     ( );
+        const float&              response_version     ( ) const;
+              int&                response_status_code ( );
+        const int&                response_status_code ( ) const;
+              string&             response_reason      ( );
+        const string&             response_reason      ( ) const;
+              map<string,string>& response_header      ( );
+        const map<string,string>& response_header      ( ) const;
 
     public: // Override
         std::ostream& flush ( );

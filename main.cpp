@@ -9,9 +9,10 @@ using namespace ap;
 
 int main ( )
 {
-    http_get("https://httpbin.org/get",
-             http_get::proxy("http://127.0.0.1:33210")
-            ).for_each(print);
+    ssl_stream stream;
+    stream.connect("ssl://192.168.3.61:8888");
+    stream << "GOOD!" << std::flush;
+    stream.close();
 
 
 

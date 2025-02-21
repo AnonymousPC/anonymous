@@ -204,7 +204,7 @@ void http_buf::connect_without_proxy ( const url& website )
     if ( website.scheme() == "https" )
     {
         // Create SSL handle.
-        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_client_context);
+        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_context);
 
         // SSL server name indication.
         let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
@@ -280,7 +280,7 @@ void http_buf::establish_proxy_tunnel ( const url& website, const url& proxy_web
     
             // Create SSL handle (might have been created in connect(proxy_website)).
             if ( https_handle == nullptr )
-                https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_client_context);
+                https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_context);
     
             // SSL server name indication.
             let sni_success = SSL_set_tlsext_host_name(https_handle->native_handle(), website.host().c_str());
@@ -323,7 +323,7 @@ void http_buf::listen_to_port ( const url& portal )
     if ( portal.scheme() == "https" )
     {
         // Create SSL handle.
-        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_server_context);
+        https_handle = std::make_unique<boost::asio::ssl::stream<boost::beast::tcp_stream&>>(*http_handle, ssl_context);
 
         // SSL handshake.
         try

@@ -1,48 +1,52 @@
 #pragma once
 
-class ssl::acceptor
-    extends public tcp::acceptor
-{
-    public:
-        using tcp::acceptor::acceptor;
-
-        void accept ( auto&& sock, auto&&... args )
-        {
-            tcp::acceptor::accept(std::forward<decltype(sock)>(sock), std::forward<decltype(args)>(args)...);
-            sock.handshake(boost::asio::ssl::stream_base::server);
-        }
-};
-
 class ssl::socket
-    extends protected tcp::socket,
-            public    boost::asio::ssl::stream<tcp::socket&>
-{
+    extends public boost::asio::ssl::stream<tcp::socket>
+{   
     public:
         socket ( auto&&... args )
-            extends tcp::socket ( std::forward<decltype(args)>(args)... ),
-                    boost::asio::ssl::stream<tcp::socket&> ( static_cast<tcp::socket&>(self), ssl_client_context )
+            extends boost::asio::ssl::stream<tcp::socket>(typename tcp::socket(std::forward<decltype(args)>(args)...), ssl_context)
         {
             
         }
 
         void connect ( auto&&... args )
         {
-            tcp::socket::connect(std::forward<decltype(args)>(args)...);
-            boost::asio::ssl::stream<tcp::socket&>::handshake(boost::asio::ssl::stream_base::client);
+            self.next_layer().connect(std::forward<decltype(args)>(args)...);
+            try { self.handshake(boost::asio::ssl::stream_base::client); } catch (...) { self.next_layer().close(); throw; }
         }   
 
         void shutdown ( auto&&... args )
         {
-            boost::asio::ssl::stream<tcp::socket&>::shutdown();
-            tcp::socket::shutdown(std::forward<decltype(args)>(args)...);
+            self.boost::asio::ssl::stream<tcp::socket>::shutdown();
+            self.next_layer().shutdown(std::forward<decltype(args)>(args)...);
         }
 
-        using tcp::socket::close,
-              tcp::socket::local_endpoint,
-              tcp::socket::remote_endpoint;
+        void close ( auto&&... args )
+        {
+            self.next_layer().close();
+        }
 
-        using boost::asio::ssl::stream<tcp::socket&>::read_some,
-              boost::asio::ssl::stream<tcp::socket&>::write_some;
+        endpoint local_endpoint ( ) const
+        {
+            return self.next_layer().local_endpoint();
+        }
 
-        friend class ssl::acceptor;
+        endpoint remote_endpoint ( ) const
+        {
+            return self.next_layer().remote_endpoint();
+        }
+};
+
+class ssl::acceptor
+    extends public tcp::acceptor
+{
+    public:
+        using tcp::acceptor::acceptor;
+
+        void accept ( ssl::socket& sock, auto&&... args )
+        {
+            tcp::acceptor::accept(sock.next_layer(), std::forward<decltype(args)>(args)...);
+            try { sock.handshake(boost::asio::ssl::stream_base::server); } catch (...) { sock.close(); throw; }
+        }
 };

@@ -21,7 +21,7 @@ void basic_socket_buf<protocol>::connect ( url website )
     for ( const auto& ip in ip_list )
         try
         {
-            socket.connect(ip);
+            handle.connect(ip);
             break;
         }
         catch ( const boost::system::system_error& e )
@@ -51,22 +51,22 @@ void basic_socket_buf<protocol>::listen ( url portal )
         {
             if constexpr ( protocol::connection_oriented() )
                 // Accept a connection.
-                typename protocol::acceptor(io_context, ip).accept(socket);
+                typename protocol::acceptor(io_context, ip).accept(handle);
 
             else // if constexpr ( not protocol::connection_oriented() )
             {
                 // Bind the local endpoint.
                 if ( ip.endpoint().address().is_v4() )
-                    socket.open(protocol::v4());
+                    handle.open(protocol::v4());
                 else
-                    socket.open(protocol::v6());
-                socket.bind(ip.endpoint());
+                    handle.open(protocol::v6());
+                handle.bind(ip.endpoint());
 
                 // Accept whole message. The maximum length is fixed to 65535 in connectionless protocols (udp, icmp).
                 receive_buff.resize(65535);
                 let endpoint = typename protocol::endpoint();
-                int bytes    = socket.receive_from(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()), endpoint);
-                socket.connect(endpoint);
+                int bytes    = handle.receive_from(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()), endpoint);
+                handle.connect(endpoint);
                 received = true;
 
                 // Set get area.
@@ -91,8 +91,8 @@ void basic_socket_buf<protocol>::close ( )
     try
     {
         // Shutdown and close.
-        socket.shutdown(boost::asio::socket_base::shutdown_both);
-        socket.close();
+        handle.shutdown(boost::asio::socket_base::shutdown_both);
+        handle.close();
     }
     catch ( const boost::system::system_error& e )
     {
@@ -110,7 +110,7 @@ void basic_socket_buf<protocol>::close ( )
 template < class protocol >
 bool basic_socket_buf<protocol>::is_open ( ) const
 {
-    return socket.is_open();
+    return handle.is_open();
 }
 
 
@@ -121,7 +121,7 @@ url basic_socket_buf<protocol>::local_endpoint ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(socket.local_endpoint()));
+        return "{}://{}"s.format(protocol::name(), string(handle.local_endpoint()));
     }
     catch ( const boost::system::system_error& e )
     {
@@ -134,7 +134,7 @@ url basic_socket_buf<protocol>::remote_endpoint ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(socket.remote_endpoint()));
+        return "{}://{}"s.format(protocol::name(), string(handle.remote_endpoint()));
     }
     catch ( const boost::system::system_error& e )
     {
@@ -154,7 +154,7 @@ int basic_socket_buf<protocol>::underflow ( )
             // Receive message.
             if ( receive_buff == "" )
                 receive_buff.resize(default_buffer_size);
-            int bytes = socket.read_some(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
+            int bytes = handle.read_some(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
 
             // Set get area.
             setg(receive_buff.begin(),
@@ -177,7 +177,7 @@ int basic_socket_buf<protocol>::underflow ( )
             {
                 // Receive new message. The maximum length is fixed to 65535 in connectionless protocols (udp, icmp).
                 receive_buff.resize(65535);
-                int bytes = boost::asio::read(socket, boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
+                int bytes = boost::asio::read(handle, boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
                 received = true;
 
                 // Set get area.
@@ -211,7 +211,7 @@ int basic_socket_buf<protocol>::overflow ( int c )
             if ( send_buff == "" )
                 send_buff.resize(default_buffer_size);
             else
-                bytes = socket.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
+                bytes = handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
 
             // Set put area.
             std::move(send_buff.begin() + bytes, send_buff.end(), send_buff.begin());
@@ -247,7 +247,7 @@ int basic_socket_buf<protocol>::sync ( )
     try
     {
         // Send message.
-        boost::asio::write(socket, boost::asio::const_buffer(send_buff.data(), pptr() - send_buff.data()));
+        boost::asio::write(handle, boost::asio::const_buffer(send_buff.data(), pptr() - send_buff.data()));
 
         // Set put area.
         setp(send_buff.data(),
@@ -269,7 +269,7 @@ string basic_socket_buf<protocol>::local_endpoint_noexcept ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(socket.local_endpoint()));
+        return "{}://{}"s.format(protocol::name(), string(handle.local_endpoint()));
     }
     catch ( const boost::system::system_error& e )
     {
@@ -282,7 +282,7 @@ string basic_socket_buf<protocol>::remote_endpoint_noexcept ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(socket.remote_endpoint()));
+        return "{}://{}"s.format(protocol::name(), string(handle.remote_endpoint()));
     }
     catch ( const boost::system::system_error& e )
     {

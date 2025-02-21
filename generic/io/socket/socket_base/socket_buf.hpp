@@ -29,7 +29,7 @@ class basic_socket_buf
         constexpr static const int default_buffer_size = 4096;
 
     private: // Data
-        typename protocol::socket socket       = typename protocol::socket(io_context);
+        typename protocol::socket handle       = typename protocol::socket(io_context);
         string                    send_buff    = "";
         string                    receive_buff = "";
         bool                      received     = false; // Used in connectionless cases.

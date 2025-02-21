@@ -1,4 +1,0 @@
-[1mmain.cpp:14:9: [0m[0;1;35mwarning: [0m[1munused variable 'i' [-Wunused-variable][0m
-   14 |     [0;34mint[0m i = [0;32m100[0m;[0m
-      | [0;1;32m        ^
-[0m1 warning generated.

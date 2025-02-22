@@ -21,7 +21,7 @@ sql_stream& sql_stream::open ( url sql_server, sql_mode auto... args )
                     ( same_as<password,decltype(args)> or ... ),
                     "you should provide both username and password" );
     let params = boost::mysql::connect_params();
-    params.server_address.emplace_host_and_port(sql_server.host().c_str(), int(sql_server.port()));
+    params.server_address.emplace_host_and_port(sql_server.host().c_str(), sql_server.port() != "" ? int(sql_server.port()) otherwise 3306);
     params.username = detail::value_of_same_type   <username>(args...)            .value.c_str();
     params.password = detail::value_of_same_type   <password>(args...)            .value.c_str();
     params.database = detail::value_of_same_type_or<database>(args..., database()).value.c_str();
@@ -42,8 +42,8 @@ sql_stream& sql_stream::open ( url sql_server, sql_mode auto... args )
 matrix<typename sql_stream::value_type> sql_stream::execute ( string str, auto... args )
 {
     return detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
-               execute_client_stmt    (str, args...) otherwise
-               try_execute_server_stmt(str, args...);
+               execute_client_stmt(str, args...) otherwise
+               execute_server_stmt(str, args...);
 }
 
 matrix<typename sql_stream::value_type> sql_stream::execute_client_stmt ( string str, auto... args )
@@ -55,25 +55,15 @@ matrix<typename sql_stream::value_type> sql_stream::execute_client_stmt ( string
         detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
             sql_handle.execute(boost::mysql::with_params(boost::mysql::runtime(("{0}" + str).c_str()), detail::sql_empty_arg(), make_stmt_arg(args)...), results) otherwise
             sql_handle.execute(boost::mysql::with_params(boost::mysql::runtime(         str .c_str()),                          make_stmt_arg(args)...), results);
-        return {};
+        return execute_result(results);
     }
     catch ( const boost::mysql::error_with_diagnostics& e )
     {
-        throw sql_error("failed to execute sql statement (with statement = {})",
-                        e.code() != boost::mysql::client_errc::unformattable_value             and
-                        e.code() != boost::mysql::client_errc::format_string_invalid_specifier and
-                        e.code() != boost::mysql::client_errc::format_string_invalid_syntax    and
-                        e.code() != boost::mysql::client_errc::format_string_manual_auto_mix   and
-                        e.code() != boost::mysql::client_errc::format_arg_not_found ?
-                            detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
-                                boost::mysql::format_sql(sql_handle.format_opts().value(), boost::mysql::runtime(("{0}" + str).c_str()), detail::sql_empty_arg(), make_stmt_arg(args)...) otherwise
-                                boost::mysql::format_sql(sql_handle.format_opts().value(), boost::mysql::runtime(         str .c_str()),                          make_stmt_arg(args)...) otherwise
-                            "[[cannot format string \"{}\" with args {}]]"s.format(str, tuple(args...))
-                       ).from(detail::sql_error_with_diagnostics(e));
+        throw sql_error("failed to execute sql statement (with statement = {})", format_client_stmt(e, str, args...)).from(detail::sql_error_with_diagnostics(e));
     }
 }
 
-matrix<typename sql_stream::value_type> sql_stream::try_execute_server_stmt ( string str, auto... args )
+matrix<typename sql_stream::value_type> sql_stream::execute_server_stmt ( string str, auto... args )
 {
     // If has been proved that this statement cannot be composed on server (for example: er_unsupported_ps)
     if ( client_stmtpool.contains(str) )
@@ -86,8 +76,11 @@ matrix<typename sql_stream::value_type> sql_stream::try_execute_server_stmt ( st
         let error = boost::system::error_code();
         let diag  = boost::mysql::diagnostics();
         statement = sql_handle.prepare_statement(string(str).replace("{}", '?').c_str(), error, diag);
-        if ( error == boost::mysql::common_server_errc::er_unsupported_ps )
+        if ( error != boost::system::error_code() )
+        {
+            client_stmtpool.push(str);
             return execute_client_stmt(str, std::forward<decltype(args)>(args)...);
+        }
     }
     
     // Execute statement.
@@ -95,35 +88,59 @@ matrix<typename sql_stream::value_type> sql_stream::try_execute_server_stmt ( st
     {
         let results = boost::mysql::results();
         sql_handle.execute(statement.bind(make_stmt_arg(args)...), results);
-        return {};
+        return execute_result(results);
     }
     catch ( const boost::mysql::error_with_diagnostics& e )
     {
-        throw sql_error("failed to execute sql statement (with statement = {})", statement).from(detail::sql_error_with_diagnostics(e));
-    }
-    catch ( const boost::system::system_error& e )
-    {
-        throw sql_error("failed to execute sql statement (with statement = {})", statement).from(detail::system_error(e));
+        throw sql_error("failed to execute sql statement (with statement = {})", format_server_stmt(e, str, args...)).from(detail::sql_error_with_diagnostics(e));
     }
 }
 
-auto sql_stream::make_stmt_arg ( const auto& args )
+string sql_stream::format_client_stmt ( const boost::mysql::error_with_diagnostics& e, const string& str, const auto&... args ) const
 {
-    using type = decay<decltype(args)>;
+    return e.code() != boost::mysql::client_errc::unformattable_value             and
+           e.code() != boost::mysql::client_errc::format_string_invalid_specifier and
+           e.code() != boost::mysql::client_errc::format_string_invalid_syntax    and
+           e.code() != boost::mysql::client_errc::format_string_manual_auto_mix   and
+           e.code() != boost::mysql::client_errc::format_arg_not_found ?
+               detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
+                   boost::mysql::format_sql(sql_handle.format_opts().value(), boost::mysql::runtime(("{0}" + str).c_str()), detail::sql_empty_arg(), make_stmt_arg(args)...).c_str() otherwise
+                   boost::mysql::format_sql(sql_handle.format_opts().value(), boost::mysql::runtime(         str .c_str()),                          make_stmt_arg(args)...).c_str() otherwise
+               "[[cannot format string \"{}\" with args {}]]"s.format(str, tuple(args...));
+}
+
+string sql_stream::format_server_stmt ( const boost::mysql::error_with_diagnostics&, const string& str, const auto&... args ) const
+{
+    try
+    {
+        return detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
+            boost::mysql::format_sql(sql_handle.format_opts().value(), boost::mysql::runtime(("{0}" + str).c_str()), detail::sql_empty_arg(), make_stmt_arg(args)...).c_str() otherwise
+            boost::mysql::format_sql(sql_handle.format_opts().value(), boost::mysql::runtime(         str .c_str()),                          make_stmt_arg(args)...).c_str();
+    }
+    catch ( const boost::system::system_error& )
+    {
+        return "[[cannot format string \"{}\" with args {}]]"s.format(str, tuple(args...));
+    }
+}
+
+auto sql_stream::make_stmt_arg ( const auto& val )
+{
+    using type = decay<decltype(val)>;
 
     if constexpr ( same_as<type,std::nullptr_t> or same_as<type,bool> or char_type<type> or number_type<type> )
-        return args;
+        return val;
     else if constexpr ( same_as<type,const char*> )
-        return args;
+        return val;
     else if constexpr ( string_type<type> )
-        return std::string_view(string_view(args).begin(), string_view(args).size());
+        return std::string_view(string_view(val).begin(), string_view(val).size());
     else if constexpr ( same_as<type,time_point> )
-        return boost::mysql::datetime(args.year(), args.month(), args.day(), args.hour(), args.minute(), args.second(), 1000 * args.millisecond() + args.microsecond());
+        return boost::mysql::datetime(std::chrono::system_clock::time_point(val));
     else if constexpr ( same_as<type,duration> )
-        return boost::mysql::time(args);
+        return boost::mysql::time(std::chrono::microseconds(val));
     else 
         static_assert(false, "unsuppored statement arg");
 }
+
 
 
 

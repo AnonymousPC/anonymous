@@ -102,3 +102,10 @@ constexpr int variant<types...>::size ( )
 {
     return sizeof...(types);
 }
+
+template < class... types >
+std::ostream& operator << ( std::ostream& left, const variant<types...>& right )
+    requires ( printable<types> and ... ) and ( sizeof...(types) >= 1 )
+{
+    return right.visit([&] (const auto& val) -> std::ostream& { return left << val; });
+} 

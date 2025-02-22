@@ -17,15 +17,15 @@ constexpr time_point::time_point ( int_type auto YYYY, int_type auto MM, int_typ
     #endif
 }
 
-template < class clock_type >
-constexpr time_point::time_point ( std::chrono::time_point<clock_type> cvt )
+template < class clock_type, class ratio_type >
+constexpr time_point::time_point ( std::chrono::time_point<clock_type,ratio_type> cvt )
     extends time_point ( date(1970, 1, 1) + duration(cvt.time_since_epoch()) + ap::hour(time_zone()) )
 {
 
 }
 
-template < class clock_type >
-constexpr time_point::operator std::chrono::time_point<clock_type> ( ) const
+template < class clock_type, class ratio_type >
+constexpr time_point::operator std::chrono::time_point<clock_type,ratio_type> ( ) const
 {
     return std::chrono::time_point<std::chrono::system_clock>(
                typename std::chrono::system_clock::duration(

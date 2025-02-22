@@ -40,4 +40,6 @@ class variant
         constexpr static int size ( );
 };
 
+template < class... types > std::ostream& operator << ( std::ostream&, const variant<types...>& ) requires ( printable<types> and ... ) and ( sizeof...(types) >= 1 );
+
 #include "variant.ipp"

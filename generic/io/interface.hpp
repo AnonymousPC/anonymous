@@ -60,6 +60,13 @@ namespace ap
     class pipe_buf;
     class pipe_stream;
 
+    void wait_process      ( int );
+    void suspend_process   ( int );
+    void resume_process    ( int );
+    void interrupt_process ( int );
+    int  exit_process      ( int );
+    int  terminate_process ( int );
+
     /// Socket
     class tcp;
     class udp;

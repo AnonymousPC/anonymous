@@ -244,7 +244,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/static/main.exe -fuse-ld=lld bin/static/main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lCrypt32 -lcrypto -ldeflate -lFLAC -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmpg123 -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
+                "command": "g++ -o bin/static/main.exe -fuse-ld=lld bin/static/main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lbz2 -lCrypt32 -lcrypto -ldeflate -lFLAC -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmpg123 -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
             }
         },
         {

@@ -16,6 +16,11 @@ class ssl::socket
             try { self.handshake(boost::asio::ssl::stream_base::client); } catch (...) { self.next_layer().close(); throw; }
         }   
 
+        void bind ( auto&&... args )
+        {
+            self.next_layer().bind(std::forward<decltype(args)>(args)...);
+        }
+
         void shutdown ( auto&&... args )
         {
             self.boost::asio::ssl::stream<tcp::socket>::shutdown();

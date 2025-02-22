@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include "generic/basic/interface.hpp"
 #include "generic/container/interface.hpp"
 #include "generic/io/interface.hpp"
@@ -10,22 +9,20 @@ using namespace ap;
 
 int main ( )
 {
-    let avoid_kill = set<int>{getpid()};
+    // let addr = input("listen which address: ");
 
-    for ( int i in range(7) )
-        avoid_kill.push(int(input("vscode pid: ")));
-
-    for ( int i in range(10000) )
-    {
-        if ( not avoid_kill.contains(i) )
-            tryc
-            {
-                print("terminate process {} with exit code {}"s.format(i, terminate_process(i)));
-            }
-            catch ( const std::exception& e )
-            {
-                if ( not string(e.what()).contains("No such process") )
-                    print("failed due to {}: {}"s.format(typeid(e), e.what()));
-            }
-    }       
+    // while ( true )
+    //     try
+    //     {
+    //         let stream = http_stream();
+    //         print("listening...");
+    //         stream.listen(addr);
+    //         let info = "connected: local_endpoint = {}, remote_endpoint = {}"s.format(stream.local_endpoint(), stream.remote_endpoint());
+    //         print(info);
+    //         stream << info << std::flush;
+    //     }
+    //     catch ( const std::exception& e )
+    //     {
+    //         print("error:", e.what());
+    //     }
 }

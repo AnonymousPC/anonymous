@@ -10,22 +10,11 @@ using namespace ap;
 
 int main ( )
 {
-    let avoid_kill = set<int>{getpid()};
-
-    for ( int i in range(7) )
-        avoid_kill.push(int(input("vscode pid: ")));
-
-    for ( int i in range(10000) )
-    {
-        if ( not avoid_kill.contains(i) )
-            tryc
-            {
-                print("terminate process {} with exit code {}"s.format(i, terminate_process(i)));
-            }
-            catch ( const std::exception& e )
-            {
-                if ( not string(e.what()).contains("No such process") )
-                    print("failed due to {}: {}"s.format(typeid(e), e.what()));
-            }
-    }       
+    int p = int(input("which local port to make connection?"));
+    
+    tcp::socket sock(io_context);
+    sock.open   (boost::asio::ip::tcp::v4());
+    sock.bind   (boost::asio::ip::tcp::endpoint(boost::asio::ip::make_address("0.0.0.0"),         p));
+    sock.connect(boost::asio::ip::tcp::endpoint(boost::asio::ip::make_address("115.120.204.162"), 80  ));
+    
 }

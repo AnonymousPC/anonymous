@@ -227,6 +227,9 @@
             "type": "shell",
             "windows": {
                 "command": "rm bin/static/main.o bin/static/main.exe 2>nul || exit /b 0"
+            },
+            "osx": {
+                "command": "echo not supported"
             }
         },
         {
@@ -236,7 +239,10 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/static/main.o 2>&1 | tee bin/static/log.txt",
-            }         
+            },
+            "osx": {
+                "command": "echo not supported"
+            }    
         },
         {
             "label": "static.link",
@@ -245,6 +251,9 @@
             "problemMatcher": [],
             "windows": {
                 "command": "g++ -o bin/static/main.exe -fuse-ld=lld bin/static/main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lCrypt32 -lcrypto -ldeflate -lFLAC -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmpg123 -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
+            },
+            "osx": {
+                "command": "echo not supported"
             }
         },
         {
@@ -256,6 +265,9 @@
             "dependsOrder": "sequence",
             "windows": {
                 "command": "start cmd /c \"\"bin/static/main.exe\" & pause\""
+            },
+            "osx": {
+                "command": "echo not supported"
             }
         },
     ]

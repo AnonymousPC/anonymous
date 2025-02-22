@@ -6,7 +6,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "rm bin\\debug\\main.o bin\\debug\\main.exe 2>nul || exit /b 0"
+                "command": "rm bin/debug/main.o bin/debug/main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/debug/main.o bin/debug/main 2>&- || :"
@@ -52,7 +52,7 @@
             "group": "test",
             "type": "shell",
             "windows": { 
-                "command": "start cmd /c \"bin\\debug\\main.exe & pause\""
+                "command": "start cmd /c \"\"bin/debug/main.exe\" & pause\""
             },
             "osx": {
                 "command": "bin/debug/main"
@@ -66,7 +66,7 @@
             "dependsOn": ["debug.clear", "debug.compile", "debug.link"],
             "dependsOrder": "sequence",
             "windows": {
-                "command": "start cmd /c \"bin\\debug\\main.exe & pause\""
+                "command": "start cmd /c \"\"bin/debug/main.exe\" & pause\""
             },
             "osx": {
                 "command": "bin/debug/main"
@@ -83,7 +83,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "rm bin\\release\\main.o bin\\release\\main.exe 2>nul || exit /b 0"
+                "command": "rm bin/release/main.o bin/release/main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/release/main.o bin/release/main 2>&- || :"
@@ -129,7 +129,7 @@
             "group": "test",
             "type": "shell",
             "windows": {
-                "command": "start cmd /c \"bin\\release\\main.exe & pause\""
+                "command": "start cmd /c \"\"bin/release/main.exe\" & pause\""
             },
             "osx": {
                 "command": "bin/release/main"
@@ -143,7 +143,7 @@
             "dependsOn": ["release.clear", "release.compile", "release.link"],
             "dependsOrder": "sequence",
             "windows": {
-                "command": "start cmd /c \"bin\\release\\main.exe & pause\""
+                "command": "start cmd /c \"\"bin/release/main.exe\" & pause\""
             },
             "osx": {
                 "command": "bin/release/main"
@@ -163,7 +163,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "rm bin\\dll\\main.o 2>nul || exit /b 0"
+                "command": "rm bin/dll/main.o 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/dll/main.o 2>&- || :"
@@ -216,6 +216,47 @@
             "osx": {
                 "command": ":"
             }
-        }
+        },
+
+
+
+
+        {
+            "label": "static.clear",
+            "hide": true,
+            "type": "shell",
+            "windows": {
+                "command": "rm bin/static/main.o bin/static/main.exe 2>nul || exit /b 0"
+            }
+        },
+        {
+            "label": "static.compile",
+            "group": "none",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/static/main.o 2>&1 | tee bin/static/log.txt",
+            }         
+        },
+        {
+            "label": "static.link",
+            "group": "none",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "g++ -o bin/static/main.exe -fuse-ld=lld bin/static/main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lCrypt32 -lcrypto -ldeflate -lFLAC -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmpg123 -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
+            }
+        },
+        {
+            "label": "static",
+            "detail": "static",
+            "group": "build",
+            "type": "shell",
+            "dependsOn": ["static.clear", "static.compile", "static.link"],
+            "dependsOrder": "sequence",
+            "windows": {
+                "command": "start cmd /c \"\"bin/static/main.exe\" & pause\""
+            }
+        },
     ]
 }

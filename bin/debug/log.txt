@@ -1,0 +1,30 @@
+In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/device.hpp:25,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/system.hpp:33,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm/accumulate.hpp:17,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm.hpp:18,
+                 from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute.hpp:14,
+                 from generic/basic/interface.hpp:167,
+                 from main.cpp:1:
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/detail/get_object_info.hpp: In member function 'std::vector<_Ch_type> boost::compute::detail::get_object_info_impl<std::vector<_Ch_type> >::operator()(Function, Info) const':
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/detail/get_object_info.hpp:186: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
+  186 |         if(size == 0) return std::vector<T>();
+D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/detail/get_object_info.hpp:186: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
+In file included from generic/io/interface.hpp:128,
+                 from main.cpp:3:
+generic/io/initialize.hpp: In constructor 'ap::detail::io_initializer_t::io_initializer_t()':
+generic/io/initialize.hpp:19: error: cannot bind non-const lvalue reference of type 'ap::file_stream&' to an rvalue of type 'ap::file_stream'
+   19 |             ssl_context.use_certificate_chain(views::binary_istream<char>(file_stream("cert.pem")) | std::ranges::to<std::string>());
+In file included from generic/io/utility/stream/binary_stream_view.hpp:75,
+                 from generic/io/utility/stream/stream.hpp:5,
+                 from generic/io/utility/utility.hpp:10,
+                 from generic/io/interface.hpp:118:
+generic/io/utility/stream/binary_stream_view.ipp:127: note:   initializing argument 1 of 'constexpr auto ap::views::binary_istream(auto:1308&) requires requires(input_type t) {ap::views::binary_istream::s->read(reinterpret_cast<char*>(&t), sizeof (input_type));} [with input_type = char; std::endian endian = std::endian::little; auto:1308 = ap::file_stream]'
+  127 | constexpr auto views::binary_istream ( auto& /*stream_type*/ s )
+generic/io/initialize.hpp:20: error: cannot bind non-const lvalue reference of type 'ap::file_stream&' to an rvalue of type 'ap::file_stream'
+   20 |             ssl_context.use_private_key      (views::binary_istream<char>(file_stream("key.pem" )) | std::ranges::to<std::string>());
+generic/io/utility/stream/binary_stream_view.ipp:127: note:   initializing argument 1 of 'constexpr auto ap::views::binary_istream(auto:1308&) requires requires(input_type t) {ap::views::binary_istream::s->read(reinterpret_cast<char*>(&t), sizeof (input_type));} [with input_type = char; std::endian endian = std::endian::little; auto:1308 = ap::file_stream]'
+  127 | constexpr auto views::binary_istream ( auto& /*stream_type*/ s )
+generic/io/initialize.hpp:21: error: cannot bind non-const lvalue reference of type 'ap::file_stream&' to an rvalue of type 'ap::file_stream'
+   21 |             ssl_context.use_tmp_dh           (views::binary_istream<char>(file_stream("dh.pem"  )) | std::ranges::to<std::string>());
+generic/io/utility/stream/binary_stream_view.ipp:127: note:   initializing argument 1 of 'constexpr auto ap::views::binary_istream(auto:1308&) requires requires(input_type t) {ap::views::binary_istream::s->read(reinterpret_cast<char*>(&t), sizeof (input_type));} [with input_type = char; std::endian endian = std::endian::little; auto:1308 = ap::file_stream]'
+  127 | constexpr auto views::binary_istream ( auto& /*stream_type*/ s )

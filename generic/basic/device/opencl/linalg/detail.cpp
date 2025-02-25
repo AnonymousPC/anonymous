@@ -4,75 +4,75 @@ namespace detail
 {
     std::string clblast_error_message ( clblast::StatusCode c )
     {
-        static const let dict = std::map<clblast::StatusCode,std::string>
+        switch ( c )
         {
             // Status codes in common with the OpenCL standard
-            {kSuccess                   , "CL_SUCCESS"},
-            {kOpenCLCompilerNotAvailable, "CL_COMPILER_NOT_AVAILABLE"},
-            {kTempBufferAllocFailure    , "CL_MEM_OBJECT_ALLOCATION_FAILURE"},
-            {kOpenCLOutOfResources      , "CL_OUT_OF_RESOURCES"},
-            {kOpenCLOutOfHostMemory     , "CL_OUT_OF_HOST_MEMORY"},
-            {kOpenCLBuildProgramFailure , "CL_BUILD_PROGRAM_FAILURE"},
-            {kInvalidValue              , "CL_INVALID_VALUE"},
-            {kInvalidCommandQueue       , "CL_INVALID_COMMAND_QUEUE"},
-            {kInvalidMemObject          , "CL_INVALID_MEM_OBJECT"},
-            {kInvalidBinary             , "CL_INVALID_BINARY"},
-            {kInvalidBuildOptions       , "CL_INVALID_BUILD_OPTIONS"},
-            {kInvalidProgram            , "CL_INVALID_PROGRAM"},
-            {kInvalidProgramExecutable  , "CL_INVALID_PROGRAM_EXECUTABLE"},
-            {kInvalidKernelName         , "CL_INVALID_KERNEL_NAME"},
-            {kInvalidKernelDefinition   , "CL_INVALID_KERNEL_DEFINITION"},
-            {kInvalidKernel             , "CL_INVALID_KERNEL"},
-            {kInvalidArgIndex           , "CL_INVALID_ARG_INDEX"},
-            {kInvalidArgValue           , "CL_INVALID_ARG_VALUE"},
-            {kInvalidArgSize            , "CL_INVALID_ARG_SIZE"},
-            {kInvalidKernelArgs         , "CL_INVALID_KERNEL_ARGS"},
-            {kInvalidLocalNumDimensions , "CL_INVALID_WORK_DIMENSION"},
-            {kInvalidLocalThreadsTotal  , "CL_INVALID_WORK_GROUP_SIZE"},
-            {kInvalidLocalThreadsDim    , "CL_INVALID_WORK_ITEM_SIZE"},
-            {kInvalidGlobalOffset       , "CL_INVALID_GLOBAL_OFFSET"},
-            {kInvalidEventWaitList      , "CL_INVALID_EVENT_WAIT_LIST"},
-            {kInvalidEvent              , "CL_INVALID_EVENT"},
-            {kInvalidOperation          , "CL_INVALID_OPERATION"},
-            {kInvalidBufferSize         , "CL_INVALID_BUFFER_SIZE"},
-            {kInvalidGlobalWorkSize     , "CL_INVALID_GLOBAL_WORK_SIZE"},
+            case clblast::StatusCode::kSuccess:                    return "CL_SUCCESS";
+            case clblast::StatusCode::kOpenCLCompilerNotAvailable: return "CL_COMPILER_NOT_AVAILABLE";
+            case clblast::StatusCode::kTempBufferAllocFailure:     return "CL_MEM_OBJECT_ALLOCATION_FAILURE";
+            case clblast::StatusCode::kOpenCLOutOfResources:       return "CL_OUT_OF_RESOURCES";
+            case clblast::StatusCode::kOpenCLOutOfHostMemory:      return "CL_OUT_OF_HOST_MEMORY";
+            case clblast::StatusCode::kOpenCLBuildProgramFailure:  return "CL_BUILD_PROGRAM_FAILURE";
+            case clblast::StatusCode::kInvalidValue:               return "CL_INVALID_VALUE";
+            case clblast::StatusCode::kInvalidCommandQueue:        return "CL_INVALID_COMMAND_QUEUE";
+            case clblast::StatusCode::kInvalidMemObject:           return "CL_INVALID_MEM_OBJECT";
+            case clblast::StatusCode::kInvalidBinary:              return "CL_INVALID_BINARY";
+            case clblast::StatusCode::kInvalidBuildOptions:        return "CL_INVALID_BUILD_OPTIONS";
+            case clblast::StatusCode::kInvalidProgram:             return "CL_INVALID_PROGRAM";
+            case clblast::StatusCode::kInvalidProgramExecutable:   return "CL_INVALID_PROGRAM_EXECUTABLE";
+            case clblast::StatusCode::kInvalidKernelName:          return "CL_INVALID_KERNEL_NAME";
+            case clblast::StatusCode::kInvalidKernelDefinition:    return "CL_INVALID_KERNEL_DEFINITION";
+            case clblast::StatusCode::kInvalidKernel:              return "CL_INVALID_KERNEL";
+            case clblast::StatusCode::kInvalidArgIndex:            return "CL_INVALID_ARG_INDEX";
+            case clblast::StatusCode::kInvalidArgValue:            return "CL_INVALID_ARG_VALUE";
+            case clblast::StatusCode::kInvalidArgSize:             return "CL_INVALID_ARG_SIZE";
+            case clblast::StatusCode::kInvalidKernelArgs:          return "CL_INVALID_KERNEL_ARGS";
+            case clblast::StatusCode::kInvalidLocalNumDimensions:  return "CL_INVALID_WORK_DIMENSION";
+            case clblast::StatusCode::kInvalidLocalThreadsTotal:   return "CL_INVALID_WORK_GROUP_SIZE";
+            case clblast::StatusCode::kInvalidLocalThreadsDim:     return "CL_INVALID_WORK_ITEM_SIZE";
+            case clblast::StatusCode::kInvalidGlobalOffset:        return "CL_INVALID_GLOBAL_OFFSET";
+            case clblast::StatusCode::kInvalidEventWaitList:       return "CL_INVALID_EVENT_WAIT_LIST";
+            case clblast::StatusCode::kInvalidEvent:               return "CL_INVALID_EVENT";
+            case clblast::StatusCode::kInvalidOperation:           return "CL_INVALID_OPERATION";
+            case clblast::StatusCode::kInvalidBufferSize:          return "CL_INVALID_BUFFER_SIZE";
+            case clblast::StatusCode::kInvalidGlobalWorkSize:      return "CL_INVALID_GLOBAL_WORK_SIZE";
 
             // Status codes in common with the clBLAS library
-            {kNotImplemented            , "Routine or functionality not implemented yet"},
-            {kInvalidMatrixA            , "Matrix A is not a valid OpenCL buffer"},
-            {kInvalidMatrixB            , "Matrix B is not a valid OpenCL buffer"},
-            {kInvalidMatrixC            , "Matrix C is not a valid OpenCL buffer"},
-            {kInvalidVectorX            , "Vector X is not a valid OpenCL buffer"},
-            {kInvalidVectorY            , "Vector Y is not a valid OpenCL buffer"},
-            {kInvalidDimension          , "Dimensions M, N, and K have to be larger than zero"},
-            {kInvalidLeadDimA           , "LD of A is smaller than the matrix's first dimension"},
-            {kInvalidLeadDimB           , "LD of B is smaller than the matrix's first dimension"},
-            {kInvalidLeadDimC           , "LD of C is smaller than the matrix's first dimension"},
-            {kInvalidIncrementX         , "Increment of vector X cannot be zero"},
-            {kInvalidIncrementY         , "Increment of vector Y cannot be zero"},
-            {kInsufficientMemoryA       , "Matrix A's OpenCL buffer is too small"},
-            {kInsufficientMemoryB       , "Matrix B's OpenCL buffer is too small"},
-            {kInsufficientMemoryC       , "Matrix C's OpenCL buffer is too small"},
-            {kInsufficientMemoryX       , "Vector X's OpenCL buffer is too small"},
-            {kInsufficientMemoryY       , "Vector Y's OpenCL buffer is too small"},
+            case clblast::StatusCode::kNotImplemented:             return "Routine or functionality not implemented yet";
+            case clblast::StatusCode::kInvalidMatrixA:             return "Matrix A is not a valid OpenCL buffer";
+            case clblast::StatusCode::kInvalidMatrixB:             return "Matrix B is not a valid OpenCL buffer";
+            case clblast::StatusCode::kInvalidMatrixC:             return "Matrix C is not a valid OpenCL buffer";
+            case clblast::StatusCode::kInvalidVectorX:             return "Vector X is not a valid OpenCL buffer";
+            case clblast::StatusCode::kInvalidVectorY:             return "Vector Y is not a valid OpenCL buffer";
+            case clblast::StatusCode::kInvalidDimension:           return "Dimensions M, N, and K have to be larger than zero";
+            case clblast::StatusCode::kInvalidLeadDimA:            return "LD of A is smaller than the matrix's first dimension";
+            case clblast::StatusCode::kInvalidLeadDimB:            return "LD of B is smaller than the matrix's first dimension";
+            case clblast::StatusCode::kInvalidLeadDimC:            return "LD of C is smaller than the matrix's first dimension";
+            case clblast::StatusCode::kInvalidIncrementX:          return "Increment of vector X cannot be zero";
+            case clblast::StatusCode::kInvalidIncrementY:          return "Increment of vector Y cannot be zero";
+            case clblast::StatusCode::kInsufficientMemoryA:        return "Matrix A's OpenCL buffer is too small";
+            case clblast::StatusCode::kInsufficientMemoryB:        return "Matrix B's OpenCL buffer is too small";
+            case clblast::StatusCode::kInsufficientMemoryC:        return "Matrix C's OpenCL buffer is too small";
+            case clblast::StatusCode::kInsufficientMemoryX:        return "Vector X's OpenCL buffer is too small";
+            case clblast::StatusCode::kInsufficientMemoryY:        return "Vector Y's OpenCL buffer is too small";
 
             // Custom additional status codes for CLBlast
-            {kInsufficientMemoryTemp    , "Temporary buffer provided to GEMM routine is too small"},
-            {kInvalidBatchCount         , "The batch count needs to be positive"},
-            {kInvalidOverrideKernel     , "Trying to override parameters for an invalid kernel"},
-            {kMissingOverrideParameter  , "Missing override parameter(s) for the target kernel"},
-            {kInvalidLocalMemUsage      , "Not enough local memory available on this device"},
-            {kNoHalfPrecision           , "Half precision (16-bits) not supported by the device"},
-            {kNoDoublePrecision         , "Double precision (64-bits) not supported by the device"},
-            {kInvalidVectorScalar       , "The unit-sized vector is not a valid OpenCL buffer"},
-            {kInsufficientMemoryScalar  , "The unit-sized vector's OpenCL buffer is too small"},
-            {kDatabaseError             , "Entry for the device was not found in the database"},
-            {kUnknownError              , "A catch-all error code representing an unspecified error"},
-            {kUnexpectedError           , "A catch-all error code representing an unexpected exception"},
-        };
-
-        let it = dict.find(c);
-        return it != dict.end() ? *it otherwise std::format("unknown clblast error message (with code = {})", c)
+            case clblast::StatusCode::kInsufficientMemoryTemp:     return "Temporary buffer provided to GEMM routine is too small";
+            case clblast::StatusCode::kInvalidBatchCount:          return "The batch count needs to be positive";
+            case clblast::StatusCode::kInvalidOverrideKernel:      return "Trying to override parameters for an invalid kernel";
+            case clblast::StatusCode::kMissingOverrideParameter:   return "Missing override parameter(s) for the target kernel";
+            case clblast::StatusCode::kInvalidLocalMemUsage:       return "Not enough local memory available on this device";
+            case clblast::StatusCode::kNoHalfPrecision:            return "Half precision (16-bits) not supported by the device";
+            case clblast::StatusCode::kNoDoublePrecision:          return "Double precision (64-bits) not supported by the device";
+            case clblast::StatusCode::kInvalidVectorScalar:        return "The unit-sized vector is not a valid OpenCL buffer";
+            case clblast::StatusCode::kInsufficientMemoryScalar:   return "The unit-sized vector's OpenCL buffer is too small";
+            case clblast::StatusCode::kDatabaseError:              return "Entry for the device was not found in the database";
+            case clblast::StatusCode::kUnknownError:               return "A catch-all error code representing an unspecified error";
+            case clblast::StatusCode::kUnexpectedError:            return "A catch-all error code representing an unexpected exception";
+        
+            // Default case
+            default:                                               return "[[unknown clblast error]]";
+        }
     }
     
 } // namespace detail

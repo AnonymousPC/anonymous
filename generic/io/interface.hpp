@@ -2,9 +2,6 @@
 
 namespace ap
 {
-    /// Email
-    class email_send;
-
     /// File
     class file_stream;
     class file_bmp;
@@ -48,16 +45,7 @@ namespace ap
     path     try_rename_directory ( const path&, const path& );
     intmax_t size_of_directory    ( const path& );
 
-    /// Http
-    class http_buf;
-    class http_stream;
-    class http_get;
-    class http_post;
-    class http_server;
-
-
     /// Pipe
-    class pipe_buf;
     class pipe_stream;
 
     void wait_process      ( int );
@@ -67,20 +55,35 @@ namespace ap
     int  exit_process      ( int );
     int  terminate_process ( int );
 
-    /// Socket
+    /// Network
     class tcp;
     class udp;
     class icmp;
     class ssl;
-    template < class protocol > class basic_socket_buf;
+    class url;
+
+    /// Socket
     template < class protocol > class basic_socket_stream;
     using tcp_stream  = basic_socket_stream<tcp>;
     using udp_stream  = basic_socket_stream<udp>;
     using icmp_stream = basic_socket_stream<icmp>;
     using ssl_stream  = basic_socket_stream<ssl>;
 
+    /// Http
+    // template < class protocol > class basic_http_stream;
+    // using http_stream  = basic_http_stream<tcp>;
+    // using https_stream = basic_http_stream<ssl>;
+    class http_stream;
+    class http_get;
+    class http_post;
+
+    class url;
+
     // Sql
     class sql_stream;
+
+    /// Email
+    class email_send;
 
     /// Utility
     class color;
@@ -124,13 +127,11 @@ namespace ap
     /// Include
     #include "utility/utility.hpp" // First.
     #include "file/file.hpp"
-    #include "http/http.hpp"
     #include "pipe/pipe.hpp"
-    // #include "serial_port/serial_port.hpp"
+    #include "network/network.hpp"
     #include "socket/socket.hpp"
+    #include "http/http.hpp"
     #include "sql/sql.hpp"
-    // #include "usb/usb.hpp"
-    // #include "websocket/websocket.hpp"
     #include "email/email.hpp"
     #include "initialize.hpp"
 

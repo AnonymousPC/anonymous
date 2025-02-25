@@ -38,6 +38,10 @@ namespace detail
 
 
 
+    enum { eigen_map_default,
+           eigen_map_vector,
+           eigen_map_matrix,
+           eigen_map_tensor };
 
     constexpr auto eigen_make_extents ( const auto& extents )
     {
@@ -80,12 +84,15 @@ namespace detail
         return arr;
     }
 
+    template < int rank >
+    constexpr auto eigen_make_convolve_full_dims ( )
+    {
+        let arr = std::array<int,rank>();
+        for_constexpr<0,rank-1>([&] <int index> { arr[index] = index; });
+        return arr;
+    }
 
-
-
-
-
-
+    template < auto mode >
     constexpr auto eigen_map_helper ( const auto& mds )
     {
         using value_type    = decay<decltype(mds)>::value_type;
@@ -95,7 +102,7 @@ namespace detail
 
         static_assert ( same_as<typename cpu::layout_type,std::layout_right> );
 
-        if constexpr ( extents_type::rank() == 1 )
+        if constexpr ( ( mode == eigen_map_default and extents_type::rank() == 1 ) or mode == eigen_map_vector )
             if constexpr ( is_contiguous_layout<layout_type> )
                 if constexpr ( is_non_const_accessor<accessor_type> )
                     return Eigen::Map<      Eigen::Vector<eigen_nativize<value_type>,Eigen::Dynamic>>(mds.data_handle(), mds.size());
@@ -106,7 +113,7 @@ namespace detail
                     return Eigen::Map<      Eigen::Vector<eigen_nativize<value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mds.data_handle(), mds.size(), mds.stride(0));
                 else
                     return Eigen::Map<const Eigen::Vector<eigen_nativize<value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mds.data_handle(), mds.size(), mds.stride(0));
-        else if constexpr ( extents_type::rank() == 2 )
+        else if constexpr ( ( mode == eigen_map_default and extents_type::rank() == 2 ) or mode == eigen_map_matrix )
             if constexpr ( is_contiguous_layout<layout_type> )
                 if constexpr ( is_non_const_accessor<accessor_type> )
                     return Eigen::Map<      Eigen::Matrix<eigen_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mds.data_handle(), mds.extent(0), mds.extent(1));
@@ -122,7 +129,7 @@ namespace detail
                     return Eigen::Map<      Eigen::Matrix<eigen_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mds.data_handle(), mds.extent(1), mds.extent(0)).transpose();
                 else
                     return Eigen::Map<const Eigen::Matrix<eigen_nativize<value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mds.data_handle(), mds.extent(1), mds.extent(0)).transpose();
-        else // if constexpr ( extents_type::rank() >= 3 )
+        else // if constexpr ( ( mode == eigen_map_default and extents_type::rank() == 3 ) or mode == eigen_map_tensor )
             if constexpr ( is_contiguous_layout<layout_type> )
                 if constexpr ( is_non_const_accessor<accessor_type> )   
                     return Eigen::TensorMap<      Eigen::Tensor<eigen_nativize<value_type>,extents_type::rank(),Eigen::RowMajor>>(mds.data_handle(), eigen_make_extents(mds.extents()));
@@ -140,15 +147,15 @@ namespace detail
                     return Eigen::TensorMap<const Eigen::Tensor<eigen_nativize<value_type>,extents_type::rank(),Eigen::RowMajor>>(mds.data_handle(), eigen_make_transpose_extents(mds.extents())).shuffle(eigen_make_transpose_shuffle<extents_type::rank()>());
     }
 
-    template < class type = void >
+    template < class type = void, auto mode = eigen_map_default >
     constexpr auto eigen_map ( const auto& mds )
     {
         using value_type = decay<decltype(mds)>::value_type;
 
         if constexpr ( is_void<type> or same_as<type,value_type> )
-            return eigen_map_helper(mds);
+            return eigen_map_helper<mode>(mds);
         else
-            return eigen_map_helper(mds).template cast<type>();
+            return eigen_map_helper<mode>(mds).template cast<type>();
     }
 } // namespace detail
 

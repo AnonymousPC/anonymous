@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>微信风格实时聊天</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #e5e5e5;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #f8f8f8;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin: 10px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.other {
+            justify-content: flex-start;
+        }
+
+        .message.self {
+            justify-content: flex-end;
+        }
+
+        .bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 5px;
+            position: relative;
+            word-break: break-word;
+        }
+
+        .message.other .bubble {
+            background: #fff;
+            margin-left: 10px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .message.self .bubble {
+            background: #9eea6a;
+            margin-right: 10px;
+        }
+
+        .timestamp {
+            color: #999;
+            font-size: 12px;
+            margin: 0 10px;
+            align-self: center;
+        }
+
+        .input-area {
+            padding: 15px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #sendBtn {
+            padding: 10px 20px;
+            background: #07c160;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #sendBtn:hover {
+            background: #06ad54;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages" id="messageContainer"></div>
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="输入消息...">
+            <button id="sendBtn" onclick="sendMessage()">发送</button>
+        </div>
+    </div>
+
+    <script>
+        // 消息存储和去重
+        let lastUpdate = 0;
+
+        // 获取服务器消息
+        async function fetchMessages() {
+            try {
+                const response = await fetch('/message', {
+                    method: 'DELETE',
+                    parts: '/message',
+                    headers: {
+                        'Accept': 'text/plain'
+                    }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP错误! 状态码: ${response.status}`);
+                const text = await response.text();
+                processMessages(text);
+            } catch (error) {
+                console.error('获取消息失败:', error);
+            }
+        }
+
+        // 处理消息文本
+        function processMessages(text) {
+            const container = document.getElementById('messageContainer');
+            const messages = text.split('\n').filter(line => line.trim() !== '');
+            
+            messages.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length < 3) return;
+                
+                const sender = parts[0].trim();
+                const timestamp = parts[1].trim();
+                const content = parts.slice(2).join(',').trim();
+
+                // 创建消息元素
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                messageDiv.innerHTML = `
+                    <div class="bubble">
+                        <div class="timestamp">${timestamp}</div>
+                        ${content}
+                    </div>
+                `;
+
+                // 检查是否已存在相同消息
+                const existing = [...container.children].find(child => 
+                    child.textContent === messageDiv.textContent
+                );
+                
+                if (!existing) {
+                    container.appendChild(messageDiv);
+                }
+            });
+
+            // 滚动到底部
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 发送消息功能（前端演示版）
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // 这里可以添加实际发送到服务器的代码
+            // 示例：仅在前端显示
+            const newMessage = document.createElement('div');
+            newMessage.className = 'message self';
+            newMessage.innerHTML = `
+                <div class="bubble">
+                    <div class="timestamp">${new Date().toLocaleString()}</div>
+                    ${message}
+                </div>
+            `;
+
+            document.getElementById('messageContainer').appendChild(newMessage);
+            input.value = '';
+            input.focus();
+        }
+
+        // 初始化定时器
+        setInterval(fetchMessages, 1000);
+        fetchMessages(); // 立即加载一次
+
+        // 回车发送支持
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

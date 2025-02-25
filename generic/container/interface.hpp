@@ -3,12 +3,12 @@
 namespace ap
 {
     template < class type, int dim = 1,                                    class device = cpu > class array;
-    template < class type,                                                 class device = cpu > using vector = array<type>;
-    template < class type,                                                 class device = cpu > using matrix = array<type,2>;
+    template < class type,                                                 class device = cpu > using vector = array<type,1,device>;
+    template < class type,                                                 class device = cpu > using matrix = array<type,2,device>;
     template < class type, int len,                                        class device = cpu > class static_array;
-    template < class type, int len,                                        class device = cpu > using static_vector  = static_array<type,len>;
+    template < class type, int len,                                        class device = cpu > using static_vector  = static_array <type,len,device>;
     template < class type, int len,                                        class device = cpu > class inplace_array;
-    template < class type, int len,                                        class device = cpu > using inplace_vector = inplace_array<type,len>;
+    template < class type, int len,                                        class device = cpu > using inplace_vector = inplace_array<type,len,device>;
 
     template < class type,                                                 class device = cpu > class deque;
     template < class type,                                                 class device = cpu > class list;

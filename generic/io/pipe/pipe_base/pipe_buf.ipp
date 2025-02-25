@@ -33,7 +33,7 @@ void pipe_buf::open ( path exe, pipe_mode auto... args )
     try
     {
         // Find_executable is always in higher priority than raw_path.
-        process_handle = run_with_args(find_executable != "" ? find_executable otherwise path_executable, {}, tuple<decltype(args)...>(args...));
+        handle = run_with_args(find_executable != "" ? find_executable otherwise path_executable, {}, tuple<decltype(args)...>(args...));
     }
     catch ( const boost::process::v2::system_error& e )
     {

@@ -71,7 +71,7 @@ class http_buf
 
         open_type                                                                                 opened                       = open_type::close;
         optional<int>                                                                             optional_port                = nullopt;
-        optional<url>                                                                             optional_proxy_relay         = nullopt;
+        optional<url>                                                                             optional_proxy_midway        = nullopt;
         optional<url>                                                                             optional_proxy_target        = nullopt;
         string                                                                                    current_request_method       = "GET";
         string                                                                                    current_request_path         = "";

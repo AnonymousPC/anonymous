@@ -17,17 +17,17 @@ void pipe_buf::close ( )
         }
         catch ( const boost::system::system_error& e )
         {
-            throw pipe_error("failed to close pipe (with process_id = {}): cannot close stdin/stdout/stderr", process_handle->id()).from(detail::system_error(e));
+            throw pipe_error("failed to close pipe (with process_id = {}): cannot close stdin/stdout/stderr", handle->id()).from(detail::system_error(e));
         }
 
         try
         {
             if ( is_running() )
-                process_handle->terminate();
+                handle->terminate();
         }
         catch ( const boost::system::system_error& e )
         {
-            throw pipe_error("failed to close pipe (with process_id = {}): cannot terminate process", process_handle->id()).from(detail::system_error(e));
+            throw pipe_error("failed to close pipe (with process_id = {}): cannot terminate process", handle->id()).from(detail::system_error(e));
         }
     }
 
@@ -35,7 +35,7 @@ void pipe_buf::close ( )
         throw pipe_error("failed to close pipe: pipe is not opened");
 
     // Clean resource.
-    process_handle = nullptr;
+    handle = nullptr;
     stdin_buff .clear();
     stdout_buff.clear();
     stderr_buff.clear();
@@ -45,12 +45,12 @@ void pipe_buf::close ( )
 
 bool pipe_buf::is_open ( ) const
 {
-    return process_handle != nullptr;
+    return handle != nullptr;
 }
 
 bool pipe_buf::is_running ( ) const
 {
-    return process_handle != nullptr and process_handle->running();
+    return handle != nullptr and handle->running();
 }
 
 
@@ -96,11 +96,11 @@ int pipe_buf::underflow ( )
 
     // Run task.
     let stdout_task = std::execution::schedule(cpu::execution_context.get_scheduler())
-                    | std::execution::then([&] { context_handle->run(); });
+                    | std::execution::then([&] { ctx->run(); });
     let stderr_task = std::execution::schedule(cpu::execution_context.get_scheduler()) 
-                    | std::execution::then([&] { context_handle->run(); });
+                    | std::execution::then([&] { ctx->run(); });
     std::execution::sync_wait(std::execution::when_all(stdout_task, stderr_task));
-    context_handle->restart();
+    ctx->restart();
 
     // Return
     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
@@ -141,7 +141,7 @@ int pipe_buf::overflow ( int c )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", process_handle->id()).from(detail::system_error(e));
+        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", handle->id()).from(detail::system_error(e));
     }
 }
 
@@ -156,6 +156,6 @@ int pipe_buf::sync ( )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", process_handle->id()).from(detail::system_error(e));
+        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", handle->id()).from(detail::system_error(e));
     }
 }

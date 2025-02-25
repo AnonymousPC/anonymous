@@ -649,7 +649,7 @@ void http_buf::update_header_to ( auto& serializer )
                                          current_request_param | std::views::transform([] (const auto& kv) { return "{}={}"s.format(kv.key(), kv.value()); }) 
                                                                | std::views::join_with('&')
                                                                | std::ranges::to<string>()).c_str()); // "/path?key=value"
-        if ( not optional_proxy_relay.empty() and https_handle == nullptr ) // If we are using http proxy, then request.target() should be expanded into full url that we desire to access.
+        if ( not optional_proxy_midway.empty() and https_handle == nullptr ) // If we are using http proxy, then request.target() should be expanded into full url that we desire to access.
             request.target("{}://{}{}{}"s.format(optional_proxy_target.value().scheme(),
                                                  optional_proxy_target.value().host(), 
                                                  optional_proxy_target.value().port() != "" ? ":{}"s.format(optional_proxy_target.value().port()) otherwise "",
@@ -690,7 +690,7 @@ void http_buf::reset_param ( )
 
     // Reset states.
     optional_port                = nullopt;
-    optional_proxy_relay         = nullopt;
+    optional_proxy_midway        = nullopt;
     optional_proxy_target        = nullopt;
     current_request_method       = "GET";
     current_request_path         = "";

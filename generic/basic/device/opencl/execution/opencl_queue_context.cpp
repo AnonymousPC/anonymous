@@ -70,7 +70,7 @@ void detail::opencl_queue_context::enqueue ( execpools::task_base* task, std::ui
             throw opencl_error("failed to enqueue task").from(e);
         }
     else
-        throw opencl_error("failed to enqueue task: this opencl device does not supports executing host function (with name = {}, vendor = {}, profile = {}, version = {}, driver_version = {}, capability = {{exec_kernel = {}, exec_native_kernel = {}}})",
+        throw opencl_error("failed to enqueue task: this opencl device does not supports executing host function (with name = {}, vendor = {}, profile = {}, version = {}, driver_version = {}, capability.exec_kernel = {}, capability.exec_native_kernel = {})",
                            boost::compute::system::default_device().name(),
                            boost::compute::system::default_device().vendor(),
                            boost::compute::system::default_device().profile(),

@@ -25,14 +25,14 @@ class pipe_buf
     private: // Data
         /* boost::process::v2::process will immediate start once been constructed */
         /* boost::asio::io_context is not movable */
-        std::unique_ptr<boost::process::v2::process> process_handle = nullptr;
-        std::unique_ptr<boost::asio::io_context>     context_handle = std::make_unique<boost::asio::io_context>(2);
-        boost::asio::writable_pipe                   stdin_pipe     = boost::asio::writable_pipe(*context_handle);
-        boost::asio::readable_pipe                   stdout_pipe    = boost::asio::readable_pipe(*context_handle);
-        boost::asio::readable_pipe                   stderr_pipe    = boost::asio::readable_pipe(*context_handle);
-        string                                       stdin_buff     = "";
-        string                                       stdout_buff    = "";
-        string                                       stderr_buff    = "";
+        std::unique_ptr<boost::process::v2::process> handle      = nullptr;
+        std::unique_ptr<boost::asio::io_context>     ctx         = std::make_unique<boost::asio::io_context>(2);
+        boost::asio::writable_pipe                   stdin_pipe  = boost::asio::writable_pipe(*ctx);
+        boost::asio::readable_pipe                   stdout_pipe = boost::asio::readable_pipe(*ctx);
+        boost::asio::readable_pipe                   stderr_pipe = boost::asio::readable_pipe(*ctx);
+        string                                       stdin_buff  = "";
+        string                                       stdout_buff = "";
+        string                                       stderr_buff = "";
 
     private: // Auxiliary
         constexpr static const int default_buffer_size = 4096;

@@ -290,7 +290,7 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device2>& cvt )
                 else
                     device2::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
             else
-                device2::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
+                device2::copy(cvt./*line-wise*/begin(), cvt./*line-wise*/end(), self./*line-wise*/begin());
         else
             if constexpr ( same_as<typename device::layout_type,typename device2::layout_type> )
                 if ( cvt.ownership() )
@@ -300,7 +300,7 @@ constexpr array<type,dim,device>::array ( const array<type2,dim,device2>& cvt )
                 else
                     device::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
             else
-                device::copy(cvt.array<type,dim,device2>::upper::begin(), cvt.array<type,dim,device2>::upper::end(), self./*line-wise*/begin());
+                device::copy(cvt./*line-wise*/begin(), cvt./*line-wise*/end(), self./*line-wise*/begin());
     else
         if ( cvt.ownership() )
             device::transform(cvt.array<type2,dim,device>::base::begin(), cvt.array<type2,dim,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });

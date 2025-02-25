@@ -29,10 +29,10 @@ void http_buf::connect ( url website, http_client_mode auto... args )
     set_client_request(website, args...);
 
     // Connect.
-    if ( optional_proxy_relay.empty() )
+    if ( optional_proxy_midway.empty() )
         connect_without_proxy(website);
     else
-        connect_through_proxy(website, optional_proxy_relay.value());
+        connect_through_proxy(website, optional_proxy_midway.value());
 
     // Set state.
     opened = open_type::client;
@@ -116,7 +116,7 @@ void http_buf::set_client_request ( const url& website, const auto&... args )
 
     // Proxy
     if constexpr ( ( same_as<proxy,decay<decltype(args)>> or ... ) )
-        optional_proxy_relay = detail::value_of_same_type<proxy>(args...).value;
+        optional_proxy_midway = detail::value_of_same_type<proxy>(args...).value;
 
     // Timeout
     if constexpr ( ( same_as<timeout,decay<decltype(args)>> or ... ) )

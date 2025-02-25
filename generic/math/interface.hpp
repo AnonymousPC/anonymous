@@ -80,8 +80,8 @@ namespace ap
     constexpr array_type auto  ifft           ( const array_type auto&  vector )                              requires                                       complex_type<vector_value_type>   and                                                                           ( vector_dimension == 1 );
     constexpr array_type auto  tensor         ( const array_type auto&  left, const array_type auto&  right ) requires ( ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( number_type<right_value_type> or complex_type<right_value_type> ) ) and ( left_dimension == 1 and right_dimension == 1 ) and same_as<left_device_type,right_device_type>;
     
-    // constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
-    // constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
+ // constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  2 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> ); 
+ // constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() ==  1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
     // constexpr array_type     auto   convolve        ( const array_type auto&  left, const array_type auto&  right ) requires ( left  .dimension() == -1 ) and ( number_type<left_value_type>   or complex_type<left_value_type>   ) and ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> );
     // constexpr /*value_type*/ auto   det             ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
     // constexpr pair_type      auto   eigen           ( const array_type auto&  matrix )                              requires ( matrix.dimension() ==  2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> );
@@ -129,4 +129,13 @@ namespace ap
     #include "numeric/numeric.hpp"
     #include "complex/complex.hpp"
     #include "linalg/linalg.hpp"
+
+    constexpr number_type auto random ( number_type auto a, number_type auto b )
+    {
+        using common_type = common_type<decltype(a),decltype(b)>;
+        if constexpr ( int_type<common_type> )
+            return std::uniform_int_distribution<common_type>(a, b)(cpu::random_context);
+        else if constexpr ( float_type<common_type> )
+            return std::uniform_real_distribution<common_type>(a, b)(cpu::random_context);
+    }
 }

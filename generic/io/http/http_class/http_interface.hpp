@@ -30,7 +30,6 @@ class http_interface
         using path          = http_stream::path;
         using port          = http_stream::port;
         using proxy         = http_stream::proxy;
-        using timeout       = http_stream::timeout;
         using version       = http_stream::version;
 
     protected: // Modes (optional)

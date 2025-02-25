@@ -8,10 +8,7 @@ using namespace ap;
 
 int main ( )
 {
-    let stream = pipe_stream("zsh");
-    stream << "ifconfig" << std::endl
-           << "exit" << std::endl;
-
-    views::binary_istream<char>(stream) 
-        | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
+    let stream = http_stream("https://www.bilibili.com");
+    stream << std::flush;
+    views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
 }

@@ -13,6 +13,7 @@ class ssl::socket
         void connect ( auto&&... args )
         {
             self.next_layer().connect(std::forward<decltype(args)>(args)...);
+            try { SSL_set_tlsext_host_name(self.native_handle(), )}
             try { self.handshake(boost::asio::ssl::stream_base::client); } catch (...) { self.next_layer().close(); throw; }
         }   
 

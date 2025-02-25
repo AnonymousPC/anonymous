@@ -121,7 +121,7 @@ url basic_socket_buf<protocol>::local_endpoint ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(handle.local_endpoint()));
+        return "{}://{}"s.format(protocol::name(), handle.local_endpoint());
     }
     catch ( const boost::system::system_error& e )
     {
@@ -134,7 +134,7 @@ url basic_socket_buf<protocol>::remote_endpoint ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(handle.remote_endpoint()));
+        return "{}://{}"s.format(protocol::name(), handle.remote_endpoint());
     }
     catch ( const boost::system::system_error& e )
     {

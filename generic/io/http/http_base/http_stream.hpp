@@ -50,7 +50,6 @@ class http_stream
         using path          = http_buf::path;
         using port          = http_buf::port;
         using proxy         = http_buf::proxy;
-        using timeout       = http_buf::timeout;
         using version       = http_buf::version;
 
     private: // Data

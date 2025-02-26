@@ -7,11 +7,7 @@
 template < class protocol >
 void basic_socket_buf<protocol>::connect ( url website )
 {
-    // Check scheme.
-    if ( website.scheme() != protocol::name() )
-        throw network_error("unrecognized {} scheme (with url = {}, scheme = {}, expected = {})", protocol::name(), website, website.scheme(), protocol::name());
-
-    // Check port.
+    // Check port to be explicit.
     if ( website.port() == "" )
         throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol::name(), website);
 
@@ -40,11 +36,7 @@ void basic_socket_buf<protocol>::connect ( url website )
 template < class protocol >
 void basic_socket_buf<protocol>::listen ( url portal )
 {
-    // Check scheme.
-    if ( portal.scheme() != protocol::name() )
-        throw network_error("unrecognized {} scheme (with url = {}, scheme = {}, expected = {})", protocol::name(), portal, portal.scheme(), protocol::name());
-
-    // Check port.
+    // Check port to be explicit.
     if ( portal.port() == "" )
         throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol::name(), portal);
 
@@ -162,16 +154,12 @@ int basic_socket_buf<protocol>::overflow ( int c )
     try
     {
         // Send message.
-        if constexpr ( protocol::connection_oriented() )
-        {
-            int bytes = handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
-            std::move(send_buff.begin() + bytes, send_buff.end(), send_buff.begin());
-            setp(send_buff.end() - bytes,
-                 send_buff.end());
-        }
-        else 
-            throw network_error("send message failed: message size exceeds max_size (with local_endpoint = {}, remote_endpoint = {}, protocol = {}, limit = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol::name(), protocol::max_buffer_size());
-    
+        int bytes = handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
+
+        // Set put area
+        std::move(send_buff.begin() + bytes, send_buff.end(), send_buff.begin());
+        setp(send_buff.end() - bytes,
+             send_buff.end());
         *pptr() = traits_type::to_int_type(c);
         pbump(1);
         return traits_type::to_int_type(c);

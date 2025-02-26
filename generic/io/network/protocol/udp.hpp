@@ -12,8 +12,8 @@ class udp
     public:
         constexpr static string name                ( ) { return "udp"; }
         constexpr static bool   connection_oriented ( ) { return false; }
-        constexpr static int    default_buffer_size ( ) { return 65507; } // 65535 - 20(ip_header) - 8(udp_header)
-        constexpr static int    max_buffer_size     ( ) { return 65507; }
+        constexpr static int    default_buffer_size ( ) { return 65536; }
+        constexpr static int    max_buffer_size     ( ) { return 65536; }
 };
 
 class udp::acceptor
@@ -35,6 +35,9 @@ class udp::socket
         
         std::size_t read_some  ( auto&&... );
         std::size_t write_some ( auto&&... );
+
+    private:
+        string receive_buff = string();
 };
 
 #include "udp.ipp"

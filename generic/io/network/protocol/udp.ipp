@@ -16,12 +16,11 @@ void udp::acceptor::accept ( udp::socket& sock )
     sock.bind(local_edp);
 
     // Accept message.
-    let receive_buff = string(1, '\0'); // TODO: MUST BE AT LEAST 1 ???
     let remote_edp = endpoint();
     try
     {
-        sock.receive_from(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()), remote_edp);
-        print("receive ok!, remote_edp =", remote_edp);
+        throw exception("not coded yet");
+      //  sock.receive_from(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()), remote_edp);
     }
     catch ( const boost::system::system_error& )
     {

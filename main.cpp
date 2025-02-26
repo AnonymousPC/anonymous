@@ -9,29 +9,34 @@ using namespace ap;
 void client ( )
 {
     sleep(1s);
-    let stream = udp_stream();
-    stream.connect("udp://localhost:10000");
-    print("client: connect ok");
-    stream << "hello from client" << std::flush;
-    views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
+    print("client start!");
+    let stream = ssl_stream();
+    // stream.connect("ssl://127.0.0.1:12345");
+    // print("client: connect ok");
+    // views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
 }
 
 void server ( )
 {
-    let stream = udp_stream();
-    stream.listen("udp://localhost:10000");
+    let stream = ssl_stream();
+    stream.listen("ssl://127.0.0.1:12345");
     print("server: listen ok");
-    views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
-    stream << "hello from server" << std::flush;
     views::binary_istream<char>(std::cin) | std::ranges::to<views::binary_ostream<char>>(std::ref(stream));
+}
+
+void print_error ( std::exception_ptr ptr )
+{
+    try { std::rethrow_exception(ptr); } catch ( const std::exception& e ) { print(e.what()); }
 }
 
 int main ( )
 {
     let client_task = std::execution::schedule(cpu::execution_context.get_scheduler())
-                    | std::execution::then(client);
+                    | std::execution::then(client)
+                    | std::execution::upon_error(print_error);
     let server_task = std::execution::schedule(cpu::execution_context.get_scheduler())
-                    | std::execution::then(server);
+                    | std::execution::then(server)
+                    | std::execution::upon_error(print_error);
     std::execution::sync_wait(std::execution::when_all(server_task, client_task));
 
 }

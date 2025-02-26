@@ -92,7 +92,7 @@ class basic_http_buf
 
         void   set_client_request         ( const url&, const auto&... );
         void   set_server_response        ( const url&, const auto&... );
-        auto   resolve                    ( const url& );
+        auto   resolve_url                ( const url& );
         void   connect_without_proxy      ( const url& );
         void   connect_through_proxy      ( const url&, const url& );
         void   establish_proxy_tunnel     ( const url&, const url& )    requires same_as<protocol,ssl>;

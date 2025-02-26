@@ -130,7 +130,7 @@ namespace ap
     #include "pipe/pipe.hpp"
     #include "network/network.hpp"
     #include "socket/socket.hpp"
-    #include "http/http.hpp"
+    //#include "http/http.hpp"
     #include "sql/sql.hpp"
     #include "email/email.hpp"
     #include "initialize.hpp"

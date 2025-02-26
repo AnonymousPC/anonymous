@@ -337,7 +337,7 @@ void basic_http_buf<protocol>::set_server_response ( const url& portal, const au
 }
 
 template < class protocol >
-auto basic_http_buf<protocol>::resolve ( const url& website )
+auto basic_http_buf<protocol>::resolve_url ( const url& website )
 {
     try
     {
@@ -360,7 +360,7 @@ void basic_http_buf<protocol>::connect_without_proxy ( const url& website )
 {
     // Connect.
     let errpool = vector<detail::system_error>();
-    let ip_list = resolve(website);
+    let edp_list = resolve_url(website);
     for ( const auto& ip in ip_list )
         try
         {
@@ -373,15 +373,6 @@ void basic_http_buf<protocol>::connect_without_proxy ( const url& website )
         }
     if ( not errpool.empty() )
         throw network_error("connection failed (with remote_url = {}, remote_endpoint = {})", website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failed(errpool));
-
-    // SSL.
-    if ( same_as<protocol,ssl> )
-    {
-        // SSL server name indication.
-        let sni_success = SSL_set_tlsext_host_name(handle.native_handle(), website.host().c_str());
-        if ( not sni_success )
-            throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, layer = https/ssl)", local_endpoint_noexcept(), website, remote_endpoint_noexcept()).from(detail::system_error(boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category()))));
-    }
 }
 
 template < class protocol >

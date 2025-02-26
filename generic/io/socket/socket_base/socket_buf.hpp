@@ -23,16 +23,12 @@ class basic_socket_buf
         string local_endpoint_noexcept  ( ) const;
         string remote_endpoint_noexcept ( ) const;
         string protocol_name            ( ) const;
-        auto   resolve                  ( const url& );
-
-    private: // Typedef
-        constexpr static const int default_buffer_size = 4096;
+        auto   resolve_url              ( const url& );
 
     private: // Data
         typename protocol::socket handle       = typename protocol::socket(io_context);
         string                    send_buff    = "";
         string                    receive_buff = "";
-        bool                      received     = false; // Used in connectionless cases.
 };
 
 

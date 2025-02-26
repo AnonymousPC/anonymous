@@ -5,19 +5,19 @@ void basic_http_buf<protocol>::establish_proxy_tunnel ( const url& website, cons
 {
     // Establish proxy tunnel.
     let errpool = vector<detail::system_error>();
-    let ip_list = resolve(website);
-    for ( const auto& ip in ip_list )
+    let resolve_list = resolve_url(website);
+    for ( const auto& resolve_entry in resolve_list )
     {
         // Turn ip into string.
-        let ip_str = string(ip.endpoint().address().to_string()) + ':' + string(ip.endpoint().port());
+        let resolve_str = "{}:{}"s.format(resolve_entry.endpoint().address(), resolve_entry.endpoint().port());
 
         // Prepare "CONNECT" request and response.
         let tunnel_request  = boost::beast::http::request        <boost::beast::http::empty_body>();
         let tunnel_response = boost::beast::http::response_parser<boost::beast::http::empty_body>();
         let tunnel_buff     = boost::beast::flat_buffer();
         tunnel_request.method(boost::beast::http::verb::connect);
-        tunnel_request.target(ip_str.c_str());
-        tunnel_request.set(boost::beast::http::field::host,             ip_str.c_str());
+        tunnel_request.target(resolve_str.c_str());
+        tunnel_request.set(boost::beast::http::field::host,             resolve_str.c_str());
         tunnel_request.set(boost::beast::http::field::user_agent,       string(request_serializer->get()["User-Agent"]).c_str());
         tunnel_request.set(boost::beast::http::field::connection,       "keep-alive");
         tunnel_request.set(boost::beast::http::field::proxy_connection, "keep-alive");
@@ -29,18 +29,8 @@ void basic_http_buf<protocol>::establish_proxy_tunnel ( const url& website, cons
             let buff = boost::beast::flat_buffer();
             boost::beast::http::write(handle,       tunnel_request );
             boost::beast::http::read (handle, buff, tunnel_response);
-
             if ( tunnel_response.get().result_int() >= 300 and tunnel_response.get().result_int() <= 599 )
                 throw boost::system::system_error(boost::system::error_code(), "received {} {} from proxy server"s.format(tunnel_response.get().result_int(), tunnel_response.get().reason()));
-    
-            // SSL server name indication.
-            let sni_success = SSL_set_tlsext_host_name(handle.native_handle(), website.host().c_str());
-            if ( not sni_success )
-                throw boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category()));
-    
-            // SSL handshake.
-            https_handle->handshake(boost::asio::ssl::stream_base::client);
-
             break;
         }
         catch ( const boost::system::system_error& e )
@@ -52,7 +42,8 @@ void basic_http_buf<protocol>::establish_proxy_tunnel ( const url& website, cons
         throw network_error("establishment of proxy tunnel failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, proxy_url = {})", local_endpoint_noexcept(), website, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>(), proxy_website).from(detail::all_attempts_failed(errpool));
 }
 
-void http_buf::listen_to_port ( const url& portal )
+template < class protocol >
+void basic_http_buf<protocol>::listen_to_port ( const url& portal )
 {
     // Listen.
     let errpool = vector<detail::system_error>();
@@ -69,23 +60,6 @@ void http_buf::listen_to_port ( const url& portal )
         }
     if ( not errpool.empty() )
         throw network_error("listening failed (with local_url = {}, local_endpoint = {}, layer = socket)", portal, ip_list | std::ranges::to<vector<boost::asio::ip::tcp::endpoint>>()).from(detail::all_attempts_failed(errpool));
-
-    // SSL
-    if ( portal.scheme() == "https" )
-    {
-        // Create SSL handle.
-        https_handle = std::make_unique<boost::asio::ssl::stream<boost::asio::ip::tcp::socket&>>(*http_handle, ssl_context);
-
-        // SSL handshake.
-        try
-        {
-            https_handle->handshake(boost::asio::ssl::stream_base::server);
-        }
-        catch ( const boost::system::system_error& e )
-        {
-            throw network_error("listening failed (with local_url = {}, local_endpoint = {}, remote_endpoint = {}, layer = https/ssl)", portal, local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
-        }
-    }
 }
 
 

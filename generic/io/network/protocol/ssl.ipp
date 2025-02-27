@@ -1,11 +1,9 @@
 #pragma once
 
-void ssl::acceptor::accept ( ssl::socket& sock, auto&&... args )
+void ssl::acceptor::accept ( auto&& sock, auto&&... args )
 {
-    // TCP connect
     self.tcp::acceptor::accept(sock.next_layer(), std::forward<decltype(args)>(args)...);
 
-    // Handshake
     try
     {
         sock.handshake(boost::asio::ssl::stream_base::server);
@@ -25,18 +23,15 @@ ssl::socket::socket ( auto&&... args )
 
 void ssl::socket::connect ( auto&&... args )
 {
-    // TCP connect
     self.next_layer().connect(std::forward<decltype(args)>(args)...);
 
-    // // SNI
-    // if constexpr ( requires { first_value_of(args...).host_name(); } )
-    // {
-    //     let sni = SSL_set_tlsext_host_name(self.native_handle(), first_value_of(args...).host_name().c_str());
-    //     if ( not sni )
-    //         throw boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category()));
-    // }
+    if constexpr ( requires { first_value_of(args...).host_name(); } )
+    {
+        let sni = SSL_set_tlsext_host_name(self.native_handle(), first_value_of(args...).host_name().c_str());
+        if ( not sni )
+            throw boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category()));
+    }
 
-    // Handshake
     try
     { 
         self.handshake(boost::asio::ssl::stream_base::client);

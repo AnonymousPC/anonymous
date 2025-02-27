@@ -1,9 +1,5 @@
 #pragma once
 
-/// Class basic_socket_buf (connection-oriented)
-
-// Interface
-
 template < class protocol >
 void basic_socket_buf<protocol>::connect ( url website )
 {
@@ -46,7 +42,12 @@ void basic_socket_buf<protocol>::listen ( url portal )
     for ( const auto& resolve_entry in resolve_results )
         try
         {
-            typename protocol::acceptor(io_context, resolve_entry.endpoint()).accept(handle);
+            if constexpr ( requires { typename protocol::acceptor; } )
+                typename protocol::acceptor(io_context, resolve_entry.endpoint()).accept(handle);
+            else
+            {
+                handle.open(resolve_entry.address().is_v4() ? protocol::v4() )
+            }
             break;
         }
         catch ( const boost::system::system_error& e )

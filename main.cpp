@@ -8,13 +8,12 @@ using namespace ap;
 
 void client ( )
 {
-    sleep(1s);
     print("client.start");
     let stream = udp_stream();
     stream.connect("udp://127.0.0.1:12345");
     print("client: connect ok");
-    stream << "hello, world" << std::endl;
-    stream << "nice, Alex" << std::endl;
+    sleep(5s);
+    stream << string(65500, 'a') << std::flush;
     print("client.quit");
     stream.close();
     
@@ -23,17 +22,17 @@ void client ( )
 void server ( )
 {
     let stream = udp_stream();
+    print("server hello");
     stream.listen("udp://127.0.0.1:12345");
-    print("server: listen ok");
-    views::binary_istream<char>(stream)
-        | std::views::take_while([] (const auto& ch) { return ch != '\n'; })
-        | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
-    sleep(10s);
+    views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout)); print();
+    stream.clear();
+    views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout)); print();
+    print("server.quit");
 }
 
 void print_error ( std::exception_ptr ptr )
 {
-    try { std::rethrow_exception(ptr); } catch ( const std::exception& e ) { print(e.what()); }
+    try { std::rethrow_exception(ptr); } catch ( const std::exception& e ) { print("ERROR", e.what()); }
 }
 
 int main ( )

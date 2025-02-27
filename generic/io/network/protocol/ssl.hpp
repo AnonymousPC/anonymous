@@ -1,28 +1,12 @@
 #pragma once
 
-class ssl
-    extends public tcp
-{
-    public:
-        class acceptor;
-        using endpoint = tcp::endpoint;
-        using resolver = tcp::resolver;
-        class socket;
-
-    public:
-        constexpr static string name                ( ) { return "ssl"; }
-        constexpr static bool   connection_oriented ( ) { return true; }
-        constexpr static int    default_buffer_size ( ) { return 4096; }
-        constexpr static int    max_buffer_size     ( ) { return std::numeric_limits<int>::max(); }
-};
-
 class ssl::acceptor
     extends public tcp::acceptor
 {
     public:
         using tcp::acceptor::acceptor;
         
-        void accept ( ssl::socket&, auto&&... );
+        void accept ( auto&&, auto&&... );
 };
 
 class ssl::socket

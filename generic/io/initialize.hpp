@@ -11,12 +11,10 @@ namespace detail
         static string dh_file;
     };
 
-    #if dll
     io_initializer_t::io_initializer_t ( )
     {
         try
         {
-
             ssl_context.set_default_verify_paths();
             ssl_context.set_options(boost::asio::ssl::context_base::default_workarounds
                                    |boost::asio::ssl::context_base::no_sslv2
@@ -24,7 +22,6 @@ namespace detail
             ssl_context.use_certificate_chain(boost::asio::buffer(cert_file.data(), cert_file.size()));
             ssl_context.use_private_key      (boost::asio::buffer(key_file .data(), key_file .size()), boost::asio::ssl::context::pem);
             ssl_context.use_tmp_dh           (boost::asio::buffer(dh_file  .data(), dh_file  .size()));
-
         }
         catch ( const boost::system::system_error& e )
         {
@@ -98,7 +95,6 @@ namespace detail
         "WTWN5lmI5xWS22d5TaHkP+/OsabXOoD5xTdBLJcGX1cE9XVOsSX2y8C9C6KTW6e8\n"
         "Rnk9frvt1++YMNIs4GZZsNpMoNhmnhFcVwIBAgICAOE=\n"
         "-----END DH PARAMETERS-----\n";
-    #endif
 
     io_initializer_t io_initializer;
 }

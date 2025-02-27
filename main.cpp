@@ -9,19 +9,26 @@ using namespace ap;
 void client ( )
 {
     sleep(1s);
-    print("client start!");
-    let stream = ssl_stream();
-    // stream.connect("ssl://127.0.0.1:12345");
-    // print("client: connect ok");
-    // views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
+    print("client.start");
+    let stream = udp_stream();
+    stream.connect("udp://127.0.0.1:12345");
+    print("client: connect ok");
+    stream << "hello, world" << std::endl;
+    stream << "nice, Alex" << std::endl;
+    print("client.quit");
+    stream.close();
+    
 }
 
 void server ( )
 {
-    let stream = ssl_stream();
-    stream.listen("ssl://127.0.0.1:12345");
+    let stream = udp_stream();
+    stream.listen("udp://127.0.0.1:12345");
     print("server: listen ok");
-    views::binary_istream<char>(std::cin) | std::ranges::to<views::binary_ostream<char>>(std::ref(stream));
+    views::binary_istream<char>(stream)
+        | std::views::take_while([] (const auto& ch) { return ch != '\n'; })
+        | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
+    sleep(10s);
 }
 
 void print_error ( std::exception_ptr ptr )

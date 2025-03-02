@@ -55,19 +55,18 @@ namespace ap
     int  exit_process      ( int );
     int  terminate_process ( int );
 
-    /// Network
-    class tcp;
-    class udp;
-    class icmp;
-    class ssl;
-    class url;
-
     /// Socket
+    using tcp  = boost::asio::ip::tcp;
+    using udp  = boost::asio::ip::udp;
+    using icmp = boost::asio::ip::icmp;
+    class ssl;
     template < class protocol > class basic_socket_stream;
     using tcp_stream  = basic_socket_stream<tcp>;
     using udp_stream  = basic_socket_stream<udp>;
     using icmp_stream = basic_socket_stream<icmp>;
     using ssl_stream  = basic_socket_stream<ssl>;
+
+    class url;
 
     /// Http
     // template < class protocol > class basic_http_stream;
@@ -128,11 +127,10 @@ namespace ap
     #include "utility/utility.hpp" // First.
     #include "file/file.hpp"
     #include "pipe/pipe.hpp"
-    #include "network/network.hpp"
     #include "socket/socket.hpp"
-    #include "http/http.hpp"
+    //#include "http/http.hpp"
     #include "sql/sql.hpp"
-    #include "email/email.hpp"
+    //#include "email/email.hpp"
     #include "initialize.hpp"
 
     /// Literal

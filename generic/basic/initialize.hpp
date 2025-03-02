@@ -15,7 +15,6 @@ namespace detail
         static void terminate_signal_handler                ( int );
     };
     
-    #if dll
     basic_initializer_t::basic_initializer_t ( )
     {
         // Stdio
@@ -146,7 +145,6 @@ namespace detail
     {
         throw ap::terminate_signal("SIGTERM (termination signal)");
     }
-    #endif
 
     basic_initializer_t basic_initializer;
 }

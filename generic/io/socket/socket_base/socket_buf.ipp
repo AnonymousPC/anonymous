@@ -1,27 +1,20 @@
 #pragma once
 
-/// Class basic_socket_buf (connection-oriented)
-
-// Interface
-
 template < class protocol >
 void basic_socket_buf<protocol>::connect ( url website )
 {
-    // Check scheme.
-    if ( website.scheme() != protocol::name() )
-        throw network_error("unrecognized {} scheme (with url = {}, scheme = {}, expected = {})", protocol::name(), website, website.scheme(), protocol::name());
+    if ( website.scheme() != protocol_name() )
+        throw network_error("unrecognized {} scheme (with url = {}, scheme = {}, expected = {})", protocol_name(), website, website.scheme(), protocol_name());
 
-    // Check port.
     if ( website.port() == "" )
-        throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol::name(), website);
+        throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol_name(), website);
 
-    // Connect.
     let errpool = vector<detail::system_error>();
-    let ip_list = resolve(website);
-    for ( const auto& ip in ip_list )
+    let resolve_results = resolve_url(website);
+    for ( const auto& resolve_entry in resolve_results )
         try
         {
-            handle.connect(ip);
+            handle.connect(resolve_entry);
             break;
         }
         catch ( const boost::system::system_error& e )
@@ -29,47 +22,35 @@ void basic_socket_buf<protocol>::connect ( url website )
             errpool.push(detail::system_error(e));
         }
     if ( not errpool.empty() )
-        throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), website, ip_list | std::ranges::to<vector<typename protocol::endpoint>>(), protocol::name()).from(detail::all_attempts_failed(errpool));
+        throw network_error("connection failed (with local_endpoint = {}, remote_url = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), website, resolve_results | std::ranges::to<vector<typename protocol::endpoint>>(), protocol_name()).from(detail::all_attempts_failed(errpool));
 }
 
 template < class protocol >
 void basic_socket_buf<protocol>::listen ( url portal )
 {
-    // Check scheme.
-    if ( portal.scheme() != protocol::name() )
-        throw network_error("unrecognized {} scheme (with url = {}, scheme = {}, expected = {})", protocol::name(), portal, portal.scheme(), protocol::name());
+    if ( portal.scheme() != protocol_name() )
+        throw network_error("unrecognized {} scheme (with url = {}, scheme = {}, expected = {})", protocol_name(), portal, portal.scheme(), protocol_name());
 
-    // Check port.
     if ( portal.port() == "" )
-        throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol::name(), portal);
+        throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol_name(), portal);
 
-    // Listen.
     let errpool = vector<detail::system_error>();
-    let ip_list = resolve(portal);
-    for ( const auto& ip in ip_list )
+    let resolve_results = resolve_url(portal);
+    for ( const auto& resolve_entry in resolve_results )
         try
         {
-            if constexpr ( protocol::connection_oriented() )
-                // Accept a connection.
-                typename protocol::acceptor(io_context, ip).accept(handle);
+            if constexpr ( requires { typename protocol::acceptor; } )
+                typename protocol::acceptor(io_context, resolve_entry).accept(handle);
 
-            else // if constexpr ( not protocol::connection_oriented() )
+            else
             {
-                // Bind the local endpoint.
-                if ( ip.endpoint().address().is_v4() )
-                    handle.open(protocol::v4());
-                else
-                    handle.open(protocol::v6());
-                handle.bind(ip.endpoint());
+                handle.open(resolve_entry.endpoint().protocol());
+                handle.bind(resolve_entry.endpoint());
 
-                // Accept whole message. The maximum length is fixed to 65535 in connectionless protocols (udp, icmp).
-                receive_buff.resize(65535);
-                let endpoint = typename protocol::endpoint();
-                int bytes    = handle.receive_from(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()), endpoint);
-                handle.connect(endpoint);
-                received = true;
-
-                // Set get area.
+                receive_buff.resize(default_buffer_size);
+                let remote_edp = typename protocol::endpoint();
+                int bytes = handle.receive_from(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()), remote_edp);
+                handle.connect(remote_edp);
                 setg(receive_buff.begin(),
                      receive_buff.begin(),
                      receive_buff.begin() + bytes);
@@ -82,7 +63,7 @@ void basic_socket_buf<protocol>::listen ( url portal )
             errpool.push(detail::system_error(e));
         }
     if ( not errpool.empty() )
-        throw network_error("listening failed (with local_url = {}, local_endpoint = {}, protocol = {})", portal, ip_list | std::ranges::to<vector<typename protocol::endpoint>>(), protocol::name()).from(detail::all_attempts_failed(errpool));
+        throw network_error("listening failed (with local_url = {}, local_endpoint = {}, protocol = {})", portal, resolve_results | std::ranges::to<vector<typename protocol::endpoint>>(), protocol_name()).from(detail::all_attempts_failed(errpool));
 }
 
 template < class protocol >
@@ -90,21 +71,18 @@ void basic_socket_buf<protocol>::close ( )
 {
     try
     {
-        // Shutdown and close.
         handle.shutdown(boost::asio::socket_base::shutdown_both);
         handle.close();
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol::name()).from(detail::system_error(e));     
+        throw network_error("disconnection failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol_name()).from(detail::system_error(e));     
     }
 
-    // Reset params.
     send_buff   .clear();
     receive_buff.clear();
     setp(nullptr, nullptr);
     setg(nullptr, nullptr, nullptr);
-    received = false;
 }
 
 template < class protocol >
@@ -148,96 +126,80 @@ url basic_socket_buf<protocol>::remote_endpoint ( ) const
 template < class protocol >
 int basic_socket_buf<protocol>::underflow ( )
 {
-    if constexpr ( protocol::connection_oriented() )
-        try
-        {
-            // Receive message.
-            if ( receive_buff == "" )
-                receive_buff.resize(default_buffer_size);
-            int bytes = handle.read_some(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
+    try
+    {
+        if ( receive_buff == "" )
+            receive_buff.resize(default_buffer_size);
 
-            // Set get area.
+        if constexpr ( requires { handle.read_some(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size())); })
+        {
+            int bytes = handle.read_some(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
             setg(receive_buff.begin(),
                  receive_buff.begin(),
                  receive_buff.begin() + bytes);
-            return traits_type::to_int_type(*gptr());
-        }
-        catch ( const boost::system::system_error& e )
-        {
-            if ( e.code() == boost::asio::error::eof )
-                return traits_type::eof();
-            else
-                throw network_error("receive message failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol::name()).from(detail::system_error(e));
         }
 
-    else // if constexpr ( not protocol::connection_oriented() )
-        try
-        {
-            if ( not received ) // Datagram has not been received: then receive new message.
+        else
+            if ( eback() == egptr() )
             {
-                // Receive new message. The maximum length is fixed to 65535 in connectionless protocols (udp, icmp).
-                receive_buff.resize(65535);
-                int bytes = boost::asio::read(handle, boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
-                received = true;
-
-                // Set get area.
+                int bytes = handle.receive(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()));
                 setg(receive_buff.begin(),
                      receive_buff.begin(),
                      receive_buff.begin() + bytes);
-                return traits_type::to_int_type(*gptr());
             }
-
-            else // Datagram has been received: then notify eof.
+            else
             {
-                // End of message.
-                received = false;
+                setg(nullptr,
+                     nullptr,
+                     nullptr); // Reset everything to nullptr, which looks like we are the first time receiving message.
                 return traits_type::eof();
             }
-        }
-        catch ( const boost::system::system_error& e )
-        {
-            throw network_error("receive message failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol::name()).from(detail::system_error(e));
-        }
+
+        return traits_type::to_int_type(*gptr());
+    }
+    catch ( const boost::system::system_error& e )
+    {
+        if ( e.code() == boost::asio::error::eof )
+            return traits_type::eof();
+        else
+            throw network_error("receive message failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol_name()).from(detail::system_error(e));
+    }
 }
 
 template < class protocol >
 int basic_socket_buf<protocol>::overflow ( int c )
 {
-    if constexpr ( protocol::connection_oriented() )
-        try
+    try
+    {
+        if ( send_buff == "" )
         {
-            // Send message if buffer is full, or create buffer space at first for further writing. Connection-oriented protocol allows chunk message.
-            int bytes = default_buffer_size;
-            if ( send_buff == "" )
-                send_buff.resize(default_buffer_size);
-            else
-                bytes = handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
+            send_buff.resize(default_buffer_size);
+            setp(send_buff.begin(),
+                 send_buff.end());
+        }
 
-            // Set put area.
+        else if constexpr ( requires { handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size())); })
+        {
+            int bytes = handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
             std::move(send_buff.begin() + bytes, send_buff.end(), send_buff.begin());
             setp(send_buff.end() - bytes,
                  send_buff.end());
-            *pptr() = traits_type::to_int_type(c);
-            pbump(1);
-            return traits_type::to_int_type(c);
         }
-        catch ( const boost::system::system_error& e )
+
+        else
         {
-            throw network_error("send message failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol::name()).from(detail::system_error(e));
+            handle.send(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
+            setp(send_buff.begin(),
+                 send_buff.end());
         }
 
-    else // if constexpr ( not protocol::connection_oriented() )
-    {
-        // Prepare more buffer. Connectionless protocol demands the whole message to be sent in once.
-        send_buff.resize(send_buff.size() + default_buffer_size);
-
-        // Set put area.
-        setp(send_buff.begin(),
-             send_buff.end());
-        pbump(send_buff.size() - default_buffer_size);
         *pptr() = traits_type::to_int_type(c);
         pbump(1);
         return traits_type::to_int_type(c);
+    }
+    catch ( const boost::system::system_error& e )
+    {
+        throw network_error("send message failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol_name()).from(detail::system_error(e));
     }
 }
 
@@ -246,17 +208,14 @@ int basic_socket_buf<protocol>::sync ( )
 {
     try
     {
-        // Send message.
-        boost::asio::write(handle, boost::asio::const_buffer(send_buff.data(), pptr() - send_buff.data()));
-
-        // Set put area.
-        setp(send_buff.data(),
-             send_buff.data() + send_buff.size());
+        handle.send(boost::asio::const_buffer(send_buff.begin(), pptr() - send_buff.begin()));
+        setp(send_buff.begin(),
+             send_buff.end());
         return 0;
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("send message failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol::name()).from(detail::system_error(e));
+        throw network_error("send message failed (with local_endpoint = {}, remote_endpoint = {}, protocol = {})", local_endpoint_noexcept(), remote_endpoint_noexcept(), protocol_name()).from(detail::system_error(e));
     }
 }
 
@@ -269,7 +228,7 @@ string basic_socket_buf<protocol>::local_endpoint_noexcept ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(handle.local_endpoint()));
+        return "{}://{}"s.format(protocol_name(), string(handle.local_endpoint()));
     }
     catch ( const boost::system::system_error& e )
     {
@@ -282,7 +241,7 @@ string basic_socket_buf<protocol>::remote_endpoint_noexcept ( ) const
 {
     try
     {
-        return "{}://{}"s.format(protocol::name(), string(handle.remote_endpoint()));
+        return "{}://{}"s.format(protocol_name(), string(handle.remote_endpoint()));
     }
     catch ( const boost::system::system_error& e )
     {
@@ -291,7 +250,13 @@ string basic_socket_buf<protocol>::remote_endpoint_noexcept ( ) const
 }
 
 template < class protocol >
-auto basic_socket_buf<protocol>::resolve ( const url& website )
+string basic_socket_buf<protocol>::protocol_name ( ) const
+{
+    return string(typeid(protocol)).right_partition("::")[-1];
+}
+
+template < class protocol >
+auto basic_socket_buf<protocol>::resolve_url ( const url& website ) const
 {
     try
     {
@@ -301,6 +266,6 @@ auto basic_socket_buf<protocol>::resolve ( const url& website )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("resolution failed (with local_endpoint = {}, remote_url = {}, protocol = {})", local_endpoint_noexcept(), website, protocol::name()).from(detail::system_error(e));
+        throw network_error("resolution failed (with local_endpoint = {}, remote_url = {}, protocol = {})", local_endpoint_noexcept(), website, protocol_name()).from(detail::system_error(e));
     }
 }

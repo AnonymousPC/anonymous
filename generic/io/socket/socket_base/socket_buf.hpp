@@ -22,8 +22,6 @@ class basic_socket_buf
     private: // Auxiliary
         string local_endpoint_noexcept  ( )            const;
         string remote_endpoint_noexcept ( )            const;
-        int    send_buffer_size         ( )            const;
-        int    receive_buffer_size      ( )            const;
         string protocol_name            ( )            const;
         auto   resolve_url              ( const url& ) const;
 
@@ -32,6 +30,7 @@ class basic_socket_buf
         string                    send_buff    = "";
         string                    receive_buff = "";
 
+    private: // Detail
         constexpr static const int default_buffer_size = 65536;
 };
 

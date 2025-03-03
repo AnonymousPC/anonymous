@@ -1,0 +1,4 @@
+main.cpp:9:8: fatal error: module 'boost' not found
+    9 | import boost;
+      | ~~~~~~~^~~~~
+1 error generated.

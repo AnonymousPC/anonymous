@@ -1,20 +1,21 @@
 #pragma once
 
-class http_stream
+template < class protocol >
+class basic_http_stream
     extends public std::iostream
 {
     public: // Core
-        http_stream  ( );
-        http_stream  ( url, http_client_mode auto... );
-        http_stream  ( http_stream&& );
-       ~http_stream  ( );
-        http_stream& operator = ( http_stream&& );
+        basic_http_stream  ( );
+        basic_http_stream  ( url, http_client_mode auto... );
+        basic_http_stream  ( basic_http_stream&& );
+       ~basic_http_stream  ( );
+        basic_http_stream& operator = ( basic_http_stream&& );
 
     public: // Interface
-        http_stream& connect ( url, http_client_mode auto... );
-        http_stream& listen  ( url, http_server_mode auto... );
-        http_stream& close   ( );
-        bool         is_open ( ) const;
+        basic_http_stream& connect ( url, http_client_mode auto... );
+        basic_http_stream& listen  ( url, http_server_mode auto... );
+        basic_http_stream& close   ( );
+        bool               is_open ( ) const;
 
     public: // Interface (cache)
               url                 local_endpoint       ( ) const;
@@ -38,29 +39,23 @@ class http_stream
               map<string,string>& response_header      ( );
         const map<string,string>& response_header      ( ) const;
 
-    public: // Override
-        std::ostream& flush ( );
-
     public: // Modes
-        using authorization = http_buf::authorization;
-        using cookie        = http_buf::cookie;
-        using header        = http_buf::header;
-        using method        = http_buf::method;
-        using param         = http_buf::param;
-        using path          = http_buf::path;
-        using port          = http_buf::port;
-        using proxy         = http_buf::proxy;
-        using timeout       = http_buf::timeout;
-        using version       = http_buf::version;
+        using authorization = basic_http_buf<protocol>::authorization;
+        using cookie        = basic_http_buf<protocol>::cookie;
+        using header        = basic_http_buf<protocol>::header;
+        using method        = basic_http_buf<protocol>::method;
+        using param         = basic_http_buf<protocol>::param;
+        using path          = basic_http_buf<protocol>::path;
+        using port          = basic_http_buf<protocol>::port;
+        using proxy         = basic_http_buf<protocol>::proxy;
+        using timeout       = basic_http_buf<protocol>::timeout;
+        using version       = basic_http_buf<protocol>::version;
 
     private: // Data
-        std::unique_ptr<http_buf> buff_ptr = std::make_unique<http_buf>();
+        std::unique_ptr<basic_http_buf<protocol>> buff_ptr = std::make_unique<basic_http_buf<protocol>>();
 };
 
 
 
 
 #include "http_stream.ipp"
-#if dll
-    #include "http_stream.cpp"
-#endif

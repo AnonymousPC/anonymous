@@ -16,9 +16,6 @@ class pipe_stream
         bool         is_open    ( ) const;
         bool         is_running ( ) const;
 
-    public: // Override
-        std::ostream& flush ( );
-
     public: // Modes
         using environment     = pipe_buf::environment;
         using param           = pipe_buf::param;

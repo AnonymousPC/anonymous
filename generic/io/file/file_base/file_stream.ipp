@@ -7,10 +7,7 @@ struct file_stream::append     extends public detail::io_mode<bool> { using deta
 
 file_stream::file_stream ( path pth, file_mode auto... args )
 {
-    // Set exception cases.
     exceptions(std::ios::badbit);
-
-    // Open
     open(pth, std::forward<decltype(args)>(args)...);
 }
 

@@ -7,10 +7,7 @@
 pipe_stream::pipe_stream ( )
     extends std::iostream ( nullptr )
 {
-    // Initialize
-    rdbuf(buff_ptr.get()); // Buff is contructed after std::iostream, so "extends std::iostream(&buff)" will cause segfault.
-
-    // Set exception cases.
+    rdbuf(buff_ptr.get());
     exceptions(std::ios::badbit);
 }
 
@@ -28,7 +25,6 @@ pipe_stream::pipe_stream ( pipe_stream&& init )
 
 pipe_stream::~pipe_stream ( )
 {
-    // Reset exception cases.
     exceptions(std::ios::iostate());
 }
 
@@ -49,52 +45,21 @@ pipe_stream& pipe_stream::operator = ( pipe_stream&& right )
 
 pipe_stream& pipe_stream::close ( )
 {
-    let ptr = dynamic_cast<pipe_buf*>(rdbuf());
-    if ( ptr != nullptr )
-        ptr->close();
-    else
-        throw pipe_error("pipe_stream.rdbuf() does not point to a pipe_buf (with common = {}, current = {}, expected = {})",
-                         typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(pipe_buf));
+    static_cast<pipe_buf*>(rdbuf())->close();
     clear();
-    
     return self;
 }
 
 bool pipe_stream::is_open ( ) const
 {
-    let ptr = dynamic_cast<pipe_buf*>(rdbuf());
-    if ( ptr != nullptr )
-        return ptr->is_open();
-    else
-        throw pipe_error("pipe_stream.rdbuf() does not point to a pipe_buf (with common = {}, current = {}, expected = {})",
-                         typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(pipe_buf));
+    return static_cast<const pipe_buf*>(rdbuf())->is_open();
 }
 
 bool pipe_stream::is_running ( ) const
 {
-    let ptr = dynamic_cast<pipe_buf*>(rdbuf());
-    if ( ptr != nullptr )
-        return ptr->is_running();
-    else
-        throw pipe_error("pipe_stream.rdbuf() does not point to a pipe_buf (with common = {}, current = {}, expected = {})",
-                         typeid(std::streambuf), ptr != nullptr ? typeid(*ptr) otherwise typeid(nullptr), typeid(pipe_buf));
+    return static_cast<const pipe_buf*>(rdbuf())->is_running();
 }
 
-
-// Override
-
-std::ostream& pipe_stream::flush ( )
-{
-    if ( rdbuf() != nullptr )
-    {
-        std::ostream::sentry(self);
-        let success = rdbuf()->pubsync(); // May throws pipe_error (instead of std::ios_base::failure).
-        if ( success == -1 )
-            setstate(std::ios::badbit);
-    }
-
-    return self;
-}
 
 
 

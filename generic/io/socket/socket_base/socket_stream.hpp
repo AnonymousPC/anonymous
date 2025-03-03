@@ -12,10 +12,10 @@ class basic_socket_stream
         basic_socket_stream& operator = ( basic_socket_stream&& );
 
     public: // Interface
-        void connect ( url );
-        void listen  ( url );
-        void close   ( );
-        bool is_open ( ) const;
+        basic_socket_stream& connect ( url );
+        basic_socket_stream& listen  ( url );
+        basic_socket_stream& close   ( );
+        bool                 is_open ( ) const;
 
     public: // Interface
         url local_endpoint  ( ) const;

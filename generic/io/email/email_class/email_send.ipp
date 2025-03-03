@@ -85,15 +85,15 @@ email_send::email_send ( email_mode auto... args )
     let stream = ssl_stream(url(email_server));
     stream << "EHLO localhost\r\n"
            << "AUTH LOGIN\r\n"
-           << "{}\r\n"s                                             .format(email_username | views::encode_base64 | std::ranges::to<string>())
-           << "{}\r\n"s                                             .format(email_password | views::encode_base64 | std::ranges::to<string>())
-           << "MAIL FROM:<{}>\r\n"s                                 .format(email_from)
-           <</*RCPT TO:<{}>\r\n*/"{}"s                              .format(array<array<string>>{email_to, email_cc, email_bcc}
-                                                                               | std::views::join
-                                                                               | std::ranges::to<set<string>>()
-                                                                               | std::views::transform([] (const auto& rcpt) { return "RCPT TO:<{}>\r\n"s.format(rcpt); })
-                                                                               | std::views::join
-                                                                               | std::ranges::to<string>())
+           << "{}\r\n"s                                  .format(email_username | views::encode_base64 | std::ranges::to<string>())
+           << "{}\r\n"s                                  .format(email_password | views::encode_base64 | std::ranges::to<string>())
+           << "MAIL FROM:<{}>\r\n"s                      .format(email_from)
+           <</*RCPT TO:<{}>\r\n*/"{}"s                   .format(array<array<string>>{email_to, email_cc, email_bcc}
+                                                                    | std::views::join
+                                                                    | std::ranges::to<set<string>>()
+                                                                    | std::views::transform([] (const auto& rcpt) { return "RCPT TO:<{}>\r\n"s.format(rcpt); })
+                                                                    | std::views::join
+                                                                    | std::ranges::to<string>())
 
            << "DATA\r\n"
            << "From: {}\r\n"s                            .format(email_from)
@@ -133,18 +133,27 @@ email_send::email_send ( email_mode auto... args )
 
     // Check response.
     let line_count = 1;
-    let response = views::binary_istream<char>(stream)
-                 | std::views::lazy_split('\n')
-                 | std::views::transform([&] (const auto& line)
-                     {
-                         let str = line
-                                 | std::ranges::to<string>();
-                         if ( str.size() >= 4 and str[1,3].is_digit() and str[4,4].is_space() )
-                             line_count++;
-                         return not str.ends_with('\r') ? str otherwise str.pop();
-                     })
-                 | std::views::take_while([&] (const auto&) { return line_count <= 9; })
-                 | std::ranges::to<vector<string>>();
+    let response   = vector<string>();
+    try
+    {
+        std::ranges::for_each(
+            views::binary_istream<char>(stream)
+                | std::views::take_while([&] (const auto&) { return line_count <= 9; })
+                | std::views::lazy_split('\n'),
+            [&] (const auto& line)
+                {
+                    let str = line | std::ranges::to<string>();
+                    if ( str.size() >= 4 and str[1,3].is_digit() and str[4,4].is_space() )
+                        line_count++;
+                    response.push(std::move(not str.ends_with('\r') ? str otherwise str.pop()));
+                }
+        );
+    }
+    catch ( network_error& )
+    {
+        response.push("...");
+    }
+
     if ( response.exist([] (const auto& line) { return line.begins_with('4') or line.begins_with('5'); }) )
         throw network_error("send email failed (with server_response = [[see_below]])\n"
                             "{}", response | std::views::join_with('\n') | std::ranges::to<string>());

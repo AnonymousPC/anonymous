@@ -64,6 +64,7 @@ template < class type >
 class range<type>::const_iterator
 {
     public: // Typedef
+        using iterator_concept  = std::random_access_iterator_tag;
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = range<type>::value_type;
         using pointer           = value_type*;

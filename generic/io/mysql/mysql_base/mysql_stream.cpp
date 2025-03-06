@@ -1,11 +1,11 @@
 #pragma once
 
-matrix<typename sql_stream::value_type> sql_stream::execute_result ( const boost::mysql::results& results )
+matrix<typename mysql_stream::value_type> mysql_stream::execute_result ( const boost::mysql::results& results )
 {
     return matrix<value_type>(results.rows().size(), results.rows().num_columns(), [&] (int i, int j) { return make_result_arg(results.rows()[i-1][j-1]); });
 }
 
-sql_stream::value_type sql_stream::make_result_arg ( const boost::mysql::field_view& field )
+mysql_stream::value_type mysql_stream::make_result_arg ( const boost::mysql::field_view& field )
 {
     switch ( field.kind() )
     {

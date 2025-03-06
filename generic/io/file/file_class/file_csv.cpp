@@ -100,9 +100,10 @@ class ranges::csv_lazy_split_view<range,pattern>::iterator
         constexpr iterator& operator ++ ( int );
 
     public: // Typedef
-        using iterator_concept = std::input_iterator_tag;
-        using difference_type  = std::ptrdiff_t;
-        class value_type;
+        using iterator_concept  = std::input_iterator_tag;
+     // using iterator_category = not supported;
+        class value_type; 
+        using difference_type   = std::ptrdiff_t;
 };
 
 template < class range, class pattern >

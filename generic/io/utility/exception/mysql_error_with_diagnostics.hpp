@@ -2,11 +2,11 @@
 
 namespace detail
 {
-    class sql_error_with_diagnostics
+    class mysql_error_with_diagnostics
         extends public boost::mysql::error_with_diagnostics
     {
         public: // Core
-            sql_error_with_diagnostics ( const boost::mysql::error_with_diagnostics& );
+            mysql_error_with_diagnostics ( const boost::mysql::error_with_diagnostics& );
 
         public: // What
             virtual const char* what ( ) const noexcept;
@@ -17,5 +17,5 @@ namespace detail
 } // namespace detail
 
 #if dll
-    #include "sql_error_with_diagnostics.cpp"
+    #include "mysql_error_with_diagnostics.cpp"
 #endif

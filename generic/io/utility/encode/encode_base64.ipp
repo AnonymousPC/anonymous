@@ -48,9 +48,10 @@ struct ranges::encode_base64_view<range>::iterator
         int                         t = 0;                             // Total size we had encoded to output. we should append '=' if output.size() % 4 != 0.
 
     public: // Typedef
-        using iterator_concept = std::input_iterator_tag;
-        using value_type       = char;
-        using difference_type  = std::ptrdiff_t;
+        using iterator_concept  = std::input_iterator_tag;
+     // using iterator_category = not supported; 
+        using value_type        = char;
+        using difference_type   = std::ptrdiff_t;
 
     public: // Interface
         constexpr iterator ( ) = default;

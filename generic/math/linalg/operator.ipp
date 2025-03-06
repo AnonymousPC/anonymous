@@ -34,7 +34,7 @@ constexpr array_type auto operator + ( const array_type auto& left, const array_
     using device     = left_device_type;
     using value_type = decltype(std::declval<left_value_type>() + std::declval<right_value_type>());
     let output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
-    device_linalg_2_1(plus, left, right, output);
+    left.mdspan().visit([&] (const auto& lspan) { return right.mdspan().visit([&] (const auto& rspan) { return device::linalg::plus(lspan, rspan, output.mdspan().template value<1>()); }); });
     return output;
 }
 

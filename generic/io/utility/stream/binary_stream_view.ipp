@@ -30,9 +30,10 @@ template < class stream_type, class input_type, std::endian endian >
 class ranges::binary_istream_view<stream_type,input_type,endian>::iterator
 {
     public: // Typedef
-        using iterator_concept = std::input_iterator_tag;
-        using value_type       = input_type;
-        using difference_type  = std::ptrdiff_t;
+        using iterator_concept  = std::input_iterator_tag;
+     // using iterator_category = not supported; 
+        using value_type        = input_type;
+        using difference_type   = std::ptrdiff_t;
 
     private: // Data
         binary_istream_view* v_ptr = nullptr;

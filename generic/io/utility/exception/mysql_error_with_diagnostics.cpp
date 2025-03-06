@@ -1,6 +1,6 @@
 #pragma once
 
-detail::sql_error_with_diagnostics::sql_error_with_diagnostics ( const boost::mysql::error_with_diagnostics& e )
+detail::mysql_error_with_diagnostics::mysql_error_with_diagnostics ( const boost::mysql::error_with_diagnostics& e )
     extends boost::mysql::error_with_diagnostics ( e )
 {
     let diag = e.get_diagnostics().server_message() != "" and e.get_diagnostics().client_message() != "" ? 
@@ -15,7 +15,7 @@ detail::sql_error_with_diagnostics::sql_error_with_diagnostics ( const boost::my
     error_what = detail::red + string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()) + diag + detail::white;
 }
 
-const char* detail::sql_error_with_diagnostics::what ( ) const noexcept
+const char* detail::mysql_error_with_diagnostics::what ( ) const noexcept
 {
     return error_what.c_str();
 }

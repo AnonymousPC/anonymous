@@ -95,30 +95,18 @@
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
-    #include <exec/when_any.hpp>
+    #include <exec/single_thread_context.hpp>
+    #include <exec/system_context.hpp>
     #include <execpools/tbb/tbb_thread_pool.hpp>
-    namespace std
-    {
-        namespace execution
-        {
-            using namespace ::stdexec;
-            using namespace ::exec;
-        }
-    }
+    namespace std { namespace execution { using namespace ::stdexec; } }
     #pragma GCC diagnostic pop
 #elifdef __clang__
     #include <stdexec/execution.hpp>
     #include <exec/static_thread_pool.hpp>
-    #include <exec/when_any.hpp>
+    #include <exec/single_thread_context.hpp>
+    #include <exec/system_context.hpp>
     #include <execpools/tbb/tbb_thread_pool.hpp>
-    namespace std
-    {
-        namespace execution
-        {
-            using namespace ::stdexec;
-            using namespace ::exec;
-        }
-    }
+    namespace std { namespace execution { using namespace ::stdexec; } }
 #endif
 
 
@@ -313,7 +301,7 @@ namespace ap
     #include "initialize.hpp"
 
     /// Global
-                 std::execution::static_thread_pool& execution_context = cpu::execution_context;
-    thread_local std::mt19937&                       random_context    = cpu::random_context;
+                 exec::static_thread_pool& execution_context = cpu::execution_context;
+    thread_local std::mt19937&             random_context    = cpu::random_context;
 
 } // namespace ap

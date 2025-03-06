@@ -8,6 +8,7 @@ class opencl::pointer
         size_t                 idx = 0;
 
     public: // Typedef
+        using iterator_concept  = std::contiguous_iterator_tag;
         using iterator_category = std::contiguous_iterator_tag;
         using value_type        = opencl::template value_type<type>;
         using reference         = opencl::template reference <type>;
@@ -51,6 +52,7 @@ class opencl::const_pointer
         size_t                 idx = 0;
     
     public: // Typedef
+        using iterator_concept  = std::contiguous_iterator_tag;
         using iterator_category = std::contiguous_iterator_tag;
         using value_type        = opencl::template value_type     <type>;
         using reference         = opencl::template const_reference<type>;

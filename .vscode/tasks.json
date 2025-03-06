@@ -35,10 +35,10 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
             },
             "osx": {
-                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
+                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -112,10 +112,10 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
             },
             "osx": {
-                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
+                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -192,10 +192,10 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -lFLAC -ljpeg -lkernel32 -lmpg123 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
             },
             "osx": {
-                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -lFLAC -ljpeg -lmpg123 -lpng -lssl -ltbb -ltiff -framework OpenCL",
+                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL",
                 "options": {
                     "env": {
                         "LIBRARY_PATH": "/opt/homebrew/lib"
@@ -250,7 +250,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/static/main.exe -fuse-ld=lld bin/static/main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lbz2 -lCrypt32 -lcrypto -ldeflate -lFLAC -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmpg123 -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
+                "command": "g++ -o bin/static/main.exe -fuse-ld=lld bin/static/main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lbz2 -lCrypt32 -lcrypto -ldeflate -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
             },
             "osx": {
                 "command": "echo not supported"

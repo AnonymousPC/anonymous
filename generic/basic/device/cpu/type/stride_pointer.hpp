@@ -8,6 +8,7 @@ class cpu::stride_pointer
         int   step = 1;
 
     public: // Typedef
+        using iterator_concept  = std::random_access_iterator_tag;
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = cpu::template value_type<type>;
         using reference         = cpu::template reference <type>;
@@ -53,6 +54,7 @@ class cpu::const_stride_pointer
         int         step = 1;
 
     public: // Typedef
+        using iterator_concept  = std::random_access_iterator_tag;
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = cpu::template value_type     <type>;
         using reference         = cpu::template const_reference<type>;

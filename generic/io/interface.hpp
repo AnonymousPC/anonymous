@@ -72,13 +72,9 @@ namespace ap
     template < class protocol > class basic_http_stream;
     using http_stream  = basic_http_stream<tcp>;
     using https_stream = basic_http_stream<ssl>; 
-    class http_get;
-    class https_get;
-    class http_post;
-    class https_post;
 
-    // Sql
-    class sql_stream;
+    // Mysql
+    class mysql_stream;
 
     /// Email
     class email_send;
@@ -128,7 +124,7 @@ namespace ap
     #include "pipe/pipe.hpp"
     #include "socket/socket.hpp"
     #include "http/http.hpp"
-    #include "sql/sql.hpp"
+    #include "mysql/mysql.hpp"
     #include "email/email.hpp"
     #include "initialize.hpp"
 

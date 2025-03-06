@@ -24,9 +24,10 @@ template < class stream_type, class input_type >
 class ranges::istream_view<stream_type,input_type>::iterator
 {
     public: // Typedef
-        using iterator_concept = std::input_iterator_tag;
-        using value_type       = input_type;
-        using difference_type  = std::ptrdiff_t;
+        using iterator_concept  = std::input_iterator_tag;
+     // using iterator_category = not supported; 
+        using value_type        = input_type;
+        using difference_type   = std::ptrdiff_t;
 
     private: // Data
         istream_view* v_ptr = nullptr;

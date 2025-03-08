@@ -1,6 +1,6 @@
 #pragma once
 
-struct email_send::server     extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::server     extends public detail::io_mode<url>           { using detail::io_mode<url>          ::io_mode; struct email_mode_tag { }; };
 struct email_send::username   extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
 struct email_send::password   extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
 struct email_send::from       extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
@@ -8,7 +8,7 @@ struct email_send::to         extends public detail::io_mode<array<string>> { us
 struct email_send::cc         extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
 struct email_send::bcc        extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
 struct email_send::title      extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
-struct email_send::content    extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
+struct email_send::data       extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
 struct email_send::attachment extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
 // Must use array<string> instead of array<path>, because "utility/io_mode.hpp" instantiates "array<path>" but is included before "file/path.hpp". 
 
@@ -63,10 +63,10 @@ email_send::email_send ( email_mode auto... args )
             else
                 return "";
         } ();
-    let email_content = [&] -> string
+    let email_data = [&] -> string
         {
-            if constexpr ( ( same_as<content,decltype(args)> or ... ) ) 
-                return index_value_of<detail::find_same_type<content,decltype(args)...>>(args...).value;
+            if constexpr ( ( same_as<data,decltype(args)> or ... ) ) 
+                return index_value_of<detail::find_same_type<data,decltype(args)...>>(args...).value;
             else
                 return "";
         } ();
@@ -77,58 +77,55 @@ email_send::email_send ( email_mode auto... args )
             else
                 return {};
         } ();
+
+    // Check params.
     if ( email_to.empty() and email_cc.empty() and email_bcc.empty() )
-        throw logic_error("send an email with no receivers");
-    let email_boundary = email_attachment.empty() ? "" otherwise string().resize(16).generate([] { return std::uniform_int_distribution<int>('a','z')(cpu::random_context); });
+        throw logic_error("send an email with no receivers (with to = {}, cc = {}, bcc = {})", email_to, email_cc, email_bcc);
 
     // Send email.
-    let stream = ssl_stream(url(email_server));
-    stream << "EHLO localhost\r\n"
-           << "AUTH LOGIN\r\n"
-           << "{}\r\n"s                                  .format(email_username | views::encode_base64 | std::ranges::to<string>())
-           << "{}\r\n"s                                  .format(email_password | views::encode_base64 | std::ranges::to<string>())
-           << "MAIL FROM:<{}>\r\n"s                      .format(email_from)
-           <</*RCPT TO:<{}>\r\n*/"{}"s                   .format(array<array<string>>{email_to, email_cc, email_bcc}
-                                                                    | std::views::join
-                                                                    | std::ranges::to<set<string>>()
-                                                                    | std::views::transform([] (const auto& rcpt) { return "RCPT TO:<{}>\r\n"s.format(rcpt); })
-                                                                    | std::views::join
-                                                                    | std::ranges::to<string>())
+    let stream = ssl_stream();
+    stream.connect(email_server);
 
-           << "DATA\r\n"
-           << "From: {}\r\n"s                            .format(email_from)
-           << "To: {}\r\n"s                              .format(email_to .empty() ? "" otherwise email_to | std::views::join_with(", "s) | std::ranges::to<string>())
-           << "Cc: {}\r\n"s                              .format(email_cc .empty() ? "" otherwise email_cc | std::views::join_with(", "s) | std::ranges::to<string>())
-           << "Subject: {}\r\n"s                         .format(email_title)
+    stream << "ehlo localhost\r\n"
+           << "auth login\r\n"
+           << "{}\r\n"s                                             .format(email_username | views::encode_base64 | std::ranges::to<string>())
+           << "{}\r\n"s                                             .format(email_password | views::encode_base64 | std::ranges::to<string>())
+           << "mail from:<{}>\r\n"s                                 .format(email_from)
+           <</*rcpt to:<{}>\r\n*/"{}"s                              .format(array<array<string>>{email_to, email_cc, email_bcc} | std::views::join | std::ranges::to<set<string>>() | std::views::transform([] (const auto& rcpt) { return "rcpt to:<{}>\r\n"s.format(rcpt); }) | std::views::join | std::ranges::to<string>())
+           << "data\r\n"
+           << "From: {}\r\n"s                                       .format(email_from)
+           << "To: {}\r\n"s                                         .format(email_to.empty() ? "" otherwise email_to | std::views::join_with(", "s) | std::ranges::to<string>())
+           << "Cc: {}\r\n"s                                         .format(email_cc.empty() ? "" otherwise email_cc | std::views::join_with(", "s) | std::ranges::to<string>())
+           << "Subject: {}\r\n"s                                    .format(email_title)
            << "MIME-Version: 1.0\r\n"
-           <</*Content-Type: multipart/mixed; boundary={}\r\n*/
-             "{}"s                                       .format(email_attachment.empty() ? "" otherwise "Content-Type: multipart/mixed; boundary={}\r\n"s.format(email_boundary))
-
-           <</*--boundary\r\n*/"{}"s                     .format(email_attachment.empty() ? "" otherwise "--{}\r\n"s.format(email_boundary))
-           << "Content-Type: text/plain; charset={}\r\n"s.format(std::text_encoding::literal().name())
+           << "Content-Type: multipart/mixed; boundary=boundary\r\n"
            << "\r\n"
-           << "{}\r\n"s                                  .format(email_content)
+
+           << "--boundary\r\n"
+           << "Content-Type: text/plain; charset={}\r\n"s           .format(std::text_encoding::literal().name())
+           << "\r\n"
+           << "{}\r\n"s                                             .format(email_data)
            << "\r\n";
 
     // Send attachment
     for ( const auto& atc in email_attachment )
     {
-        stream << "--{}\r\n"s                                               .format(email_boundary)
+        stream << "--boundary\r\n"
                << "Content-Type: application/octet-stream; name=\"{}\"\r\n"s.format(atc)
                << "Content-Transfer-Encoding: base64\r\n"
-               << "Content-Disposition: attachment; filename = \"{}\"\r\n"s .format(atc)
+               << "Content-Disposition: attachment; filename=\"{}\"\r\n"s   .format(atc)
                << "\r\n";
         let attach_stream = file_stream(atc, file_stream::read_only(true));
         views::binary_istream<char>(attach_stream)
             | views::encode_base64
-            | std::ranges::to<views::binary_ostream<char>>(std::ref(stream));
-        stream << "\r\n"
-               << "\r\n";
+            | std::ranges::to<views::binary_ostream<char>>(std::ref(stream)); stream << "\r\n";
+        stream << "\r\n";
     }
 
     // Send goodbye
+    stream << "--boundary--\r\n";
     stream << ".\r\n"
-           << "QUIT\r\n"
+           << "quit\r\n"
            << std::flush;
 
     // Check response.

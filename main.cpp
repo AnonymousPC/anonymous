@@ -8,7 +8,5 @@ using namespace ap;
 
 int main ( )
 {
-    let stream = tcp_stream();
-    stream.connect("tcp://218.82.57.42:3306");
-    print("OK");
+
 }

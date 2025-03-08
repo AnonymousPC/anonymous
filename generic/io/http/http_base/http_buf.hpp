@@ -8,7 +8,7 @@ class basic_http_buf
     extends public std::streambuf
 {
     private: // Precondition
-        static_assert ( same_as<protocol,tcp> or same_as<protocol,ssl> );
+        static_assert ( same_as<protocol,tcp> or same_as<protocol,ssl> or same_as<protocol,tls> );
 
     public: // Interface
         void connect ( url, http_client_mode auto... );
@@ -106,7 +106,7 @@ class basic_http_buf
         auto   resolve_url                 ( const url& );
         void   connect_without_proxy       ( const url& );
         void   connect_through_proxy       ( const url&, const url& )     requires same_as<protocol,tcp>;
-        void   connect_through_proxy       ( const url&, const url& )     requires same_as<protocol,ssl>;
+        void   connect_through_proxy       ( const url&, const url& )     requires same_as<protocol,ssl> or same_as<protocol,tls>;
         void   listen_to_port              ( const url& );
         void   disconnect                  ( );
         void   send_more                   ( int, auto& /*serializer*/ );

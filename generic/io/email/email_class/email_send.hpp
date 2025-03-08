@@ -17,7 +17,7 @@ class email_send
         struct cc;
         struct bcc;
         struct title;
-        struct content;
+        struct data;
         struct attachment;
 };  
 

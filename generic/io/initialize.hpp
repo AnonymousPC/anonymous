@@ -17,17 +17,31 @@ namespace detail
         {
 
             ssl_context.set_default_verify_paths();
-            ssl_context.set_options(boost::asio::ssl::context_base::default_workarounds
-                                   |boost::asio::ssl::context_base::no_sslv2
-                                   |boost::asio::ssl::context_base::single_dh_use);
+            ssl_context.set_options(boost::asio::ssl::context::default_workarounds
+                                   |boost::asio::ssl::context::single_dh_use);
             ssl_context.use_certificate_chain(boost::asio::buffer(cert_file.data(), cert_file.size()));
             ssl_context.use_private_key      (boost::asio::buffer(key_file .data(), key_file .size()), boost::asio::ssl::context::pem);
             ssl_context.use_tmp_dh           (boost::asio::buffer(dh_file  .data(), dh_file  .size()));
-
         }
         catch ( const boost::system::system_error& e )
         {
             throw network_error("failed to create ssl_context").from(detail::system_error(e));
+        }
+        
+        try
+        {
+            tls_context.set_default_verify_paths();
+            tls_context.set_options(boost::asio::ssl::context::default_workarounds
+                                   |boost::asio::ssl::context::no_sslv2
+                                   |boost::asio::ssl::context::no_sslv3
+                                   |boost::asio::ssl::context::single_dh_use);
+            tls_context.use_certificate_chain(boost::asio::buffer(cert_file.data(), cert_file.size()));
+            tls_context.use_private_key      (boost::asio::buffer(key_file .data(), key_file .size()), boost::asio::ssl::context::pem);
+            tls_context.use_tmp_dh           (boost::asio::buffer(dh_file  .data(), dh_file  .size()));
+        }
+        catch ( const boost::system::system_error& e )
+        {
+            throw network_error("failed to create tls_context").from(detail::system_error(e));
         }
     }
 

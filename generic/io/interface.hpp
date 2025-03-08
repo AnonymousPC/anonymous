@@ -60,16 +60,18 @@ namespace ap
     using udp  = boost::asio::ip::udp;
     using icmp = boost::asio::ip::icmp;
     class ssl;
+    class tls;
     template < class protocol > class basic_socket_stream;
     using tcp_stream  = basic_socket_stream<tcp>;
     using udp_stream  = basic_socket_stream<udp>;
     using icmp_stream = basic_socket_stream<icmp>;
     using ssl_stream  = basic_socket_stream<ssl>;
+    using tls_stream  = basic_socket_stream<tls>;
 
     class url;
 
     /// Http
-    template < class protocol > class basic_http_stream;
+    template < class protocol > class basic_http_stream; // protocol can be one of tcp, ssl and tls.
     using http_stream  = basic_http_stream<tcp>;
     using https_stream = basic_http_stream<ssl>; 
 
@@ -116,7 +118,8 @@ namespace ap
 
     /// Global
     boost::asio::io_context   io_context  = boost::asio::io_context();
-    boost::asio::ssl::context ssl_context = boost::asio::ssl::context(boost::asio::ssl::context::tls);
+    boost::asio::ssl::context ssl_context = boost::asio::ssl::context(boost::asio::ssl::context::sslv23);
+    boost::asio::ssl::context tls_context = boost::asio::ssl::context(boost::asio::ssl::context::tls);
     
     /// Include
     #include "utility/utility.hpp" // First.

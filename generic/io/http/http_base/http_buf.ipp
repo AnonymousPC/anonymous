@@ -411,7 +411,7 @@ void basic_http_buf<protocol>::connect_through_proxy ( const url& website, const
 
 template < class protocol >
 void basic_http_buf<protocol>::connect_through_proxy ( const url& website, const url& proxy_website )
-    requires same_as<protocol,ssl>
+    requires same_as<protocol,ssl> or same_as<protocol,tls>
 {
     // Connect to proxy server. We demand the proxy website to be http.
     let errpool = vector<detail::system_error>();

@@ -2,9 +2,8 @@
 
 namespace ranges
 {
-    template < class range >
-        requires input_range<range> and 
-                 same_as<range_value<range>,char>
+    template < input_range range >
+        requires same_as<range_value<range>,char>
     class encode_base64_view
         extends public std::ranges::view_interface<encode_base64_view<range>>
     {
@@ -16,9 +15,9 @@ namespace ranges
             
         public: // Interface
             constexpr encode_base64_view ( range );
-            constexpr auto begin ( ) const;
-            constexpr auto end   ( ) const;
-        //    constexpr auto size  ( ) const requires std::ranges::sized_range<range>;
+            constexpr auto begin ( );
+            constexpr auto end   ( );
+            constexpr auto size  ( ) const requires std::ranges::sized_range<range>;
     };
 
 } // namespace ranges
@@ -35,4 +34,4 @@ namespace views
     
 } // namespace views
 
-#include "encode_base64.ipp"
+#include "base64.ipp"

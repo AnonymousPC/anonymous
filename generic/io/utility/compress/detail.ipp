@@ -7,6 +7,14 @@ constexpr detail::compress_view<range,method>::compress_view ( range init_r )
 {
     i.push(method());
     i.push(s);
+    i.exceptions(std::ios::badbit);
+}
+
+template < input_range range, class method >
+    requires same_as<range_value<range>,char>
+constexpr detail::compress_view<range,method>::~compress_view ( )
+{
+    i.exceptions(std::ios::iostate());
 }
 
 template < input_range range, class method >
@@ -29,17 +37,17 @@ struct detail::compress_view<range,method>::source_type
     extends public boost::iostreams::source
 {
     private:
-        range_const_iterator<range> i;
-        range_const_sentinel<range> s;
+        range_iterator<range> i;
+        range_sentinel<range> s;
 
     public:
-        constexpr source_type ( const range& );
+        constexpr source_type ( range& );
         constexpr std::streamsize read ( char*, std::streamsize );
 };
 
 template < input_range range, class method >
     requires same_as<range_value<range>,char>
-constexpr detail::compress_view<range,method>::source_type::source_type ( const range& r )
+constexpr detail::compress_view<range,method>::source_type::source_type ( range& r )
     extends i ( r.begin() ),
             s ( r.end() )
 {

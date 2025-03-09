@@ -8,8 +8,8 @@ class time_point // Class time_point always stores zoned_time.
         constexpr time_point ( int_type auto, int_type auto, int_type auto, int_type auto, int_type auto, int_type auto, int_type auto, int_type auto, int_type auto );
 
     public: // Conversion
-        template < class clock_type, class duration_type > constexpr time_point ( std::chrono::time_point<clock_type,duration_type> );
-        template < class clock_type, class duration_type > constexpr operator     std::chrono::time_point<clock_type,duration_type> ( ) const;
+        template < class duration_type > constexpr time_point ( std::chrono::time_point<std::chrono::system_clock,duration_type> );
+        template < class duration_type > constexpr operator     std::chrono::time_point<std::chrono::system_clock,duration_type> ( ) const;
 
     public: // Interface
         constexpr       int& year        ( );

@@ -7,7 +7,7 @@
 
 #include "file_base/file_stream.hpp"
 
-#include "third_party/boost_gil.ipp"
+#include "file_class/detail.hpp"
 #include "file_class/file_interface.hpp"
 #include "file_class/file_bmp.hpp"
 #include "file_class/file_csv.hpp"

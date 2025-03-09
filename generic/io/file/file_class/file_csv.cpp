@@ -17,9 +17,8 @@ namespace detail
 
 namespace ranges
 {
-    template < class range, class pattern >
-        requires input_range<range> and 
-                 equalable_to<range_value<range>,pattern>
+    template < input_range range, class pattern >
+        requires equalable_to<range_value<range>,pattern>
     class csv_lazy_split_view
         extends public std::ranges::view_interface<csv_lazy_split_view<range,pattern>>
     {
@@ -56,9 +55,8 @@ namespace views
 } // namespace views
 
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr ranges::csv_lazy_split_view<range,pattern>::csv_lazy_split_view ( range init_r, pattern init_p )
 extends r ( std::move(init_r) ),
         p ( std::move(init_p) )
@@ -66,26 +64,23 @@ extends r ( std::move(init_r) ),
 
 };
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr auto ranges::csv_lazy_split_view<range,pattern>::begin ( )
 {
     return iterator(self);
 };
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr auto ranges::csv_lazy_split_view<range,pattern>::end ( )
 {
     return std::default_sentinel;
 }
 
 
-template < class range, class pattern >
-    requires input_range<range> and 
-                equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 class ranges::csv_lazy_split_view<range,pattern>::iterator
 {
     private: // Data
@@ -106,9 +101,8 @@ class ranges::csv_lazy_split_view<range,pattern>::iterator
         using difference_type   = std::ptrdiff_t;
 };
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr ranges::csv_lazy_split_view<range,pattern>::iterator::iterator ( csv_lazy_split_view& init_v )
     extends v ( &init_v ),
             i ( v->r.begin() )
@@ -116,9 +110,8 @@ constexpr ranges::csv_lazy_split_view<range,pattern>::iterator::iterator ( csv_l
 
 }
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr auto ranges::csv_lazy_split_view<range,pattern>::iterator::operator * ( ) const
 {
     v->q = false; // Maybe useless.
@@ -133,9 +126,8 @@ constexpr auto ranges::csv_lazy_split_view<range,pattern>::iterator::operator * 
     return r;
 }
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr bool ranges::csv_lazy_split_view<range,pattern>::iterator::operator == ( std::default_sentinel_t ) const
 {
     if constexpr ( detail::is_istream_view<range>::value )
@@ -144,9 +136,8 @@ constexpr bool ranges::csv_lazy_split_view<range,pattern>::iterator::operator ==
         return *i == '\n' or i == v->r.end();
 }
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr ranges::csv_lazy_split_view<range,pattern>::iterator& ranges::csv_lazy_split_view<range,pattern>::iterator::operator ++ ( )
 {
     if constexpr ( detail::is_istream_view<range>::value )
@@ -157,17 +148,15 @@ constexpr ranges::csv_lazy_split_view<range,pattern>::iterator& ranges::csv_lazy
     return self;
 }
 
-template < class range, class pattern >
-    requires input_range<range> and
-             equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 constexpr ranges::csv_lazy_split_view<range,pattern>::iterator& ranges::csv_lazy_split_view<range,pattern>::iterator::operator ++ ( int )
 {
     return operator++();
 }
 
-template < class range, class pattern >
-    requires input_range<range> and 
-                equalable_to<range_value<range>,pattern>
+template < input_range range, class pattern >
+    requires equalable_to<range_value<range>,pattern>
 class ranges::csv_lazy_split_view<range,pattern>::iterator::value_type
     extends public decltype(*std::declval<iterator>()) // Only a declaration to make value_type available.
 {

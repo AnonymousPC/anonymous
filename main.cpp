@@ -8,5 +8,7 @@ using namespace ap;
 
 int main ( )
 {
-
+    let str = string("hello, world");
+    let com = str | views::encode_gzip | std::ranges::to<string>();
+    print(com);
 }

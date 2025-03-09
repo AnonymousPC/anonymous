@@ -10,34 +10,15 @@ namespace detail
 
     string input_t::operator() ( ) const
     {
-        string str = "";
-        char   ch  = '\0';
-        while ( true )
-        {
-            std::cin.get(ch);
-            if ( ch != '\n' and ch != '\0' )
-                str.push(ch);
-            else
-                break;
-        }
-        return str;
+        let str = std::string();
+        std::getline(std::cin, str, '\n');
+        return string(str);
     }
 
     string input_t::operator() ( const printable auto& prompt ) const
     {
-
-        string str = "";
-        char   ch  = '\0';
         std::cout << prompt;
-        while ( true )
-        {
-            std::cin.get(ch);
-            if ( ch != '\n' and ch != '\0' )
-                str.push(ch);
-            else
-                break;
-        } 
-        return str;
+        return self();
     }  
 } 
 

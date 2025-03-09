@@ -6,10 +6,10 @@ struct mysql_stream::database extends public detail::io_mode<string> { using det
 
 mysql_stream::mysql_stream ( url mysql_server, mysql_mode auto... args )
 {
-    open(mysql_server, std::forward<decltype(args)>(args)...);
+    connect(mysql_server, std::forward<decltype(args)>(args)...);
 }
 
-mysql_stream& mysql_stream::open ( url mysql_server, mysql_mode auto... args )
+mysql_stream& mysql_stream::connect ( url mysql_server, mysql_mode auto... args )
 {
     // Params
     static_assert ( ( same_as<username,decltype(args)> or ... ) and

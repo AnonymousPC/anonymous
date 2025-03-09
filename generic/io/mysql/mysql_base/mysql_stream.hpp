@@ -23,7 +23,7 @@ class mysql_stream
         mysql_stream ( url, mysql_mode auto... );
 
     public: // Interface
-        mysql_stream&      open    ( url, mysql_mode auto... );
+        mysql_stream&      connect ( url, mysql_mode auto... );
         mysql_stream&      close   ( );
         matrix<value_type> execute ( string, auto... );
 

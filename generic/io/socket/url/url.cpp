@@ -4,8 +4,8 @@ const std::regex url::regex = std::regex
 (
     R"(([a-z]+://))"                                                                                                                                    // Essential: protocal.
     R"(([a-zA-Z0-9\-._~%]+:[a-zA-Z0-9\-._~%]+@)?)"                                                                                                      // Optional:  usermame-password.
-    R"(([a-zA-Z0-9\-._~%]+|\[[a-fA-F0-9:.]+\]))"                                                                                                        // Essential: domain/ipv4/ipv6.
-    R"((:\d{1,5}?)?)"                                                                                                                                   // Optional:  port.
+    R"(([a-zA-Z0-9\-._~%]+|\d{1,3}(?:\.\d{1,3}){3}|[a-fA-F0-9]{0,4}(?::[a-fA-F0-9]{0,4}){7}))"                                                          // Essential: domain/ipv4/ipv6.
+    R"((:\d{1,5})?)"                                                                                                                                    // Optional:  port.
     R"((/(?:[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+(?:/[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+)*)?)?)"                                                                  // Optional:  path to resource.
     R"((\?(?:[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+=[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+(?:&[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+=[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+)*)?)?)" // Optional:  parameters.
     R"((\#(?:[a-zA-Z0-9\-._~%!$&'()*+,;=:@/?]+)?)?)"                                                                                                    // Optional:  fragment.
@@ -32,7 +32,7 @@ string url::scheme ( ) const
     }
     catch ( const regex_error& )
     {
-        throw network_error("url {} does not matches url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
+        throw network_error("url {} does not match url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
     }
 }
 
@@ -45,7 +45,7 @@ string url::authorization ( ) const
     }
     catch ( const regex_error& )
     {
-        throw network_error("url {} does not matches url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
+        throw network_error("url {} does not match url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
     }
 }
 
@@ -58,7 +58,7 @@ string url::host ( ) const
     }
     catch ( const regex_error& )
     {
-        throw network_error("url {} does not matches url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
+        throw network_error("url {} does not match url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
     }
 }
 
@@ -71,7 +71,7 @@ string url::port ( ) const
     }
     catch ( const regex_error& )
     {
-        throw network_error("url {} does not matches url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
+        throw network_error("url {} does not match url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
     }
 }
 
@@ -84,7 +84,7 @@ string url::path ( ) const
     }
     catch ( const regex_error& )
     {
-        throw network_error("url {} does not matches url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
+        throw network_error("url {} does not match url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
     }
 }
 
@@ -97,7 +97,7 @@ string url::param ( ) const
     }
     catch ( const regex_error& )
     {
-        throw network_error("url {} does not matches url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
+        throw network_error("url {} does not match url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
     }
 }
 
@@ -110,6 +110,6 @@ string url::fragment ( ) const
     }
     catch ( const regex_error& )
     {
-        throw network_error("url {} does not matches url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
+        throw network_error("url {} does not match url::regex (example: https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3)", self);
     }
 }

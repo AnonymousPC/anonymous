@@ -316,7 +316,7 @@ void basic_http_buf<protocol>::init_header_as_client ( const url& website, const
         current_request_version = detail::value_of_same_type<version>(args...).value;
 
     // Other
-    else
+    else if constexpr ( sizeof...(args) >= 1 )
         static_assert(false, "invalid mode");
 
     // Check authorization

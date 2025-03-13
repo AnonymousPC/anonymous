@@ -8,15 +8,9 @@ using namespace ap;
 
 int main ( )
 {
-    let devices = array<string>{"Bluetooth-Incoming-Port",
-                                "HUAWEIFreeBudsPro3",
-                                "HUAWEIFreeClip",
-                                "debug-console"};
-    let task = std::execution::schedule(cpu::execution_context.get_scheduler())
-             | std::execution::bulk(4, [&] (int i)
-                {
-                    let stream = serial_port_stream("/dev/cu.{}"s.format(devices[i-1]));
-                })
+    let stream = serial_port_stream("/dev/cu.Bluetooth-Incoming-Port");
+    while ( true )
+        stream << "hello" << std::endl;
 }
 
 

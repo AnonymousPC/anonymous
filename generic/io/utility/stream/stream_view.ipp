@@ -4,14 +4,13 @@ template < class stream_type, class input_type >
 constexpr ranges::istream_view<stream_type,input_type>::istream_view ( stream_type& init_s )
     extends s_ptr ( &init_s )
 {
-
+    ++iterator(self);
 }
 
 template < class stream_type, class input_type >
 constexpr auto ranges::istream_view<stream_type,input_type>::begin ( )
 {
-    *s_ptr >> t;
-    return iterator ( self );
+    return iterator(self);
 }
 
 template < class stream_type, class input_type >
@@ -36,7 +35,7 @@ class ranges::istream_view<stream_type,input_type>::iterator
         constexpr iterator ( istream_view& );
         constexpr value_type& operator *  ( ) const;
         constexpr iterator&   operator ++ ( );
-        constexpr iterator&   operator ++ ( int );
+        constexpr void        operator ++ ( int );
         constexpr bool        operator == ( std::default_sentinel_t ) const;
 };
 
@@ -61,7 +60,7 @@ constexpr ranges::istream_view<stream_type,input_type>::iterator& ranges::istrea
 }
 
 template < class stream_type, class input_type >
-constexpr ranges::istream_view<stream_type,input_type>::iterator& ranges::istream_view<stream_type,input_type>::iterator::operator ++ ( int )
+constexpr void ranges::istream_view<stream_type,input_type>::iterator::operator ++ ( int )
 {
     *v_ptr->s_ptr >> v_ptr->t;
     return self;

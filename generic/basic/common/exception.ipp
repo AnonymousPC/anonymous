@@ -208,16 +208,6 @@ class file_error
         friend exception_interface<file_error>;
 };
 
-class network_error
-    extends public io_error,
-            public exception_interface<network_error>
-{
-    public:
-        using io_error::io_error;
-        using exception_interface<network_error>::from;
-        friend exception_interface<network_error>;
-};
-
 class pipe_error
     extends public io_error,
             public exception_interface<pipe_error>
@@ -228,14 +218,34 @@ class pipe_error
         friend exception_interface<pipe_error>;
 };
 
-class sql_error
+class serial_port_error
     extends public io_error,
-            public exception_interface<sql_error>
+            public exception_interface<serial_port_error>
 {
     public:
         using io_error::io_error;
-        using exception_interface<sql_error>::from;
-        friend exception_interface<sql_error>;
+        using exception_interface<serial_port_error>::from;
+        friend exception_interface<serial_port_error>;
+};
+
+class network_error
+    extends public io_error,
+            public exception_interface<network_error>
+{
+    public:
+        using io_error::io_error;
+        using exception_interface<network_error>::from;
+        friend exception_interface<network_error>;
+};
+
+class mysql_error
+    extends public io_error,
+            public exception_interface<mysql_error>
+{
+    public:
+        using io_error::io_error;
+        using exception_interface<mysql_error>::from;
+        friend exception_interface<mysql_error>;
 };
 
 class device_error

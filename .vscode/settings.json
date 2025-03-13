@@ -116,6 +116,7 @@
         "ccomplex": "cpp",
         "tensor": "cpp",
         "specialfunctions": "cpp",
-        "cfenv": "cpp"
+        "cfenv": "cpp",
+        "barrier": "cpp"
     }
 }

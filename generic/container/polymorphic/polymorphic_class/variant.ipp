@@ -34,7 +34,7 @@ template < class... types >
 constexpr const std::type_info& variant<types...>::type ( ) const
 {
     if ( not base::valueless_by_exception() ) [[likely]]
-        return *(std::array<const std::type_info*,sizeof...(types)>{&typeid(types)...}[index()-1]);
+        return *(static_array<const std::type_info*,sizeof...(types)>{&typeid(types)...}[index()]);
     else
         return typeid(void);
 }

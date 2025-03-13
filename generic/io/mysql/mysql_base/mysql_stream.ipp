@@ -28,7 +28,7 @@ mysql_stream& mysql_stream::connect ( url mysql_server, mysql_mode auto... args 
    }
     catch ( const boost::mysql::error_with_diagnostics& e )
     {
-        throw network_error("failed to connect mysql server (with server_url = {})", mysql_server).from(detail::mysql_error_with_diagnostics(e));
+        throw mysql_error("connection failed (with mysql_server = {})", mysql_server).from(detail::mysql_error_with_diagnostics(e));
     }
     
     return self;
@@ -54,7 +54,7 @@ matrix<typename mysql_stream::value_type> mysql_stream::execute_client_stmt ( st
     }
     catch ( const boost::mysql::error_with_diagnostics& e )
     {
-        throw sql_error("failed to execute mysql statement (with statement = {})", format_client_stmt(e, str, args...)).from(detail::mysql_error_with_diagnostics(e));
+        throw mysql_error("execution failed (with mysql_statement = {})", format_client_stmt(e, str, args...)).from(detail::mysql_error_with_diagnostics(e));
     }
 }
 
@@ -87,7 +87,7 @@ matrix<typename mysql_stream::value_type> mysql_stream::execute_server_stmt ( st
     }
     catch ( const boost::mysql::error_with_diagnostics& e )
     {
-        throw sql_error("failed to execute mysql statement (with statement = {})", format_server_stmt(e, str, args...)).from(detail::mysql_error_with_diagnostics(e));
+        throw mysql_error("execution failed (with mysql_statement = {})", format_server_stmt(e, str, args...)).from(detail::mysql_error_with_diagnostics(e));
     }
 }
 

@@ -273,7 +273,7 @@ void basic_http_buf<protocol>::init_header_as_client ( const url& website, const
     if ( website.authorization() != "" )
         current_request_header["Authorization"] = "Basic {}"s.format(website.authorization() | views::encode_base64 | std::ranges::to<string>());
     else if constexpr ( ( same_as<authorization,decay<decltype(args)>> or ... ) )
-        current_request_header["Authorization"] = "Basic {}:{}"s.format("{}:{}"s.format(detail::value_of_same_type<authorization>(args...).value.key(), detail::value_of_same_type<authorization>(args...).value.value()) | views::encode_base64 | std::ranges::to<string>());
+        current_request_header["Authorization"] = "Basic {}"s.format("{}:{}"s.format(detail::value_of_same_type<authorization>(args...).value.key(), detail::value_of_same_type<authorization>(args...).value.value()) | views::encode_base64 | std::ranges::to<string>());
 
     // Cookie
     else if constexpr ( ( same_as<cookie,decay<decltype(args)>> or ... ) )

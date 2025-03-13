@@ -19,18 +19,18 @@ class basic_socket_buf
         virtual int overflow  ( int = traits_type::eof() ) override;
         virtual int sync      ( )                          override;
 
-    private: // Auxiliary
-        string local_endpoint_noexcept  ( )            const;
-        string remote_endpoint_noexcept ( )            const;
-        string protocol_name            ( )            const;
-        auto   resolve_url              ( const url& ) const;
-
     private: // Data
         typename protocol::socket handle       = typename protocol::socket(io_context);
         string                    send_buff    = "";
         string                    receive_buff = "";
 
     private: // Detail
+        string local_endpoint_noexcept  ( )            const;
+        string remote_endpoint_noexcept ( )            const;
+        string protocol_name            ( )            const;
+        auto   resolve_url              ( const url& ) const;
+
+    private: // Settings
         constexpr static const int default_buffer_size = 65536;
 };
 

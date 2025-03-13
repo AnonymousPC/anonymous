@@ -25,6 +25,7 @@
 #include <execution>
 #include <filesystem>
 #include <format>
+#include <forward_list>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -245,6 +246,7 @@ namespace ap
     inline namespace constants { }
     inline namespace literals  { }
 
+    namespace asio   { }
     namespace neural { }
     namespace spirit { }
     namespace stock  { }
@@ -281,9 +283,10 @@ namespace ap
                 class regex_error;
             class io_error;
                 class file_error;
-                class network_error;
                 class pipe_error;
-                class sql_error;
+                class serial_port_error;
+                class network_error;
+                class mysql_error;
             class device_error;
                 class cuda_error;
                 class opencl_error;

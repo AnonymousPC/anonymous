@@ -34,12 +34,16 @@ class pipe_buf
         string                                       stdout_buff = "";
         string                                       stderr_buff = "";
 
-    private: // Auxiliary
+    private: // Detail
+        auto   run_with_args       ( const boost::filesystem::path&, std::vector<std::string>, const auto&, auto... );
+        string process_id_noexcept ( ) const;
+
+    private: // Typedef
+        template < class... types > 
+        struct tuple;
+
+    private: // Settings
         constexpr static const int default_buffer_size = 4096;
-        // This is not similiar to http_buf.set_request(field_1, ...), http_buf.set_request(field_2, ...),
-        // as all params must be forwarded at one time.
-        auto run_with_args ( const boost::filesystem::path&, std::vector<std::string>, const auto&, auto... );
-        template < class... types > struct tuple;
 };
 
 

@@ -7,33 +7,18 @@
 void pipe_buf::close ( )
 {
     // Close handle.
-    if ( is_open() )
+    try
     {
-        try
-        {
-            stdin_pipe .close();
-            stdout_pipe.close();
-            stderr_pipe.close();
-        }
-        catch ( const boost::system::system_error& e )
-        {
-            throw pipe_error("failed to close pipe (with process_id = {}): cannot close stdin/stdout/stderr", handle->id()).from(detail::system_error(e));
-        }
-
-        try
-        {
-            if ( is_running() )
-                handle->terminate();
-        }
-        catch ( const boost::system::system_error& e )
-        {
-            throw pipe_error("failed to close pipe (with process_id = {}): cannot terminate process", handle->id()).from(detail::system_error(e));
-        }
+        stdin_pipe .close();
+        stdout_pipe.close();
+        stderr_pipe.close();
+        handle->terminate();
     }
-
-    else
-        throw pipe_error("failed to close pipe: pipe is not opened");
-
+    catch ( const boost::system::system_error& e )
+    {
+        throw pipe_error("close failed (with process_id = {})", process_id_noexcept()).from(detail::system_error(e));
+    }
+    
     // Clean resource.
     handle = nullptr;
     stdin_buff .clear();
@@ -66,7 +51,7 @@ int pipe_buf::underflow ( )
 
     // Post task.
     let stdout_error = boost::system::error_code();
-    stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.data(), stdout_buff.size()),
+    stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
                                     if ( error == boost::system::error_code() )
@@ -80,7 +65,7 @@ int pipe_buf::underflow ( )
                                         stdout_error = error;
                                 });
     let stderr_error = boost::system::error_code();
-    stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.data(), stderr_buff.size()),
+    stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
                                     if ( error == boost::system::error_code() )
@@ -105,13 +90,12 @@ int pipe_buf::underflow ( )
     // Return
     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.
         return traits_type::to_int_type(*gptr());
-    else if ( ( stdout_error == boost::asio::error::broken_pipe and stderr_error == boost::asio::error::broken_pipe ) or
-              ( stdout_error == boost::asio::error::eof         and stderr_error == boost::asio::error::eof         ) )
+    else if ( stdout_error == boost::asio::error::eof and stderr_error == boost::asio::error::eof )
         return traits_type::eof();
     else
     {
         let errpool = vector<detail::system_error>{detail::system_error(boost::system::system_error(stdout_error)), detail::system_error(boost::system::system_error(stderr_error))};
-        throw detail::all_attempts_failed(errpool);
+        throw pipe_error("read data failed (with process_id = {}, pipe = [stdout, stderr])", process_id_noexcept()).from(detail::all_attempts_failed(errpool));
     }
 }
 
@@ -125,6 +109,7 @@ int pipe_buf::overflow ( int c )
             setp(stdin_buff.begin(),
                  stdin_buff.end());
         }
+
         else
         {
             int bytes = stdin_pipe.write_some(boost::asio::const_buffer(stdin_buff.c_str(), stdin_buff.size()));
@@ -141,7 +126,7 @@ int pipe_buf::overflow ( int c )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", handle->id()).from(detail::system_error(e));
+        throw pipe_error("write data failed (with process_id = {}, pipe = stdin)", process_id_noexcept()).from(detail::system_error(e));
     }
 }
 
@@ -149,13 +134,25 @@ int pipe_buf::sync ( )
 {
     try
     {
-        boost::asio::write(stdin_pipe, boost::asio::const_buffer(stdin_buff.data(), pptr() - stdin_buff.data()));
+        boost::asio::write(stdin_pipe, boost::asio::const_buffer(stdin_buff.begin(), pptr() - stdin_buff.begin()));
         setp(stdin_buff.begin(),
              stdin_buff.end());
         return 0;
     }
     catch ( const boost::system::system_error& e )
     {
-        throw pipe_error("failed to write to pipe.stdin (with process_id = {})", handle->id()).from(detail::system_error(e));
+        throw pipe_error("write data failed (with process_id = {}, pipe = stdin)", process_id_noexcept()).from(detail::system_error(e));
+    }
+}
+
+string pipe_buf::process_id_noexcept ( ) const
+{
+    try
+    {
+        return string(handle->id());
+    }
+    catch ( const boost::system::system_error& e )
+    {
+        return "[[bad process id]]";
     }
 }

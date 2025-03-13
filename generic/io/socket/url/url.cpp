@@ -4,7 +4,7 @@ const std::regex url::regex = std::regex
 (
     R"(([a-z]+://))"                                                                                                                                    // Essential: protocal.
     R"(([a-zA-Z0-9\-._~%]+:[a-zA-Z0-9\-._~%]+@)?)"                                                                                                      // Optional:  usermame-password.
-    R"(([a-zA-Z0-9\-._~%]+|\d{1,3}(?:\.\d{1,3}){3}|[a-fA-F0-9]{0,4}(?::[a-fA-F0-9]{0,4}){7}))"                                                          // Essential: domain/ipv4/ipv6.
+    R"(([a-zA-Z0-9\-._~%]+|(?:\d{1,3}\.){3}(?:\d{1,3})|(?:[a-fA-F0-9]{0,4}:){7}(?:[a-fA-F0-9]{0,4})))"                                                          // Essential: domain/ipv4/ipv6.
     R"((:\d{1,5})?)"                                                                                                                                    // Optional:  port.
     R"((/(?:[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+(?:/[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+)*)?)?)"                                                                  // Optional:  path to resource.
     R"((\?(?:[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+=[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+(?:&[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+=[a-zA-Z0-9\-._~%!$&'()*+,;=:@]+)*)?)?)" // Optional:  parameters.

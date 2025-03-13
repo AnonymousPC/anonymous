@@ -37,7 +37,7 @@ void pipe_buf::open ( path exe, pipe_mode auto... args )
     }
     catch ( const boost::process::v2::system_error& e )
     {
-        throw pipe_error("failed to open pipe {} (with path_executable = {}, find_executable = {})", exe, boost::filesystem::is_regular_file(path_executable) ? path_executable otherwise "[[not exist]]", find_executable != "" ? find_executable otherwise "[[not found]]").from(detail::system_error(e));
+        throw pipe_error("open failed (with path_executable = {}, find_executable = {})", exe, boost::filesystem::is_regular_file(path_executable) ? path_executable otherwise "[[not exist]]", find_executable != "" ? find_executable otherwise "[[not found]]").from(detail::system_error(e));
     }
 
     // Set put area.

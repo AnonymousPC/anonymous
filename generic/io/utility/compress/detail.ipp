@@ -3,19 +3,24 @@
 template < input_range range, class method >
     requires same_as<range_value<range>,char>
 constexpr detail::compress_view<range,method>::compress_view ( range init_r )
-    extends r ( std::move(init_r) )
+    extends r ( std::move(init_r) ),
+            s ( r ),
+            p ( [&]
+                { 
+                    let i = std::shared_ptr<boost::iostreams::filtering_istream>(
+                                new boost::iostreams::filtering_istream(), 
+                                [] (auto p) { p->exceptions(std::ios::iostate()); }
+                            );
+                    i->push(method());
+                    i->push(s);
+                    i->exceptions(std::ios::badbit);
+                    return i;
+                } () ),
+            v ( *p )
 {
-    i.push(method());
-    i.push(s);
-    i.exceptions(std::ios::badbit);
+
 }
 
-template < input_range range, class method >
-    requires same_as<range_value<range>,char>
-constexpr detail::compress_view<range,method>::~compress_view ( )
-{
-    i.exceptions(std::ios::iostate());
-}
 
 template < input_range range, class method >
     requires same_as<range_value<range>,char>
@@ -70,7 +75,9 @@ constexpr std::streamsize detail::compress_view<range,method>::source_type::read
         let d = 0;
         while ( d < n and i != s )
         {
-            (*c++) = *(i++);
+            *c = *i;
+            ++c;
+            ++i;
             ++d;
         }
         return d != 0 ? d otherwise -1;

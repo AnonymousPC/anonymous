@@ -70,6 +70,9 @@ namespace ap
 
     class url;
 
+    /// Serial port
+    class serial_port_stream;
+
     /// Http
     template < class protocol > class basic_http_stream; // protocol can be one of tcp, ssl and tls.
     using http_stream  = basic_http_stream<tcp>;
@@ -125,6 +128,7 @@ namespace ap
     #include "utility/utility.hpp" // First.
     #include "file/file.hpp"
     #include "pipe/pipe.hpp"
+    #include "serial_port/serial_port.hpp"
     #include "socket/socket.hpp"
     #include "http/http.hpp"
     #include "mysql/mysql.hpp"

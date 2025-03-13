@@ -12,15 +12,14 @@ namespace detail
 
         private: // Data
             range                                                                 r;
-            source_type                                                           s = source_type(r);
-            boost::iostreams::filtering_istream                                   i = boost::iostreams::filtering_istream();
-            ranges::binary_istream_view<boost::iostreams::filtering_istream,char> v = ranges::binary_istream_view<boost::iostreams::filtering_istream,char>(i);
+            source_type                                                           s;
+            std::shared_ptr<boost::iostreams::filtering_istream>                  p;
+            ranges::binary_istream_view<boost::iostreams::filtering_istream,char> v;
             
         public: // Interface
-            constexpr  compress_view ( range );
-            constexpr ~compress_view ( );
-            constexpr  auto begin ( );
-            constexpr  auto end   ( );
+            constexpr compress_view ( range );
+            constexpr auto begin ( );
+            constexpr auto end   ( );
     };
 
     template < class method >

@@ -1,5 +1,4 @@
 #pragma once
-#include "../../generic/math/interface.hpp"
 
 namespace ap::neural
 {

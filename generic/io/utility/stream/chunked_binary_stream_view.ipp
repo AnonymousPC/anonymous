@@ -5,13 +5,13 @@ constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::ch
     extends s_ptr ( &init_s ),
             t     ( chunk_len )
 {
-
+    ++iterator(self);
 }
 
 template < class stream_type, class input_type, std::endian endian >
 constexpr auto ranges::chunked_binary_istream_view<stream_type,input_type,endian>::begin ( )
 {
-    return ++iterator(self);
+    return iterator(self);
 }
 
 template < class stream_type, class input_type, std::endian endian >
@@ -36,7 +36,7 @@ class ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterat
         constexpr iterator ( chunked_binary_istream_view& );
         constexpr value_type& operator *  ( ) const;
         constexpr iterator&   operator ++ ( );
-        constexpr iterator&   operator ++ ( int );
+        constexpr void        operator ++ ( int );
         constexpr bool        operator == ( std::default_sentinel_t ) const;
 };
 
@@ -66,14 +66,9 @@ constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::it
 }
 
 template < class stream_type, class input_type, std::endian endian >
-constexpr ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator& ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator::operator ++ ( int )
+constexpr void ranges::chunked_binary_istream_view<stream_type,input_type,endian>::iterator::operator ++ ( int )
 {
-    v_ptr->s_ptr->read(reinterpret_cast<char*>(v_ptr->t.data()), v_ptr->t.size() * sizeof(input_type));
-
-    if constexpr ( detail::requires_byteswap<endian,input_type> )
-        v_ptr->t.for_each([] (auto& val) { detail::byteswap(val); });
-
-    return self;
+    ++self;
 }
 
 template < class stream_type, class input_type, std::endian endian >

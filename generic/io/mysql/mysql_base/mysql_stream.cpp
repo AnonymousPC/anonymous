@@ -19,6 +19,6 @@ mysql_stream::value_type mysql_stream::make_result_arg ( const boost::mysql::fie
         case boost::mysql::field_kind::datetime: return time_point(field.get_datetime().get_time_point());
         case boost::mysql::field_kind::time:     return duration  (field.get_time    ());
         case boost::mysql::field_kind::null:     return nullptr;
-        default: throw logic_error("internel error");
+        default:                                 throw  mysql_error("bad data");
     }
 }

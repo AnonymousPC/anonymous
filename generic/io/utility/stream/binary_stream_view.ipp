@@ -4,13 +4,13 @@ template < class stream_type, class input_type, std::endian endian >
 constexpr ranges::binary_istream_view<stream_type,input_type,endian>::binary_istream_view ( stream_type& init_s )
     extends s_ptr ( &init_s )
 {
-
+    ++iterator(self);
 }
 
 template < class stream_type, class input_type, std::endian endian >
 constexpr auto ranges::binary_istream_view<stream_type,input_type,endian>::begin ( )
 {
-    return ++iterator(self);
+    return iterator(self);
 }
 
 template < class stream_type, class input_type, std::endian endian >
@@ -42,7 +42,7 @@ class ranges::binary_istream_view<stream_type,input_type,endian>::iterator
         constexpr iterator ( binary_istream_view& );
         constexpr value_type& operator *  ( ) const;
         constexpr iterator&   operator ++ ( );
-        constexpr iterator&   operator ++ ( int );
+        constexpr void        operator ++ ( int );
         constexpr bool        operator == ( std::default_sentinel_t ) const;
 };
 
@@ -71,14 +71,9 @@ constexpr ranges::binary_istream_view<stream_type,input_type,endian>::iterator& 
 }
 
 template < class stream_type, class input_type, std::endian endian >
-constexpr ranges::binary_istream_view<stream_type,input_type,endian>::iterator& ranges::binary_istream_view<stream_type,input_type,endian>::iterator::operator ++ ( int )
+constexpr void ranges::binary_istream_view<stream_type,input_type,endian>::iterator::operator ++ ( int )
 {
-    v_ptr->s_ptr->read(reinterpret_cast<char*>(&v_ptr->t), sizeof(input_type));
-
-    if constexpr ( detail::requires_byteswap<endian,input_type> )
-        detail::byteswap(v_ptr->t);
-
-    return self;
+    ++self;
 }
 
 template < class stream_type, class input_type, std::endian endian >

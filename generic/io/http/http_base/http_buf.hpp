@@ -97,16 +97,14 @@ class basic_http_buf
         int                                                                                       cache_message_receivable     = 0;
 
     private: // Detail
-        constexpr static const int default_buffer_size = 4096;
-
         void   init_buffer_as_client       ( );
         void   init_buffer_as_server       ( );
         void   init_header_as_client       ( const url&, const auto&... );
         void   init_header_as_server       ( const url&, const auto&... );
         auto   resolve_url                 ( const url& );
         void   connect_without_proxy       ( const url& );
-        void   connect_through_proxy       ( const url&, const url& )     requires same_as<protocol,tcp>;
-        void   connect_through_proxy       ( const url&, const url& )     requires same_as<protocol,ssl> or same_as<protocol,tls>;
+        void   connect_through_proxy       ( const url&, const url& ) requires same_as<protocol,tcp>;
+        void   connect_through_proxy       ( const url&, const url& ) requires same_as<protocol,ssl> or same_as<protocol,tls>;
         void   listen_to_port              ( const url& );
         void   disconnect                  ( );
         void   send_more                   ( int, auto& /*serializer*/ );
@@ -120,6 +118,9 @@ class basic_http_buf
         void   reset_everything            ( );
         string local_endpoint_noexcept     ( ) const;
         string remote_endpoint_noexcept    ( ) const;
+
+    private: // Settings
+        constexpr static const int default_buffer_size = 4096;
 };
 
 

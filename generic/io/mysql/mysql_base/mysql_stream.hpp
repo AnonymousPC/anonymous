@@ -46,6 +46,7 @@ class mysql_stream
         static auto               make_stmt_arg       ( const auto& );
         static value_type         make_result_arg     ( const boost::mysql::field_view& );
 
+    private: // Typedef
         struct empty_arg { };
         friend class boost::mysql::formatter<empty_arg>;
 };

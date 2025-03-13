@@ -181,7 +181,9 @@ int basic_socket_buf<protocol>::overflow ( int c )
         else if constexpr ( requires { handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size())); })
         {
             int bytes = handle.write_some(boost::asio::const_buffer(send_buff.begin(), send_buff.size()));
-            std::move(send_buff.begin() + bytes, send_buff.end(), send_buff.begin());
+            std::move(send_buff.begin() + bytes, 
+                      send_buff.end(), 
+                      send_buff.begin());
             setp(send_buff.end() - bytes,
                  send_buff.end());
         }

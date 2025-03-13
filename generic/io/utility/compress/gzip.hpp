@@ -17,9 +17,9 @@ namespace ranges
 namespace views
 {
     using encode_gzip_t = detail::compress_t<boost::iostreams::gzip_compressor>;
-    encode_gzip_t encode_gzip;
+    constexpr encode_gzip_t encode_gzip;
 
     using decode_gzip_t = detail::compress_t<boost::iostreams::gzip_decompressor>;
-    decode_gzip_t decode_gzip;
+    constexpr decode_gzip_t decode_gzip;
     
 } // namespace views

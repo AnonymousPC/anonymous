@@ -62,8 +62,7 @@ constexpr ranges::istream_view<stream_type,input_type>::iterator& ranges::istrea
 template < class stream_type, class input_type >
 constexpr void ranges::istream_view<stream_type,input_type>::iterator::operator ++ ( int )
 {
-    *v_ptr->s_ptr >> v_ptr->t;
-    return self;
+    ++self;
 }
 
 template < class stream_type, class input_type >

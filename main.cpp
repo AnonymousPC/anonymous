@@ -8,9 +8,21 @@ using namespace ap;
 
 int main ( )
 {
-    let stream = serial_port_stream("/dev/cu.Bluetooth-Incoming-Port");
     while ( true )
-        stream << "hello" << std::endl;
+        try
+        {
+            let stream = http_stream();
+            stream.listen("http://0.0.0.0:80");
+            views::binary_istream<char>(stream) | std::ranges::to<views::binary_ostream<char>>(std::ref(std::cout));
+            stream.clear();
+            stream << "i love you" << std::endl;
+            print("send ok");
+            sleep(5s);
+        }
+        catch ( const std::exception& e )
+        {
+            print("send failed: {}"s.format(e.what()));
+        }
 }
 
 

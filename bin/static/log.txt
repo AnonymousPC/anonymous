@@ -3,7 +3,7 @@ In file included from D:/My Passport/My Passport - Application/MSYS/ucrt64/inclu
                  from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm/accumulate.hpp:17,
                  from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/algorithm.hpp:18,
                  from D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute.hpp:14,
-                 from generic/basic/interface.hpp:167,
+                 from generic/basic/interface.hpp:156,
                  from main.cpp:1:
 D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/detail/get_object_info.hpp: In member function 'std::vector<_Ch_type> boost::compute::detail::get_object_info_impl<std::vector<_Ch_type> >::operator()(Function, Info) const':
 D:/My Passport/My Passport - Application/MSYS/ucrt64/include/boost/compute/detail/get_object_info.hpp:186: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers

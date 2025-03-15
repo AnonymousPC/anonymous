@@ -300,11 +300,11 @@ namespace ap
 
     /// Include
     #include "common/common.hpp"
-    #include "device/device.hpp"
-    #include "initialize.hpp"
+    // #include "device/device.hpp"
+    // #include "initialize.hpp"
 
-    /// Global
-                 exec::static_thread_pool& execution_context = cpu::execution_context;
-    thread_local std::mt19937&             random_context    = cpu::random_context;
+    // /// Global
+    //              exec::static_thread_pool& execution_context = cpu::execution_context;
+    // thread_local std::mt19937&             random_context    = cpu::random_context;
 
 } // namespace ap

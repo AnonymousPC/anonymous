@@ -264,7 +264,7 @@
             "dependsOn": ["static.clear", "static.compile", "static.link"],
             "dependsOrder": "sequence",
             "windows": {
-                "command": "start cmd /c \"\"bin/static/main.exe\" & pause\""
+                "command": "::"
             },
             "osx": {
                 "command": "echo not supported"

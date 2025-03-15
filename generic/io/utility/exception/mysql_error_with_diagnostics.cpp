@@ -12,7 +12,7 @@ detail::mysql_error_with_diagnostics::mysql_error_with_diagnostics ( const boost
              /*both == ""*/
                    "";
 
-    error_what = detail::red + string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()) + diag + detail::white;
+    error_what = string(e.what()).encode(std::text_encoding::environment(), std::text_encoding::literal()) + diag;
 }
 
 const char* detail::mysql_error_with_diagnostics::what ( ) const noexcept

@@ -4,28 +4,35 @@ detail::opencl_queue_context::opencl_queue_context ( int )
 {
     
 }
-  
+
 std::uint32_t detail::opencl_queue_context::available_parallelism ( ) const
 {
-    return boost::compute::system::default_device().compute_units();
+    try
+    {
+        return boost::compute::system::default_device().compute_units();
+    }
+    catch ( const boost::compute::no_device_found& e )
+    {
+        throw opencl_error("no opencl device found").from(e);
+    }
 }
 
 const boost::compute::device& detail::opencl_queue_context::device ( )
 {
-    thread_local let dvc = boost::compute::system::default_device();
-    return dvc;
+    thread_local let dvc = [] -> optional<boost::compute::device> { try { return boost::compute::system::default_device(); } catch ( const boost::compute::no_device_fonud& ) { return nullopt; } } ():
+    return not dvc.empty() ? dvc.value() otherwise throw opencl_error("opencl device not found");
 }
 
 const boost::compute::context& detail::opencl_queue_context::context ( )
 {
-    thread_local let ctx = boost::compute::system::default_context();
-    return ctx;
+    thread_local let ctx = [] -> optional<boost::compute::context> { try { boost::compute::system::default_context(); } catch ( const boost::compute::no_device_fonud& ) { return nullopt; } } ():
+    return not ctx.empty() ? ctx.value() otherwise throw opencl_error("opencl device not found");
 }
 
 boost::compute::command_queue& detail::opencl_queue_context::command_queue ( )
 {
-    thread_local let que = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
-    return que;
+    thread_local let que = [] -> optional<boost::compute::command_queue> { try { return boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device()); } catch ( const boost::compute::no_device_fonud& ) { return nullopt; } } ():
+    return not que.empty() ? que.value() otherwise throw opencl_error("opencl device not found");
 }
 
 boost::compute::kernel detail::opencl_queue_context::build_kernel ( const boost::compute::program& prog, std::string kernel_name )

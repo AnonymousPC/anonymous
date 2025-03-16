@@ -153,7 +153,9 @@ class tbb
         using cpu::upper_bound;
 };
 
+#if dll
+    #include "tbb.cpp"
+#endif
+
 #include "container/priority_queue.hpp"
 #include "container/queue.hpp"
-
-tbb::execution_context_type tbb::execution_context = tbb::execution_context_type(1 /*::tbb::this_task_arena::max_concurrency()*/);

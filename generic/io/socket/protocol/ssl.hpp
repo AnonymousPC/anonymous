@@ -35,3 +35,6 @@ class ssl::socket
 };
 
 #include "ssl.ipp"
+#if dll
+    #include "ssl.cpp"
+#endif

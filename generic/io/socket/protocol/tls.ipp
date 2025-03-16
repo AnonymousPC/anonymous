@@ -44,13 +44,3 @@ std::size_t tls::socket::receive ( auto&&... args )
 {
     return self.boost::asio::ssl::stream<typename tcp::socket>::read_some(std::forward<decltype(args)>(args)...);
 }
-
-tls::endpoint tls::socket::local_endpoint ( ) const
-{
-    return self.next_layer().local_endpoint();
-}
-
-tls::endpoint tls::socket::remote_endpoint ( ) const
-{
-    return self.next_layer().remote_endpoint();
-}

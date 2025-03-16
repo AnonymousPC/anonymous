@@ -120,9 +120,9 @@ namespace ap
     constexpr int        time_zone   ( );
 
     /// Global
-    boost::asio::io_context   io_context  = boost::asio::io_context();
-    boost::asio::ssl::context ssl_context = boost::asio::ssl::context(boost::asio::ssl::context::sslv23);
-    boost::asio::ssl::context tls_context = boost::asio::ssl::context(boost::asio::ssl::context::tls);
+    extern boost::asio::io_context   io_context;
+    extern boost::asio::ssl::context ssl_context;
+    extern boost::asio::ssl::context tls_context;
     
     /// Include
     #include "utility/utility.hpp" // First.
@@ -133,7 +133,7 @@ namespace ap
     #include "http/http.hpp"
     #include "mysql/mysql.hpp"
     #include "email/email.hpp"
-    #include "initialize.hpp"
+    #include "global/global.hpp"
 
     /// Literal
     inline namespace literals

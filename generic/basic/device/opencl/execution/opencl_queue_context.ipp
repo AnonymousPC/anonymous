@@ -2,22 +2,7 @@
 
 namespace detail
 {
-    std::string& opencl_source_replace ( std::string& str, const std::string& from, const std::string to )
-    {
-        size_t pos = 0;
-        while ( true )
-        {
-            pos = str.find(from, pos);
-            if ( pos != std::string::npos )
-            {
-                str.replace(pos, from.size(), to);
-                pos += to.size() + 1;
-            }
-            else 
-                break;
-        }
-        return str;
-    }
+    std::string& opencl_source_replace ( std::string&, const std::string&, const std::string& );
 
     template < class type >
     std::string opencl_type_name ( )

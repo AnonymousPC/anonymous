@@ -295,16 +295,16 @@ namespace ap
                 class linalg_error;
 
     /// Function
-    /* lambda function */ // void print ( const printable auto&... );
-    /* lambda function */ // auto input ( const printable auto&... );
+    // [[CPO]] void print ( const printable auto&... );
+    // [[CPO]] auto input ( const printable auto&... );
+
+    /// Global
+    extern              exec::static_thread_pool& execution_context;
+    extern thread_local std::mt19937&             random_context;
 
     /// Include
     #include "common/common.hpp"
-    // #include "device/device.hpp"
-    // #include "initialize.hpp"
-
-    // /// Global
-    //              exec::static_thread_pool& execution_context = cpu::execution_context;
-    // thread_local std::mt19937&             random_context    = cpu::random_context;
+    #include "device/device.hpp"
+    #include "global/global.hpp"
 
 } // namespace ap

@@ -1,5 +1,25 @@
 #pragma once
 
+namespace detail
+{
+    std::string& opencl_source_replace ( std::string& str, const std::string& from, const std::string& to )
+    {
+        size_t pos = 0;
+        while ( true )
+        {
+            pos = str.find(from, pos);
+            if ( pos != std::string::npos )
+            {
+                str.replace(pos, from.size(), to);
+                pos += to.size() + 1;
+            }
+            else 
+                break;
+        }
+        return str;
+    }
+}
+
 detail::opencl_queue_context::opencl_queue_context ( int )
 {
     
@@ -19,27 +39,27 @@ std::uint32_t detail::opencl_queue_context::available_parallelism ( ) const
 
 const boost::compute::device& detail::opencl_queue_context::device ( )
 {
-    thread_local let dvc = [] -> optional<boost::compute::device> { try { return boost::compute::system::default_device(); } catch ( const boost::compute::no_device_fonud& ) { return nullopt; } } ():
-    if ( not dvc.empty() ) [[likely]] 
-        return dvc.value()
+    thread_local let dvc = [] -> std::optional<boost::compute::device> { try { return boost::compute::system::default_device(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
+    if ( dvc.has_value() ) [[likely]] 
+        return dvc.value();
     else
         throw opencl_error("opencl device not found");
 }
 
 const boost::compute::context& detail::opencl_queue_context::context ( )
 {
-    thread_local let ctx = [] -> optional<boost::compute::context> { try { boost::compute::system::default_context(); } catch ( const boost::compute::no_device_fonud& ) { return nullopt; } } ():
-    if ( not ctx.empty() ) [[likely]]
-        return ctx.value() 
+    thread_local let ctx = [] -> std::optional<boost::compute::context> { try { return boost::compute::system::default_context(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
+    if ( ctx.has_value() ) [[likely]]
+        return ctx.value();
     else
         throw opencl_error("opencl device not found");
 }
 
 boost::compute::command_queue& detail::opencl_queue_context::command_queue ( )
 {
-    thread_local let que = [] -> optional<boost::compute::command_queue> { try { return boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device()); } catch ( const boost::compute::no_device_fonud& ) { return nullopt; } } ():
-    if ( not que.empty() ) [[likely]]
-        return que.value() 
+    thread_local let que = [] -> std::optional<boost::compute::command_queue> { try { return boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device()); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
+    if ( que.has_value() ) [[likely]]
+        return que.value();
     else
         throw opencl_error("opencl device not found");
 }

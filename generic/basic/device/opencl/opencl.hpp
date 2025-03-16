@@ -199,6 +199,10 @@ class opencl
         };
 };
 
+#if dll
+    #include "opencl.cpp"
+#endif
+
 #include "type/reference.hpp"
 #include "type/pointer.hpp"
 #include "type/stride_pointer.hpp"
@@ -219,6 +223,4 @@ class opencl
 #include "algorithm/reduce.hpp"
 
 //#include "linalg/linalg.hpp"
-
-opencl::execution_context_type opencl::execution_context = opencl::execution_context_type(boost::compute::system::default_device().max_work_group_size());
 

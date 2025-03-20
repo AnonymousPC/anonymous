@@ -120,7 +120,6 @@ namespace ap
     constexpr int        time_zone   ( );
 
     /// Global
-    extern boost::asio::io_context   io_context;
     extern boost::asio::ssl::context ssl_context;
     extern boost::asio::ssl::context tls_context;
     

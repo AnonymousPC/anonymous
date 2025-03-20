@@ -20,12 +20,12 @@ namespace detail
     }
 }
 
-detail::opencl_queue_context::opencl_queue_context ( int )
+opencl_queue_context::opencl_queue_context ( int )
 {
     
 }
 
-std::uint32_t detail::opencl_queue_context::available_parallelism ( ) const
+std::uint32_t opencl_queue_context::available_parallelism ( ) const
 {
     try
     {
@@ -37,7 +37,7 @@ std::uint32_t detail::opencl_queue_context::available_parallelism ( ) const
     }
 }
 
-const boost::compute::device& detail::opencl_queue_context::device ( )
+const boost::compute::device& opencl_queue_context::device ( )
 {
     thread_local let dvc = [] -> std::optional<boost::compute::device> { try { return boost::compute::system::default_device(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
     if ( dvc.has_value() ) [[likely]] 
@@ -46,7 +46,7 @@ const boost::compute::device& detail::opencl_queue_context::device ( )
         throw opencl_error("opencl device not found");
 }
 
-const boost::compute::context& detail::opencl_queue_context::context ( )
+const boost::compute::context& opencl_queue_context::context ( )
 {
     thread_local let ctx = [] -> std::optional<boost::compute::context> { try { return boost::compute::system::default_context(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
     if ( ctx.has_value() ) [[likely]]
@@ -55,7 +55,7 @@ const boost::compute::context& detail::opencl_queue_context::context ( )
         throw opencl_error("opencl device not found");
 }
 
-boost::compute::command_queue& detail::opencl_queue_context::command_queue ( )
+boost::compute::command_queue& opencl_queue_context::command_queue ( )
 {
     thread_local let que = [] -> std::optional<boost::compute::command_queue> { try { return boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device()); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
     if ( que.has_value() ) [[likely]]
@@ -64,7 +64,7 @@ boost::compute::command_queue& detail::opencl_queue_context::command_queue ( )
         throw opencl_error("opencl device not found");
 }
 
-boost::compute::kernel detail::opencl_queue_context::build_kernel ( const boost::compute::program& prog, std::string kernel_name )
+boost::compute::kernel opencl_queue_context::build_kernel ( const boost::compute::program& prog, std::string kernel_name )
 {
     try
     {
@@ -91,7 +91,7 @@ boost::compute::kernel detail::opencl_queue_context::build_kernel ( const boost:
     }
 }
 
-void detail::opencl_queue_context::enqueue ( execpools::task_base* task, std::uint32_t tid )
+void opencl_queue_context::enqueue ( execpools::task_base* task, std::uint32_t tid )
 {
     if ( boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL )
         try
@@ -116,7 +116,7 @@ void detail::opencl_queue_context::enqueue ( execpools::task_base* task, std::ui
                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL);
 }
 
-BOOST_COMPUTE_CL_CALLBACK void detail::opencl_queue_context::enqueue_callback ( void* args )
+BOOST_COMPUTE_CL_CALLBACK void opencl_queue_context::enqueue_callback ( void* args )
 {
     let ptr = static_cast<task_type*>(args);
     ptr->task->__execute(ptr->task, /*tid=*/ptr->tid);

@@ -23,13 +23,12 @@ class pipe_buf
         struct start_directory;
 
     private: // Data
-        /* boost::process::v2::process will immediate start once been constructed */
-        /* boost::asio::io_context is not movable */
+        /* boost::process::v2::process will immediate start once been constructed, so wrap it in unique_ptr */
         std::unique_ptr<boost::process::v2::process> handle      = nullptr;
-        std::unique_ptr<boost::asio::io_context>     ctx         = std::make_unique<boost::asio::io_context>(2);
-        boost::asio::writable_pipe                   stdin_pipe  = boost::asio::writable_pipe(*ctx);
-        boost::asio::readable_pipe                   stdout_pipe = boost::asio::readable_pipe(*ctx);
-        boost::asio::readable_pipe                   stderr_pipe = boost::asio::readable_pipe(*ctx);
+        boost::asio::io_context                      ctx         = boost::asio::io_context();
+        boost::asio::writable_pipe                   stdin_pipe  = boost::asio::writable_pipe(ctx);
+        boost::asio::readable_pipe                   stdout_pipe = boost::asio::readable_pipe(ctx);
+        boost::asio::readable_pipe                   stderr_pipe = boost::asio::readable_pipe(ctx);
         string                                       stdin_buff  = "";
         string                                       stdout_buff = "";
         string                                       stderr_buff = "";

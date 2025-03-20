@@ -201,16 +201,6 @@ constexpr time_point& operator -= ( time_point& left, const duration& right )
     return left = left - right;
 }
 
-constexpr void sleep_until ( time_point time )
-{
-    sleep_for(time - now());
-}
-
-constexpr int time_zone ( )
-{
-    return (boost::posix_time::second_clock::local_time() - boost::posix_time::second_clock::universal_time()).hours();
-}
-
 constexpr int detail::date_to_int ( tuple<int,int,int> date )
 {
     using namespace literals;

@@ -49,8 +49,4 @@ constexpr time_point    operator  -  ( const time_point&, const duration&   );
 constexpr time_point&   operator  += (       time_point&, const duration&   );
 constexpr time_point&   operator  -= (       time_point&, const duration&   );
 
-// Time_point: other
-constexpr void sleep_until ( time_point );
-constexpr int  time_zone   ( );
-
 #include "time_point.ipp"

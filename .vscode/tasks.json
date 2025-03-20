@@ -6,7 +6,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "rm bin/debug/main.o bin/debug/main.exe 2>nul || exit /b 0"
+                "command": "del bin/debug/main.o bin/debug/main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/debug/main.o bin/debug/main 2>&- || :"
@@ -83,7 +83,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "rm bin/release/main.o bin/release/main.exe 2>nul || exit /b 0"
+                "command": "del bin/release/main.o bin/release/main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/release/main.o bin/release/main 2>&- || :"
@@ -163,7 +163,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "rm bin/dll/main.o 2>nul || exit /b 0"
+                "command": "del bin/dll/main.o 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/dll/main.o 2>&- || :"
@@ -226,7 +226,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "rm bin/static/main.o bin/static/main.exe 2>nul || exit /b 0"
+                "command": "del bin/static/main.o bin/static/main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "echo not supported"

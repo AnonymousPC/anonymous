@@ -16,7 +16,7 @@ auto sender<types...>::connect ( std::execution::receiver auto&& recv )
 
 template < class... types >
 template < std::execution::receiver receiver >
-class sender<types...>::operation_state<receiver>
+class sender<types...>::operation_state
     extends public operation_state_base
 {
     public: // Core

@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "Win32",
-            "compilerPath": "D:/My Passport/My Passport - Application/MSYS/ucrt64/bin/g++.exe",
+            "compilerPath": "F:/msys/ucrt64/bin/g++.exe",
             "compilerArgs": [
                 "-std=c++23"
             ],
@@ -10,8 +10,8 @@
             "cppStandard": "c++23",
             "includePath": [
                 "${workspaceFolder}/**",
-                "D:/My Passport/My Passport - Application/MSYS/ucrt64/include/c++/14.2.0",
-                "D:/My Passport/My Passport - Application/MSYS/ucrt64/include"
+                "F:/msys/ucrt64/include/c++/14.2.0",
+                "F:/msys/ucrt64/include"
             ],
             "intelliSenseMode": "windows-gcc-x64"
         },

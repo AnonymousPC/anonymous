@@ -5,23 +5,17 @@
 namespace boost::asio
 {
     template < class... types > 
-    class async_result<ap::asio::use_sender_t,types...>
+    class async_result<ap::asio::use_sender_t,void(types...)>
     {
         public: // Typedef
             using return_type = ap::asio::sender<types...>;
 
         public: // Interface
-            static int initiate ( auto&&, ap::asio::use_sender_t, types&&... );
-
-            // static int initiate ( auto&&... args )
-            // {
-            //     typeid_buf = std::vector{&typeid(args)...};
-            //     return 42;
-            // }
+            static int initiate ( auto&&, ap::asio::use_sender_t, auto&&... );
     };
 
     template < class... types >
-    int async_result<ap::asio::use_sender_t,types...>::initiate ( auto&& initiation, ap::asio::use_sender_t, types&&... args )
+    int async_result<ap::asio::use_sender_t,void(types...)>::initiate ( auto&& initiation, ap::asio::use_sender_t, auto&&... args )
     {
         return return_type(std::forward<decltype(initiation)>(initiation), std::forward<decltype(args)>(args)...);
     }

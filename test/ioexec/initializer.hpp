@@ -29,8 +29,6 @@ template <class... Args>
 
                 void init(use_sender_handler_base<Args...> &&handler) override
                 {
-                    ap::print(std::source_location::current().function_name());
-                    ap::print();
                     std::apply(std::move(_init), std::tuple_cat(std::make_tuple(std::move(handler)), std::move(_args)));
                 }
 

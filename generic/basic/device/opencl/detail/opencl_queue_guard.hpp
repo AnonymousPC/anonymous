@@ -2,13 +2,13 @@
 
 namespace detail
 {
-    struct opencl_queue_scope
+    struct opencl_queue_guard
     {
-        ~opencl_queue_scope ( );
+        ~opencl_queue_guard ( );
         static boost::compute::command_queue& command_queue ( );
     };
 } // namespace detail
 
 #if dll
-    #include "opencl_queue_scope.cpp"
+    #include "opencl_queue_guard.cpp"
 #endif

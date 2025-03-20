@@ -4,7 +4,7 @@ void wait_process ( int process_id )
 {
     try
     {
-        boost::process::v2::process(io_context.get_executor(), process_id).wait();
+        boost::process::v2::process(boost::asio::system_executor(), process_id).wait();
     }
     catch ( const boost::system::system_error& e )
     {
@@ -16,7 +16,7 @@ void suspend_process ( int process_id )
 {
     try
     {
-        boost::process::v2::process(io_context.get_executor(), process_id).suspend();
+        boost::process::v2::process(boost::asio::system_executor(), process_id).suspend();
     }
     catch ( const boost::system::system_error& e )
     {
@@ -28,7 +28,7 @@ void resume_process ( int process_id )
 {
     try
     {
-        boost::process::v2::process(io_context.get_executor(), process_id).resume();
+        boost::process::v2::process(boost::asio::system_executor(), process_id).resume();
     }
     catch ( const boost::system::system_error& e )
     {
@@ -40,7 +40,7 @@ void interrupt_process ( int process_id )
 {
     try
     {
-        boost::process::v2::process(io_context.get_executor(), process_id).interrupt();
+        boost::process::v2::process(boost::asio::system_executor(), process_id).interrupt();
     }
     catch ( const boost::system::system_error& e )
     {
@@ -52,7 +52,7 @@ int exit_process ( int process_id )
 {
     try
     {
-        let handle = boost::process::v2::process(io_context.get_executor(), process_id);
+        let handle = boost::process::v2::process(boost::asio::system_executor(), process_id);
         handle.request_exit();
         return handle.exit_code();
     }
@@ -66,7 +66,7 @@ int terminate_process ( int process_id )
 {
     try
     {
-        let handle = boost::process::v2::process(io_context.get_executor(), process_id);
+        let handle = boost::process::v2::process(boost::asio::system_executor(), process_id);
         handle.terminate();
         return handle.exit_code();
     }

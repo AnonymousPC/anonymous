@@ -16,7 +16,8 @@ void basic_http_buf<protocol>::connect ( url website, http_client_mode auto... a
 {
     // Check scheme.
     if ( ( same_as<protocol,tcp> but website.scheme() != "http"  ) or
-         ( same_as<protocol,ssl> but website.scheme() != "https" ) )
+         ( same_as<protocol,ssl> but website.scheme() != "https" ) or
+         ( same_as<protocol,tls> but website.scheme() != "https" ) )
         throw network_error("unrecognized http scheme (with url = {}, scheme = {}, expected = {})", website, website.scheme(), same_as<protocol,tcp> ? "http" otherwise "https");
 
     // Initialize.
@@ -369,7 +370,7 @@ auto basic_http_buf<protocol>::resolve_url ( const url& website )
 {
     try
     {
-        return typename protocol::resolver(io_context).resolve(
+        return typename protocol::resolver(boost::asio::system_executor()).resolve(
                    website.host().c_str(),
                    (website.port() != ""      ? website.port()                otherwise
                     not optional_port.empty() ? string(optional_port.value()) otherwise
@@ -471,7 +472,7 @@ void basic_http_buf<protocol>::listen_to_port ( const url& portal )
     for ( const auto& resolve_entry in resolve_results )
         try
         {
-            typename protocol::acceptor(io_context, resolve_entry).accept(handle);
+            typename protocol::acceptor(boost::asio::system_executor(), resolve_entry).accept(handle);
             break;
         }
         catch ( const boost::system::system_error& e )

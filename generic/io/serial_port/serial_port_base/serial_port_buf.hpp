@@ -14,7 +14,7 @@ class serial_port_buf
         virtual int sync      ( )                          override;
 
     private: // Data
-        boost::asio::serial_port handle       = typename boost::asio::serial_port(io_context);
+        boost::asio::serial_port handle       = typename boost::asio::serial_port(boost::asio::system_executor());
         string                   send_buff    = "";
         string                   receive_buff = "";
 

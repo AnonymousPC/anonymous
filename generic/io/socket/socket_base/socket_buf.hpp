@@ -20,7 +20,7 @@ class basic_socket_buf
         virtual int sync      ( )                          override;
 
     private: // Data
-        typename protocol::socket handle       = typename protocol::socket(io_context);
+        typename protocol::socket handle       = typename protocol::socket(boost::asio::system_executor());
         string                    send_buff    = "";
         string                    receive_buff = "";
 

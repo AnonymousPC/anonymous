@@ -196,7 +196,7 @@ class cpu
         };
 
     public: // Random
-        using random_context_type = std::mt19937;
+        using               random_context_type = std::mt19937;
         static thread_local random_context_type random_context;
 };
 

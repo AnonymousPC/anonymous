@@ -234,16 +234,6 @@ constexpr duration& operator /= ( duration& left, const number_type auto& right 
     return left = left / right;
 }
 
-constexpr void sleep ( duration time )
-{
-    sleep_for(time);
-}
-
-constexpr void sleep_for ( duration time )
-{
-    std::this_thread::sleep_for(std::chrono::nanoseconds(time));
-}
-
 constexpr bool detail::is_same_sign ( auto a, auto... args )
 {
     if constexpr ( sizeof...(args) == 0 )

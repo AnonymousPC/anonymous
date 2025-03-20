@@ -40,7 +40,7 @@ void basic_socket_buf<protocol>::listen ( url portal )
         try
         {
             if constexpr ( requires { typename protocol::acceptor; } )
-                typename protocol::acceptor(io_context, resolve_entry).accept(handle);
+                typename protocol::acceptor(boost::asio::system_executor(), resolve_entry).accept(handle);
 
             else
             {
@@ -262,7 +262,7 @@ auto basic_socket_buf<protocol>::resolve_url ( const url& website ) const
 {
     try
     {
-        return typename protocol::resolver(io_context).resolve(
+        return typename protocol::resolver(boost::asio::system_executor()).resolve(
                    website.host().c_str(),
                    website.port().c_str());
     }

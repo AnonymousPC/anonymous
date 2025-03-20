@@ -50,7 +50,7 @@ void pipe_buf::open ( path exe, pipe_mode auto... args )
 auto pipe_buf::run_with_args ( const boost::filesystem::path& proc, std::vector<std::string> params, const auto& inputs, auto... outputs )
 {
     if constexpr ( decay<decltype(inputs)>::size == 0 )
-        return std::make_unique<boost::process::v2::process>(io_context, proc, params, outputs..., boost::process::v2::process_stdio(stdin_pipe, stdout_pipe, stderr_pipe));
+        return std::make_unique<boost::process::v2::process>(boost::asio::system_executor(), proc, params, outputs..., boost::process::v2::process_stdio(stdin_pipe, stdout_pipe, stderr_pipe));
 
     else if constexpr ( same_as<decltype(inputs.first),environment> )
     {

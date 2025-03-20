@@ -23,9 +23,9 @@ class function<ret_type(arg_types...)>
         constexpr function ( function_type<ret_type(arg_types...)> auto );
 
     public: // Member
-        constexpr       bool            empty      ( )                const;
-        constexpr const std::type_info& type       ( )                const;
-        constexpr       ret_type        operator() ( arg_types&&... ) const;
+        constexpr       bool            empty      ( )              const;
+        constexpr const std::type_info& type       ( )              const;
+        constexpr       ret_type        operator() ( arg_types... ) const;
 };
 
 

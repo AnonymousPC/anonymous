@@ -158,6 +158,7 @@
 #include <boost/container/container_fwd.hpp>
 #include <boost/date_time.hpp>
 #include <boost/dll.hpp>
+#include <boost/dll/smart_library.hpp>
 #include <boost/gil.hpp>
 #include <boost/gil/extension/io/bmp.hpp>
 #include <boost/gil/extension/io/jpeg.hpp>
@@ -246,10 +247,9 @@ namespace ap
     inline namespace constants { }
     inline namespace literals  { }
 
-    namespace asio   { }
+    namespace ioexec { }
     namespace neural { }
     namespace spirit { }
-    namespace stock  { }
 
     /// Device
     class cpu;
@@ -257,6 +257,7 @@ namespace ap
     class hip;
     class mps;
     class opencl;
+    class system;
     class tbb;
 
     /// Class

@@ -20,7 +20,7 @@ constexpr const std::type_info& function<ret_type(arg_types...)>::type ( ) const
 }
 
 template < class ret_type, class... arg_types >
-constexpr ret_type function<ret_type(arg_types...)>::operator() ( arg_types&&... args ) const
+constexpr ret_type function<ret_type(arg_types...)>::operator() ( arg_types... args ) const
 {
     if ( not empty() ) [[likely]]
         return base::operator()(std::forward<decltype(args)>(args)...);

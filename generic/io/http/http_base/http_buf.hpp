@@ -66,7 +66,7 @@ class basic_http_buf
         // Thus, pack everything in a std::unique_ptr.
 
         // Handle
-        typename protocol::socket                                                                 handle                       = typename protocol::socket(io_context);
+        typename protocol::socket                                                                 handle                       = typename protocol::socket(boost::asio::system_executor());
 
         // Buffer
         std::unique_ptr<boost::beast::http::request_serializer <boost::beast::http::string_body>> request_serializer           = nullptr;

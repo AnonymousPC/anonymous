@@ -33,7 +33,7 @@ class mysql_stream
         struct database;
 
     private: // Data
-        boost::mysql::any_connection                  handle          = boost::mysql::any_connection(io_context);
+        boost::mysql::any_connection                  handle          = boost::mysql::any_connection(boost::asio::system_executor());
         unordered_map<string,boost::mysql::statement> server_stmtpool = {};
         unordered_set<string>                         client_stmtpool = {};
 

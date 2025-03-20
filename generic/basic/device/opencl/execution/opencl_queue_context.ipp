@@ -16,7 +16,7 @@ namespace detail
 } // namespace detail
 
 
-boost::compute::program detail::opencl_queue_context::build_program ( std::string source, const auto&... args )
+boost::compute::program opencl_queue_context::build_program ( std::string source, const auto&... args )
 {
     // Build
     if constexpr ( sizeof...(args) > 0 )

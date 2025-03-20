@@ -50,11 +50,4 @@ constexpr duration&     operator  -= (       duration&,         const duration& 
 constexpr duration&     operator  *= (       duration&,         const number_type auto& );
 constexpr duration&     operator  /= (       duration&,         const number_type auto& );
 
-
-// Duration: other
-constexpr void sleep     ( duration );
-constexpr void sleep_for ( duration );
-
-
-
 #include "duration.ipp"

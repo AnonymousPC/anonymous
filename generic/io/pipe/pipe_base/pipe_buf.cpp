@@ -80,12 +80,7 @@ int pipe_buf::underflow ( )
                                 });
 
     // Run task.
-    let stdout_task = std::execution::schedule(cpu::execution_context.get_scheduler())
-                    | std::execution::then([&] { ctx->run(); });
-    let stderr_task = std::execution::schedule(cpu::execution_context.get_scheduler()) 
-                    | std::execution::then([&] { ctx->run(); });
-    std::execution::sync_wait(std::execution::when_all(stdout_task, stderr_task));
-    ctx->restart();
+    ctx.run();
 
     // Return
     if ( stdout_error == boost::system::error_code() or stderr_error == boost::system::error_code() ) // One of operation suceeded.

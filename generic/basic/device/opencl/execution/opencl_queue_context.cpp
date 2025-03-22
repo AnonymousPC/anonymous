@@ -39,7 +39,7 @@ std::uint32_t opencl_queue_context::available_parallelism ( ) const
 
 const boost::compute::device& opencl_queue_context::device ( )
 {
-    thread_local let dvc = [] -> std::optional<boost::compute::device> { try { return boost::compute::system::default_device(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
+    static let dvc = [] -> std::optional<boost::compute::device> { try { return boost::compute::system::default_device(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
     if ( dvc.has_value() ) [[likely]] 
         return dvc.value();
     else
@@ -48,7 +48,7 @@ const boost::compute::device& opencl_queue_context::device ( )
 
 const boost::compute::context& opencl_queue_context::context ( )
 {
-    thread_local let ctx = [] -> std::optional<boost::compute::context> { try { return boost::compute::system::default_context(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
+    static let ctx = [] -> std::optional<boost::compute::context> { try { return boost::compute::system::default_context(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
     if ( ctx.has_value() ) [[likely]]
         return ctx.value();
     else

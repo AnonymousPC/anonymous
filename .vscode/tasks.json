@@ -6,7 +6,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "del bin/debug/main.o bin/debug/main.exe 2>nul || exit /b 0"
+                "command": "del bin\\debug\\main.o bin\\debug\\main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/debug/main.o bin/debug/main 2>&- || :"
@@ -18,7 +18,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O0 -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -O0 -Ddebug=1 -c main.cpp -o bin\\debug\\main.o 2>&1 | tee bin\\debug\\log.txt",
             },
             "osx": {
                 "command": "clang++ -std=c++26 -g -Wall -O0 -Ddebug=1 -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt",
@@ -35,7 +35,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/debug/main.exe -fuse-ld=lld bin/debug/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -o bin\\debug\\main.exe -fuse-ld=lld bin\\debug\\main.o bin\\dll\\main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
             },
             "osx": {
                 "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL",
@@ -52,7 +52,7 @@
             "group": "test",
             "type": "shell",
             "windows": { 
-                "command": "start cmd /c \"\"bin/debug/main.exe\" & pause\""
+                "command": "bin\\debug\\main.exe"
             },
             "osx": {
                 "command": "bin/debug/main"
@@ -66,7 +66,7 @@
             "dependsOn": ["debug.clear", "debug.compile", "debug.link"],
             "dependsOrder": "sequence",
             "windows": {
-                "command": "start cmd /c \"\"bin/debug/main.exe\" & pause\""
+                "command": "bin\\debug\\main.exe"
             },
             "osx": {
                 "command": "bin/debug/main"
@@ -83,7 +83,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "del bin/release/main.o bin/release/main.exe 2>nul || exit /b 0"
+                "command": "del bin\\release\\main.o bin\\release\\main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/release/main.o bin/release/main 2>&- || :"
@@ -95,7 +95,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin\\release\\main.o 2>&1 | tee bin\\release\\log.txt",
             },
             "osx": {
                 "command": "clang++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt",
@@ -112,7 +112,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/release/main.exe -fuse-ld=lld bin/release/main.o bin/dll/main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -o bin\\release\\main.exe -fuse-ld=lld bin\\release\\main.o bin\\dll\\main.dll -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
             },
             "osx": {
                 "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL",
@@ -129,7 +129,7 @@
             "group": "test",
             "type": "shell",
             "windows": {
-                "command": "start cmd /c \"\"bin/release/main.exe\" & pause\""
+                "command": "bin\\release\\main.exe"
             },
             "osx": {
                 "command": "bin/release/main"
@@ -143,7 +143,7 @@
             "dependsOn": ["release.clear", "release.compile", "release.link"],
             "dependsOrder": "sequence",
             "windows": {
-                "command": "start cmd /c \"\"bin/release/main.exe\" & pause\""
+                "command": "bin\\release\\main.exe"
             },
             "osx": {
                 "command": "bin/release/main"
@@ -163,7 +163,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "del bin/dll/main.o 2>nul || exit /b 0"
+                "command": "del bin\\dll\\main.o 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "rm bin/dll/main.o 2>&- || :"
@@ -175,7 +175,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin\\dll\\main.o 2>&1 | tee bin\\dll\\log.txt",
             },
             "osx": {
                 "command": "clang++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt",
@@ -192,7 +192,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -shared -o bin/dll/main.dll -fuse-ld=lld bin/dll/main.o -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
+                "command": "g++ -shared -o bin\\dll\\main.dll -fuse-ld=lld bin\\dll\\main.o -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -ltbb12 -ltiff -luser32 -lws2_32",
             },
             "osx": {
                 "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL",
@@ -226,7 +226,7 @@
             "hide": true,
             "type": "shell",
             "windows": {
-                "command": "del bin/static/main.o bin/static/main.exe 2>nul || exit /b 0"
+                "command": "del bin\\static\\main.o bin\\static\\main.exe 2>nul || exit /b 0"
             },
             "osx": {
                 "command": "echo not supported"
@@ -238,7 +238,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin/static/main.o 2>&1 | tee bin/static/log.txt",
+                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=1 -c main.cpp -o bin\\static\\main.o 2>&1 | tee bin\\static\\log.txt",
             },
             "osx": {
                 "command": "echo not supported"
@@ -250,7 +250,7 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin/static/main.exe -fuse-ld=lld bin/static/main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lbz2 -lCrypt32 -lcrypto -ldeflate -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
+                "command": "g++ -o bin\\static\\main.exe -fuse-ld=lld bin\\static\\main.o -Wl,-Bstatic -static-libgcc -static-libstdc++ -lstdc++exp -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lbz2 -lCrypt32 -lcrypto -ldeflate -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
             },
             "osx": {
                 "command": "echo not supported"

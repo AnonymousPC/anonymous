@@ -14,7 +14,7 @@ class system_scheduler::sender
 {
     public: // Traits
         using sender_concept        = std::execution::sender_t;
-        using completion_signatures = std::execution::completion_signatures<std::execution::set_value_t(),std::execution::set_error_t(std::exception_ptr),std::execution::set_stopped_t()>;
+        using completion_signatures = std::execution::completion_signatures<std::execution::set_value_t()>;
 
     public: // Typedef
         template < class receiver_type > class operation_state;
@@ -23,7 +23,12 @@ class system_scheduler::sender
         constexpr static auto connect ( std::execution::receiver auto&& );
 
     public: // Query
-        constexpr static auto query ( std::execution::get_env_t ) noexcept;
+                                        constexpr static auto query ( std::execution::get_env_t )                                noexcept; 
+                                        constexpr static auto query ( std::execution::get_scheduler_t )                          noexcept;
+        template < class channel_type > constexpr static auto query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept;
+
+    private: // Data
+        [[maybe_unused]] int i_am_not_constexpr = 42;
 };
 
 template < class receiver_type >
@@ -46,7 +51,7 @@ class system_scheduler::bulk_sender
 {
     public: // Traits
         using sender_concept        = std::execution::sender_t;
-        using completion_signatures = std::execution::completion_signatures<std::execution::set_value_t(),std::execution::set_error_t(std::exception_ptr),std::execution::set_stopped_t()>;
+        using completion_signatures = sender_type::completion_signatures;
 
     public: // Data
         sender_type   snd;
@@ -61,7 +66,9 @@ class system_scheduler::bulk_sender
         constexpr auto connect ( std::execution::receiver auto&& );
 
     public: // Query
-        constexpr static auto query ( std::execution::get_env_t ) noexcept;
+                                        constexpr        auto query ( std::execution::get_env_t )                                const noexcept; 
+                                        constexpr static auto query ( std::execution::get_scheduler_t )                                noexcept;
+        template < class channel_type > constexpr static auto query ( std::execution::get_completion_scheduler_t<channel_type> )       noexcept;
 };
 
 template < class sender_type, class shape_type, class function_type >
@@ -85,8 +92,10 @@ class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_
         constexpr void set_error   ( auto&&... ) noexcept;
         constexpr void set_stopped ( auto&&... ) noexcept;
 
-    public: // Query
-        constexpr static auto get_env ( ) noexcept;
+    public: // Query    
+                                        constexpr        auto query ( std::execution::get_env_t )                                const noexcept; 
+                                        constexpr static auto query ( std::execution::get_scheduler_t )                                noexcept;
+        template < class channel_type > constexpr static auto query ( std::execution::get_completion_scheduler_t<channel_type> )       noexcept;
 };
 
 template < class sender_type, class shape_type, class function_type >
@@ -104,41 +113,10 @@ class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::opera
 
 
 
-/// Declaration (system_scheduler.env)
-
-class system_scheduler::env
-{
-    public: // Interface
-        template < class channel_type > constexpr static auto query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept;
-
-    private: // Data
-        [[maybe_unused]] int i_am_not_constexpr = 42;
-};
 
 
 
 
-
-
-
-
-
-/// Implemention (system_scheduler)
-
-constexpr std::execution::sender auto system_scheduler::schedule ( ) noexcept
-{
-    return sender();
-}
-
-constexpr std::execution::sender auto system_scheduler::bulk ( std::execution::sender auto&& snd, int_type auto&& shp, auto&& func ) noexcept
-{
-    return bulk_sender(std::forward<decltype(snd)>(snd), std::forward<decltype(shp)>(shp), std::forward<decltype(func)>(func));
-}
-
-constexpr auto system_scheduler::get_env ( ) noexcept
-{
-    return env();
-}
 
 
 
@@ -151,7 +129,18 @@ constexpr auto system_scheduler::sender::connect ( std::execution::receiver auto
 
 constexpr auto system_scheduler::sender::query ( std::execution::get_env_t ) noexcept
 {
-    return env();
+    return sender();
+}
+
+constexpr auto system_scheduler::sender::query ( std::execution::get_scheduler_t ) noexcept
+{
+    return system_scheduler();
+}
+
+template < class channel_type >
+constexpr auto system_scheduler::sender::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
+{
+    return system_scheduler();
 }
 
 template < class receiver_type >
@@ -185,9 +174,22 @@ constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_typ
 }
 
 template < class sender_type, class shape_type, class function_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::query ( std::execution::get_env_t ) noexcept
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::query ( std::execution::get_env_t ) const noexcept
 {
-    return env();
+    return self;
+}
+
+template < class sender_type, class shape_type, class function_type >
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::query ( std::execution::get_scheduler_t ) noexcept
+{
+    return system_scheduler();
+}
+
+template < class sender_type, class shape_type, class function_type >
+template < class channel_type >
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
+{
+    return system_scheduler();
 }
 
 template < class sender_type, class shape_type, class function_type >
@@ -252,9 +254,24 @@ constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_typ
 
 template < class sender_type, class shape_type, class function_type >
 template < class receiver_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::get_env ( ) noexcept
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::query ( std::execution::get_env_t ) const noexcept
 {
-    return env();
+    return self;
+}
+
+template < class sender_type, class shape_type, class function_type >
+template < class receiver_type >
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::query ( std::execution::get_scheduler_t ) noexcept
+{
+    return system_scheduler();
+}
+
+template < class sender_type, class shape_type, class function_type >
+template < class receiver_type >
+template < class channel_type >
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
+{
+    return system_scheduler();
 }
 
 template < class sender_type, class shape_type, class function_type >
@@ -269,11 +286,24 @@ constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_typ
 
 
 
+/// Implemention (system_scheduler), should be the last one to instantiate.
 
-/// Implemention (system_scheduler.env)
+constexpr std::execution::sender auto system_scheduler::schedule ( ) noexcept
+{
+    return sender();
+}
 
-template < class channel_type >
-constexpr auto system_scheduler::env::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
+constexpr std::execution::sender auto system_scheduler::bulk ( std::execution::sender auto&& snd, int_type auto&& shp, auto&& func ) noexcept
+{
+    return bulk_sender(std::forward<decltype(snd)>(snd), std::forward<decltype(shp)>(shp), std::forward<decltype(func)>(func));
+}
+
+constexpr auto system_scheduler::query ( std::execution::get_env_t ) noexcept
 {
     return system_scheduler();
+}
+
+constexpr auto system_scheduler::query ( std::execution::get_forward_progress_guarantee_t ) noexcept
+{
+    return std::execution::forward_progress_guarantee::concurrent; // The operation system is always your strong backing :)
 }

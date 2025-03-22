@@ -5,6 +5,60 @@
 #include "specific/ioexec/interface.hpp"
 using namespace ap;
 
+// extern boost::compute::device my_device;
+// #if dll
+//     boost::compute::device my_device = boost::compute::system::default_device();
+// #endif
+
+int main ( )
+{
+
+}
+
+// int main ( )
+// {
+//     let task = std::execution::schedule(cpu::execution_context.get_scheduler())
+//              | std::execution::bulk(3, [] (int)
+//                  {
+//                      print("cpu::execution_context.thread_id() = {}"s.format(std::this_thread::get_id()));
+//                  })
+//              | std::execution::continues_on(system::execution_context.get_scheduler())
+//              | std::execution::then([]
+//                  {
+//                      print("system::execution_context.thread_id() = {}"s.format(std::this_thread::get_id()));
+//                  });
+//     std::execution::sync_wait(std::move(task));
+
+//     print("===============");
+
+//     let timer  = boost::asio::system_timer(boost::asio::system_executor(), 3s);
+//     let work_1 = std::execution::schedule(cpu::execution_context.get_scheduler())
+//                | std::execution::then([]
+//                    {
+//                        print("work_1.start().thread_id() = {}"s.format(std::this_thread::get_id())); 
+//                    })
+//                | std::execution::let_value([&]
+//                    {
+//                        return timer.async_wait(ioexec::use_sender);
+//                    })
+//                | std::execution::then([] (auto&&...) 
+//                    { 
+//                        print("work_1.finish().thread_id() = {}"s.format(std::this_thread::get_id()));  
+//                    });
+
+//     let work_2 = std::execution::schedule(cpu::execution_context.get_scheduler())
+//                | std::execution::then([] 
+//                    {
+//                        print("work_2.thread_id() = {}"s.format(std::this_thread::get_id())); 
+//                    });
+
+//     std::execution::sync_wait(std::execution::when_all(work_2, work_1));
+
+//     print("exit");
+
+//     //print("{}"s.format(typeid(std::execution::get_delegation_scheduler(std::execution::get_env(work_1)))));
+// }
+
 
 // void main1 ( ) 
 // {
@@ -51,14 +105,3 @@ using namespace ap;
 
 //     print(now());
 // } 
-
-int main ( )
-{
-    print(std::this_thread::get_id());
-    let task   = std::execution::schedule(system_context().get_scheduler());
-    let sleepy = [] (int i) { print("sleep on", i); sleep(3s); print("awake on", i); };
-
-    let task2 = system_context().get_scheduler().bulk(task, 3, sleepy);
-
-    std::execution::sync_wait(task2);
-}

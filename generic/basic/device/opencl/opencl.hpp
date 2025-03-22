@@ -22,7 +22,7 @@ class opencl
         template < class type > using allocator = boost::compute::buffer_allocator<type>;
 
     public: // Memory
-                                using layout_type         = std::layout_left;
+                                using layout_type   = std::layout_left;
         template < class type > class accessor_type;
 
     public: // Operator

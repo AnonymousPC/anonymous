@@ -26,7 +26,7 @@ template < class... types >
 class sender<types...>::async_starter_base
 {
     public: // Core
-        virtual ~async_starter_base ( )             = default;
+        virtual ~async_starter_base       ( )       = default;
         virtual  async_starter_base& copy ( ) const = abstract;
 
     public: // Interface
@@ -63,7 +63,7 @@ template < class... types >
 template < class func_type, class... arg_types >
 sender<types...>::async_starter_base& sender<types...>::async_starter<func_type,arg_types...>::copy ( ) const
 {
-    return *new async_starter(func, args); // Don't worry, we will then put it into a unique_ptr in sender::sender(const sender&).
+    return *new async_starter(func, args); // Don't worry, we will then put it into a unique_ptr in sender::[[copy_constructor]].
 }
 
 template < class... types >

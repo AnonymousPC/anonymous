@@ -247,9 +247,9 @@ namespace ap
     inline namespace constants { }
     inline namespace literals  { }
 
-    namespace ioexec { }
-    namespace neural { }
-    namespace spirit { }
+    namespace asioexec { }
+    namespace neural   { }
+    namespace spirit   { }
 
     /// Device
     class cpu;

@@ -79,13 +79,14 @@ class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_
         using receiver_concept = std::execution::receiver_t;
     
     public: // Data
-        bulk_sender&            bulk_snd;
-        receiver_type&          recv;
-        std::atomic<shape_type> cnt      = 0;
+        receiver_type           recv;
+        shape_type              shp;
+        function_type           func;
+        std::atomic<shape_type> cnt  = 0;
 
     public: // Core
-        constexpr bulk_receiver ( bulk_sender&, receiver_type& );
-        constexpr bulk_receiver ( const bulk_receiver& );        // std::atomic<shape_type> is not copyable.
+        constexpr bulk_receiver ( receiver_type, shape_type, function_type );
+        constexpr bulk_receiver ( const bulk_receiver& );                    // std::atomic<shape_type> is not copyable.
         
     public: // Interface
         constexpr void set_value   ( auto&&... ) noexcept;
@@ -103,8 +104,7 @@ template < class receiver_type >
 class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::operation_state
 {
     public: // Data
-        bulk_sender   bulk_snd;
-        receiver_type recv;
+        std::execution::connect_result_t<sender_type,bulk_receiver<receiver_type>> op;
 
     public: // Interface
         constexpr void start ( ) noexcept;
@@ -170,7 +170,7 @@ constexpr void system_scheduler::sender::operation_state<receiver_type>::start (
 template < class sender_type, class shape_type, class function_type >
 constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::connect ( std::execution::receiver auto&& recv )
 {
-    return operation_state<decay<decltype(recv)>>(std::move(self), std::forward<decltype(recv)>(recv));
+    return operation_state<decay<decltype(recv)>>(std::execution::connect(std::move(snd), bulk_receiver(std::forward<decltype(recv)>(recv), std::move(shp), std::move(func))));
 }
 
 template < class sender_type, class shape_type, class function_type >
@@ -194,21 +194,21 @@ constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_typ
 
 template < class sender_type, class shape_type, class function_type >
 template < class receiver_type >
-constexpr system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::bulk_receiver ( bulk_sender& init_bulk_snd, receiver_type& init_recv )
-    extends bulk_snd ( init_bulk_snd ),
-            recv     ( init_recv )
+constexpr system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::bulk_receiver ( receiver_type init_recv, shape_type init_shp, function_type init_func )
+    extends recv ( std::move(init_recv) ),
+            shp  ( std::move(init_shp ) ),
+            func ( std::move(init_func) )
 {
-
 }
 
 template < class sender_type, class shape_type, class function_type >
 template < class receiver_type >
 constexpr system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::bulk_receiver ( const bulk_receiver& init )
-    extends bulk_snd ( init.bulk_snd ),
-            recv     ( init.recv ),
-            cnt      ( shape_type(init.cnt) )
+    extends recv ( init.recv ),
+            shp  ( init.shp ),
+            func ( init.func ),
+            cnt  ( init.cnt.load() )
 {
-    
 }
 
 template < class sender_type, class shape_type, class function_type >
@@ -218,19 +218,14 @@ constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_typ
     try
     {
         let args_tuple = std::tuple(std::forward<decltype(args)>(args)...);
-        print("set_value...", bulk_snd.shp);
 
-        for ( int i in range(bulk_snd.shp) )
-        {
-            print("post", i);
-            boost::asio::post(boost::asio::system_executor(), [&]
+        for ( int i in range(0, shp-1) )
+            boost::asio::post(boost::asio::system_executor(), [&, i]
                 {
-                    print("post...");
-                    std::apply([&] (auto&&... args) { bulk_snd.func(i, args...); }, args_tuple); // bulk_snd.func(i, args...).
-                    if ( (++cnt) == bulk_snd.shp )
-                        std::apply([&] (auto&&... args) { std::execution::set_value(std::move(recv), std::forward<decltype(args)>(args)...); }, args_tuple); // std::execution::set_value(recv, args...).
+                    std::apply([&] (auto&&... args) { func(i, args...); }, args_tuple);
+                    if ( (++cnt) == shp )
+                        std::apply([&] (auto&&... args) { std::execution::set_value(std::move(recv), std::forward<decltype(args)>(args)...); }, args_tuple);
                 });
-        }
     }
     catch (...)
     {
@@ -278,11 +273,8 @@ template < class sender_type, class shape_type, class function_type >
 template < class receiver_type >
 constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_type>::operation_state<receiver_type>::start ( ) noexcept
 {
-    let op = std::execution::connect(bulk_snd.snd, bulk_receiver<receiver_type>(bulk_snd, recv));
-    std::execution::start(op); // All channel.
+    std::execution::start(op);
 }
-
-
 
 
 
@@ -305,5 +297,5 @@ constexpr auto system_scheduler::query ( std::execution::get_env_t ) noexcept
 
 constexpr auto system_scheduler::query ( std::execution::get_forward_progress_guarantee_t ) noexcept
 {
-    return std::execution::forward_progress_guarantee::concurrent; // The operation system is always your strong backing :)
+    return std::execution::forward_progress_guarantee::concurrent; // System is always your strong backing :)
 }

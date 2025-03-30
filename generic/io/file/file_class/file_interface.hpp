@@ -10,6 +10,10 @@ class file_interface
         file_interface& operator = ( const file_interface&  ) = delete;
         file_interface& operator = (       file_interface&& );
 
+    public: // Constructor
+        file_interface ( const char* );
+        file_interface ( const path& );
+
     protected: // Interface (override)
         type& open    ( const path& );
         type& save    ( );

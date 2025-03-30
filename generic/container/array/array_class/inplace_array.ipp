@@ -4,7 +4,7 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::inplace_array ( int init_size )
     extends base ( init_size )
 {
-    #if debug
+    #ifdef debug
     if ( init_size < 0 )
         throw value_error("initialize inplace_array with negative size {}", init_size);
     if ( init_size > capacity() )
@@ -17,7 +17,7 @@ constexpr inplace_array<type,len,device>::inplace_array ( int init_size, const t
     requires copyable<type>
     extends base ( init_size, init_value )
 {
-    #if debug
+    #ifdef debug
     if ( init_size < 0 )
         throw value_error("initialize inplace_array with negative size {}", init_size);
     if ( init_size > capacity() )
@@ -47,7 +47,7 @@ constexpr inplace_array<type,len,device>::inplace_array ( std::initializer_list<
     requires copyable<type>
     extends base ( std::forward<decltype(init)>(init) )
 {
-    #if debug
+    #ifdef debug
     if ( int(init.size()) > capacity() )
         throw value_error("initialize inplace_array with size {} out of capacity {}", init.size(), size());
     #endif
@@ -200,7 +200,7 @@ constexpr inplace_array<type,len,device>::const_iterator inplace_array<type,len,
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::reference inplace_array<type,len,device>::operator[] ( int pos )
 {
-    #if debug
+    #ifdef debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
@@ -212,7 +212,7 @@ constexpr inplace_array<type,len,device>::reference inplace_array<type,len,devic
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::const_reference inplace_array<type,len,device>::operator[] ( int pos ) const
 {
-    #if debug
+    #ifdef debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
@@ -231,7 +231,7 @@ constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::clear 
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::resize ( int new_size )
 {
-    #if debug
+    #ifdef debug
     if ( new_size < 0 )
         throw value_error("resize inplace_array with negative size {}", new_size);
     if ( new_size > capacity() )
@@ -246,7 +246,7 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::push ( type new_value )
     requires movable<type>
 {
-    #if debug
+    #ifdef debug
     if ( size() == capacity() )
         throw value_error("cannot push into inplace_array: size has already reached capacity");
     #endif
@@ -259,7 +259,7 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::pop ( int old_pos )
     requires movable<type>
 {
-    #if debug
+    #ifdef debug
     if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
         throw value_error("index {} is out of range with size {}", old_pos, size());
     #endif
@@ -272,7 +272,7 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::insert ( int new_pos, type new_value )
     requires movable<type>
 {
-    #if debug
+    #ifdef debug
     if ( size() == capacity() )
         throw value_error("cannot insert into inplace_array: size has already reached capacity");
     if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
@@ -290,7 +290,7 @@ constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::erase 
     let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size();
     let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size();
 
-    #if debug
+    #ifdef debug
     if ( ( ( p1 < 1 or p1 > size() ) or
            ( p2 < 1 or p2 > size() ) )
     and not // Except for below:

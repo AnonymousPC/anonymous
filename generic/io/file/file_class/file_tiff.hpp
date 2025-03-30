@@ -7,8 +7,6 @@ class file_tiff
     public: // Core
         using file_interface<file_tiff>::file_interface;
         using matrix<color>::operator=;
-        file_tiff ( const char* );
-        file_tiff ( const path& );
 
     public: // Interface (override)
         file_tiff& open ( const path& );
@@ -22,6 +20,6 @@ class file_tiff
         int image_depth = 32;
 };
 
-#if dll
+#ifdef dll
     #include "file_tiff.cpp"
 #endif

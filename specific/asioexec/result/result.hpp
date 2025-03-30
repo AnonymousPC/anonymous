@@ -22,8 +22,18 @@ namespace boost::asio
         return std::execution::when_all(std::move(sched_sender), std::move(value_sender))
              | std::execution::let_value([] (auto&& sched, auto&&... args)
                  {
-                     return ap::asioexec::sender<types...>(std::forward<decltype(args)>(args)...)
-                          | std::execution::continues_on(std::forward<decltype(sched)>(sched));
+                     if constexpr ( ap::same_as<ap::decay<ap::first_type_of<types...>>,boost::system::error_code> )
+                         return ap::asioexec::sender<types...>(std::forward<decltype(args)>(args)...)
+                              | std::execution::let_value([] (boost::system::error_code ec, auto&&... args)
+                                  {
+                                      if ( ec )
+                                          throw boost::system::system_error(ec);
+                                      return std::execution::just(std::forward<delctype(args)>(args)...);
+                                  })
+                              | std::execution::continues_on(std::forward<decltype(sched)>(sched));
+                     else
+                          return ap::asioexec::sender<types...>(std::forward<decltype(args)>(args)...)
+                               | std::execution::continues_on(std::forward<decltype(sched)>(sched));
                  });
                     
     }

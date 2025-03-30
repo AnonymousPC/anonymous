@@ -17,6 +17,18 @@ file_interface<type>& file_interface<type>::operator = ( file_interface&& right 
 }
 
 template < class type >
+file_interface<type>::file_interface ( const char* pth )
+{
+    static_cast<type&>(self).open(pth);
+}
+
+template < class type >
+file_interface<type>::file_interface ( const path& pth )
+{
+    static_cast<type&>(self).open(pth);
+}
+
+template < class type >
 type& file_interface<type>::open ( const path& pth )
 {
     if ( file_open )

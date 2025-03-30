@@ -9,7 +9,7 @@ constexpr array_type auto inverse ( const array_type auto& matrix )
         return inverse ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
     {
-        #if debug
+        #ifdef debug
             if ( matrix.row() != matrix.column() )
                 throw value_error("cannot inverse matrix of shape {}: matrix must be square", matrix.shape());
         #endif

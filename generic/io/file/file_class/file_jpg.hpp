@@ -7,8 +7,6 @@ class file_jpg
     public: // Core
         using file_interface<file_jpg>::file_interface;
         using matrix<color>::operator=;
-        file_jpg ( const char* );
-        file_jpg ( const path& );
 
     public: // Interface (override)
         file_jpg& open ( const path& );
@@ -23,6 +21,6 @@ class file_jpg
 };
 
 
-#if dll
+#ifdef dll
     #include "file_jpg.cpp"
 #endif

@@ -14,7 +14,7 @@ constexpr range<type>::range ( value_type init_low, value_type init_high, value_
             high ( init_high ),
             step ( init_step )
 {
-    #if debug
+    #ifdef debug
     if constexpr ( requires { step == 0; low - high != 0; } )
         if ( step == 0 and low - high != 0 )
             throw value_error("range from {} to {} with step {} is invalid", low, high, step);

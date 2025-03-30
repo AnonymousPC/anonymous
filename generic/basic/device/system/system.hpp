@@ -14,6 +14,6 @@ class system
         static thread_local random_context_type random_context;
 }; 
 
-#if dll
+#ifdef dll
     #include "system.cpp"
 #endif

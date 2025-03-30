@@ -15,7 +15,7 @@ constexpr bool queue<type,device>::empty ( ) const
 template < class type, class device >
 constexpr queue<type,device>::reference queue<type,device>::front ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access front of an empty queue");
     #endif
@@ -25,7 +25,7 @@ constexpr queue<type,device>::reference queue<type,device>::front ( )
 template < class type, class device >
 constexpr queue<type,device>::const_reference queue<type,device>::front ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access front of an empty queue");
     #endif
@@ -35,7 +35,7 @@ constexpr queue<type,device>::const_reference queue<type,device>::front ( ) cons
 template < class type, class device >
 constexpr queue<type,device>::reference queue<type,device>::back ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access back of an empty queue");
     #endif
@@ -45,7 +45,7 @@ constexpr queue<type,device>::reference queue<type,device>::back ( )
 template < class type, class device >
 constexpr queue<type,device>::const_reference queue<type,device>::back ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access back of an empty queue");
     #endif
@@ -61,7 +61,7 @@ constexpr void queue<type,device>::push ( type val )
 template < class type, class device >
 constexpr type queue<type,device>::pop ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot pop from an empty queue");
     #endif

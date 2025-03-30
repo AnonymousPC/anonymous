@@ -16,6 +16,6 @@ namespace detail
     };
 } // namespace detail
 
-#if dll
+#ifdef dll
     #include "mysql_error_with_diagnostics.cpp"
 #endif

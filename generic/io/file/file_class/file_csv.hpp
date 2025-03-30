@@ -7,8 +7,6 @@ class file_csv
     public: // Core
         using file_interface<file_csv>::file_interface;
         using matrix<string>::operator=;
-        file_csv ( const char* );
-        file_csv ( const path& );
 
     public: // Interface (override)
         file_csv& open ( const path& );
@@ -16,6 +14,6 @@ class file_csv
 };
 
 
-#if dll
+#ifdef dll
     #include "file_csv.cpp"
 #endif

@@ -1,15 +1,5 @@
 #pragma once
 
-file_tga::file_tga ( const char* pth )
-{
-    open(pth);
-}
-
-file_tga::file_tga ( const path& pth )
-{
-    open(pth);
-}
-
 file_tga& file_tga::open ( const path& pth )
 {
     // Open file.

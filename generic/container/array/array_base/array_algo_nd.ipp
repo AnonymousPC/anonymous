@@ -115,7 +115,7 @@ template < int axis >
 constexpr container& array_algo<container,type,dim,device>::rotate ( int n )
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) )
 {
-    #if debug
+    #ifdef debug
         if ( n < -shape()[axis] or n > shape()[axis] )
             throw value_error("rotate array with step {} out of range with shape {} axis {}", n, shape(), axis);
     #endif
@@ -141,7 +141,7 @@ constexpr array<type,dim-1,device> array_algo<container,type,dim,device>::averag
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) ) and
              default_initializable<type> and plusable<type> and dividable_to<type,int>
 {
-    #if debug
+    #ifdef debug
         if ( shape()[axis] == 0 )
             throw value_error("get average from an empty array with shape {} axis {}", shape(), axis);
     #endif

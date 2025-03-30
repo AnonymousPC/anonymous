@@ -7,8 +7,6 @@ class file_png
     public: // Core
         using file_interface<file_png>::file_interface;
         using matrix<color>::operator=;
-        file_png ( const char* );
-        file_png ( const path& );
 
     public: // Interface (override)
         file_png& open ( const path& );
@@ -22,6 +20,6 @@ class file_png
         int image_depth = 32;
 };
 
-#if dll
+#ifdef dll
     #include "file_png.cpp"
 #endif

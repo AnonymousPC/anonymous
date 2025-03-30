@@ -52,6 +52,6 @@ class mysql_stream
 };
 
 #include "mysql_stream.ipp"
-#if dll
+#ifdef dll
     #include "mysql_stream.cpp"
 #endif

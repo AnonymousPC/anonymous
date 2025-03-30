@@ -8,16 +8,6 @@ struct file_idx::info_header
     vector<uint32_t> shape     = {};   // Shows the data-shape.
 };
 
-file_idx::file_idx ( const char* pth )
-{
-    open(pth);
-}
-
-file_idx::file_idx ( const path& pth )
-{
-    open(pth);
-}
-
 file_idx& file_idx::open ( const path& pth )
 {
     // Open file.

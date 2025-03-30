@@ -15,7 +15,7 @@ constexpr bool priority_queue<type,compare,device>::empty ( ) const
 template < class type, class compare, class device >
 constexpr priority_queue<type,compare,device>::const_reference priority_queue<type,compare,device>::top ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access top of an empty priority_queue");
     #endif
@@ -31,7 +31,7 @@ constexpr void priority_queue<type,compare,device>::push ( type val )
 template < class type, class compare, class device >
 constexpr type priority_queue<type,compare,device>::pop ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot pop from an empty priority_queue");
     #endif

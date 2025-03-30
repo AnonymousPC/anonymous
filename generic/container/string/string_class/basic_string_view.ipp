@@ -97,7 +97,7 @@ constexpr basic_string_view<type,device>::const_pointer basic_string_view<type,d
 template < class type, class device >
 constexpr basic_string_view<type,device>::const_reference basic_string_view<type,device>::operator[] ( int pos ) const
 {
-    #if debug
+    #ifdef debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
@@ -110,7 +110,7 @@ constexpr basic_string_view<type,device> basic_string_view<type,device>::operato
     let abs_pos_1 = pos_1 >= 0 ? pos_1 otherwise pos_1 + size() + 1;
     let abs_pos_2 = pos_2 >= 0 ? pos_2 otherwise pos_2 + size() + 1;
 
-    #if debug
+    #ifdef debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
            ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
     and not // Except for below:

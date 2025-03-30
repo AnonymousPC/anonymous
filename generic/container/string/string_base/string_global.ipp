@@ -90,7 +90,7 @@ constexpr string_type auto& operator += ( string_type auto& left, const string_t
 
 constexpr string_type auto operator * ( const string_type auto& left, int_type auto right )
 {
-    #if debug
+    #ifdef debug
         if ( right < 0 )
             throw value_error("multiply string with negative times {}", right);
     #endif
@@ -104,7 +104,7 @@ constexpr string_type auto operator * ( const string_type auto& left, int_type a
 
 constexpr string_type auto operator * ( int_type auto left, const string_type auto& right )
 {
-    #if debug
+    #ifdef debug
         if ( left < 0 )
             throw value_error("multiply string with negative times {}", left);
     #endif
@@ -119,7 +119,7 @@ constexpr string_type auto operator * ( int_type auto left, const string_type au
 constexpr string_type auto& operator *= ( string_type auto& left, int_type auto right )
     requires ( left_type::ownership() )
 {    
-    #if debug
+    #ifdef debug
         if ( right < 0 )
             throw value_error("multiply string with negative times {}", right);
     #endif

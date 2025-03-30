@@ -192,17 +192,6 @@ constexpr auto views::csv_lazy_split<pattern>::operator() ( input_range auto&& r
 
 
 
-
-file_csv::file_csv ( const char* pth )
-{
-    open(pth);
-}
-
-file_csv::file_csv ( const path& pth )
-{
-    open(pth);
-}
-
 file_csv& file_csv::open ( const path& pth )
 {
     // Open file.

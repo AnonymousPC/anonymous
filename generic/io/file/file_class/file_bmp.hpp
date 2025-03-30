@@ -7,8 +7,6 @@ class file_bmp
     public: // Core
         using file_interface<file_bmp>::file_interface;
         using matrix<color>::operator=;
-        file_bmp ( const char* );
-        file_bmp ( const path& );
 
     public: // Interface (override)
         file_bmp& open ( const path& );
@@ -22,6 +20,6 @@ class file_bmp
         int image_depth = 32;
 };
 
-#if dll
+#ifdef dll
     #include "file_bmp.cpp"
 #endif

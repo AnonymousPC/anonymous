@@ -9,7 +9,7 @@ namespace detail
 constexpr time_point::time_point ( int_type auto YYYY, int_type auto MM, int_type auto DD, int_type auto hh, int_type auto mm, int_type auto ss, int_type auto ms, int_type auto us, int_type auto ns )
     extends tuple<int,int,int,int,int,int,int,int,int> ( YYYY, MM, DD, hh, mm, ss, ms, us, ns )
 {
-    #if debug
+    #ifdef debug
     if ( detail::int_to_date(detail::date_to_int(ap::tuple(YYYY, MM, DD))) != ap::tuple(YYYY, MM, DD) )
         throw value_error("time_point {:04d}-{:04d}-{:04d} {:02d}:{:02d}:{:02d} {:03d}.{:03d}.{:03d} is invalid: date does not exit", year(), month(), day(), hour(), minute(), second(), millisecond(), microsecond(), nanosecond());
     if ( hh > 23 or hh < 0 or mm > 59 or mm < 0 or ss > 59 or ss < 0 or ms > 999 or ms < 0 or us > 999 or us < 0 or ns > 999 or ns < 0 )

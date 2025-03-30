@@ -39,7 +39,7 @@ constexpr list<type,device>::const_iterator list<type,device>::end ( ) const
 template < class type, class device >
 constexpr list<type,device>::reference list<type,device>::front ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access front of an empty list");
     #endif
@@ -49,7 +49,7 @@ constexpr list<type,device>::reference list<type,device>::front ( )
 template < class type, class device >
 constexpr list<type,device>::const_reference list<type,device>::front ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access front of an empty list");
     #endif
@@ -60,7 +60,7 @@ constexpr list<type,device>::const_reference list<type,device>::front ( ) const
 template < class type, class device >
 constexpr list<type,device>::reference list<type,device>::back ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access back of an empty list");
     #endif
@@ -70,7 +70,7 @@ constexpr list<type,device>::reference list<type,device>::back ( )
 template < class type, class device >
 constexpr list<type,device>::const_reference list<type,device>::back ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access back of an empty list");
     #endif
@@ -95,7 +95,7 @@ template < class type, class device >
 constexpr type list<type,device>::pop_front ( )
     requires movable<type>
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot pop_front from an empty list");
     #endif
@@ -113,7 +113,7 @@ template < class type, class device >
 constexpr type list<type,device>::pop_back ( )
     requires movable<type>
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot pop_back from an empty list");
     #endif

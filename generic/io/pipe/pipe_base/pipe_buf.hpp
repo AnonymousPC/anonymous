@@ -48,6 +48,6 @@ class pipe_buf
 
 
 #include "pipe_buf.ipp"
-#if dll
+#ifdef dll
     #include "pipe_buf.cpp"
 #endif // dll

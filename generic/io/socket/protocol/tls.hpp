@@ -35,6 +35,6 @@ class tls::socket
 };
 
 #include "tls.ipp"
-#if dll
+#ifdef dll
     #include "tls.cpp"
 #endif

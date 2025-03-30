@@ -1,15 +1,5 @@
 #pragma once
 
-file_txt::file_txt ( const char* pth )
-{
-    open(pth);
-}
-
-file_txt::file_txt ( const path& pth )
-{
-    open(pth);
-}
-
 file_txt& file_txt::open ( const path& pth )
 {
     // Open file.

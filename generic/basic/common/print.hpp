@@ -1,6 +1,6 @@
 #pragma once
 
 #include "print.ipp"
-#if dll
+#ifdef dll
     #include "print.cpp"
 #endif

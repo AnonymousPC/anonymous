@@ -11,7 +11,7 @@ template < class type, int len, class device >
 constexpr static_array<type,len,device>::static_array ( std::initializer_list<type> init )
     requires copyable<type>
 {
-    #if debug
+    #ifdef debug
     if ( int(init.size()) != size() )
         throw value_error("initialize static_array with size {} inconsistent with fixed_size {}", init.size(), size());
     #endif
@@ -22,7 +22,7 @@ template < class type, int len, class device >
 constexpr static_array<type,len,device>::static_array ( range<type> init )
     requires copyable<type>
 {
-    #if debug
+    #ifdef debug
     if ( init.size() != size() )
         throw value_error("initialize static_array with size {} inconsistent with fixed_size {}", init.size(), size());
     #endif
@@ -36,7 +36,7 @@ constexpr static_array<type,len,device>::static_array ( const array<type2,1,devi
              convertible_to<type2,type> and
              ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
 {
-    #if debug
+    #ifdef debug
     if ( cvt.size() != size() )
         throw value_error("initialize static_array with size {} inconsistent with fixed_size {}", cvt.size(), size());
     #endif
@@ -72,7 +72,7 @@ constexpr static_array<type,len,device>::static_array ( const inplace_array<type
              ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> ) and
              ( len2 >= len )
 {
-    #if debug
+    #ifdef debug
     if ( cvt.size() != size() )
         throw value_error("initialize static_array with size {} inconsistent with fixed_size {}", cvt.size(), size());
     #endif
@@ -176,7 +176,7 @@ constexpr static_array<type,len,device>::const_iterator static_array<type,len,de
 template < class type, int len, class device >
 constexpr static_array<type,len,device>::reference static_array<type,len,device>::operator[] ( int pos )
 {
-    #if debug
+    #ifdef debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
@@ -188,7 +188,7 @@ constexpr static_array<type,len,device>::reference static_array<type,len,device>
 template < class type, int len, class device >
 constexpr static_array<type,len,device>::const_reference static_array<type,len,device>::operator[] ( int pos ) const
 {
-    #if debug
+    #ifdef debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif

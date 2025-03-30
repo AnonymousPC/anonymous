@@ -1,15 +1,5 @@
 #pragma once
 
-file_tiff::file_tiff ( const char* pth )
-{
-    open(pth);
-}
-
-file_tiff::file_tiff ( const path& pth )
-{
-    open(pth);
-}
-
 file_tiff& file_tiff::open ( const path& pth )
 {
     // Open file.

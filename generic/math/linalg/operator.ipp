@@ -26,7 +26,7 @@ constexpr array_type auto operator + ( const array_type auto& left, const array_
              ( left_dimension == right_dimension ) and 
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.shape() != right.shape() )
         throw linalg_error("plus array with inconsistent shape (with left_shape = {}, right_shape = {})", left.shape(), right.shape());
     #endif
@@ -43,7 +43,7 @@ constexpr array_type auto operator - ( const array_type auto& left, const array_
              ( left_dimension == right_dimension ) and 
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.shape() != right.shape() )
         throw linalg_error("minus array with inconsistent shape (with left_shape = {}, right_shape = {})", left.shape(), right.shape());
     #endif
@@ -80,7 +80,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
              ( left_dimension == 2 and right_dimension == 2 ) and
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.column() != right.row() )
         throw linalg_error("multiply matrix with inconsistent column and row (with left_shape = {}, right_shape = {})", left.shape(), right.shape());
     #endif
@@ -107,7 +107,7 @@ constexpr array_type auto& operator += ( array_type auto& left, const array_type
              ( left_dimension == right_dimension ) and 
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.shape() != right.shape() )
         throw linalg_error("plus array with inconsistent shape (with left_shape = {}, right_shape = {})", left.shape(), right.shape());
     #endif
@@ -123,7 +123,7 @@ constexpr array_type auto& operator -= ( array_type auto& left, const array_type
              ( left_dimension == right_dimension ) and 
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.shape() != right.shape() )
         throw linalg_error("minus array with inconsistent shape (with left_shape = {}, right_shape = {})", left.shape(), right.shape());
     #endif
@@ -148,7 +148,7 @@ constexpr array_type auto& operator *= ( array_type auto& left, const array_type
              ( left_dimension == 2 and right_dimension == 2 ) and
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.column() != right.row() )
         throw linalg_error("multiply matrix with inconsistent column and row (with left_shape = {}, right_shape = {})", left.shape(), right.shape());
     #endif

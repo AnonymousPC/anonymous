@@ -1,15 +1,5 @@
 #pragma once
 
-file_bmp::file_bmp ( const char* pth )
-{
-    open(pth);
-}
-
-file_bmp::file_bmp ( const path& pth )
-{
-    open(pth);
-}
-
 file_bmp& file_bmp::open ( const path& pth )
 {
     // Open file.

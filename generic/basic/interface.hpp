@@ -1,20 +1,5 @@
 #pragma once
 
-// Macro.begin
-#ifdef debug
-    #if debug
-        #define debug_symbol true
-    #endif
-    #undef debug
-#endif
-
-#ifdef dll
-    #if dll
-        #define dll_symbol true
-    #endif
-    #undef dll
-#endif
-
 // Include [[std]]
 #include <algorithm>
 #include <cassert>
@@ -144,7 +129,7 @@
 #endif 
 
 // Include [[third-party.boost]]
-#ifndef debug_symbol
+#ifndef debug
     #define BOOST_DISABLE_ASSERTS
 #endif
 #define BOOST_COMPUTE_HAVE_THREAD_LOCAL
@@ -179,7 +164,7 @@
 #include <boost/stacktrace.hpp>
 
 // Include [[third-party.eigen]]
-#ifdef debug_symbol
+#ifdef debug
     #define eigen_assert(expr) do { if ( not bool(expr) ) throw std::runtime_error(EIGEN_MAKESTRING(expr)); } while ( false )
 #else
     #define eigen_assert(expr)
@@ -194,18 +179,6 @@
 #include <eigen3/unsupported/Eigen/CXX11/Tensor>
 #if defined(__GNUC__) and not defined(__clang__)
     #pragma GCC diagnostic pop
-#endif
-
-// Macro.end
-#ifdef debug_symbol
-
-    #undef debug_symbol
-    #define debug true
-#endif
-
-#ifdef dll_symbol
-    #undef dll_symbol
-    #define dll true
 #endif
 
 
@@ -248,6 +221,8 @@ namespace ap
     inline namespace literals  { }
 
     namespace asioexec { }
+    namespace email    { }
+    namespace mysql    { }
     namespace neural   { }
     namespace spirit   { }
 
@@ -287,7 +262,6 @@ namespace ap
                 class pipe_error;
                 class serial_port_error;
                 class network_error;
-                class mysql_error;
             class device_error;
                 class cuda_error;
                 class opencl_error;

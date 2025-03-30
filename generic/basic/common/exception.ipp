@@ -238,16 +238,6 @@ class network_error
         friend exception_interface<network_error>;
 };
 
-class mysql_error
-    extends public io_error,
-            public exception_interface<mysql_error>
-{
-    public:
-        using io_error::io_error;
-        using exception_interface<mysql_error>::from;
-        friend exception_interface<mysql_error>;
-};
-
 class device_error
     extends public runtime_error,
             public exception_interface<device_error>

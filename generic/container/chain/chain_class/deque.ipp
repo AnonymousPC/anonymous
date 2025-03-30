@@ -39,7 +39,7 @@ constexpr deque<type,device>::const_iterator deque<type,device>::end ( ) const
 template < class type, class device >
 constexpr deque<type,device>::reference deque<type,device>::operator [] ( int pos )
 {
-    #if debug
+    #ifdef debug
         if ( pos < -size() or pos == 0 or pos > size() )
             throw index_error("index {} is out of range with size {}", pos, size());
     #endif        
@@ -49,7 +49,7 @@ constexpr deque<type,device>::reference deque<type,device>::operator [] ( int po
 template < class type, class device >
 constexpr deque<type,device>::const_reference deque<type,device>::operator [] ( int pos ) const
 {
-    #if debug
+    #ifdef debug
         if ( pos < -size() or pos == 0 or pos > size() )
             throw index_error("index {} is out of range with size {}", pos, size());
     #endif        
@@ -59,7 +59,7 @@ constexpr deque<type,device>::const_reference deque<type,device>::operator [] ( 
 template < class type, class device >
 constexpr deque<type,device>::reference deque<type,device>::front ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access front of an empty deque");
     #endif
@@ -69,7 +69,7 @@ constexpr deque<type,device>::reference deque<type,device>::front ( )
 template < class type, class device >
 constexpr deque<type,device>::const_reference deque<type,device>::front ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access front of an empty deque");
     #endif
@@ -79,7 +79,7 @@ constexpr deque<type,device>::const_reference deque<type,device>::front ( ) cons
 template < class type, class device >
 constexpr deque<type,device>::reference deque<type,device>::back ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access back of an empty deque");
     #endif
@@ -89,7 +89,7 @@ constexpr deque<type,device>::reference deque<type,device>::back ( )
 template < class type, class device >
 constexpr deque<type,device>::const_reference deque<type,device>::back ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access back of an empty deque");
     #endif
@@ -111,7 +111,7 @@ constexpr void deque<type,device>::push_back ( type val )
 template < class type, class device >
 constexpr type deque<type,device>::pop_front ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot pop_front from an empty deque");
     #endif
@@ -128,7 +128,7 @@ constexpr type deque<type,device>::pop_front ( )
 template < class type, class device >
 constexpr type deque<type,device>::pop_back ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot pop_back from an empty deque");
     #endif

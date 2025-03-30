@@ -43,7 +43,7 @@ constexpr array_type auto operator - ( const array_type auto& right )
 constexpr array_type auto operator + ( const array_type auto& left, const array_type auto& right )
     requires ( left.dimension() == right.dimension() ) and addable_to<left_value_type,right_value_type>
 {
-    #if debug
+    #ifdef debug
         if ( left.shape() != right.shape() )
             throw value_error("cannot add array of shape {} and array of shape {}: shape must be equal", left.shape(), right.shape());
     #endif
@@ -62,7 +62,7 @@ constexpr array_type auto operator + ( const array_type auto& left, const array_
 constexpr array_type auto operator - ( const array_type auto& left, const array_type auto& right )
     requires ( left.dimension() == right.dimension() ) and minusable_to<left_value_type,right_value_type>
 {
-    #if debug
+    #ifdef debug
         if ( left.shape() != right.shape() )
             throw value_error("cannot add array of shape {} and array of shape {}: shape must be equal", left.shape(), right.shape());
     #endif

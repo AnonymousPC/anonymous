@@ -19,6 +19,6 @@ class serial_port_stream
         std::unique_ptr<serial_port_buf> buff_ptr = std::make_unique<serial_port_buf>();
 };
 
-#if dll
+#ifdef dll
     #include "serial_port_stream.cpp"
 #endif

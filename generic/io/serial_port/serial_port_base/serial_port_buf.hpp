@@ -22,6 +22,6 @@ class serial_port_buf
         constexpr static const int default_buffer_size = 672; // Default MTU in L2CAP.
 };
 
-#if dll
+#ifdef dll
     #include "serial_port_buf.cpp"
 #endif

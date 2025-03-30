@@ -19,6 +19,6 @@ class file_pcap
         struct packet_header;
 };
 
-#if dll
+#ifdef dll
     #include "file_pcap.cpp"
 #endif

@@ -11,6 +11,7 @@
 #include "file_class/file_interface.hpp"
 #include "file_class/file_bmp.hpp"
 #include "file_class/file_csv.hpp"
+#include "file_class/file_dll.hpp"
 // #include "file_class/file_html.hpp"
 #include "file_class/file_idx.hpp"
 // #include "file_class/file_json.hpp"

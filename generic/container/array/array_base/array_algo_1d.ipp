@@ -214,7 +214,7 @@ template < class container, class type, class device >
 constexpr array_algo<container,type,1,device>::reference array_algo<container,type,1,device>::max ( )
     requires comparable<type>
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("get max element from an empty array");
     #endif
@@ -225,7 +225,7 @@ constexpr array_algo<container,type,1,device>::reference array_algo<container,ty
 template < class container, class type, class device >
 constexpr array_algo<container,type,1,device>::const_reference array_algo<container,type,1,device>::max ( relation<type,type> auto pred ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("get max element from an empty array");
     #endif
@@ -237,7 +237,7 @@ template < class container, class type, class device >
 constexpr array_algo<container,type,1,device>::reference array_algo<container,type,1,device>::min ( )
     requires comparable<type>
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("get min element from an empty array");
     #endif
@@ -248,7 +248,7 @@ constexpr array_algo<container,type,1,device>::reference array_algo<container,ty
 template < class container, class type, class device >
 constexpr array_algo<container,type,1,device>::const_reference array_algo<container,type,1,device>::min ( relation<type,type> auto pred ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("get min element from an empty array");
     #endif
@@ -291,7 +291,7 @@ template < class container, class type, class device >
 constexpr container& array_algo<container,type,1,device>::partial_sort ( int n )
     requires comparable<type>
 {
-    #if debug
+    #ifdef debug
         if ( n < 0 )
             throw value_error("partial_sort array with middle {} out of range with size {}", n, size());
     #endif
@@ -303,7 +303,7 @@ constexpr container& array_algo<container,type,1,device>::partial_sort ( int n )
 template < class container, class type, class device >
 constexpr container& array_algo<container,type,1,device>::partial_sort ( int n, relation<type,type> auto pred )
 {
-    #if debug
+    #ifdef debug
         if ( n < 0 )
             throw value_error("partial_sort array with middle {} out of range with size {}", n, size());
     #endif
@@ -435,7 +435,7 @@ constexpr int array_algo<container,type,1,device>::right_find ( predicate<type> 
 template < class container, class type, class device >
 constexpr container& array_algo<container,type,1,device>::rotate ( int n )
 {
-    #if debug
+    #ifdef debug
         if ( n <= -size() or n >= size() )
             throw value_error("rotate array with step {} out of range with size {}", n, size());
     #endif
@@ -546,7 +546,7 @@ template < class container, class type, class device >
 constexpr type array_algo<container,type,1,device>::average ( ) const
     requires default_initializable<type> and plusable<type> and dividable_to<type,int>
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("get average from an empty array");
     #endif

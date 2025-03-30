@@ -7,8 +7,6 @@ class file_pnm
     public: // Core
         using file_interface<file_pnm>::file_interface;
         using matrix<color>::operator=;
-        file_pnm ( const char* );
-        file_pnm ( const path& );
 
     public: // Interface (override)
         file_pnm& open ( const path& );
@@ -22,6 +20,6 @@ class file_pnm
         int image_depth = 32;
 };
 
-#if dll
+#ifdef dll
     #include "file_pnm.cpp"
 #endif

@@ -183,7 +183,7 @@ constexpr basic_string<type,device>::const_pointer basic_string<type,device>::c_
 template < class type, class device >
 constexpr basic_string<type,device>::reference basic_string<type,device>::operator[] ( int pos )
 {
-    #if debug
+    #ifdef debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
@@ -193,7 +193,7 @@ constexpr basic_string<type,device>::reference basic_string<type,device>::operat
 template < class type, class device >
 constexpr basic_string<type,device>::const_reference basic_string<type,device>::operator[] ( int pos ) const
 {
-    #if debug
+    #ifdef debug
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
@@ -206,7 +206,7 @@ constexpr basic_string_view<type,device> basic_string<type,device>::operator[] (
     let abs_pos_1 = pos_1 >= 0 ? pos_1 otherwise pos_1 + size() + 1;
     let abs_pos_2 = pos_2 >= 0 ? pos_2 otherwise pos_2 + size() + 1;
 
-    #if debug
+    #ifdef debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
            ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
     and not // Except for below:
@@ -230,7 +230,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::erase ( int old_
     let abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size() + 1;
     let abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size() + 1;
 
-    #if debug
+    #ifdef debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
            ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
     and not // Except for below:
@@ -245,7 +245,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::erase ( int old_
 template < class type, class device >
 constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new_pos, basic_string_view<type,device> new_value )
 {
-    #if debug
+    #ifdef debug
     if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
         throw index_error("index {} is out of range with size {}", new_pos, size());
     #endif
@@ -263,7 +263,7 @@ constexpr basic_string<type,device>& basic_string<type,device>::push ( basic_str
 template < class type, class device >
 constexpr basic_string<type,device>& basic_string<type,device>::pop ( int old_pos )
 {
-    #if debug
+    #ifdef debug
     if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
         throw index_error("index {} is out of range with size {}", old_pos, size());
     #endif

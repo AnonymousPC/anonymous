@@ -4,8 +4,10 @@ namespace ap
 {
     /// File
     class file_stream;
+
     class file_bmp;
     class file_csv;
+    class file_dll;
     class file_html;
     class file_idx;
     class file_json;
@@ -78,12 +80,6 @@ namespace ap
     using http_stream  = basic_http_stream<tcp>;
     using https_stream = basic_http_stream<ssl>; 
 
-    // Mysql
-    class mysql_stream;
-
-    /// Email
-    class email_send;
-
     /// Utility
     class color;
     class time_point;
@@ -130,8 +126,6 @@ namespace ap
     #include "serial_port/serial_port.hpp"
     #include "socket/socket.hpp"
     #include "http/http.hpp"
-    #include "mysql/mysql.hpp"
-    #include "email/email.hpp"
     #include "global/global.hpp"
 
     /// Literal

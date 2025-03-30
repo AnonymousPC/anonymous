@@ -200,7 +200,7 @@ class cpu
         static thread_local random_context_type random_context;
 };
 
-#if dll
+#ifdef dll
     #include "cpu.cpp"
 #endif
 

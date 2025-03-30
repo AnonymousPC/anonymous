@@ -4,7 +4,7 @@ constexpr /*value_type*/ auto operator * ( const array_type auto& left, const ar
     requires ( left .dimension() == -1 ) and ( number_type<left_value_type > or complex_type<left_value_type > ) and
              ( right.dimension() ==  1 ) and ( number_type<right_value_type> or complex_type<right_value_type> )
 {
-    #if debug
+    #ifdef debug
         if ( left.size() != right.size() )
             throw value_error("cannot multiply transposed-vector of size {} and vector of size {}: size must be equal", left.size(), right.size());
     #endif

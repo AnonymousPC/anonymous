@@ -22,6 +22,6 @@ class url
 };
 
 
-#if dll
+#ifdef dll
     #include "url.cpp"
 #endif

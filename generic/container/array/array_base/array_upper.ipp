@@ -41,7 +41,7 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::pointer array_upper<type,1,device>::data ( )
     {
-        #if debug
+        #ifdef debug
         if ( not contiguous() )
             throw logic_error("cannot get native data from a non-contiguous view");
         #endif
@@ -51,7 +51,7 @@ namespace detail
     template < class type, class device >
     constexpr array_upper<type,1,device>::const_pointer array_upper<type,1,device>::data ( ) const
     {
-        #if debug
+        #ifdef debug
         if ( not contiguous() )
             throw logic_error("cannot get native data from a non-contiguous view");
         #endif
@@ -271,7 +271,7 @@ namespace detail
         requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::pointer array_upper<type,dim,device>::data ( )
     {
-        #if debug
+        #ifdef debug
         if ( not contiguous() )
             throw logic_error("cannot get native data from a non-contiguous view");
         #endif
@@ -282,7 +282,7 @@ namespace detail
         requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::const_pointer array_upper<type,dim,device>::data ( ) const
     {
-        #if debug
+        #ifdef debug
         if ( not contiguous() )
             throw logic_error("cannot get native data from a non-contiguous view");
         #endif
@@ -376,7 +376,7 @@ namespace detail
         requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr int array_upper<type,dim,device>::get_offset ( ) const
     {
-        #if debug
+        #ifdef debug
         if ( get_attribute() == transpose_attribute )   
             throw logic_error("using offset() on a transposed array");
         #endif
@@ -491,7 +491,7 @@ namespace detail
     constexpr array_upper<type,dim,device>::reference array_upper<type,dim,device>::get_value ( int_type auto... offsets )
     {
         static_assert ( sizeof...(offsets) == dim );
-        #if debug
+        #ifdef debug
         if ( get_attribute() == transpose_attribute )
             throw logic_error("using get_value() on a transposed array");
         #endif
@@ -504,7 +504,7 @@ namespace detail
     constexpr array_upper<type,dim,device>::const_reference array_upper<type,dim,device>::get_value ( int_type auto... offsets ) const
     {
         static_assert ( sizeof...(offsets) == dim );
-        #if debug
+        #ifdef debug
         if ( get_attribute() == transpose_attribute )
             throw logic_error("using get_value() from a transposed array");
         #endif
@@ -516,7 +516,7 @@ namespace detail
         requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::pointer array_upper<type,dim,device>::get_pointer ( int_type auto... offsets )
     {
-        #if debug
+        #ifdef debug
         if ( get_attribute() == transpose_attribute )
             throw logic_error("using get_pointer() on a transposed array");
         #endif
@@ -528,7 +528,7 @@ namespace detail
         requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr array_upper<type,dim,device>::const_pointer array_upper<type,dim,device>::get_pointer ( int_type auto... offsets ) const
     {
-        #if debug
+        #ifdef debug
         if ( get_attribute() == transpose_attribute )
             throw logic_error("using get_pointer() from a transposed array");
         #endif
@@ -540,7 +540,7 @@ namespace detail
         requires ( dim >= 2 and dim <= max_dim - 1 )
     constexpr int array_upper<type,dim,device>::get_stride ( ) const
     {
-        #if debug
+        #ifdef debug
         if ( get_attribute() == transpose_attribute )
             throw logic_error("using get_stride() from a transposed array");
         #endif

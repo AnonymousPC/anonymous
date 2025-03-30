@@ -17,6 +17,6 @@ namespace detail
     };
 } // namespace detail
 
-#if dll
+#ifdef dll
     #include "system_error.cpp"
 #endif

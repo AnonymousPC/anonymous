@@ -7,8 +7,6 @@ class file_tga
     public: // Core
         using file_interface<file_tga>::file_interface;
         using matrix<color>::operator=;
-        file_tga ( const char* );
-        file_tga ( const path& );
 
     public: // Interface (override)
         file_tga& open ( const path& );
@@ -22,6 +20,6 @@ class file_tga
         int image_depth = 32;
 };
 
-#if dll
+#ifdef dll
     #include "file_tga.cpp"
 #endif

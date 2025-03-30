@@ -1,5 +1,5 @@
 #pragma once
 
-#if dll
+#ifdef dll
     #include "system.cpp"
 #endif

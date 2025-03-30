@@ -6,7 +6,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
     requires ( left .dimension() == 2 ) and ( number_type<left_value_type > or complex_type<left_value_type > ) and
              ( right.dimension() == 2 ) and ( number_type<right_value_type> or complex_type<right_value_type> )
 {
-    #if debug
+    #ifdef debug
         if ( left.column() != right.row() )
             throw value_error("cannot multiply matrix of shape {} and matrix of shape {}", left.shape(), right.shape());
     #endif
@@ -26,7 +26,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
     requires ( left .dimension() == 2 ) and ( number_type<left_value_type > or complex_type<left_value_type > ) and
              ( right.dimension() == 1 ) and ( number_type<right_value_type> or complex_type<right_value_type> )
 {
-    #if debug
+    #ifdef debug
         if ( left.column() != right.size() )
             throw value_error("cannot multiply matrix of shape {} and vector of size {}", left.shape(), right.size());
     #endif
@@ -38,7 +38,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
     requires ( left .dimension() == -1 ) and ( number_type<left_value_type > or complex_type<left_value_type > ) and
              ( right.dimension() ==  2 ) and ( number_type<right_value_type> or complex_type<right_value_type> )
 {
-    #if debug
+    #ifdef debug
         if ( left.size() != right.row() )
             throw value_error("cannot multiply transposed-vector of size {} and matrix of shape {}", left.size(), right.shape());
     #endif

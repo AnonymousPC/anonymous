@@ -181,7 +181,7 @@ constexpr complex_type auto operator * ( const number_type auto& left, const com
 
 constexpr complex_type auto operator / ( const complex_type auto& left, const complex_type auto& right )
 {
-    #if debug
+    #ifdef debug
     if ( right == 0 )
         throw math_error("{} / {}", left, right);
     #endif
@@ -193,7 +193,7 @@ constexpr complex_type auto operator / ( const complex_type auto& left, const co
 
 constexpr complex_type auto operator / ( const complex_type auto& left, const number_type auto& right )
 {
-    #if debug
+    #ifdef debug
     if ( right == 0 )
         throw math_error("{} / {}", left, right);
     #endif
@@ -202,7 +202,7 @@ constexpr complex_type auto operator / ( const complex_type auto& left, const nu
 
 constexpr complex_type auto operator / ( const number_type auto& left, const complex_type auto& right )
 {
-    #if debug
+    #ifdef debug
     if ( right == 0 )
         throw math_error("{} / {}", left, right);
     #endif

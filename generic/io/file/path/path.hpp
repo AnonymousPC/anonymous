@@ -29,6 +29,6 @@ bool operator == ( const path&, const path& );
 
 
 
-#if dll
+#ifdef dll
     #include "path.cpp"
 #endif

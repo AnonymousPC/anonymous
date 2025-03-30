@@ -15,7 +15,7 @@ constexpr bool stack<type,device>::empty ( ) const
 template < class type, class device >
 constexpr stack<type,device>::reference stack<type,device>::top ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access top of an empty stack");
     #endif
@@ -25,7 +25,7 @@ constexpr stack<type,device>::reference stack<type,device>::top ( )
 template < class type, class device >
 constexpr stack<type,device>::const_reference stack<type,device>::top ( ) const
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot access top of an empty stack");
     #endif
@@ -41,7 +41,7 @@ constexpr void stack<type,device>::push ( type val )
 template < class type, class device >
 constexpr type stack<type,device>::pop ( )
 {
-    #if debug
+    #ifdef debug
         if ( empty() )
             throw value_error("cannot pop from an empty stack");
     #endif

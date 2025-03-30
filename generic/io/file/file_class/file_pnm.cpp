@@ -1,15 +1,5 @@
 #pragma once
 
-file_pnm::file_pnm ( const char* pth )
-{
-    open(pth);
-}
-
-file_pnm::file_pnm ( const path& pth )
-{
-    open(pth);
-}
-
 file_pnm& file_pnm::open ( const path& pth )
 {
     // Open file.

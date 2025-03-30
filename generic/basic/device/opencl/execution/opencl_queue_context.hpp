@@ -40,6 +40,6 @@ class opencl_queue_context
 };
 
 #include "opencl_queue_context.ipp"
-#if dll
+#ifdef dll
     #include "opencl_queue_context.cpp"
 #endif

@@ -26,6 +26,6 @@ class pipe_stream
 };
 
 #include "pipe_stream.ipp"
-#if dll
+#ifdef dll
     #include "pipe_stream.cpp"
 #endif

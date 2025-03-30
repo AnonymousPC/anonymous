@@ -153,7 +153,7 @@ class tbb
         using cpu::upper_bound;
 };
 
-#if dll
+#ifdef dll
     #include "tbb.cpp"
 #endif
 

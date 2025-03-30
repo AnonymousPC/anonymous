@@ -138,6 +138,6 @@ namespace detail
 
 } // namespace detail
 
-#if dll
+#ifdef dll
     #include "detail.cpp"
 #endif

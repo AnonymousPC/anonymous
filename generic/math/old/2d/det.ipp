@@ -9,7 +9,7 @@ constexpr /*value_type*/ auto det ( const array_type auto& matrix )
         return matrix_value_type ( round ( det ( matrix.template as_type<int_to_float_type<matrix_value_type>>() ) ) );
     else
     {
-        #if debug
+        #ifdef debug
             if ( matrix.row() != matrix.column() )
                 throw value_error("cannot calculate determinant of matrx of shape {}: matrix must be square", matrix.shape());
         #endif

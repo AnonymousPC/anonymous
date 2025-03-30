@@ -199,7 +199,7 @@ class opencl
         };
 };
 
-#if dll
+#ifdef dll
     #include "opencl.cpp"
 #endif
 

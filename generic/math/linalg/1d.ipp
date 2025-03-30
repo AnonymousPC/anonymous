@@ -17,7 +17,7 @@ constexpr array_type auto cross ( const array_type auto& left, const array_type 
              ( left_dimension == 1 and right_dimension == 1 ) and 
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.size() != 3 or right.size() != 3 )
         throw linalg_error("cross vector whose size is not 3 (with left_size = {}, right_size = {})", left.size(), right.size());
     #endif
@@ -34,7 +34,7 @@ constexpr auto dot ( const array_type auto& left, const array_type auto& right )
              ( left_dimension == 1 and right_dimension == 1 ) and 
              same_as<left_device_type,right_device_type>
 {
-    #if debug
+    #ifdef debug
     if ( left.size() != right.size() )
         throw linalg_error("dot vector with inconsistent size (with left_size = {}, right_size = {})", left.size(), right.size());
     #endif

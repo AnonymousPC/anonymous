@@ -22,6 +22,6 @@ class file_stream
 };
 
 #include "file_stream.ipp"
-#if dll
+#ifdef dll
     #include "file_stream.cpp"
 #endif

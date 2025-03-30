@@ -2,6 +2,6 @@
 
 std::string demangle ( const std::type_info& );
 
-#if dll
+#ifdef dll
     #include "abi.cpp"
 #endif

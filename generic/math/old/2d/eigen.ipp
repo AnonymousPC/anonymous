@@ -9,7 +9,7 @@ constexpr pair_type auto eigen ( const array_type auto& matrix )
         return eigen ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
     {
-        #if debug
+        #ifdef debug
             if ( matrix.row() != matrix.column() )
                 throw value_error("cannot calculate eigen of matrix of shape {}: matrix must be square", matrix.shape());
         #endif
@@ -36,7 +36,7 @@ constexpr array_type auto eigen_value ( const array_type auto& matrix )
         return eigen_value ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
     {
-        #if debug
+        #ifdef debug
             if ( matrix.row() != matrix.column() )
                 throw value_error("cannot calculate eigen_value of matrix of shape {}: matrix must be square", matrix.shape());
         #endif
@@ -62,7 +62,7 @@ constexpr array_type auto eigen_vector ( const array_type auto& matrix )
         return eigen_vector ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
     {
-        #if debug
+        #ifdef debug
             if ( matrix.row() != matrix.column() )
                 throw value_error("cannot calculate eigen_vector of matrix of shape {}: matrix must be square", matrix.shape());
         #endif

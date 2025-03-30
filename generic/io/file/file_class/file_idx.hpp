@@ -9,8 +9,6 @@ class file_idx
     public: // Core
         using file_interface<file_idx>::file_interface;
         using any::operator=;
-        file_idx ( const char* );
-        file_idx ( const path& );
 
     public: // Interface (override)
         file_idx& open ( const path& );
@@ -27,6 +25,6 @@ class file_idx
         friend file_stream& operator << ( file_stream&, const file_idx::info_header& );
 };
 
-#if dll
+#ifdef dll
     #include "file_idx.cpp"
 #endif

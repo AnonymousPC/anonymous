@@ -3,7 +3,7 @@
 constexpr tuple_type auto evd ( const array_type auto& matrix )
     requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    #if debug
+    #ifdef debug
         if ( matrix.row() != matrix.column() )
             throw value_error("cannot evd-decompose matrix of shape {}: matrix must be square", matrix.shape());
     #endif

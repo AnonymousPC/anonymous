@@ -29,5 +29,6 @@ int main ( )
     dll.template get<void(*)(std::string)>("hello_world")("hello");
     
     
+    
 };
 

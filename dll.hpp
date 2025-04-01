@@ -1,13 +1,6 @@
 #pragma once
+#include <string>
 
-class test_class
-{
-    test_class();
-    ~test_class();
+extern "C" void hello_world();
 
-    static void* operator new(size_t);
-    static void* operator new[](size_t);
-    static void  operator delete(void*);
-    static void  operator delete[](void*);
-
-};
+extern std::string str;

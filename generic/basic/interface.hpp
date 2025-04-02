@@ -219,32 +219,19 @@ namespace ap
     /// Subnamespace
     inline namespace constants { }
     inline namespace literals  { }
-
     namespace asioexec { }
     namespace email    { }
     namespace mysql    { }
     namespace neural   { }
     namespace spirit   { }
 
-    /// Device
-    class cpu;
-    class cuda;
-    class hip;
-    class mps;
-    class opencl;
-    class system;
-    class tbb;
-
-    /// Class
-    template < class type > class range;
-
-    /// Concept
-    // See concept.h.
-
-    /// Abi
+    /// Common.abi
     std::string demangle ( const std::type_info& );
 
-    /// Exception
+    /// Common.concept
+    // See concept.h.
+
+    /// Common.exception
     class exception;
         class logic_error;
             class value_error;
@@ -269,17 +256,29 @@ namespace ap
             class math_error;
                 class linalg_error;
 
-    /// Function
-    // [[CPO]] void print ( const printable auto&... );
-    // [[CPO]] auto input ( const printable auto&... );
+    /// Common.print
+    class print_t;
 
-    /// Global
-    extern              exec::static_thread_pool& execution_context;
-    extern thread_local std::mt19937&             random_context;
+    /// Common.range
+    template < class type > class range;
+
+    /// Device
+    class cpu;
+    class cuda;
+    class hip;
+    class mps;
+    class opencl;
+    class system;
+    class tbb;
 
     /// Include
     #include "common/common.hpp"
     #include "device/device.hpp"
     #include "global/global.hpp"
+
+    /// Global
+    constexpr           print_t                   print;
+    extern              exec::static_thread_pool& execution_context;
+    extern thread_local std::mt19937&             random_context;
 
 } // namespace ap

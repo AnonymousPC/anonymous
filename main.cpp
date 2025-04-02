@@ -6,6 +6,7 @@ using namespace ap;
 
 int main ( )
 {
-
+    print("good");
+    throw exception("hello");
 };
 

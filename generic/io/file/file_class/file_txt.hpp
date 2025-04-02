@@ -1,12 +1,12 @@
 #pragma once
 
 class file_txt
-    extends public file_interface<file_txt>,
-            public vector<string>
+    extends public vector<string>,
+            public file_interface<file_txt>
 {
     public: // Core
-        using file_interface<file_txt>::file_interface;
         using vector<string>::operator=;
+        using file_interface<file_txt>::file_interface;
 
     public: // Interface (override)
         file_txt& open ( const path& );

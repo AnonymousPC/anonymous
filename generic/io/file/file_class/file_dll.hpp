@@ -1,12 +1,12 @@
 #pragma once
 
 class file_dll
-    extends public file_interface<file_dll>,
-            public map<string,void*>
+    extends public map<string,any>,
+            public file_interface<file_dll>
 {
     public: // Core
-        using file_interface<file_dll>::file_interface;
         using map<string,void*>::operator=;
+        using file_interface<file_dll>::file_interface;
 
     public: // Interface (override)
         file_dll& open ( const path& );

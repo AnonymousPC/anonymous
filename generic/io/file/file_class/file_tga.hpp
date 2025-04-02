@@ -1,12 +1,12 @@
 #pragma once
 
 class file_tga
-    extends public file_interface<file_tga>,
-            public matrix<color>
+    extends public matrix<color>,
+            public file_interface<file_tga>
 {
     public: // Core
-        using file_interface<file_tga>::file_interface;
         using matrix<color>::operator=;
+        using file_interface<file_tga>::file_interface;
 
     public: // Interface (override)
         file_tga& open ( const path& );

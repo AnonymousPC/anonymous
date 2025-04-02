@@ -1,14 +1,14 @@
 #pragma once
 
 class file_idx
-    extends public file_interface<file_idx>,
-            public any
+    extends public any,
+            public file_interface<file_idx>
 {
     /** idx-file is always in big endian **/
 
     public: // Core
-        using file_interface<file_idx>::file_interface;
         using any::operator=;
+        using file_interface<file_idx>::file_interface;
 
     public: // Interface (override)
         file_idx& open ( const path& );

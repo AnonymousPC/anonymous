@@ -345,7 +345,7 @@ template<input_range _Vp>
     constexpr auto
     operator() [[nodiscard]] (_Dp&& __r) const
     {
-      return __range_adaptor_closure_t(std::__bind_back(*this, std::forward<_Dp>(__r)));
+      return __pipeable(std::__bind_back(*this, std::forward<_Dp>(__r)));
     }
 
       static constexpr int _S_arity = 2;

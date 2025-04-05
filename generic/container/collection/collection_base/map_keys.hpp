@@ -18,6 +18,11 @@ namespace detail
             struct set_tag { };
 
         public: // Member
+            constexpr int size ( ) const
+            {
+                return static_cast<const collection_type&>(self).size();
+            }
+
             constexpr const_iterator begin ( ) const
             {
                 return static_cast<const collection_type&>(self).begin();

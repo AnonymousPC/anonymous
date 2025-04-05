@@ -1,4 +1,5 @@
 #pragma once
+#include <__ranges/range_adaptor.h>
 
 namespace std {
 namespace ranges {
@@ -523,7 +524,7 @@ namespace ranges {
   constexpr auto
   operator() [[nodiscard]] (_Pattern&& __f) const
   {
-    return __range_adaptor_closure_t(std::__bind_back(*this, std::forward<_Pattern>(__f)));
+    return __pipeable(std::__bind_back(*this, std::forward<_Pattern>(__f)));
   }
 
 

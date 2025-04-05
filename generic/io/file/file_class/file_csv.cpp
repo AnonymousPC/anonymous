@@ -8,8 +8,8 @@ namespace detail
         constexpr static const bool value = false;
     };
     
-    template < class stream_type, class value_type >
-    struct is_istream_view<ranges::binary_istream_view<stream_type,value_type>>
+    template < class type >
+    struct is_istream_view<ranges::binary_istream_view<type>>
     {
         constexpr static const bool value = true;
     };
@@ -192,11 +192,17 @@ constexpr auto views::csv_lazy_split<pattern>::operator() ( input_range auto&& r
 
 
 
-file_csv& file_csv::open ( const path& pth )
+
+file_csv::file_csv ( path pth )
+{
+    open(pth);
+}
+
+file_csv& file_csv::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
-    let stream = file_stream(path(self), file_stream::read_only(true));
+    let stream = file_stream(self.operator path(), file_stream::read_only(true));
 
     // Read data.
     let raw_data = views::binary_istream<char>(stream)
@@ -234,7 +240,7 @@ file_csv& file_csv::save ( )
 {
     // Save file.
     file_interface::save();
-    let stream = file_stream(path(self), file_stream::write_only(true), file_stream::erase(true));
+    let stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
 
     // Write data.
     self | std::views::transform([] (auto line)
@@ -250,6 +256,17 @@ file_csv& file_csv::save ( )
              })
          | std::views::join_with('\n')
          | std::ranges::to<views::binary_ostream<char>>(std::ref(stream));
+
+    return self;
+}
+
+file_csv& file_csv::close ( )
+{
+    // Close file.
+    file_interface::close();
+
+    // Clear data.
+    matrix<string>::clear();
 
     return self;
 }

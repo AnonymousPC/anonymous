@@ -1,16 +1,17 @@
 #pragma once
 
 class file_csv
-    extends public matrix<string>,
-            public file_interface<file_csv>
+    extends public file_interface<file_csv>,
+            public matrix<string>
 {
     public: // Core
-        using matrix<string>::operator=;
-        using file_interface<file_csv>::file_interface;
+        file_csv ( ) = default;
+        file_csv ( path );
 
     public: // Interface (override)
-        file_csv& open ( const path& );
-        file_csv& save ( );
+        file_csv& open  ( path );
+        file_csv& save  ( );
+        file_csv& close ( );
 };
 
 

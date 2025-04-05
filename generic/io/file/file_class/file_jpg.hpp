@@ -1,16 +1,17 @@
 #pragma once
 
 class file_jpg
-    extends public matrix<color>,
-            public file_interface<file_jpg>
+    extends public file_interface<file_jpg>,   
+            public matrix<color>
 {
     public: // Core
-        using matrix<color>::operator=;
-        using file_interface<file_jpg>::file_interface;
+        file_jpg ( ) = default;
+        file_jpg ( path );
 
     public: // Interface (override)
-        file_jpg& open ( const path& );
-        file_jpg& save ( );
+        file_jpg& open  ( path );
+        file_jpg& save  ( );
+        file_jpg& close ( );
 
     public: // Interface
               int& depth ( );

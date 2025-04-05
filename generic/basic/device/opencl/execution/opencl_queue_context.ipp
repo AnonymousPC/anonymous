@@ -10,7 +10,7 @@ namespace detail
         if constexpr ( requires { boost::compute::detail::type_name_trait<type>::value(); } )
             return boost::compute::detail::type_name_trait<type>::value();
         else
-            return demangle(typeid(type));
+            return boost::core::demangle(typeid(type).name());
     }
     
 } // namespace detail

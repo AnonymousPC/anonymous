@@ -38,6 +38,9 @@ namespace detail
             constexpr int                    row           ( ) const;
             constexpr int                    column        ( ) const requires ( dim == 2 );
             constexpr bool                   empty         ( ) const;
+
+        public: // Member
+            constexpr array_info&            clear         ( );
             constexpr array_info&            resize        ( const static_array<int,dim>& );
 
         public: // Detail

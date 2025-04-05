@@ -57,11 +57,11 @@ std::string detail::format_stacktrace ( const std::stacktrace& trace )
 std::string detail::format_nested_exception ( const std::type_info& from_type, const std::string& from_what )
 {
     #if defined(__GNUC__) but not defined(__clang__) // terminate called after throwing an instance of '{typeid}'\n  what():  {what}
-        return std::format("after throwing another instance of '{}'\n  what(): {}", demangle(from_type), from_what);
+        return std::format("after throwing another instance of '{}'\n  what(): {}", boost::core::demangle(from_type.name()), from_what);
     #elifdef __clang__ // libc++abi: terminating due to uncaught exception of type {typeid}: {what}
-        return std::format("due to another exception of type {}: {}", demangle(from_type), from_what);
+        return std::format("due to another exception of type {}: {}", boost::core::demangle(from_type.name()), from_what);
     #else
-        return std::format("catch {}: {}", demangle(from_type), from_what);
+        return std::format("catch {}: {}", boost::core::demangle(from_type.name()), from_what);
     #endif
 }
 

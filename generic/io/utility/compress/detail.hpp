@@ -11,10 +11,10 @@ namespace detail
             struct source_type;
 
         private: // Data
-            range                                                                 r;
-            source_type                                                           s;
-            std::shared_ptr<boost::iostreams::filtering_istream>                  p;
-            ranges::binary_istream_view<boost::iostreams::filtering_istream,char> v;
+            range                                                r;
+            source_type                                          s;
+            std::shared_ptr<boost::iostreams::filtering_istream> p;
+            ranges::binary_istream_view<char>                    v;
             
         public: // Interface
             constexpr compress_view ( range );

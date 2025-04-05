@@ -6,25 +6,47 @@ file_dll& file_dll::open ( const path& pth )
     file_interface::open(pth);
 
     // Read data.
-    let dll = boost::dll::shared_library(pth.c_str());
-    let tmp = boost::dll::library_info(pth.c_str()).symbols()
-        | std::views::transform([&] (const auto& symbol) -> optional<pair<string,void*>>
-            {
-                try
-                {
-                    return pair(string(symbol.c_str()), dll.template get<void*>(symbol)); 
-                }
-                catch ( ... )
-                {
-                    return nullopt;
-                }
-            })
-        | std::views::filter([] (const auto& kv) { return not kv.empty(); })
-        | std::views::transform([] (const auto& kv) { return kv.value(); })
-        | std::ranges::to<map<string,void*>>();
 
-    static_cast<map<string,void*>&>(self) = tmp;
+
+
+    boost::dll::shared_library::load(pth.c_str());
+    static_cast<unordered_map<string,file_dll_any>&>(self)
+        = boost::dll::library_info(pth.c_str()).symbols()
+        | std::views::transform([&] (const std::string& symbol)
+            {
+                let dmg_symbol = boost::dll::detail::demangle_symbol(mangled_symbol.c_str());
+                if ( dmg_symbol == "" )
+                    dmg_symbol = symbol;
+
+                return pair(string(dmg_symbol), file_dll_any(library, dmg_symbol));
+            })
+        | std::ranges::to<unordered_map<string,file_dll_any>>();
+
+    return self;       
+}
+
+file_dll& file_dll::close ( )
+{
+    // Close file.
+    file_interface::close();
+
+    // Clear data.
+    boost::dll::shared_library::unload();
+    unordered_map<string,file_dll_any>::clear();
 
     return self;
-        
+}
+
+file_dll_any& file_dll::operator [] ( const string& k )
+{
+    let it = unordered_map<string,file_dll_any>::find(k);
+    if ( it != unordered_map<string,file_dll_any>::end() )
+        return get<1>(*it);
+    else
+        throw key_error("key {} not found", k);
+}
+
+const file_dll_any& file_dll::operator [] ( const string& k ) const
+{
+    return unordered_map<string,file_dll_any>::operator[](k);
 }

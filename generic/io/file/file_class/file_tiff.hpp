@@ -1,16 +1,17 @@
 #pragma once
 
 class file_tiff
-    extends public matrix<color>,
-            public file_interface<file_tiff>
+    extends public file_interface<file_tiff>,
+            public matrix<color>
 {
     public: // Core
-        using matrix<color>::operator=;
-        using file_interface<file_tiff>::file_interface;
+        file_tiff ( ) = default;
+        file_tiff ( path );
 
     public: // Interface (override)
-        file_tiff& open ( const path& );
-        file_tiff& save ( );
+        file_tiff& open  ( path );
+        file_tiff& save  ( );
+        file_tiff& close ( );
 
     public: // Interface
               int& depth ( );

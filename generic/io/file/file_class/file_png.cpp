@@ -1,12 +1,17 @@
 #pragma once
 
-file_png& file_png::open ( const path& pth )
+file_png::file_png ( path pth )
+{
+    open(pth);
+}
+
+file_png& file_png::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
 
     // Read data.
-    detail::read_from_boost_gil(self, path(self), boost::gil::png_tag(), depth());
+    detail::read_from_boost_gil(self, self.operator path(), boost::gil::png_tag(), depth());
 
     return self;
 }
@@ -17,7 +22,18 @@ file_png& file_png::save ( )
     file_interface::save();
 
     // Write data.
-    detail::write_to_boost_gil(self, path(self), boost::gil::png_tag(), depth());
+    detail::write_to_boost_gil(self, self.operator path(), boost::gil::png_tag(), depth());
+
+    return self;
+}
+
+file_png& file_png::close ( )
+{
+    // Close file.
+    file_interface::close();
+
+    // Clear data.
+    matrix<color>::clear();
 
     return self;
 }

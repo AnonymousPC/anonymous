@@ -1,10 +1,15 @@
 #pragma once
 
-file_txt& file_txt::open ( const path& pth )
+file_txt::file_txt ( path pth )
+{
+    open(pth);
+}
+
+file_txt& file_txt::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
-    let stream = file_stream(path(self), file_stream::read_only(true));
+    let stream = file_stream(self.operator path(), file_stream::read_only(true));
 
     // Read data.
     static_cast<vector<string>&>(self)
@@ -25,7 +30,7 @@ file_txt& file_txt::save ( )
 {
     // Save file.
     file_interface::save();
-    let stream = file_stream(path(self), file_stream::write_only(true), file_stream::erase(true));
+    let stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
 
     // Write data.
     self | std::views::reverse
@@ -33,6 +38,17 @@ file_txt& file_txt::save ( )
          | std::views::reverse
          | std::views::join_with('\n')
          | std::ranges::to<views::binary_ostream<char>>(std::ref(stream));
+
+    return self;
+}
+
+file_txt& file_txt::close ( )
+{
+    // Close file.
+    file_interface::close();
+
+    // Clear data.
+    vector<string>::clear();
 
     return self;
 }

@@ -1,16 +1,17 @@
 #pragma once
 
 class file_pnm
-    extends public matrix<color>,
-            public file_interface<file_pnm>
+    extends public file_interface<file_pnm>,
+            public matrix<color>
 {
     public: // Core
-        using matrix<color>::operator=;
-        using file_interface<file_pnm>::file_interface;
+        file_pnm ( ) = default;
+        file_pnm ( path );
 
     public: // Interface (override)
-        file_pnm& open ( const path& );
-        file_pnm& save ( );
+        file_pnm& open  ( path );
+        file_pnm& save  ( );
+        file_pnm& close ( );
 
     public: // Interface
               int& depth ( );

@@ -1,16 +1,17 @@
 #pragma once
 
 class file_bmp
-    extends public matrix<color>,
-            public file_interface<file_bmp>
+    extends public file_interface<file_bmp>,
+            public matrix<color>
 {
     public: // Core
-        using matrix<color>::operator=;
-        using file_interface<file_bmp>::file_interface;
+        file_bmp ( ) = default;
+        file_bmp ( path );
 
     public: // Interface (override)
-        file_bmp& open ( const path& );
-        file_bmp& save ( );
+        file_bmp& open  ( path );
+        file_bmp& save  ( );
+        file_bmp& close ( );
 
     public: // Interface
               int& depth ( );

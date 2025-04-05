@@ -17,6 +17,11 @@ namespace detail
             using  device_type           = device;
 
         public: // Member
+            constexpr int size ( ) const
+            {
+                return static_cast<const collection_type&>(self).size();
+            }
+
             constexpr iterator begin ( )
             {
                 return static_cast<collection_type&>(self).begin();

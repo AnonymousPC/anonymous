@@ -60,6 +60,14 @@ namespace detail
 
     template < class type, int dim, class device >
         requires ( dim >= 2 )
+    constexpr array_info<type,dim,device>& array_info<type,dim,device>::clear ( )
+    {
+        for_constexpr<1,dim>([&] <int index> { shp[index] = 0; });
+        return self;
+    }
+
+    template < class type, int dim, class device >
+        requires ( dim >= 2 )
     constexpr array_info<type,dim,device>& array_info<type,dim,device>::resize ( const static_array<int,dim>& new_shape )
     {
         shp = new_shape;

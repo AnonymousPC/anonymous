@@ -4,15 +4,14 @@ class file_idx
     extends public any,
             public file_interface<file_idx>
 {
-    /** idx-file is always in big endian **/
-
     public: // Core
-        using any::operator=;
-        using file_interface<file_idx>::file_interface;
+        file_idx ( ) = default;
+        file_idx ( const path& );
 
     public: // Interface (override)
-        file_idx& open ( const path& );
-        file_idx& save ( );
+        file_idx& open  ( const path& );
+        file_idx& save  ( );
+        file_idx& close ( );
 
     private: // Headers
         struct info_header;

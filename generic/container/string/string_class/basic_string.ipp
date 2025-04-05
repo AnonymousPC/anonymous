@@ -114,7 +114,7 @@ constexpr basic_string<type,device>::operator type2 ( ) const
 template < class type, class device >
 constexpr basic_string<type,device>::basic_string ( const std::type_info& cvt )
     requires same_as<type,char>
-    extends base ( demangle(cvt) )
+    extends base ( boost::core::demangle(cvt.name()) )
 {
     
 }

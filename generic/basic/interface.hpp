@@ -73,34 +73,13 @@
 #endif
 
 // Include [[std.experimental.execution]]
-#if defined(__GNUC__) and not defined(__clang__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wshadow"
-    #pragma GCC diagnostic ignored "-Wswitch-default"
-    #pragma GCC diagnostic ignored "-Wundef"
-    #pragma GCC diagnostic ignored "-Wunused-parameter"
-    #include <stdexec/execution.hpp>
-    #include <exec/static_thread_pool.hpp>
-    #include <exec/single_thread_context.hpp>
-    #include <exec/system_context.hpp>
-    #include <execpools/tbb/tbb_thread_pool.hpp>
-    namespace std { namespace execution { using namespace ::stdexec; } }
-    #pragma GCC diagnostic pop
-#elifdef __clang__
-    #include <stdexec/execution.hpp>
-    #include <exec/static_thread_pool.hpp>
-    #include <exec/single_thread_context.hpp>
-    #include <exec/system_context.hpp>
-    #include <execpools/tbb/tbb_thread_pool.hpp>
-    namespace std { namespace execution { using namespace ::stdexec; } }
-#endif
 
-
-// Include [[compiler]]
-#if defined(__GNUC__) or defined(__clang__)
-    #define _GNU_SOURCE
-    #include <cxxabi.h>
-#endif
+#include <stdexec/execution.hpp>
+#include <exec/static_thread_pool.hpp>
+#include <exec/single_thread_context.hpp>
+#include <exec/system_context.hpp>
+#include <execpools/tbb/tbb_thread_pool.hpp>
+namespace std { namespace execution { using namespace ::stdexec; } }
 
 // Include [[system.windows]]
 #ifdef _WIN32
@@ -143,7 +122,6 @@
 #include <boost/container/container_fwd.hpp>
 #include <boost/date_time.hpp>
 #include <boost/dll.hpp>
-#include <boost/dll/smart_library.hpp>
 #include <boost/gil.hpp>
 #include <boost/gil/extension/io/bmp.hpp>
 #include <boost/gil/extension/io/jpeg.hpp>
@@ -224,9 +202,6 @@ namespace ap
     namespace mysql    { }
     namespace neural   { }
     namespace spirit   { }
-
-    /// Common.abi
-    std::string demangle ( const std::type_info& );
 
     /// Common.concept
     // See concept.h.

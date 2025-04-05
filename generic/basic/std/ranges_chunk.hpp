@@ -536,7 +536,7 @@ namespace ranges {
     constexpr auto
     operator() [[nodiscard]] (_Dp&& __n) const
     {
-      return __range_adaptor_closure_t(std::__bind_back(*this, std::forward<_Dp>(__n)));
+      return __pipeable(std::__bind_back(*this, std::forward<_Dp>(__n)));
     }
 
 

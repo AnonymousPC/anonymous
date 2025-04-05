@@ -376,9 +376,9 @@ namespace detail
         else if constexpr ( printable<decltype(f)> )
             return (std::stringstream()<<f).str();
         else if constexpr ( same_as<decltype(f),const std::type_info&> )
-            return demangle(f);
+            return boost::core::demangle(f.name());
         else
-            return std::format("[[{} object at {}]]", demangle(typeid(f)), static_cast<const void*>(&f));
+            return std::format("[[{} object at {}]]", boost::core::demangle(typeid(f).name()), static_cast<const void*>(&f));
     } 
 }
 

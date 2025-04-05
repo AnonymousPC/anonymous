@@ -4,20 +4,18 @@ class path
     extends public string
 {
     public: // Core
-        path ( ) = default;
-        path ( const char* );
-        path ( string );
+        using string::string;
 
     public: // Conversion
         path   ( std::filesystem::path );
         operator std::filesystem::path ( ) const;
 
     public: // Member
-        path absolute_path ( )             const;
-        path relative_path ( )             const;
-        path parent_path   ( )             const;
-        path child_path    ( const path& ) const;
-        path root_path     ( )             const;
+        path absolute_path ( )      const;
+        path relative_path ( )      const;
+        path parent_path   ( )      const;
+        path child_path    ( path ) const;
+        path root_path     ( )      const;
 
     public: // Iterator
         const array<path> dir  ( ) const;

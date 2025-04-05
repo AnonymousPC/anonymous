@@ -1,21 +1,41 @@
 #pragma once
 
-struct file_idx::info_header
+namespace detail
 {
-    uint16_t         magic_num = 0x0;  // Always set as 0.
-    uint8_t          type      = 0x08; // Shows the data-type, where { 0x08: uint8_t, 0x09: int8_t, 0x0b: int16_t, 0x0c: int32_t, 0x0d: float32_t, 0x0e: float64_t }.
-    uint8_t          dimension = 0;    // Shows the data-dimension.
-    vector<uint32_t> shape     = {};   // Shows the data-shape.
-};
+    struct file_idx_info_header
+    {
+        uint16_t         magic_num = 0x0;  // Always set as 0.
+        uint8_t          type      = 0x08; // Shows the data-type, where { 0x08: uint8_t, 0x09: int8_t, 0x0b: int16_t, 0x0c: int32_t, 0x0d: float32_t, 0x0e: float64_t }.
+        uint8_t          dimension = 0;    // Shows the data-dimension.
+        vector<uint32_t> shape     = {};   // Shows the data-shape.
+    };    
+
+    template < class value_type, int dimension, bool first = true > auto           file_idx_read      ( auto&&, const static_array<int, dimension>& );
+    template < class value_type, int dimension, bool first = true > void           file_idx_write     ( auto&&, const array<value_type,dimension>&  );
+                                                                    decltype(auto) file_idx_write_aux ( const auto& /*data*/ );
+                                                                    file_stream&   operator >>        ( file_stream&,       file_idx_info_header& );
+                                                                    file_stream&   operator <<        ( file_stream&, const file_idx_info_header& );
+    
+} // namespace detail
+
+
+
+
+
+
+file_idx::file_idx ( const path& pth )
+{
+    open(pth);
+}
 
 file_idx& file_idx::open ( const path& pth )
 {
     // Open file.
     file_interface::open(pth);
-    let stream = file_stream(path(self), file_stream::read_only(true));
+    let stream = file_stream(self.operator path(), file_stream::read_only(true));
 
     // Read header.
-    let info_head = info_header();
+    let info_head = detail::file_idx_info_header();
     stream >> info_head;
     if ( info_head.magic_num != 0x0 )
         throw file_error("cannot open idx-file: magic_num mismatches (with pos = [1,2]th-byte, magic_num = {:#x}, expected = 0x0)", info_head.magic_num);
@@ -26,53 +46,53 @@ file_idx& file_idx::open ( const path& pth )
     if ( info_head.dimension == 1 )
     {
         if ( info_head.type == 0x08 )
-            static_cast<any&>(self) = read<uint8_t,1>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<uint8_t,1>  (stream, info_head.shape);
         else if ( info_head.type == 0x09 )
-            static_cast<any&>(self) = read<int8_t,1>   (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int8_t,1>   (stream, info_head.shape);
         else if ( info_head.type == 0x0b )
-            static_cast<any&>(self) = read<int16_t,1>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int16_t,1>  (stream, info_head.shape);
         else if ( info_head.type == 0x0c )
-            static_cast<any&>(self) = read<int32_t,1>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int32_t,1>  (stream, info_head.shape);
         else if ( info_head.type == 0x0d )
-            static_cast<any&>(self) = read<float32_t,1>(stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<float32_t,1>(stream, info_head.shape);
         else if ( info_head.type == 0x0e )
-            static_cast<any&>(self) = read<float64_t,1>(stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<float64_t,1>(stream, info_head.shape);
     }
 
     else if ( info_head.dimension == 2 )
     {
         if ( info_head.type == 0x08 )
-            static_cast<any&>(self) = read<uint8_t,2>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<uint8_t,2>  (stream, info_head.shape);
         else if ( info_head.type == 0x09 )
-            static_cast<any&>(self) = read<int8_t,2>   (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int8_t,2>   (stream, info_head.shape);
         else if ( info_head.type == 0x0b )
-            static_cast<any&>(self) = read<int16_t,2>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int16_t,2>  (stream, info_head.shape);
         else if ( info_head.type == 0x0c )
-            static_cast<any&>(self) = read<int32_t,2>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int32_t,2>  (stream, info_head.shape);
         else if ( info_head.type == 0x0d )
-            static_cast<any&>(self) = read<float32_t,2>(stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<float32_t,2>(stream, info_head.shape);
         else if ( info_head.type == 0x0e )
-            static_cast<any&>(self) = read<float64_t,2>(stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<float64_t,2>(stream, info_head.shape);
     }
 
     else if ( info_head.dimension == 3 )
     {
         if ( info_head.type == 0x08 )
-            static_cast<any&>(self) = read<uint8_t,3>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<uint8_t,3>  (stream, info_head.shape);
         else if ( info_head.type == 0x09 )
-            static_cast<any&>(self) = read<int8_t,3>   (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int8_t,3>   (stream, info_head.shape);
         else if ( info_head.type == 0x0b )
-            static_cast<any&>(self) = read<int16_t,3>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int16_t,3>  (stream, info_head.shape);
         else if ( info_head.type == 0x0c )
-            static_cast<any&>(self) = read<int32_t,3>  (stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<int32_t,3>  (stream, info_head.shape);
         else if ( info_head.type == 0x0d )
-            static_cast<any&>(self) = read<float32_t,3>(stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<float32_t,3>(stream, info_head.shape);
         else if ( info_head.type == 0x0e )
-            static_cast<any&>(self) = read<float64_t,3>(stream, info_head.shape);
+            static_cast<any&>(self) = detail::file_idx_read<float64_t,3>(stream, info_head.shape);
     }
 
     else
-        throw file_error("cannot open idx-file {}: dimension not supported (with dimension = {}, expected = 1, 2, 3)", path(self), info_head.dimension);
+        throw file_error("cannot open idx-file {}: dimension not supported (with dimension = {}, expected = 1, 2, 3)", self.operator path(), info_head.dimension);
 
     return self;
 }
@@ -81,66 +101,100 @@ file_idx& file_idx::save ( )
 {
     // Save file.
     file_interface::save();
-    let stream = file_stream(path(self), file_stream::write_only(true), file_stream::erase(true));
+    let stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
 
-    // Write header and data
+    // Write header.
+    stream << info_header
+    {
+        .type = same_as<value_type,uint8_t>   ? 0x08 otherwise
+                same_as<value_type,int8_t>    ? 0x09 otherwise
+                same_as<value_type,int16_t>   ? 0x0b otherwise
+                same_as<value_type,int32_t>   ? 0x0c otherwise
+                same_as<value_type,float32_t> ? 0x0d otherwise
+            /*same_as<value_type,float64_t>*/ 0x0e,
+        .dimension = dimension,
+        .shape = arr.shape()
+    };
+
+    // Write data.
     if ( self.type() == typeid(array<uint8_t,1>) )
-        write<uint8_t,1>  (stream, self.value<array<uint8_t,1>>());
+        file_idx_write<uint8_t,1>  (stream, self.value<array<uint8_t,1>>());
     else if ( self.type() == typeid(array<int8_t,1>) )
-        write<int8_t,1>   (stream, self.value<array<int8_t,1>>());
+        file_idx_write<int8_t,1>   (stream, self.value<array<int8_t,1>>());
     else if ( self.type() == typeid(array<int16_t,1>) )
-        write<int16_t,1>  (stream, self.value<array<int16_t,1>>());
+        file_idx_write<int16_t,1>  (stream, self.value<array<int16_t,1>>());
     else if ( self.type() == typeid(array<int32_t,1>) )
-        write<int32_t,1>  (stream, self.value<array<int32_t,1>>());
+        file_idx_write<int32_t,1>  (stream, self.value<array<int32_t,1>>());
     else if ( self.type() == typeid(array<float32_t,1>) )
-        write<float32_t,1>(stream, self.value<array<float32_t,1>>());
+        file_idx_write<float32_t,1>(stream, self.value<array<float32_t,1>>());
     else if ( self.type() == typeid(array<float64_t,1>) )
-        write<float64_t,1>(stream, self.value<array<float64_t,1>>());
+        file_idx_write<float64_t,1>(stream, self.value<array<float64_t,1>>());
 
     else if ( self.type() == typeid(array<uint8_t,2>) )
-        write<uint8_t,2>  (stream, self.value<array<uint8_t,2>>());
+        file_idx_write<uint8_t,2>  (stream, self.value<array<uint8_t,2>>());
     else if ( self.type() == typeid(array<int8_t,2>) )
-        write<int8_t,2>   (stream, self.value<array<int8_t,2>>());
+        file_idx_write<int8_t,2>   (stream, self.value<array<int8_t,2>>());
     else if ( self.type() == typeid(array<int16_t,2>) )
-        write<int16_t,2>  (stream, self.value<array<int16_t,2>>());
+        file_idx_write<int16_t,2>  (stream, self.value<array<int16_t,2>>());
     else if ( self.type() == typeid(array<int32_t,2>) )
-        write<int32_t,2>  (stream, self.value<array<int32_t,2>>());
+        file_idx_write<int32_t,2>  (stream, self.value<array<int32_t,2>>());
     else if ( self.type() == typeid(array<float32_t,2>) )
-        write<float32_t,2>(stream, self.value<array<float32_t,2>>());
+        file_idx_write<float32_t,2>(stream, self.value<array<float32_t,2>>());
     else if ( self.type() == typeid(array<float64_t,2>) )
-        write<float64_t,2>(stream, self.value<array<float64_t,2>>());
+        file_idx_write<float64_t,2>(stream, self.value<array<float64_t,2>>());
 
     else if ( self.type() == typeid(array<uint8_t,3>) )
-        write<uint8_t,3>  (stream, self.value<array<uint8_t,3>>());
+        file_idx_write<uint8_t,3>  (stream, self.value<array<uint8_t,3>>());
     else if ( self.type() == typeid(array<int8_t,3>) )
-        write<int8_t,3>   (stream, self.value<array<int8_t,3>>());
+        file_idx_write<int8_t,3>   (stream, self.value<array<int8_t,3>>());
     else if ( self.type() == typeid(array<int16_t,3>) )
-        write<int16_t,3>  (stream, self.value<array<int16_t,3>>());
+        file_idx_write<int16_t,3>  (stream, self.value<array<int16_t,3>>());
     else if ( self.type() == typeid(array<int32_t,3>) )
-        write<int32_t,3>  (stream, self.value<array<int32_t,3>>());
+        file_idx_write<int32_t,3>  (stream, self.value<array<int32_t,3>>());
     else if ( self.type() == typeid(array<float32_t,3>) )
-        write<float32_t,3>(stream, self.value<array<float32_t,3>>());
+        file_idx_write<float32_t,3>(stream, self.value<array<float32_t,3>>());
     else if ( self.type() == typeid(array<float64_t,3>) )
-        write<float64_t,3>(stream, self.value<array<float64_t,3>>());
+        file_idx_write<float64_t,3>(stream, self.value<array<float64_t,3>>());
 
     else
         throw file_error("cannot save idx-file {}: type or dimension not supported (with dimension = {}, expected_type = uint8_t, int8_t, int16_t, int32_t, float32_t, float64_t, expected_dimension = 1, 2, 3)",
-                         path(self), self.type());
+                         self.operator path(), self.type());
 
     return self;
 }
 
+file_idx& file_idx::close ( )
+{
+    // Close file.
+    file_interface::close();
+
+    // Clear data.
+    any::operator=(nullptr);
+
+    return self;
+}
+
+
+
+
+
+
+
+
+
+
+
 template < class value_type, int dimension, bool first >
-array<value_type,dimension> file_idx::read ( auto&& stream, const static_array<int,dimension>& shp )
+array<value_type,dimension> detail::file_idx_read ( auto&& stream, const static_array<int,dimension>& shp )
 {
     if constexpr ( dimension == 1 )
         if constexpr ( first )
             return views::binary_istream<value_type,std::endian::big>(stream/*non-view*/)
-                 | std::views::take(shp[1]) // This is an optimize to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
+                 | std::views::take(shp[1]) // This is an optimization to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
                  | std::ranges::to<array<value_type>>();
         else
             return stream/*chunked-binary-istream-view*/
-                 | std::views::take(shp[1]) // This is an optimize to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
+                 | std::views::take(shp[1]) // This is an optimization to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
                  | std::ranges::to<array<value_type>>();
 
     else if constexpr ( dimension >= 2 )
@@ -152,14 +206,14 @@ array<value_type,dimension> file_idx::read ( auto&& stream, const static_array<i
         if constexpr ( first )
             std::ranges::move(
                 views::chunked_binary_istream<value_type,std::endian::big>(stream/*non-view*/, sub_shp.product())
-                    | std::views::transform([&] (const auto& chunked_stream) { return read<value_type,dimension-1,false>(chunked_stream, sub_shp); }),
+                    | std::views::transform([&] (const auto& chunked_stream) { return detail::file_idx_read<value_type,dimension-1,false>(chunked_stream, sub_shp); }),
                 arr.begin()
             );
         else
             std::ranges::move(
                 stream/*chunked-binary-istream-view*/
                     | std::views::chunk(sub_shp.product())
-                    | std::views::transform([&] (const auto& chunked_stream) { return read<value_type,dimension-1,false>(chunked_stream, sub_shp); }),
+                    | std::views::transform([&] (const auto& chunked_stream) { return detail::file_idx_read<value_type,dimension-1,false>(chunked_stream, sub_shp); }),
                 arr.begin()
             );
 
@@ -168,26 +222,19 @@ array<value_type,dimension> file_idx::read ( auto&& stream, const static_array<i
 }
 
 template < class value_type, int dimension, bool first >
-void file_idx::write ( auto&& stream, const array<value_type,dimension>& arr )
+void detail::file_idx_write ( auto&& stream, const array<value_type,dimension>& arr )
 {
     if constexpr ( first )
-        stream << info_header
-            {
-                .type = same_as<value_type,uint8_t>   ? 0x08 otherwise
-                        same_as<value_type,int8_t>    ? 0x09 otherwise
-                        same_as<value_type,int16_t>   ? 0x0b otherwise
-                        same_as<value_type,int32_t>   ? 0x0c otherwise
-                        same_as<value_type,float32_t> ? 0x0d otherwise
-                    /*same_as<value_type,float64_t>*/ 0x0e,
-                .dimension = dimension,
-                .shape = arr.shape()
-            };
+
 
     if constexpr ( dimension == 1 )
         arr | std::ranges::to<views::binary_ostream<value_type,std::endian::big>>(std::ref(stream));
 
     else if constexpr ( dimension >= 2 )
-        arr | std::views::transform([] (const auto& chunked_data) { return write_aux(chunked_data); })
+        arr | std::views::transform([] (const auto& chunked_data) 
+                {
+                    return chunked | std::views::join;
+                })
             | std::ranges::to<views::chunked_binary_ostream<value_type,std::endian::big>>(std::ref(stream), arr.shape().product() / arr.shape()[1]);
 }
 

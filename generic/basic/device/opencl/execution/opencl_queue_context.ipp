@@ -5,16 +5,26 @@ namespace detail
     std::string& opencl_source_replace ( std::string&, const std::string&, const std::string& );
 
     template < class type >
-    std::string opencl_type_name ( )
-    {
-        if constexpr ( requires { boost::compute::detail::type_name_trait<type>::value(); } )
-            return boost::compute::detail::type_name_trait<type>::value();
-        else
-            return boost::core::demangle(typeid(type).name());
-    }
+    std::string opencl_type_name ( );
     
 } // namespace detail
 
+constexpr auto opencl_queue_context::forward_progress_guarantee ( )
+{
+    return std::execution::forward_progress_guarantee::weak_parallel;
+}
+
+constexpr auto opencl_queue_context::available_parallelism ( )
+{
+    try
+    {
+        return boost::compute::system::default_device().compute_units();
+    }
+    catch ( const boost::compute::no_device_found& e )
+    {
+        throw opencl_error("no opencl device found").from(e);
+    }
+}
 
 boost::compute::program opencl_queue_context::build_program ( std::string source, const auto&... args )
 {
@@ -72,4 +82,16 @@ boost::compute::program opencl_queue_context::build_program ( std::string source
     }
 
     return prog;
+}
+
+
+
+
+template < class type >
+std::string detail::opencl_type_name ( )
+{
+    if constexpr ( requires { boost::compute::detail::type_name_trait<type>::value(); } )
+        return boost::compute::detail::type_name_trait<type>::value();
+    else
+        return boost::core::demangle(typeid(type).name());
 }

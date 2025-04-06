@@ -35,6 +35,12 @@ const std::stacktrace& exception::stacktrace ( ) const
     return error_stacktrace;
 }
 
+
+
+
+
+
+
 std::string detail::format_stacktrace ( const std::stacktrace& trace )
 {
     return trace | std::views::reverse

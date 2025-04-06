@@ -1,16 +1,16 @@
 #pragma once
 
-const boost::compute::device& opencl_queue_context::device ( )
+const boost::compute::context& opencl_queue_context::context ( )
 {
-    if ( default_device.has_value() ) [[likely]] 
+    if ( default_context.has_value() ) [[likely]] 
         return default_device.value();
     else
         throw opencl_error("opencl device not found");
 }
 
-const boost::compute::context& opencl_queue_context::context ( )
+const boost::compute::device& opencl_queue_context::device ( )
 {
-    if ( default_context.has_value() ) [[likely]] 
+    if ( default_device.has_value() ) [[likely]] 
         return default_device.value();
     else
         throw opencl_error("opencl device not found");

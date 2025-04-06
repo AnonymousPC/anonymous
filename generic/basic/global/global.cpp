@@ -1,7 +1,7 @@
 #pragma once
 
-             exec::static_thread_pool&   execution_context         = cpu::execution_context;
-thread_local std::mt19937&               random_context            = cpu::random_context;
+//              exec::static_thread_pool&   execution_context         = cpu::execution_context;
+// thread_local std::mt19937&               random_context            = cpu::random_context;
              detail::basic_initializer_t detail::basic_initializer = detail::basic_initializer_t();
 
 detail::basic_initializer_t::basic_initializer_t ( )

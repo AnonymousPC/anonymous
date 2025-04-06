@@ -15,4 +15,6 @@ class file_csv
 };
 
 
-#include "file_csv.ipp"
+#ifdef dll
+    #include "file_csv.cpp"
+#endif

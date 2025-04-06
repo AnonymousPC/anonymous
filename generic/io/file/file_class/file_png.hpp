@@ -21,4 +21,6 @@ class file_png
         int image_depth = 32;
 };
 
-#include "file_png.ipp"
+#ifdef dll
+    #include "file_png.cpp"
+#endif

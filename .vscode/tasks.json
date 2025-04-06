@@ -30,10 +30,10 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin\\debug\\main.exe -fuse-ld=lld bin\\debug\\main.o -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
+                "command": "g++ -o bin\\debug\\main.exe -fuse-ld=lld bin\\debug\\main.o bin\\dll\\main.dll -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
             },
             "osx": {
-                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
+                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
             }
         },
         {
@@ -53,8 +53,14 @@
             "detail": "debug",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["debug.clear", "debug.compile", "debug.link", "debug.run"],
-            "dependsOrder": "sequence"
+            "dependsOn": ["debug.clear", "debug.compile", "debug.link"],
+            "dependsOrder": "sequence",
+            "windows": {
+                "command": "bin\\debug\\main.exe"
+            },
+            "osx": {
+                "command": "bin/debug/main"
+            }
         },
 
 
@@ -91,10 +97,10 @@
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "g++ -o bin\\release\\main.exe -fuse-ld=lld bin\\release\\main.o -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
+                "command": "g++ -o bin\\release\\main.exe -fuse-ld=lld bin\\release\\main.o bin\\dll\\main.dll -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
             },
             "osx": {
-                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
+                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
             }
         },
         {
@@ -114,11 +120,73 @@
             "detail": "release",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["release.clear", "release.compile", "release.link", "release.run"],
-            "dependsOrder": "sequence"
+            "dependsOn": ["release.clear", "release.compile", "release.link"],
+            "dependsOrder": "sequence",
+            "windows": {
+                "command": "bin\\release\\main.exe"
+            },
+            "osx": {
+                "command": "bin/release/main"
+            }
         },
 
 
+
+
+
+
+
+
+
+        {
+            "label": "dll.clear",
+            "hide": true,
+            "type": "shell",
+            "windows": {
+                "command": "del bin\\dll\\main.o bin\\dll\\main.dll 2>nul || exit /b 0"
+            },
+            "osx": {
+                "command": "rm bin/dll/main.o bin/dll/main.dylib 2>&- || :"
+            }
+        },
+        {
+            "label": "dll.compile",
+            "group": "none",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=dll -c main.cpp -o bin\\dll\\main.o 2>&1 | tee bin\\dll\\log.txt"
+            },
+            "osx": {
+                "command": "clang++ -std=c++26 -g -Wall -O3 -Ddll=dll -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt"
+            }
+        },
+        {
+            "label": "dll.link",
+            "group": "none",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "g++ -shared -o bin\\dll\\main.dll -fuse-ld=lld bin\\dll\\main.o -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
+            },
+            "osx": {
+                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
+            }
+        },
+        {
+            "label": "dll",
+            "detail": "dll",
+            "group": "build",
+            "type": "shell",
+            "dependsOn": ["dll.clear", "dll.compile", "dll.link"],
+            "dependsOrder": "sequence",
+            "windows": {
+                "command": "::"
+            },
+            "osx": {
+                "command": ":"
+            }
+        },
 
 
 
@@ -159,23 +227,18 @@
             }
         },
         {
-            "label": "static.run",
-            "group": "test",
-            "type": "shell",
-            "windows": {
-                "command": "bin\\static\\main.exe"
-            },
-            "osx": {
-                "command": "bin/static/main"
-            }
-        },
-        {
             "label": "static",
             "detail": "static",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["static.clear", "static.compile", "static.link", "static.run"],
-            "dependsOrder": "sequence"
+            "dependsOn": ["static.clear", "static.compile", "static.link"],
+            "dependsOrder": "sequence",
+            "windows": {
+                "command": "::"
+            },
+            "osx": {
+                "command": ":"
+            }
         },
     ]
 }

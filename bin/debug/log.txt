@@ -1,14 +1,16 @@
-In file included from F:/msys/ucrt64/include/boost/compute/device.hpp:25,
-                 from F:/msys/ucrt64/include/boost/compute/system.hpp:33,
+In file included from F:/msys/ucrt64/include/boost/atomic/detail/core_operations_emulated.hpp:22,
+                 from F:/msys/ucrt64/include/boost/atomic/detail/core_arch_operations.hpp:18,
+                 from F:/msys/ucrt64/include/boost/atomic/detail/core_operations.hpp:19,
+                 from F:/msys/ucrt64/include/boost/atomic/detail/atomic_impl.hpp:27,
+                 from F:/msys/ucrt64/include/boost/atomic/atomic.hpp:25,
+                 from F:/msys/ucrt64/include/boost/atomic.hpp:15,
+                 from F:/msys/ucrt64/include/boost/compute/system.hpp:28,
                  from F:/msys/ucrt64/include/boost/compute/algorithm/accumulate.hpp:17,
                  from F:/msys/ucrt64/include/boost/compute/algorithm.hpp:18,
                  from F:/msys/ucrt64/include/boost/compute.hpp:14,
-                 from generic/basic/interface.hpp:141,
+                 from generic/basic/interface.hpp:120,
                  from main.cpp:1:
-F:/msys/ucrt64/include/boost/compute/detail/get_object_info.hpp: In member function 'std::vector<_Ch_type> boost::compute::detail::get_object_info_impl<std::vector<_Ch_type> >::operator()(Function, Info) const':
-F:/msys/ucrt64/include/boost/compute/detail/get_object_info.hpp:186: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-  186 |         if(size == 0) return std::vector<T>();
-F:/msys/ucrt64/include/boost/compute/detail/get_object_info.hpp:186: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
-main.cpp: In function 'int main()':
-main.cpp:11: error: 'my_test' was not declared in this scope
-   11 |     my_test = nullptr;
+F:/msys/ucrt64/include/boost/atomic/detail/lock_pool.hpp: In function 'boost::atomics::detail::uintptr_t boost::atomics::detail::lock_pool::hash_ptr(const volatile void*)':
+F:/msys/ucrt64/include/boost/atomic/detail/lock_pool.hpp:82: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
+   82 |     BOOST_IF_CONSTEXPR (Alignment != malloc_alignment)
+F:/msys/ucrt64/include/boost/atomic/detail/lock_pool.hpp:82: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory

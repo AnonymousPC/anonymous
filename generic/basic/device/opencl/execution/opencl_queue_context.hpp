@@ -5,11 +5,10 @@ class opencl_queue_context
 {
     public: // Constructor
         opencl_queue_context ( ) = default;
-        explicit opencl_queue_context ( int );
 
     public: // Attronite
-        constexpr static std::execution::forward_progress_guarantee forward_progress_guarantee ( ) { return std::execution::forward_progress_guarantee::weakly_parallel; };
-        std::uint32_t available_parallelism ( ) const;
+        constexpr static auto forward_progress_guarantee ( );
+        constexpr static auto available_parallelism ( );
 
     public: // Kernel
         static const boost::compute::device&        device        ( );
@@ -40,6 +39,3 @@ class opencl_queue_context
 };
 
 #include "opencl_queue_context.ipp"
-#ifdef dll
-    #include "opencl_queue_context.cpp"
-#endif

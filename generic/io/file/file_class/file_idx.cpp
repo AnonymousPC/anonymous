@@ -187,38 +187,12 @@ file_idx& file_idx::close ( )
 template < class value_type, int dimension, bool first >
 array<value_type,dimension> detail::file_idx_read ( auto&& stream, const static_array<int,dimension>& shp )
 {
-    if constexpr ( dimension == 1 )
-        if constexpr ( first )
-            return views::binary_istream<value_type,std::endian::big>(stream/*non-view*/)
-                 | std::views::take(shp[1]) // This is an optimization to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
-                 | std::ranges::to<array<value_type>>();
-        else
-            return stream/*chunked-binary-istream-view*/
-                 | std::views::take(shp[1]) // This is an optimization to make views::binary_istream satisfy std::ranges::sized_view, which allows array.reserve().
-                 | std::ranges::to<array<value_type>>();
-
-    else if constexpr ( dimension >= 2 )
-    {
-        let arr = array<value_type,dimension>(shp);
-        let sub_shp = static_array<int,dimension-1>();
-        detail::for_constexpr<1,dimension-1>([&] <int index> { sub_shp[index] = shp[index+1]; });
-
-        if constexpr ( first )
-            std::ranges::move(
-                views::chunked_binary_istream<value_type,std::endian::big>(stream/*non-view*/, sub_shp.product())
-                    | std::views::transform([&] (const auto& chunked_stream) { return detail::file_idx_read<value_type,dimension-1,false>(chunked_stream, sub_shp); }),
-                arr.begin()
-            );
-        else
-            std::ranges::move(
-                stream/*chunked-binary-istream-view*/
-                    | std::views::chunk(sub_shp.product())
-                    | std::views::transform([&] (const auto& chunked_stream) { return detail::file_idx_read<value_type,dimension-1,false>(chunked_stream, sub_shp); }),
-                arr.begin()
-            );
-
-        return arr;
-    }
+    static_assert(same_as<typename array<value_type,dimension>::device_type::layout_type,std::layout_right>);
+    let arr = array<value_type,dimension>(shp);
+    std::ranges::move(views::binary_istream<value_type,std::endian::big>(stream)
+                          | std::views::take(shp.product()),
+                      [&] { if constexpr ( dimension == 1 ) return arr.begin(); else return arr.flatten().begin(); });
+    return arr;
 }
 
 template < class value_type, int dimension, bool first >
@@ -251,7 +225,7 @@ decltype(auto) file_idx::write_aux ( const auto& arr )
 
 file_stream& operator >> ( file_stream& left, file_idx::info_header& right )
 {
-    ranges::binary_istream_view<file_stream,uint16_t,std::endian::big>(left) >> right.magic_num;
+    std::ranges::move(ranges::binary_istream_view<file_stream,uint16_t,std::endian::big>(left) | std::views::take(1), right.magic_num;
     ranges::binary_istream_view<file_stream,uint8_t, std::endian::big>(left) >> right.type >> right.dimension;
     right.shape.resize(right.dimension);
     for ( auto& size in right.shape )

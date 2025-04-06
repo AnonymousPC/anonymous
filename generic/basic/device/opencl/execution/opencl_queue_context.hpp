@@ -11,8 +11,8 @@ class opencl_queue_context
         constexpr auto available_parallelism ( ) const;
 
     public: // Kernel
-        static const boost::compute::device&        device        ( );
         static const boost::compute::context&       context       ( );
+        static const boost::compute::device&        device        ( );
         static       boost::compute::command_queue& command_queue ( );
         static       boost::compute::program        build_program ( std::string, const auto&... );
         static       boost::compute::kernel         build_kernel  ( const boost::compute::program&, std::string );
@@ -34,8 +34,8 @@ class opencl_queue_context
         };  
 
     private: // Data
-        inline static std::optional<boost::compute::device>        default_device        = [] { try { return boost::compute::system::default_device ();          } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } (); 
         inline static std::optional<boost::compute::context>       default_context       = [] { try { return boost::compute::system::default_context();          } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } (); 
+        inline static std::optional<boost::compute::device>        default_device        = [] { try { return boost::compute::system::default_device ();          } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } (); 
         inline static std::optional<boost::compute::command_queue> default_command_queue = [] { try { return boost::compute::command_queue(context(), device()); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } (); 
 
     private: // Friend

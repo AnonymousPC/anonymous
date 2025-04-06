@@ -5,11 +5,10 @@ class opencl_queue_context
 {
     public: // Constructor
         opencl_queue_context ( ) = default;
-        explicit opencl_queue_context ( int );
 
-    public: // Attronite
-        constexpr static std::execution::forward_progress_guarantee forward_progress_guarantee ( ) { return std::execution::forward_progress_guarantee::weakly_parallel; };
-        std::uint32_t available_parallelism ( ) const;
+    public: // Attribute
+        constexpr auto std::execution::forward_progress_guarantee forward_progress_guarantee ( );
+        constexpr auto available_parallelism ( ) const;
 
     public: // Kernel
         static const boost::compute::device&        device        ( );
@@ -33,6 +32,11 @@ class opencl_queue_context
             execpools::task_base* task;
             std::uint32_t         tid;
         };  
+
+    private: // Data
+        inline static std::optional<boost::compute::device>        default_device        = [] { try { return boost::compute::system::default_device ();          } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } (); 
+        inline static std::optional<boost::compute::context>       default_context       = [] { try { return boost::compute::system::default_context();          } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } (); 
+        inline static std::optional<boost::compute::command_queue> default_command_queue = [] { try { return boost::compute::command_queue(context(), device()); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } (); 
 
     private: // Friend
         friend execpools::thread_pool_base<opencl_queue_context>;

@@ -1,56 +1,17 @@
 #pragma once
 
-namespace detail
-{
-    std::string& opencl_source_replace ( std::string& str, const std::string& from, const std::string& to )
-    {
-        size_t pos = 0;
-        while ( true )
-        {
-            pos = str.find(from, pos);
-            if ( pos != std::string::npos )
-            {
-                str.replace(pos, from.size(), to);
-                pos += to.size() + 1;
-            }
-            else 
-                break;
-        }
-        return str;
-    }
-}
-
-opencl_queue_context::opencl_queue_context ( int )
-{
-    
-}
-
-std::uint32_t opencl_queue_context::available_parallelism ( ) const
-{
-    try
-    {
-        return boost::compute::system::default_device().compute_units();
-    }
-    catch ( const boost::compute::no_device_found& e )
-    {
-        throw opencl_error("no opencl device found").from(e);
-    }
-}
-
 const boost::compute::device& opencl_queue_context::device ( )
 {
-    static let dvc = [] -> std::optional<boost::compute::device> { try { return boost::compute::system::default_device(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
-    if ( dvc.has_value() ) [[likely]] 
-        return dvc.value();
+    if ( default_device.has_value() ) [[likely]] 
+        return default_device.value();
     else
         throw opencl_error("opencl device not found");
 }
 
 const boost::compute::context& opencl_queue_context::context ( )
 {
-    static let ctx = [] -> std::optional<boost::compute::context> { try { return boost::compute::system::default_context(); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
-    if ( ctx.has_value() ) [[likely]]
-        return ctx.value();
+    if ( default_context.has_value() ) [[likely]] 
+        return default_device.value();
     else
         throw opencl_error("opencl device not found");
 }
@@ -120,4 +81,29 @@ BOOST_COMPUTE_CL_CALLBACK void opencl_queue_context::enqueue_callback ( void* ar
 {
     let ptr = static_cast<task_type*>(args);
     ptr->task->__execute(ptr->task, /*tid=*/ptr->tid);
+}
+
+
+
+
+
+
+
+
+
+std::string& detail::opencl_source_replace ( std::string& str, const std::string& from, const std::string& to )
+{
+    size_t pos = 0;
+    while ( true )
+    {
+        pos = str.find(from, pos);
+        if ( pos != std::string::npos )
+        {
+            str.replace(pos, from.size(), to);
+            pos += to.size() + 1;
+        }
+        else 
+            break;
+    }
+    return str;
 }

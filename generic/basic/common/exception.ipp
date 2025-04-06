@@ -16,27 +16,6 @@ namespace detail
     std::string format_stacktrace_color ( std::string, int = 0, int = 0 );
 }
 
-
-
-template < class exception_type >
-class exception_interface
-{
-    public: // Interface
-        exception_type& from ( const std::exception& );
-};
-
-template < class exception_type >
-exception_type& exception_interface<exception_type>::from ( const std::exception& e )
-{
-    static_cast<exception_type&>(self).from_type = &typeid(e);
-    static_cast<exception_type&>(self).from_what = e.what();
-    return static_cast<exception_type&>(self);
-}
-
-
-
-
-
 class exception
     extends public std::exception,
             public exception_interface<exception>
@@ -64,17 +43,6 @@ class exception
         const   std::type_info* from_type        = nullptr;
                 std::string     from_what        = "";
 };
-
-
-template < class... types >
-exception::exception ( format_string<type_identity<types>...> str, types&&... args )
-    extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
-{
-    
-}   
-
-
-
 
 
 class logic_error
@@ -339,6 +307,38 @@ class terminate_signal
 {
     using signal::signal;
 };
+
+
+
+
+
+
+
+
+template < class exception_type >
+class exception_interface
+{
+    public: // Interface
+        exception_type& from ( const std::exception& );
+};
+
+template < class exception_type >
+exception_type& exception_interface<exception_type>::from ( const std::exception& e )
+{
+    static_cast<exception_type&>(self).from_type = &typeid(e);
+    static_cast<exception_type&>(self).from_what = e.what();
+    return static_cast<exception_type&>(self);
+}
+
+template < class... types >
+exception::exception ( format_string<type_identity<types>...> str, types&&... args )
+    extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
+{
+    
+}   
+
+
+
 
 
 

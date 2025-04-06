@@ -1,11 +1,11 @@
 #pragma once
 
-file_pnm::file_pnm ( path pth )
+inline file_pnm::file_pnm ( path pth )
 {
     open(pth);
 }
 
-file_pnm& file_pnm::open ( path pth )
+inline file_pnm& file_pnm::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
@@ -16,7 +16,7 @@ file_pnm& file_pnm::open ( path pth )
     return self;
 }
 
-file_pnm& file_pnm::save ( )
+inline file_pnm& file_pnm::save ( )
 {
     // Save file.
     file_interface::save();
@@ -27,7 +27,7 @@ file_pnm& file_pnm::save ( )
     return self;
 }
 
-file_pnm& file_pnm::close ( )
+inline file_pnm& file_pnm::close ( )
 {
     // Close file.
     file_interface::close();
@@ -38,12 +38,12 @@ file_pnm& file_pnm::close ( )
     return self;
 }
 
-int& file_pnm::depth ( )
+inline int& file_pnm::depth ( )
 {
     return image_depth;
 }
 
-const int& file_pnm::depth ( ) const
+inline const int& file_pnm::depth ( ) const
 {
     return image_depth;
 }

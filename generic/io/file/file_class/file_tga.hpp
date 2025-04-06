@@ -21,6 +21,4 @@ class file_tga
         int image_depth = 32;
 };
 
-#ifdef dll
-    #include "file_tga.cpp"
-#endif
+#include "file_tga.ipp"

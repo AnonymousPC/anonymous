@@ -193,12 +193,12 @@ constexpr auto views::csv_lazy_split<pattern>::operator() ( input_range auto&& r
 
 
 
-file_csv::file_csv ( path pth )
+inline file_csv::file_csv ( path pth )
 {
     open(pth);
 }
 
-file_csv& file_csv::open ( path pth )
+inline file_csv& file_csv::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
@@ -236,7 +236,7 @@ file_csv& file_csv::open ( path pth )
     return self;
 }
 
-file_csv& file_csv::save ( )
+inline file_csv& file_csv::save ( )
 {
     // Save file.
     file_interface::save();
@@ -260,7 +260,7 @@ file_csv& file_csv::save ( )
     return self;
 }
 
-file_csv& file_csv::close ( )
+inline file_csv& file_csv::close ( )
 {
     // Close file.
     file_interface::close();

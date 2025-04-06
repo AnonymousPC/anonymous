@@ -1,41 +1,11 @@
 #pragma once
 
-namespace detail
-{    
-    constexpr const char* red        = "\033[38;2;240;0;0m";
-    constexpr const char* yellow     = "\033[38;2;240;240;0m";
-    constexpr const char* green      = "\033[38;2;0;240;0m";
-    constexpr const char* blue       = "\033[38;2;0;120;240m";
-    constexpr const char* white      = "\033[38;2;192;192;192m";
-    constexpr const char* light_grey = "\033[38;2;144;144;144m";
-    constexpr const char* grey       = "\033[38;2;96;96;96m";
-    constexpr const char* dark_grey  = "\033[38;2;48;48;48m";
-
-    std::string format_stacktrace       ( const std::stacktrace& );
-    std::string format_nested_exception ( const std::type_info&, const std::string& );
-    std::string format_stacktrace_color ( std::string, int = 0, int = 0 );
-}
-
-
-
 template < class exception_type >
 class exception_interface
 {
     public: // Interface
         exception_type& from ( const std::exception& );
 };
-
-template < class exception_type >
-exception_type& exception_interface<exception_type>::from ( const std::exception& e )
-{
-    static_cast<exception_type&>(self).from_type = &typeid(e);
-    static_cast<exception_type&>(self).from_what = e.what();
-    return static_cast<exception_type&>(self);
-}
-
-
-
-
 
 class exception
     extends public std::exception,
@@ -64,18 +34,6 @@ class exception
         const   std::type_info* from_type        = nullptr;
                 std::string     from_what        = "";
 };
-
-
-template < class... types >
-exception::exception ( format_string<type_identity<types>...> str, types&&... args )
-    extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
-{
-    
-}   
-
-
-
-
 
 class logic_error
     extends public exception,
@@ -342,44 +300,75 @@ class terminate_signal
 
 
 
-
 namespace detail
-{
+{    
+    constexpr const char* red        = "\033[38;2;240;0;0m";
+    constexpr const char* yellow     = "\033[38;2;240;240;0m";
+    constexpr const char* green      = "\033[38;2;0;240;0m";
+    constexpr const char* blue       = "\033[38;2;0;120;240m";
+    constexpr const char* white      = "\033[38;2;192;192;192m";
+    constexpr const char* light_grey = "\033[38;2;144;144;144m";
+    constexpr const char* grey       = "\033[38;2;96;96;96m";
+    constexpr const char* dark_grey  = "\033[38;2;48;48;48m";
+
     enum { implicit_mode, explicit_mode, default_mode };
 
-    constexpr int get_format_mode ( const char* str )
-    {
-        let b = str;
-        let e = str;
-        while ( *e != '\0' )
-            e++;
+    inline    std::string    format_stacktrace       ( const std::stacktrace& );
+    inline    std::string    format_nested_exception ( const std::type_info&, const std::string& );
+    inline    std::string    format_stacktrace_color ( std::string, int = 0, int = 0 );
+    constexpr int            get_format_mode         ( const char* );
+    constexpr decltype(auto) make_formattable        ( auto&& );
+}
 
-        while ( true )
-        {
-            let p = std::find(b, e, '{');
 
-            if ( p == e )
-                return default_mode;
-            else if ( *(p+1) >= '0' and *(p+1) <= '9' )
-                return explicit_mode;
-            else if ( p+1 < e and *(p+1) != '{' )
-                return implicit_mode;
-            else
-                { b = p + 2; continue; }
-        }
-    }
+template < class exception_type >
+exception_type& exception_interface<exception_type>::from ( const std::exception& e )
+{
+    static_cast<exception_type&>(self).from_type = &typeid(e);
+    static_cast<exception_type&>(self).from_what = e.what();
+    return static_cast<exception_type&>(self);
+}
 
-    constexpr decltype(auto) make_formattable ( auto&& f )
-    {
-        if constexpr ( std::formattable<decay<decltype(f)>,char> )
-            return f;
-        else if constexpr ( printable<decltype(f)> )
-            return (std::stringstream()<<f).str();
-        else if constexpr ( same_as<decltype(f),const std::type_info&> )
-            return boost::core::demangle(f.name());
-        else
-            return std::format("[[{} object at {}]]", boost::core::demangle(typeid(f).name()), static_cast<const void*>(&f));
-    } 
+template < class... types >
+exception::exception ( format_string<type_identity<types>...> str, types&&... args )
+    extends error_message ( str.format(std::forward<decltype(args)>(args)...) )
+{
+    
+}   
+
+inline const char* exception::what ( ) const noexcept
+{
+    if ( from_type == nullptr )
+        error_what = detail::red   + error_message + '\n' +
+                     detail::white + detail::format_stacktrace(error_stacktrace);
+
+    else
+        error_what = detail::red   + error_message + '\n' + 
+                     detail::white + detail::format_stacktrace(error_stacktrace) + '\n' + 
+                     '\n' +
+                     detail::white + detail::format_nested_exception(*from_type, from_what);
+        
+    return error_what.c_str();
+}
+
+inline std::string& exception::message ( )
+{
+    return error_message;
+}
+
+inline const std::string& exception::message ( ) const
+{
+    return error_message;
+}
+
+inline std::stacktrace& exception::stacktrace ( )
+{
+    return error_stacktrace;
+}
+
+inline const std::stacktrace& exception::stacktrace ( ) const
+{
+    return error_stacktrace;
 }
 
 template < class... types >
@@ -419,4 +408,104 @@ constexpr std::string exception::format_string<types...>::format ( types&&... ar
     }
 }
 
+
+
+
+
+
+inline std::string detail::format_stacktrace ( const std::stacktrace& trace )
+{
+    return trace | std::views::reverse
+                 | std::views::transform([&] (const auto& entry)
+                     {
+                         if ( entry.source_file() != "" and entry.source_line() != 0 )
+                             return std::format("    {}{} {}{} {}{} {}{}:{}{}",
+                                                yellow, "at", white, format_stacktrace_color(entry.description()),
+                                                green,  "in", grey,  entry.source_file(), entry.source_line(),
+                                                white);
+                         else
+                             return std::format("    {}{} {}{}{}",
+                                                yellow, "at", white, format_stacktrace_color(entry.description()),
+                                                white);
+                     })
+                 | std::views::join_with('\n')
+                 | std::ranges::to<std::string>();
+}
+
+inline std::string detail::format_nested_exception ( const std::type_info& from_type, const std::string& from_what )
+{
+    #if defined(__GNUC__) but not defined(__clang__) // terminate called after throwing an instance of '{typeid}'\n  what():  {what}
+        return std::format("after throwing another instance of '{}'\n  what(): {}", boost::core::demangle(from_type.name()), from_what);
+    #elifdef __clang__ // libc++abi: terminating due to uncaught exception of type {typeid}: {what}
+        return std::format("due to another exception of type {}: {}", boost::core::demangle(from_type.name()), from_what);
+    #else
+        return std::format("catch {}: {}", boost::core::demangle(from_type.name()), from_what);
+    #endif
+}
+
+inline std::string detail::format_stacktrace_color ( std::string str, int str_pos, int colors_pos )
+{
+    constexpr std::array<const char*,4> colors = { white, light_grey, grey, dark_grey };
+
+    // Locate brackets
+    let p1 = str.find('<', str_pos);
+    let p2 = str.find('>', str_pos);
+
+    // Find end.
+    if ( p1 == str.npos and p2 == str.npos )
+        return str;
+
+    // '<' is first.
+    if ( p1 != str.npos and p1 < p2 )
+    {
+        int p = std::clamp(++colors_pos, 0, int(colors.size()-1));
+        str.insert(p1, colors[p]);
+        str_pos = p1 + std::string_view(colors[p]).size() + 1;
+    }
+
+    // '>' is first.
+    else if ( p2 != str.npos and p2 < p1 )
+    {
+        int p = std::clamp(--colors_pos, 0, int(colors.size()-1));
+        str.insert(p2 + 1, colors[p]);
+        str_pos = p2 + 1 + std::string_view(colors[p]).size();
+    }
+
+    // Continue.
+    return format_stacktrace_color ( std::move(str), str_pos, colors_pos );
+}
+
+constexpr int detail::get_format_mode ( const char* str )
+{
+    let b = str;
+    let e = str;
+    while ( *e != '\0' )
+        e++;
+
+    while ( true )
+    {
+        let p = std::find(b, e, '{');
+
+        if ( p == e )
+            return default_mode;
+        else if ( *(p+1) >= '0' and *(p+1) <= '9' )
+            return explicit_mode;
+        else if ( p+1 < e and *(p+1) != '{' )
+            return implicit_mode;
+        else
+            { b = p + 2; continue; }
+    }
+}
+
+constexpr decltype(auto) detail::make_formattable ( auto&& f )
+{
+    if constexpr ( std::formattable<decay<decltype(f)>,char> )
+        return f;
+    else if constexpr ( printable<decltype(f)> )
+        return (std::stringstream()<<f).str();
+    else if constexpr ( same_as<decltype(f),const std::type_info&> )
+        return boost::core::demangle(f.name());
+    else
+        return std::format("[[{} object at {}]]", boost::core::demangle(typeid(f).name()), static_cast<const void*>(&f));
+} 
 

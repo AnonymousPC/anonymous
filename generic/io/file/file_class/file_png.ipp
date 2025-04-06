@@ -1,11 +1,11 @@
 #pragma once
 
-file_png::file_png ( path pth )
+inline file_png::file_png ( path pth )
 {
     open(pth);
 }
 
-file_png& file_png::open ( path pth )
+inline file_png& file_png::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
@@ -16,7 +16,7 @@ file_png& file_png::open ( path pth )
     return self;
 }
 
-file_png& file_png::save ( )
+inline file_png& file_png::save ( )
 {
     // Save file.
     file_interface::save();
@@ -27,7 +27,7 @@ file_png& file_png::save ( )
     return self;
 }
 
-file_png& file_png::close ( )
+inline file_png& file_png::close ( )
 {
     // Close file.
     file_interface::close();
@@ -38,12 +38,12 @@ file_png& file_png::close ( )
     return self;
 }
 
-int& file_png::depth ( )
+inline int& file_png::depth ( )
 {
     return image_depth;
 }
 
-const int& file_png::depth ( ) const
+inline const int& file_png::depth ( ) const
 {
     return image_depth;
 }

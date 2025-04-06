@@ -21,6 +21,4 @@ class file_tiff
         int image_depth = 32;
 };
 
-#ifdef dll
-    #include "file_tiff.cpp"
-#endif
+#include "file_tiff.ipp"

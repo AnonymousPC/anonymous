@@ -1,11 +1,11 @@
 #pragma once
 
-file_tga::file_tga ( path pth )
+inline file_tga::file_tga ( path pth )
 {
     open(pth);
 }
 
-file_tga& file_tga::open ( path pth )
+inline file_tga& file_tga::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
@@ -16,7 +16,7 @@ file_tga& file_tga::open ( path pth )
     return self;
 }
 
-file_tga& file_tga::save ( )
+inline file_tga& file_tga::save ( )
 {
     // Save file.
     file_interface::save();
@@ -27,7 +27,7 @@ file_tga& file_tga::save ( )
     return self;
 }
 
-file_tga& file_tga::close ( )
+inline file_tga& file_tga::close ( )
 {
     // Close file.
     file_interface::close();
@@ -38,12 +38,12 @@ file_tga& file_tga::close ( )
     return self;
 }
 
-int& file_tga::depth ( )
+inline int& file_tga::depth ( )
 {
     return image_depth;
 }
 
-const int& file_tga::depth ( ) const
+inline const int& file_tga::depth ( ) const
 {
     return image_depth;
 }

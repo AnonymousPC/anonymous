@@ -21,6 +21,4 @@ class file_bmp
         int image_depth = 32;
 };
 
-#ifdef dll
-    #include "file_bmp.cpp"
-#endif
+#include "file_bmp.ipp"

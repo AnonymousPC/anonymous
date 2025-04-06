@@ -6,8 +6,8 @@
 class opencl
 {
     public: // Execution
-        using  execution_context_type = opencl_queue_context;
-        static execution_context_type execution_context;
+        using execution_context_type = opencl_queue_context;
+        inline static execution_context_type execution_context = opencl_queue_context();
 
     public: // Type
         template < class type > using value_type = type;
@@ -198,10 +198,6 @@ class opencl
             constexpr static auto hermitian         ( const auto,             auto );
         };
 };
-
-#ifdef dll
-    #include "opencl.cpp"
-#endif
 
 #include "type/reference.hpp"
 #include "type/pointer.hpp"

@@ -9,6 +9,4 @@ namespace detail
     };
 } // namespace detail
 
-#ifdef dll
-    #include "opencl_queue_guard.cpp"
-#endif
+#include "opencl_queue_guard.ipp"

@@ -21,7 +21,4 @@ class file_jpg
         int image_depth = 24;
 };
 
-
-#ifdef dll
-    #include "file_jpg.cpp"
-#endif
+#include "file_jpg.ipp"

@@ -4,8 +4,8 @@ class tbb
     extends protected cpu
 {
     public: // Execution
-        using  execution_context_type = execpools::tbb_thread_pool;
-        static execution_context_type execution_context;
+        using execution_context_type = execpools::tbb_thread_pool;
+        inline static execution_context_type execution_context = execution_context_type(1);
 
     public: // Type
         using cpu::value_type;

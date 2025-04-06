@@ -59,7 +59,7 @@ constexpr ranges::binary_istream_view<input_type,endian>::iterator& ranges::bina
     v_ptr->s_ptr->read(reinterpret_cast<char*>(&v_ptr->t), sizeof(input_type));
 
     if constexpr ( detail::requires_byteswap<endian,input_type> )
-        detail::byteswap(v_ptr->t);
+        v_ptr->t = std::byteswap(v_ptr->t);
 
     return self;
 }
@@ -85,9 +85,8 @@ constexpr ranges::binary_ostream_view<output_type,endian>::binary_ostream_view (
             s.write(reinterpret_cast<const char*>(&e), sizeof(output_type));
         else
         {
-            let e2 = e;
-            detail::byteswap(e2);
-            s.write(reinterpret_cast<const char*>(&e2), sizeof(output_type));
+            let f = std::byteswap(e);
+            s.write(reinterpret_cast<const char*>(f), sizeof(output_type));
         }
 }
 

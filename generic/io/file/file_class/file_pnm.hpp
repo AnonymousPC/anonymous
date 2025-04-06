@@ -21,6 +21,4 @@ class file_pnm
         int image_depth = 32;
 };
 
-#ifdef dll
-    #include "file_pnm.cpp"
-#endif
+#include "file_pnm.ipp"

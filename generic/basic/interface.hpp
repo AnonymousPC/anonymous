@@ -133,7 +133,7 @@
     #define BOOST_DISABLE_ASSERTS
 #endif
 #define BOOST_COMPUTE_HAVE_THREAD_LOCAL
-#define BOOST_COMPUTE_USE_CPP11
+#define BOOST_COMPUTE_THREAD_SAFE
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/beast.hpp>

@@ -9,6 +9,3 @@ F:/msys/ucrt64/include/boost/compute/detail/get_object_info.hpp: In member funct
 F:/msys/ucrt64/include/boost/compute/detail/get_object_info.hpp:186: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
   186 |         if(size == 0) return std::vector<T>();
 F:/msys/ucrt64/include/boost/compute/detail/get_object_info.hpp:186: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
-main.cpp: In function 'int main()':
-main.cpp:11: error: 'my_test' was not declared in this scope
-   11 |     my_test = nullptr;

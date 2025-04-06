@@ -6,10 +6,14 @@
 class system
 {
     public: // Execution
-        using execution_context_type = system_context;
-        inline static execution_context_type execution_context = execution_context_type();
+        using  execution_context_type = system_context;
+        static execution_context_type execution_context;
 
     public: // Random
-        using random_context_type = std::random_device;
-        inline static thread_local random_context_type random_context = random_context_type();
+        using               random_context_type = std::random_device;
+        static thread_local random_context_type random_context;
 }; 
+
+#ifdef dll
+    #include "system.cpp"
+#endif

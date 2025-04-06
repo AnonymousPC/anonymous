@@ -3,8 +3,8 @@
 class cpu
 {
     public: // Execution
-        using execution_context_type = exec::static_thread_pool;
-        inline static execution_context_type execution_context = execution_context_type(1);
+        using  execution_context_type = exec::static_thread_pool;
+        static execution_context_type execution_context;
 
     public: // Type
         template < class type > using value_type      = type;
@@ -196,9 +196,13 @@ class cpu
         };
 
     public: // Random
-        using random_context_type = std::mt19937;
-        inline static thread_local random_context_type random_context = random_context_type(std::random_device()());
+        using               random_context_type = std::mt19937;
+        static thread_local random_context_type random_context;
 };
+
+#ifdef dll
+    #include "cpu.cpp"
+#endif
 
 #include "type/stride_pointer.hpp"
 

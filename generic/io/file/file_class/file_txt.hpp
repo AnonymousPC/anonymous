@@ -14,4 +14,6 @@ class file_txt
         file_txt& close ( );
 };
 
-#include "file_txt.ipp"
+#ifdef dll
+    #include "file_txt.cpp"
+#endif

@@ -1,11 +1,11 @@
 #pragma once
 
-inline file_txt::file_txt ( path pth )
+file_txt::file_txt ( path pth )
 {
     open(pth);
 }
 
-inline file_txt& file_txt::open ( path pth )
+file_txt& file_txt::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
@@ -26,7 +26,7 @@ inline file_txt& file_txt::open ( path pth )
     return self;
 }
 
-inline file_txt& file_txt::save ( )
+file_txt& file_txt::save ( )
 {
     // Save file.
     file_interface::save();
@@ -42,7 +42,7 @@ inline file_txt& file_txt::save ( )
     return self;
 }
 
-inline file_txt& file_txt::close ( )
+file_txt& file_txt::close ( )
 {
     // Close file.
     file_interface::close();

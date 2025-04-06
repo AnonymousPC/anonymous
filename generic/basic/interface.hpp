@@ -203,9 +203,6 @@ namespace ap
     namespace neural   { }
     namespace spirit   { }
 
-    /// Common.abi
-    inline std::string demangle ( const std::type_info& );
-
     /// Common.concept
     // See concept.h.
 
@@ -255,8 +252,8 @@ namespace ap
     #include "global/global.hpp"
 
     /// Global
-    constexpr           print_t                   print             = print_t();
-    inline              exec::static_thread_pool& execution_context = cpu::execution_context;
-    inline thread_local std::mt19937&             random_context    = cpu::random_context;
+    constexpr           print_t                   print;
+    extern              exec::static_thread_pool& execution_context;
+    extern thread_local std::mt19937&             random_context;
 
 } // namespace ap

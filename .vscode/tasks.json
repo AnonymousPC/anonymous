@@ -2,39 +2,11 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "debug.clear",
-            "hide": true,
-            "type": "shell",
-            "windows": {
-                "command": "del bin\\debug\\main.o bin\\debug\\main.exe 2>nul || exit /b 0"
-            },
-            "osx": {
-                "command": "rm bin/debug/main.o bin/debug/main 2>&- || :"
-            }
-        },
-        {
-            "label": "debug.compile",
+            "label": "debug.build",
+            "detail": "debug.build",
             "group": "none",
             "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O0 -Ddebug=debug -c main.cpp -o bin\\debug\\main.o 2>&1 | tee bin\\debug\\log.txt"
-            },
-            "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -O0 -Ddebug=debug -c main.cpp -o bin/debug/main.o 2>&1 | tee bin/debug/log.txt"
-            }
-        },
-        {
-            "label": "debug.link",
-            "group": "none",
-            "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -o bin\\debug\\main.exe -fuse-ld=lld bin\\debug\\main.o bin\\dll\\main.dll -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
-            },
-            "osx": {
-                "command": "clang++ -o bin/debug/main -fuse-ld=lld bin/debug/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
-            }
+            "command": "python bin/build.py debug"
         },
         {
             "label": "debug.run",
@@ -43,6 +15,9 @@
             "type": "shell",
             "windows": { 
                 "command": "bin\\debug\\main.exe"
+            },
+            "linux": {
+                "command": "bin/debug/main"
             },
             "osx": {
                 "command": "bin/debug/main"
@@ -53,63 +28,29 @@
             "detail": "debug",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["debug.clear", "debug.compile", "debug.link"],
+            "dependsOn": ["debug.build", "debug.run"],
             "dependsOrder": "sequence",
-            "windows": {
-                "command": "bin\\debug\\main.exe"
-            },
-            "osx": {
-                "command": "bin/debug/main"
-            }
         },
 
 
 
-
-
-
         {
-            "label": "release.clear",
-            "hide": true,
-            "type": "shell",
-            "windows": {
-                "command": "del bin\\release\\main.o bin\\release\\main.exe 2>nul || exit /b 0"
-            },
-            "osx": {
-                "command": "rm bin/release/main.o bin/release/main 2>&- || :"
-            }
-        },
-        {
-            "label": "release.compile",
+            "label": "release.build",
+            "detail": "release.build",
             "group": "none",
             "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin\\release\\main.o 2>&1 | tee bin\\release\\log.txt"
-            },
-            "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -O3 -c main.cpp -o bin/release/main.o 2>&1 | tee bin/release/log.txt"
-            }            
-        },
-        {
-            "label": "release.link",
-            "group": "none",
-            "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -o bin\\release\\main.exe -fuse-ld=lld bin\\release\\main.o bin\\dll\\main.dll -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
-            },
-            "osx": {
-                "command": "clang++ -o bin/release/main -fuse-ld=lld bin/release/main.o bin/dll/main.dylib -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
-            }
+            "command": "python bin/build.py release"
         },
         {
             "label": "release.run",
             "detail": "release.run",
             "group": "test",
             "type": "shell",
-            "windows": {
+            "windows": { 
                 "command": "bin\\release\\main.exe"
+            },
+            "linux": {
+                "command": "bin/release/main"
             },
             "osx": {
                 "command": "bin/release/main"
@@ -120,125 +61,9 @@
             "detail": "release",
             "group": "build",
             "type": "shell",
-            "dependsOn": ["release.clear", "release.compile", "release.link"],
+            "dependsOn": ["release.build", "release.run"],
             "dependsOrder": "sequence",
-            "windows": {
-                "command": "bin\\release\\main.exe"
-            },
-            "osx": {
-                "command": "bin/release/main"
-            }
         },
 
-
-
-
-
-
-
-
-
-        {
-            "label": "dll.clear",
-            "hide": true,
-            "type": "shell",
-            "windows": {
-                "command": "del bin\\dll\\main.o bin\\dll\\main.dll 2>nul || exit /b 0"
-            },
-            "osx": {
-                "command": "rm bin/dll/main.o bin/dll/main.dylib 2>&- || :"
-            }
-        },
-        {
-            "label": "dll.compile",
-            "group": "none",
-            "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=dll -c main.cpp -o bin\\dll\\main.o 2>&1 | tee bin\\dll\\log.txt"
-            },
-            "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -O3 -Ddll=dll -c main.cpp -o bin/dll/main.o 2>&1 | tee bin/dll/log.txt"
-            }
-        },
-        {
-            "label": "dll.link",
-            "group": "none",
-            "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -shared -o bin\\dll\\main.dll -fuse-ld=lld bin\\dll\\main.o -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lclblast -lcrypto -ljpeg -lkernel32 -lmswsock -lntdll -lOpenCL -lpng -lshell32 -lssl -lstdc++exp -ltbb12 -ltiff -luser32 -lws2_32"
-            },
-            "osx": {
-                "command": "clang++ -shared -o bin/dll/main.dylib -fuse-ld=lld bin/dll/main.o -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
-            }
-        },
-        {
-            "label": "dll",
-            "detail": "dll",
-            "group": "build",
-            "type": "shell",
-            "dependsOn": ["dll.clear", "dll.compile", "dll.link"],
-            "dependsOrder": "sequence",
-            "windows": {
-                "command": "::"
-            },
-            "osx": {
-                "command": ":"
-            }
-        },
-
-
-
-
-        {
-            "label": "static.clear",
-            "hide": true,
-            "type": "shell",
-            "windows": {
-                "command": "del bin\\static\\main.o bin\\static\\main.exe 2>nul || exit /b 0"
-            },
-            "osx": {
-                "command": "rm bin/static/main.o bin/static/main 2>&- || :"
-            }
-        },
-        {
-            "label": "static.compile",
-            "group": "none",
-            "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -std=c++26 -g -Wall -O3 -Ddll=dll -c main.cpp -o bin\\static\\main.o 2>&1 | tee bin\\static\\log.txt",
-            },
-            "osx": {
-                "command": "clang++ -std=c++26 -g -Wall -O3 -Ddll=dll -c main.cpp -o bin/static/main.o 2>&1 | tee bin/static/log.txt"
-            }    
-        },
-        {
-            "label": "static.link",
-            "group": "none",
-            "type": "shell",
-            "problemMatcher": [],
-            "windows": {
-                "command": "g++ -o bin\\static\\main.exe -fuse-ld=lld bin\\static\\main.o -static -ladvapi32 -lbcrypt -lboost_charconv-mt -lboost_date_time-mt -lboost_filesystem-mt -lboost_iostreams-mt -lboost_locale-mt -lboost_process-mt -lboost_stacktrace_basic-mt -lboost_thread-mt -lbz2 -lCrypt32 -lcrypto -ldeflate -liconv -licu -licudt -licuin -licuio -licutest -licutu -licuuc -ljbig -ljpeg -lkernel32 -llerc -llzma -lmswsock -lntdll -lpng -lsharpyuv -lshell32 -lssl -lstdc++exp -ltiff -luser32 -lwebp -lwinpthread -lws2_32 -lz -lzstd -Wl,-Bdynamic -lclblast -lOpenCL -ltbb12",
-            },
-            "osx": {
-                "command": "clang++ -o bin/static/main -fuse-ld=lld bin/static/main.o -static -lboost_charconv -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_locale -lboost_process -lboost_stacktrace_basic -lboost_system -lclblast -lcrypto -ljpeg -lpng -lssl -ltbb -ltiff -framework OpenCL"
-            }
-        },
-        {
-            "label": "static",
-            "detail": "static",
-            "group": "build",
-            "type": "shell",
-            "dependsOn": ["static.clear", "static.compile", "static.link"],
-            "dependsOrder": "sequence",
-            "windows": {
-                "command": "::"
-            },
-            "osx": {
-                "command": ":"
-            }
-        },
     ]
 }

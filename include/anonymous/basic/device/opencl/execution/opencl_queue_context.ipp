@@ -38,10 +38,10 @@ boost::compute::program opencl_queue_context::build_program ( std::string source
         });
     }
 
-    let prog   = boost::compute::program();
- // let ext    = device().extensions();
- // let align  = std::ranges::max_element(ext, [] (const auto& a, const auto& b) { return a.size() < b.size(); })->size();
- // let pragma = ext
+    auto prog   = boost::compute::program();
+ // auto ext    = device().extensions();
+ // auto align  = std::ranges::max_element(ext, [] (const auto& a, const auto& b) { return a.size() < b.size(); })->size();
+ // auto pragma = ext
  //            | std::views::filter   ([ ] (const auto& opt) { return opt != ""; })
  //            | std::views::transform([&] (const auto& opt) { return std::format("#pragma OPENCL EXTENSION {:{}} : enable", opt, align); })
  //            | std::views::join_with('\n')

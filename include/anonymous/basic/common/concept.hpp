@@ -76,7 +76,7 @@ template < class type >                                    using          range_
 template < class type >                                    using          range_const_sentinel               = std::ranges::const_sentinel_t          <type>;
 
 template < class type >                                    constexpr int  tuple_size                         = std::tuple_size<type>::value;
-template < int index, class type >                         using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) otherwise std::size_t(index+int(std::tuple_size<type>::value)),type>::type;
+template < int index, class type >                         using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) : std::size_t(index+int(std::tuple_size<type>::value)),type>::type;
 
 /// Concepts
 

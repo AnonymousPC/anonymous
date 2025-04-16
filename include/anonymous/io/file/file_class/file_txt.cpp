@@ -9,7 +9,7 @@ file_txt& file_txt::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
-    let stream = file_stream(self.operator path(), file_stream::read_only(true));
+    auto stream = file_stream(self.operator path(), file_stream::read_only(true));
 
     // Read data.
     static_cast<vector<string>&>(self)
@@ -17,9 +17,9 @@ file_txt& file_txt::open ( path pth )
         | std::views::lazy_split('\n')
         | std::views::transform ([] (const auto& stream_line)
             {
-                let line = stream_line
+                auto line = stream_line
                          | std::ranges::to<string>();
-                return line.ends_with('\r') ? line.pop() otherwise line;
+                return line.ends_with('\r') ? line.pop() : line;
             })
         | std::ranges::to<vector<string>>();
 
@@ -30,7 +30,7 @@ file_txt& file_txt::save ( )
 {
     // Save file.
     file_interface::save();
-    let stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
+    auto stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
 
     // Write data.
     self | std::views::reverse

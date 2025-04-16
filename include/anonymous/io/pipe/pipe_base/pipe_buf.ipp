@@ -26,18 +26,18 @@ void pipe_buf::open ( path exe, pipe_mode auto... args )
         static_assert(detail::all_different<decltype(args)...>, "modes must be unique");
 
     // Find executable.
-    let path_executable = boost::filesystem::path(exe.c_str());
-    let find_executable = boost::process::v2::environment::find_executable(exe.c_str());
+    auto path_executable = boost::filesystem::path(exe.c_str());
+    auto find_executable = boost::process::v2::environment::find_executable(exe.c_str());
 
     // Open pipe.
     try
     {
         // Find_executable is always in higher priority than raw_path.
-        handle = run_with_args(find_executable != "" ? find_executable otherwise path_executable, {}, tuple<decltype(args)...>(args...));
+        handle = run_with_args(find_executable != "" ? find_executable : path_executable, {}, tuple<decltype(args)...>(args...));
     }
     catch ( const boost::process::v2::system_error& e )
     {
-        throw pipe_error("open failed (with path_executable = {}, find_executable = {})", exe, boost::filesystem::is_regular_file(path_executable) ? path_executable otherwise "[[not exist]]", find_executable != "" ? find_executable otherwise "[[not found]]").from(detail::system_error(e));
+        throw pipe_error("open failed (with path_executable = {}, find_executable = {})", exe, boost::filesystem::is_regular_file(path_executable) ? path_executable : "[[not exist]]", find_executable != "" ? find_executable : "[[not found]]").from(detail::system_error(e));
     }
 
     // Set put area.
@@ -54,11 +54,11 @@ auto pipe_buf::run_with_args ( const boost::filesystem::path& proc, std::vector<
 
     else if constexpr ( same_as<decltype(inputs.first),environment> )
     {
-        let env = boost::process::v2::process_environment(inputs.first.value
+        auto env = boost::process::v2::process_environment(inputs.first.value
                 | std::views::transform([] (const auto& kv)
                                         {
-                                            let k = std::string(kv.key());
-                                            let v = std::string(kv.value()
+                                            auto k = std::string(kv.key());
+                                            auto v = std::string(kv.value()
                                                   | std::views::join_with(char_type(';'))
                                                   | std::ranges::to<std::string>());
                                             return std::pair(k, v);
@@ -77,7 +77,7 @@ auto pipe_buf::run_with_args ( const boost::filesystem::path& proc, std::vector<
 
     else if constexpr ( same_as<decltype(inputs.first),start_directory> )
     {
-        let startdir = boost::process::v2::process_start_dir(inputs.first.value.c_str());
+        auto startdir = boost::process::v2::process_start_dir(inputs.first.value.c_str());
         return run_with_args(proc, params, inputs.other, startdir, outputs...);
     }
 

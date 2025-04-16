@@ -32,8 +32,8 @@ template < class type, class device >
 constexpr basic_string_view<type,device>::operator bool ( ) const
     requires same_as<type,char>
 {
-    return self == "true"  ? true  otherwise
-           self == "false" ? false otherwise
+    return self == "true"  ? true  :
+           self == "false" ? false :
                              throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(bool));   
 }
 
@@ -42,7 +42,7 @@ template < number_type type2 >
 constexpr basic_string_view<type,device>::operator type2 ( ) const
     requires same_as<type,char>
 {
-    let cvt = type2();
+    auto cvt = type2();
     auto [p, ec] = std::from_chars ( data(), data() + size(), cvt );
     if ( p != data() + size() or ec != std::errc() )
         throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
@@ -56,8 +56,8 @@ constexpr basic_string_view<type,device>::operator type2 ( ) const
              ( not number_type<type2> ) and
              ( not string_type<type2> )
 {
-    let cvt = type2();
-    let stream = std::stringstream();
+    auto cvt = type2();
+    auto stream = std::stringstream();
     stream << self;
     stream >> cvt;
     if ( not stream.eof() and stream.fail() ) // Not until the stream reaches end, that the stream fails.
@@ -101,14 +101,14 @@ constexpr basic_string_view<type,device>::const_reference basic_string_view<type
     if ( pos < -size() or pos == 0 or pos > size() )
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
-    return base::operator[](pos >= 0 ? pos - 1 otherwise pos + size());
+    return base::operator[](pos >= 0 ? pos - 1 : pos + size());
 }
 
 template < class type, class device >
 constexpr basic_string_view<type,device> basic_string_view<type,device>::operator[] ( int pos_1, int pos_2 ) const
 {
-    let abs_pos_1 = pos_1 >= 0 ? pos_1 otherwise pos_1 + size() + 1;
-    let abs_pos_2 = pos_2 >= 0 ? pos_2 otherwise pos_2 + size() + 1;
+    auto abs_pos_1 = pos_1 >= 0 ? pos_1 : pos_1 + size() + 1;
+    auto abs_pos_2 = pos_2 >= 0 ? pos_2 : pos_2 + size() + 1;
 
     #ifdef debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or

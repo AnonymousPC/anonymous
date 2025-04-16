@@ -15,8 +15,8 @@ string url::scheme ( ) const
 {
     try
     {
-        let part = self.split(url::regex)[1];
-        return part.ends_with("://") ? part[1,-4] otherwise throw network_error("failed to parse scheme from url {}", self);
+        auto part = self.split(url::regex)[1];
+        return part.ends_with("://") ? part[1,-4] : throw network_error("failed to parse scheme from url {}", self);
     }
     catch ( const regex_error& )
     {
@@ -28,8 +28,8 @@ string url::authorization ( ) const
 {
     try
     {
-        let part = self.split(url::regex)[2];
-        return part.ends_with('@') ? part[1,-2] otherwise part;
+        auto part = self.split(url::regex)[2];
+        return part.ends_with('@') ? part[1,-2] : part;
     }
     catch ( const regex_error& )
     {
@@ -41,8 +41,8 @@ string url::host ( ) const
 {
     try
     {
-        let part = self.split(url::regex)[3];
-        return part != "" ? part otherwise throw network_error("failed to parse host from url {}", self);
+        auto part = self.split(url::regex)[3];
+        return part != "" ? part : throw network_error("failed to parse host from url {}", self);
     }
     catch ( const regex_error& )
     {
@@ -54,8 +54,8 @@ string url::port ( ) const
 {
     try
     {
-        let part = self.split(url::regex)[4];
-        return part.begins_with(':') ? part[2,-1] otherwise part;
+        auto part = self.split(url::regex)[4];
+        return part.begins_with(':') ? part[2,-1] : part;
     }
     catch ( const regex_error& )
     {
@@ -67,8 +67,8 @@ string url::path ( ) const
 {
     try
     {
-        let part = self.split(url::regex)[5];
-        return part.begins_with('/') ? part[2,-1] otherwise part;
+        auto part = self.split(url::regex)[5];
+        return part.begins_with('/') ? part[2,-1] : part;
     }
     catch ( const regex_error& )
     {
@@ -80,8 +80,8 @@ string url::param ( ) const
 {
     try
     {
-        let part = self.split(url::regex)[6];
-        return part.begins_with('?') ? part[2,-1] otherwise part;
+        auto part = self.split(url::regex)[6];
+        return part.begins_with('?') ? part[2,-1] : part;
     }
     catch ( const regex_error& )
     {
@@ -93,8 +93,8 @@ string url::fragment ( ) const
 {
     try
     {
-        let part = self.split(url::regex)[7];
-        return part.begins_with('#') ? part[2,-1] otherwise part;
+        auto part = self.split(url::regex)[7];
+        return part.begins_with('#') ? part[2,-1] : part;
     }
     catch ( const regex_error& )
     {

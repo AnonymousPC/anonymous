@@ -19,7 +19,7 @@ constexpr pair_type auto eigen ( const array_type auto& matrix )
             using solver_type = conditional<number_type<matrix_value_type>,
                                             Eigen::EigenSolver<decltype(aux::to_eigen(matrix))>,
                                             Eigen::ComplexEigenSolver<decltype(aux::to_eigen(matrix))>>;
-            let solver = solver_type(aux::to_eigen(matrix));
+            auto solver = solver_type(aux::to_eigen(matrix));
             return pair ( aux::from_eigen(solver.eigenvalues()), aux::from_eigen(solver.eigenvectors().transpose()) );
         }
         catch ( const std::runtime_error& e )
@@ -72,7 +72,7 @@ constexpr array_type auto eigen_vector ( const array_type auto& matrix )
             using solver_type = conditional<number_type<matrix_value_type>,
                                             Eigen::EigenSolver<decltype(aux::to_eigen(matrix))>,
                                             Eigen::ComplexEigenSolver<decltype(aux::to_eigen(matrix))>>;
-            let solver = solver_type(aux::to_eigen(matrix));
+            auto solver = solver_type(aux::to_eigen(matrix));
             return aux::from_eigen(solver.eigenvectors().transpose());
         }
         catch ( const std::runtime_error& e )

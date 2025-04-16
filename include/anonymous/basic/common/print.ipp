@@ -1,11 +1,11 @@
 #pragma once
 
-constexpr void print_t::operator() ( )
+constexpr void detail::print_t::operator() ( )
 {
     std::cout << std::endl;
 }
 
-constexpr void print_t::operator() ( const printable auto& first, const printable auto&... args )
+constexpr void detail::print_t::operator() ( const printable auto& first, const printable auto&... args )
 {
     std::cout << first;
     if constexpr ( sizeof...(args) >= 1 )

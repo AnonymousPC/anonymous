@@ -51,7 +51,7 @@ constexpr set<type,compare,device>& set<type,compare,device>::clear ( )
 template < class type, class compare, class device >
 constexpr set<type,compare,device>& set<type,compare,device>::push ( type k )
 {
-    let result = base::insert(k);
+    auto result = base::insert(k);
     if ( result.second == true )
         return self;
     else
@@ -61,7 +61,7 @@ constexpr set<type,compare,device>& set<type,compare,device>::push ( type k )
 template < class type, class compare, class device >
 constexpr set<type,compare,device>& set<type,compare,device>::pop ( const type& k )
 {
-    let pop_count = base::erase(k);
+    auto pop_count = base::erase(k);
     if ( pop_count >= 1 )
         return self;
     else

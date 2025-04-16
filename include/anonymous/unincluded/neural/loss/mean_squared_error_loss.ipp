@@ -43,11 +43,11 @@ template < array_type type >
     requires float_type<typename type::value_type>
 constexpr typename mean_squared_error_loss<type>::value_type mean_squared_error_loss<type>::value ( ) const
 {
-    let losses = from() - to();
+    auto losses = from() - to();
 
     if constexpr ( type::dimension() == 1 )
     {
-        let avg = losses.average();
+        auto avg = losses.average();
         return losses.average([&] (const auto& loss) { return (loss - avg) * (loss - avg); });
     }
 
@@ -55,7 +55,7 @@ constexpr typename mean_squared_error_loss<type>::value_type mean_squared_error_
     {
         return losses.average([&] (const auto& sample_loss)
                               {
-                                  let avg = sample_loss.average();
+                                  auto avg = sample_loss.average();
                                   return sample_loss.average([&] (const auto& loss) { return (loss - avg) * (loss - avg); });
                               });
     }

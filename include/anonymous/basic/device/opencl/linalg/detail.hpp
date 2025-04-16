@@ -87,10 +87,10 @@ namespace detail
 
     void opencl_copy_mdspan ( const auto& left, auto& output )
     {
-        let status =
+        auto status =
             clblast::Copy<detail::opencl_nativize<output_value_type>>(
                 left.size(),
-                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), is_contiguous_layout<left_layout_type> ? 1 otherwise left.stride(0),
+                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), is_contiguous_layout<left_layout_type> ? 1 : left.stride(0),
                 output.data_handle().get_buffer().get(), output.data_handle().get_index(), 1,
                 &opencl::execution_context.command_queue().get()
             );
@@ -103,11 +103,11 @@ namespace detail
     {
         static_assert(is_contiguous_layout<typename decay<decltype(right)::layout_type>, "internal error");
 
-        let status = 
+        auto status = 
             clblast::Axpy<detail::opencl_nativize<output_value_type>>(
                 right.size(), 
                 scale,
-                right .data_handle().get_buffer().get(), right .data_handle().get_index(), not detail::is_strided_layout<right_layout_type> ? 1 otherwise right.stride(0),
+                right .data_handle().get_buffer().get(), right .data_handle().get_index(), not detail::is_strided_layout<right_layout_type> ? 1 : right.stride(0),
                 output.data_handle().get_buffer().get(), output.data_handle().get_index(), 1,
                 &opencl::execution_context.command_queue().get()
             );
@@ -117,15 +117,15 @@ namespace detail
 
     void opencl_multiply_matrix_inplace ( const auto& left, const auto& right, auto& output )
     {
-        let status = 
+        auto status = 
             clblast::Gemm<detail::opencl_nativize<typename decay<decltype(output)>::value_type>>(
                 clblast::Layout::kColMajor,
-                detail::is_contiguous_layout<typename decay<decltype(left )::layout_type> ? clblast::Transpose::kNo otherwise clblast::Transpose::kYes,
-                detail::is_contiguous_layout<typename decay<decltype(right)::layout_type> ? clblast::Transpose::kNo otherwise clblast::Transpose::kYes,
+                detail::is_contiguous_layout<typename decay<decltype(left )::layout_type> ? clblast::Transpose::kNo : clblast::Transpose::kYes,
+                detail::is_contiguous_layout<typename decay<decltype(right)::layout_type> ? clblast::Transpose::kNo : clblast::Transpose::kYes,
                 left.extent(0), right.extent(1), left.extent(1),
                 1,
-                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), detail::is_contiguous_layout<typename decay<decltype(left )::layout_type> ? left .extent(0) otherwise left .extent(1),
-                right .data_handle().get_buffer().get(), right .data_handle().get_index(), detail::is_contiguous_layout<typename decay<decltype(right)::layout_type> ? right.extent(0) otherwise right.extent(1),
+                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), detail::is_contiguous_layout<typename decay<decltype(left )::layout_type> ? left .extent(0) : left .extent(1),
+                right .data_handle().get_buffer().get(), right .data_handle().get_index(), detail::is_contiguous_layout<typename decay<decltype(right)::layout_type> ? right.extent(0) : right.extent(1),
                 0,
                 output.data_handle().get_buffer().get(), output.data_handle().get_index(), output.extent(0),
                 &opencl::execution_context.command_queue().get()

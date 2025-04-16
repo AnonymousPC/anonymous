@@ -17,7 +17,7 @@ void tls::socket::connect ( auto&&... args )
     self.next_layer().connect(args...);
     if constexpr ( requires { first_value_of(args...).host_name(); } )
     {
-        let sni = SSL_set_tlsext_host_name(self.native_handle(), first_value_of(args...).host_name().c_str());
+        auto sni = SSL_set_tlsext_host_name(self.native_handle(), first_value_of(args...).host_name().c_str());
         if ( not sni )
             throw boost::system::system_error(boost::system::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category()));
     }

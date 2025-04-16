@@ -5,8 +5,8 @@ template < anonymous::array_type type >
 template < class parse_context >
 constexpr parse_context::iterator std::formatter<type>::parse ( parse_context& ctx )
 {
-    let b = ctx.begin();
-    let e = std::formatter<typename type::value_type>().parse(ctx);
+    auto b = ctx.begin();
+    auto e = std::formatter<typename type::value_type>().parse(ctx);
     parse_ctx = "{:" + anonymous::string(anonymous::string_view(b, e-b)) + '}'; // Try parsing and return to end of format-braces... if error occured then throw exception.
     return e;
 }
@@ -20,10 +20,10 @@ constexpr format_context::iterator std::formatter<type>::format ( const type& ar
     // stringalize_array, align_array, print_array.
     // See container/array/array_global.cpp.
 
-    let stringalizer = [this] ( const typename type::value_type& item ) { return anonymous::string(parse_ctx).format(item); };
+    auto stringalizer = [this] ( const typename type::value_type& item ) { return anonymous::string(parse_ctx).format(item); };
 
     std::stringstream buff;
-    let strarr = anonymous::detail::stringalize_array(buff, arr, stringalizer);
+    auto strarr = anonymous::detail::stringalize_array(buff, arr, stringalizer);
     anonymous::detail::align_array(strarr);
     anonymous::detail::print_array(buff, strarr);
 

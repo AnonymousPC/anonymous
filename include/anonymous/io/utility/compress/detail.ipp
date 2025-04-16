@@ -7,7 +7,7 @@ constexpr detail::compress_view<range,method>::compress_view ( range init_r )
             s ( r ),
             p ( [&]
                 { 
-                    let i = std::shared_ptr<boost::iostreams::filtering_istream>(
+                    auto i = std::shared_ptr<boost::iostreams::filtering_istream>(
                                 new boost::iostreams::filtering_istream(), 
                                 [] (auto p) { p->exceptions(std::ios::iostate()); }
                             );
@@ -65,14 +65,14 @@ constexpr std::streamsize detail::compress_view<range,method>::source_type::read
 {
     if constexpr ( random_access_range<range> )
     {
-        let d = std::min(n, std::streamsize(s-i));
-        let [e, _] = std::ranges::copy_n(i, d, c);
+        auto d = std::min(n, std::streamsize(s-i));
+        auto [e, _] = std::ranges::copy_n(i, d, c);
         i = e;
-        return d != 0 ? d otherwise -1;
+        return d != 0 ? d : -1;
     }
     else
     {
-        let d = 0;
+        auto d = 0;
         while ( d < n and i != s )
         {
             *c = *i;
@@ -80,7 +80,7 @@ constexpr std::streamsize detail::compress_view<range,method>::source_type::read
             ++i;
             ++d;
         }
-        return d != 0 ? d otherwise -1;
+        return d != 0 ? d : -1;
     }
 }
 

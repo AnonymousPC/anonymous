@@ -43,7 +43,7 @@ constexpr deque<type,device>::reference deque<type,device>::operator [] ( int po
         if ( pos < -size() or pos == 0 or pos > size() )
             throw index_error("index {} is out of range with size {}", pos, size());
     #endif        
-    return base::operator[](pos >= 0 ? pos-1 otherwise pos+size());
+    return base::operator[](pos >= 0 ? pos-1 : pos+size());
 }
 
 template < class type, class device >
@@ -53,7 +53,7 @@ constexpr deque<type,device>::const_reference deque<type,device>::operator [] ( 
         if ( pos < -size() or pos == 0 or pos > size() )
             throw index_error("index {} is out of range with size {}", pos, size());
     #endif        
-    return base::operator[](pos >= 0 ? pos-1 otherwise pos+size());
+    return base::operator[](pos >= 0 ? pos-1 : pos+size());
 }
 
 template < class type, class device >
@@ -119,7 +119,7 @@ constexpr type deque<type,device>::pop_front ( )
         return base::pop_front();
     else
     {
-        let poped = type(std::move(front()));
+        auto poped = type(std::move(front()));
         base::pop_front();
         return poped;
     }
@@ -136,7 +136,7 @@ constexpr type deque<type,device>::pop_back ( )
         return base::pop();
     else
     {
-        let poped = type(std::move(front()));
+        auto poped = type(std::move(front()));
         base::pop_back();
         return poped;
     }

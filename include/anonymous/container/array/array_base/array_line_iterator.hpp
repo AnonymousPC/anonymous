@@ -45,9 +45,9 @@ namespace detail
             friend constexpr array_line_iterator  operator  -  ( const array_line_iterator& left,       difference_type      right ) { return array_line_iterator(left .iter - right); }
             friend constexpr difference_type      operator  -  ( const array_line_iterator& left, const array_line_iterator& right ) { return left.iter - right.iter; }
             friend constexpr array_line_iterator& operator ++  (       array_line_iterator& left                                   ) { ++left.iter;           return left; }
-            friend constexpr array_line_iterator  operator ++  (       array_line_iterator& left,       int                        ) { let it = left; ++left; return it;   }
+            friend constexpr array_line_iterator  operator ++  (       array_line_iterator& left,       int                        ) { auto it = left; ++left; return it;   }
             friend constexpr array_line_iterator& operator --  (       array_line_iterator& left                                   ) { --left.iter;;          return left; }
-            friend constexpr array_line_iterator  operator --  (       array_line_iterator& left,       int                        ) { let it = left; --left; return it;   }
+            friend constexpr array_line_iterator  operator --  (       array_line_iterator& left,       int                        ) { auto it = left; --left; return it;   }
             friend constexpr array_line_iterator& operator +=  (       array_line_iterator& left,       difference_type      right ) { left.iter += right;    return left; }
             friend constexpr array_line_iterator& operator -=  (       array_line_iterator& left,       difference_type      right ) { left.iter -= right;    return left; }
     };
@@ -90,9 +90,9 @@ namespace detail
             friend constexpr array_line_const_iterator  operator  -  ( const array_line_const_iterator& left,       difference_type            right ) { return array_line_const_iterator(left .iter - right); }
             friend constexpr difference_type            operator  -  ( const array_line_const_iterator& left, const array_line_const_iterator& right ) { return left.iter - right.iter; }
             friend constexpr array_line_const_iterator& operator ++  (       array_line_const_iterator& left                                         ) { ++left.iter;           return left; }
-            friend constexpr array_line_const_iterator  operator ++  (       array_line_const_iterator& left,       int                              ) { let it = left; ++left; return it;   }
+            friend constexpr array_line_const_iterator  operator ++  (       array_line_const_iterator& left,       int                              ) { auto it = left; ++left; return it;   }
             friend constexpr array_line_const_iterator& operator --  (       array_line_const_iterator& left                                         ) { --left.iter;;          return left; }
-            friend constexpr array_line_const_iterator  operator --  (       array_line_const_iterator& left,       int                              ) { let it = left; --left; return it;   }
+            friend constexpr array_line_const_iterator  operator --  (       array_line_const_iterator& left,       int                              ) { auto it = left; --left; return it;   }
             friend constexpr array_line_const_iterator& operator +=  (       array_line_const_iterator& left,       difference_type            right ) { left.iter += right;    return left; }
             friend constexpr array_line_const_iterator& operator -=  (       array_line_const_iterator& left,       difference_type            right ) { left.iter -= right;    return left; }
     };

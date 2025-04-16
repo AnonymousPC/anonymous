@@ -59,7 +59,7 @@ constexpr map<type1,type2,compare,device>::value_reference map<type1,type2,compa
 template < class type1, class type2, class compare, class device > 
 constexpr map<type1,type2,compare,device>::const_value_reference map<type1,type2,compare,device>::operator[] ( const type1& k ) const
 {
-    let it = base::find(k);
+    auto it = base::find(k);
     if ( it != base::end() )
         return get<1>(*it);
     else
@@ -103,7 +103,7 @@ constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::clea
 template < class type1, class type2, class compare, class device > 
 constexpr map<type1,type2,compare,device>& map<type1,type2,compare,device>::pop ( const type1& k )
 {
-    let pop_count = base::erase(k);
+    auto pop_count = base::erase(k);
     if ( pop_count >= 1 )
         return self;
     else
@@ -191,7 +191,7 @@ class map<type1,type2,compare,device>::iterator
         constexpr friend iterator operator ++ ( iterator& left, int )
             requires requires ( base b ) { b++; }
         {
-            let it = left;
+            auto it = left;
             ++left;
             return it;
         }
@@ -206,7 +206,7 @@ class map<type1,type2,compare,device>::iterator
         constexpr friend iterator operator -- ( iterator& left, int )
             requires requires ( base b ) { b--; }
         {
-            let it = left;
+            auto it = left;
             --left;
             return it;
         }
@@ -277,7 +277,7 @@ class map<type1,type2,compare,device>::const_iterator
         constexpr friend const_iterator operator ++ ( const_iterator& left, int )
             requires requires ( base b ) { b++; }
         {
-            let it = left;
+            auto it = left;
             ++left;
             return it;
         }
@@ -292,7 +292,7 @@ class map<type1,type2,compare,device>::const_iterator
         constexpr friend const_iterator operator -- ( const_iterator& left, int )
             requires requires ( base b ) { b--; }
         {
-            let it = left;
+            auto it = left;
             --left;
             return it;
         }

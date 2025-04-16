@@ -19,7 +19,7 @@ constexpr const std::type_info& any::type ( ) const
 template < class value_type >
 constexpr value_type& any::value ( )
 {
-    let ptr = std::any_cast<value_type>(static_cast<base*>(&self));
+    auto ptr = std::any_cast<value_type>(static_cast<base*>(&self));
     if ( ptr != nullptr )
         return *ptr;
     else
@@ -29,7 +29,7 @@ constexpr value_type& any::value ( )
 template < class value_type >
 constexpr const value_type& any::value ( ) const
 {
-    let ptr = std::any_cast<value_type>(static_cast<const base*>(&self));
+    auto ptr = std::any_cast<value_type>(static_cast<const base*>(&self));
     if ( ptr != nullptr )
         return *ptr;
     else

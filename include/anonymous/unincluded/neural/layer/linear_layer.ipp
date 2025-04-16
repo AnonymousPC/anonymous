@@ -56,11 +56,11 @@ template < array_type type1, array_type type2 >
              float_type<typename type2::value_type> and ( type2::dimension() == 1 )
 constexpr typename linear_layer<type1,type2>::input_type linear_layer<type1,type2>::backward ( const output_type& losses, optimizer_type auto& optimizer )
 {
-    let& inputs = optimizer.template forward<input_type>();
+    auto& inputs = optimizer.template forward<input_type>();
 
-    let grad_weights = losses * transpose(inputs);
-    let grad_bias    = losses;
-    let grad_layer   = transpose(weights) * losses;
+    auto grad_weights = losses * transpose(inputs);
+    auto grad_bias    = losses;
+    auto grad_layer   = transpose(weights) * losses;
 
     weights -= optimizer.backward(weights, grad_weights);
     bias    -= optimizer.backward(weights, grad_bias);
@@ -73,11 +73,11 @@ template < array_type type1, array_type type2 >
              float_type<typename type2::value_type> and ( type2::dimension() == 1 )
 constexpr typename linear_layer<type1,type2>::batch_input_type linear_layer<type1,type2>::backward ( const batch_output_type& losses, optimizer_type auto& optimizer )
 {
-    let& inputs = optimizer.template forward<batch_input_type>();
+    auto& inputs = optimizer.template forward<batch_input_type>();
 
-    let grad_weights = transpose(losses) * inputs;                        // losses[[column-major]] * transpose(inputs[[column-major]]).
-    let grad_bias    = losses.template sum<1>();                          // losses[[column-major]] * array<value_type,-1>{1, 1, 1...}.
-    let grad_layer   = transpose(transpose(weights) * transpose(losses)); // ( transpose(weights) * losses[[column-major]] ) [[=> column-major]].
+    auto grad_weights = transpose(losses) * inputs;                        // losses[[column-major]] * transpose(inputs[[column-major]]).
+    auto grad_bias    = losses.template sum<1>();                          // losses[[column-major]] * array<value_type,-1>{1, 1, 1...}.
+    auto grad_layer   = transpose(transpose(weights) * transpose(losses)); // ( transpose(weights) * losses[[column-major]] ) [[=> column-major]].
 
     weights -= optimizer.backward(weights, grad_weights);
     bias    -= optimizer.backward(bias,    grad_bias);

@@ -60,7 +60,7 @@ public:
       : __extents_(__other.extents()) {
     // not catching this could lead to out-of-bounds access later when used inside mdspan
     // Note: since this is constraint to rank 1, extents itself would catch the invalid conversion first
-    //       and thus this libcpp_assertion should never be triggered, but keeping it here for consistency
+    //       and thus this libcpp_assertion should never be triggered, and keeping it here for consistency
     // layout_right::mapping<dextents<char, 1>> map(
     //           layout_left::mapping<dextents<unsigned, 1>>(dextents<unsigned, 1>(200))); map.extents().extent(0) ==
     //           -56

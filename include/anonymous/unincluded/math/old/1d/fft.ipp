@@ -11,15 +11,15 @@ constexpr array_type auto fft ( const array_type auto& vector )
         {
             if constexpr ( float_type<vector_value_type> )
             {
-                let a = aux::to_eigen(vector);
-                let b = Eigen::Vector<std::complex<vector_value_type>,Eigen::Dynamic>(a.size());
+                auto a = aux::to_eigen(vector);
+                auto b = Eigen::Vector<std::complex<vector_value_type>,Eigen::Dynamic>(a.size());
                 Eigen::FFT<vector_value_type>().fwd(b, a);
                 return aux::from_eigen(b);
             }
             else if constexpr ( complex_float_type<vector_value_type> )
             {
-                let a = aux::to_eigen(vector);
-                let b = Eigen::Vector<std::complex<vector_value_type::value_type>,Eigen::Dynamic>(a.size());
+                auto a = aux::to_eigen(vector);
+                auto b = Eigen::Vector<std::complex<vector_value_type::value_type>,Eigen::Dynamic>(a.size());
                 Eigen::FFT<vector_value_type::value_type>().fwd(b, a);
                 return aux::from_eigen(b);
             }
@@ -44,8 +44,8 @@ constexpr array_type auto ifft ( const array_type auto& vector )
     {
         try
         {
-            let a = aux::to_eigen(vector);
-            let b = Eigen::Vector<std::complex<vector_value_type::value_type>,Eigen::Dynamic>(a.size());
+            auto a = aux::to_eigen(vector);
+            auto b = Eigen::Vector<std::complex<vector_value_type::value_type>,Eigen::Dynamic>(a.size());
             Eigen::FFT<vector_value_type::value_type>().inv(b, a);
             return aux::from_eigen(b);
         }

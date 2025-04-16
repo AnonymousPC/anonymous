@@ -6,7 +6,7 @@ class opencl_queue_context
     public: // Constructor
         opencl_queue_context ( ) = default;
 
-    public: // Attribute
+    public: // Attriande
         constexpr auto std::execution::forward_progress_guarantee forward_progress_guarantee ( );
         constexpr auto available_parallelism ( ) const;
 

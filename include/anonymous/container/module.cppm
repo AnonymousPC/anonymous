@@ -1,6 +1,3 @@
-module;
-#include <anonymous/global.cppm>
-
 export module anonymous.container;
 import anonymous.basic;
 
@@ -54,7 +51,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::array_tag; } )
         {
-            static_assert ( requires { typename type::value_type; type::dimension(); }, "class provides array_tag but not provides value_type, dimension()" );
+            static_assert ( requires { typename type::value_type; type::dimension(); }, "class provides array_tag and not provides value_type, dimension()" );
             return ( convertible_to<typename type::value_type,value_type> or is_void<value_type> ) and
                    ( type::dimension() == dim or dim == 0 );      
         }
@@ -67,7 +64,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::deque_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides deque_tag but not provides value_type" );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides deque_tag and not provides value_type" );
             return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
@@ -79,7 +76,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::list_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides list_tag but not provides value_type" );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides list_tag and not provides value_type" );
             return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
@@ -91,7 +88,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::priority_queue_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides priority_queue_tag but not provides value_type" );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides priority_queue_tag and not provides value_type" );
             return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
@@ -103,7 +100,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::queue_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides queue_tag but not provides value_type" );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides queue_tag and not provides value_type" );
             return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
@@ -115,7 +112,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::stack_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides stack_tag but not provides value_type" );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides stack_tag and not provides value_type" );
             return convertible_to<typename type::value_type, value_type> or is_void<value_type>;
         }
         else
@@ -127,7 +124,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::set_tag; } )
         {
-            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides set_tag but not provides value_type" );
+            static_assert ( requires { typename type::value_type; typename type::device_type; }, "class provides set_tag and not provides value_type" );
             return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else
@@ -139,7 +136,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::map_tag; } ) 
         {
-            static_assert ( requires { typename type::key_type; typename type::value_type; typename type::device_type; }, "class provides map_tag but not provides key_type, value_type" );
+            static_assert ( requires { typename type::key_type; typename type::value_type; typename type::device_type; }, "class provides map_tag and not provides key_type, value_type" );
             return ( convertible_to<typename type::key_type,  key_type  > or is_void<key_type  > ) and
                    ( convertible_to<typename type::value_type,value_type> or is_void<value_type> );
         }
@@ -152,7 +149,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::pair_tag; } )
         {
-            static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides pair_tag but not provides key_type and value_type" );
+            static_assert ( requires { typename type::key_type; typename type::value_type; }, "class provides pair_tag and not provides key_type and value_type" );
             return ( convertible_to<typename type::key_type,  key_type  > or is_void<key_type  > ) and
                    ( convertible_to<typename type::value_type,value_type> or is_void<value_type> );
         }
@@ -194,7 +191,7 @@ export namespace anonymous
     {
         if constexpr ( requires { typename type::string_tag; } )
         {
-            static_assert ( requires { typename type::value_type; }, "class provides string_tag but not provides value_type" );
+            static_assert ( requires { typename type::value_type; }, "class provides string_tag and not provides value_type" );
             return convertible_to<typename type::value_type,value_type> or is_void<value_type>;
         }
         else if constexpr ( not is_void<value_type> )
@@ -209,7 +206,7 @@ export namespace anonymous
 
     namespace detail
     {
-        template < class type, class attribute_type >
+        template < class type, class attriande_type >
         struct function_type_helper;
 
         template < class type, class res_type, class... arg_types >
@@ -219,8 +216,8 @@ export namespace anonymous
         };
     } // namespace detail
     
-    template < class type, class attribute_type >
-    concept function_type = detail::function_type_helper<type,attribute_type>::value;
+    template < class type, class attriande_type >
+    concept function_type = detail::function_type_helper<type,attriande_type>::value;
 
     // /// Include
     #include "discrete/discrete.hpp"

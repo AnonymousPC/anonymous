@@ -15,8 +15,8 @@ mysql_stream& mysql_stream::connect ( url mysql_server, mysql_mode auto... args 
     static_assert ( ( same_as<username,decltype(args)> or ... ) and
                     ( same_as<password,decltype(args)> or ... ),
                     "you should provide both username and password" );
-    let params = boost::mysql::connect_params();
-    params.server_address.emplace_host_and_port(mysql_server.host().c_str(), mysql_server.port() != "" ? int(mysql_server.port()) otherwise 3306);
+    auto params = boost::mysql::connect_params();
+    params.server_address.emplace_host_and_port(mysql_server.host().c_str(), mysql_server.port() != "" ? int(mysql_server.port()) : 3306);
     params.username = detail::value_of_same_type   <username>(args...)            .value.c_str();
     params.password = detail::value_of_same_type   <password>(args...)            .value.c_str();
     params.database = detail::value_of_same_type_or<database>(args..., database()).value.c_str();
@@ -37,7 +37,7 @@ mysql_stream& mysql_stream::connect ( url mysql_server, mysql_mode auto... args 
 matrix<typename mysql_stream::value_type> mysql_stream::execute ( string str, auto... args )
 {
     return detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
-               execute_client_stmt(str, args...) otherwise
+               execute_client_stmt(str, args...) :
                execute_server_stmt(str, args...);
 }
 
@@ -46,9 +46,9 @@ matrix<typename mysql_stream::value_type> mysql_stream::execute_client_stmt ( st
     // Execute statement.
     try
     {
-        let results = boost::mysql::results();
+        auto results = boost::mysql::results();
         detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
-            handle.execute(boost::mysql::with_params(boost::mysql::runtime(("{0}" + str).c_str()), empty_arg(), make_stmt_arg(args)...), results) otherwise
+            handle.execute(boost::mysql::with_params(boost::mysql::runtime(("{0}" + str).c_str()), empty_arg(), make_stmt_arg(args)...), results) :
             handle.execute(boost::mysql::with_params(boost::mysql::runtime(         str .c_str()),              make_stmt_arg(args)...), results);
         return execute_result(results);
     }
@@ -65,11 +65,11 @@ matrix<typename mysql_stream::value_type> mysql_stream::execute_server_stmt ( st
         return execute_client_stmt(std::move(str), std::forward<decltype(args)>(args)...);
     
     // Try to prepare a server statement. If failed, then fallback into client statement.
-    let& statement = server_stmtpool[str];
+    auto& statement = server_stmtpool[str];
     if ( not statement.valid() )
     {
-        let error = boost::system::error_code();
-        let diag  = boost::mysql::diagnostics();
+        auto error = boost::system::error_code();
+        auto diag  = boost::mysql::diagnostics();
         statement = handle.prepare_statement(string(str).replace("{}", '?').c_str(), error, diag);
         if ( error != boost::system::error_code() )
         {
@@ -81,7 +81,7 @@ matrix<typename mysql_stream::value_type> mysql_stream::execute_server_stmt ( st
     // Execute statement.
     try
     {
-        let results = boost::mysql::results();
+        auto results = boost::mysql::results();
         handle.execute(statement.bind(make_stmt_arg(args)...), results);
         return execute_result(results);
     }
@@ -99,8 +99,8 @@ string mysql_stream::format_client_stmt ( const boost::mysql::error_with_diagnos
            e.code() != boost::mysql::client_errc::format_string_manual_auto_mix   and
            e.code() != boost::mysql::client_errc::format_arg_not_found ?
                detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
-                   boost::mysql::format_sql(handle.format_opts().value(), boost::mysql::runtime(("{0}" + str).c_str()), empty_arg(), make_stmt_arg(args)...).c_str() otherwise
-                   boost::mysql::format_sql(handle.format_opts().value(), boost::mysql::runtime(         str .c_str()),              make_stmt_arg(args)...).c_str() otherwise
+                   boost::mysql::format_sql(handle.format_opts().value(), boost::mysql::runtime(("{0}" + str).c_str()), empty_arg(), make_stmt_arg(args)...).c_str() :
+                   boost::mysql::format_sql(handle.format_opts().value(), boost::mysql::runtime(         str .c_str()),              make_stmt_arg(args)...).c_str() :
                "[[cannot format string \"{}\" with args {}]]"s.format(str, tuple(args...));
 }
 
@@ -109,7 +109,7 @@ string mysql_stream::format_server_stmt ( const boost::mysql::error_with_diagnos
     try
     {
         return detail::get_format_mode(str.c_str()) == detail::explicit_mode ?
-            boost::mysql::format_sql(handle.format_opts().value(), boost::mysql::runtime(("{0}" + str).c_str()), empty_arg(), make_stmt_arg(args)...).c_str() otherwise
+            boost::mysql::format_sql(handle.format_opts().value(), boost::mysql::runtime(("{0}" + str).c_str()), empty_arg(), make_stmt_arg(args)...).c_str() :
             boost::mysql::format_sql(handle.format_opts().value(), boost::mysql::runtime(         str .c_str()),              make_stmt_arg(args)...).c_str();
     }
     catch ( const boost::system::system_error& )

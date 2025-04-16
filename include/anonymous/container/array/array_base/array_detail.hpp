@@ -129,9 +129,9 @@ namespace detail
     {
         static_assert ( decay<decltype(old_shape)>::size() == decay<decltype(new_shape)>::size() );
 
-        let smaller_shape     = old_shape;
-        let smaller_size      = 1;
-        let smaller_resizable = 0;
+        auto smaller_shape     = old_shape;
+        auto smaller_size      = 1;
+        auto smaller_resizable = 0;
         for_constexpr<1,decay<decltype(old_shape)>::size()>([&] <int index>
         {
             if ( new_shape[index] < old_shape[index] )
@@ -141,7 +141,7 @@ namespace detail
             }
         });
         for_constexpr<1,decay<decltype(smaller_shape)>::size()>([&] <int index> { smaller_size *= smaller_shape[index]; });
-        let smaller_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and smaller_resizable == 1 and new_shape[ 1] < old_shape[ 1] ) or
+        auto smaller_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and smaller_resizable == 1 and new_shape[ 1] < old_shape[ 1] ) or
                                          ( same_as<typename device::layout_type,std::layout_left > and smaller_resizable == 1 and new_shape[-1] < old_shape[-1] ) );                   
 
         return tuple(smaller_shape, smaller_size, smaller_resizable > 0, smaller_relayoutable);
@@ -152,9 +152,9 @@ namespace detail
     {
         static_assert ( decay<decltype(old_shape)>::size() == decay<decltype(new_shape)>::size() );
 
-        let larger_shape     = old_shape;
-        let larger_size      = 1;
-        let larger_resizable = 0;
+        auto larger_shape     = old_shape;
+        auto larger_size      = 1;
+        auto larger_resizable = 0;
         for_constexpr<1,decay<decltype(old_shape)>::size()>([&] <int index>
         {
             if ( new_shape[index] > old_shape[index] )
@@ -164,7 +164,7 @@ namespace detail
             }
         });
         for_constexpr<1,decay<decltype(larger_shape)>::size()>([&] <int index> { larger_size *= larger_shape[index]; });
-        let larger_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and larger_resizable == 1 and new_shape[ 1] > old_shape[ 1] ) or
+        auto larger_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and larger_resizable == 1 and new_shape[ 1] > old_shape[ 1] ) or
                                         ( same_as<typename device::layout_type,std::layout_left > and larger_resizable == 1 and new_shape[-1] > old_shape[-1] ) );                   
 
         return tuple(larger_shape, larger_size, larger_resizable > 0, larger_relayoutable);
@@ -179,7 +179,7 @@ namespace detail
         using accessor_type = device_type::template accessor_type<value_type>;
         using mdspan        = std::mdspan<value_type,std::dextents<int,dim>,layout_type,accessor_type>;
 
-        let adjust = [] (int x) { return x - 1; };
+        auto adjust = [] (int x) { return x - 1; };
         [[assume(arr.ownership())]];
 
         if constexpr ( same_as<layout_type,std::layout_right> )
@@ -190,8 +190,8 @@ namespace detail
             else
                 for ( int i in range(new_shape[-1]) )
                 {
-                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(idx)..., adjust(i)); 
-                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(idx)..., adjust(i));
+                    auto old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(idx)..., adjust(i)); 
+                    auto new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(idx)..., adjust(i));
                     if ( old_offset != new_offset )
                         arr.data()[new_offset] = std::move(arr.data()[old_offset]);
                 }
@@ -205,8 +205,8 @@ namespace detail
             else
                 for ( int i in range(new_shape[1]) )
                 {
-                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(i), adjust(idx)...); 
-                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(i), adjust(idx)...);
+                    auto old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(i), adjust(idx)...); 
+                    auto new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(i), adjust(idx)...);
                     if ( old_offset != new_offset )
                         arr.data()[new_offset] = std::move(arr.data()[old_offset]);
                 }
@@ -222,7 +222,7 @@ namespace detail
         using accessor_type = device_type::template accessor_type<value_type>;
         using mdspan        = std::mdspan<value_type,std::dextents<int,dim>,layout_type,accessor_type>;
 
-        let adjust = [] (int x) { return x - 1; };
+        auto adjust = [] (int x) { return x - 1; };
         [[assume(arr.ownership())]];
 
         if constexpr ( same_as<layout_type,std::layout_right> )
@@ -233,8 +233,8 @@ namespace detail
             else
                 for ( int i in range(old_shape[-1], 1, -1) )
                 {
-                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(idx)..., adjust(i));
-                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(idx)..., adjust(i));
+                    auto old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(idx)..., adjust(i));
+                    auto new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(idx)..., adjust(i));
                     if ( old_offset != new_offset )
                     {
                         arr.data()[new_offset] = std::move(arr.data()[old_offset]);
@@ -251,8 +251,8 @@ namespace detail
             else
                 for ( int i in range(old_shape[1], 1, -1) )
                 {
-                    let old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(i), adjust(idx)...);
-                    let new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(i), adjust(idx)...);
+                    auto old_offset = mdspan(arr.data(), old_shape).mapping()(adjust(i), adjust(idx)...);
+                    auto new_offset = mdspan(arr.data(), new_shape).mapping()(adjust(i), adjust(idx)...);
                     if ( old_offset != new_offset )
                     {
                         arr.data()[new_offset] = std::move(arr.data()[old_offset]);
@@ -328,19 +328,19 @@ namespace detail
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
         if constexpr ( axis == 1 )
-            n > 0 ? device::rotate(arr.begin(), arr.end() - n, arr.end()) otherwise
+            n > 0 ? device::rotate(arr.begin(), arr.end() - n, arr.end()) :
                     device::rotate(arr.begin(), arr.begin() - n, arr.end());
         else
             for ( int i in range(shp[depth]) )
                 md_rotate<device,axis-1,depth+1>(arr[i], shp, n);
     }
 
-    enum array_attribute
+    enum array_attriande
     {
-        no_attribute,
-        rows_attribute,
-        columns_attribute,
-        transpose_attribute 
+        no_attriande,
+        rows_attriande,
+        columns_attriande,
+        transpose_attriande 
     };
 
 
@@ -350,24 +350,24 @@ namespace detail
         if constexpr ( sizeof...(offsets) == 0 )
             return 0;
         else
-            if constexpr ( attr == rows_attribute )
+            if constexpr ( attr == rows_attriande )
             { 
                 int ofs = 0;
                 for_constexpr<1,sizeof...(offsets)>([&] <int index>
                     {
-                        let p = 1;
+                        auto p = 1;
                         for_constexpr<1+index,1+sizeof...(offsets)>([&] <int index2> { p *= shp[index2]; });
                         p *= index_value_of<index>(offsets...);
                         ofs += p;
                     });
                 return ofs;
             }
-            else if constexpr ( attr == columns_attribute )
+            else if constexpr ( attr == columns_attriande )
             {
                 int ofs = 0;
                 for_constexpr<1,sizeof...(offsets)>([&] <int index>
                     {
-                        let p = 1;
+                        auto p = 1;
                         for_constexpr<decay<decltype(shp)>::size()-sizeof...(offsets),decay<decltype(shp)>::size()-sizeof...(offsets)+index-1>([&] <int index2> { p *= shp[index2]; });
                         p *= index_value_of<index>(offsets...);
                         ofs += p;
@@ -375,18 +375,18 @@ namespace detail
                 return ofs;
             }
             else
-                static_assert(false, "unknown attribute");
+                static_assert(false, "unknown attriande");
     }
 
     template < auto attr >
     constexpr int view_offset_end ( const auto& shp, int_type auto... offsets )
     {
-        if constexpr ( attr == rows_attribute )
+        if constexpr ( attr == rows_attriande )
             return view_offset_begin<attr>(shp, offsets...) + shp[1+sizeof...(offsets)];
-        else if constexpr ( attr == columns_attribute )
+        else if constexpr ( attr == columns_attriande )
             return view_offset_begin<attr>(shp, offsets...) + shp[decay<decltype(shp)>::size()-sizeof...(offsets)];
         else
-            static_assert(false, "unknown attribute");
+            static_assert(false, "unknown attriande");
     }
 
 
@@ -397,7 +397,7 @@ namespace detail
     {
         return stringalize_array(stream, arr, [&] (const auto& item)
                    {
-                       let buff = std::stringstream();
+                       auto buff = std::stringstream();
                        buff.copyfmt(stream);
                        buff.setf(stream.flags());
                        buff << item;
@@ -411,7 +411,7 @@ namespace detail
             return array<std::string,decay<decltype(arr)>::dimension()>(arr.size(), [&] (int i) { return stringalizer(arr[i]); } );
         else
         {
-            let string_array = array<std::string,decay<decltype(arr)>::dimension()>();
+            auto string_array = array<std::string,decay<decltype(arr)>::dimension()>();
             string_array.resize(arr.shape());
             for ( int i in range(arr.shape()[1]) )
                 string_array[i] = stringalize_array(stream,arr[i],stringalizer);
@@ -425,12 +425,12 @@ namespace detail
 
         if constexpr ( decay<decltype(arr)>::dimension() == 1 )
         {
-            let align = arr.empty() ? 0 otherwise arr.max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
+            auto align = arr.empty() ? 0 : arr.max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
             arr.for_each([&] (auto& str) { str.resize(align, ' '); });
         }
         else
         {
-            let align = arr.empty() ? 0 otherwise arr.flatten().max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
+            auto align = arr.empty() ? 0 : arr.flatten().max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();
             arr.flatten().for_each([&] (auto& str) { str.resize(align, ' '); });
         }
     }

@@ -178,28 +178,28 @@ bool operator == ( opencl::template const_pointer<type> left, opencl::template c
 template < class type >
 std::partial_ordering operator <=> ( opencl::template pointer<type> left, opencl::template pointer<type> right )
 {
-    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() otherwise 
+    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() : 
                                                      std::partial_ordering::unordered;
 }
 
 template < class type >
 std::partial_ordering operator <=> ( opencl::template pointer<type> left, opencl::template const_pointer<type> right )
 {
-    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() otherwise 
+    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() : 
                                                      std::partial_ordering::unordered;
 }
 
 template < class type >
 std::partial_ordering operator <=> ( opencl::template const_pointer<type> left, opencl::template pointer<type> right )
 {
-    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() otherwise 
+    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() : 
                                                      std::partial_ordering::unordered;
 }
 
 template < class type >
 std::partial_ordering operator <=> ( opencl::template const_pointer<type> left, opencl::template const_pointer<type> right )
 {
-    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() otherwise 
+    return left.get_buffer() == right.get_buffer() ? left.get_index() <=> right.get_index() : 
                                                      std::partial_ordering::unordered;
 }
 
@@ -306,7 +306,7 @@ opencl::template const_pointer<type>& operator ++ ( opencl::template const_point
 template < class type >
 opencl::template pointer<type> operator ++ ( opencl::template pointer<type>& left, int )
 {
-    let tmp = left;
+    auto tmp = left;
     ++left;
     return tmp;
 }
@@ -314,7 +314,7 @@ opencl::template pointer<type> operator ++ ( opencl::template pointer<type>& lef
 template < class type >
 opencl::template const_pointer<type> operator ++ ( opencl::template const_pointer<type>& left, int )
 {
-    let tmp = left;
+    auto tmp = left;
     ++left;
     return tmp;
 }
@@ -334,7 +334,7 @@ opencl::template const_pointer<type>& operator -- ( opencl::template const_point
 template < class type >
 opencl::template pointer<type> operator -- ( opencl::template pointer<type>& left, int )
 {
-    let tmp = left;
+    auto tmp = left;
     --left;
     return tmp;
 }
@@ -342,7 +342,7 @@ opencl::template pointer<type> operator -- ( opencl::template pointer<type>& lef
 template < class type >
 opencl::template const_pointer<type> operator -- ( opencl::template const_pointer<type>& left, int )
 {
-    let tmp = left;
+    auto tmp = left;
     --left;
     return tmp;
 }

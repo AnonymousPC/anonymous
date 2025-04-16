@@ -1,7 +1,7 @@
 #pragma once
 
 /* As system_scheduler is not a class-template, the declaration and implemention on different parts
- * should be written in a specific order, otherwise a "cannot use incomplete type..." compile-error
+ * should be written in a specific order, : a "cannot use incomplete type..." compile-error
  * may occur.
  * 
  * Thus, we provide a guide to declaration/implemetion.
@@ -217,7 +217,7 @@ constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_typ
 {
     try
     {
-        let args_tuple = std::tuple(std::forward<decltype(args)>(args)...);
+        auto args_tuple = std::tuple(std::forward<decltype(args)>(args)...);
 
         for ( int i in range(0, shp-1) )
             boost::asio::post(boost::asio::system_executor(), [&, i]

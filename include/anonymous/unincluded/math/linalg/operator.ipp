@@ -6,7 +6,7 @@ constexpr array_type auto operator + ( const array_type auto& right )
 {
     using device     = right_device_type;
     using value_type = decltype(+std::declval<right_value_type>());
-    let output = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
+    auto output = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
     device_linalg_1_1(unary_plus, right, output);    
     return output;
 }
@@ -16,7 +16,7 @@ constexpr array_type auto operator - ( const array_type auto& right )
 {
     using device     = right_device_type;
     using value_type = decltype(-std::declval<right_value_type>());
-    let output = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
+    auto output = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
     device_linalg_1_1(unary_minus, right, output);
     return output;
 }
@@ -33,7 +33,7 @@ constexpr array_type auto operator + ( const array_type auto& left, const array_
     
     using device     = left_device_type;
     using value_type = decltype(std::declval<left_value_type>() + std::declval<right_value_type>());
-    let output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
+    auto output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     left.mdspan().visit([&] (const auto& lspan) { return right.mdspan().visit([&] (const auto& rspan) { return device::linalg::plus(lspan, rspan, output.mdspan().template value<1>()); }); });
     return output;
 }
@@ -50,7 +50,7 @@ constexpr array_type auto operator - ( const array_type auto& left, const array_
     
     using device     = left_device_type;
     using value_type = decltype(std::declval<left_value_type>() - std::declval<right_value_type>());
-    let output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
+    auto output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     device_linalg_2_1(minus, left, right, output);
     return output;
 }
@@ -60,7 +60,7 @@ constexpr array_type auto operator * ( const auto& left, const array_type auto& 
 {    
     using device     = right_device_type;
     using value_type = decltype(std::declval<left_type>() * std::declval<right_value_type>());
-    let output = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
+    auto output = array<value_type,right_dimension,device>([&] { if constexpr ( right_dimension == 1 ) return right.size(); else return right.shape(); } ());
     device_linalg_c1_1(left_scale, left, right, output);
     return output;
 }
@@ -70,7 +70,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const auto& 
 {    
     using device     = left_device_type;
     using value_type = decltype(std::declval<left_value_type>() * std::declval<right_type>());
-    let output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
+    auto output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     device_linalg_1c_1(right_scale, left, right, output);
     return output;
 }
@@ -87,7 +87,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
     
     using device     = left_device_type;
     using value_type = decltype(std::declval<left_value_type>() * std::declval<right_value_type>());
-    let output = array<value_type,2,device>(left.row(), right.column());
+    auto output = array<value_type,2,device>(left.row(), right.column());
     device_linalg_2_1(multiply, left, right, output);
     return output;
 }
@@ -97,7 +97,7 @@ constexpr array_type auto operator / ( const array_type auto& left, const auto& 
 {    
     using device     = left_device_type;
     using value_type = decltype(std::declval<left_value_type>() / std::declval<right_type>());
-    let output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
+    auto output = array<value_type,left_dimension,device>([&] { if constexpr ( left_dimension == 1 ) return left.size(); else return left.shape(); } ());
     device_linalg_1c_1(divide, left, right, output);
     return output;
 }
@@ -113,7 +113,7 @@ constexpr array_type auto& operator += ( array_type auto& left, const array_type
     #endif
 
     using device = left_device_type;
-    let& output = left;
+    auto& output = left;
     device_linalg_2_1(plus_equal, left, right, output);
     return left;
 }
@@ -129,7 +129,7 @@ constexpr array_type auto& operator -= ( array_type auto& left, const array_type
     #endif
     
     using device = left_device_type;
-    let& output = left;
+    auto& output = left;
     device_linalg_2_1(minus_equal, left, right, output);
     return left;
 }
@@ -138,7 +138,7 @@ constexpr array_type auto& operator *= ( array_type auto& left, const auto& righ
     requires ( number_type<left_value_type> or complex_type<left_value_type> ) and ( number_type<right_type> or complex_type<right_type> )
 {   
     using device = left_device_type;
-    let& output = left;
+    auto& output = left;
     device_linalg_1c_1(right_scale_equal, left, right, output);
     return left;
 }
@@ -154,7 +154,7 @@ constexpr array_type auto& operator *= ( array_type auto& left, const array_type
     #endif
     
     using device = left_device_type;
-    let& output = left;
+    auto& output = left;
     device_linalg_2_1(multiply_equal, left, right, output);
     return left;
 }
@@ -163,7 +163,7 @@ constexpr array_type auto& operator /= ( array_type auto& left, const auto& righ
     requires ( number_type<left_value_type> or complex_type<left_value_type> ) and ( number_type<right_type> or complex_type<right_type> )
 {   
     using device = left_device_type;
-    let& output = left;
+    auto& output = left;
     device_linalg_1c_1(divide_equal, left, right, output);
     return left;
 }

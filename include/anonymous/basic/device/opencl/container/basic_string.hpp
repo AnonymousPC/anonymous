@@ -67,7 +67,7 @@ class opencl::basic_string
 
         basic_string& append ( const_pointer new_data, int new_size )
         {
-            let old_size = self.size();
+            auto old_size = self.size();
             as_vector().resize(self.size() + new_size, opencl::execution_context.command_queue());
             boost::compute::copy(new_data, new_data + new_size, self.data() + old_size, opencl::execution_context.command_queue());
             opencl::execution_context.command_queue().finish();

@@ -27,7 +27,7 @@ class opencl::stack
 
         type pop ( )       
         {
-            let poped = base::top();
+            auto poped = base::top();
             base::pop();
             return poped;
         } 

@@ -103,7 +103,7 @@ constexpr type list<type,device>::pop_front ( )
         return base::pop_front();
     else
     {
-        let poped = type(std::move(front()));
+        auto poped = type(std::move(front()));
         base::pop_front();
         return poped;
     }
@@ -121,7 +121,7 @@ constexpr type list<type,device>::pop_back ( )
         return base::pop();
     else
     {
-        let poped = type(std::move(front()));
+        auto poped = type(std::move(front()));
         base::pop_back();
         return poped;
     }

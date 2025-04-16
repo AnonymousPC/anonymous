@@ -103,7 +103,7 @@ class range<type>::const_iterator
         constexpr friend auto operator <=> ( const const_iterator& left, const const_iterator& right )
         {
             [[assume(left.step == right.step)]];
-            return left.step > 0 ? left.val <=> right.val otherwise right.val <=> left.val;
+            return left.step > 0 ? left.val <=> right.val : right.val <=> left.val;
         }
 
         constexpr friend const_iterator operator + ( const const_iterator& left, int right )
@@ -135,7 +135,7 @@ class range<type>::const_iterator
 
         constexpr friend const_iterator operator ++ ( const_iterator& left, int )
         {
-            let other = left;
+            auto other = left;
             ++left;
             return other;
         }
@@ -148,7 +148,7 @@ class range<type>::const_iterator
 
         constexpr friend const_iterator operator -- ( const_iterator& left, int )
         {
-            let other = left;
+            auto other = left;
             --left;
             return other;
         }

@@ -23,8 +23,8 @@ class variant
 
     public: // Constructor 
         constexpr          variant ( auto v ) requires ( same_as           <types,decltype(v)> or ... );
-        constexpr          variant ( auto v ) requires ( convertible_to    <decltype(v),types> or ... ) but ( not ( same_as       <types,decltype(v)> or ... ) );
-        constexpr explicit variant ( auto v ) requires ( constructible_from<types,decltype(v)> or ... ) but ( not ( convertible_to<decltype(v),types> or ... ) );
+        constexpr          variant ( auto v ) requires ( convertible_to    <decltype(v),types> or ... ) and ( not ( same_as       <types,decltype(v)> or ... ) );
+        constexpr explicit variant ( auto v ) requires ( constructible_from<types,decltype(v)> or ... ) and ( not ( convertible_to<decltype(v),types> or ... ) );
 
     public: // Member
                                        constexpr       int                                  index ( )          const;

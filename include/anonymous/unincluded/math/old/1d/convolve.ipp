@@ -6,13 +6,13 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
 {
     using type = common_type<left_value_type,right_value_type>;
 
-    let n = 1;
+    auto n = 1;
     while ( n < left.size() + right.size() - 1 )
         n *= 2;
 
     if ( n <= 64 + 64 - 1 ) // Needs retesting.
     {
-        let v = array<type> ( left.size() + right.size() - 1 );
+        auto v = array<type> ( left.size() + right.size() - 1 );
         for ( int i in range ( left.size() ) )
             for ( int j in range ( right.size() ) )
                 v[i+j-1] += left[i] * right[j];
@@ -21,10 +21,10 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
 
     else
     {
-        let a = fft(array(left ).resize(n));
-        let b = fft(array(right).resize(n));
-        let c = array(a.size(), [&] (int i) { return a[i] * b[i]; });
-        let d = ifft(c).resize(left.size() + right.size() - 1);
+        auto a = fft(array(left ).resize(n));
+        auto b = fft(array(right).resize(n));
+        auto c = array(a.size(), [&] (int i) { return a[i] * b[i]; });
+        auto d = ifft(c).resize(left.size() + right.size() - 1);
 
         if constexpr ( int_type<type> )
             return array<type> ( d.size(), [&] (int i) { return type(round(d[i].real())); });

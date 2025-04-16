@@ -52,7 +52,7 @@ int exit_process ( int process_id )
 {
     try
     {
-        let handle = boost::process::v2::process(boost::asio::system_executor(), process_id);
+        auto handle = boost::process::v2::process(boost::asio::system_executor(), process_id);
         handle.request_exit();
         return handle.exit_code();
     }
@@ -66,7 +66,7 @@ int terminate_process ( int process_id )
 {
     try
     {
-        let handle = boost::process::v2::process(boost::asio::system_executor(), process_id);
+        auto handle = boost::process::v2::process(boost::asio::system_executor(), process_id);
         handle.terminate();
         return handle.exit_code();
     }

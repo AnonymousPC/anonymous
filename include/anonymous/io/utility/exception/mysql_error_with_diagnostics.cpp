@@ -3,12 +3,12 @@
 detail::mysql_error_with_diagnostics::mysql_error_with_diagnostics ( const boost::mysql::error_with_diagnostics& e )
     extends boost::mysql::error_with_diagnostics ( e )
 {
-    let diag = e.get_diagnostics().server_message() != "" and e.get_diagnostics().client_message() != "" ? 
-                   " (with server_message = {}, client_message = {})"s.format(std::string(e.get_diagnostics().server_message()), std::string(e.get_diagnostics().client_message())) otherwise
+    auto diag = e.get_diagnostics().server_message() != "" and e.get_diagnostics().client_message() != "" ? 
+                   " (with server_message = {}, client_message = {})"s.format(std::string(e.get_diagnostics().server_message()), std::string(e.get_diagnostics().client_message())) :
                e.get_diagnostics().server_message() != "" ? 
-                   " (with server_message = {})"s.format(std::string(e.get_diagnostics().server_message())) otherwise
+                   " (with server_message = {})"s.format(std::string(e.get_diagnostics().server_message())) :
                e.get_diagnostics().client_message() != "" ? 
-                   " (with client_message = {})"s.format(std::string(e.get_diagnostics().client_message())) otherwise
+                   " (with client_message = {})"s.format(std::string(e.get_diagnostics().client_message())) :
              /*both == ""*/
                    "";
 

@@ -104,7 +104,7 @@ namespace detail
             constexpr friend const_iterator operator ++ ( const_iterator& left, int )
                 requires requires ( base b ) { b++; }
             {
-                let it = left;
+                auto it = left;
                 ++left;
                 return it;
             }
@@ -119,7 +119,7 @@ namespace detail
             constexpr friend const_iterator operator -- ( const_iterator& left, int )
                 requires requires ( base b ) { b--; }
             {
-                let it = left;
+                auto it = left;
                 --left;
                 return it;
             }      

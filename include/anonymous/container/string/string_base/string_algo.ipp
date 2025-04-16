@@ -178,7 +178,7 @@ constexpr container& string_algo<container,type,device>::capitalize ( )
 template < class container, class type, class device >
 constexpr container& string_algo<container,type,device>::title ( )
 {
-    for ( let pos = begin(); pos != end() + 1; pos++ )
+    for ( auto pos = begin(); pos != end() + 1; pos++ )
     {
         if ( pos != begin() or std::islower(*pos) )
             *pos = std::toupper(*pos);
@@ -202,9 +202,9 @@ constexpr container& string_algo<container,type,device>::center ( int len, type 
         throw string_error("center string with negative size {}", len);
     if ( len > size() )
     {
-        let old_size    = size();
-        let left_space  = (len - old_size )    / 2;
-        let right_space = (len - old_size + 1) / 2;
+        auto old_size    = size();
+        auto left_space  = (len - old_size )    / 2;
+        auto right_space = (len - old_size + 1) / 2;
         static_cast<container&>(self).resize(len);
         device::copy_backward(begin(), begin() + old_size, end() - right_space);
         device::fill(begin(), begin() + left_space, ch);
@@ -234,7 +234,7 @@ constexpr container& string_algo<container,type,device>::right_justify ( int len
         throw string_error("right_justify string with negative size {}", len);
     if ( len > size() )
     {
-        let old_size = size();
+        auto old_size = size();
         static_cast<container&>(self).resize(len);
         device::copy_backward(begin(), begin() + old_size, end());
         device::fill(begin(), end() - old_size, ch);
@@ -247,8 +247,8 @@ constexpr array<typename string_algo<container,type,device>::view> string_algo<c
 {
     if ( str.empty() )
         throw string_error("partition string with empty seperator");
-    let pos = device::search(self.data(), self.data() + self.size(), str.data(), str.data() + str.size());
-    let arr = pos != self.data() + self.size() ? array<view>{view(self.data(),pos-self.data()), view(pos,str.size()), view(pos+str.size(), self.size()-(pos-self.data())-str.size())} otherwise
+    auto pos = device::search(self.data(), self.data() + self.size(), str.data(), str.data() + str.size());
+    auto arr = pos != self.data() + self.size() ? array<view>{view(self.data(),pos-self.data()), view(pos,str.size()), view(pos+str.size(), self.size()-(pos-self.data())-str.size())} :
                                                  array<view>{view(self.data(),self.size()), view(self.data()+self.size(),0), view(self.data()+self.size(),0)};
     return arr;
 }
@@ -258,8 +258,8 @@ constexpr array<typename string_algo<container,type,device>::view> string_algo<c
 {
     if ( str.empty() )
         throw string_error("right_partition string with empty seperator");
-    let pos = device::find_end(self.data(), self.data() + self.size(), str.data(), str.data() + str.size());
-    return pos != self.data() + self.size() ? array<view>{view(self.data(),pos-self.data()), view(pos,str.size()), view(pos+str.size(), self.size()-(pos-self.data())-str.size())} otherwise
+    auto pos = device::find_end(self.data(), self.data() + self.size(), str.data(), str.data() + str.size());
+    return pos != self.data() + self.size() ? array<view>{view(self.data(),pos-self.data()), view(pos,str.size()), view(pos+str.size(), self.size()-(pos-self.data())-str.size())} :
                                               array<view>{view(self.data(),0), view(self.data(),0), view(self.data(),self.size())};
 }
 
@@ -270,10 +270,10 @@ constexpr array<typename string_algo<container,type,device>::view> string_algo<c
         throw string_error("split string with empty seperator");
     if ( times < 0 )
         throw string_error("split string with negative times {}", times);
-    let arr = array<view>();
-    for ( let pos_1 = self.data(); times >= 0; times-- )
+    auto arr = array<view>();
+    for ( auto pos_1 = self.data(); times >= 0; times-- )
     {
-        let pos_2 = times >= 1 ? device::search(pos_1, self.data() + self.size(), str.data(), str.data() + str.size()) otherwise
+        auto pos_2 = times >= 1 ? device::search(pos_1, self.data() + self.size(), str.data(), str.data() + str.size()) :
                                  self.data() + self.size();
         arr.push(view(pos_1, pos_2 - pos_1));
         if ( pos_2 != self.data() + self.size() )
@@ -291,14 +291,14 @@ constexpr array<typename string_algo<container,type,device>::view> string_algo<c
         throw string_error("right_split string with empty seperator");
     if ( times < 0 )
         throw string_error("right_split string with negative times {}", times);
-    let arr = array<view>();
-    for ( let pos_2 = self.data() + self.size(); times >= 0; times-- )
+    auto arr = array<view>();
+    for ( auto pos_2 = self.data() + self.size(); times >= 0; times-- )
     {
-        let pos_1 = times >= 1 ? device::find_end(self.data(), pos_2, str.data(), str.data() + str.size()) otherwise
+        auto pos_1 = times >= 1 ? device::find_end(self.data(), pos_2, str.data(), str.data() + str.size()) :
                                  pos_2;
         if ( pos_1 == pos_2 )
             pos_1 = self.data() - str.size();
-        arr.empty() ? arr.push  (   view(pos_1 + str.size(), pos_2 - pos_1 - str.size())) otherwise
+        arr.empty() ? arr.push  (   view(pos_1 + str.size(), pos_2 - pos_1 - str.size())) :
                       arr.insert(1, view(pos_1 + str.size(), pos_2 - pos_1 - str.size()));
         if ( pos_1 != self.data() - str.size() )
             pos_2 = pos_1;
@@ -325,7 +325,7 @@ constexpr container& string_algo<container,type,device>::left_strip ( view chars
 {
     if ( chars.empty() )
         throw string_error("left_strip string with empty strip_list");
-    let pos = device::find_if(begin(), end(), [&] (const auto& ch) { return not chars.contains(ch); });
+    auto pos = device::find_if(begin(), end(), [&] (const auto& ch) { return not chars.contains(ch); });
     return static_cast<container&>(self).erase(1, pos - begin());
 }
 
@@ -334,7 +334,7 @@ constexpr container& string_algo<container,type,device>::right_strip ( view char
 {
     if ( chars.empty() )
         throw string_error("left_strip string with empty strip_list");
-    let pos = end() - 1;
+    auto pos = end() - 1;
     while ( pos >= begin() and not chars.contains(*pos) )
         pos--;
     return static_cast<container&>(self).erase(pos - begin() + 1, size());
@@ -375,7 +375,7 @@ constexpr container& string_algo<container,type,device>::format ( auto&&... f )
     try
     {
         detail::get_format_mode(data()) == detail::explicit_mode ?
-            static_cast<std::string&>(static_cast<container&>(self)) = std::format(std::runtime_format(std::string("{0}") + data()), "", detail::make_formattable(f)...) otherwise
+            static_cast<std::string&>(static_cast<container&>(self)) = std::format(std::runtime_format(std::string("{0}") + data()), "", detail::make_formattable(f)...) :
             static_cast<std::string&>(static_cast<container&>(self)) = std::format(std::runtime_format(                     data()),     detail::make_formattable(f)...);
         return static_cast<container&>(self);
     }
@@ -426,8 +426,8 @@ constexpr int string_algo<container,type,device>::count ( view str ) const
     if ( str.empty() )
         throw string_error("count string with empty substr");
 
-    let pos   = begin();
-    let times = 0;
+    auto pos   = begin();
+    auto times = 0;
     while ( true )
     {
         pos = device::search(pos, self.end(), str.begin(), str.end());
@@ -451,8 +451,8 @@ constexpr bool string_algo<container,type,device>::exist ( view str ) const
 template < class container, class type, class device >
 constexpr int string_algo<container,type,device>::find ( view str ) const
 {
-    let pos = device::search(self.begin(), self.end(), str.begin(), str.end());
-    return pos != end() ? pos - begin() + 1 otherwise 0;
+    auto pos = device::search(self.begin(), self.end(), str.begin(), str.end());
+    return pos != end() ? pos - begin() + 1 : 0;
 }
 
 template < class container, class type, class device >
@@ -467,13 +467,13 @@ constexpr container& string_algo<container,type,device>::remove ( view str )
     if ( str.empty() )
         throw string_error("remove string with empty substr");
 
-    let pos = begin();
+    auto pos = begin();
     while ( true )
     {
         pos = device::search(pos, self.end(), str.begin(), str.end());
         if ( pos != self.end() )
         {
-            let idx = pos - begin() + 1;
+            auto idx = pos - begin() + 1;
             static_cast<container&>(self).erase(idx, idx + str.size() - 1);
             pos = begin() + idx - 1 + str.size();
         }
@@ -486,13 +486,13 @@ constexpr container& string_algo<container,type,device>::remove ( view str )
 template < class container, class type, class device >
 constexpr container& string_algo<container,type,device>::replace ( view old_str, view new_str )
 {
-    let pos = begin();
+    auto pos = begin();
     while ( true )
     {
         pos = device::search(pos, self.end(), old_str.begin(), old_str.end());
         if ( pos != self.end() )
         {
-            let idx = pos - begin() + 1;
+            auto idx = pos - begin() + 1;
             if ( idx + old_str.size() - 1 != size() )
                 static_cast<container&>(self).erase(idx, idx + old_str.size() - 1).insert(idx, new_str);
             else
@@ -508,15 +508,15 @@ constexpr container& string_algo<container,type,device>::replace ( view old_str,
 template < class container, class type, class device >
 constexpr int string_algo<container,type,device>::right_find ( view str ) const
 {
-    let pos = device::find_end(self.begin(), self.end(), str.begin(), str.end());
-    return pos != end() ? pos - begin() + 1 otherwise 0;
+    auto pos = device::find_end(self.begin(), self.end(), str.begin(), str.end());
+    return pos != end() ? pos - begin() + 1 : 0;
 }
 
 template < class container, class type, class device >
 constexpr array<int> string_algo<container,type,device>::where ( view str ) const
 {
-    let pos = begin();
-    let arr = array<int>();
+    auto pos = begin();
+    auto arr = array<int>();
     while ( true )
     {
         pos = device::search(pos, self.end(), str.begin(), str.end());
@@ -568,9 +568,9 @@ template < class container, class type, class device >
 constexpr int string_algo<container,type,device>::find ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
-    let mtc   = std::match_results<typename container::const_iterator>();
-    let found = std::regex_search(begin(), end(), mtc, rgx);
-    return found ? mtc.position() + 1 otherwise 0; 
+    auto mtc   = std::match_results<typename container::const_iterator>();
+    auto found = std::regex_search(begin(), end(), mtc, rgx);
+    return found ? mtc.position() + 1 : 0; 
 }
 
 template < class container, class type, class device >
@@ -607,11 +607,11 @@ template < class container, class type, class device >
 constexpr int string_algo<container,type,device>::right_find ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
-    let mtc = std::match_results<typename container::const_iterator>();
-    for ( let it = std::regex_iterator(begin(), end(), rgx); it != std::regex_iterator<typename container::const_iterator>(); ++it )
+    auto mtc = std::match_results<typename container::const_iterator>();
+    for ( auto it = std::regex_iterator(begin(), end(), rgx); it != std::regex_iterator<typename container::const_iterator>(); ++it )
         mtc = *it;
-    let found = not mtc.empty();
-    return found ? mtc.position() + 1 otherwise 0;
+    auto found = not mtc.empty();
+    return found ? mtc.position() + 1 : 0;
 }
 
 template < class container, class type, class device >
@@ -621,8 +621,8 @@ constexpr array<typename string_algo<container,type,device>::view> string_algo<c
     if ( std::basic_regex<type>(rgx).mark_count() == 0 )
         throw regex_error("split string with regex \"{}\" which never captures group", rgx);
 
-    let mtc     = std::match_results<typename container::const_iterator>();
-    let matched = std::regex_match(begin(), end(), mtc, rgx);
+    auto mtc     = std::match_results<typename container::const_iterator>();
+    auto matched = std::regex_match(begin(), end(), mtc, rgx);
 
     if ( not matched )
         throw regex_error("split string \"{}\" with regex \"{}\" which is not matched", static_cast<const container&>(self), rgx);

@@ -20,7 +20,7 @@ constexpr /*value_type*/ auto det ( const array_type auto& matrix )
                 return aux::to_eigen(matrix).determinant();
             else if constexpr ( complex_type<matrix_value_type> )
             {
-                let d = aux::to_eigen(matrix).determinant();
+                auto d = aux::to_eigen(matrix).determinant();
                 return complex ( d.real(), d.imag() );
             }
         }

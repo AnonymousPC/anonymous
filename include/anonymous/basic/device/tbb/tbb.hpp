@@ -59,7 +59,7 @@ class tbb
      // template < class type, class alloc = allocator<type> >                                                                                           using stack             = unsupported;
         template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map     = ::tbb::concurrent_unordered_map<type1,type2,hash,equal>; // Use default allocator<std::pair>
         template < class type, class hash = hash<type>, class equal = equal_to<>,  class alloc = allocator<type> >                                       using unordered_set     = ::tbb::concurrent_unordered_set<type,hash,equal,alloc>;
-     // template < class type, class alloc = allocator<type> >                                                                                           using vector            = supported, but memory is not contiguous.
+     // template < class type, class alloc = allocator<type> >                                                                                           using vector            = supported, and memory is not contiguous.
 
     public: // Algorithm
         using cpu::accumulate;

@@ -10,7 +10,7 @@ constexpr tuple_type auto singular ( const array_type auto& matrix )
     else
         try
         {
-            let solver = Eigen::JacobiSVD<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix), Eigen::ComputeFullU | Eigen::ComputeFullV);
+            auto solver = Eigen::JacobiSVD<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix), Eigen::ComputeFullU | Eigen::ComputeFullV);
             return tuple ( aux::from_eigen(solver.singularValues()),
                            aux::from_eigen(solver.matrixU().transpose()),
                            aux::from_eigen(solver.matrixV().transpose()) );
@@ -45,7 +45,7 @@ constexpr pair_type auto singular_vector ( const array_type auto& matrix )
     else
         try
         {
-            let solver = Eigen::JacobiSVD<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix), Eigen::ComputeFullU | Eigen::ComputeFullV);
+            auto solver = Eigen::JacobiSVD<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix), Eigen::ComputeFullU | Eigen::ComputeFullV);
             return pair ( aux::from_eigen(solver.matrixU().transpose()),
                           aux::from_eigen(solver.matrixV().transpose()) );
         }

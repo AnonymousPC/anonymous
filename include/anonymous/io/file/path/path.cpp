@@ -39,8 +39,8 @@ path path::parent_path ( ) const
 {
     try
     {
-        let p = std::filesystem::path(self).parent_path();
-        return not p.empty() ? p otherwise ".";
+        auto p = std::filesystem::path(self).parent_path();
+        return not p.empty() ? p : ".";
     }
     catch ( const std::filesystem::filesystem_error& e )
     {

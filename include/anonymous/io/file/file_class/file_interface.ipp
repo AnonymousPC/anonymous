@@ -39,8 +39,8 @@ type& file_interface<type>::save_as ( path pth )
     if ( is_file(pth) )
         throw file_error("cannot save_as file {}: file already exists", pth);
 
-    let old_path = file_path;
-    let new_path = create_file(pth);
+    auto old_path = file_path;
+    auto new_path = create_file(pth);
     try
     {
         file_path = new_path;

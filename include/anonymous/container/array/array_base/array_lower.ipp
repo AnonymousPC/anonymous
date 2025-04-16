@@ -17,16 +17,16 @@ namespace detail
     {
         if constexpr ( sizeof...(args) == dim ) // Without trailing value
         {
-            let shp = static_array<int,dim>{args...};
-            rows_view   .template resize<rows_attribute   >(shp, static_cast<array<type,dim,device>&>(self));
-            columns_view.template resize<columns_attribute>(shp, static_cast<array<type,dim,device>&>(self));
+            auto shp = static_array<int,dim>{args...};
+            rows_view   .template resize<rows_attriande   >(shp, static_cast<array<type,dim,device>&>(self));
+            columns_view.template resize<columns_attriande>(shp, static_cast<array<type,dim,device>&>(self));
         }
         else if constexpr ( sizeof...(args) == dim + 1 ) // With trailing value
         {
-            let shp = static_array<int,dim>();
+            auto shp = static_array<int,dim>();
             for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-            rows_view   .template resize<rows_attribute   >(shp, static_cast<array<type,dim,device>&>(self));
-            columns_view.template resize<columns_attribute>(shp, static_cast<array<type,dim,device>&>(self));
+            rows_view   .template resize<rows_attriande   >(shp, static_cast<array<type,dim,device>&>(self));
+            columns_view.template resize<columns_attriande>(shp, static_cast<array<type,dim,device>&>(self));
         }
         else
             static_assert(false, "invalid argument list");
@@ -37,8 +37,8 @@ namespace detail
     constexpr array_lower<type,dim,device>::array_lower ( const static_array<int,dim>& args )
         extends transpose_view ( static_cast<array<type,dim,device>&>(self) )
     {
-        rows_view   .template resize<rows_attribute   >(args, static_cast<array<type,dim,device>&>(self));
-        columns_view.template resize<columns_attribute>(args, static_cast<array<type,dim,device>&>(self));
+        rows_view   .template resize<rows_attriande   >(args, static_cast<array<type,dim,device>&>(self));
+        columns_view.template resize<columns_attriande>(args, static_cast<array<type,dim,device>&>(self));
     }
 
 
@@ -97,8 +97,8 @@ namespace detail
         requires ( dim >= 2 )
     constexpr array_lower<type,dim,device>& array_lower<type,dim,device>::resize ( const static_array<int,dim>& new_shape )
     {
-        rows_view   .template resize<rows_attribute   >(new_shape, static_cast<array<type,dim,device>&>(self));
-        columns_view.template resize<columns_attribute>(new_shape, static_cast<array<type,dim,device>&>(self));
+        rows_view   .template resize<rows_attriande   >(new_shape, static_cast<array<type,dim,device>&>(self));
+        columns_view.template resize<columns_attriande>(new_shape, static_cast<array<type,dim,device>&>(self));
         return self;
     }
 
@@ -123,7 +123,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<rows_attribute,dim2>(static_cast<array<type,dim,device>&>(self).shape(), offsets...);
+        return rows_view.template value<rows_attriande,dim2>(static_cast<array<type,dim,device>&>(self).shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -133,7 +133,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return rows_view.template value<rows_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).shape(), offsets...);
+        return rows_view.template value<rows_attriande,dim2>(static_cast<const array<type,dim,device>&>(self).shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -143,7 +143,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<columns_attribute,dim2>(static_cast<array<type,dim,device>&>(self).shape(), offsets...);
+        return columns_view.template value<columns_attriande,dim2>(static_cast<array<type,dim,device>&>(self).shape(), offsets...);
     }
 
     template < class type, int dim, class device >
@@ -153,7 +153,7 @@ namespace detail
     {
         static_assert ( dim2 > 0 and dim2 < dim );
         static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
-        return columns_view.template value<columns_attribute,dim2>(static_cast<const array<type,dim,device>&>(self).shape(), offsets...);
+        return columns_view.template value<columns_attriande,dim2>(static_cast<const array<type,dim,device>&>(self).shape(), offsets...);
     }
     
 
@@ -226,13 +226,13 @@ namespace detail
     template < auto attr >
     constexpr tuple_upper<type,1,device>& tuple_upper<type,1,device>::resize ( const auto& shp, array<type,2,device>& arr )
     {
-        let s = 1;
-        if constexpr ( attr == rows_attribute )
+        auto s = 1;
+        if constexpr ( attr == rows_attriande )
             for_constexpr<1,decay<decltype(shp)>::size()-1>([&] <int index> { s *= shp[index]; });
-        else if constexpr ( attr == columns_attribute )
+        else if constexpr ( attr == columns_attriande )
             for_constexpr<2,decay<decltype(shp)>::size()  >([&] <int index> { s *= shp[index]; });
         else
-            static_assert(false, "unknown attribute");
+            static_assert(false, "unknown attriande");
         vct.resize(s);
         for ( int i in range(0, s-1) ) 
             vct[i] = array_upper<type,1,device>(arr, attr, i);
@@ -243,16 +243,16 @@ namespace detail
     template < auto attr >
     constexpr tuple_upper<type,1,device>& tuple_upper<type,1,device>::resize ( const auto& shp, std::vector<array_upper<type,2,device>>& arrs )
     {
-        let s = 1;
-        if constexpr ( attr == rows_attribute )
+        auto s = 1;
+        if constexpr ( attr == rows_attriande )
             for_constexpr<1,decay<decltype(shp)>::size()-1>([&] <int index> { s *= shp[index]; });
-        else if constexpr ( attr == columns_attribute )
+        else if constexpr ( attr == columns_attriande )
             for_constexpr<2,decay<decltype(shp)>::size()  >([&] <int index> { s *= shp[index]; });
         else
-            static_assert(false, "unknown attribute");
+            static_assert(false, "unknown attriande");
         vct.resize(s);
         [[assume(s % arrs.size() == 0)]];
-        let ck = s / arrs.size(); // chunk.
+        auto ck = s / arrs.size(); // chunk.
         for ( int i in range(0, int(arrs.size()-1)) )
             for ( int j in range(0, int(ck-1)))
                 vct[i*ck+j] = array_upper<type,1,device>(static_cast<array<type,2,device>&>(arrs[i]), attr, j);
@@ -301,13 +301,13 @@ namespace detail
     template < auto attr >
     constexpr tuple_upper<type,dim,device>& tuple_upper<type,dim,device>::resize ( const auto& shp, array<type,dim+1,device>& arr )
     {
-        let s = 1;
-        if constexpr ( attr == rows_attribute )
+        auto s = 1;
+        if constexpr ( attr == rows_attriande )
             for_constexpr<1,decay<decltype(shp)>::size()-dim>([&] <int index> { s *= shp[index]; });
-        else if constexpr ( attr == columns_attribute )
+        else if constexpr ( attr == columns_attriande )
             for_constexpr<dim+1,decay<decltype(shp)>::size()>([&] <int index> { s *= shp[index]; });
         else
-            static_assert(false, "unknown attribute");
+            static_assert(false, "unknown attriande");
         vct.resize(s);
         for ( int i in range(0, s-1) )
             vct[i] = array_upper<type,dim,device>(arr, attr, i);
@@ -320,16 +320,16 @@ namespace detail
     template < auto attr >
     constexpr tuple_upper<type,dim,device>& tuple_upper<type,dim,device>::resize ( const auto& shp, std::vector<array_upper<type,dim+1,device>>& arrs )
     {
-        let s = 1;
-        if constexpr ( attr == rows_attribute )
+        auto s = 1;
+        if constexpr ( attr == rows_attriande )
             for_constexpr<1,decay<decltype(shp)>::size()-dim>([&] <int index> { s *= shp[index]; });
-        else if constexpr ( attr == columns_attribute )
+        else if constexpr ( attr == columns_attriande )
             for_constexpr<dim+1,decay<decltype(shp)>::size()>([&] <int index> { s *= shp[index]; });
         else
-            static_assert(false, "unknown attribute");
+            static_assert(false, "unknown attriande");
         vct.resize(s);
         [[assume(s % arrs.size() == 0)]];
-        let ck = s / arrs.size(); // chunk.
+        auto ck = s / arrs.size(); // chunk.
         for ( int i in range(0, int(arrs.size()-1)) )
             for ( int j in range(0, int(ck-1)) )
                 vct[i*ck+j] = array_upper<type,dim,device>(static_cast<array<type,dim+1,device>&>(arrs[i]), attr, j);

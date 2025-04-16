@@ -10,7 +10,7 @@
 constexpr std::ostream& operator << ( std::ostream& left, const array_type auto& right )
     requires printable<right_value_type>
 {
-    let string_array = detail::stringalize_array(left, right);
+    auto string_array = detail::stringalize_array(left, right);
     detail::align_array(string_array);
     detail::print_array(left, string_array);
     return left;

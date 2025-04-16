@@ -115,7 +115,7 @@ template < input_range range, class pattern >
 constexpr auto ranges::csv_lazy_split_view<range,pattern>::iterator::operator * ( ) const
 {
     v->q = false; // Maybe useless.
-    let r = std::views::iota(i, v->r.end())
+    auto r = std::views::iota(i, v->r.end())
           | std::views::transform ([]  (const auto& i) { return *i; })
           | std::views::take_while([&] (const auto& c)
               {
@@ -202,14 +202,14 @@ file_csv& file_csv::open ( path pth )
 {
     // Open file.
     file_interface::open(pth);
-    let stream = file_stream(self.operator path(), file_stream::read_only(true));
+    auto stream = file_stream(self.operator path(), file_stream::read_only(true));
 
     // Read data.
-    let raw_data = views::binary_istream<char>(stream)
+    auto raw_data = views::binary_istream<char>(stream)
                  | views::csv_lazy_split('\n') // Only splits outside quotes.
                  | std::views::transform([] (const auto& stream_line)
                      {
-                         let line = (stream_line
+                         auto line = (stream_line
                                   | views::csv_lazy_split(',') // Only splits outside quotes.
                                   | std::ranges::to<vector<string>>())
                                   . for_each ([] (auto& str)
@@ -225,7 +225,7 @@ file_csv& file_csv::open ( path pth )
                  | std::ranges::to<vector<vector<string>>>();
 
     // Align.
-    let align = 0;
+    auto align = 0;
     if ( not raw_data.empty() )
         align = raw_data.max([] (const auto& line1, const auto& line2) { return line1.size() < line2.size(); }).size();
 
@@ -240,7 +240,7 @@ file_csv& file_csv::save ( )
 {
     // Save file.
     file_interface::save();
-    let stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
+    auto stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
 
     // Write data.
     self | std::views::transform([] (auto line)

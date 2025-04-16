@@ -186,7 +186,7 @@ constexpr complex_type auto operator / ( const complex_type auto& left, const co
         throw math_error("{} / {}", left, right);
     #endif
 
-    let div = right.real() * right.real() + right.imag() * right.imag();
+    auto div = right.real() * right.real() + right.imag() * right.imag();
     return complex((left.real() * right.real() + left.imag() * right.imag()) / div,
                    (left.imag() * right.real() - left.real() * right.imag()) / div);
 }
@@ -270,12 +270,12 @@ constexpr complex_type auto exp ( complex_type auto x )
 
 constexpr complex_type auto sqrt ( complex_type auto x )
 {
-    let r = abs(x);
-    let t = x.real() > 0 ?                std::atan(x.imag() / x.real())      otherwise
-            x.real() < 0 ? x.imag() > 0 ? std::atan(x.imag() / x.real()) + pi otherwise
-                                          std::atan(x.imag() / x.real()) - pi otherwise
-         /*x.real() == 0*/ x.imag() > 0 ?  pi / 2                             otherwise
-                           x.imag() < 0 ? -pi / 2                             otherwise
+    auto r = abs(x);
+    auto t = x.real() > 0 ?                std::atan(x.imag() / x.real())      :
+            x.real() < 0 ? x.imag() > 0 ? std::atan(x.imag() / x.real()) + pi :
+                                          std::atan(x.imag() / x.real()) - pi :
+         /*x.real() == 0*/ x.imag() > 0 ?  pi / 2                             :
+                           x.imag() < 0 ? -pi / 2                             :
                          /*x.imag() == 0*/ 0;
     return complex(std::sqrt(r) * std::cos(t / 2), 
                    std::sqrt(r) * std::sin(t / 2));
@@ -283,12 +283,12 @@ constexpr complex_type auto sqrt ( complex_type auto x )
 
 constexpr complex_type auto ln ( complex_type auto x )
 {
-    let r = abs(x);
-    let t = x.real() > 0 ?                std::atan(x.imag() / x.real())      otherwise
-            x.real() < 0 ? x.imag() > 0 ? std::atan(x.imag() / x.real()) + pi otherwise
-                                          std::atan(x.imag() / x.real()) - pi otherwise
-         /*x.real() == 0*/ x.imag() > 0 ?  pi / 2                             otherwise
-                           x.imag() < 0 ? -pi / 2                             otherwise
+    auto r = abs(x);
+    auto t = x.real() > 0 ?                std::atan(x.imag() / x.real())      :
+            x.real() < 0 ? x.imag() > 0 ? std::atan(x.imag() / x.real()) + pi :
+                                          std::atan(x.imag() / x.real()) - pi :
+         /*x.real() == 0*/ x.imag() > 0 ?  pi / 2                             :
+                           x.imag() < 0 ? -pi / 2                             :
                          /*x.imag() == 0*/ 0;
     return ln(r) + i * t;
 }

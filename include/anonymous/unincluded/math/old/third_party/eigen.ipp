@@ -8,8 +8,8 @@ namespace aux
 
 constexpr auto aux::from_eigen ( const auto& matrix )
 {
-    constexpr int dimension = not std::type_identity<matrix_type>::type::IsVectorAtCompileTime  ? 2 otherwise
-                                  std::type_identity<matrix_type>::type::ColsAtCompileTime == 1 ? 1 otherwise
+    constexpr int dimension = not std::type_identity<matrix_type>::type::IsVectorAtCompileTime  ? 2 :
+                                  std::type_identity<matrix_type>::type::ColsAtCompileTime == 1 ? 1 :
                                                                                                  -1;
     using value_type = conditional<not std::same_as<typename matrix_type::Scalar,decltype(std::complex(typename matrix_type::Scalar()))>,
                                    typename matrix_type::Scalar,
@@ -46,19 +46,19 @@ constexpr auto aux::to_eigen ( const auto& matrix )
 
     if constexpr ( dimension == 1 or dimension == -1 )
     {
-        constexpr int row    = dimension == 1 ? Eigen::Dynamic otherwise 1;
-        constexpr int column = dimension == 1 ? 1 otherwise Eigen::Dynamic;
+        constexpr int row    = dimension == 1 ? Eigen::Dynamic : 1;
+        constexpr int column = dimension == 1 ? 1 : Eigen::Dynamic;
 
         if constexpr ( number_type<matrix_value_type> )
         {
-            let m = Eigen::Matrix<typename matrix_type::value_type,row,column> ( matrix.size() );
+            auto m = Eigen::Matrix<typename matrix_type::value_type,row,column> ( matrix.size() );
             for ( int i in range(matrix.size()) ) // TODO: Vectorize.
                 m(i-1) = matrix[i];
             return m;
         }
         else if constexpr ( complex_type<value_type> )
         {
-            let m = Eigen::Matrix<std::complex<typename matrix_type::value_type::value_type>,row,column> ( matrix.size() );
+            auto m = Eigen::Matrix<std::complex<typename matrix_type::value_type::value_type>,row,column> ( matrix.size() );
             for ( int i in range(matrix.size()) ) // TODO: Vectorize.
                 m(i-1) = { matrix[i].real(), matrix[i].imag() };
             return m;
@@ -69,7 +69,7 @@ constexpr auto aux::to_eigen ( const auto& matrix )
     {
         if constexpr ( number_type<matrix_value_type> )
         {
-            let m = Eigen::Matrix<typename matrix_type::value_type,Eigen::Dynamic,Eigen::Dynamic> ( matrix.row(), matrix.column() );
+            auto m = Eigen::Matrix<typename matrix_type::value_type,Eigen::Dynamic,Eigen::Dynamic> ( matrix.row(), matrix.column() );
             for ( int i in range(matrix.row()) ) // TODO: Vectorize.
                 for ( int j in range(matrix.column()) )
                     m(i-1, j-1) = matrix[i][j];
@@ -77,7 +77,7 @@ constexpr auto aux::to_eigen ( const auto& matrix )
         }
         else if constexpr ( complex_type<value_type> )
         {
-            let m = Eigen::Matrix<std::complex<typename matrix_type::value_type::value_type>,Eigen::Dynamic,Eigen::Dynamic> ( matrix.row(), matrix.column() );
+            auto m = Eigen::Matrix<std::complex<typename matrix_type::value_type::value_type>,Eigen::Dynamic,Eigen::Dynamic> ( matrix.row(), matrix.column() );
             for ( int i in range(matrix.row()) ) // TODO: Vectorize.
                 for ( int j in range(matrix.column()) )
                     m(i-1, j-1) = { matrix[i][j].real(), matrix[i][j].imag() };

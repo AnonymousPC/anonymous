@@ -1,8 +1,6 @@
-import anonymous.std;
+import anonymous;
 
 int main ( )
 {
 
 }
-
-#include <unicode/ucnv

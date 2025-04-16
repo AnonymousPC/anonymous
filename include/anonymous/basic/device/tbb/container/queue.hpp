@@ -9,5 +9,5 @@ class tbb::queue
 
     public: // Override  
         int  size ( ) const { return base::unsafe_size(); }
-        type pop  ( )       { let poped = type(); let ok = base::try_pop(poped); return ok ? poped otherwise throw value_error("cannot pop from an empty queue"); }
+        type pop  ( )       { auto poped = type(); auto ok = base::try_pop(poped); return ok ? poped : throw value_error("cannot pop from an empty queue"); }
 };

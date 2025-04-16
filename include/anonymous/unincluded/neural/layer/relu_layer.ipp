@@ -50,7 +50,7 @@ template < array_type type1, array_type type2 >
              ( type1::dimension() == type2::dimension() )
 constexpr typename relu_layer<type1,type2>::input_type relu_layer<type1,type2>::backward ( const output_type& losses, optimizer_type auto& optimizer )
 {
-    let& inputs = optimizer.template forward<input_type>();
+    auto& inputs = optimizer.template forward<input_type>();
     return self.backward_one_sample(losses, inputs);
 }
 
@@ -60,7 +60,7 @@ template < array_type type1, array_type type2 >
              ( type1::dimension() == type2::dimension() )
 constexpr typename relu_layer<type1,type2>::batch_input_type relu_layer<type1,type2>::backward ( const batch_output_type& losses, optimizer_type auto& optimizer )
 {
-    let& inputs = optimizer.template forward<batch_input_type>();
+    auto& inputs = optimizer.template forward<batch_input_type>();
     return batch_input_type(inputs.row(), [&] (int i) { return self.backward_one_sample(losses[i], inputs[i]); });
 }
 
@@ -71,13 +71,13 @@ template < array_type type1, array_type type2 >
 constexpr auto relu_layer<type1,type2>::backward_one_sample ( const auto& losses, auto& inputs )
 {
     if constexpr ( inputs.dimension() == 1 )
-        return input_type(inputs.size(), [&] (int i) { return inputs[i] > 0 ? losses[i] otherwise 0; });
+        return input_type(inputs.size(), [&] (int i) { return inputs[i] > 0 ? losses[i] : 0; });
 
     else if constexpr ( inputs.dimension() >= 2 )
     {
-        let result = input_type().resize(inputs.shape());
+        auto result = input_type().resize(inputs.shape());
         for ( int i in range(result.size()) )
-            result.flatten()[i] = inputs.flatten()[i] > 0 ? losses.flatten()[i] otherwise 0;
+            result.flatten()[i] = inputs.flatten()[i] > 0 ? losses.flatten()[i] : 0;
         return result;
     }
 }

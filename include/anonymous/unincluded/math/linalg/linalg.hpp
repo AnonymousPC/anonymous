@@ -22,8 +22,8 @@
 #define ndarray_device_type      typename decay<decltype(ndarray)>::device_type
 
 #define device_linalg_1_1($function, $input, $output)                                                                                                                                                                        \
-    let input_mdspan  = $input .mdspan();                                                                                                                                                                                    \
-    let output_mdspan = $output.mdspan();                                                                                                                                                                                    \
+    auto input_mdspan  = $input .mdspan();                                                                                                                                                                                    \
+    auto output_mdspan = $output.mdspan();                                                                                                                                                                                    \
     switch ( input_mdspan.index() )                                                                                                                                                                                          \
     {                                                                                                                                                                                                                        \
         case 1: if constexpr (requires{input_mdspan.template value<1>();}) device::linalg::$function(input_mdspan.template value<1>(), output_mdspan.template value<1>()); else throw linalg_error("internal error"); break; \
@@ -33,8 +33,8 @@
     }
 
 #define device_linalg_c1_1($function, $constant, $input, $output)                                                                                                                                                                       \
-    let input_mdspan  = $input .mdspan();                                                                                                                                                                                               \
-    let output_mdspan = $output.mdspan();                                                                                                                                                                                               \
+    auto input_mdspan  = $input .mdspan();                                                                                                                                                                                               \
+    auto output_mdspan = $output.mdspan();                                                                                                                                                                                               \
     switch ( input_mdspan.index() )                                                                                                                                                                                                     \
     {                                                                                                                                                                                                                                   \
         case 1: if constexpr (requires{input_mdspan.template value<1>();}) device::linalg::$function($constant, input_mdspan.template value<1>(), output_mdspan.template value<1>()); else throw linalg_error("internal error"); break; \
@@ -44,8 +44,8 @@
     }
     
 #define device_linalg_1c_1($function, $input, $constant, $output)                                                                                                                                                                       \
-    let input_mdspan  = $input .mdspan();                                                                                                                                                                                               \
-    let output_mdspan = $output.mdspan();                                                                                                                                                                                               \
+    auto input_mdspan  = $input .mdspan();                                                                                                                                                                                               \
+    auto output_mdspan = $output.mdspan();                                                                                                                                                                                               \
     switch ( input_mdspan.index() )                                                                                                                                                                                                     \
     {                                                                                                                                                                                                                                   \
         case 1: if constexpr (requires{input_mdspan.template value<1>();}) device::linalg::$function(input_mdspan.template value<1>(), $constant, output_mdspan.template value<1>()); else throw linalg_error("internal error"); break; \
@@ -55,7 +55,7 @@
     }
 
 #define device_linalg_1_c($function, $input, $output)                                                                                                                                              \
-    let input_mdspan = $input.mdspan();                                                                                                                                                            \
+    auto input_mdspan = $input.mdspan();                                                                                                                                                            \
     switch ( input_mdspan.index() )                                                                                                                                                                \
     {                                                                                                                                                                                              \
         case 1: if constexpr (requires{input_mdspan.template value<1>();}) device::linalg::$function(input_mdspan.template value<1>(), $output); else throw linalg_error("internal error"); break; \
@@ -65,9 +65,9 @@
     }
 
 #define device_linalg_2_1($function, $input1, $input2, $output)                                                                                                                                                                                                                                      \
-    let input1_mdspan = $input1.mdspan();                                                                                                                                                                                                                                                            \
-    let input2_mdspan = $input2.mdspan();                                                                                                                                                                                                                                                            \
-    let output_mdspan = $output.mdspan();                                                                                                                                                                                                                                                            \
+    auto input1_mdspan = $input1.mdspan();                                                                                                                                                                                                                                                            \
+    auto input2_mdspan = $input2.mdspan();                                                                                                                                                                                                                                                            \
+    auto output_mdspan = $output.mdspan();                                                                                                                                                                                                                                                            \
     switch ( 3 * input1_mdspan.index() + input2_mdspan.index() - 3 )                                                                                                                                                                                                                                 \
     {                                                                                                                                                                                                                                                                                                \
         case 1: if constexpr (requires{input1_mdspan.template value<1>(); input2_mdspan.template value<1>();}) device::linalg::$function(input1_mdspan.template value<1>(), input2_mdspan.template value<1>(), output_mdspan.template value<1>()); else throw linalg_error("internal error"); break; \
@@ -83,8 +83,8 @@
     }
 
 #define device_linalg_2_c($function, $input1, $input2, $constant)                                                                                                                                                                                                            \
-    let input1_mdspan = $input1.mdspan();                                                                                                                                                                                                                                    \
-    let input2_mdspan = $input2.mdspan();                                                                                                                                                                                                                                    \
+    auto input1_mdspan = $input1.mdspan();                                                                                                                                                                                                                                    \
+    auto input2_mdspan = $input2.mdspan();                                                                                                                                                                                                                                    \
     switch ( 3 * input1_mdspan.index() + input2_mdspan.index() - 3 )                                                                                                                                                                                                         \
     {                                                                                                                                                                                                                                                                        \
         case 1: if constexpr (requires{input1_mdspan.template value<1>(); input2_mdspan.template value<1>();}) device::linalg::$function(input1_mdspan.template value<1>(), input2_mdspan.template value<1>(), $constant); else throw linalg_error("internal error"); break; \

@@ -10,7 +10,7 @@ namespace detail
 
     constexpr string input_t::operator() ( ) const
     {
-        let str = std::string();
+        auto str = std::string();
         std::getline(std::cin, str, '\n');
         return string(str);
     }

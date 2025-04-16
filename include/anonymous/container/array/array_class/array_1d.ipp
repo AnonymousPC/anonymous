@@ -213,14 +213,14 @@ constexpr int array<type,1,device>::dimension ( )
 template < class type, class device >
 constexpr int array<type,1,device>::size ( ) const
 {
-    return ownership() ? base::size() otherwise
+    return ownership() ? base::size() :
                          upper::size();
 }
 
 template < class type, class device >
 constexpr int array<type,1,device>::capacity ( ) const
 {
-    return ownership() ? base::capacity() otherwise
+    return ownership() ? base::capacity() :
                          throw value_error("cannot get memory capacity from array: it does not own its data");
 }
 
@@ -233,51 +233,51 @@ constexpr static_array<int,1> array<type,1,device>::shape ( ) const
 template < class type, class device >
 constexpr bool array<type,1,device>::empty ( ) const
 {
-    return ownership() ? base::empty() otherwise
+    return ownership() ? base::empty() :
                          upper::empty();
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::pointer array<type,1,device>::data ( )
 {
-    return ownership()  ? base::data() otherwise
-           contiguous() ? upper::data() otherwise
+    return ownership()  ? base::data() :
+           contiguous() ? upper::data() :
                           throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_pointer array<type,1,device>::data ( ) const
 {
-    return ownership()  ? base::data() otherwise
-           contiguous() ? upper::data() otherwise
+    return ownership()  ? base::data() :
+           contiguous() ? upper::data() :
                           throw logic_error("cannot get native data from array: it does not own its data, meanwhile the borrowed data is not contiguous");
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::begin ( )
 {
-    return ownership() ? iterator(base::data(), 1) otherwise
+    return ownership() ? iterator(base::data(), 1) :
                          upper::begin();
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::begin ( ) const
 {
-    return ownership() ? const_iterator(base::data(), 1) otherwise
+    return ownership() ? const_iterator(base::data(), 1) :
                          upper::begin();
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::iterator array<type,1,device>::end ( )
 {
-    return ownership() ? iterator(base::data() + base::size(), 1) otherwise
+    return ownership() ? iterator(base::data() + base::size(), 1) :
                          upper::end();
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::const_iterator array<type,1,device>::end ( ) const
 {
-    return ownership() ? const_iterator(base::data() + base::size(), 1) otherwise
+    return ownership() ? const_iterator(base::data() + base::size(), 1) :
                          upper::end();
 }
 
@@ -289,9 +289,9 @@ constexpr array<type,1,device>::reference array<type,1,device>::operator [] ( in
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    return ownership() ? pos >= 0 ? base ::operator[](pos-1)             otherwise
-                                    base ::operator[](pos+base::size())  otherwise
-                         pos >= 0 ? upper::operator[](pos-1)             otherwise
+    return ownership() ? pos >= 0 ? base ::operator[](pos-1)             :
+                                    base ::operator[](pos+base::size())  :
+                         pos >= 0 ? upper::operator[](pos-1)             :
                                     upper::operator[](pos+upper::size());
 }
 
@@ -303,9 +303,9 @@ constexpr array<type,1,device>::const_reference array<type,1,device>::operator [
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    return ownership() ? pos >= 0 ? base ::operator[](pos-1)             otherwise
-                                    base ::operator[](pos+base::size())  otherwise
-                         pos >= 0 ? upper::operator[](pos-1)             otherwise
+    return ownership() ? pos >= 0 ? base ::operator[](pos-1)             :
+                                    base ::operator[](pos+base::size())  :
+                         pos >= 0 ? upper::operator[](pos-1)             :
                                     upper::operator[](pos+upper::size());
 }
 
@@ -358,7 +358,7 @@ constexpr array<type,1,device>& array<type,1,device>::pop ( int old_pos )
         throw index_error("index {} is out of range with size {}", old_pos, base::size());
     #endif
 
-    base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 otherwise base::begin() + old_pos + base::size());
+    base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 : base::begin() + old_pos + base::size());
     return self;
 }
 
@@ -372,7 +372,7 @@ constexpr array<type,1,device>& array<type,1,device>::insert ( int new_pos, type
         throw index_error("index {} is out of range with size {}", new_pos, base::size());
     #endif
     
-    base::insert(new_pos >= 0 ? base::begin() + new_pos - 1 otherwise base::begin() + new_pos + base::size(), std::move(new_value));
+    base::insert(new_pos >= 0 ? base::begin() + new_pos - 1 : base::begin() + new_pos + base::size(), std::move(new_value));
     return self;
 }
 
@@ -384,8 +384,8 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int
         throw logic_error("cannot erase from array: it does not own its data");
     #endif
 
-    let abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + base::size() + 1;
-    let abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + base::size() + 1;
+    auto abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 : old_pos_1 + base::size() + 1;
+    auto abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 : old_pos_2 + base::size() + 1;
     #ifdef debug
     if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
            ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
@@ -418,18 +418,18 @@ constexpr auto array<type,1,device>::mdspan ( )
 
     if ( contiguous() )
     {
-        let ptr = data();
-        let shp = std::dextents<int,1> { size() };
-        let mds = type1(ptr, shp);
+        auto ptr = data();
+        auto shp = std::dextents<int,1> { size() };
+        auto mds = type1(ptr, shp);
         return variant<type1,type2>(mds);
     }
     else
     {
-        let ptr  = upper::get_pointer(0);
-        let shp  = std::dextents<int,1> { size() };
-        let strd = std::array   <int,1> { upper::get_stride() };
-        let mp   = typename type2::mapping_type(shp, strd);
-        let mds  = type2(ptr, mp);
+        auto ptr  = upper::get_pointer(0);
+        auto shp  = std::dextents<int,1> { size() };
+        auto strd = std::array   <int,1> { upper::get_stride() };
+        auto mp   = typename type2::mapping_type(shp, strd);
+        auto mds  = type2(ptr, mp);
         return variant<type1,type2>(mds);
     }
 }
@@ -442,18 +442,18 @@ constexpr const auto array<type,1,device>::mdspan ( ) const
 
     if ( contiguous() )
     {
-        let ptr = data();
-        let shp = std::dextents<int,1> { size() };
-        let mds = type1(ptr, shp);
+        auto ptr = data();
+        auto shp = std::dextents<int,1> { size() };
+        auto mds = type1(ptr, shp);
         return variant<type1,type2>(mds);
     }
     else
     {
-        let ptr  = upper::get_pointer(0);
-        let shp  = std::dextents<int,1> { size() };
-        let strd = std::array   <int,1> { upper::get_stride() };
-        let mp   = typename type2::mapping_type(shp, strd);
-        let mds  = type2(ptr, mp);
+        auto ptr  = upper::get_pointer(0);
+        auto shp  = std::dextents<int,1> { size() };
+        auto strd = std::array   <int,1> { upper::get_stride() };
+        auto mp   = typename type2::mapping_type(shp, strd);
+        auto mds  = type2(ptr, mp);
         return variant<type1,type2>(mds);
     }
 }

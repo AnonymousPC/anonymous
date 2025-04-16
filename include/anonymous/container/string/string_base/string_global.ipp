@@ -13,10 +13,10 @@ constexpr std::istream& operator >> ( std::istream& left, string_type auto& righ
     requires is_class<right_type> and ( right_type::ownership() )
 {
     right.clear();
-    [[maybe_unused]] let entry = std::istream::sentry(left, false);
+    [[maybe_unused]] auto entry = std::istream::sentry(left, false);
     while ( true )
     {
-        let buf = right_value_type(left.get());
+        auto buf = right_value_type(left.get());
         if ( not std::isspace(buf) and not left.eof() )
             right.push(buf);
         else
@@ -32,7 +32,7 @@ constexpr std::ostream& operator << ( std::ostream& left, const string_type auto
     requires is_class<right_type>
 {
     using device = right_device_type;
-    [[maybe_unused]] let entry = std::ostream::sentry(left);
+    [[maybe_unused]] auto entry = std::ostream::sentry(left);
     device::copy(right.begin(), right.end(), std::ostream_iterator<right_value_type>(left));
     return left;
 }
@@ -42,8 +42,8 @@ constexpr bool operator == ( const string_type auto& left, const string_type aut
              same_as<left_device_type,right_device_type>
 {
     using device = left_device_type;
-    let left_view  = basic_string_view(left);
-    let right_view = basic_string_view(right);
+    auto left_view  = basic_string_view(left);
+    auto right_view = basic_string_view(right);
     return device::equal(left_view.begin(), left_view.end(), right_view.begin(), right_view.end());
 }
 
@@ -52,13 +52,13 @@ constexpr std::strong_ordering operator <=> ( const string_type auto& left, cons
              same_as<left_device_type,right_device_type>
 {
     using device = left_device_type;
-    let left_view  = basic_string_view(left);
-    let right_view = basic_string_view(right);
+    auto left_view  = basic_string_view(left);
+    auto right_view = basic_string_view(right);
     if constexpr ( requires { device::lexicographical_compare_three_way(left_view.begin(), left_view.end(), right_view.begin(), right_view.end()); } )
         return device::lexicographical_compare_three_way(left_view.begin(), left_view.end(), right_view.begin(), right_view.end());
     else   
-        return left_view == right_view                                                                                   ? std::strong_ordering::equal otherwise
-               device::lexicographical_compare(left_view.begin(), left_view.end(), right_view.begin(), right_view.end()) ? std::strong_ordering::less  otherwise
+        return left_view == right_view                                                                                   ? std::strong_ordering::equal :
+               device::lexicographical_compare(left_view.begin(), left_view.end(), right_view.begin(), right_view.end()) ? std::strong_ordering::less  :
                                                                                                                            std::strong_ordering::greater;
 }
 
@@ -67,9 +67,9 @@ constexpr string_type auto operator + ( const string_type auto& left, const stri
              same_as<left_device_type,right_device_type>
 {
     using device = left_device_type;
-    let left_view  = basic_string_view(left);
-    let right_view = basic_string_view(right);
-    let str        = basic_string<left_value_type,left_device_type>(left_view.size() + right_view.size(), left_value_type('\0'));
+    auto left_view  = basic_string_view(left);
+    auto right_view = basic_string_view(right);
+    auto str        = basic_string<left_value_type,left_device_type>(left_view.size() + right_view.size(), left_value_type('\0'));
     device::copy(left_view .begin(), left_view .end(), str.begin());
     device::copy(right_view.begin(), right_view.end(), str.begin() + left_view.size());
     return str;
@@ -81,8 +81,8 @@ constexpr string_type auto& operator += ( string_type auto& left, const string_t
              ( left_type::ownership() )
 {
     using device = left_device_type;
-    let right_view = basic_string_view(right);
-    let old_size   = left.size();
+    auto right_view = basic_string_view(right);
+    auto old_size   = left.size();
     left.resize(left.size() + right_view.size());
     device::copy(right_view.begin(), right_view.end(), left.begin() + old_size);
     return left;
@@ -95,8 +95,8 @@ constexpr string_type auto operator * ( const string_type auto& left, int_type a
             throw value_error("multiply string with negative times {}", right);
     #endif
     using device = left_device_type;
-    let left_view = basic_string_view(left);
-    let str       = basic_string<left_value_type,left_device_type>(left.size() * right, left_value_type('\0'));
+    auto left_view = basic_string_view(left);
+    auto str       = basic_string<left_value_type,left_device_type>(left.size() * right, left_value_type('\0'));
     for ( int i in range(right) )
         device::copy(left_view.begin(), left_view.end(), str.begin() + left_view.size() * (i - 1));
     return str;
@@ -109,8 +109,8 @@ constexpr string_type auto operator * ( int_type auto left, const string_type au
             throw value_error("multiply string with negative times {}", left);
     #endif
     using device = right_device_type;
-    let right_view = basic_string_view(right);
-    let str        = basic_string<right_value_type,right_device_type>(left * right.size(), right_value_type('\0'));
+    auto right_view = basic_string_view(right);
+    auto str        = basic_string<right_value_type,right_device_type>(left * right.size(), right_value_type('\0'));
     for ( int i in range(left) )
         device::copy(right_view.begin(), right_view.end(), str.begin() + right_view.size() * (i - 1));
     return str;
@@ -124,7 +124,7 @@ constexpr string_type auto& operator *= ( string_type auto& left, int_type auto 
             throw value_error("multiply string with negative times {}", right);
     #endif
     using device = left_device_type;
-    let old_size = left.size();
+    auto old_size = left.size();
     left.resize(left.size() * right);
     for ( int i in range(2, right) )
         device::copy(left.begin(), left.begin() + old_size, left.begin() + old_size * (i - 1));

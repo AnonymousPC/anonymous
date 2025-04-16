@@ -50,7 +50,7 @@ template < array_type type1, array_type type2 >
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::input_type sigmoid_layer<type1,type2>::backward ( const output_type& losses, optimizer_type auto& optimizer )
 {
-    let& inputs = optimizer.template forward<input_type>();
+    auto& inputs = optimizer.template forward<input_type>();
     return self.backward_one_sample(losses, inputs);
 }
 
@@ -60,7 +60,7 @@ template < array_type type1, array_type type2 >
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::batch_input_type sigmoid_layer<type1,type2>::backward ( const batch_output_type& losses, optimizer_type auto& optimizer )
 {
-    let& inputs = optimizer.template forward<batch_input_type>();
+    auto& inputs = optimizer.template forward<batch_input_type>();
     return batch_input_type(inputs.row(), [&] (int i) { return self.backward_one_sample(losses[i], inputs[i]); });
 }
 
@@ -88,14 +88,14 @@ template < array_type type1, array_type type2 >
              ( type1::dimension() == type2::dimension() )
 constexpr auto sigmoid_layer<type1,type2>::backward_one_sample ( const auto& losses, auto& inputs )
 {
-    let outputs = self.forward(inputs);
+    auto outputs = self.forward(inputs);
 
     if constexpr ( inputs.dimension() == 1 )
         return input_type(inputs.size(), [&] (int i) { return losses[i] * outputs[i] * ( 1 - outputs[i] ); });
 
     else if constexpr ( inputs.dimension() >= 2 )
     {
-        let result = input_type().resize(inputs.shape());
+        auto result = input_type().resize(inputs.shape());
         for ( int i in range(result.size()) )
             result.flatten()[i] = losses.flatten()[i] * outputs.flatten()[i] * ( 1 - outputs.flatten()[i] );
         return result;

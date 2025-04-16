@@ -25,4 +25,4 @@ class basic_socket_stream
         std::unique_ptr<basic_socket_buf<protocol>> buff_ptr = std::make_unique<basic_socket_buf<protocol>>();
 };
 
-#include "socket_stream.ipp"
+#include "socket_stream.cpp"

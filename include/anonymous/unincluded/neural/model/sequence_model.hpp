@@ -18,4 +18,4 @@ class sequence_model
         template < int index = sizeof...(types) > constexpr void tuplewise_backward ( const auto&, auto& );
 };
 
-#include "sequence_model.ipp"
+#include "sequence_model.cpp"

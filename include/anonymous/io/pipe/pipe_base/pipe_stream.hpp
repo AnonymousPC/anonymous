@@ -25,7 +25,7 @@ class pipe_stream
         std::unique_ptr<pipe_buf> buff_ptr = std::make_unique<pipe_buf>();
 };
 
-#include "pipe_stream.ipp"
+#include "pipe_stream.cpp"
 #ifdef dll
     #include "pipe_stream.cpp"
 #endif

@@ -29,4 +29,4 @@ class mean_squared_error_loss<type>
         constexpr       value_type value ( ) const;
 };
 
-#include "mean_squared_error_loss.ipp"
+#include "mean_squared_error_loss.cpp"

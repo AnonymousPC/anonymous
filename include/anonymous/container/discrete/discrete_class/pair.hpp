@@ -23,4 +23,4 @@ class pair
         constexpr const type2& value ( ) const;
 };
 
-#include "pair.ipp"
+#include "pair.cpp"

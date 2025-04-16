@@ -31,4 +31,4 @@ class linear_layer<type1,type2>
         constexpr batch_input_type  backward ( const batch_output_type&, optimizer_type auto& );
 };
 
-#include "linear_layer.ipp"
+#include "linear_layer.cpp"

@@ -32,7 +32,7 @@ constexpr          bool           operator ==  ( const map_type auto& left, cons
 constexpr          auto           operator <=> ( const map_type auto& left, const map_type auto& right ) requires comparable_to<left_key_type,right_key_type> and comparable_to<left_value_type,right_value_type> and same_as<left_compare_type,right_compare_type> and same_as<left_device_type,right_device_type>;
 
 
-#include "collection_global.ipp"
+#include "collection_global.cpp"
 
 #undef left_key_type
 #undef left_value_type

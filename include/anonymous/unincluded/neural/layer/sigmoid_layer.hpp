@@ -40,4 +40,4 @@ class sigmoid_layer<type1,type2>
         constexpr auto backward_one_sample ( const auto&, auto& );
 };
 
-#include "sigmoid_layer.ipp"
+#include "sigmoid_layer.cpp"

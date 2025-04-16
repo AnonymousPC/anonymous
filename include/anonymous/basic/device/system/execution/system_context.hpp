@@ -6,4 +6,4 @@ class system_context
         constexpr static std::execution::scheduler auto get_scheduler ( ) noexcept;
 };   
 
-#include "system_context.ipp"
+#include "system_context.cpp"

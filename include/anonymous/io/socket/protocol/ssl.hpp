@@ -34,7 +34,7 @@ class ssl::socket
         endpoint    remote_endpoint ( )           const;
 };
 
-#include "ssl.ipp"
+#include "ssl.cpp"
 #ifdef dll
     #include "ssl.cpp"
 #endif

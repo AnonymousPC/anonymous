@@ -37,7 +37,7 @@ class file_dll
 
 };
 
-#include "file_dll.ipp"
+#include "file_dll.cpp"
 //#ifdef dll
     #include "file_dll.cpp"
 //#endif

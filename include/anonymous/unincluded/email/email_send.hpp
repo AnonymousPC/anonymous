@@ -21,4 +21,4 @@ class email_send
         struct attachment;
 };  
 
-#include "email_send.ipp"
+#include "email_send.cpp"

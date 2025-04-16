@@ -17,4 +17,4 @@ class any
         template < class value_type > constexpr const value_type&     value ( ) const;
 };
 
-#include "any.ipp"
+#include "any.cpp"

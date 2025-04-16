@@ -58,4 +58,4 @@ class basic_http_stream
 
 
 
-#include "http_stream.ipp"
+#include "http_stream.cpp"

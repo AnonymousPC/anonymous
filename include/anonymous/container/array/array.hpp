@@ -35,16 +35,16 @@ constexpr int max_dim = 3;
 
 // .ipp
 
-#include "array_base/array_global.ipp"
-#include "array_base/array_line_iterator.ipp"
-#include "array_base/array_upper.ipp"
-#include "array_base/array_lower.ipp"
-#include "array_base/array_info.ipp"
-#include "array_base/array_algo_1d.ipp"
-#include "array_base/array_algo_nd.ipp"
+#include "array_base/array_global.cpp"
+#include "array_base/array_line_iterator.cpp"
+#include "array_base/array_upper.cpp"
+#include "array_base/array_lower.cpp"
+#include "array_base/array_info.cpp"
+#include "array_base/array_algo_1d.cpp"
+#include "array_base/array_algo_nd.cpp"
 
-#include "array_class/array_1d.ipp"
-#include "array_class/array_nd.ipp"
-#include "array_class/array_xd.ipp"
-#include "array_class/static_array.ipp"
-#include "array_class/inplace_array.ipp"
+#include "array_class/array_1d.cpp"
+#include "array_class/array_nd.cpp"
+#include "array_class/array_xd.cpp"
+#include "array_class/static_array.cpp"
+#include "array_class/inplace_array.cpp"

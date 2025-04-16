@@ -36,4 +36,4 @@ class stack
         constexpr type            pop   ( );
 };
 
-#include "stack.ipp"
+#include "stack.cpp"

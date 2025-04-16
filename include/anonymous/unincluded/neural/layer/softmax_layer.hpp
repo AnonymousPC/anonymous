@@ -32,4 +32,4 @@ class softmax_layer<type1,type2>
         constexpr auto backward_one_sample ( const auto&, auto& );
 };
 
-#include "softmax_layer.ipp"
+#include "softmax_layer.cpp"

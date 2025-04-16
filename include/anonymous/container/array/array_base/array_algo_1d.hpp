@@ -95,4 +95,4 @@ class array_algo<container,type,1,device>
 };
 
 // This .ipp file is explicitly delay included in array.hpp
-// #include "array_algo_1d.ipp"
+// #include "array_algo_1d.cpp"

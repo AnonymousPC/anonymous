@@ -30,4 +30,4 @@ class binary_cross_entropy_loss<type>
 };
 
 
-#include "binary_cross_entropy_loss.ipp"
+#include "binary_cross_entropy_loss.cpp"

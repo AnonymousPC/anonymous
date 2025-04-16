@@ -119,4 +119,4 @@ template < class type > opencl::template const_pointer<type>& operator  -- ( ope
 template < class type > opencl::template       pointer<type>  operator  -- ( opencl::template       pointer<type>&, int                                  );
 template < class type > opencl::template const_pointer<type>  operator  -- ( opencl::template const_pointer<type>&, int                                  );
 
-#include "pointer.ipp"
+#include "pointer.cpp"

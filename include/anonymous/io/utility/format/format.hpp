@@ -39,6 +39,6 @@ class std::formatter<anonymous::duration>
         mutable anonymous::string parse_ctx = "";
 };
 
-#include "format.ipp"
+#include "format.cpp"
 
 namespace anonymous { // Back into namespace anonymous

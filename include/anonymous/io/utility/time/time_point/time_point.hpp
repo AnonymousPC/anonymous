@@ -49,4 +49,4 @@ constexpr time_point    operator  -  ( const time_point&, const duration&   );
 constexpr time_point&   operator  += (       time_point&, const duration&   );
 constexpr time_point&   operator  -= (       time_point&, const duration&   );
 
-#include "time_point.ipp"
+#include "time_point.cpp"

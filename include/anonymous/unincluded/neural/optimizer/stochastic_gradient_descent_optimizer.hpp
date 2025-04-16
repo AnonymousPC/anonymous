@@ -47,4 +47,4 @@ class stochastic_gradient_descent_optimizer
 };
 
 
-#include "stochastic_gradient_descent_optimizer.ipp"
+#include "stochastic_gradient_descent_optimizer.cpp"

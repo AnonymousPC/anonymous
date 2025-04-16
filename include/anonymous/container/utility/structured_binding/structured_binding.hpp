@@ -59,6 +59,6 @@ namespace anonymous
 }
 
 
-#include "structured_binding.ipp"
+#include "structured_binding.cpp"
 
 namespace anonymous { // Back into namespace anonymous

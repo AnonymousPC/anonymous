@@ -115,4 +115,4 @@ template < class type >               type                                 opera
 template < class type >               opencl::template reference<type>     operator --  ( opencl::template       reference<type>                                           ) requires requires ( type  a          ) {   --  a; };
 template < class type >               type                                 operator --  ( opencl::template       reference<type>, int                                      ) requires requires ( type  a          ) { a --;    };
 
-#include "reference.ipp"
+#include "reference.cpp"

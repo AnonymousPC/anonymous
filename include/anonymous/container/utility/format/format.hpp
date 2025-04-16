@@ -27,6 +27,6 @@ class std::formatter<type,typename type::value_type>
         template < class format_context > constexpr format_context::iterator format ( const type&, format_context& ) const;
 };
 
-#include "format.ipp"
+#include "format.cpp"
 
 namespace anonymous { // Back into namespace anonymous.

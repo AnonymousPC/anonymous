@@ -45,4 +45,4 @@ class range
         template < class type2 > friend class range;
 };
 
-#include "range.ipp"
+#include "range.cpp"

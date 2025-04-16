@@ -168,4 +168,4 @@ class numeric_expr<type(type,type)>
 
 
 
-#include "numeric.ipp"
+#include "numeric.cpp"

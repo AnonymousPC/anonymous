@@ -1,5 +1,45 @@
-ld64.lld: error: duplicate symbol: main
->>> defined in /Users/anonymous/Code/anonymous/main.cpp
->>>            bin/debug/main.o
->>> defined in bin/debug/main.o
-clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+In file included from include/anonymous/basic/module.cppm:112:
+In file included from include/anonymous/basic/device/device.hpp:7:
+In file included from include/anonymous/basic/device/opencl/opencl.hpp:3:
+In file included from include/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:41:
+[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:19:38: [0m[0;1;31merror: [0m[1mout-of-line definition of 'available_parallelism' does not match any declaration in 'anonymous::opencl_queue_context'[0m
+   19 | constexpr auto opencl_queue_context::available_parallelism ( )[0m
+      | [0;1;32m                                     ^~~~~~~~~~~~~~~~~~~~~
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:3:7: [0m[0;1;36mnote: [0mopencl_queue_context defined here[0m
+    3 | class opencl_queue_context[0m
+      | [0;1;32m      ^~~~~~~~~~~~~~~~~~~~
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:11:24: [0m[0;1;36mnote: [0mmember declaration does not match because it is const qualified[0m
+   11 |         constexpr auto available_parallelism ( ) const;[0m
+      | [0;1;32m                       ^                         ~~~~~
+[0mIn file included from include/anonymous/basic/module.cppm:112:
+In file included from include/anonymous/basic/device/device.hpp:7:
+In file included from include/anonymous/basic/device/opencl/opencl.hpp:3:
+In file included from include/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:41:
+[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:22:9: [0m[0;1;31merror: [0m[1mexpected body of lambda expression[0m
+   22 |         try[0m
+      | [0;1;32m        ^
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:33:5: [0m[0;1;31merror: [0m[1mexpected expression[0m
+   33 |     else[0m
+      | [0;1;32m    ^
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:41:16: [0m[0;1;31merror: [0m[1mreturning reference to local temporary object[0m
+   41 |         return boost::compute::system::default_context();[0m
+      | [0;1;32m               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:150:60: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_DEVICE_EXECUTION_CAPABILITIES'[0m
+  150 |     if ( boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL )[0m
+      | [0;1;32m                                                           ^
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:150:98: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_EXEC_NATIVE_KERNEL'[0m
+  150 |     if ( boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL )[0m
+      | [0;1;32m                                                                                                 ^
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:169:78: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_DEVICE_EXECUTION_CAPABILITIES'[0m
+  169 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_KERNEL,[0m
+      | [0;1;32m                                                                             ^
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:169:116: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_EXEC_KERNEL'[0m
+  169 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_KERNEL,[0m
+      | [0;1;32m                                                                                                                   ^
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:170:78: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_DEVICE_EXECUTION_CAPABILITIES'[0m
+  170 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL);[0m
+      | [0;1;32m                                                                             ^
+[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:170:116: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_EXEC_NATIVE_KERNEL'[0m
+  170 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL);[0m
+      | [0;1;32m                                                                                                                   ^
+[0m10 errors generated.

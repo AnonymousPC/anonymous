@@ -47,4 +47,4 @@ namespace views
 
 
 
-#include "stream_view.ipp"
+#include "stream_view.cpp"

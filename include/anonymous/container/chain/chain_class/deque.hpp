@@ -52,4 +52,4 @@ class deque
 
 
 
-#include "deque.ipp"
+#include "deque.cpp"

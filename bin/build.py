@@ -12,11 +12,9 @@ elif sys.platform == "darwin":
     system = "macos"
 
 
-
 # Input
 
 modules = [
-    "anonymous.std",
     "anonymous.basic",
     "anonymous"
 ]
@@ -27,7 +25,8 @@ compile_args = [
     "-fdiagnostics-color=always"
 ]
 link_args = [
-    "-fuse-ld=lld"
+    "-fuse-ld=lld",
+    "-fdiagnostics-color=always"
 ]
 define_args = {
     "abstract": '0', 
@@ -78,58 +77,75 @@ elif type == "release":
 compile_args_cmd  = ' '.join(compile_args)
 link_args_cmd     = ' '.join(link_args)
 define_args_cmd   = ' '.join(f"-D{key}=\"{value}\"" for key, value in define_args.items())
-module_path_cmd   = f"-fprebuilt-module-path={module_path} -fprebuilt-module-path=bin/{type}"
+module_path_cmd   = f"-fprebuilt-module-path={module_path} -fprebuilt-module-path=module/{type}"
 include_path_cmd  = f"-I{include_path}"
 lib_path_cmd      = f"-L{lib_path}"
 libs_cmd          = ' '.join(f"-l{lib}" for lib in libs)
 
 def compile():
     for module in modules:
+        log(module, color="yellow")
         if updatable(module):
-            run(f"{compiler} {compile_args_cmd} {define_args_cmd} include/{module.replace('.', '/')}/module.cppm --precompile -o bin/{type}/{module}.pcm {module_path_cmd} {include_path_cmd}")
-            run(f"{compiler} {compile_args_cmd}                   bin/{type}/{module}.pcm                        -c           -o bin/{type}/{module}.o   {module_path_cmd}                   ")
+            run(f"{compiler} {compile_args_cmd} {define_args_cmd} {module_path_cmd} {include_path_cmd} include/{module.replace('.', '/')}/module.cppm --precompile -o module/{type}/{module}.pcm ")
+            run(f"{compiler} {compile_args_cmd}                   {module_path_cmd}                    module/{type}/{module}.pcm                     -c           -o bin/{type}/{module}.o      ")
     
-    run(f"{compiler} {compile_args_cmd} {define_args_cmd} main.cpp -c -o bin/{type}/main.o {module_path_cmd} {include_path_cmd}")
+    log("main", color="yellow")
+    run(f"{compiler} {compile_args_cmd} {define_args_cmd} {module_path_cmd} {include_path_cmd} main.cpp -c -o bin/{type}/main.o")
 
 
 def link():
-    linkable = []
-    for file in os.listdir(f"bin/{type}"):
-        if file.endswith(".o"):
-            linkable.append(f"bin/{type}/{file}")
+    linkable = [f"bin/{type}/main.o"]
+    for module in modules:
+        linkable.append(f"bin/{type}/{module}.o")
     for file in os.listdir(module_path):
         if file.endswith(".o"):
             linkable.append(f"{module_path}/{file}")
     linkable = ' '.join(linkable)
     
-    run(f"{compiler} {link_args_cmd} {linkable} -o bin/{type}/main {lib_path_cmd} {libs_cmd} ")
+    run(f"{compiler} {link_args_cmd} {linkable} {lib_path_cmd} {libs_cmd} -o bin/{type}/main")
 
 
 
 # Detail
 
+
 def updatable(module):
     try:
-        bin_time = os.path.getmtime(f"bin/{type}/{module}.pcm")
+        bin_time = os.path.getmtime(f"module/{type}/{module}.pcm")
     except OSError:
-        return True # Module does not exist, so it needs to be built.
+        bin_time = 0
     
     src_time = 0
     for root, _, files in os.walk(f"include/{module.replace('.', '/')}"):
         for file in files:
             src_time = max(src_time, os.path.getmtime(f"{root}/{file}"))
 
-    return src_time >= bin_time
+    update = src_time >= bin_time
+    return update
 
 def run(command):
     try:
         command = re.sub(r'\s+', ' ', command)
-        print(command, '\n')
+        log(command, color="green")
         subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as e:
         print(e.stderr, '\n', file=sys.stderr)
         open(f"bin/{type}/log.txt", 'w').write(e.stderr)
         exit(-1)
+
+def log(message, color=None):
+    colormap = {
+        "red"   : "\033[38;2;240;240;0m",
+        "yellow": "\033[38;2;240;240;0m",
+        "green" : "\033[38;2;0;240;0m",
+        "white" : "\033[38;2;192;192;192m"
+    }
+
+    if color is None:
+        print(message)
+    else:
+        print(f"{colormap[color]}{message}{colormap["white"]}")
+
 
 
 

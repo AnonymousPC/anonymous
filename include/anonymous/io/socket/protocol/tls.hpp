@@ -34,7 +34,7 @@ class tls::socket
         endpoint    remote_endpoint ( )           const;
 };
 
-#include "tls.ipp"
+#include "tls.cpp"
 #ifdef dll
     #include "tls.cpp"
 #endif

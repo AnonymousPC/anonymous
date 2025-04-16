@@ -24,4 +24,4 @@ class file_interface
         path file_path = "";
 };
 
-#include "file_interface.ipp"
+#include "file_interface.cpp"

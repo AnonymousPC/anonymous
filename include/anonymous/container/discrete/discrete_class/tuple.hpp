@@ -21,4 +21,4 @@ class tuple
         template < int index > constexpr const auto& value ( ) const requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
 };
 
-#include "tuple.ipp"
+#include "tuple.cpp"

@@ -47,7 +47,7 @@ class pipe_buf
 
 
 
-#include "pipe_buf.ipp"
+#include "pipe_buf.cpp"
 #ifdef dll
     #include "pipe_buf.cpp"
 #endif // dll

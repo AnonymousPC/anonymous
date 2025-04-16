@@ -6,7 +6,7 @@
 #include "string_class/basic_string.hpp"
 #include "string_class/basic_string_view.hpp"
 
-#include "string_base/string_global.ipp"
-#include "string_base/string_algo.ipp"
-#include "string_class/basic_string.ipp"
-#include "string_class/basic_string_view.ipp"
+#include "string_base/string_global.cpp"
+#include "string_base/string_algo.cpp"
+#include "string_class/basic_string.cpp"
+#include "string_class/basic_string_view.cpp"

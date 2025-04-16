@@ -31,4 +31,4 @@ class relu_layer<type1,type2>
         constexpr auto backward_one_sample ( const auto&, auto& );
 };
 
-#include "relu_layer.ipp"
+#include "relu_layer.cpp"

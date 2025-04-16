@@ -6,8 +6,8 @@
 class opencl
 {
     public: // Execution
-        using  execution_context_type = opencl_queue_context;
-        static execution_context_type execution_context;
+        using execution_context_type = opencl_queue_context;
+        inline static execution_context_type execution_context = execution_context_type();
 
     public: // Type
         template < class type > using value_type = type;
@@ -55,7 +55,7 @@ class opencl
      // template < class type, class alloc = allocator<type> >                                                                                                using deque              = unsupported;
      // template < class type, int len >                                                                                                                      using inplace_vector     = unsupported;
      // template < class type, class alloc = allocator<type> >                                                                                                using list               = unsupported;
-     // template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>> >                             using map                = supported, and too many bugs.
+     // template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>> >                             using map                = supported, but too many bugs.
      // template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using priority_queue     = unsupported;
      // template < class type, class alloc = allocator<type> >                                                                                                using queue              = unsupported;
         template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    class set;
@@ -199,28 +199,26 @@ class opencl
         };
 };
 
-#ifdef dll
-    #include "opencl.cpp"
-#endif
+// #include "opencl.cpp"
 
-#include "type/reference.hpp"
-#include "type/pointer.hpp"
-#include "type/stride_pointer.hpp"
-#include "type/type_traits.hpp"
+// #include "type/reference.hpp"
+// #include "type/pointer.hpp"
+// #include "type/stride_pointer.hpp"
+// #include "type/type_traits.hpp"
 
-#include "operator/operator.hpp"
-#include "operator/type_traits.hpp"
+// #include "operator/operator.hpp"
+// #include "operator/type_traits.hpp"
 
-#include "memory/accessor_type.hpp"
+// #include "memory/accessor_type.hpp"
 
-#include "container/array.hpp"
-#include "container/basic_string.hpp"
-#include "container/basic_string_view.hpp"
-#include "container/set.hpp"
-#include "container/stack.hpp"
-#include "container/vector.hpp"
+// #include "container/array.hpp"
+// #include "container/basic_string.hpp"
+// #include "container/basic_string_view.hpp"
+// #include "container/set.hpp"
+// #include "container/stack.hpp"
+// #include "container/vector.hpp"
 
-#include "algorithm/reduce.hpp"
+// #include "algorithm/reduce.hpp"
 
-//#include "linalg/linalg.hpp"
+// #include "linalg/linalg.hpp"
 

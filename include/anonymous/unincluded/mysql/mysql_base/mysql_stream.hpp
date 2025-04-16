@@ -51,7 +51,7 @@ class mysql_stream
         friend class boost::mysql::formatter<empty_arg>;
 };
 
-#include "mysql_stream.ipp"
+#include "mysql_stream.cpp"
 #ifdef dll
     #include "mysql_stream.cpp"
 #endif

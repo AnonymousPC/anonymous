@@ -16,4 +16,4 @@ class use_sender_t
         static auto as_default_on ( auto&& );
 };
 
-#include "use_sender.ipp"
+#include "use_sender.cpp"

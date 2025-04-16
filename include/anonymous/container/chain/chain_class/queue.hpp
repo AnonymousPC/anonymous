@@ -38,4 +38,4 @@ class queue
         constexpr type            pop   ( );
 };
 
-#include "queue.ipp"
+#include "queue.cpp"

@@ -21,7 +21,7 @@ class file_stream
         struct append;
 };
 
-#include "file_stream.ipp"
+#include "file_stream.cpp"
 #ifdef dll
     #include "file_stream.cpp"
 #endif

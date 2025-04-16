@@ -32,4 +32,4 @@ constexpr color black  ( );
 
 
 
-#include "color.ipp"
+#include "color.cpp"

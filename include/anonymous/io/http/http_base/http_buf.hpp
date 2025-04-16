@@ -125,4 +125,4 @@ class basic_http_buf
 
 
 
-#include "http_buf.ipp"
+#include "http_buf.cpp"

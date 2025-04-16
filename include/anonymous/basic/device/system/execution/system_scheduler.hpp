@@ -23,5 +23,5 @@ class system_scheduler
 
 #include <execpools/thread_pool_base.hpp>
 
-#include "system_scheduler.ipp"
+#include "system_scheduler.cpp"
 

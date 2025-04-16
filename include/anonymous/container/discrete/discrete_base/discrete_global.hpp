@@ -9,7 +9,7 @@
 
 /// Detail
 
-#include "discrete_global.ipp"
+#include "discrete_global.cpp"
 
 /// Global
 

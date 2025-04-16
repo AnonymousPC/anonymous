@@ -31,4 +31,4 @@ namespace detail
     
 } // namespace detail
 
-#include "detail.ipp"
+#include "detail.cpp"

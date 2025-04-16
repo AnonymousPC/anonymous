@@ -29,4 +29,4 @@ class cross_entropy_loss<type>
         constexpr       value_type value ( ) const;
 };
 
-#include "cross_entropy_loss.ipp"
+#include "cross_entropy_loss.cpp"

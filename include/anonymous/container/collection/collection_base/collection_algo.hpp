@@ -30,4 +30,4 @@ class collection_algo
 };
 
 
-#include "collection_algo.ipp"
+#include "collection_algo.cpp"

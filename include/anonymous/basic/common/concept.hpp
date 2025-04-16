@@ -1,5 +1,5 @@
 #pragma once
-#include "concept.ipp" // This .ipp is included at the beinning instead of at the end.
+#include "concept.cpp" // This .ipp is included at the beinning instead of at the end.
 
 /// Type traits
 

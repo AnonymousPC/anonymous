@@ -83,4 +83,4 @@ template < class functor >
 function ( functor ) -> function<detail::member_function_deduction<decltype(&functor::operator())>>;
 
 
-#include "function.ipp"
+#include "function.cpp"

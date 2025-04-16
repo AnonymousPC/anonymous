@@ -42,4 +42,4 @@ class variant
 
 template < class... types > std::ostream& operator << ( std::ostream&, const variant<types...>& ) requires ( printable<types> and ... ) and ( sizeof...(types) >= 1 );
 
-#include "variant.ipp"
+#include "variant.cpp"

@@ -19,6 +19,6 @@ namespace detail
     all_attempts_failed ( input_range auto&& r ) -> all_attempts_failed<range_value<decltype(r)>>;
 } // namespace detail
 
-#include "all_attempts_failed.ipp"
+#include "all_attempts_failed.cpp"
 
 

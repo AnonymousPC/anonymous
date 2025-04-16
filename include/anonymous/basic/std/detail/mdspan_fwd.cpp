@@ -19,7 +19,7 @@ struct layout_stride {
 };
 
 // Layout policy added by user.
-// Defined in "mdspan_layout_transpose.ipp"
+// Defined in "mdspan_layout_transpose.cpp"
 // template <class _Layout>
 // struct layout_transpose {
 //     template <class _Extents> class mapping;

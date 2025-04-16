@@ -62,4 +62,4 @@ namespace detail
 
 }
 
-#include "io_mode.ipp"
+#include "io_mode.cpp"

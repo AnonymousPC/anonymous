@@ -20,6 +20,11 @@ namespace detail
     constexpr decltype(auto) make_formattable        ( auto&& );
 }
 
+
+
+
+
+
 template < class exception_type >
 exception_type& exception_interface<exception_type>::from ( const std::exception& e )
 {

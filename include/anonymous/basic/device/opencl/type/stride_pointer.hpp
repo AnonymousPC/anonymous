@@ -108,4 +108,4 @@ class opencl::const_stride_pointer
         friend class stride_pointer<type>;
 };
 
-#include "stride_pointer.ipp"
+#include "stride_pointer.cpp"

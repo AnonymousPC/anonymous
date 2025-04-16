@@ -40,4 +40,4 @@ class priority_queue
 
 
 
-#include "priority_queue.ipp"
+#include "priority_queue.cpp"

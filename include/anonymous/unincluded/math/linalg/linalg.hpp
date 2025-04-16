@@ -99,10 +99,10 @@
         default: throw linalg_error("internal error");                                                                                                                                                                                                                       \
     }
 
-#include "operator.ipp"
-#include "1d.ipp"
-#include "2d.ipp"
-#include "nd.ipp"
+#include "operator.cpp"
+#include "1d.cpp"
+#include "2d.cpp"
+#include "nd.cpp"
 
 #undef device_linalg_1_1
 #undef device_linalg_c1_1

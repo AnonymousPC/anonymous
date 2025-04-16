@@ -26,4 +26,4 @@ class sender
         std::unique_ptr<async_starter_base> starter;
 };
 
-#include "sender.ipp"
+#include "sender.cpp"

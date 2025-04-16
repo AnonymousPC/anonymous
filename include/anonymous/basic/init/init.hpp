@@ -18,4 +18,4 @@ namespace detail
     inline basic_initializer_t basic_initializer = basic_initializer_t();
 }
 
-#include "init.ipp"
+#include "init.cpp"

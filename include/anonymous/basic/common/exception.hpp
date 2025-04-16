@@ -345,4 +345,4 @@ class terminate_signal
 };
 
 
-#include "exception.ipp"
+#include "exception.cpp"

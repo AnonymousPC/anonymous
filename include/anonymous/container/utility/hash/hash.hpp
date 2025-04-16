@@ -9,6 +9,6 @@ struct std::hash<type>
     constexpr auto operator() ( const type& ) const;
 };
 
-#include "hash.ipp"
+#include "hash.cpp"
 
 namespace anonymous { // Back into namespace anonymous

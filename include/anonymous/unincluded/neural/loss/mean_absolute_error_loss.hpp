@@ -29,4 +29,4 @@ class mean_absolute_error_loss<type>
         constexpr       value_type value ( ) const;
 };
 
-#include "mean_absolute_error_loss.ipp"
+#include "mean_absolute_error_loss.cpp"

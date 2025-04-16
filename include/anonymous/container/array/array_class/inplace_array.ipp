@@ -205,7 +205,7 @@ constexpr inplace_array<type,len,device>::reference inplace_array<type,len,devic
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    return pos >= 0 ? base::operator[](pos-1) otherwise
+    return pos >= 0 ? base::operator[](pos-1) :
                       base::operator[](pos+size());
 }
 
@@ -217,7 +217,7 @@ constexpr inplace_array<type,len,device>::const_reference inplace_array<type,len
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    return pos >= 0 ? base::operator[](pos-1) otherwise
+    return pos >= 0 ? base::operator[](pos-1) :
                       base::operator[](pos+size());
 }
 
@@ -264,7 +264,7 @@ constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::pop ( 
         throw value_error("index {} is out of range with size {}", old_pos, size());
     #endif
 
-    base::erase(old_pos >= 0 ? begin() + old_pos - 1 otherwise begin() + old_pos + size());
+    base::erase(old_pos >= 0 ? begin() + old_pos - 1 : begin() + old_pos + size());
     return self;
 }
 
@@ -279,7 +279,7 @@ constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::insert
         throw value_error("index {} is out of range with size {}", new_pos, size());
     #endif
 
-    base::insert(new_pos >= 0 ? begin() + new_pos - 1 otherwise begin() + new_pos + size(), std::move(new_value));
+    base::insert(new_pos >= 0 ? begin() + new_pos - 1 : begin() + new_pos + size(), std::move(new_value));
     return self;
 }
 
@@ -287,8 +287,8 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::erase ( int old_pos_1, int old_pos_2 )
     requires movable<type>
 {
-    let p1 = old_pos_1 >= 0 ? old_pos_1 otherwise old_pos_1 + size();
-    let p2 = old_pos_2 >= 0 ? old_pos_2 otherwise old_pos_2 + size();
+    auto p1 = old_pos_1 >= 0 ? old_pos_1 : old_pos_1 + size();
+    auto p2 = old_pos_2 >= 0 ? old_pos_2 : old_pos_2 + size();
 
     #ifdef debug
     if ( ( ( p1 < 1 or p1 > size() ) or
@@ -319,9 +319,9 @@ constexpr auto inplace_array<type,len,device>::mdspan ( )
 {
     using type1 = std::mdspan<type,std::dextents<int,1>,typename device::layout_type,typename device::template accessor_type<type>>;
 
-    let ptr = data();
-    let shp = std::dextents<int,1> { size() };
-    let mds = type1(ptr, shp);
+    auto ptr = data();
+    auto shp = std::dextents<int,1> { size() };
+    auto mds = type1(ptr, shp);
     return variant<type1>(mds);
 }
 
@@ -330,8 +330,8 @@ constexpr const auto inplace_array<type,len,device>::mdspan ( ) const
 {
     using type1 = std::mdspan<const type,std::dextents<int,1>,typename device::layout_type,typename device::template accessor_type<const type>>;
 
-    let ptr = data();
-    let shp = std::dextents<int,1> { size() };
-    let mds = type1(ptr, shp);
+    auto ptr = data();
+    auto shp = std::dextents<int,1> { size() };
+    auto mds = type1(ptr, shp);
     return variant<type1>(mds);
 }

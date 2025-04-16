@@ -16,8 +16,8 @@ constexpr void swap ( array_type auto&& left, array_type auto&& right )
         #ifdef debug
             if ( left.shape() != right.shape() )
                 throw value_error("cannot swap {} of shape {} with {} of shape {}: shape must be equal",
-                                  not left_is_view  ? "array" otherwise "array_view", left .shape(),
-                                  not right_is_view ? "array" otherwise "array_view", right.shape());
+                                  not left_is_view  ? "array" : "array_view", left .shape(),
+                                  not right_is_view ? "array" : "array_view", right.shape());
         #endif
 
         std::swap_ranges ( left.begin(), left.end(), right.begin() );

@@ -8,12 +8,12 @@ constexpr tuple_type auto evd ( const array_type auto& matrix )
             throw value_error("cannot evd-decompose matrix of shape {}: matrix must be square", matrix.shape());
     #endif
 
-    let [vals, vcts] = eigen(matrix);
-    let u = transpose(vcts);
-    let e = array<typename decltype(vals)::value_type,2>(vals.size(), vals.size());
+    auto [vals, vcts] = eigen(matrix);
+    auto u = transpose(vcts);
+    auto e = array<typename decltype(vals)::value_type,2>(vals.size(), vals.size());
     for ( int i in range(vals.size()) )
         e[i][i] = vals[i];
-    let v = inverse(u);
+    auto v = inverse(u);
 
     return tuple ( u, e, v );
 }

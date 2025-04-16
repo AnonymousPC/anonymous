@@ -21,8 +21,8 @@ serial_port_stream::serial_port_stream ( serial_port_stream&& init )
     self.rdbuf(buff_ptr.get());
 
     std::swap(self.buff_ptr, init.buff_ptr);
-    let self_rdbuf = self.rdbuf();
-    let init_rdbuf = init.rdbuf();
+    auto self_rdbuf = self.rdbuf();
+    auto init_rdbuf = init.rdbuf();
     self.rdbuf(init_rdbuf);
     init.rdbuf(self_rdbuf);
 }
@@ -37,8 +37,8 @@ serial_port_stream& serial_port_stream::operator = ( serial_port_stream&& right 
     self.std::iostream::operator=(std::move(static_cast<std::iostream&>(right)));
 
     std::swap(self.buff_ptr, right.buff_ptr);
-    let self_rdbuf  = self .rdbuf();
-    let right_rdbuf = right.rdbuf();
+    auto self_rdbuf  = self .rdbuf();
+    auto right_rdbuf = right.rdbuf();
     self .rdbuf(right_rdbuf);
     right.rdbuf(self_rdbuf );
 

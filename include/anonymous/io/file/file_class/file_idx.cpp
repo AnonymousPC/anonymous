@@ -32,10 +32,10 @@ file_idx& file_idx::open ( const path& pth )
 {
     // Open file.
     file_interface::open(pth);
-    let stream = file_stream(self.operator path(), file_stream::read_only(true));
+    auto stream = file_stream(self.operator path(), file_stream::read_only(true));
 
     // Read header.
-    let info_head = detail::file_idx_info_header();
+    auto info_head = detail::file_idx_info_header();
     stream >> info_head;
     if ( info_head.magic_num != 0x0 )
         throw file_error("cannot open idx-file: magic_num mismatches (with pos = [1,2]th-byte, magic_num = {:#x}, expected = 0x0)", info_head.magic_num);
@@ -101,16 +101,16 @@ file_idx& file_idx::save ( )
 {
     // Save file.
     file_interface::save();
-    let stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
+    auto stream = file_stream(self.operator path(), file_stream::write_only(true), file_stream::erase(true));
 
     // Write header.
     stream << info_header
     {
-        .type = same_as<value_type,uint8_t>   ? 0x08 otherwise
-                same_as<value_type,int8_t>    ? 0x09 otherwise
-                same_as<value_type,int16_t>   ? 0x0b otherwise
-                same_as<value_type,int32_t>   ? 0x0c otherwise
-                same_as<value_type,float32_t> ? 0x0d otherwise
+        .type = same_as<value_type,uint8_t>   ? 0x08 :
+                same_as<value_type,int8_t>    ? 0x09 :
+                same_as<value_type,int16_t>   ? 0x0b :
+                same_as<value_type,int32_t>   ? 0x0c :
+                same_as<value_type,float32_t> ? 0x0d :
             /*same_as<value_type,float64_t>*/ 0x0e,
         .dimension = dimension,
         .shape = arr.shape()
@@ -188,7 +188,7 @@ template < class value_type, int dimension, bool first >
 array<value_type,dimension> detail::file_idx_read ( auto&& stream, const static_array<int,dimension>& shp )
 {
     static_assert(same_as<typename array<value_type,dimension>::device_type::layout_type,std::layout_right>);
-    let arr = array<value_type,dimension>(shp);
+    auto arr = array<value_type,dimension>(shp);
     std::ranges::move(views::binary_istream<value_type,std::endian::big>(stream)
                           | std::views::take(shp.product()),
                       [&] { if constexpr ( dimension == 1 ) return arr.begin(); else return arr.flatten().begin(); });

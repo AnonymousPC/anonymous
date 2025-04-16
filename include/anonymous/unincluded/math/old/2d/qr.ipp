@@ -8,7 +8,7 @@ constexpr pair_type auto qr ( const array_type auto& matrix )
     else
         try
         {
-            let solver = Eigen::HouseholderQR<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix));
+            auto solver = Eigen::HouseholderQR<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix));
             return pair ( aux::from_eigen(Eigen::Matrix<typename decltype(aux::to_eigen(matrix))::Scalar,Eigen::Dynamic,Eigen::Dynamic>(solver.householderQ())),
                           aux::from_eigen(Eigen::Matrix<typename decltype(aux::to_eigen(matrix))::Scalar,Eigen::Dynamic,Eigen::Dynamic>(solver.matrixQR().template triangularView<Eigen::Upper>())) );
         }

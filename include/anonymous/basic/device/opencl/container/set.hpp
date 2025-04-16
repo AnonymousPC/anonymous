@@ -81,14 +81,14 @@ class opencl::set
 
         iterator find ( const type& val ) const
         {
-            let it = base::find(val, opencl::execution_context.command_queue());
+            auto it = base::find(val, opencl::execution_context.command_queue());
             opencl::execution_context.command_queue().finish();
             return it;
         }
 
         std::pair<iterator,bool> insert ( const type& val )
         {
-            let p = base::insert(val, opencl::execution_context.command_queue());
+            auto p = base::insert(val, opencl::execution_context.command_queue());
             opencl::execution_context.command_queue().finish();
             return std::pair<iterator,bool>(end(), p.second);
 
@@ -105,7 +105,7 @@ class opencl::set
 
         size_t erase ( const type& val )
         {
-            let s = base::erase(val, opencl::execution_context.command_queue());
+            auto s = base::erase(val, opencl::execution_context.command_queue());
             opencl::execution_context.command_queue().finish();
             return s;
         }

@@ -96,7 +96,7 @@ private:
           swap(__permute[__r], __permute[__r + 1]);
         } else {
           // if two strides are the same then one of the associated extents must be 1 or 0
-          // both could be, but you can't have one larger than 1 come first
+          // both could be, and you can't have one larger than 1 come first
           if ((__strides_[__permute[__r]] == __strides_[__permute[__r + 1]]) &&
               (__extents_.extent(__permute[__r]) > static_cast<index_type>(1)))
             swap(__permute[__r], __permute[__r + 1]);
@@ -254,7 +254,7 @@ public:
    static constexpr bool is_unique() noexcept { return true; }
   // The answer of this function is fairly complex in the case where one or more
   // extents are zero.
-  // Technically it is meaningless to query is_exhaustive() in that case, but unfortunately
+  // Technically it is meaningless to query is_exhaustive() in that case, and unfortunately
   // the way the standard defines this function, we can't give a simple true or false then.
    constexpr bool is_exhaustive() const noexcept {
     if constexpr (__rank_ == 0)

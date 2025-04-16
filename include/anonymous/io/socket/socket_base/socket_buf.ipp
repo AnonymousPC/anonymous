@@ -9,8 +9,8 @@ void basic_socket_buf<protocol>::connect ( url website )
     if ( website.port() == "" )
         throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol_name(), website);
 
-    let errpool = vector<detail::system_error>();
-    let resolve_results = resolve_url(website);
+    auto errpool = vector<detail::system_error>();
+    auto resolve_results = resolve_url(website);
     for ( const auto& resolve_entry in resolve_results )
         try
         {
@@ -34,8 +34,8 @@ void basic_socket_buf<protocol>::listen ( url portal )
     if ( portal.port() == "" )
         throw network_error("unknown default port for {} scheme (with url = {}, port = [[implicit]], expected = [[explicit]])", protocol_name(), portal);
 
-    let errpool = vector<detail::system_error>();
-    let resolve_results = resolve_url(portal);
+    auto errpool = vector<detail::system_error>();
+    auto resolve_results = resolve_url(portal);
     for ( const auto& resolve_entry in resolve_results )
         try
         {
@@ -48,7 +48,7 @@ void basic_socket_buf<protocol>::listen ( url portal )
                 handle.bind(resolve_entry.endpoint());
 
                 receive_buff.resize(default_buffer_size);
-                let remote_edp = typename protocol::endpoint();
+                auto remote_edp = typename protocol::endpoint();
                 int bytes = handle.receive_from(boost::asio::mutable_buffer(receive_buff.begin(), receive_buff.size()), remote_edp);
                 handle.connect(remote_edp);
                 setg(receive_buff.begin(),

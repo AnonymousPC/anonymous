@@ -20,8 +20,8 @@ constexpr array_type auto operator + ( const array_type auto& right )
     using iterate_type = conditional<abs(dim)==1,value_type,array<value_type,dim-1>>;
     using base         = decltype ( [] { if constexpr ( dim == 1 ) return array<value_type,1>(); else return typename array<value_type,dim>::base(); } () );
 
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return right.size(); else return right.row(); } ();
-    let arr   = array<value_type,dim> ( shp_1, iterate_type() );
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return right.size(); else return right.row(); } ();
+    auto arr   = array<value_type,dim> ( shp_1, iterate_type() );
     std::transform ( right.begin(), right.end(), static_cast<base&>(arr).begin(), [] ( const auto& a ) { return +a; } );
     return arr;
 }
@@ -33,9 +33,9 @@ constexpr array_type auto operator - ( const array_type auto& right )
     using value_type   = decltype(-std::declval<right_value_type>());
     using iterate_type = conditional<abs(dim)==1,value_type,array<value_type,dim-1>>;
 
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return right.size(); else return right.row(); } ();
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return right.size(); else return right.row(); } ();
     using base         = decltype ( [] { if constexpr ( dim == 1 ) return array<value_type,1>(); else return typename array<value_type,dim>::base(); } () );
-    let arr   = array<value_type,dim> ( shp_1, iterate_type() );
+    auto arr   = array<value_type,dim> ( shp_1, iterate_type() );
     std::transform ( right.begin(), right.end(), static_cast<base&>(arr).begin(), [] ( const auto& a ) { return -a; } );
     return arr;
 }
@@ -53,8 +53,8 @@ constexpr array_type auto operator + ( const array_type auto& left, const array_
     using iterate_type = conditional<abs(dim)==1,value_type,array<value_type,dim-1>>;
     using base         = decltype ( [] { if constexpr ( dim == 1 ) return array<value_type,1>(); else return typename array<value_type,dim>::base(); } () );
 
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
-    let arr   = array<value_type,dim> ( shp_1, iterate_type() );
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+    auto arr   = array<value_type,dim> ( shp_1, iterate_type() );
     std::transform ( left.begin(), left.end(), right.begin(), static_cast<base&>(arr).begin(), [] ( const auto& a, const auto& b ) { return a + b; } );
     return arr;
 }
@@ -72,8 +72,8 @@ constexpr array_type auto operator - ( const array_type auto& left, const array_
     using iterate_type = conditional<abs(dim)==1,value_type,array<value_type,dim-1>>;
     using base         = decltype ( [] { if constexpr ( dim == 1 ) return array<value_type,1>(); else return typename array<value_type,dim>::base(); } () );
 
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
-    let arr   = array<value_type,dim> ( shp_1, iterate_type() );
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+    auto arr   = array<value_type,dim> ( shp_1, iterate_type() );
     std::transform ( left.begin(), left.end(), right.begin(), static_cast<base&>(arr).begin(), [] ( const auto& a, const auto& b ) { return a - b; } );
     return arr;
 }
@@ -86,8 +86,8 @@ constexpr array_type auto operator * ( const array_type auto& left, const auto& 
     using iterate_type = conditional<abs(dim)==1,value_type,array<value_type,dim-1>>;
     using base         = decltype ( [] { if constexpr ( dim == 1 ) return array<value_type,1>(); else return typename array<value_type,dim>::base(); } () );
 
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
-    let arr   = array<value_type,dim> ( shp_1, iterate_type() );
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+    auto arr   = array<value_type,dim> ( shp_1, iterate_type() );
     std::transform ( left.begin(), left.end(), static_cast<base&>(arr).begin(), [&] ( const auto& a ) { return a * right; } );
     return arr;
 }
@@ -100,8 +100,8 @@ constexpr array_type auto operator * ( const auto& left, const array_type auto& 
     using iterate_type = conditional<abs(dim)==1,value_type,array<value_type,dim-1>>;
     using base         = decltype ( [] { if constexpr ( dim == 1 ) return array<value_type,1>(); else return typename array<value_type,dim>::base(); } () );
 
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return right.size(); else return right.row(); } ();
-    let arr   = array<value_type,dim> ( shp_1, iterate_type() );
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return right.size(); else return right.row(); } ();
+    auto arr   = array<value_type,dim> ( shp_1, iterate_type() );
     std::transform ( right.begin(), right.end(), static_cast<base&>(arr).begin(), [&] ( const auto& b ) { return left * b; } );
     return arr;
 }
@@ -114,8 +114,8 @@ constexpr array_type auto operator / ( const array_type auto& left, const auto& 
     using iterate_type = conditional<abs(dim)==1,value_type,array<value_type,dim-1>>;
     using base         = decltype ( [] { if constexpr ( dim == 1 ) return array<value_type,1>(); else return typename array<value_type,dim>::base(); } () );
 
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
-    let arr   = array<value_type,dim> ( shp_1, iterate_type() );
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+    auto arr   = array<value_type,dim> ( shp_1, iterate_type() );
     std::transform ( left.begin(), left.end(), static_cast<base&>(arr).begin(), [&] ( const auto& a ) { return a / right; } );
     return arr;
 }
@@ -124,7 +124,7 @@ constexpr array_type auto& operator += ( array_type auto& left, const array_type
     requires requires { left = left + right; }
 {
     constexpr int dim  = left.dimension();
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
 
     for ( int i in range(shp_1) )
         if constexpr ( ( left.dimension() >= 2 and right.dimension() >= 2 ) or requires ( left_value_type a, right_value_type b ) { a += b; } )
@@ -145,7 +145,7 @@ constexpr array_type auto& operator -= ( array_type auto& left, const array_type
     requires requires { left = left - right; }
 {
     constexpr int dim  = left.dimension();
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
 
     for ( int i in range(shp_1) )
         if constexpr ( ( left.dimension() >= 2 and right.dimension() >= 2 ) or requires ( left_value_type a, right_value_type b ) { a -= b; } )
@@ -171,7 +171,7 @@ constexpr array_type auto& operator *= ( array_type auto& left, const auto& righ
     else /* not array_type<right_type> */
     {
         constexpr int dim  = left.dimension();
-        let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+        auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
 
         for ( int i in range(shp_1) )
             if constexpr ( ( left.dimension() >= 2 ) or requires ( left_value_type a, right_type b ) { a *= b; } )
@@ -193,7 +193,7 @@ constexpr array_type auto& operator /= ( array_type auto& left, const auto& righ
     requires requires { left = left / right; }
 {
     constexpr int dim  = left.dimension();
-    let shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
+    auto shp_1 = [&] { if constexpr ( abs(dim) == 1 ) return left.size(); else return left.row(); } ();
 
     for ( int i in range(shp_1) )
         if constexpr ( ( left.dimension() >= 2 ) or requires ( left_value_type a, right_type b ) { a /= b; } )

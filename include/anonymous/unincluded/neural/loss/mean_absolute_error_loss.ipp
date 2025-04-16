@@ -37,12 +37,12 @@ template < array_type type >
 constexpr type mean_absolute_error_loss<type>::grad ( ) const
 {
     if constexpr ( type::dimension() == 1 )
-        return (from() - to()).transform([] (const auto& loss) { return loss > 0 ? 1 otherwise loss < 0 ? -1 otherwise 0; });
+        return (from() - to()).transform([] (const auto& loss) { return loss > 0 ? 1 : loss < 0 ? -1 : 0; });
 
     else if constexpr ( type::dimension() == 2 )
     {
-        let losses = from() - to();
-        losses.flatten().transform([] (const auto& loss) { return loss > 0 ? 1 otherwise loss < 0 ? -1 otherwise 0; });
+        auto losses = from() - to();
+        losses.flatten().transform([] (const auto& loss) { return loss > 0 ? 1 : loss < 0 ? -1 : 0; });
         return losses;
     }
 }
@@ -51,11 +51,11 @@ template < array_type type >
     requires float_type<typename type::value_type>
 constexpr typename mean_absolute_error_loss<type>::value_type mean_absolute_error_loss<type>::value ( ) const
 {
-    let losses = from() - to();
+    auto losses = from() - to();
 
     if constexpr ( type::dimension() == 1 )
     {
-        let avg = losses.average();
+        auto avg = losses.average();
         return losses.average([&] (const auto& loss) { return abs(loss - avg); });
     }
 
@@ -63,7 +63,7 @@ constexpr typename mean_absolute_error_loss<type>::value_type mean_absolute_erro
     {
         return losses.average([&] (const auto& sample_loss)
                               {
-                                  let avg = sample_loss.average();
+                                  auto avg = sample_loss.average();
                                   return sample_loss.average([&] (const auto& loss) { return abs(loss - avg); });
                               });
     }

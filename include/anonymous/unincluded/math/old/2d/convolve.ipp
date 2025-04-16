@@ -7,7 +7,7 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
 {
     using type = common_type<left_value_type,right_value_type>;
 
-    let a = array<type,2> ( left.row() + right.row() - 1, left.column() + right.column() - 1 );
+    auto a = array<type,2> ( left.row() + right.row() - 1, left.column() + right.column() - 1 );
     for ( int i in range ( left.row() ) )
         for ( int j in range ( right.row() ) )
             for ( int m in range ( left.column() ) )
@@ -22,7 +22,7 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
 {
     using type = common_type<left_value_type,right_value_type>;
 
-    let a = array<type,2> ( left.row(), left.column() + right.size() - 1,
+    auto a = array<type,2> ( left.row(), left.column() + right.size() - 1,
                             [&] (int i) { return convolve ( left[i], right ); } );
 }
 

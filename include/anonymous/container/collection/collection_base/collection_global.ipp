@@ -6,7 +6,7 @@ constexpr std::ostream& operator << ( std::ostream& left, const set_type auto& r
     left << '{';
     auto it = right.begin();
     while ( it != right.end() )
-        it == right.begin() ? left         << *it++ otherwise
+        it == right.begin() ? left         << *it++ :
                               left << ", " << *it++;
     left << '}';
     return left;
@@ -33,13 +33,13 @@ constexpr auto operator <=> ( const set_type auto& left, const set_type auto& ri
         return device::lexicographical_compare_three_way(left.begin(), left.end(), right.begin(), right.end());
     else
         if constexpr ( not same_as<compare_result<left_value_type,right_value_type>,std::partial_ordering> )
-            return left == right                                                                         ? compare_result<left_value_type,right_value_type>::equivalent otherwise 
-                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? compare_result<left_value_type,right_value_type>::less       otherwise
+            return left == right                                                                         ? compare_result<left_value_type,right_value_type>::equivalent : 
+                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? compare_result<left_value_type,right_value_type>::less       :
                                                                                                            compare_result<left_value_type,right_value_type>::greater;  
         else
-            return left == right                                                                             ? std::partial_ordering::equivalent otherwise 
-                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end())     ? std::partial_ordering::less       otherwise
-                   not device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? std::partial_ordering::greater    otherwise
+            return left == right                                                                             ? std::partial_ordering::equivalent : 
+                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end())     ? std::partial_ordering::less       :
+                   not device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? std::partial_ordering::greater    :
                                                                                                                std::partial_ordering::unordered; 
 }
 
@@ -65,8 +65,8 @@ constexpr std::ostream& operator << ( std::ostream& left, const map_type auto& r
     requires printable<right_key_type> and printable<right_value_type>
 {
     left << '{';
-    for ( let it = right.begin(); it != right.end(); ++it )
-        it == right.begin() ? left         << it->key() << ": " << it->value() otherwise
+    for ( auto it = right.begin(); it != right.end(); ++it )
+        it == right.begin() ? left         << it->key() << ": " << it->value() :
                               left << ", " << it->key() << ": " << it->value();
     left << '}';
     return left;
@@ -95,12 +95,12 @@ constexpr auto operator <=> ( const map_type auto& left, const map_type auto& ri
         return device::lexicographical_compare_three_way(left.begin(), left.end(), right.begin(), right.end());
     else
         if constexpr ( not same_as<compare_result<left_value_type,right_value_type>,std::partial_ordering> )
-            return left == right                                                                         ? compare_result<left_value_type,right_value_type>::equivalent otherwise 
-                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? compare_result<left_value_type,right_value_type>::less       otherwise
+            return left == right                                                                         ? compare_result<left_value_type,right_value_type>::equivalent : 
+                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? compare_result<left_value_type,right_value_type>::less       :
                                                                                                            compare_result<left_value_type,right_value_type>::greater;  
         else
-            return left == right                                                                             ? std::partial_ordering::equivalent otherwise 
-                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end())     ? std::partial_ordering::less       otherwise
-                   not device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? std::partial_ordering::greater    otherwise
+            return left == right                                                                             ? std::partial_ordering::equivalent : 
+                   device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end())     ? std::partial_ordering::less       :
+                   not device::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()) ? std::partial_ordering::greater    :
                                                                                                                std::partial_ordering::unordered; 
 }

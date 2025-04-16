@@ -9,14 +9,14 @@ constexpr variant<types...>::variant ( auto v )
 
 template < class... types >
 constexpr variant<types...>::variant ( auto v )
-    requires ( convertible_to<decltype(v),types> or ... ) but ( not ( same_as<types,decltype(v)> or ... ) )
+    requires ( convertible_to<decltype(v),types> or ... ) and ( not ( same_as<types,decltype(v)> or ... ) )
 {
     base::template emplace<detail::find_convertible_type<decltype(v),types...>-1>(std::move(v));
 }
 
 template < class... types >
 constexpr variant<types...>::variant ( auto v )
-    requires ( constructible_from<types,decltype(v)> or ... ) but ( not ( convertible_to<decltype(v),types> or ... ) )
+    requires ( constructible_from<types,decltype(v)> or ... ) and ( not ( convertible_to<decltype(v),types> or ... ) )
 {
     base::template emplace<detail::find_constructible_type<decltype(v),types...>-1>(std::move(v));
 }

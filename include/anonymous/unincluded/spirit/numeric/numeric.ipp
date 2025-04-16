@@ -163,14 +163,14 @@ type numeric_expr<type>::operator() ( const string& str ) const
     using namespace boost::spirit::qi;
 
     // Calculate.
-    let  pos     = str.begin();
-    let  result  = type();
+    auto  pos     = str.begin();
+    auto  result  = type();
     bool success = phrase_parse(pos, str.end(), self.expression, ascii::space, result);
 
     if ( success and pos == str.end() )
         return result;
     else
-        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attribute = {})", str, pos-str.begin()+1, typeid(type));
+        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attriande = {})", str, pos-str.begin()+1, typeid(type));
 }
 
 template < class type >
@@ -284,7 +284,7 @@ class numeric_expr<type(type)>::var_con_map
             for ( auto ptr in range ( ptr_end, ptr_begin + 1, -1 ) )
                 if ( ptr_con->keys().contains(string_view(ptr_begin, ptr)) )
                 {
-                    let& v = (*ptr_con)[string_view(ptr_begin, ptr)];
+                    auto& v = (*ptr_con)[string_view(ptr_begin, ptr)];
                     ptr_begin = ptr;
                     return &v;
                 }
@@ -299,7 +299,7 @@ class numeric_expr<type(type)>::var_con_map
             for ( auto ptr in range ( ptr_end, ptr_begin + 1, -1 ) )
                 if ( ptr_con->keys().contains(string_view(ptr_begin, ptr)) )
                 {
-                    let& v = (*ptr_con)[string_view(ptr_begin, ptr)];
+                    auto& v = (*ptr_con)[string_view(ptr_begin, ptr)];
                     ptr_begin = ptr;
                     return &v;
                 }
@@ -368,13 +368,13 @@ function<type(type)> numeric_expr<type(type)>::operator() ( const string& str ) 
     using namespace boost::spirit::qi;
 
     // Calculate.
-    let  pos     = str.begin();
-    let  result  = function<type(type)>();
+    auto  pos     = str.begin();
+    auto  result  = function<type(type)>();
     bool success = phrase_parse(pos, str.end(), self.expression, ascii::space, result);
     if ( success and pos == str.end() )
         return result;
     else
-        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attribute = {})", str, pos-str.begin()+1, typeid(type(type)));
+        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attriande = {})", str, pos-str.begin()+1, typeid(type(type)));
 }
 
 template < class type >
@@ -564,7 +564,7 @@ class numeric_expr<type(type,type)>::var_con_map
             for ( auto ptr in range ( ptr_end, ptr_begin + 1, -1 ) )
                 if ( ptr_con->keys().contains(string_view(ptr_begin, ptr)) )
                 {
-                    let& v = (*ptr_con)[string_view(ptr_begin, ptr)];
+                    auto& v = (*ptr_con)[string_view(ptr_begin, ptr)];
                     ptr_begin = ptr;
                     return &v;
                 }
@@ -579,7 +579,7 @@ class numeric_expr<type(type,type)>::var_con_map
             for ( auto ptr in range ( ptr_end, ptr_begin + 1, -1 ) )
                 if ( ptr_con->keys().contains(string_view(ptr_begin, ptr)) )
                 {
-                    let& v = (*ptr_con)[string_view(ptr_begin, ptr)];
+                    auto& v = (*ptr_con)[string_view(ptr_begin, ptr)];
                     ptr_begin = ptr;
                     return &v;
                 }
@@ -647,13 +647,13 @@ function<type(type,type)> numeric_expr<type(type,type)>::operator() ( const stri
     using namespace boost::spirit::qi;
 
     // Calculate.
-    let  pos     = str.begin();
-    let  result  = function<type(type,type)>();
+    auto  pos     = str.begin();
+    auto  result  = function<type(type,type)>();
     bool success = phrase_parse(pos, str.end(), self.expression, ascii::space, result);
     if ( success and pos == str.end() )
         return result;
     else
-        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attribute = {})", str, pos-str.begin()+1, typeid(type(type,type)));
+        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attriande = {})", str, pos-str.begin()+1, typeid(type(type,type)));
 }
 
 template < class type >

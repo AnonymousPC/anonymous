@@ -38,21 +38,21 @@ void detail::read_from_boost_gil_header ( matrix<color>&, path pth, auto tag, in
 
         else if constexpr ( same_as<decltype(tag),boost::gil::jpeg_tag> )
         {
-            let info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
+            auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
             dep = info_head._data_precision * info_head._num_components;
         }
 
         else if constexpr ( same_as<decltype(tag),boost::gil::png_tag> )
         {
-            let info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
+            auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
             dep = info_head._bit_depth * info_head._num_channels;
         }
 
         else if constexpr ( same_as<decltype(tag),boost::gil::pnm_tag> )
         {
-            let info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
-            dep = info_head._type == boost::gil::pnm_image_type::mono_asc_t::value  or info_head._type == boost::gil::pnm_image_type::mono_bin_t::value  ? 1                                          otherwise
-                  info_head._type == boost::gil::pnm_image_type::gray_asc_t::value  or info_head._type == boost::gil::pnm_image_type::gray_bin_t::value  ? 1 * int(log2(int(info_head._max_value+1))) otherwise
+            auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
+            dep = info_head._type == boost::gil::pnm_image_type::mono_asc_t::value  or info_head._type == boost::gil::pnm_image_type::mono_bin_t::value  ? 1                                          :
+                  info_head._type == boost::gil::pnm_image_type::gray_asc_t::value  or info_head._type == boost::gil::pnm_image_type::gray_bin_t::value  ? 1 * int(log2(int(info_head._max_value+1))) :
                                    /*boost::gil::pnm_image_type::color_asc_t::value or info_head._type == boost::gil::pnm_image_type::color_bin_t::value*/ 3 * int(log2(int(info_head._max_value+1)));
         }
 
@@ -61,7 +61,7 @@ void detail::read_from_boost_gil_header ( matrix<color>&, path pth, auto tag, in
 
         else if constexpr ( same_as<decltype(tag),boost::gil::tiff_tag> )
         {
-            let info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
+            auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
             dep = info_head._bits_per_sample * info_head._samples_per_pixel;
         }
 
@@ -78,19 +78,19 @@ void detail::read_from_boost_gil ( matrix<color>& image, path pth, auto tag, int
 {
     read_from_boost_gil_header(image, pth, tag, dep);
 
-    dep == 24  ? read_from_boost_gil_impl<uint8_t, boost::gil::rgb_layout_t >(image, pth, tag, dep) otherwise
-    dep == 32  ? read_from_boost_gil_impl<uint8_t, boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
-    dep == 48  ? read_from_boost_gil_impl<uint16_t,boost::gil::rgb_layout_t >(image, pth, tag, dep) otherwise
-    dep == 64  ? read_from_boost_gil_impl<uint16_t,boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
+    dep == 24  ? read_from_boost_gil_impl<uint8_t, boost::gil::rgb_layout_t >(image, pth, tag, dep) :
+    dep == 32  ? read_from_boost_gil_impl<uint8_t, boost::gil::rgba_layout_t>(image, pth, tag, dep) :
+    dep == 48  ? read_from_boost_gil_impl<uint16_t,boost::gil::rgb_layout_t >(image, pth, tag, dep) :
+    dep == 64  ? read_from_boost_gil_impl<uint16_t,boost::gil::rgba_layout_t>(image, pth, tag, dep) :
                  throw file_error("cannot open {}-file {}: depth not supported (with depth = {})", get_boost_gil_tag_name(tag), pth, dep);
 }
 
 void detail::write_to_boost_gil ( const matrix<color>& image, path pth, auto tag, int dep )
 {
-    dep == 24  ? write_to_boost_gil_impl<uint8_t, boost::gil::rgb_layout_t >(image, pth, tag, dep) otherwise
-    dep == 32  ? write_to_boost_gil_impl<uint8_t, boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
-    dep == 48  ? write_to_boost_gil_impl<uint16_t,boost::gil::rgb_layout_t >(image, pth, tag, dep) otherwise
-    dep == 64  ? write_to_boost_gil_impl<uint16_t,boost::gil::rgba_layout_t>(image, pth, tag, dep) otherwise
+    dep == 24  ? write_to_boost_gil_impl<uint8_t, boost::gil::rgb_layout_t >(image, pth, tag, dep) :
+    dep == 32  ? write_to_boost_gil_impl<uint8_t, boost::gil::rgba_layout_t>(image, pth, tag, dep) :
+    dep == 48  ? write_to_boost_gil_impl<uint16_t,boost::gil::rgb_layout_t >(image, pth, tag, dep) :
+    dep == 64  ? write_to_boost_gil_impl<uint16_t,boost::gil::rgba_layout_t>(image, pth, tag, dep) :
                  throw file_error("cannot save {}-file {}: depth not supported (with depth = {})", get_boost_gil_tag_name(tag), pth, dep);;
 }
 
@@ -105,7 +105,7 @@ void detail::read_from_boost_gil_impl ( matrix<color>& image, path pth, auto tag
 {
     using gil_pixel_type = boost::gil::pixel<value_type,layout_type>;
     using gil_image_type = boost::gil::image<gil_pixel_type,false,std::allocator<value_type>>;
-    let   gil_image      = gil_image_type();
+    auto   gil_image      = gil_image_type();
 
     if constexpr ( requires { boost::gil::read_image(pth.c_str(), gil_image, tag); } )
     {
@@ -120,7 +120,7 @@ void detail::read_from_boost_gil_impl ( matrix<color>& image, path pth, auto tag
         }
 
         // Convert image.
-        let gil_image_view = boost::gil::view(gil_image);
+        auto gil_image_view = boost::gil::view(gil_image);
         image.resize(int(gil_image_view.height()), int(gil_image_view.width()));
         std::ranges::move(
             gil_image_view
@@ -155,12 +155,12 @@ void detail::write_to_boost_gil_impl ( const matrix<color>& image, path pth, aut
 {
     using gil_pixel_type = boost::gil::pixel<value_type,layout_type>;
     using gil_image_type = boost::gil::image<gil_pixel_type,false,std::allocator<value_type>>;
-    let   gil_image      = gil_image_type(image.column(), image.row());
+    auto   gil_image      = gil_image_type(image.column(), image.row());
 
     if constexpr ( requires { boost::gil::write_view(pth.c_str(), boost::gil::view(gil_image), tag); } )
     {
         // Convert image.
-        let gil_image_view = boost::gil::view(gil_image);
+        auto gil_image_view = boost::gil::view(gil_image);
         std::ranges::copy(
             image.flatten()
                 | std::views::transform([&] (const auto& pixel)

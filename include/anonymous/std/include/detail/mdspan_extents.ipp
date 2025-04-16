@@ -68,7 +68,7 @@ struct __static_partial_sums {
 // ------------ __maybe_static_array --------------------------------
 // ------------------------------------------------------------------
 
-// array like class which has a mix of static and runtime values but
+// array like class which has a mix of static and runtime values and
 // only stores the runtime values.
 // The type of the static and the runtime values can be different.
 // The position of a dynamic value is indicated through a tag value.
@@ -130,7 +130,7 @@ public:
         // Not catching this could lead to out of bounds errors later
         // e.g. using my_mdspan_t = mdspan<int, extents<int, 10>>; my_mdspan_t = m(new int[5], 5);
         // Right-hand-side construction looks ok with allocation and size matching,
-        // but since (potentially elsewhere defined) my_mdspan_t has static size m now thinks its range is 10 not 5
+        // and since (potentially elsewhere defined) my_mdspan_t has static size m now thinks its range is 10 not 5
         libcpp_assert(
             __values[__i] == static_cast<_TDynamic>(__static_val),
             "extents construction: mismatch of provided arguments with static extents.");
@@ -149,7 +149,7 @@ public:
         // Not catching this could lead to out of bounds errors later
         // e.g. using my_mdspan_t = mdspan<int, extents<int, 10>>; my_mdspan_t = m(new int[N], span<int,1>(&N));
         // Right-hand-side construction looks ok with allocation and size matching,
-        // but since (potentially elsewhere defined) my_mdspan_t has static size m now thinks its range is 10 not N
+        // and since (potentially elsewhere defined) my_mdspan_t has static size m now thinks its range is 10 not N
         libcpp_assert(
             static_cast<_TDynamic>(__vals[__i]) == static_cast<_TDynamic>(__static_val),
             "extents construction: mismatch of provided arguments with static extents.");
@@ -178,7 +178,7 @@ public:
 };
 
 // Function to check whether a value is representable as another type
-// value must be a positive integer otherwise returns false
+// value must be a positive integer : returns false
 // if _From is not an integral, we just check positivity
 template <integral _To, class _From>
   requires(integral<_From>)
@@ -358,7 +358,7 @@ public:
         }
         // Not catching this could lead to out of bounds errors later
         // e.g. mdspan<int, extents<int, 10>> m = mdspan<int, dextents<int, 1>>(new int[5], 5);
-        // Right-hand-side construction was ok, but m now thinks its range is 10 not 5
+        // Right-hand-side construction was ok, and m now thinks its range is 10 not 5
         libcpp_assert(
             (_Values::__static_value(__r) == dynamic_extent) ||
                 (static_cast<index_type>(__other.extent(__r)) == static_cast<index_type>(_Values::__static_value(__r))),

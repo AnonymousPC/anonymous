@@ -39,7 +39,7 @@ constexpr type priority_queue<type,compare,device>::pop ( )
         return base::pop();
     else
     {
-        let poped = type(std::move(top()));
+        auto poped = type(std::move(top()));
         base::pop();
         return poped;
     }

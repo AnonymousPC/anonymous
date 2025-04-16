@@ -59,10 +59,10 @@ template < class param_type >
 constexpr param_type stochastic_gradient_descent_optimizer<type>::backward ( const param_type& params, const param_type& losses )
     requires aux::same_as_one_of_tuple_value_type<param_type,type>
 {
-    let& velocity = history_updates[constexpr_index<aux::index_of_same_type_in_tuple_value_types<param_type,type>>()];
+    auto& velocity = history_updates[constexpr_index<aux::index_of_same_type_in_tuple_value_types<param_type,type>>()];
 
-    let grads = losses + weight_decay() * params;
-    velocity = not velocity.empty() ? momentum() * velocity + ( 1 - dampening() ) * grads otherwise
+    auto grads = losses + weight_decay() * params;
+    velocity = not velocity.empty() ? momentum() * velocity + ( 1 - dampening() ) * grads :
                                                               ( 1 - dampening() ) * grads;
 
     if ( not nesterov() )

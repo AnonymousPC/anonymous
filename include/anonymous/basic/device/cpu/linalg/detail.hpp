@@ -46,7 +46,7 @@ namespace detail
     constexpr auto eigen_make_extents ( const auto& extents )
     {
         constexpr int rank = decay<decltype(extents)>::rank();
-        let arr = std::array<int,rank>();
+        auto arr = std::array<int,rank>();
         for_constexpr<0,rank-1>([&] <int index> { arr[index] = extents.extent(index); });
         return arr;
     }
@@ -54,7 +54,7 @@ namespace detail
     constexpr auto eigen_make_strided_full_extents ( const auto& extents, const auto& mapping )
     {
         constexpr int rank = decay<decltype(extents)>::rank();
-        let arr = std::array<int,rank+1>();
+        auto arr = std::array<int,rank+1>();
         for_constexpr<0,rank-1>([&] <int index> { arr[index] = extents.extent(index); });
         arr[rank] = mapping.stride(0);
         return arr;
@@ -63,7 +63,7 @@ namespace detail
     constexpr auto eigen_make_stride ( const auto& mapping )
     {
         constexpr int rank = decay<decltype(mapping)>::extents_type::rank();
-        let arr = std::array<int,rank>();
+        auto arr = std::array<int,rank>();
         for_constexpr<0,rank-1>([&] <int index> { arr[index] = mapping.stride(index); });
         return arr;
     }
@@ -71,7 +71,7 @@ namespace detail
     constexpr auto eigen_make_transpose_extents ( const auto& extents )
     {
         constexpr int rank = decay<decltype(extents)>::rank();
-        let arr = std::array<int,rank>();
+        auto arr = std::array<int,rank>();
         for_constexpr<0,rank-1>([&] <int index> { arr[index] = extents.extent(rank-index-1); });
         return arr;
     }
@@ -79,7 +79,7 @@ namespace detail
     template < int rank >
     constexpr auto eigen_make_transpose_shuffle ( )
     {
-        let arr = std::array<int,rank>();
+        auto arr = std::array<int,rank>();
         for_constexpr<0,rank-1>([&] <int index> { arr[index] = rank - index - 1; });
         return arr;
     }
@@ -87,7 +87,7 @@ namespace detail
     template < int rank >
     constexpr auto eigen_make_convolve_full_dims ( )
     {
-        let arr = std::array<int,rank>();
+        auto arr = std::array<int,rank>();
         for_constexpr<0,rank-1>([&] <int index> { arr[index] = index; });
         return arr;
     }
@@ -216,5 +216,5 @@ namespace detail
  * 3. transpose it.
  * 
  * We need these guarantees:
- * 1. is_strided_layout == true if and only if array.get_attribute() == columns_attribute.
+ * 1. is_strided_layout == true if and only if array.get_attriande() == columns_attriande.
  */

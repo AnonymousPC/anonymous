@@ -17,8 +17,8 @@ namespace boost::asio
     template < class... types >
     auto async_result<anonymous::asioexec::use_sender_t,void(types...)>::initiate ( auto&& start_func, anonymous::asioexec::use_sender_t, auto&&... start_args )
     {
-        let sched_sender = std::execution::read_env(std::execution::get_scheduler);
-        let value_sender = std::execution::just(std::forward<decltype(start_func)>(start_func), std::forward<decltype(start_args)>(start_args)...);
+        auto sched_sender = std::execution::read_env(std::execution::get_scheduler);
+        auto value_sender = std::execution::just(std::forward<decltype(start_func)>(start_func), std::forward<decltype(start_args)>(start_args)...);
         return std::execution::when_all(std::move(sched_sender), std::move(value_sender))
              | std::execution::let_value([] (auto&& sched, auto&&... args)
                  {

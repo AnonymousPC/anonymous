@@ -133,7 +133,7 @@ std::string detail::format_stacktrace ( const std::stacktrace& trace )
 
 std::string detail::format_nested_exception ( const std::type_info& from_type, const std::string& from_what )
 {
-    #if defined(__GNUC__) but not defined(__clang__) // terminate called after throwing an instance of '{typeid}'\n  what():  {what}
+    #if defined(__GNUC__) and not defined(__clang__) // terminate called after throwing an instance of '{typeid}'\n  what():  {what}
         return std::format("after throwing another instance of '{}'\n  what(): {}", boost::core::demangle(from_type.name()), from_what);
     #elifdef __clang__ // libc++abi: terminating due to uncaught exception of type {typeid}: {what}
         return std::format("due to another exception of type {}: {}", boost::core::demangle(from_type.name()), from_what);
@@ -147,8 +147,8 @@ std::string detail::format_stacktrace_color ( std::string str, int str_pos, int 
     constexpr std::array<const char*,4> colors = { white, light_grey, grey, dark_grey };
 
     // Locate brackets
-    let p1 = str.find('<', str_pos);
-    let p2 = str.find('>', str_pos);
+    auto p1 = str.find('<', str_pos);
+    auto p2 = str.find('>', str_pos);
 
     // Find end.
     if ( p1 == str.npos and p2 == str.npos )
@@ -176,14 +176,14 @@ std::string detail::format_stacktrace_color ( std::string str, int str_pos, int 
 
 constexpr int detail::get_format_mode ( const char* str )
 {
-    let b = str;
-    let e = str;
+    auto b = str;
+    auto e = str;
     while ( *e != '\0' )
         e++;
 
     while ( true )
     {
-        let p = std::find(b, e, '{');
+        auto p = std::find(b, e, '{');
 
         if ( p == e )
             return default_mode;

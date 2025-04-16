@@ -5,10 +5,10 @@
 template < class parse_context >
 constexpr parse_context::iterator std::formatter<anonymous::color>::parse ( parse_context& ctx )
 {
-    let n = 1;
+    auto n = 1;
 
-    let b = ctx.begin();
-    let e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
+    auto b = ctx.begin();
+    auto e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
 
     parse_ctx = anonymous::string(anonymous::string_view(b, e-b));
     return e;
@@ -20,13 +20,13 @@ constexpr format_context::iterator std::formatter<anonymous::color>::format ( co
     if ( parse_ctx == "" )
         parse_ctx = "(r,g,b)";
 
-    let str =
+    auto str =
         anonymous::string(parse_ctx)
            .replace('r', anonymous::string(c.red  ()))
            .replace('g', anonymous::string(c.green()))
            .replace('b', anonymous::string(c.blue ()));
 
-    let it = ctx.out();
+    auto it = ctx.out();
     for ( char ch in str )
         *(it++) = ch;
 
@@ -40,10 +40,10 @@ constexpr format_context::iterator std::formatter<anonymous::color>::format ( co
 template < class parse_context >
 constexpr parse_context::iterator std::formatter<anonymous::time_point>::parse ( parse_context& ctx )
 {
-    let n = 1;
+    auto n = 1;
 
-    let b = ctx.begin();
-    let e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
+    auto b = ctx.begin();
+    auto e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
 
     parse_ctx = anonymous::string(anonymous::string_view(b, e-b));
     return e;
@@ -55,7 +55,7 @@ constexpr format_context::iterator std::formatter<anonymous::time_point>::format
     if ( parse_ctx == "" )
         parse_ctx = "YYYY-MM-DD hh:mm:ss ms.us.ns";
 
-    let str =
+    auto str =
         anonymous::string(parse_ctx)
            .replace("YYYY", anonymous::string("{:04d}").format(c.year   ()))
            .replace("MM",   anonymous::string("{:02d}").format(c.month  ()))
@@ -80,7 +80,7 @@ constexpr format_context::iterator std::formatter<anonymous::time_point>::format
            .replace("m",    anonymous::string("{:d}"  ).format(c.minute()))
            .replace("s",    anonymous::string("{:d}"  ).format(c.second()));
 
-    let it = ctx.out();
+    auto it = ctx.out();
     for ( char ch in str )
         *(it++) = ch;
 
@@ -94,10 +94,10 @@ constexpr format_context::iterator std::formatter<anonymous::time_point>::format
 template < class parse_context >
 constexpr parse_context::iterator std::formatter<anonymous::duration>::parse ( parse_context& ctx )
 {
-    let n = 1;
+    auto n = 1;
 
-    let b = ctx.begin();
-    let e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
+    auto b = ctx.begin();
+    auto e = std::find_if(ctx.begin(), ctx.end(), [&] (auto ch) { if (ch=='{') n++; if (ch=='}') n--; return n == 0; });
 
     parse_ctx = anonymous::string(anonymous::string_view(b, e));
     return e;
@@ -109,7 +109,7 @@ constexpr format_context::iterator std::formatter<anonymous::duration>::format (
     if ( parse_ctx == "" )
         parse_ctx = "hh:mm:ss ms.us.ns";
 
-    let str =
+    auto str =
         anonymous::string(parse_ctx)
 
            .replace("hh", anonymous::string("{:02d}").format(c.hour  ()))
@@ -126,7 +126,7 @@ constexpr format_context::iterator std::formatter<anonymous::duration>::format (
            .replace("m",  anonymous::string("{:d}"  ).format(c.minute()))
            .replace("s",  anonymous::string("{:d}"  ).format(c.second()));
 
-    let it = ctx.out();
+    auto it = ctx.out();
     for ( char ch in str )
         *(it++) = ch;
 

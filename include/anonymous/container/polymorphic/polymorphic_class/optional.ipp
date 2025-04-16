@@ -23,7 +23,7 @@ constexpr bool optional<types>::empty ( ) const
 template < class types >
 constexpr const std::type_info& optional<types>::type ( ) const
 {
-    return not empty() ? typeid(types) otherwise typeid(void);
+    return not empty() ? typeid(types) : typeid(void);
 }
 
 template < class types >

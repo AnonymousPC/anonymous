@@ -1,3 +1,9 @@
+module;
+#include <__functional/bind_back.h>
+#include <__type_traits/maybe_const.h>
+#include <__ranges/non_propagating_cache.h>
+#include <__ranges/range_adaptor.h>
+
 export module anonymous.std;
 import std;
 import boost;
@@ -11,11 +17,15 @@ import boost;
     #include "include/is_layout_compatible.hpp"
 #endif
 
-#ifdef __cpp_lib_mdspan
+#ifndef __cpp_lib_aligned_accessor
+    #include "include/detail/mdspan_aligned_accessor.ipp"
+#endif
+
+#ifndef __cpp_lib_mdspan
+    #include "include/detail/mdspan.ipp"
+#else
     #include "include/detail/mdspan_layout_transpose.ipp"
     #include "include/detail/mdspan_aligned_accessor.ipp"
-#else
-    #include "mdspan.hpp"
 #endif
 
 #ifndef __cpp_lib_ranges_chunk

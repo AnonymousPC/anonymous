@@ -98,14 +98,14 @@ constexpr void cpu::linalg::fft ( const auto vector, auto output )
      * eigen_map[index] returns a rvalue instead of const lvalue&.
      * So we must map it manually.
      */
-    let vector_map = [&]
+    auto vector_map = [&]
         {
             if constexpr ( detail::is_contiguous_layout<typename decay<decltype(vector)>::layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
             else // if constexpr ( detail::is_strided_layout<typename decay<decltype(vector)>::layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
         } ();
-    let output_map = detail::eigen_map(output);
+    auto output_map = detail::eigen_map(output);
     Eigen::FFT<detail::eigen_nativize<output_value_type::value_type>>().fwd(output_map, vector_map);
 }
 
@@ -115,14 +115,14 @@ constexpr void cpu::linalg::ifft ( const auto vector, auto output )
      * eigen_map[index] returns a rvalue instead of const lvalue&.
      * So we must map it manually.
      */
-    let vector_map = [&]
+    auto vector_map = [&]
         {
             if constexpr ( detail::is_contiguous_layout<typename decay<decltype(vector)>::layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
             else // if constexpr ( detail::is_strided_layout<typename decay<decltype(vector)>::layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
         } ();
-    let output_map = detail::eigen_map(output);
+    auto output_map = detail::eigen_map(output);
     Eigen::FFT<detail::eigen_nativize<output_value_type::value_type>>().inv(output_map, vector_map);
 }
 

@@ -15,10 +15,10 @@ template < class protocol >
 void basic_http_buf<protocol>::connect ( url website, http_client_mode auto... args )
 {
     // Check scheme.
-    if ( ( same_as<protocol,tcp> but website.scheme() != "http"  ) or
-         ( same_as<protocol,ssl> but website.scheme() != "https" ) or
-         ( same_as<protocol,tls> but website.scheme() != "https" ) )
-        throw network_error("unrecognized http scheme (with url = {}, scheme = {}, expected = {})", website, website.scheme(), same_as<protocol,tcp> ? "http" otherwise "https");
+    if ( ( same_as<protocol,tcp> and website.scheme() != "http"  ) or
+         ( same_as<protocol,ssl> and website.scheme() != "https" ) or
+         ( same_as<protocol,tls> and website.scheme() != "https" ) )
+        throw network_error("unrecognized http scheme (with url = {}, scheme = {}, expected = {})", website, website.scheme(), same_as<protocol,tcp> ? "http" : "https");
 
     // Initialize.
     init_buffer_as_client();
@@ -39,7 +39,7 @@ void basic_http_buf<protocol>::listen ( url portal, http_server_mode auto... arg
 {
     // Check scheme.
     if ( portal.scheme() != "http" and portal.scheme() != "https" )
-        throw network_error("unrecognized http scheme (with url = {}, scheme = {}, expected = {})", portal, portal.scheme(), same_as<protocol,tcp> ? "http" otherwise "https");
+        throw network_error("unrecognized http scheme (with url = {}, scheme = {}, expected = {})", portal, portal.scheme(), same_as<protocol,tcp> ? "http" : "https");
 
     // Initialize.
     init_buffer_as_server();
@@ -78,7 +78,7 @@ url basic_http_buf<protocol>::local_endpoint ( ) const
 {
     try
     {
-        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" otherwise "https", handle.local_endpoint());
+        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" : "https", handle.local_endpoint());
     }
     catch ( const boost::system::system_error& e )
     {
@@ -91,7 +91,7 @@ url basic_http_buf<protocol>::remote_endpoint ( ) const
 {
     try
     {
-        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" otherwise "https", handle.remote_endpoint());
+        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" : "https", handle.remote_endpoint());
     }
     catch ( const boost::system::system_error& e )
     {
@@ -210,16 +210,16 @@ const map<string,string>& basic_http_buf<protocol>::response_header ( ) const
 template < class protocol >
 int basic_http_buf<protocol>::underflow ( )
 {
-    return status == status_type::client ? receive_more(*response_parser) otherwise
-           status == status_type::server ? receive_more(*request_parser ) otherwise
+    return status == status_type::client ? receive_more(*response_parser) :
+           status == status_type::server ? receive_more(*request_parser ) :
                                            throw network_error("receive message failed: http_buf has not been opened");
 }
 
 template < class protocol >
 int basic_http_buf<protocol>::overflow ( int c )
 {
-    status == status_type::client ? send_more(c, *request_serializer ) otherwise
-    status == status_type::server ? send_more(c, *response_serializer) otherwise
+    status == status_type::client ? send_more(c, *request_serializer ) :
+    status == status_type::server ? send_more(c, *response_serializer) :
                                     throw network_error("send message failed: http_buf has not been opened");
     return traits_type::to_int_type(c);
 }
@@ -227,8 +227,8 @@ int basic_http_buf<protocol>::overflow ( int c )
 template < class protocol >
 int basic_http_buf<protocol>::sync ( )
 {
-    status == status_type::client ? send_end(*request_serializer ) otherwise
-    status == status_type::server ? send_end(*response_serializer) otherwise
+    status == status_type::client ? send_end(*request_serializer ) :
+    status == status_type::server ? send_end(*response_serializer) :
                                     throw network_error("send message failed: http_buf has not been opened");
     reset_send_buffer();
     return 0;
@@ -264,9 +264,9 @@ void basic_http_buf<protocol>::init_header_as_client ( const url& website, const
     // Default settings
     current_request_method  = "GET";
     current_request_path    = website.path();
-    current_request_param   = website.param() != "" ? website.param().split('&') | std::views::transform([] (const auto& kv) { return pair<string,string>(kv.partition('=')[1], kv.partition('=')[3]); }) | std::ranges::to<map<string,string>>() otherwise map<string,string>();
+    current_request_param   = website.param() != "" ? website.param().split('&') | std::views::transform([] (const auto& kv) { return pair<string,string>(kv.partition('=')[1], kv.partition('=')[3]); }) | std::ranges::to<map<string,string>>() : map<string,string>();
     current_request_version = 1.1;
-    current_request_header  = map<string,string>{{"Host",       website.port() != "" ? "{}:{}"s.format(website.host(), website.port()) otherwise website.host()},  
+    current_request_header  = map<string,string>{{"Host",       website.port() != "" ? "{}:{}"s.format(website.host(), website.port()) : website.host()},  
                                                  {"User-Agent", "C++"},
                                                  {"Accept",     "*/*"}};
 
@@ -372,8 +372,8 @@ auto basic_http_buf<protocol>::resolve_url ( const url& website )
     {
         return typename protocol::resolver(boost::asio::system_executor()).resolve(
                    website.host().c_str(),
-                   (website.port() != ""      ? website.port()                otherwise
-                    not optional_port.empty() ? string(optional_port.value()) otherwise
+                   (website.port() != ""      ? website.port()                :
+                    not optional_port.empty() ? string(optional_port.value()) :
                                                 website.scheme()).c_str());
     }
     catch ( const boost::system::system_error& e )
@@ -386,8 +386,8 @@ template < class protocol >
 void basic_http_buf<protocol>::connect_without_proxy ( const url& website )
 {
     // Connect.
-    let errpool = vector<detail::system_error>();
-    let resolve_results = resolve_url(website);
+    auto errpool = vector<detail::system_error>();
+    auto resolve_results = resolve_url(website);
     for ( const auto& resolve_entry in resolve_results )
         try
         {
@@ -415,8 +415,8 @@ void basic_http_buf<protocol>::connect_through_proxy ( const url& website, const
     requires same_as<protocol,ssl> or same_as<protocol,tls>
 {
     // Connect to proxy server. We demand the proxy website to be http.
-    let errpool = vector<detail::system_error>();
-    let proxy_results = resolve_url(proxy_website);
+    auto errpool = vector<detail::system_error>();
+    auto proxy_results = resolve_url(proxy_website);
     for ( const auto& proxy_entry in proxy_results )
         try
         {
@@ -424,13 +424,13 @@ void basic_http_buf<protocol>::connect_through_proxy ( const url& website, const
             handle.next_layer().connect(proxy_entry);
 
             // Prepare "CONNECT" request and response.
-            let target = "{}:{}"s.format(website.host(), website.port() != ""      ? website.port()                otherwise
-                                                         not optional_port.empty() ? string(optional_port.value()) otherwise
-                                                         same_as<protocol,tcp>     ? "80"                          otherwise
+            auto target = "{}:{}"s.format(website.host(), website.port() != ""      ? website.port()                :
+                                                         not optional_port.empty() ? string(optional_port.value()) :
+                                                         same_as<protocol,tcp>     ? "80"                          :
                                                                                      "443");
-            let tunnel_request  = boost::beast::http::request        <boost::beast::http::empty_body>();
-            let tunnel_response = boost::beast::http::response_parser<boost::beast::http::empty_body>();
-            let tunnel_buff     = boost::beast::flat_buffer();
+            auto tunnel_request  = boost::beast::http::request        <boost::beast::http::empty_body>();
+            auto tunnel_response = boost::beast::http::response_parser<boost::beast::http::empty_body>();
+            auto tunnel_buff     = boost::beast::flat_buffer();
             tunnel_request.method(boost::beast::http::verb::connect);
             tunnel_request.target(target.c_str());
             tunnel_request.set(boost::beast::http::field::host,             target.c_str());
@@ -440,14 +440,14 @@ void basic_http_buf<protocol>::connect_through_proxy ( const url& website, const
             tunnel_response.skip(true); // Skip the body. Most times the response to "CONNECT" request is empty-header and empty-body.
         
             // Send request and receive response to/from proxy server.
-            let buff = boost::beast::flat_buffer();
+            auto buff = boost::beast::flat_buffer();
             boost::beast::http::write(handle.next_layer(),       tunnel_request );
             boost::beast::http::read (handle.next_layer(), buff, tunnel_response);
             if ( tunnel_response.get().result_int() >= 300 and tunnel_response.get().result_int() <= 599 )
                 throw boost::system::system_error(boost::system::error_code(), "received {} {} from proxy server"s.format(tunnel_response.get().result_int(), std::string(tunnel_response.get().reason())));
         
             // Do SSL handshake in tunnel.
-            let sni_success = SSL_set_tlsext_host_name(handle.native_handle(), website.host().c_str());
+            auto sni_success = SSL_set_tlsext_host_name(handle.native_handle(), website.host().c_str());
             if ( not sni_success )
                 throw boost::system::system_error(boost::beast::error_code(int(ERR_get_error()), boost::asio::error::get_ssl_category()));
             handle.handshake(boost::asio::ssl::stream_base::client);
@@ -467,8 +467,8 @@ template < class protocol >
 void basic_http_buf<protocol>::listen_to_port ( const url& portal )
 {
     // Listen.
-    let errpool = vector<detail::system_error>();
-    let resolve_results = resolve_url(portal);
+    auto errpool = vector<detail::system_error>();
+    auto resolve_results = resolve_url(portal);
     for ( const auto& resolve_entry in resolve_results )
         try
         {
@@ -532,7 +532,7 @@ void basic_http_buf<protocol>::send_more ( int c, auto& serializer )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("send {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(serializer)>::value_type::is_request::value ? "request" otherwise "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
+        throw network_error("send {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(serializer)>::value_type::is_request::value ? "request" : "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
     } 
 }
 
@@ -565,7 +565,7 @@ void basic_http_buf<protocol>::send_end ( auto& serializer )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("send {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(serializer)>::value_type::is_request::value ? "request" otherwise "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
+        throw network_error("send {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(serializer)>::value_type::is_request::value ? "request" : "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
     }
 }
 
@@ -605,7 +605,7 @@ int basic_http_buf<protocol>::receive_more ( auto& parser )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("receive {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(parser)>::value_type::is_request::value ? "request" otherwise "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
+        throw network_error("receive {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(parser)>::value_type::is_request::value ? "request" : "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
     }
 }
 
@@ -624,7 +624,7 @@ void basic_http_buf<protocol>::receive_begin ( auto& parser )
     }
     catch ( const boost::system::system_error& e )
     {
-        throw network_error("receive {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(parser)>::value_type::is_request::value ? "request" otherwise "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
+        throw network_error("receive {} failed (with local_endpoint = {}, remote_endpoint = {})", decay<decltype(parser)>::value_type::is_request::value ? "request" : "response", local_endpoint_noexcept(), remote_endpoint_noexcept()).from(detail::system_error(e));
     }
 }
 
@@ -728,37 +728,37 @@ void basic_http_buf<protocol>::update_header_to ( auto& serializer )
 
     if constexpr ( decay<decltype(serializer.get())>::is_request::value )
     {
-        let& request = const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(serializer.get());
+        auto& request = const_cast<boost::beast::http::request<boost::beast::http::string_body>&>(serializer.get());
 
         request.method(boost::beast::http::string_to_verb(current_request_method.c_str()) != boost::beast::http::verb::unknown ?
-                       boost::beast::http::string_to_verb(current_request_method.c_str()) otherwise throw network_error("unrecognized http method {} (expected = GET, POST, ...)", current_request_method));
+                       boost::beast::http::string_to_verb(current_request_method.c_str()) : throw network_error("unrecognized http method {} (expected = GET, POST, ...)", current_request_method));
         request.target("/{}{}{}"s.format(current_request_path, 
-                                         not current_request_param.empty() ? "?" otherwise "",
+                                         not current_request_param.empty() ? "?" : "",
                                          current_request_param | std::views::transform([] (const auto& kv) { return "{}={}"s.format(kv.key(), kv.value()); }) 
                                                                | std::views::join_with('&')
                                                                | std::ranges::to<string>()).c_str()); // /path?key=value
         if ( not optional_proxy_midway.empty() and same_as<protocol,tcp> ) // If we are using http (not https) proxy, then request.target() should be expanded into full url, and followed with it's origin value (path, param...).
             request.target("{}://{}{}{}"s.format(optional_proxy_target.value().scheme(),
                                                  optional_proxy_target.value().host(), 
-                                                 optional_proxy_target.value().port() != "" ? ":{}"s.format(optional_proxy_target.value().port()) otherwise "",
+                                                 optional_proxy_target.value().port() != "" ? ":{}"s.format(optional_proxy_target.value().port()) : "",
                                                  string(request.target())).c_str()); // http://final_target.com/path?key=value
         request.version(int(current_request_version * 10));
         for ( const auto& [k, v] in current_request_header )
             boost::beast::http::string_to_field(k.c_str()) != boost::beast::http::field::unknown ? 
-                request.set(boost::beast::http::string_to_field(k.c_str()), v.c_str()) otherwise
+                request.set(boost::beast::http::string_to_field(k.c_str()), v.c_str()) :
                 request.set(k.c_str(), v.c_str());
     }
 
     else
     {
-        let& response = const_cast<boost::beast::http::response<boost::beast::http::string_body>&>(serializer.get());
+        auto& response = const_cast<boost::beast::http::response<boost::beast::http::string_body>&>(serializer.get());
 
         response.result(boost::beast::http::int_to_status(current_response_status_code) != boost::beast::http::status::unknown ? 
-                        boost::beast::http::int_to_status(current_response_status_code) otherwise throw network_error("unrecognized http status code {} (expected = 200, 404, ...)", current_response_status_code));
+                        boost::beast::http::int_to_status(current_response_status_code) : throw network_error("unrecognized http status code {} (expected = 200, 404, ...)", current_response_status_code));
         response.reason(current_response_reason.c_str());
         for ( const auto& [k, v] in current_response_header )
             boost::beast::http::string_to_field(k.c_str()) != boost::beast::http::field::unknown ? 
-                response.set(boost::beast::http::string_to_field(k.c_str()), v.c_str()) otherwise
+                response.set(boost::beast::http::string_to_field(k.c_str()), v.c_str()) :
                 response.set(k.c_str(), v.c_str());
     }
 }
@@ -790,7 +790,7 @@ string basic_http_buf<protocol>::local_endpoint_noexcept ( ) const
 {
     try
     {
-        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" otherwise "https", handle.local_endpoint());
+        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" : "https", handle.local_endpoint());
     }
     catch ( const boost::system::system_error& e )
     {
@@ -803,7 +803,7 @@ string basic_http_buf<protocol>::remote_endpoint_noexcept ( ) const
 {
     try
     {
-        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" otherwise "https", handle.remote_endpoint());
+        return "{}://{}"s.format(same_as<protocol,tcp> ? "http" : "https", handle.remote_endpoint());
     }
     catch ( const boost::system::system_error& e )
     {

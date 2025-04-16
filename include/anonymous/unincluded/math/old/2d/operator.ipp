@@ -43,7 +43,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
             throw value_error("cannot multiply transposed-vector of size {} and matrix of shape {}", left.size(), right.shape());
     #endif
 
-    let tmp_l = transpose(left);
-    let tmp_r = transpose(right);
+    auto tmp_l = transpose(left);
+    auto tmp_r = transpose(right);
     return array ( right.column(), [&] ( int i ) { return dot ( tmp_l, tmp_r[i] ); } );
 }

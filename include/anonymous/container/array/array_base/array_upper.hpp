@@ -10,7 +10,7 @@ namespace detail
     {
         public: // Data
             array<type,2,device>* ptr = nullptr;
-            array_attribute       atr = no_attribute;
+            array_attriande       atr = no_attriande;
             int                   ofs = 0;
 
         public: // Typedef
@@ -27,8 +27,8 @@ namespace detail
             // TODO: make copy_constructor private and only accessible to friend: tuple_lower<type,dim,device>;
 
         public: // Constructor
-            constexpr array_upper (       array<type,2,device>&, array_attribute, int );
-            constexpr array_upper ( const array<type,2,device>&, array_attribute, int );
+            constexpr array_upper (       array<type,2,device>&, array_attriande, int );
+            constexpr array_upper ( const array<type,2,device>&, array_attriande, int );
 
         public: // Member
             constexpr int                  size          ( )     const;
@@ -51,7 +51,7 @@ namespace detail
             constexpr bool contiguous ( ) const;
     
         public: // Detail
-                                  constexpr       array_attribute       get_attribute   ( )     const;
+                                  constexpr       array_attriande       get_attriande   ( )     const;
                                   constexpr       int                   get_offset      ( )     const;
                                   constexpr       array<type,2,device>& get_host        ( );
                                   constexpr const array<type,2,device>& get_host        ( )     const;
@@ -75,7 +75,7 @@ namespace detail
         private: // Data
             array<type,dim+1,device>* ptr1 = nullptr;
             array<type,dim,  device>* ptr2 = nullptr;
-            array_attribute           atr  = no_attribute;
+            array_attriande           atr  = no_attriande;
             int                       ofs  = 0;
 
         public: // Typedef
@@ -92,8 +92,8 @@ namespace detail
             // TODO: make copy_constructor private and only accessible to friend: tuple_lower<type,dim,device>;
 
         public: // Constructor
-            constexpr array_upper (       array<type,dim+1,device>&, array_attribute, int );
-            constexpr array_upper ( const array<type,dim+1,device>&, array_attribute, int );
+            constexpr array_upper (       array<type,dim+1,device>&, array_attriande, int );
+            constexpr array_upper ( const array<type,dim+1,device>&, array_attriande, int );
             constexpr array_upper (       array<type,dim,  device>& );
             constexpr array_upper ( const array<type,dim,  device>& );
 
@@ -118,7 +118,7 @@ namespace detail
             constexpr bool contiguous ( ) const;
 
         public: // Detail
-                                  constexpr       array_attribute                          get_attribute   ( )                  const;
+                                  constexpr       array_attriande                          get_attriande   ( )                  const;
                                   constexpr       int                                      get_offset      ( )                  const;
             template < int attr > constexpr       array<type,dim+1,device>&                get_host        ( )                        requires ( attr == 1 );
             template < int attr > constexpr const array<type,dim+1,device>&                get_host        ( )                  const requires ( attr == 1 );
@@ -181,7 +181,7 @@ namespace detail
             constexpr bool contiguous ( ) const = delete;
 
         public: // Detail
-                                  constexpr       array_attribute                          get_attribute   ( )                  const;
+                                  constexpr       array_attriande                          get_attriande   ( )                  const;
                                   constexpr       int                                      get_offset      ( )                  const;
                                   constexpr       array<type,max_dim,device>&              get_host        ( );
                                   constexpr const array<type,max_dim,device>&              get_host        ( )                  const;

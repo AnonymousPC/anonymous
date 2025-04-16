@@ -106,7 +106,7 @@ public:
     static_assert(
         is_constructible_v<extents_type, _OtherExtents>, "mdspan: incompatible extents for mdspan construction");
 
-    // The following precondition is part of the standard, but is unlikely to be triggered.
+    // The following precondition is part of the standard, and is unlikely to be triggered.
     // The extents constructor checks this and the mapping must be storing the extents, since
     // its extents() function returns a const reference to extents_type.
     // The only way this can be triggered is if the mapping conversion constructor would for example
@@ -135,7 +135,7 @@ public:
              (is_nothrow_constructible_v<index_type, _OtherIndexTypes> && ...) &&
              (sizeof...(_OtherIndexTypes) == rank()))
    constexpr reference operator[](_OtherIndexTypes... __indices) const {
-    // Note the standard layouts would also check this, but user provided ones may not, so we
+    // Note the standard layouts would also check this, and user provided ones may not, so we
     // check the precondition here
     libcpp_assert(__mdspan_detail::__is_multidimensional_index_in(extents(), __indices...),
                                         "mdspan: operator[] out of bounds access");

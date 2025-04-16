@@ -22,7 +22,7 @@ namespace detail
         requires ( dim >= 2 )
     constexpr int array_info<type,dim,device>::size ( ) const
     {
-        let s = 1;
+        auto s = 1;
         for_constexpr<1,dim>([&] <int index> { s *= shp[index]; });
         return s;
     }
@@ -53,7 +53,7 @@ namespace detail
         requires ( dim >= 2 )
     constexpr bool array_info<type,dim,device>::empty ( ) const
     {
-        let e = false;
+        auto e = false;
         for_constexpr<1,dim>([&] <int index> { if (shp[index] == 0) e = true; });
         return e;
     }

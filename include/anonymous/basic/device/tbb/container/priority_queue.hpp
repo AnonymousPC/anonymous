@@ -8,5 +8,5 @@ class tbb::priority_queue
         using base = ::tbb::concurrent_priority_queue<type,compare,alloc>;
     
     public: // Override
-        type pop ( ) { let poped = type(); let ok = base::try_pop(poped); return ok ? poped otherwise throw value_error("cannot pop from an empty priority_queue"); }
+        type pop ( ) { auto poped = type(); auto ok = base::try_pop(poped); return ok ? poped : throw value_error("cannot pop from an empty priority_queue"); }
 };

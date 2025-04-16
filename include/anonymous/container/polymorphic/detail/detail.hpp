@@ -37,33 +37,33 @@ namespace detail
     constexpr int find_same_type = [] { static_assert(false, "you need to specialize it"); return false; } ();
 
     template < class input_type, class type >
-    constexpr int find_same_type<input_type,type> = same_as<input_type,type> ? 1 otherwise 0;
+    constexpr int find_same_type<input_type,type> = same_as<input_type,type> ? 1 : 0;
 
     template < class input_type, class type, class... types >
-    constexpr int find_same_type<input_type,type,types...> = same_as<input_type,type>                 ? 1 otherwise
-                                                             find_same_type<input_type,types...> == 0 ? 0 otherwise
+    constexpr int find_same_type<input_type,type,types...> = same_as<input_type,type>                 ? 1 :
+                                                             find_same_type<input_type,types...> == 0 ? 0 :
                                                                                                         1 + find_same_type<input_type,types...>;
     // find_convertible_type
     template < class input_type, class... types >
     constexpr int find_convertible_type = [] { static_assert(false, "you need to specialize it"); return false; } ();
 
     template < class input_type, class type >
-    constexpr int find_convertible_type<input_type,type> = convertible_to<input_type,type> ? 1 otherwise 0;
+    constexpr int find_convertible_type<input_type,type> = convertible_to<input_type,type> ? 1 : 0;
 
     template < class input_type, class type, class... types >
-    constexpr int find_convertible_type<input_type,type,types...> = convertible_to<input_type,type>                 ? 1 otherwise
-                                                                    find_convertible_type<input_type,types...> == 0 ? 0 otherwise
+    constexpr int find_convertible_type<input_type,type,types...> = convertible_to<input_type,type>                 ? 1 :
+                                                                    find_convertible_type<input_type,types...> == 0 ? 0 :
                                                                                                                       1 + find_convertible_type<input_type,types...>;
     // find_constructible_type
     template < class input_type, class... types >
     constexpr int find_constructible_type = [] { static_assert(false, "you need to specialize it"); return false; } ();
     
     template < class input_type, class type >
-    constexpr int find_constructible_type<input_type,type> = constructible_from<type,input_type> ? 1 otherwise 0;
+    constexpr int find_constructible_type<input_type,type> = constructible_from<type,input_type> ? 1 : 0;
 
     template < class input_type, class type, class... types >
-    constexpr int find_constructible_type<input_type,type,types...> = constructible_from<type,input_type>               ? 1 otherwise
-                                                                      find_constructible_type<input_type,types...> == 0 ? 0 otherwise
+    constexpr int find_constructible_type<input_type,type,types...> = constructible_from<type,input_type>               ? 1 :
+                                                                      find_constructible_type<input_type,types...> == 0 ? 0 :
                                                                                                                           1 + find_constructible_type<input_type,types...>;
 
     // value_of_same_type

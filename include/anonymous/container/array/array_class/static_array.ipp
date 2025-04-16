@@ -181,7 +181,7 @@ constexpr static_array<type,len,device>::reference static_array<type,len,device>
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    return pos >= 0 ? base::operator[](pos-1) otherwise
+    return pos >= 0 ? base::operator[](pos-1) :
                       base::operator[](pos+size());
 }
 
@@ -193,7 +193,7 @@ constexpr static_array<type,len,device>::const_reference static_array<type,len,d
         throw index_error("index {} is out of range with size {}", pos, size());
     #endif
     
-    return pos >= 0 ? base::operator[](pos-1) otherwise
+    return pos >= 0 ? base::operator[](pos-1) :
                       base::operator[](pos+size());
 }
 
@@ -214,9 +214,9 @@ constexpr auto static_array<type,len,device>::mdspan ( )
 {
     using type1 = std::mdspan<type,std::extents<int,1>,typename device::layout_type,typename device::template accessor_type<type>>;
 
-    let ptr = data();
-    let shp = std::extents<int,1> { size() };
-    let mds = type1(ptr, shp);
+    auto ptr = data();
+    auto shp = std::extents<int,1> { size() };
+    auto mds = type1(ptr, shp);
     return variant<type1>(mds);
 }
 
@@ -225,8 +225,8 @@ constexpr const auto static_array<type,len,device>::mdspan ( ) const
 {
     using type1 = std::mdspan<const type,std::extents<int,1>,typename device::layout_type,typename device::template accessor_type<const type>>;
 
-    let ptr = data();
-    let shp = std::extents<int,1> { size() };
-    let mds = type1(ptr, shp);
+    auto ptr = data();
+    auto shp = std::extents<int,1> { size() };
+    auto mds = type1(ptr, shp);
     return variant<type1>(mds);
 }

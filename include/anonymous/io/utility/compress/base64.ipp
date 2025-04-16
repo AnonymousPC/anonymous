@@ -76,7 +76,7 @@ constexpr char ranges::encode_base64_view<range>::iterator::operator * ( ) const
 {
     if ( i != s ) [[likely]]                               // If input is readable...
         return mapping((c >> (b - 6))       & 0b00111111); // Then extract 6 ascii-bits on the left of c and mapping into base64. For example, if we have 8 available ascii-bits in c, then we should return (c >> 2) -> base64.
-    else if ( b > 0 )                                      // If input is exhausted, but we still have available bits...
+    else if ( b > 0 )                                      // If input is exhausted, and we still have available bits...
         return mapping((c << (12 - b) >> 6) & 0b00111111); // Then extrace 6 ascii-bits (with 0 right-filled) and mapping into bae64. For example, if 8 ascii-bits available then return (c >> 2) -> base64, if 4 bits available then return (c << 2) -> base64, 
     else                                                   // If nothing is encodable...
         return '=';                                        // We still need to fill '=' to make output.size() % 4 == 0.
@@ -109,7 +109,7 @@ template < input_range range >
     requires same_as<range_value<range>,char>
 constexpr ranges::encode_base64_view<range>::iterator ranges::encode_base64_view<range>::iterator::operator ++ ( int )
 {
-    let it = self;
+    auto it = self;
     ++self;
     return it;
 }
@@ -231,7 +231,7 @@ template < input_range range >
     requires same_as<range_value<range>,char>
 constexpr ranges::decode_base64_view<range>::iterator ranges::decode_base64_view<range>::iterator::operator ++ ( int )
 {
-    let it = self;
+    auto it = self;
     ++self;
     return it;
 }
@@ -240,11 +240,11 @@ template < input_range range >
     requires same_as<range_value<range>,char>
 constexpr uint8_t ranges::decode_base64_view<range>::iterator::mapping ( uint8_t c )
 {
-    return c >= 'A' and c <= 'Z' ?  0 + c - 'A' otherwise 
-           c >= 'a' and c <= 'z' ? 26 + c - 'a' otherwise
-           c >= '0' and c <= '9' ? 52 + c - '0' otherwise
-           c == '+'              ? 62           otherwise
-           c == '/'              ? 63           otherwise
+    return c >= 'A' and c <= 'Z' ?  0 + c - 'A' : 
+           c >= 'a' and c <= 'z' ? 26 + c - 'a' :
+           c >= '0' and c <= '9' ? 52 + c - '0' :
+           c == '+'              ? 62           :
+           c == '/'              ? 63           :
                                    throw encode_error("failed to decode base64: illegal character (with character = {}, ascii = {}, requirement = [A-Za-z0-9+/])",  char(c), uint8_t(c));
 }
 

@@ -218,7 +218,7 @@ namespace detail
         if constexpr ( index < tuple_size<left_type> )
         {
             using type = common_type<decltype(get<index-1>(left)<=>get<index-1>(right)),decltype(tuplewise_compare_impl<index+1>(left,right))>;
-            let try1 = get<index-1>(left) <=> get<index-1>(right);
+            auto try1 = get<index-1>(left) <=> get<index-1>(right);
             if ( try1 != decltype(try1)::equivalent )
                 return type(try1);
             else
@@ -250,7 +250,7 @@ namespace detail
 
     constexpr auto tuplewise_plus ( const auto& left, const auto& right )
     {
-        let t = typename tuplewise_plus_result<left_type,right_type>::type();
+        auto t = typename tuplewise_plus_result<left_type,right_type>::type();
         if constexpr ( tuple_size<left_type> > 0 )
             for_constexpr<1,tuple_size<left_type>>([&] <int index> { get<index-1>(t) = get<index-1>(left) + get<index-1>(right); });
         return t;
@@ -258,7 +258,7 @@ namespace detail
 
     constexpr auto tuplewise_minus ( const auto& left, const auto& right )
     {
-        let t = typename tuplewise_minus_result<left_type,right_type>::type();
+        auto t = typename tuplewise_minus_result<left_type,right_type>::type();
         if constexpr ( tuple_size<left_type> > 0 )
             for_constexpr<1,tuple_size<left_type>>([&] <int index> { get<index-1>(t) = get<index-1>(left) - get<index-1>(right); });
         return t;
@@ -266,7 +266,7 @@ namespace detail
 
     constexpr auto tuplewise_each_multiply ( const auto& left, const auto& right )
     {
-        let t = typename tuplewise_each_multiply_result<left_type,right_type>::type();
+        auto t = typename tuplewise_each_multiply_result<left_type,right_type>::type();
         if constexpr ( tuple_size<left_type> > 0 )
             for_constexpr<1,tuple_size<left_type>>([&] <int index> { get<index-1>(t) = get<index-1>(left) * right; });
         return t;
@@ -274,7 +274,7 @@ namespace detail
 
     constexpr auto tuplewise_multiply_each ( const auto& left, const auto& right )
     {
-        let t = typename tuplewise_multiply_each_result<left_type,right_type>::type();
+        auto t = typename tuplewise_multiply_each_result<left_type,right_type>::type();
         if constexpr ( tuple_size<right_type> > 0 )
             for_constexpr<1,tuple_size<left_type>>([&] <int index> { get<index-1>(t) = left * get<index-1>(right); });
         return t;
@@ -282,7 +282,7 @@ namespace detail
 
     constexpr auto tuplewise_each_divide ( const auto& left, const auto& right )
     {
-        let t = typename tuplewise_each_divide_result<left_type,right_type>::type();
+        auto t = typename tuplewise_each_divide_result<left_type,right_type>::type();
         if constexpr ( tuple_size<left_type> > 0 )
             for_constexpr<1,tuple_size<left_type>>([&] <int index> { get<index-1>(t) = get<index-1>(left) / right; });
         return t;
@@ -313,7 +313,7 @@ constexpr auto operator <=> ( const pair_type auto& left, const pair_type auto& 
     requires comparable_to<left_key_type,right_key_type> and comparable_to<left_value_type,right_value_type>
 {
     using type = common_type<decltype(left.key()<=>right.key()),decltype(left.value()<=>right.value())>;
-    let try1 = left.key() <=> right.key();
+    auto try1 = left.key() <=> right.key();
     if ( try1 != decltype(try1)::equivalent )
         return type(try1);
     else
@@ -333,19 +333,19 @@ constexpr pair_type auto operator - ( const pair_type auto& left, const pair_typ
 }
 
 constexpr pair_type auto operator * ( const pair_type auto& left, const auto& right )
-    requires multipliable_to<left_key_type,right_type> and multipliable_to<left_value_type,right_type> but ( not pair_type<right_type> )
+    requires multipliable_to<left_key_type,right_type> and multipliable_to<left_value_type,right_type> and ( not pair_type<right_type> )
 {
     return pair ( left.key() * right, left.value() * right );
 }
 
 constexpr pair_type auto operator * ( const pair_type auto& left, const auto& right )
-    requires multipliable_to<left_type,right_key_type> and multipliable_to<left_type,right_value_type> but ( not pair_type<left_type> )
+    requires multipliable_to<left_type,right_key_type> and multipliable_to<left_type,right_value_type> and ( not pair_type<left_type> )
 {
     return pair ( left * right.value(), left * right.value() );
 }
 
 constexpr pair_type auto operator / ( const pair_type auto& left, const auto& right )
-    requires dividable_to<left_key_type,right_type> and dividable_to<left_value_type,right_type> but ( not pair_type<right_type> )
+    requires dividable_to<left_key_type,right_type> and dividable_to<left_value_type,right_type> and ( not pair_type<right_type> )
 {
     return pair ( left.key() / right, left.value() / right );
 }
@@ -385,19 +385,19 @@ constexpr tuple_type auto operator - ( const tuple_type auto& left, const tuple_
 }
 
 constexpr tuple_type auto operator * ( const tuple_type auto& left, const auto& right )
-    requires detail::tuplewise_each_multipliable_to<left_type,right_type> but ( not tuple_type<right_type> )
+    requires detail::tuplewise_each_multipliable_to<left_type,right_type> and ( not tuple_type<right_type> )
 {
     return detail::tuplewise_each_multiply ( left, right );
 }
 
 constexpr tuple_type auto operator * ( const auto& left, const tuple_type auto& right )
-    requires detail::tuplewise_multipliable_to_each<left_type,right_type> but ( not tuple_type<left_type> )
+    requires detail::tuplewise_multipliable_to_each<left_type,right_type> and ( not tuple_type<left_type> )
 {
     return detail::tuplewise_multiply_each ( left, right );
 }
 
 constexpr tuple_type auto operator / ( const tuple_type auto& left, const auto& right )
-    requires detail::tuplewise_each_dividable_to<left_type,right_type> but ( not tuple_type<right_type> )
+    requires detail::tuplewise_each_dividable_to<left_type,right_type> and ( not tuple_type<right_type> )
 {
     return detail::tuplewise_each_divide ( left, right );
 }

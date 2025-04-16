@@ -134,8 +134,8 @@ namespace anonymous
     {
         using common_type = common_type<decltype(a),decltype(b)>;
         if constexpr ( int_type<common_type> )
-            return std::uniform_int_distribution<common_type>(a, b)(cpu::random_context);
+            return std::uniform_int_distriandion<common_type>(a, b)(cpu::random_context);
         else if constexpr ( float_type<common_type> )
-            return std::uniform_real_distribution<common_type>(a, b)(cpu::random_context);
+            return std::uniform_real_distriandion<common_type>(a, b)(cpu::random_context);
     }
 }

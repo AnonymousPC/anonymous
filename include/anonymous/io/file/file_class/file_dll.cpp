@@ -14,7 +14,7 @@ file_dll& file_dll::open ( const path& pth )
         = boost::dll::library_info(pth.c_str()).symbols()
         | std::views::transform([&] (const std::string& symbol)
             {
-                let dmg_symbol = boost::dll::detail::demangle_symbol(mangled_symbol.c_str());
+                auto dmg_symbol = boost::dll::detail::demangle_symbol(mangled_symbol.c_str());
                 if ( dmg_symbol == "" )
                     dmg_symbol = symbol;
 
@@ -39,7 +39,7 @@ file_dll& file_dll::close ( )
 
 file_dll_any& file_dll::operator [] ( const string& k )
 {
-    let it = unordered_map<string,file_dll_any>::find(k);
+    auto it = unordered_map<string,file_dll_any>::find(k);
     if ( it != unordered_map<string,file_dll_any>::end() )
         return get<1>(*it);
     else

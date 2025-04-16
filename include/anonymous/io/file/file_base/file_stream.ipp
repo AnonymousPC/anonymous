@@ -19,12 +19,12 @@ file_stream& file_stream::open ( path pth, file_mode auto... args )
         std::fstream::open(pth.c_str(), std::ios::in | std::ios::out | std::ios::binary);
     else
     {
-        let open_mode = std::ios_base::openmode();
+        auto open_mode = std::ios_base::openmode();
 
-        open_mode |= detail::value_of_same_type_or<read_only >(args..., read_only ()).value ? std::ios::in    otherwise std::ios_base::openmode();
-        open_mode |= detail::value_of_same_type_or<write_only>(args..., write_only()).value ? std::ios::out   otherwise std::ios_base::openmode();
-        open_mode |= detail::value_of_same_type_or<erase     >(args..., erase     ()).value ? std::ios::trunc otherwise std::ios_base::openmode();
-        open_mode |= detail::value_of_same_type_or<append    >(args..., append    ()).value ? std::ios::app   otherwise std::ios_base::openmode();
+        open_mode |= detail::value_of_same_type_or<read_only >(args..., read_only ()).value ? std::ios::in    : std::ios_base::openmode();
+        open_mode |= detail::value_of_same_type_or<write_only>(args..., write_only()).value ? std::ios::out   : std::ios_base::openmode();
+        open_mode |= detail::value_of_same_type_or<erase     >(args..., erase     ()).value ? std::ios::trunc : std::ios_base::openmode();
+        open_mode |= detail::value_of_same_type_or<append    >(args..., append    ()).value ? std::ios::app   : std::ios_base::openmode();
 
         if ( open_mode & std::ios::in and open_mode & std::ios::out )
             throw file_error("conflicting settings: read_only == true and write_only == true");

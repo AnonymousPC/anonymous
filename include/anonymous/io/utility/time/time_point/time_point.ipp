@@ -150,10 +150,10 @@ constexpr std::ostream& operator << ( std::ostream& left, const time_point& righ
 
 constexpr time_point operator + ( const time_point& left, const duration& right )
 {
-    let dur = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+    auto dur = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
               duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond()) +
               right;
-    let dt = detail::int_to_date(dur.hour() / 24);
+    auto dt = detail::int_to_date(dur.hour() / 24);
     dur.hour() %= 24;
 
     return time_point(dt.template value<1>(), dt.template value<2>(), dt.template value<3>(), dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
@@ -161,10 +161,10 @@ constexpr time_point operator + ( const time_point& left, const duration& right 
 
 constexpr time_point operator + ( const duration& left, const time_point& right )
 {
-    let dur = left +
+    auto dur = left +
               hour(detail::date_to_int({right.year(), right.month(), right.day()})) * 24 +
               duration(right.hour(), right.minute(), right.second(), right.millisecond(), right.microsecond(), right.nanosecond());
-    let dt = detail::int_to_date(dur.hour() / 24);
+    auto dt = detail::int_to_date(dur.hour() / 24);
     dur.hour() %= 24;
 
     return time_point(dt.template value<1>(), dt.template value<2>(), dt.template value<3>(), dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
@@ -172,9 +172,9 @@ constexpr time_point operator + ( const duration& left, const time_point& right 
 
 constexpr duration operator - ( const time_point& left, const time_point& right )
 {
-    let dur1 = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+    auto dur1 = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
                duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond());
-    let dur2 = hour(detail::date_to_int({right.year(), right.month(), right.day()})) * 24 +
+    auto dur2 = hour(detail::date_to_int({right.year(), right.month(), right.day()})) * 24 +
                duration(right.hour(), right.minute(), right.second(), right.millisecond(), right.microsecond(), right.nanosecond());
 
     return dur1 - dur2;
@@ -182,10 +182,10 @@ constexpr duration operator - ( const time_point& left, const time_point& right 
 
 constexpr time_point operator - ( const time_point& left, const duration& right )
 {
-    let dur = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
+    auto dur = hour(detail::date_to_int({left.year(), left.month(), left.day()})) * 24 +
               duration(left.hour(), left.minute(), left.second(), left.millisecond(), left.microsecond(), left.nanosecond()) -
               right;
-    let dt = detail::int_to_date(dur.hour() / 24);
+    auto dt = detail::int_to_date(dur.hour() / 24);
     dur.hour() %= 24;
 
     return time_point(dt.template value<1>(), dt.template value<2>(), dt.template value<3>(), dur.hour(), dur.minute(), dur.second(), dur.millisecond(), dur.microsecond(), dur.nanosecond());
@@ -205,14 +205,14 @@ constexpr int detail::date_to_int ( tuple<int,int,int> date )
 {
     using namespace literals;
 
-    let [y, m, d] = date;
+    auto [y, m, d] = date;
 
     return + y * 365                                                                                        // Count normal year  from 0000 to y-1.
-           + ( y == 0 ? 0 otherwise ( ( y - 1 ) / 4 - ( y - 1 ) / 100 + ( y - 1 ) / 400 + 1 ) )             // Count leap   year  from 0000 to y-1.
+           + ( y == 0 ? 0 : ( ( y - 1 ) / 4 - ( y - 1 ) / 100 + ( y - 1 ) / 400 + 1 ) )             // Count leap   year  from 0000 to y-1.
 
            + ( m - 1 ) * 31                                                                                 // Count approx month from 1    to m-1.
-           + ( m <= 2 ? 0 otherwise ( y % 4 != 0 or ( y % 100 == 0 but y % 400 != 0 ) ) ? -2 otherwise -1 ) // Count leap   month from 1    to m-1. Here only converts 28/29 to 30.
-           + ( m <= 8 ? - ( m - 1 ) / 2 otherwise - ( m - 2 ) / 2 )                                         // Count 30-day month from 1    to m-1.
+           + ( m <= 2 ? 0 : ( y % 4 != 0 or ( y % 100 == 0 and y % 400 != 0 ) ) ? -2 : -1 ) // Count leap   month from 1    to m-1. Here only converts 28/29 to 30.
+           + ( m <= 8 ? - ( m - 1 ) / 2 : - ( m - 2 ) / 2 )                                         // Count 30-day month from 1    to m-1.
 
            + d * 1                                                                                          // Count day from 1 to d.
 
@@ -221,31 +221,31 @@ constexpr int detail::date_to_int ( tuple<int,int,int> date )
 
 constexpr tuple<int,int,int> detail::int_to_date ( int days )
 {
-    let y_400      = days / ( 303*365+97*366 ); // Chunk by 400 years.
-    let y_400_more = days % ( 303*365+97*366 ); // Chunk by 400 years.
+    auto y_400      = days / ( 303*365+97*366 ); // Chunk by 400 years.
+    auto y_400_more = days % ( 303*365+97*366 ); // Chunk by 400 years.
 
-    let y_100      = ( y_400_more - 1 ) / ( 76*365+24*366 ); // As the first 100 years has 1 day more in 0000, minus it.
-    let y_100_more = ( y_400_more - 1 ) % ( 76*365+24*366 ) + ( y_100 == 0 ? 1 otherwise 0 ); // If is the first 100 years, add the 1 day back.
+    auto y_100      = ( y_400_more - 1 ) / ( 76*365+24*366 ); // As the first 100 years has 1 day more in 0000, minus it.
+    auto y_100_more = ( y_400_more - 1 ) % ( 76*365+24*366 ) + ( y_100 == 0 ? 1 : 0 ); // If is the first 100 years, add the 1 day back.
 
-    let y_4        = ( y_100_more + ( y_100 == 0 ? 0 otherwise 1 ) ) / ( 3*365+366 ); // If in the first 100 years, only chunk by 4 years; otherwise make up 1 day.
-    let y_4_more   = ( y_100_more + ( y_100 == 0 ? 0 otherwise 1 ) ) % ( 3*365+366 ) - ( y_100 != 0 and y_4 == 0 ? 1 otherwise 0 ); // Only in 0100-0103, 0200-0203, 0300-0303 you need to minus 1.
+    auto y_4        = ( y_100_more + ( y_100 == 0 ? 0 : 1 ) ) / ( 3*365+366 ); // If in the first 100 years, only chunk by 4 years; : make up 1 day.
+    auto y_4_more   = ( y_100_more + ( y_100 == 0 ? 0 : 1 ) ) % ( 3*365+366 ) - ( y_100 != 0 and y_4 == 0 ? 1 : 0 ); // Only in 0100-0103, 0200-0203, 0300-0303 you need to minus 1.
 
-    let y_1        = ( y_4_more - ( y_100 == 0 or y_4 != 0 ? 1 otherwise 0 ) ) / 365; // In 4-year which contains leap years, turn 366 into 365 vice versa.
-    let y_1_more   = ( y_4_more - ( y_100 == 0 or y_4 != 0 ? 1 otherwise 0 ) ) % 365 + ( ( y_100 == 0 or y_4 != 0 ) and y_1 == 0 ? 1 otherwise 0 ); // In first year of leap year you should add 1 back.
+    auto y_1        = ( y_4_more - ( y_100 == 0 or y_4 != 0 ? 1 : 0 ) ) / 365; // In 4-year which contains leap years, turn 366 into 365 vice versa.
+    auto y_1_more   = ( y_4_more - ( y_100 == 0 or y_4 != 0 ? 1 : 0 ) ) % 365 + ( ( y_100 == 0 or y_4 != 0 ) and y_1 == 0 ? 1 : 0 ); // In first year of leap year you should add 1 back.
 
-    let y          = y_400 * 400 + y_100 * 100 + y_4 * 4 + y_1; // Accumulate year.
+    auto y          = y_400 * 400 + y_100 * 100 + y_4 * 4 + y_1; // Accumulate year.
 
-    let is_leap    = y_1 == 0 and ( y_100 == 0 or y_4 != 0 ); // Judge lear year.
+    auto is_leap    = y_1 == 0 and ( y_100 == 0 or y_4 != 0 ); // Judge lear year.
 
     int m = 1;
-    let d = y_1_more + 1; // As first day refers to xxxx.01.01.
+    auto d = y_1_more + 1; // As first day refers to xxxx.01.01.
 
-    let month_day  = [&] { return m >= 8  ? m % 2 == 0 ? 31 otherwise 30 otherwise
-                                  m != 2  ? m % 2 != 0 ? 31 otherwise 30 otherwise
-                                  is_leap ?              29 otherwise 28; };
+    auto month_day  = [&] { return m >= 8  ? m % 2 == 0 ? 31 : 30 :
+                                  m != 2  ? m % 2 != 0 ? 31 : 30 :
+                                  is_leap ?              29 : 28; };
     while ( true )
     {
-        let md = month_day();
+        auto md = month_day();
         if ( d > md )
         {
             d -= md;

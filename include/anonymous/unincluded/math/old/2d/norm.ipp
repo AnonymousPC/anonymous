@@ -7,7 +7,7 @@ constexpr /*value_type*/ auto norm ( const array_type auto& matrix )
     if constexpr ( num == 1 )
     {
         using number_type = decltype(complex(matrix_value_type()))::value_type;
-        return array<number_type>(matrix.column(), [&] (int j) { let s = number_type(0); for ( int i in range(matrix.row()) ) s += abs(matrix[i][j]); return s; }) .max();
+        return array<number_type>(matrix.column(), [&] (int j) { auto s = number_type(0); for ( int i in range(matrix.row()) ) s += abs(matrix[i][j]); return s; }) .max();
     }
 
     else if constexpr ( num == 2 )

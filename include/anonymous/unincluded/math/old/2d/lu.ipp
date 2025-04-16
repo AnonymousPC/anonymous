@@ -8,7 +8,7 @@ constexpr tuple_type auto lu ( const array_type auto& matrix )
     else
         try
         {
-            let solver = Eigen::PartialPivLU<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix));
+            auto solver = Eigen::PartialPivLU<decltype(aux::to_eigen(matrix))>(aux::to_eigen(matrix));
             return tuple ( aux::from_eigen(Eigen::Matrix<typename decltype(aux::to_eigen(matrix))::Scalar,Eigen::Dynamic,Eigen::Dynamic>(solver.matrixLU().template triangularView<Eigen::Lower>())),
                            aux::from_eigen(Eigen::Matrix<typename decltype(aux::to_eigen(matrix))::Scalar,Eigen::Dynamic,Eigen::Dynamic>(solver.matrixLU().template triangularView<Eigen::Upper>())),
                            aux::from_eigen(solver.permutationP().toDenseMatrix()) );

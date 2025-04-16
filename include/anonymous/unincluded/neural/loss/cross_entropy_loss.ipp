@@ -44,7 +44,7 @@ template < array_type type >
 constexpr typename cross_entropy_loss<type>::value_type cross_entropy_loss<type>::value ( ) const
 {
     static_assert(false, "not coded yet");
-//    let loss = value_type(0);
+//    auto loss = value_type(0);
 //    for ( int i in range(from().size()) )
 //        if constexpr ( type::dimension() == 1 )
 //            loss += to()[i] * ln(from()[i]);

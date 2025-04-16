@@ -69,7 +69,7 @@ constexpr type queue<type,device>::pop ( )
         return base::pop();
     else
     {
-        let poped = type(std::move(front()));
+        auto poped = type(std::move(front()));
         base::pop();
         return poped;
     }

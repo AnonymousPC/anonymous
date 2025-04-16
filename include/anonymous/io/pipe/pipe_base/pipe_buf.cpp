@@ -50,7 +50,7 @@ int pipe_buf::underflow ( )
         stderr_buff.resize(default_buffer_size);
 
     // Post task.
-    let stdout_error = boost::system::error_code();
+    auto stdout_error = boost::system::error_code();
     stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
@@ -64,7 +64,7 @@ int pipe_buf::underflow ( )
                                     else
                                         stdout_error = error;
                                 });
-    let stderr_error = boost::system::error_code();
+    auto stderr_error = boost::system::error_code();
     stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
                                 [&] (const boost::system::error_code& error, std::size_t bytes)
                                 {
@@ -89,7 +89,7 @@ int pipe_buf::underflow ( )
         return traits_type::eof();
     else
     {
-        let errpool = vector<detail::system_error>{detail::system_error(boost::system::system_error(stdout_error)), detail::system_error(boost::system::system_error(stderr_error))};
+        auto errpool = vector<detail::system_error>{detail::system_error(boost::system::system_error(stdout_error)), detail::system_error(boost::system::system_error(stderr_error))};
         throw pipe_error("read data failed (with process_id = {}, pipe = [stdout, stderr])", process_id_noexcept()).from(detail::all_attempts_failed(errpool));
     }
 }

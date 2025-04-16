@@ -18,7 +18,7 @@ const boost::compute::device& opencl_queue_context::device ( )
 
 boost::compute::command_queue& opencl_queue_context::command_queue ( )
 {
-    thread_local let que = [] -> std::optional<boost::compute::command_queue> { try { return boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device()); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
+    thread_local auto que = [] -> std::optional<boost::compute::command_queue> { try { return boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device()); } catch ( const boost::compute::no_device_found& ) { return std::nullopt; } } ();
     if ( que.has_value() ) [[likely]]
         return que.value();
     else
@@ -58,7 +58,7 @@ void opencl_queue_context::enqueue ( execpools::task_base* task, std::uint32_t t
         try
         {
             // TODO: I currently have no environment to check it.
-            static let que = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
+            static auto que = boost::compute::command_queue(boost::compute::system::default_context(), boost::compute::system::default_device());
             que.enqueue_native_kernel(enqueue_callback, new task_type(task, tid), sizeof(task_type), 0, 0, 0);
             que.flush();
         }
@@ -79,7 +79,7 @@ void opencl_queue_context::enqueue ( execpools::task_base* task, std::uint32_t t
 
 BOOST_COMPUTE_CL_CALLBACK void opencl_queue_context::enqueue_callback ( void* args )
 {
-    let ptr = static_cast<task_type*>(args);
+    auto ptr = static_cast<task_type*>(args);
     ptr->task->__execute(ptr->task, /*tid=*/ptr->tid);
 }
 

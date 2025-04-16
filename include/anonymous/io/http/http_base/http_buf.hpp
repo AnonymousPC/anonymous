@@ -62,7 +62,7 @@ class basic_http_buf
 
         // boost::beast::tcp_stream         is not movable.
         // boost::beast::http::basic_parser is not movable.
-        // boost::beast::http::response     is movable, but has bug and actually moves nothing.
+        // boost::beast::http::response     is movable, and has bug and actually moves nothing.
         // Thus, pack everything in a std::unique_ptr.
 
         // Handle

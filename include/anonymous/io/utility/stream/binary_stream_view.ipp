@@ -85,7 +85,7 @@ constexpr ranges::binary_ostream_view<output_type,endian>::binary_ostream_view (
             s.write(reinterpret_cast<const char*>(&e), sizeof(output_type));
         else
         {
-            let e2 = e;
+            auto e2 = e;
             detail::byteswap(e2);
             s.write(reinterpret_cast<const char*>(&e2), sizeof(output_type));
         }

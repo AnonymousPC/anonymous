@@ -18,7 +18,7 @@ path create_file ( const path& p )
 
     try
     {
-        let stream = std::ofstream();
+        auto stream = std::ofstream();
         stream.exceptions(std::ios::failbit);
         stream.open(std::filesystem::path(p), std::ios::binary);
     }
@@ -414,8 +414,8 @@ intmax_t size_of_directory ( const path& p )
 
     try
     {
-        let pathes = std::filesystem::recursive_directory_iterator(std::filesystem::path(p));
-        let files  = pathes | std::views::filter([] (const auto& pth) { return std::filesystem::is_regular_file(pth); });
+        auto pathes = std::filesystem::recursive_directory_iterator(std::filesystem::path(p));
+        auto files  = pathes | std::views::filter([] (const auto& pth) { return std::filesystem::is_regular_file(pth); });
         return std::accumulate ( files.begin(), files.end(), intmax_t(0), [] (const auto& a, const auto& b) { return a + std::filesystem::file_size(b); } );
     }
     catch ( const std::filesystem::filesystem_error& e )

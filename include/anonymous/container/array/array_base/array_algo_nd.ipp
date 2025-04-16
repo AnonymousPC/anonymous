@@ -121,10 +121,10 @@ constexpr container& array_algo<container,type,dim,device>::rotate ( int n )
     #endif
 
     if constexpr ( axis == 1 or axis == -dim )
-        n > 0 ? device::rotate(begin(), end() - n, end()) otherwise
+        n > 0 ? device::rotate(begin(), end() - n, end()) :
                 device::rotate(begin(), begin() - n, end());
     else if constexpr ( axis == -1 or axis == dim )
-        n > 0 ? device::rotate(transpose().begin(), transpose().end() - n, transpose().end()) otherwise
+        n > 0 ? device::rotate(transpose().begin(), transpose().end() - n, transpose().end()) :
                 device::rotate(transpose().begin(), transpose().begin() - n, transpose().end());
     else
         if constexpr ( axis > 0 )

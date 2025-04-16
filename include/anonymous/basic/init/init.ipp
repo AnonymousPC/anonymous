@@ -84,7 +84,7 @@ detail::basic_initializer_t::basic_initializer_t ( )
     // Stack-overflow.posix
     #if defined(SIGSTKSZ) and defined(SA_ONSTACK)
     stack_t ss;
-    ss.ss_sp    = malloc(SIGSTKSZ);
+    ss.ss_sp    = new char[SIGSTKSZ] {};
     ss.ss_size  = SIGSTKSZ;
     ss.ss_flags = 0;
     sigaltstack(&ss, nullptr);

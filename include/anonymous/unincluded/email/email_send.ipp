@@ -10,7 +10,7 @@ struct email_send::bcc        extends public detail::io_mode<array<string>> { us
 struct email_send::title      extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
 struct email_send::data       extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
 struct email_send::attachment extends public detail::io_mode<array<string>> { using detail::io_mode<array<string>>::io_mode; struct email_mode_tag { }; };
-// Must use array<string> instead of array<path>, because "utility/io_mode.hpp" instantiates "array<path>" but is included before "file/path.hpp". 
+// Must use array<string> instead of array<path>, because "utility/io_mode.hpp" instantiates "array<path>" and is included before "file/path.hpp". 
 
 email_send::email_send ( email_mode auto... args )
 {
@@ -25,52 +25,52 @@ email_send::email_send ( email_mode auto... args )
                     "you must choose at least one receiver" );
     static_assert ( detail::all_different<decltype(args)...>,
                     "duplicated params" );
-    let email_server   = index_value_of<detail::find_same_type<server,  decltype(args)...>>(args...).value;
-    let email_username = index_value_of<detail::find_same_type<username,decltype(args)...>>(args...).value;
-    let email_password = index_value_of<detail::find_same_type<password,decltype(args)...>>(args...).value;
-    let email_from = [&] -> string
+    auto email_server   = index_value_of<detail::find_same_type<server,  decltype(args)...>>(args...).value;
+    auto email_username = index_value_of<detail::find_same_type<username,decltype(args)...>>(args...).value;
+    auto email_password = index_value_of<detail::find_same_type<password,decltype(args)...>>(args...).value;
+    auto email_from = [&] -> string
         {
             if constexpr ( ( same_as<from,decltype(args)> or ... ) ) 
                 return index_value_of<detail::find_same_type<from,decltype(args)...>>(args...).value;
             else
                 return email_username;
         } ();
-    let email_to = [&] -> array<string>
+    auto email_to = [&] -> array<string>
         {
             if constexpr ( ( same_as<to,decltype(args)> or ... ) ) 
                 return index_value_of<detail::find_same_type<to,decltype(args)...>>(args...).value;
             else
                 return {};
         } ();
-    let email_cc = [&] -> array<string>
+    auto email_cc = [&] -> array<string>
         {
             if constexpr ( ( same_as<cc,decltype(args)> or ... ) ) 
                 return index_value_of<detail::find_same_type<cc,decltype(args)...>>(args...).value;
             else
                 return {};
         } ();
-    let email_bcc = [&] -> array<string>
+    auto email_bcc = [&] -> array<string>
         {
             if constexpr ( ( same_as<bcc,decltype(args)> or ... ) ) 
                 return index_value_of<detail::find_same_type<bcc,decltype(args)...>>(args...).value;
             else
                 return {};
         } ();
-    let email_title = [&] -> string
+    auto email_title = [&] -> string
         {
             if constexpr ( ( same_as<title,decltype(args)> or ... ) ) 
                 return index_value_of<detail::find_same_type<title,decltype(args)...>>(args...).value;
             else
                 return "";
         } ();
-    let email_data = [&] -> string
+    auto email_data = [&] -> string
         {
             if constexpr ( ( same_as<data,decltype(args)> or ... ) ) 
                 return index_value_of<detail::find_same_type<data,decltype(args)...>>(args...).value;
             else
                 return "";
         } ();
-    let email_attachment = [&] -> array<path>
+    auto email_attachment = [&] -> array<path>
         {
             if constexpr ( ( same_as<attachment,decltype(args)> or ... ) ) 
                 return index_value_of<detail::find_same_type<attachment,decltype(args)...>>(args...).value | std::ranges::to<array<path>>();
@@ -83,7 +83,7 @@ email_send::email_send ( email_mode auto... args )
         throw logic_error("send an email with no receivers (with to = {}, cc = {}, bcc = {})", email_to, email_cc, email_bcc);
 
     // Send email.
-    let stream = ssl_stream();
+    auto stream = ssl_stream();
     stream.connect(email_server);
 
     stream << "ehlo localhost\r\n"
@@ -94,8 +94,8 @@ email_send::email_send ( email_mode auto... args )
            <</*rcpt to:<{}>\r\n*/"{}"s                              .format(array<array<string>>{email_to, email_cc, email_bcc} | std::views::join | std::ranges::to<set<string>>() | std::views::transform([] (const auto& rcpt) { return "rcpt to:<{}>\r\n"s.format(rcpt); }) | std::views::join | std::ranges::to<string>())
            << "data\r\n"
            << "From: {}\r\n"s                                       .format(email_from)
-           << "To: {}\r\n"s                                         .format(email_to.empty() ? "" otherwise email_to | std::views::join_with(", "s) | std::ranges::to<string>())
-           << "Cc: {}\r\n"s                                         .format(email_cc.empty() ? "" otherwise email_cc | std::views::join_with(", "s) | std::ranges::to<string>())
+           << "To: {}\r\n"s                                         .format(email_to.empty() ? "" : email_to | std::views::join_with(", "s) | std::ranges::to<string>())
+           << "Cc: {}\r\n"s                                         .format(email_cc.empty() ? "" : email_cc | std::views::join_with(", "s) | std::ranges::to<string>())
            << "Subject: {}\r\n"s                                    .format(email_title)
            << "MIME-Version: 1.0\r\n"
            << "Content-Type: multipart/mixed; boundary=boundary\r\n"
@@ -115,7 +115,7 @@ email_send::email_send ( email_mode auto... args )
                << "Content-Transfer-Encoding: base64\r\n"
                << "Content-Disposition: attachment; filename=\"{}\"\r\n"s   .format(atc)
                << "\r\n";
-        let attach_stream = file_stream(atc, file_stream::read_only(true));
+        auto attach_stream = file_stream(atc, file_stream::read_only(true));
         views::binary_istream<char>(attach_stream)
             | views::encode_base64
             | std::ranges::to<views::binary_ostream<char>>(std::ref(stream)); stream << "\r\n";
@@ -129,8 +129,8 @@ email_send::email_send ( email_mode auto... args )
            << std::flush;
 
     // Check response.
-    let line_count = 1;
-    let response   = vector<string>();
+    auto line_count = 1;
+    auto response   = vector<string>();
     try
     {
         std::ranges::for_each(
@@ -139,10 +139,10 @@ email_send::email_send ( email_mode auto... args )
                 | std::views::lazy_split('\n'),
             [&] (const auto& line)
                 {
-                    let str = line | std::ranges::to<string>();
+                    auto str = line | std::ranges::to<string>();
                     if ( str.size() >= 4 and str[1,3].is_digit() and str[4,4].is_space() )
                         line_count++;
-                    response.push(std::move(not str.ends_with('\r') ? str otherwise str.pop()));
+                    response.push(std::move(not str.ends_with('\r') ? str : str.pop()));
                 }
         );
     }

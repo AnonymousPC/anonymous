@@ -1,10 +1,16 @@
 #pragma once
 
-class print_t
+namespace detail
 {
-    public:
-        constexpr static void operator() ( );
-        constexpr static void operator() ( const printable auto&, const printable auto&... );
-};
+    class print_t
+    {
+        public:
+            constexpr static void operator() ( );
+            constexpr static void operator() ( const printable auto&, const printable auto&... );
+    };
+     
+} // namespace deteail
+
+
 
 #include "print.ipp"

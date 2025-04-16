@@ -51,7 +51,7 @@ constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::clea
 template < class type, class hash, class device >
 constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::push ( type k )
 {
-    let result = base::insert(k);
+    auto result = base::insert(k);
     if ( result.second == true )
         return self;
     else
@@ -61,7 +61,7 @@ constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::push
 template < class type, class hash, class device >
 constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::pop ( const type& k )
 {
-    let pop_count = base::erase(k);
+    auto pop_count = base::erase(k);
     if ( pop_count >= 1 )
         return self;
     else

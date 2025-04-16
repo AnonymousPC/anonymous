@@ -1,24 +1,5 @@
-In file included from include/anonymous/basic/module.cppm:59:
-In file included from include/anonymous/basic/device/device.hpp:3:
-[1minclude/anonymous/basic/device/cpu/cpu.hpp:6:40: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'exec'[0m
-    6 |         using execution_context_type = exec::static_thread_pool;[0m
-      | [0;1;32m                                       ^
-[0m[1minclude/anonymous/basic/device/cpu/cpu.hpp:7:23: [0m[0;1;31merror: [0m[1munknown type name 'execution_context_type'; did you mean 'boost::asio::execution_context'?[0m
-    7 |         inline static execution_context_type execution_context = execution_context_type(1);[0m
-      | [0;1;32m                      ^~~~~~~~~~~~~~~~~~~~~~
-[0m      | [0;32m                      boost::asio::execution_context
-[0m[1m/opt/homebrew/include/boost/asio/detail/handler_tracking.hpp:23:7: [0m[0;1;36mnote: [0m'boost::asio::execution_context' declared here[0m
-   23 | class execution_context;[0m
-      | [0;1;32m      ^
-[0mIn file included from include/anonymous/basic/module.cppm:59:
-In file included from include/anonymous/basic/device/device.hpp:3:
-[1minclude/anonymous/basic/device/cpu/cpu.hpp:7:66: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'execution_context_type'; did you mean 'boost::asio::execution_context'?[0m
-    7 |         inline static execution_context_type execution_context = execution_context_type(1);[0m
-      | [0;1;32m                                                                 ^
-[0m[1m/opt/homebrew/include/boost/asio/detail/handler_tracking.hpp:23:7: [0m[0;1;36mnote: [0m'boost::asio::execution_context' declared here[0m
-   23 | class execution_context;[0m
-      | [0;1;32m      ^
-[0m[1minclude/anonymous/basic/module.cppm:64:25: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'exec'[0m
-   64 |     inline              exec::static_thread_pool& execution_context = cpu::execution_context;[0m
-      | [0;1;32m                        ^
-[0m4 errors generated.
+ld64.lld: error: duplicate symbol: main
+>>> defined in /Users/anonymous/Code/anonymous/main.cpp
+>>>            bin/debug/main.o
+>>> defined in bin/debug/main.o
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)

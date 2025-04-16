@@ -36,9 +36,9 @@ class cpu::stride_pointer
         friend constexpr stride_pointer       operator  -  ( const stride_pointer& left,       difference_type right ) { return stride_pointer(left .ptr - left .step * right, left .step); }
         friend constexpr difference_type      operator  -  ( const stride_pointer& left, const stride_pointer& right ) { [[assume(left.step == right.step)]]; return (left.ptr - right.ptr) / left.step; }
         friend constexpr stride_pointer&      operator ++  (       stride_pointer& left                              ) { left.ptr += left.step;         return left; }
-        friend constexpr stride_pointer       operator ++  (       stride_pointer& left,       int                   ) { let it = left; ++left;         return it;   }
+        friend constexpr stride_pointer       operator ++  (       stride_pointer& left,       int                   ) { auto it = left; ++left;         return it;   }
         friend constexpr stride_pointer&      operator --  (       stride_pointer& left                              ) { left.ptr -= left.step;         return left; }
-        friend constexpr stride_pointer       operator --  (       stride_pointer& left,       int                   ) { let it = left; --left;         return it;   }
+        friend constexpr stride_pointer       operator --  (       stride_pointer& left,       int                   ) { auto it = left; --left;         return it;   }
         friend constexpr stride_pointer&      operator +=  (       stride_pointer& left,       difference_type right ) { left.ptr += left.step * right; return left; }
         friend constexpr stride_pointer&      operator -=  (       stride_pointer& left,       difference_type right ) { left.ptr -= left.step * right; return left; }
 
@@ -82,9 +82,9 @@ class cpu::const_stride_pointer
         friend constexpr const_stride_pointer  operator  -  ( const const_stride_pointer& left,       difference_type       right ) { return const_stride_pointer(left .ptr - left .step * right, left .step); }
         friend constexpr difference_type       operator  -  ( const const_stride_pointer& left, const const_stride_pointer& right ) { [[assume(left.step == right.step)]]; return (left.ptr - right.ptr) / left.step; }
         friend constexpr const_stride_pointer& operator ++  (       const_stride_pointer& left                                    ) { left.ptr += left.step;         return left; }
-        friend constexpr const_stride_pointer  operator ++  (       const_stride_pointer& left,       int                         ) { let it = left; ++left;         return it;   }
+        friend constexpr const_stride_pointer  operator ++  (       const_stride_pointer& left,       int                         ) { auto it = left; ++left;         return it;   }
         friend constexpr const_stride_pointer& operator --  (       const_stride_pointer& left                                    ) { left.ptr -= left.step;         return left; }
-        friend constexpr const_stride_pointer  operator --  (       const_stride_pointer& left,       int                         ) { let it = left; --left;         return it;   }
+        friend constexpr const_stride_pointer  operator --  (       const_stride_pointer& left,       int                         ) { auto it = left; --left;         return it;   }
         friend constexpr const_stride_pointer& operator +=  (       const_stride_pointer& left,       difference_type       right ) { left.ptr += left.step * right; return left; }
         friend constexpr const_stride_pointer& operator -=  (       const_stride_pointer& left,       difference_type       right ) { left.ptr -= left.step * right; return left; }
 

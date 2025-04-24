@@ -1,45 +1,14 @@
-In file included from include/anonymous/basic/module.cppm:112:
-In file included from include/anonymous/basic/device/device.hpp:7:
-In file included from include/anonymous/basic/device/opencl/opencl.hpp:3:
-In file included from include/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:41:
-[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:19:38: [0m[0;1;31merror: [0m[1mout-of-line definition of 'available_parallelism' does not match any declaration in 'anonymous::opencl_queue_context'[0m
-   19 | constexpr auto opencl_queue_context::available_parallelism ( )[0m
-      | [0;1;32m                                     ^~~~~~~~~~~~~~~~~~~~~
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:3:7: [0m[0;1;36mnote: [0mopencl_queue_context defined here[0m
-    3 | class opencl_queue_context[0m
-      | [0;1;32m      ^~~~~~~~~~~~~~~~~~~~
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:11:24: [0m[0;1;36mnote: [0mmember declaration does not match because it is const qualified[0m
-   11 |         constexpr auto available_parallelism ( ) const;[0m
-      | [0;1;32m                       ^                         ~~~~~
-[0mIn file included from include/anonymous/basic/module.cppm:112:
-In file included from include/anonymous/basic/device/device.hpp:7:
-In file included from include/anonymous/basic/device/opencl/opencl.hpp:3:
-In file included from include/anonymous/basic/device/opencl/execution/opencl_queue_context.hpp:41:
-[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:22:9: [0m[0;1;31merror: [0m[1mexpected body of lambda expression[0m
-   22 |         try[0m
+In module 'anonymous' imported from main.cpp:1:
+In module 'anonymous.basic' imported from /Users/anonymous/Code/anonymous/include/anonymous/module.cppm:2:
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/common/algo.hpp:4:21: [0m[0;1;31merror: [0m[1mstatic assertion failed due to requirement '(1 > 0 && 1 < 0) || (1 < 0 && 1 > 0)': invalid for-clause[0m
+    4 |     static_assert ( ( stride > 0 and min < max ) or[0m
+      | [0;1;32m                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m    5 |                     ( stride < 0 and min > max ),[0m
+      | [0;1;32m                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/common/print.cpp:5:9: [0m[0;1;36mnote: [0min instantiation of function template specialization 'anonymous::for_constexpr<1, 0, 1, (lambda at /Users/anonymous/Code/anonymous/include/anonymous/basic/common/print.cpp:5:44)>' requested here[0m
+    5 |         for_constexpr<1,sizeof...(args)-1>([&] <int index> { std::cout << index_value_of<index>(args...) << ' '; });[0m
       | [0;1;32m        ^
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:33:5: [0m[0;1;31merror: [0m[1mexpected expression[0m
-   33 |     else[0m
-      | [0;1;32m    ^
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:41:16: [0m[0;1;31merror: [0m[1mreturning reference to local temporary object[0m
-   41 |         return boost::compute::system::default_context();[0m
-      | [0;1;32m               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:150:60: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_DEVICE_EXECUTION_CAPABILITIES'[0m
-  150 |     if ( boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL )[0m
-      | [0;1;32m                                                           ^
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:150:98: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_EXEC_NATIVE_KERNEL'[0m
-  150 |     if ( boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL )[0m
-      | [0;1;32m                                                                                                 ^
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:169:78: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_DEVICE_EXECUTION_CAPABILITIES'[0m
-  169 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_KERNEL,[0m
-      | [0;1;32m                                                                             ^
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:169:116: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_EXEC_KERNEL'[0m
-  169 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_KERNEL,[0m
-      | [0;1;32m                                                                                                                   ^
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:170:78: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_DEVICE_EXECUTION_CAPABILITIES'[0m
-  170 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL);[0m
-      | [0;1;32m                                                                             ^
-[0m[1minclude/anonymous/basic/device/opencl/execution/opencl_queue_context.cpp:170:116: [0m[0;1;31merror: [0m[1muse of undeclared identifier 'CL_EXEC_NATIVE_KERNEL'[0m
-  170 |                            boost::compute::system::default_device().get_info<CL_DEVICE_EXECUTION_CAPABILITIES>() & CL_EXEC_NATIVE_KERNEL);[0m
-      | [0;1;32m                                                                                                                   ^
-[0m10 errors generated.
+[0m[1mmain.cpp:24:10: [0m[0;1;36mnote: [0min instantiation of function template specialization 'anonymous::print_t::operator()<unsigned long>' requested here[0m
+   24 |     print(mds.rank());[0m
+      | [0;1;32m         ^
+[0m1 error generated.

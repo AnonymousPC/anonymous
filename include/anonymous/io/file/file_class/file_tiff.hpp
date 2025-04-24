@@ -1,5 +1,3 @@
-#pragma once
-
 class file_tiff
     extends public file_interface<file_tiff>,
             public matrix<color>

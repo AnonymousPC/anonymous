@@ -1,5 +1,3 @@
-#pragma once
-
 class time_point // Class time_point always stores zoned_time.
     extends public tuple<int,int,int,int,int,int,int,int,int>
 {

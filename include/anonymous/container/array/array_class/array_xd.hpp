@@ -1,8 +1,6 @@
-#pragma once
-
 template < class type, class device >
 class array<type,max_dim,device>
-    extends public  device::template vector<type>,
+    extends private device::template vector<type>,
             private detail::array_upper<type,1,      device>, // Make abi compatible with array<type,1,device>, required from flatten().
             private detail::array_info <type,max_dim,device>,
             private detail::array_upper<type,max_dim,device>, // Only transposable.
@@ -41,11 +39,11 @@ class array<type,max_dim,device>
     public: // Constructor
         constexpr explicit array ( int_type auto... args )                                                       requires                    ( sizeof...(args)     == max_dim );
         constexpr          array ( auto... args )                                                                requires copyable<type> and ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_type     <type,decltype(args)...>;
-        constexpr          array ( auto... args )                                                                requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_func     <type,decltype(args)...>;
-        constexpr          array ( auto... args )                                                                requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_func_ints<type,decltype(args)...>;
+        constexpr          array ( auto... args )                                                                requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_generator<type,decltype(args)...>;
+        constexpr          array ( auto... args )                                                                requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_function <type,decltype(args)...>;
         constexpr          array ( static_array<int,max_dim> );
         constexpr          array ( static_array<int,max_dim>, const type& )                                      requires copyable<type>;
-        constexpr          array ( static_array<int,max_dim>, function_type<type()> auto );
+        constexpr          array ( static_array<int,max_dim>, invocable_r<type>                           auto );
         constexpr          array ( static_array<int,max_dim>, detail::invocable_r_by_n_ints<type,max_dim> auto );
         constexpr          array ( std::initializer_list<array<type,max_dim-1,device>> )                         requires copyable<type>;
 

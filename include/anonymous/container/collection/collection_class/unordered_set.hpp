@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class hash, class device >
 class unordered_set
     extends public device::template unordered_set<type,hash>,

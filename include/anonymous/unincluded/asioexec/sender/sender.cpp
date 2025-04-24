@@ -1,5 +1,3 @@
-#pragma once
-
 /// Member
 
 template < class... types >

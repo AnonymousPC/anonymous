@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     template < derived_from<std::exception> type >

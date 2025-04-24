@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 class stack
     extends public device::template stack<type>
@@ -18,7 +16,6 @@ class stack
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
         using  device_type     = device;
-        struct stack_tag { };
 
     public: // Core
         constexpr stack ( )                                                   = default;

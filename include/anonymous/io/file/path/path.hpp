@@ -1,5 +1,3 @@
-#pragma once
-
 class path
     extends public string
 {

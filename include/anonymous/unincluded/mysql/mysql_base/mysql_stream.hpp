@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 concept mysql_mode = requires { typename type::mysql_mode_tag; };
 

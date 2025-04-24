@@ -1,5 +1,3 @@
-#pragma once
-
 constexpr any::any ( auto init )
     extends base ( std::move(init) )
 {
@@ -23,15 +21,15 @@ constexpr value_type& any::value ( )
     if ( ptr != nullptr )
         return *ptr;
     else
-        throw type_error("bad any cast: cannot cast {} (whose type = {}, empty = {}) into {}", typeid(self), type(), empty(), typeid(value_type));
+        throw type_error("bad any cast (with type() = {}, cast = {})", type(), typeid(value_type));
 }
 
 template < class value_type >
 constexpr const value_type& any::value ( ) const
 {
     auto ptr = std::any_cast<value_type>(static_cast<const base*>(&self));
-    if ( ptr != nullptr )
+    if ( ptr != nullptr ) [[likely]]
         return *ptr;
     else
-        throw type_error("bad any cast: cannot cast {} (whose type = {}, empty = {}) into {}", typeid(self), type(), empty(), typeid(value_type));
+        throw type_error("bad any cast (with type() = {}, cast = {})", type(), typeid(value_type));
 }

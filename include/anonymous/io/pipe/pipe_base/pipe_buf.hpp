@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 concept pipe_mode = requires { typename type::pipe_mode_tag; };
 

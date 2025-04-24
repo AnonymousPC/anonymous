@@ -1,5 +1,3 @@
-#pragma once
-
 class file_jpg
     extends public file_interface<file_jpg>,   
             public matrix<color>

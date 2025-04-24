@@ -1,5 +1,3 @@
-#pragma once
-
 constexpr void sleep ( duration time )
 {
     sleep_for(time);

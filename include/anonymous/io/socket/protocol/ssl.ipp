@@ -1,5 +1,3 @@
-#pragma once
-
 void ssl::acceptor::accept ( auto& sock, auto&&... args )
 {
     self.tcp::acceptor::accept(sock.next_layer(), std::forward<decltype(args)>(args)...);

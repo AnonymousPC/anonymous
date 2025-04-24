@@ -1,9 +1,9 @@
-#pragma once
+#define OPENCL_SOURCE(...) #__VA_ARGS__
 
 template < class type >
 opencl::template reference<type> opencl::reference<type>::operator = ( const reference& right )
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void assign ( __global type* self_buf, int self_idx, __global type* right_buf, int right_idx )
         {
             self_buf[self_idx] = right_buf[right_idx];
@@ -45,7 +45,7 @@ opencl::template reference<type> opencl::reference<type>::operator = ( opencl::t
     requires convertible_to<type2,type>
 {
     using type1 = type;
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void assign ( __global type1* self_buf, int self_idx, __global type2* right_buf, int right_idx )
         {
             self_buf[self_idx] = right_buf[right_idx];
@@ -207,7 +207,7 @@ template < class type1, class type2 >
 bool operator == ( opencl::template const_reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a == b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void equal_to ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx, __global bool* result_buf )
         {
             result_buf[0] = (left_buf[left_idx] == right_buf[right_idx]);
@@ -251,7 +251,7 @@ compare_result<type1,type2> operator <=> ( opencl::template const_reference<type
     if constexpr ( same_as<compare_result<type1,type2>,std::strong_ordering> or
                    same_as<compare_result<type1,type2>,std::weak_ordering> )
     {
-        static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
             __kernel void three_way_compare ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx, __global int* result_buf )
             {
                 result_buf[0] = left_buf[left_idx] == right_buf[right_idx] ?  0 :
@@ -273,7 +273,7 @@ compare_result<type1,type2> operator <=> ( opencl::template const_reference<type
 
     else if constexpr ( same_as<compare_result<type1,type2>,std::partial_ordering> )
     {
-        static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+        static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
             __kernel void three_way_compare ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx, __global int* result_buf )
             {
                 result_buf[0] = left_buf[left_idx] == right_buf[right_idx] ?  0 :
@@ -303,7 +303,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator += ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a += b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void plus_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] += right_val;
@@ -328,7 +328,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator += ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a += b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void plus_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] += right_buf[right_idx];
@@ -346,7 +346,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator -= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a -= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void minus_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] -= right_val;
@@ -371,7 +371,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator -= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a -= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void minus_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] -= right_buf[right_idx];
@@ -389,7 +389,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator *= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a *= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void multiplies_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] *= right_val;
@@ -414,7 +414,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator *= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a *= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void multiplies_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] *= right_buf[right_idx];
@@ -432,7 +432,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator /= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a /= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void divides_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] /= right_val;
@@ -457,7 +457,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator /= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a /= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void divides_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] /= right_buf[right_idx];
@@ -475,7 +475,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator %= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a %= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void modulus_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] %= right_val;
@@ -500,7 +500,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator %= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a %= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void modulus_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] %= right_buf[right_idx];
@@ -518,7 +518,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator &= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a &= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void bitand_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] &= right_val;
@@ -543,7 +543,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator &= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a &= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void bitand_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] &= right_buf[right_idx];
@@ -561,7 +561,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator |= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a |= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void bitor_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] |= right_val;
@@ -586,7 +586,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator |= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a |= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void bitor_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] |= right_buf[right_idx];
@@ -604,7 +604,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator ^= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a ^= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void bitxor_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] ^= right_val;
@@ -629,7 +629,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator ^= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a ^= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void bitxor_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] ^= right_buf[right_idx];
@@ -647,7 +647,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator <<= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a <<= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void left_shift_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] <<= right_val;
@@ -672,7 +672,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator <<= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a <<= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void left_shift_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] <<= right_buf[right_idx];
@@ -690,7 +690,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator >>= ( opencl::template reference<type1> left, type2 right )
     requires requires ( type1 a, type2 b ) { a >>= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void right_shift_assign ( __global type1* left_buf, int left_idx, type2 right_val )
         {
             left_buf[left_idx] >>= right_val;
@@ -715,7 +715,7 @@ template < class type1, class type2 >
 opencl::template reference<type1> operator >>= ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )
     requires requires ( type1 a, type2 b ) { a >>= b; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void right_shift_assign ( __global type1* left_buf, int left_idx, __global type2* right_buf, int right_idx )
         {
             left_buf[left_idx] >>= right_buf[right_idx];
@@ -733,7 +733,7 @@ template < class type >
 opencl::template reference<type> operator ++ ( opencl::template reference<type> left )
     requires requires ( type a ) { ++a; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void increment ( __global type* left_buf, int left_idx )
         {
             ++left_buf[left_idx];
@@ -760,7 +760,7 @@ template < class type >
 opencl::template reference<type> operator -- ( opencl::template reference<type> left )
     requires requires ( type a ) { --a; }
 {
-    static auto program = opencl::execution_context.build_program(BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static auto program = opencl::execution_context.build_program(OPENCL_SOURCE(
         __kernel void decrement ( __global type* left_buf, int left_idx )
         {
             --left_buf[left_idx];
@@ -782,3 +782,6 @@ type operator -- ( opencl::template reference<type> left, int )
     --left;
     return tmp;
 }
+
+
+#undef OPENCL_SOURCE

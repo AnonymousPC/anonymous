@@ -1,5 +1,3 @@
-#pragma once
-
 template < class input_type, std::endian endian >
 constexpr ranges::binary_istream_view<input_type,endian>::binary_istream_view ( std::istream& init_s )
     extends s_ptr ( &init_s )

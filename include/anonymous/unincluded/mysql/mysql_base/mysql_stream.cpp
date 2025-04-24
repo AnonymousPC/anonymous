@@ -1,5 +1,3 @@
-#pragma once
-
 matrix<typename mysql_stream::value_type> mysql_stream::execute_result ( const boost::mysql::results& results )
 {
     return matrix<value_type>(results.rows().size(), results.rows().num_columns(), [&] (int i, int j) { return make_result_arg(results.rows()[i-1][j-1]); });

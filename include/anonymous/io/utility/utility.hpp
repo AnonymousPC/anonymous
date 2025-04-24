@@ -1,5 +1,3 @@
-#pragma once
-
 /// Include
 
 #include "color/color.hpp"

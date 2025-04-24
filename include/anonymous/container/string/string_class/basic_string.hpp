@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 class basic_string
     extends public device::template basic_string<type>,
@@ -36,7 +34,6 @@ class basic_string
         constexpr basic_string (      const type& );
         constexpr basic_string ( int, const type& );
         constexpr basic_string (      const type* );
-        constexpr basic_string (      const basic_string_view<type,device>& );
 
     public: // Conversion
         template < class type2, class device2 > constexpr basic_string ( const basic_string<type2,device2>& ) requires same_as<type,type2> and ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> );
@@ -51,25 +48,25 @@ class basic_string
                                        constexpr explicit basic_string ( const std::type_info& )       requires same_as<type,char>;
 
     public: // Member
-        constexpr int                            size        ( )          const;
-        constexpr basic_string&                  resize      ( int );
-        constexpr bool                           empty       ( )          const;
-        constexpr iterator                       begin       ( );
-        constexpr const_iterator                 begin       ( )          const;
-        constexpr iterator                       end         ( );
-        constexpr const_iterator                 end         ( )          const;
-        constexpr pointer                        data        ( );
-        constexpr const_pointer                  data        ( )          const;
-        constexpr const_pointer                  c_str       ( )          const;
-        constexpr reference                      operator [] ( int );
-        constexpr const_reference                operator [] ( int )      const;
-        constexpr basic_string_view<type,device> operator [] ( int, int ) const;
+        constexpr int             size        ( )                          const;
+        constexpr basic_string&   resize      ( int );
+        constexpr bool            empty       ( )                          const;
+        constexpr iterator        begin       ( );
+        constexpr const_iterator  begin       ( )                          const;
+        constexpr iterator        end         ( );
+        constexpr const_iterator  end         ( )                          const;
+        constexpr pointer         data        ( );
+        constexpr const_pointer   data        ( )                          const;
+        constexpr const_pointer   c_str       ( )                          const;
+        constexpr reference       operator [] ( int );
+        constexpr const_reference operator [] ( int )                      const;
+        constexpr basic_string    operator [] ( int, int )                 const;
 
-        constexpr basic_string&                  clear       ( );
-        constexpr basic_string&                  erase       ( int, int );
-        constexpr basic_string&                  insert      ( int, basic_string_view<type,device> );
-        constexpr basic_string&                  push        (      basic_string_view<type,device> );
-        constexpr basic_string&                  pop         ( int = -1 );
+        constexpr basic_string&   clear       ( );
+        constexpr basic_string&   erase       ( int, int );
+        constexpr basic_string&   insert      ( int, const basic_string& );
+        constexpr basic_string&   push        (      const basic_string& );
+        constexpr basic_string&   pop         ( int = -1 );
 
     public: // Memory 
         constexpr static bool ownership  ( );
@@ -91,6 +88,5 @@ class basic_string
               string_algo::where;
 };
 
-template < char_type type >               basic_string ( type )                           -> basic_string<type>;
-template < char_type type >               basic_string ( const type* )                    -> basic_string<type>;
-template < char_type type, class device > basic_string ( basic_string_view<type,device> ) -> basic_string<type,device>;
+template < char_type type > basic_string ( type )        -> basic_string<type>;
+template < char_type type > basic_string ( const type* ) -> basic_string<type>;

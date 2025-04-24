@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 constexpr range<type>::range ( value_type init_high )
     requires int_type<type>
@@ -10,20 +8,22 @@ constexpr range<type>::range ( value_type init_high )
 
 template < class type >
 constexpr range<type>::range ( value_type init_low, value_type init_high, value_type init_step )
-    extends low  ( init_low  ),
-            high ( init_high ),
-            step ( init_step )
 {
-    #ifdef debug
-    if constexpr ( requires { step == 0; low - high != 0; } )
-        if ( step == 0 and low - high != 0 )
-            throw value_error("range from {} to {} with step {} is invalid", low, high, step);
+    if constexpr ( debug )
+    {
+        if constexpr ( requires { init_step == 0; init_low - init_high != 0; } )
+            if ( init_step == 0 and init_low - init_high != 0 )
+                throw value_error("cannot initialize range (with low = {}, high = {}, step = {}): range is infinite", init_low, init_high, init_step);
 
-    if constexpr ( requires { step <=> 0; low - high <=> step; } )
-        if ( ( step > 0 and low - high > step ) or
-             ( step < 0 and low - high < step ) )
-            throw value_error("range from {} to {} with step {} is invalid", low, high, step);
-    #endif
+        if constexpr ( requires { step <=> 0; low - high <=> step; } )
+            if ( ( init_step > 0 and init_low - init_high > init_step ) or
+                 ( init_step < 0 and init_low - init_high < init_step ) )
+                throw value_error("cannot initialize range (with low = {}, high = {}, step = {}): range is infinite", init_low, init_high, init_step);
+    }
+
+    low  = init_low;
+    high = init_high;
+    step = init_step;
 }
 
 template < class type >
@@ -102,7 +102,10 @@ class range<type>::const_iterator
 
         constexpr friend auto operator <=> ( const const_iterator& left, const const_iterator& right )
         {
-            [[assume(left.step == right.step)]];
+            if constexpr ( debug )
+                if ( left.step != right.step )
+                    throw logic_error("cannot compare iterator (with left.step = {}, right.step = {}): belongs to different ranges", left.step, right.step);
+
             return left.step > 0 ? left.val <=> right.val : right.val <=> left.val;
         }
 
@@ -123,7 +126,10 @@ class range<type>::const_iterator
 
         constexpr friend int operator - ( const const_iterator& left, const const_iterator& right )
         {
-            [[assume(left.step == right.step)]];
+            if constexpr ( debug )
+                if ( left.step != right.step )
+                    throw logic_error("cannot minus iterator (with left.step = {}, right.step = {}): belongs to different ranges", left.step, right.step);
+
             return ( left.val - right.val ) / left.step;
         }
 

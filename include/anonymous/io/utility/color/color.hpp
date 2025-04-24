@@ -1,5 +1,3 @@
-#pragma once
-
 class color
     extends public tuple<float,float,float,float>
 {

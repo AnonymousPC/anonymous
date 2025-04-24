@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 constexpr int list<type,device>::size ( ) const
 {
@@ -39,41 +37,40 @@ constexpr list<type,device>::const_iterator list<type,device>::end ( ) const
 template < class type, class device >
 constexpr list<type,device>::reference list<type,device>::front ( )
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot access front of an empty list");
-    #endif
+            throw value_error("cannot get front of list (with empty() = true)");
+
     return base::front();
 }
 
 template < class type, class device >
 constexpr list<type,device>::const_reference list<type,device>::front ( ) const
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot access front of an empty list");
-    #endif
+            throw value_error("cannot get front of list (with empty() = true)");
+
     return base::front();
 }
-
 
 template < class type, class device >
 constexpr list<type,device>::reference list<type,device>::back ( )
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot access back of an empty list");
-    #endif
+            throw value_error("cannot get back of list (with empty() = true");
+
     return base::back();
 }
 
 template < class type, class device >
 constexpr list<type,device>::const_reference list<type,device>::back ( ) const
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot access back of an empty list");
-    #endif
+            throw value_error("cannot get back of list (with empty() = true)");
+
     return base::back();
 }
 
@@ -95,10 +92,10 @@ template < class type, class device >
 constexpr type list<type,device>::pop_front ( )
     requires movable<type>
 {
-    #ifdef debug
+    if constexpr ( debug ) 
         if ( empty() )
-            throw value_error("cannot pop_front from an empty list");
-    #endif
+            throw value_error("cannot pop front from list (with empty() = true");
+
     if constexpr ( requires { { base::pop_front() } -> convertible_to<type>; } )
         return base::pop_front();
     else
@@ -113,10 +110,10 @@ template < class type, class device >
 constexpr type list<type,device>::pop_back ( )
     requires movable<type>
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot pop_back from an empty list");
-    #endif
+            throw value_error("cannot pop back from list (with empty() = true)");
+
     if constexpr ( requires { { base::pop_back() } -> convertible_to<type>; } )
         return base::pop();
     else

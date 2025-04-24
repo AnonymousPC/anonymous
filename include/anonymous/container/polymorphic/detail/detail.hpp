@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     // all_different

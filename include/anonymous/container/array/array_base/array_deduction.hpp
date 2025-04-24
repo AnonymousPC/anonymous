@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     template < class... types >
@@ -17,7 +15,7 @@ namespace detail
 
     template < class... types >
         requires ( sizeof...(types) >= 2 ) and 
-                 detail::ints_until_last_func<void,types...>
+                 detail::ints_until_last_generator<void,types...>
     struct array_deduction<types...>
     {
         using value_type = invoke_result<last_type_of<types...>>;
@@ -26,7 +24,7 @@ namespace detail
 
     template < class... types >
         requires ( sizeof...(types) >= 2 ) and 
-                 detail::ints_until_last_func_ints<void,types...>
+                 detail::ints_until_last_function<void,types...>
     struct array_deduction<types...>
     {
         using value_type = detail::invoke_result_by_n_ints<last_type_of<types...>,sizeof...(types)-1>;

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "detail/detail.hpp"
 
 #include "polymorphic_class/any.hpp"

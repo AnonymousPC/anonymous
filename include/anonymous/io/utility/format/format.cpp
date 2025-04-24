@@ -1,5 +1,3 @@
-#pragma once
-
 /// Class std::formatter<color>
 
 template < class parse_context >

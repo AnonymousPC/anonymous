@@ -1,5 +1,3 @@
-#pragma once
-
 class file_bmp
     extends public file_interface<file_bmp>,
             public matrix<color>

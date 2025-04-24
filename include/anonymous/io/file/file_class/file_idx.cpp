@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     struct file_idx_info_header

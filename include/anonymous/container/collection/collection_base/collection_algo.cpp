@@ -1,5 +1,3 @@
-#pragma once
-
 template < class container, class type, class device > 
 constexpr decltype(auto) collection_algo<container,type,device>::begin ( )
 {
@@ -70,7 +68,3 @@ constexpr const container& collection_algo<container,type,device>::for_each ( in
     device::for_each(begin(), end(), op);
     return static_cast<const container&>(self);
 }
-
-
-#undef derive_of_self
-#undef const_derive_of_self

@@ -1,5 +1,3 @@
-#pragma once
-
 bool is_file ( const path& p )
 {
     return std::filesystem::is_regular_file(std::filesystem::path(p));

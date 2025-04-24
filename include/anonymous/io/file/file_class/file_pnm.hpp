@@ -1,5 +1,3 @@
-#pragma once
-
 class file_pnm
     extends public file_interface<file_pnm>,
             public matrix<color>

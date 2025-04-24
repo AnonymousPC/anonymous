@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type1, class type2, class hash, class device >
 constexpr unordered_map<type1,type2,hash,device>::unordered_map ( std::initializer_list<pair<const type1,type2>> init )
     requires copyable<type1> and copyable<type2>

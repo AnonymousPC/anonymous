@@ -1,7 +1,5 @@
-#pragma once
-
 template < class container, 
-           class type,  // Type means the type in iterator, instead of key_type or value_type.
+           class type,
            class device
          >
 class collection_algo
@@ -21,9 +19,9 @@ class collection_algo
         constexpr decltype(auto) size  ( ) const;
 
     public: // Algorithm
-        constexpr       auto       average  (                       ) const requires default_initializable<type> and plusable    <type> and dividable_to<type,int>;
-        constexpr       auto       sum      (                       ) const requires default_initializable<type> and plusable    <type>;
-        constexpr       auto       product  (                       ) const requires convertible_to<int,type>    and multipliable<type>;
+        constexpr       auto       average  ( )                       const requires default_initializable<type> and plusable    <type> and dividable_to<type,int>;
+        constexpr       auto       sum      ( )                       const requires default_initializable<type> and plusable    <type>;
+        constexpr       auto       product  ( )                       const requires convertible_to<int,type>    and multipliable<type>;
 
         constexpr       container& for_each ( invocable<type&> auto );
         constexpr const container& for_each ( invocable<type>  auto ) const;

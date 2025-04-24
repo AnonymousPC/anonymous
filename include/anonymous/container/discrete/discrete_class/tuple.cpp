@@ -1,5 +1,3 @@
-#pragma once
-
 template < class... types >
 constexpr tuple<types...>::tuple ( types... t )
     requires ( sizeof...(types) >= 1 )
@@ -11,9 +9,10 @@ constexpr tuple<types...>::tuple ( types... t )
 template < class... types >
 template < class... types2 >
 constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
-    requires ( convertible_to<types2,types> and ... )
+    requires ( sizeof...(types) == sizeof...(types2) ) and
+             ( ( convertible_to<types2,types> and ... ) )
 {
-    detail::for_constexpr<1,sizeof...(types)>([&] <int index> { self.template value<index>() = index_type_of<index,types...>(cvt.template value<index>()); });
+    for_constexpr<1,sizeof...(types)>([&] <int index> { self.template value<index>() = cvt.template value<index>(); });
 }
 
 template < class... types >

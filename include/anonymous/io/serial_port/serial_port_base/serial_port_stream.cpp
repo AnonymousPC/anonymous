@@ -1,5 +1,3 @@
-#pragma once
-
 serial_port_stream::serial_port_stream ( )
     extends std::iostream ( nullptr )
 {

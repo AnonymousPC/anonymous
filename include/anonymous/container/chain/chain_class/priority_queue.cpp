@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class compare, class device >
 constexpr int priority_queue<type,compare,device>::size ( ) const
 {
@@ -15,10 +13,10 @@ constexpr bool priority_queue<type,compare,device>::empty ( ) const
 template < class type, class compare, class device >
 constexpr priority_queue<type,compare,device>::const_reference priority_queue<type,compare,device>::top ( ) const
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot access top of an empty priority_queue");
-    #endif
+            throw value_error("cannot get top of priority_queue (with empty() = true)");
+
     return base::top();
 }
 
@@ -31,10 +29,10 @@ constexpr void priority_queue<type,compare,device>::push ( type val )
 template < class type, class compare, class device >
 constexpr type priority_queue<type,compare,device>::pop ( )
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot pop from an empty priority_queue");
-    #endif
+            throw value_error("cannot pop from priority_queue (with empty() = true)");
+
     if constexpr ( requires { { base::pop() } -> convertible_to<type>; } )
         return base::pop();
     else

@@ -1,5 +1,3 @@
-#pragma once
-
 file_jpg::file_jpg ( path pth )
 {
     open(pth);

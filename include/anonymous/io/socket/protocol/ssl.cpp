@@ -1,5 +1,3 @@
-#pragma once
-
 ssl::endpoint ssl::socket::local_endpoint ( ) const
 {
     return self.next_layer().local_endpoint();

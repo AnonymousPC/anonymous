@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class hash, class device >
 constexpr unordered_set<type,hash,device>::unordered_set ( std::initializer_list<type> init )
     requires copyable<type>
@@ -55,7 +53,7 @@ constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::push
     if ( result.second == true )
         return self;
     else
-        throw key_error("key {} already exists", k);
+        throw key_error("key {} already found", k);
 }
 
 template < class type, class hash, class device >

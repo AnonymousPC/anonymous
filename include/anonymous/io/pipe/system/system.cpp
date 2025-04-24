@@ -1,5 +1,3 @@
-#pragma once
-
 void wait_process ( int process_id )
 {
     try

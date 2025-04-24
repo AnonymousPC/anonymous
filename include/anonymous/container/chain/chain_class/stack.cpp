@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 constexpr int stack<type,device>::size ( ) const
 {
@@ -15,20 +13,20 @@ constexpr bool stack<type,device>::empty ( ) const
 template < class type, class device >
 constexpr stack<type,device>::reference stack<type,device>::top ( )
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot access top of an empty stack");
-    #endif
+            throw value_error("cannot get top of stack (with empty() = true)");
+
     return base::top();
 }
 
 template < class type, class device >
 constexpr stack<type,device>::const_reference stack<type,device>::top ( ) const
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot access top of an empty stack");
-    #endif
+            throw value_error("cannot get top of stack (with empty() = true)");
+
     return base::top();
 }
 
@@ -41,10 +39,10 @@ constexpr void stack<type,device>::push ( type val )
 template < class type, class device >
 constexpr type stack<type,device>::pop ( )
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( empty() )
-            throw value_error("cannot pop from an empty stack");
-    #endif
+            throw value_error("cannot pop from stack (with empty() = true)");
+            
     if constexpr ( requires { { base::pop() } -> convertible_to<type>; } )
         return base::pop();
     else

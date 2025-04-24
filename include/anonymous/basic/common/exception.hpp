@@ -1,15 +1,12 @@
-#pragma once
-
-/// Exceptions list
-
 class exception;
     class logic_error;
         class value_error;
             class index_error;
             class key_error;
         class type_error;
+
     class runtime_error;
-        class string_error;
+        class text_error;
             class encode_error;
             class format_error;
             class parse_error;
@@ -27,6 +24,8 @@ class exception;
         class math_error;
             class linalg_error;
 
+    class internal_error;
+
     class signal;
         class abort_signal;
         class floating_point_exception_signal;
@@ -34,7 +33,6 @@ class exception;
         class interrupt_signal;
         class segmentation_violation_signal;
         class terminate_signal;
-
 
 
 
@@ -142,52 +140,52 @@ class runtime_error
         runtime_error ( ) = delete; // A runtime error must carry message.
 };
 
-class string_error
+class text_error
     extends public runtime_error,
-            public exception_interface<string_error>
+            public exception_interface<text_error>
 {
     public:
         using runtime_error::runtime_error;
-        using exception_interface<string_error>::from;
-        friend exception_interface<string_error>;
+        using exception_interface<text_error>::from;
+        friend exception_interface<text_error>;
 };
 
 class encode_error
-    extends public string_error,
+    extends public text_error,
             public exception_interface<encode_error>
 {
     public:
-        using string_error::string_error;
+        using text_error::text_error;
         using exception_interface<encode_error>::from;
         friend exception_interface<encode_error>;
 };
 
 class format_error
-    extends public string_error,
+    extends public text_error,
             public exception_interface<format_error>
 {
     public:
-        using string_error::string_error;
+        using text_error::text_error;
         using exception_interface<format_error>::from;
         friend exception_interface<format_error>;
 };
 
 class parse_error
-    extends public string_error,
+    extends public text_error,
             public exception_interface<parse_error>
 {
     public:
-        using string_error::string_error;
+        using text_error::text_error;
         using exception_interface<parse_error>::from;
         friend exception_interface<parse_error>;
 };
 
 class regex_error
-    extends public string_error,
+    extends public text_error,
             public exception_interface<regex_error>
 {
     public:
-        using string_error::string_error;
+        using text_error::text_error;
         using exception_interface<regex_error>::from;
         friend exception_interface<regex_error>;
 };
@@ -300,6 +298,13 @@ class linalg_error
         using math_error::math_error;
         using exception_interface<linalg_error>::from;
         friend exception_interface<linalg_error>;
+};
+
+class internal_error
+    extends public exception
+{
+    public:
+        internal_error ( ) = default; // An internal error must not carry message.
 };
 
 class signal

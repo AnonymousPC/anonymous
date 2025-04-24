@@ -1,5 +1,3 @@
-#pragma once
-
 file_txt::file_txt ( path pth )
 {
     open(pth);

@@ -1,5 +1,3 @@
-#pragma once
-
 // Include
 
 #include "path/path.hpp"

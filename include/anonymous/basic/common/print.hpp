@@ -1,16 +1,8 @@
-#pragma once
-
-namespace detail
+class print_t
 {
-    class print_t
-    {
-        public:
-            constexpr static void operator() ( );
-            constexpr static void operator() ( const printable auto&, const printable auto&... );
-    };
-     
-} // namespace deteail
-
-
+    public:
+        constexpr static void operator() (  const printable auto&... );
+};
 
 #include "print.cpp"
+

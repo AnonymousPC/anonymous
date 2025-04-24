@@ -1,5 +1,3 @@
-#pragma once
-
 struct file_stream::read_only  extends public detail::io_mode<bool> { using detail::io_mode<bool>::io_mode; struct file_mode_tag { }; };
 struct file_stream::write_only extends public detail::io_mode<bool> { using detail::io_mode<bool>::io_mode; struct file_mode_tag { }; };
 struct file_stream::erase      extends public detail::io_mode<bool> { using detail::io_mode<bool>::io_mode; struct file_mode_tag { }; };

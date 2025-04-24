@@ -1,5 +1,3 @@
-#pragma once
-
 struct email_send::server     extends public detail::io_mode<url>           { using detail::io_mode<url>          ::io_mode; struct email_mode_tag { }; };
 struct email_send::username   extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };
 struct email_send::password   extends public detail::io_mode<string>        { using detail::io_mode<string>       ::io_mode; struct email_mode_tag { }; };

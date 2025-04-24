@@ -1,13 +1,3 @@
-#pragma once
-
-/* As system_scheduler is not a class-template, the declaration and implemention on different parts
- * should be written in a specific order, : a "cannot use incomplete type..." compile-error
- * may occur.
- * 
- * Thus, we provide a guide to declaration/implemetion.
- */
-
-
 /// Declartion (system_scheduler.sender)
 
 class system_scheduler::sender
@@ -46,7 +36,7 @@ class system_scheduler::sender::operation_state
 
 /// Declaration (system_scheduler.bulk_sender)
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 class system_scheduler::bulk_sender
 {
     public: // Traits
@@ -56,7 +46,7 @@ class system_scheduler::bulk_sender
     public: // Data
         sender_type   snd;
         shape_type    shp;
-        function_type func;
+        func_type func;
 
     public: // Typedef
         template < class receiver_type > class bulk_receiver;
@@ -71,9 +61,9 @@ class system_scheduler::bulk_sender
         template < class channel_type > constexpr static auto query ( std::execution::get_completion_scheduler_t<channel_type> )       noexcept;
 };
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver
+class system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver
 {
     public: // Traits
         using receiver_concept = std::execution::receiver_t;
@@ -81,11 +71,11 @@ class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_
     public: // Data
         receiver_type           recv;
         shape_type              shp;
-        function_type           func;
+        func_type           func;
         std::atomic<shape_type> cnt  = 0;
 
     public: // Core
-        constexpr bulk_receiver ( receiver_type, shape_type, function_type );
+        constexpr bulk_receiver ( receiver_type, shape_type, func_type );
         constexpr bulk_receiver ( const bulk_receiver& );                    // std::atomic<shape_type> is not copyable.
         
     public: // Interface
@@ -99,9 +89,9 @@ class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_
         template < class channel_type > constexpr static auto query ( std::execution::get_completion_scheduler_t<channel_type> )       noexcept;
 };
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-class system_scheduler::bulk_sender<sender_type,shape_type,function_type>::operation_state
+class system_scheduler::bulk_sender<sender_type,shape_type,func_type>::operation_state
 {
     public: // Data
         std::execution::connect_result_t<sender_type,bulk_receiver<receiver_type>> op;
@@ -167,43 +157,43 @@ constexpr void system_scheduler::sender::operation_state<receiver_type>::start (
 
 /// Implemention (system_scheduler.bulk_sender)
 
-template < class sender_type, class shape_type, class function_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::connect ( std::execution::receiver auto&& recv )
+template < class sender_type, class shape_type, class func_type >
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,func_type>::connect ( std::execution::receiver auto&& recv )
 {
-    return operation_state<decay<decltype(recv)>>(std::execution::connect(std::move(snd), bulk_receiver(std::forward<decltype(recv)>(recv), std::move(shp), std::move(func))));
+    return operation_state<remove_cvref<decltype(recv)>>(std::execution::connect(std::move(snd), bulk_receiver(std::forward<decltype(recv)>(recv), std::move(shp), std::move(func))));
 }
 
-template < class sender_type, class shape_type, class function_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::query ( std::execution::get_env_t ) const noexcept
+template < class sender_type, class shape_type, class func_type >
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,func_type>::query ( std::execution::get_env_t ) const noexcept
 {
     return self;
 }
 
-template < class sender_type, class shape_type, class function_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::query ( std::execution::get_scheduler_t ) noexcept
+template < class sender_type, class shape_type, class func_type >
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,func_type>::query ( std::execution::get_scheduler_t ) noexcept
 {
     return system_scheduler();
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class channel_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,func_type>::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
 {
     return system_scheduler();
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::bulk_receiver ( receiver_type init_recv, shape_type init_shp, function_type init_func )
+constexpr system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::bulk_receiver ( receiver_type init_recv, shape_type init_shp, func_type init_func )
     extends recv ( std::move(init_recv) ),
             shp  ( std::move(init_shp ) ),
             func ( std::move(init_func) )
 {
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::bulk_receiver ( const bulk_receiver& init )
+constexpr system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::bulk_receiver ( const bulk_receiver& init )
     extends recv ( init.recv ),
             shp  ( init.shp ),
             func ( init.func ),
@@ -211,9 +201,9 @@ constexpr system_scheduler::bulk_sender<sender_type,shape_type,function_type>::b
 {
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::set_value ( auto&&... args ) noexcept
+constexpr void system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::set_value ( auto&&... args ) noexcept
 {
     try
     {
@@ -233,45 +223,45 @@ constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_typ
     }
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::set_error ( auto&&... args ) noexcept
+constexpr void system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::set_error ( auto&&... args ) noexcept
 {
     std::execution::set_error(std::move(recv), std::forward<decltype(args)>(args)...);
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::set_stopped ( auto&&... args ) noexcept
+constexpr void system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::set_stopped ( auto&&... args ) noexcept
 {
     std::execution::set_stopped(std::move(recv), std::forward<decltype(args)>(args)...);
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::query ( std::execution::get_env_t ) const noexcept
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::query ( std::execution::get_env_t ) const noexcept
 {
     return self;
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::query ( std::execution::get_scheduler_t ) noexcept
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::query ( std::execution::get_scheduler_t ) noexcept
 {
     return system_scheduler();
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
 template < class channel_type >
-constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,function_type>::bulk_receiver<receiver_type>::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
+constexpr auto system_scheduler::bulk_sender<sender_type,shape_type,func_type>::bulk_receiver<receiver_type>::query ( std::execution::get_completion_scheduler_t<channel_type> ) noexcept
 {
     return system_scheduler();
 }
 
-template < class sender_type, class shape_type, class function_type >
+template < class sender_type, class shape_type, class func_type >
 template < class receiver_type >
-constexpr void system_scheduler::bulk_sender<sender_type,shape_type,function_type>::operation_state<receiver_type>::start ( ) noexcept
+constexpr void system_scheduler::bulk_sender<sender_type,shape_type,func_type>::operation_state<receiver_type>::start ( ) noexcept
 {
     std::execution::start(op);
 }

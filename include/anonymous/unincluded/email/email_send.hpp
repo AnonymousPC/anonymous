@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 concept email_mode = requires { typename type::email_mode_tag; };
 

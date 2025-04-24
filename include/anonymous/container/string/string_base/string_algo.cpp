@@ -1,5 +1,3 @@
-#pragma once
-
 template < class container, class type, class device >
 constexpr decltype(auto) string_algo<container,type,device>::begin ( )
 {
@@ -61,13 +59,13 @@ constexpr decltype(auto) string_algo<container,type,device>::operator [] ( int p
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::begins_with ( view str ) const
+constexpr bool string_algo<container,type,device>::begins_with ( const container& str ) const
 {
     return self.size() >= str.size() and device::equal(self.begin(), self.begin() + str.size(), str.begin(), str.end());
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::ends_with ( view str ) const
+constexpr bool string_algo<container,type,device>::ends_with ( const container& str ) const
 {
     return self.size() >= str.size() and device::equal(self.end() - str.size(), self.end(), str.begin(), str.end());
 }
@@ -172,39 +170,41 @@ constexpr container& string_algo<container,type,device>::capitalize ( )
 {
     if ( not empty() )
         self[1] = std::isupper(self[1]);
+
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
 constexpr container& string_algo<container,type,device>::title ( )
 {
-    for ( auto pos = begin(); pos != end() + 1; pos++ )
-    {
-        if ( pos != begin() or std::islower(*pos) )
-            *pos = std::toupper(*pos);
-        pos = device::adjacent_find(begin(), end(), [] (const auto& a, const auto& b) { return not std::isalpha(a) and std::islower(b); });
-    }
+    for ( auto it = begin(); it != end() + 1; it = device::adjacent_find(it, end(), [] (const auto& a, const auto& b) { return not std::isalpha(a) and std::islower(b); }) + 1 )
+        *it = std::toupper(*it);
+    
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::expand_tabs ( int len )
+constexpr container& string_algo<container,type,device>::expand_tabs ( int tabs_size )
 {
-    if ( len < 0 )
-        throw string_error("expand string with negative tabs {}", len);
-    return replace('\t', basic_string<type,device>(len,' '));
+    if constexpr ( debug )
+        if ( tabs_size < 0 )
+            throw value_error("cannot expand tabs to string (with tabs.size() = {}): size is negative", tabs_size);
+
+    return replace('\t', basic_string<type,device>(tabs_size,' '));
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::center ( int len, type ch )
+constexpr container& string_algo<container,type,device>::center ( int new_size, type ch )
 {
-    if ( len < 0 )
-        throw string_error("center string with negative size {}", len);
-    if ( len > size() )
+    if constexpr ( debug )
+        if ( new_size < 0 )
+            throw value_error("cannot center string (with size() = {}): size is negative", new_size);
+
+    if ( new_size > size() )
     {
         auto old_size    = size();
-        auto left_space  = (len - old_size )    / 2;
-        auto right_space = (len - old_size + 1) / 2;
+        auto left_space  = (new_size - old_size )    / 2;
+        auto right_space = (new_size - old_size + 1) / 2;
         static_cast<container&>(self).resize(len);
         device::copy_backward(begin(), begin() + old_size, end() - right_space);
         device::fill(begin(), begin() + left_space, ch);
@@ -214,97 +214,122 @@ constexpr container& string_algo<container,type,device>::center ( int len, type 
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::left_justify ( int len, type ch )
+constexpr container& string_algo<container,type,device>::left_justify ( int new_size, type ch )
 {    
-    if ( len < 0 )
-        throw string_error("left_justify string with negative size {}", len);
-    if ( len > size() )
+    if constexpr ( debug )
+        if ( new_size < 0 )
+            throw value_error("cannot left_justify string (with size() = {}): size is negative", new_size);
+
+    if ( new_size > size() )
     {
         int old_size = size();
-        static_cast<container&>(self).resize(len);
+        static_cast<container&>(self).resize(new_size);
         device::fill(begin() + old_size, end(), ch);
     }
+
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::right_justify ( int len, type ch )
+constexpr container& string_algo<container,type,device>::right_justify ( int new_size, type ch )
 {
-    if ( len < 0 )
-        throw string_error("right_justify string with negative size {}", len);
-    if ( len > size() )
+    if constexpr ( debug )
+        if ( new_size < 0 )
+            throw value_error("cannot right_justify string (with size() = {}): size is negative", new_size);
+        
+    if ( new_size > size() )
     {
         auto old_size = size();
-        static_cast<container&>(self).resize(len);
+        static_cast<container&>(self).resize(new_size);
         device::copy_backward(begin(), begin() + old_size, end());
         device::fill(begin(), end() - old_size, ch);
     }
+
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
-constexpr array<typename string_algo<container,type,device>::view> string_algo<container,type,device>::partition ( view str ) const
+constexpr array<container> string_algo<container,type,device>::partition ( const container& sep ) const
 {
-    if ( str.empty() )
-        throw string_error("partition string with empty seperator");
-    auto pos = device::search(self.data(), self.data() + self.size(), str.data(), str.data() + str.size());
-    auto arr = pos != self.data() + self.size() ? array<view>{view(self.data(),pos-self.data()), view(pos,str.size()), view(pos+str.size(), self.size()-(pos-self.data())-str.size())} :
-                                                 array<view>{view(self.data(),self.size()), view(self.data()+self.size(),0), view(self.data()+self.size(),0)};
-    return arr;
+    if constexpr ( debug )
+        if ( sep.empty() )
+            throw value_error("cannot partition string (with seperator = \"\"): seperator is empty");
+
+    auto pos = device::search(self.begin(), self.end(), sep.begin(), sep.end()) - self.begin() + 1;
+    return array<container>{self[1,pos-1], self[pos,pos+sep.size()-1], self[pos+sep.size(),-1]};
 }
 
 template < class container, class type, class device >
-constexpr array<typename string_algo<container,type,device>::view> string_algo<container,type,device>::right_partition ( view str ) const
+constexpr array<container> string_algo<container,type,device>::right_partition ( const container& sep ) const
 {
-    if ( str.empty() )
-        throw string_error("right_partition string with empty seperator");
-    auto pos = device::find_end(self.data(), self.data() + self.size(), str.data(), str.data() + str.size());
-    return pos != self.data() + self.size() ? array<view>{view(self.data(),pos-self.data()), view(pos,str.size()), view(pos+str.size(), self.size()-(pos-self.data())-str.size())} :
-                                              array<view>{view(self.data(),0), view(self.data(),0), view(self.data(),self.size())};
+    if constexpr ( debug )
+        if ( sep.empty() )
+            throw value_error("cannot right_partition string (with seperator = \"\"): seperator is empty");
+
+    auto pos = device::find_end(self.begin(), self.end(), sep.begin(), self.end()) - self.begin() + 1;
+    return array<container>{self[1,pos-1], self[pos,pos+sep.size()-1], self[pos+sep.size(),-1]};
 }
 
 template < class container, class type, class device >
-constexpr array<typename string_algo<container,type,device>::view> string_algo<container,type,device>::split ( view str, int times ) const
+constexpr array<container> string_algo<container,type,device>::split ( const container& sep, int times ) const
 {
-    if ( str.empty() )
-        throw string_error("split string with empty seperator");
-    if ( times < 0 )
-        throw string_error("split string with negative times {}", times);
-    auto arr = array<view>();
-    for ( auto pos_1 = self.data(); times >= 0; times-- )
+    if constexpr ( debug )
     {
-        auto pos_2 = times >= 1 ? device::search(pos_1, self.data() + self.size(), str.data(), str.data() + str.size()) :
-                                 self.data() + self.size();
+        if ( sep.empty() )
+            throw value_error("cannot split string (with seperator = \"\"): seperator is empty");
+        if ( times < 0 )
+            throw value_error("cannot split string (with times = {}): times is negative", times);
+    }
+
+    auto arr = array<container>();
+    auto pos_1 = 1;
+    for ( int _ in range(times) )
+    {
+        pos_2 = device::search(self.begin() + pos_1 - 1, self.end(), sep.begin(), sep.end()) - self.begin() + 1;
+        arr.push(self[pos_1, pos_2]);
+        pos_1 = pos_2 + sep.size();
+    }
+
+    for ( auto pos_1 = 1; times >= 0; times-- )
+    {
+        auto pos_2 = times >= 1 ? device::search(self.begin() + pos_1 - 1, self.end(), sep.begin(), sep.end()) :
+                                  self.size();
         arr.push(view(pos_1, pos_2 - pos_1));
         if ( pos_2 != self.data() + self.size() )
-            pos_1 = pos_2 + str.size();
+            pos_1 = pos_2 + sep.size();
         else
             break;
     }
+
     return arr;
 }
 
 template < class container, class type, class device >
-constexpr array<typename string_algo<container,type,device>::view> string_algo<container,type,device>::right_split ( view str, int times ) const
+constexpr array<container> string_algo<container,type,device>::right_split ( const container& sep, int times ) const
 {
-    if ( str.empty() )
-        throw string_error("right_split string with empty seperator");
-    if ( times < 0 )
-        throw string_error("right_split string with negative times {}", times);
+    if constexpr ( debug )
+    {
+        if ( sep.empty() )
+            throw value_error("cannot right_split string (with seperator = \"\"): seperator is empty");
+        if ( times < 0 )
+            throw value_error("cannot right_split string (with times = {}): times is negative", times);
+    }
+
     auto arr = array<view>();
     for ( auto pos_2 = self.data() + self.size(); times >= 0; times-- )
     {
-        auto pos_1 = times >= 1 ? device::find_end(self.data(), pos_2, str.data(), str.data() + str.size()) :
-                                 pos_2;
+        auto pos_1 = times >= 1 ? device::find_end(self.data(), pos_2, sep.data(), sep.data() + sep.size()) :
+                                  pos_2;
         if ( pos_1 == pos_2 )
-            pos_1 = self.data() - str.size();
-        arr.empty() ? arr.push  (   view(pos_1 + str.size(), pos_2 - pos_1 - str.size())) :
-                      arr.insert(1, view(pos_1 + str.size(), pos_2 - pos_1 - str.size()));
-        if ( pos_1 != self.data() - str.size() )
+            pos_1 = self.data() - sep.size();
+        arr.empty() ? arr.push  (   view(pos_1 + sep.size(), pos_2 - pos_1 - sep.size())) :
+                      arr.insert(1, view(pos_1 + sep.size(), pos_2 - pos_1 - sep.size()));
+        if ( pos_1 != self.data() - sep.size() )
             pos_2 = pos_1;
         else
             break;
     }
+
     return arr;
 }
 
@@ -317,27 +342,53 @@ constexpr array<typename string_algo<container,type,device>::view> string_algo<c
 template < class container, class type, class device >
 constexpr container& string_algo<container,type,device>::strip ( view chars )
 {
-    return self.left_strip(chars).right_strip(chars);
+    if constexpr ( debug )
+    {
+        if ( chars.empty() )
+            throw value_error("cannot strip string (with chars = \"\"): nothing to strip");
+    }
+
+    auto pos1 = 0;
+    while ( pos <= size() and not chars.contains(self[pos1]) )
+        pos1++;
+
+    auto pos2 = size();
+    while ( pos2 >= 1 and not chars.contains(self[pos2]) )
+        pos2--;
+
+    device::copy_backward(begin() + pos1 - 1, )
+
+
 }
 
 template < class container, class type, class device >
 constexpr container& string_algo<container,type,device>::left_strip ( view chars )
 {
-    if ( chars.empty() )
-        throw string_error("left_strip string with empty strip_list");
-    auto pos = device::find_if(begin(), end(), [&] (const auto& ch) { return not chars.contains(ch); });
-    return static_cast<container&>(self).erase(1, pos - begin());
+    if constexpr ( debug )
+    {
+        if ( chars.empty() )
+            throw value_error("cannot left_strip string (with chars = \"\"): nothing to strip");
+    }
+
+    auto pos = 0;
+    while ( pos <= size() and not chars.contains(self[pos]) )
+        pos++;
+    return static_cast<container&>(self).erase(1, pos - 1);
 }
 
 template < class container, class type, class device >
 constexpr container& string_algo<container,type,device>::right_strip ( view chars )
 {
-    if ( chars.empty() )
-        throw string_error("left_strip string with empty strip_list");
-    auto pos = end() - 1;
-    while ( pos >= begin() and not chars.contains(*pos) )
+    if constexpr ( debug )
+    {
+        if ( chars.empty() )
+            throw value_error("cannot right_strip string (with chars = \"\"): nothing to strip");
+    }
+
+    auto pos = size();
+    while ( pos >= 1 and not chars.contains(self[pos]) )
         pos--;
-    return static_cast<container&>(self).erase(pos - begin() + 1, size());
+    return static_cast<container&>(self).erase(pos + 1, size());
 }
 
 template < class container, class type, class device >
@@ -424,7 +475,7 @@ template < class container, class type, class device >
 constexpr int string_algo<container,type,device>::count ( view str ) const
 {
     if ( str.empty() )
-        throw string_error("count string with empty substr");
+        throw value_error("count string with empty substr");
 
     auto pos   = begin();
     auto times = 0;
@@ -465,7 +516,7 @@ template < class container, class type, class device >
 constexpr container& string_algo<container,type,device>::remove ( view str )
 {
     if ( str.empty() )
-        throw string_error("remove string with empty substr");
+        throw value_error("remove string with empty substr");
 
     auto pos = begin();
     while ( true )

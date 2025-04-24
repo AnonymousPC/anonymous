@@ -1,5 +1,3 @@
-#pragma once
-
 namespace aux
 {
     template < string_type type1, class type2 > class  symbol_map;

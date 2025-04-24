@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     template < class type >
@@ -17,7 +15,7 @@ namespace detail
             using result_type = type;                                                                   \
                                                                                                         \
             constexpr decltype(auto) operator() ( const type& a ) const                                 \
-                requires ( not detail::opencl_kernel_inputable<decay<decltype(a)>> )                    \
+                requires ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> )                    \
             {                                                                                           \
                 return std::$functor<type>::operator()(a);                                              \
             }                                                                                           \
@@ -26,7 +24,7 @@ namespace detail
             {                                                                                           \
                 return boost::compute::detail::invoked_function<                                        \
                         type,                                                                           \
-                        boost::tuple<decay<decltype(a)>>                                                \
+                        boost::tuple<remove_cvref<decltype(a)>>                                                \
                     >(#$operator, std::string(), boost::make_tuple(a));                                 \
             }                                                                                           \
     };                                                                                                  \
@@ -38,7 +36,7 @@ namespace detail
         public:                                                                                         \
             constexpr decltype(auto) operator() ( const auto& a ) const                                 \
                 requires requires { $operator a; } and                                                  \
-                        ( not detail::opencl_kernel_inputable<decay<decltype(a)>> )                     \
+                        ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> )                     \
             {                                                                                           \
                 return std::$functor<void>::operator()(a);                                              \
             }                                                                                           \
@@ -46,8 +44,8 @@ namespace detail
             constexpr decltype(auto) operator() ( const detail::opencl_kernel_inputable auto& a ) const \
             {                                                                                           \
                 return boost::compute::detail::invoked_function<                                        \
-                        decltype($operator std::declval<typename decay<decltype(a)>::result_type>()),   \
-                        boost::tuple<decay<decltype(a)>>                                                \
+                        decltype($operator std::declval<typename remove_cvref<decltype(a)>::result_type>()),   \
+                        boost::tuple<remove_cvref<decltype(a)>>                                                \
                     >(#$operator, std::string(), boost::make_tuple(a));                                 \
             }                                                                                           \
     }; 
@@ -62,8 +60,8 @@ namespace detail
             using boost::compute::$functor<type>::result_type;                                                                                         \
                                                                                                                                                        \
             constexpr decltype(auto) operator() ( const type& a, const type& b ) const                                                                 \
-                requires ( not detail::opencl_kernel_inputable<decay<decltype(a)>> ) and                                                               \
-                         ( not detail::opencl_kernel_inputable<decay<decltype(b)>> )                                                                   \
+                requires ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> ) and                                                               \
+                         ( not detail::opencl_kernel_inputable<remove_cvref<decltype(b)>> )                                                                   \
             {                                                                                                                                          \
                 return std::$functor<type>::operator()(a, b);                                                                                          \
             }                                                                                                                                          \
@@ -81,8 +79,8 @@ namespace detail
         public:                                                                                                                                        \
             constexpr decltype(auto) operator() ( const auto& a, const auto& b ) const                                                                 \
                 requires requires { a $operator b; } and                                                                                               \
-                        ( not detail::opencl_kernel_inputable<decay<decltype(a)>> ) and                                                                \
-                        ( not detail::opencl_kernel_inputable<decay<decltype(b)>> )                                                                    \
+                        ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> ) and                                                                \
+                        ( not detail::opencl_kernel_inputable<remove_cvref<decltype(b)>> )                                                                    \
             {                                                                                                                                          \
                 return std::$functor<void>::operator()(a, b);                                                                                          \
             }                                                                                                                                          \
@@ -90,10 +88,10 @@ namespace detail
             constexpr decltype(auto) operator() ( const detail::opencl_kernel_inputable auto& a, const detail::opencl_kernel_inputable auto& b ) const \
             {                                                                                                                                          \
                 return boost::compute::detail::invoked_binary_operator<                                                                                \
-                        decay<decltype(a)>,                                                                                                            \
-                        decay<decltype(b)>,                                                                                                            \
-                        decltype(std::declval<typename decay<decltype(a)>::result_type>() $operator                                                    \
-                                 std::declval<typename decay<decltype(b)>::result_type>())                                                             \
+                        remove_cvref<decltype(a)>,                                                                                                            \
+                        remove_cvref<decltype(b)>,                                                                                                            \
+                        decltype(std::declval<typename remove_cvref<decltype(a)>::result_type>() $operator                                                    \
+                                 std::declval<typename remove_cvref<decltype(b)>::result_type>())                                                             \
                     >(#$operator, a, b);                                                                                                               \
             }                                                                                                                                          \
     };

@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     template < class type, int dim, class device >

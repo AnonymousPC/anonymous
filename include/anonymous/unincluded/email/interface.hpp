@@ -1,5 +1,3 @@
-#pragma once
-
 namespace anonymous::email
 {
     class email_send;

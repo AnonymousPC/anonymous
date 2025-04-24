@@ -1,5 +1,3 @@
-#pragma once
-
 #include "collection_base/collection_global.hpp"
 #include "collection_base/collection_algo.hpp"
 #include "collection_base/map_keys.hpp"

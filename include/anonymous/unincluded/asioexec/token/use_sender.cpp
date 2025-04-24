@@ -1,5 +1,3 @@
-#pragma once
-
 template< class executor_type >
 class use_sender_t::executor_with_default 
     extends public executor_type 

@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 opencl::pointer<type>::pointer ( boost::compute::buffer cvt_buf, size_t cvt_idx )
     extends buf ( cvt_buf ),
@@ -242,28 +240,40 @@ opencl::template const_pointer<type> operator - ( opencl::template const_pointer
 template < class type >
 std::ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template pointer<type> right )
 {
-    [[assume(left.get_buffer() == right.get_buffer())]];
+    if constexpr ( debug )
+        if ( left.get_buffer() != right.get_buffer() )
+            throw logic_error("cannot minus pointer (with left.get_buffer() = {}, right.get_buffer() = {}): belongs to different opencl buffers", left.get_buffer(), right.get_buffer());
+
     return left.get_index() - right.get_index();
 }
 
 template < class type >
 std::ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template const_pointer<type> right )
 {
-    [[assume(left.get_buffer() == right.get_buffer())]];
+    if constexpr ( debug )
+        if ( left.get_buffer() != right.get_buffer() )
+            throw logic_error("cannot minus pointer (with left.get_buffer() = {}, right.get_buffer() = {}): belongs to different opencl buffers", left.get_buffer(), right.get_buffer());
+
     return left.get_index() - right.get_index();
 }
 
 template < class type >
 std::ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template pointer<type> right )
 {
-    [[assume(left.get_buffer() == right.get_buffer())]];
+    if constexpr ( debug )
+        if ( left.get_buffer() != right.get_buffer() )
+            throw logic_error("cannot minus pointer (with left.get_buffer() = {}, right.get_buffer() = {}): belongs to different opencl buffers", left.get_buffer(), right.get_buffer());
+
     return left.get_index() - right.get_index();
 }
 
 template < class type >
 std::ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template const_pointer<type> right )
 {
-    [[assume(left.get_buffer() == right.get_buffer())]];
+    if constexpr ( debug )
+        if ( left.get_buffer() != right.get_buffer() )
+            throw logic_error("cannot minus pointer (with left.get_buffer() = {}, right.get_buffer() = {}): belongs to different opencl buffers", left.get_buffer(), right.get_buffer());
+            
     return left.get_index() - right.get_index();
 }
 

@@ -1,5 +1,3 @@
-#pragma once
-
 file_pnm::file_pnm ( path pth )
 {
     open(pth);

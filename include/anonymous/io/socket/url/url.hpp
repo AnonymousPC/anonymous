@@ -1,5 +1,3 @@
-#pragma once
-
 class url
     extends public string
 {

@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     class system_error

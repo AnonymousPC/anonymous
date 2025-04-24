@@ -1,5 +1,3 @@
-#pragma once
-
 const std::regex url::regex = std::regex
 (
     R"(([a-z]+://))"                                                                                                                                    // Essential: protocal.

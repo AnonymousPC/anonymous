@@ -1,5 +1,3 @@
-#pragma once
-
 class any
     extends public std::any
 {

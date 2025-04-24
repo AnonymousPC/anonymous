@@ -1,5 +1,3 @@
-#pragma once
-
 /// Auxiliary
 
 template < string_type type1, class type2 >
@@ -170,7 +168,7 @@ type numeric_expr<type>::operator() ( const string& str ) const
     if ( success and pos == str.end() )
         return result;
     else
-        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attriande = {})", str, pos-str.begin()+1, typeid(type));
+        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attribute = {})", str, pos-str.begin()+1, typeid(type));
 }
 
 template < class type >
@@ -374,7 +372,7 @@ function<type(type)> numeric_expr<type(type)>::operator() ( const string& str ) 
     if ( success and pos == str.end() )
         return result;
     else
-        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attriande = {})", str, pos-str.begin()+1, typeid(type(type)));
+        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attribute = {})", str, pos-str.begin()+1, typeid(type(type)));
 }
 
 template < class type >
@@ -653,7 +651,7 @@ function<type(type,type)> numeric_expr<type(type,type)>::operator() ( const stri
     if ( success and pos == str.end() )
         return result;
     else
-        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attriande = {})", str, pos-str.begin()+1, typeid(type(type,type)));
+        throw parse_error("failed to parse numeric_expr \"{}\" at pos {} (with attribute = {})", str, pos-str.begin()+1, typeid(type(type,type)));
 }
 
 template < class type >

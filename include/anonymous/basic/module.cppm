@@ -1,13 +1,23 @@
 module;
-#include <csignal>
+#include <csignal> // macros: SIGINT, SIGABRT, ...
 #include <__functional/bind_back.h>
 #include <__type_traits/maybe_const.h>
 #include <__ranges/non_propagating_cache.h>
 #include <__ranges/range_adaptor.h>
 
+#define left_value_type      typename remove_cvref<decltype(left  )>::value_type
+#define output_value_type    typename remove_cvref<decltype(output)>::value_type
+#define vector_value_type    typename remove_cvref<decltype(vector)>::value_type
+#define vector_layout_type   typename remove_cvref<decltype(vector)>::layout_type
+#define mdspan_value_type    typename remove_cvref<decltype(mdspan)>::value_type
+#define mdspan_extents_type  typename remove_cvref<decltype(mdspan)>::extents_type
+#define mdspan_layout_type   typename remove_cvref<decltype(mdspan)>::layout_type
+#define mdspan_accessor_type typename remove_cvref<decltype(mdspan)>::accessor_type
+
 export module anonymous.basic;
 import std;
 import stdexec;
+import plf;
 import boost;
 import Eigen;
 import tbb;
@@ -39,7 +49,7 @@ import clblast;
 
 #ifndef __cpp_lib_ranges_join_with
     #include "std/ranges_join_with.hpp"
-#endif
+#endif 
 
 #ifndef __cpp_lib_ranges_starts_ends_with
     #include "std/ranges_starts_ends_with.hpp"
@@ -57,15 +67,36 @@ import clblast;
     #include "std/stacktrace.hpp"
 #endif
 
+#ifndef __cpp_lib_text_encoding
+    #include "std/text_encoding.hpp"
+#endif
+
 export namespace std::execution
 {
-    using namespace stdexec;
+    using namespace stdexec; // C++26 proposal.
+}
+
+export namespace std
+{
+    using namespace plf; // C++26 proposal.
 }
 
 export namespace anonymous
 {
-    /// Common.abi
-    std::string demangle ( const std::type_info& );
+    /// Config
+    #ifdef NDEBUG
+        constexpr bool debug = false;
+    #else
+        constexpr bool debug = true;
+    #endif
+
+    /// Common.algo
+    template < int min, int max, int stride = 1 > constexpr void for_constexpr        ( auto&& /*operations*/   );
+    template < int min, int max, int stride = 1 > constexpr bool all_of_constexpr     ( auto&& /*preds*/ );
+    template < int min, int max, int stride = 1 > constexpr bool any_of_constexpr     ( auto&& /*preds*/ );
+    template < int min, int max, int stride = 1 > constexpr bool none_of_constexpr    ( auto&& /*preds*/ );
+    template < int min, int max, int stride = 1 > constexpr auto accumulate_constexpr ( auto&& /*vals*/, auto&& /*init*/ );
+    template < int min, int max, int stride = 1 > constexpr auto accumulate_constexpr ( auto&& /*vals*/, auto&& /*init*/, auto&& /*op*/ );
 
     /// Common.concept
     // See concept.h.
@@ -95,14 +126,14 @@ export namespace anonymous
             class math_error;
                 class linalg_error;
 
+    /// Common.print
+    class print_t;
+
     /// Common.range
     template < class type > class range;
 
     /// Device
     class cpu;
-    class cuda;
-    class hip;
-    class mps;
     class opencl;
     class system;
     class tbb;
@@ -113,8 +144,17 @@ export namespace anonymous
     #include "init/init.hpp"
 
     /// Global
-    constexpr           detail::print_t              print             = detail::print_t();
-    inline              cpu::execution_context_type& execution_context = cpu::execution_context;
-    inline thread_local cpu::random_context_type&    random_context    = cpu::random_context;
+    constexpr    print_t                      print             = print_t();
+                 cpu::execution_context_type& execution_context = cpu::execution_context;
+    thread_local cpu::random_context_type&    random_context    = cpu::random_context;
 
 } // namespace anonymous
+
+export namespace boost::compute
+{
+    #include "device/opencl/type/export/boost_compute.hpp"
+    #include "device/opencl/operator/export/boost_compute.hpp"
+    
+} // namespace boost::compute
+
+

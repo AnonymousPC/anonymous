@@ -1,5 +1,3 @@
-#pragma once
-
 class serial_port_buf
     extends public std::streambuf
 {

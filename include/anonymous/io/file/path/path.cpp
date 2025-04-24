@@ -1,5 +1,3 @@
-#pragma once
-
 path::path ( std::filesystem::path pth )
     extends string ( pth.generic_string() )
 {

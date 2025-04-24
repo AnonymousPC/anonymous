@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     template < std::endian endian, class type = void >

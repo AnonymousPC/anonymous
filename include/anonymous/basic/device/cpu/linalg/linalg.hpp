@@ -1,13 +1,4 @@
-#pragma once
-
-#define left_type                  decay<decltype(left  )>
-#define left_value_type   typename decay<decltype(left  )>::value_type
-#define vector_type                decay<decltype(vector)>
-#define vector_value_type typename decay<decltype(vector)>::value_type
-#define output_type                decay<decltype(output)>
-#define output_value_type typename decay<decltype(output)>::value_type
-
-#include "detail.hpp"
+#include "detail/mapping.cpp"
 
 constexpr void cpu::linalg::unary_plus ( const auto right, auto output )
 {
@@ -89,7 +80,7 @@ constexpr void cpu::linalg::cross ( const auto left, const auto right, auto outp
 
 constexpr void cpu::linalg::dot ( const auto left, const auto right, auto output )
 {
-    output = detail::eigen_map<output_type>(left).dot(detail::eigen_map<output_type>(right));
+    output = detail::eigen_map<decltype(output)>(left).dot(detail::eigen_map<decltype(output)>(right));
 }
 
 constexpr void cpu::linalg::fft ( const auto vector, auto output )
@@ -100,9 +91,9 @@ constexpr void cpu::linalg::fft ( const auto vector, auto output )
      */
     auto vector_map = [&]
         {
-            if constexpr ( detail::is_contiguous_layout<typename decay<decltype(vector)>::layout_type> )
+            if constexpr ( detail::is_contiguous_layout<vector_layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
-            else // if constexpr ( detail::is_strided_layout<typename decay<decltype(vector)>::layout_type> )
+            else // if constexpr ( detail::is_strided_layout<vector_layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
         } ();
     auto output_map = detail::eigen_map(output);
@@ -117,9 +108,9 @@ constexpr void cpu::linalg::ifft ( const auto vector, auto output )
      */
     auto vector_map = [&]
         {
-            if constexpr ( detail::is_contiguous_layout<typename decay<decltype(vector)>::layout_type> )
+            if constexpr ( detail::is_contiguous_layout<vector_layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
-            else // if constexpr ( detail::is_strided_layout<typename decay<decltype(vector)>::layout_type> )
+            else // if constexpr ( detail::is_strided_layout<vector_layout_type> )
                 return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
         } ();
     auto output_map = detail::eigen_map(output);
@@ -130,10 +121,3 @@ constexpr void cpu::linalg::tensor ( const auto left, const auto right, auto out
 {
     detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) * detail::eigen_map<output_value_type>(right).transpose();
 }
-
-#undef left_type
-#undef left_value_type
-#undef vector_type
-#undef vector_value_type
-#undef output_type
-#undef output_value_type

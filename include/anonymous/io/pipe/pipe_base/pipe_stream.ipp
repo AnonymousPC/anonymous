@@ -1,5 +1,3 @@
-#pragma once
-
 /// Class pipe_stream
 
 // Core

@@ -1,5 +1,3 @@
-#pragma once
-
 template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr decltype(auto) array_algo<container,type,dim,device>::begin ( )
@@ -115,10 +113,9 @@ template < int axis >
 constexpr container& array_algo<container,type,dim,device>::rotate ( int n )
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) )
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( n < -shape()[axis] or n > shape()[axis] )
-            throw value_error("rotate array with step {} out of range with shape {} axis {}", n, shape(), axis);
-    #endif
+            throw value_error("cannot rotate array (with step = {}, shape() = {}, axis = {}): step out of range", n, shape(), axis);
 
     if constexpr ( axis == 1 or axis == -dim )
         n > 0 ? device::rotate(begin(), end() - n, end()) :
@@ -141,10 +138,10 @@ constexpr array<type,dim-1,device> array_algo<container,type,dim,device>::averag
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) ) and
              default_initializable<type> and plusable<type> and dividable_to<type,int>
 {
-    #ifdef debug
+    if constexpr ( debug )
         if ( shape()[axis] == 0 )
-            throw value_error("get average from an empty array with shape {} axis {}", shape(), axis);
-    #endif
+            throw value_error("cannot calculate average (with shape() = {}, axis = {}): array is empty", shape(), axis);
+
     return sum<axis>() / shape()[axis];
 }
 
@@ -155,9 +152,9 @@ constexpr array<type,dim-1,device> array_algo<container,type,dim,device>::sum ( 
     requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) ) and
              default_initializable<type> and plusable<type>
 {
-    static_assert(false, "not coded yet, you should find a way to add them in-place"
-                         "device::accumulate() or device::reduce() is NOT OKAY"
-                         "besides, if number_type<type> then use reduce in lowest layer"
-                         "see array_algo<..., dim=1, ...>::sum()");
+    static_assert(false, "not coded yet, you should find a way to add them in-place."
+                         "device::accumulate() or device::reduce() is NOT OKAY."
+                         "besides, if number_type<type> then use reduce in lowest layer."
+                         "see array_algo<..., dim=1, ...>::sum().");
 }
 

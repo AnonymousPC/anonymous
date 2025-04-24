@@ -1,5 +1,3 @@
-#pragma once
-
 class use_sender_t
 {
     public: // Core

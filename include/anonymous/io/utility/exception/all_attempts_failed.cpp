@@ -1,5 +1,3 @@
-#pragma once
-
 template < derived_from<std::exception> type >
 detail::all_attempts_failed<type>::all_attempts_failed ( input_range auto&& r )
     requires same_as<range_value<decltype(r)>,type>

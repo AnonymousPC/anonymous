@@ -1,5 +1,3 @@
-#pragma once
-
 template < class container,
            class type,
            int   dim,
@@ -93,6 +91,3 @@ class array_algo<container,type,1,device>
         constexpr       container&      replace             ( const equalable_to  <type>      auto&, const convertible_to<type> auto& );
         constexpr       container&      replace             (       predicate     <type>      auto,  const convertible_to<type> auto& );
 };
-
-// This .ipp file is explicitly delay included in array.hpp
-// #include "array_algo_1d.cpp"

@@ -1,5 +1,3 @@
-#pragma once
-
 template < class types >
 constexpr optional<types>::optional ( types init )
     extends base ( std::move(init) )
@@ -29,17 +27,17 @@ constexpr const std::type_info& optional<types>::type ( ) const
 template < class types >
 constexpr types& optional<types>::value ( )
 {
-    if ( not empty() )
+    if ( not empty() ) [[likely]]
         return base::value();
     else
-        throw type_error("bad optional access: cannot access {} in {} (whose type = {}, empty = {})", typeid(types), typeid(self), typeid(void), true);
+        throw type_error("bad optional access (with empty() = true)");
 }
 
 template < class types >
 constexpr const types& optional<types>::value ( ) const
 {
-    if ( not empty() )
+    if ( not empty() ) [[likely]]
         return base::value();
     else
-        throw type_error("bad optional access: cannot access {} in {} (whose type = {}, empty = {})", typeid(types), typeid(self), typeid(void), true);
+        throw type_error("bad optional access (with empty() = true)");
 }

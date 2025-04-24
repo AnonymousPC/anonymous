@@ -67,8 +67,10 @@ if system == "macos":
 
 if type == "debug":
     compile_args.append("-O0")
+
 elif type == "release":
     compile_args.append("-O3")
+    define_args["NDEBUG"] = ""
 
 
 
@@ -108,10 +110,13 @@ def link():
 
 # Detail
 
+update = False
 
 def updatable(module):
     try:
-        bin_time = os.path.getmtime(f"module/{type}/{module}.pcm")
+        m_time = os.path.getmtime(f"module/{type}/{module}.pcm")
+        o_time = os.path.getmtime(f"bin/{type}/{module}.o")
+        bin_time = max(m_time, o_time)
     except OSError:
         bin_time = 0
     
@@ -120,7 +125,9 @@ def updatable(module):
         for file in files:
             src_time = max(src_time, os.path.getmtime(f"{root}/{file}"))
 
-    update = src_time >= bin_time
+    global update
+    if src_time >= bin_time:
+        update = True
     return update
 
 def run(command):

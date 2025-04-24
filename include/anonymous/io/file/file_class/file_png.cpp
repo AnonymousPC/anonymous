@@ -1,5 +1,3 @@
-#pragma once
-
 file_png::file_png ( path pth )
 {
     open(pth);

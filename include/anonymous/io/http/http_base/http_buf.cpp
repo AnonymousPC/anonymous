@@ -1,5 +1,3 @@
-#pragma once
-
 template < class protocol > struct basic_http_buf<protocol>::authorization extends public detail::io_mode<pair<string,string>> { using detail::io_mode<pair<string,string>>::io_mode; struct http_client_mode_tag { }; };
 template < class protocol > struct basic_http_buf<protocol>::cookie        extends public detail::io_mode<map<string,string>>  { using detail::io_mode<map<string,string>> ::io_mode; struct http_client_mode_tag { }; };
 template < class protocol > struct basic_http_buf<protocol>::header        extends public detail::io_mode<map<string,string>>  { using detail::io_mode<map<string,string>> ::io_mode; struct http_client_mode_tag { }; };

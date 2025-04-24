@@ -1,5 +1,3 @@
-#pragma once
-
 boost::asio::ssl::context ssl_context            = boost::asio::ssl::context(boost::asio::ssl::context::sslv23);
 boost::asio::ssl::context tls_context            = boost::asio::ssl::context(boost::asio::ssl::context::tls);
 detail::io_initializer_t  detail::io_initializer = detail::io_initializer_t();

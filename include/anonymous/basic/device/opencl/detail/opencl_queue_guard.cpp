@@ -1,5 +1,3 @@
-#pragma once
-
 detail::opencl_queue_guard::~opencl_queue_guard ( )
 {
     opencl_queue_context::command_queue().finish();

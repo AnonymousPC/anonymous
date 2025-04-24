@@ -1,5 +1,3 @@
-#pragma once
-
 export namespace std
 {
     template<class _Iterator> using iter_const_reference_t = const iter_reference_t<_Iterator>;

@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     constexpr bool is_same_sign                ( auto, auto... );

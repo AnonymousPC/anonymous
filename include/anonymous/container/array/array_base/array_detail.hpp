@@ -1,42 +1,30 @@
-#pragma once
-
 namespace detail
 {
-    template < class type, class... types >
-    constexpr bool ints_until_last_func = []
-    {
-        if constexpr ( is_void<type> )
-            return convertible_until<int,-2,types...> and std::invocable<last_type_of<types...>>;
-        else
-            return convertible_until<int,-2,types...> and function_type<last_type_of<types...>,type()>;
-    } ();
+    // Helper
 
-    template < class input_type, class result_type, int count, class... types >
-    constexpr bool invocable_r_by_n_ints_helper = []
-    {
-        if constexpr ( count >= 1 )
-            return invocable_r_by_n_ints_helper<input_type,result_type,count-1,int,types...>;
-        else
-            if constexpr ( is_void<result_type> )
-                return invocable<input_type,types...>;
+    template < class input_type, int count, class... int_types >
+    constexpr bool invocable_by_n_ints_helper = []
+        {
+            if constexpr ( count >= 1 )
+                return invocable_by_n_ints_helper<input_type,count-1,int_types...,int>;
             else
-                return function_type<input_type,result_type(types...)>;
-    } ();
+                return invocable<input_type,int_types...>;
+        } ();
+
+    template < class input_type, int count >
+    concept invocable_by_n_ints = invocable_by_n_ints_helper<input_type,count>; // As concept cannot be recursive.
+
+    template < class input_type, class result_type, int count, class... int_types >
+    constexpr bool invocable_r_by_n_ints_helper = []
+        {
+            if constexpr ( count >= 1 )
+                return invocable_r_by_n_ints_helper<input_type,result_type,count-1,int_types...,int>;
+            else
+                return invocable_r<input_type,result_type,int_types...>;
+        } ();
 
     template < class input_type, class result_type, int count >
     concept invocable_r_by_n_ints = invocable_r_by_n_ints_helper<input_type,result_type,count>;
-
-    template < class type, class... types >
-    constexpr bool ints_until_last_func_ints = convertible_until<int,-2,types...> and invocable_r_by_n_ints<last_type_of<types...>,type,sizeof...(types)-1>; // No need to check <void,...>, as it forwards to invocable_r_by_n_ints_helper.
-
-    template < class type, class... types >
-    constexpr bool ints_until_last_type = convertible_until<int,-2,types...> and []
-    {
-        if constexpr ( is_void<type> )
-            return not ints_until_last_func<type,types...> and not ints_until_last_func_ints<type,types...>;
-        else
-            return std::convertible_to<last_type_of<types...>,type>;
-    } ();
 
     template < class input_type, int count, class... types >
     struct invoke_result_by_n_ints_helper;
@@ -62,39 +50,29 @@ namespace detail
 
 
 
-    constexpr auto multiply_first_to_second_last ( const auto& arg1, const auto& arg2, [[maybe_unused]] const auto&... args )
-    {
-        if constexpr ( sizeof...(args) >= 1 )
-            return multiply_first_to_second_last(arg1 * arg2, args...);
-        else 
-            return arg1;
-    }
+    // Concept
 
-    constexpr int multiply_first_until_last ( const auto&... args )
-    {
-        return ( args * ... );
-    }
+    template < class value_type, class... types >
+    constexpr bool ints_until_last_type =
+        all_of_constexpr<1,sizeof...(types)-1>([] <int index> { return convertible_to<index_type_of<index,types...>,int>; }) and
+        ( (     is_void<value_type> and not invocable<last_type_of<types...>> and not invocable_by_n_ints<last_type_of<types...>,sizeof...(types)> ) or
+          ( not is_void<value_type> and convertible_to<last_type_of<types...>,value_type> ) );
 
-    constexpr int multiply_first_until_second_last ( const auto& arg1, const auto&... args )
-    {
-        if constexpr ( sizeof...(args) >= 1 )
-            return arg1 * multiply_first_until_second_last(args...);
-        else
-            return 1;
-    }
+    template < class value_type, class... types >
+    constexpr bool ints_until_last_generator =
+        all_of_constexpr<1,sizeof...(types)-1>([] <int index> { return convertible_to<index_type_of<index,types...>,int>; }) and
+        ( (     is_void<value_type> and invocable  <last_type_of<types...>>            ) or 
+          ( not is_void<value_type> and invocable_r<last_type_of<types...>,value_type> ) );
 
-    constexpr bool check_first_until_last_as_positive ( const auto&... args )
-    {
-        return ( [] (const auto& v) { return v >= 0; } ( args ) and ... );
-    }
+    template < class value_type, class... types >
+    constexpr bool ints_until_last_function =  
+        all_of_constexpr<1,sizeof...(types)-1>([] <int index> { return convertible_to<index_type_of<index,types...>,int>; }) and 
+        ( (     is_void<value_type> and invocable_by_n_ints  <last_type_of<types...>,           sizeof...(types)> ) or
+          ( not is_void<value_type> and invocable_r_by_n_ints<last_type_of<types...>,value_type,sizeof...(types)> ) );
 
-    constexpr bool check_first_until_second_last_as_positive ( const auto& arg1, const auto&... args )
-    {
-        if constexpr ( sizeof...(args) >= 1 )
-            return arg1 >= 0 and check_first_until_second_last_as_positive(args...);
-        else
-            return true;
-    }
+
+
+    /// Multi-dimensional Operation
 
     constexpr decltype(auto) md_access ( auto& arr, int_type auto idx1, int_type auto... idxs )
     {
@@ -114,8 +92,6 @@ namespace detail
 
     constexpr void md_generate ( auto& arr, const auto& shp, const auto& func, int_type auto... idx )
     {
-        [[assume(arr.ownership())]];
-
         if constexpr ( sizeof...(idx) <= decay<decltype(arr)>::dimension() - 2 )
             for ( int i in range(shp[sizeof...(idx)+1]) )
                 md_generate(arr, shp, func, idx..., i);
@@ -142,7 +118,7 @@ namespace detail
         });
         for_constexpr<1,decay<decltype(smaller_shape)>::size()>([&] <int index> { smaller_size *= smaller_shape[index]; });
         auto smaller_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and smaller_resizable == 1 and new_shape[ 1] < old_shape[ 1] ) or
-                                         ( same_as<typename device::layout_type,std::layout_left > and smaller_resizable == 1 and new_shape[-1] < old_shape[-1] ) );                   
+                                          ( same_as<typename device::layout_type,std::layout_left > and smaller_resizable == 1 and new_shape[-1] < old_shape[-1] ) );                   
 
         return tuple(smaller_shape, smaller_size, smaller_resizable > 0, smaller_relayoutable);
     }
@@ -165,8 +141,8 @@ namespace detail
         });
         for_constexpr<1,decay<decltype(larger_shape)>::size()>([&] <int index> { larger_size *= larger_shape[index]; });
         auto larger_relayoutable = not ( ( same_as<typename device::layout_type,std::layout_right> and larger_resizable == 1 and new_shape[ 1] > old_shape[ 1] ) or
-                                        ( same_as<typename device::layout_type,std::layout_left > and larger_resizable == 1 and new_shape[-1] > old_shape[-1] ) );                   
-
+                                         ( same_as<typename device::layout_type,std::layout_left > and larger_resizable == 1 and new_shape[-1] > old_shape[-1] ) );                   
+  
         return tuple(larger_shape, larger_size, larger_resizable > 0, larger_relayoutable);
     }
 
@@ -180,7 +156,6 @@ namespace detail
         using mdspan        = std::mdspan<value_type,std::dextents<int,dim>,layout_type,accessor_type>;
 
         auto adjust = [] (int x) { return x - 1; };
-        [[assume(arr.ownership())]];
 
         if constexpr ( same_as<layout_type,std::layout_right> )
         {
@@ -223,7 +198,6 @@ namespace detail
         using mdspan        = std::mdspan<value_type,std::dextents<int,dim>,layout_type,accessor_type>;
 
         auto adjust = [] (int x) { return x - 1; };
-        [[assume(arr.ownership())]];
 
         if constexpr ( same_as<layout_type,std::layout_right> )
         {
@@ -277,7 +251,7 @@ namespace detail
     constexpr void md_pop ( auto& arr, const auto& shp, int pos )
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
-        [[assume(pos >= 1)]];
+
         if constexpr ( axis == 1 )
             device::move(arr.begin() + pos, arr.end(), arr.begin() + pos - 1);
         else
@@ -289,7 +263,7 @@ namespace detail
     constexpr void md_insert ( auto& arr, const auto& shp, int pos, auto&& new_value )
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
-        [[assume(pos >= 1)]];
+
         if constexpr ( axis == 1 )
         {
             device::move_backward(arr.begin() + pos - 1, arr.end() - 1, arr.end());
@@ -304,7 +278,7 @@ namespace detail
     constexpr void md_erase ( auto& arr, const auto& shp, int pos_1, int pos_2 )
     {
         static_assert ( axis >= 1 and axis <= decay<decltype(arr)>::dimension() );
-        [[assume(pos_1 >= 1 and pos_2 >= 1)]];
+
         if constexpr ( axis == 1 )
             device::move(arr.begin() + pos_2, arr.end(), arr.begin() + pos_1 - 1);
         else
@@ -335,12 +309,12 @@ namespace detail
                 md_rotate<device,axis-1,depth+1>(arr[i], shp, n);
     }
 
-    enum array_attriande
+    enum array_attribute
     {
-        no_attriande,
-        rows_attriande,
-        columns_attriande,
-        transpose_attriande 
+        no_attribute,
+        rows_attribute,
+        columns_attribute,
+        transpose_attribute 
     };
 
 
@@ -350,7 +324,7 @@ namespace detail
         if constexpr ( sizeof...(offsets) == 0 )
             return 0;
         else
-            if constexpr ( attr == rows_attriande )
+            if constexpr ( attr == rows_attribute )
             { 
                 int ofs = 0;
                 for_constexpr<1,sizeof...(offsets)>([&] <int index>
@@ -362,7 +336,7 @@ namespace detail
                     });
                 return ofs;
             }
-            else if constexpr ( attr == columns_attriande )
+            else if constexpr ( attr == columns_attribute )
             {
                 int ofs = 0;
                 for_constexpr<1,sizeof...(offsets)>([&] <int index>
@@ -375,18 +349,18 @@ namespace detail
                 return ofs;
             }
             else
-                static_assert(false, "unknown attriande");
+                static_assert(false, "unknown attribute");
     }
 
     template < auto attr >
     constexpr int view_offset_end ( const auto& shp, int_type auto... offsets )
     {
-        if constexpr ( attr == rows_attriande )
+        if constexpr ( attr == rows_attribute )
             return view_offset_begin<attr>(shp, offsets...) + shp[1+sizeof...(offsets)];
-        else if constexpr ( attr == columns_attriande )
+        else if constexpr ( attr == columns_attribute )
             return view_offset_begin<attr>(shp, offsets...) + shp[decay<decltype(shp)>::size()-sizeof...(offsets)];
         else
-            static_assert(false, "unknown attriande");
+            static_assert(false, "unknown attribute");
     }
 
 
@@ -421,8 +395,6 @@ namespace detail
 
     void align_array ( auto& arr )
     {
-        [[assume(arr.ownership())]];
-
         if constexpr ( decay<decltype(arr)>::dimension() == 1 )
         {
             auto align = arr.empty() ? 0 : arr.max([] (const auto& str1, const auto& str2) { return str1.size() < str2.size(); }).size();

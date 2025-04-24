@@ -1,5 +1,3 @@
-#pragma once
-
 detail::system_error::system_error ( )
     extends boost::system::system_error ( boost::system::error_code() )
 {

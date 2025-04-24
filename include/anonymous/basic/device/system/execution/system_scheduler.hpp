@@ -1,10 +1,12 @@
-#pragma once
-
 class system_scheduler
 {
+    private: // Core
+        constexpr system_scheduler ( ) = default;
+        friend class system_context;
+
     private: // Typedef
-                                                                              class sender;
-        template < class sender_type, class shape_type, class function_type > class bulk_sender;
+                                                                          class sender;
+        template < class sender_type, class shape_type, class func_type > class bulk_sender;
 
     public: // Interface
         constexpr static std::execution::sender auto schedule ( )                                                        noexcept;  
@@ -20,8 +22,6 @@ class system_scheduler
     private: // Data
         [[maybe_unused]] int i_am_not_constexpr = 42;
 };
-
-#include <execpools/thread_pool_base.hpp>
 
 #include "system_scheduler.cpp"
 

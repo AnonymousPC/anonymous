@@ -1,5 +1,3 @@
-#pragma once
-
 class serial_port_stream
     extends public std::iostream
 {

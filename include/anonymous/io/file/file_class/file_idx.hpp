@@ -1,5 +1,3 @@
-#pragma once
-
 class file_idx
     extends public any,
             public file_interface<file_idx>

@@ -1,5 +1,3 @@
-#pragma once
-
 file_dll& file_dll::open ( const path& pth )
 {
     // Open file.

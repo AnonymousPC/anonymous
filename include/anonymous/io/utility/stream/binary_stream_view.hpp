@@ -1,5 +1,3 @@
-#pragma once
-
 namespace ranges
 {
     template < class input_type, std::endian endian = std::endian::native >

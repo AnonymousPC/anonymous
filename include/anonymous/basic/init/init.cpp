@@ -1,5 +1,3 @@
-#pragma once
-
 detail::basic_initializer_t::basic_initializer_t ( )
 {
     // Stdio

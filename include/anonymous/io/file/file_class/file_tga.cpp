@@ -1,5 +1,3 @@
-#pragma once
-
 file_tga::file_tga ( path pth )
 {
     open(pth);

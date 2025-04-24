@@ -1,5 +1,3 @@
-#pragma once
-
 template < class protocol >
 basic_http_stream<protocol>::basic_http_stream ( )
     extends std::iostream ( nullptr )

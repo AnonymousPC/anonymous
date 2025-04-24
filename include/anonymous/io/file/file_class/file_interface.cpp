@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 type& file_interface<type>::open ( path pth )
 {

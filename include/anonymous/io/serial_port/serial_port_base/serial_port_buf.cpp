@@ -1,5 +1,3 @@
-#pragma once
-
 void serial_port_buf::open ( string serial_port )
 {
     try

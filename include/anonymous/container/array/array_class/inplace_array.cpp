@@ -1,32 +1,34 @@
-#pragma once
-
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::inplace_array ( int init_size )
-    extends base ( init_size )
 {
-    #ifdef debug
-    if ( init_size < 0 )
-        throw value_error("initialize inplace_array with negative size {}", init_size);
-    if ( init_size > capacity() )
-        throw value_error("initialize inplace_array with size {} out of capacity {}", init_size, capacity());
-    #endif
+    if constexpr ( debug )
+    {
+        if ( init_size < 0 )
+            throw value_error("cannot initialize inplace_array (with size() = {}): size is negative", init_size);
+        if ( init_size > capacity() )
+            throw value_error("cannot initialize inplace_array (with size() = {}, capacity() = {}): size exceeds capacity", init_size, capacity());
+    }
+
+    base::operator=(base(init_size));
 }
 
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::inplace_array ( int init_size, const type& init_value )
     requires copyable<type>
-    extends base ( init_size, init_value )
 {
-    #ifdef debug
-    if ( init_size < 0 )
-        throw value_error("initialize inplace_array with negative size {}", init_size);
-    if ( init_size > capacity() )
-        throw value_error("initialize inplace_array with size {} out of capacity {}", init_size, capacity());
-    #endif
+    if constexpr ( debug )
+    {
+        if ( init_size < 0 )
+            throw value_error("cannot initialize inplace_array (with size() = {}): size is negative", init_size);
+        if ( init_size > capacity() )
+            throw value_error("cannot initialize inplace_array (with size() = {}, capacity() = {}): size exceeds capacity", init_size, capacity());
+    }
+
+    base::operator=(base(init_size, init_value));
 }
 
 template < class type, int len, class device >
-constexpr inplace_array<type,len,device>::inplace_array ( int init_size, function_type<type()> auto init_value )
+constexpr inplace_array<type,len,device>::inplace_array ( int init_size, invocable_r<type> auto init_value )
     requires movable<type>
     extends inplace_array ( init_size )
 {
@@ -34,7 +36,7 @@ constexpr inplace_array<type,len,device>::inplace_array ( int init_size, functio
 }
 
 template < class type, int len, class device >
-constexpr inplace_array<type,len,device>::inplace_array ( int init_size, function_type<type(int)> auto init_value )
+constexpr inplace_array<type,len,device>::inplace_array ( int init_size, invocable_r<type,int> auto init_value )
     requires movable<type>
     extends inplace_array ( init_size )
 {
@@ -45,12 +47,12 @@ constexpr inplace_array<type,len,device>::inplace_array ( int init_size, functio
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::inplace_array ( std::initializer_list<type> init )
     requires copyable<type>
-    extends base ( std::forward<decltype(init)>(init) )
 {
-    #ifdef debug
-    if ( int(init.size()) > capacity() )
-        throw value_error("initialize inplace_array with size {} out of capacity {}", init.size(), size());
-    #endif
+    if constexpr ( debug )
+        if ( int(init.size()) > capacity() )
+            throw value_error("cannot initialize inplace_array (with size() = {}, capacity() = {}): size exceeds capacity", init.size(), capacity());
+
+    base::operator=(base(std::forward<decltype(init)>(init)));
 }
 
 template < class type, int len, class device >
@@ -69,6 +71,10 @@ constexpr inplace_array<type,len,device>::inplace_array ( const array<type2,1,de
              ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
     extends inplace_array ( cvt.size() )
 {
+    if constexpr ( debug )
+        if ( cvt.size() > capacity() )
+            throw value_error("cannot initialize inplace_array (with size() = {}, capacity() = {}): size exceeds capacity", cvt.size(), capacity());
+
     if constexpr ( same_as<type,type2> )
         if constexpr ( same_as<device,device2> )
             if ( cvt.ownership() )
@@ -102,7 +108,7 @@ constexpr inplace_array<type,len,device>::inplace_array ( const inplace_array<ty
 {
     if constexpr ( same_as<type,type2> )
         if constexpr ( same_as<device,device2> )
-            /*copy constructor*/;
+            static_assert(false, "should use copy constructor");
         else if constexpr ( same_as<device,cpu> )
             device2::copy(cvt.begin(), cvt.end(), self.begin());
         else // if constexpr ( same_as<device2,cpu> )
@@ -200,10 +206,9 @@ constexpr inplace_array<type,len,device>::const_iterator inplace_array<type,len,
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::reference inplace_array<type,len,device>::operator[] ( int pos )
 {
-    #ifdef debug
-    if ( pos < -size() or pos == 0 or pos > size() )
-        throw index_error("index {} is out of range with size {}", pos, size());
-    #endif
+    if constexpr ( debug )
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
     
     return pos >= 0 ? base::operator[](pos-1) :
                       base::operator[](pos+size());
@@ -212,10 +217,9 @@ constexpr inplace_array<type,len,device>::reference inplace_array<type,len,devic
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>::const_reference inplace_array<type,len,device>::operator[] ( int pos ) const
 {
-    #ifdef debug
-    if ( pos < -size() or pos == 0 or pos > size() )
-        throw index_error("index {} is out of range with size {}", pos, size());
-    #endif
+    if constexpr ( debug )
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
     
     return pos >= 0 ? base::operator[](pos-1) :
                       base::operator[](pos+size());
@@ -231,12 +235,13 @@ constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::clear 
 template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::resize ( int new_size )
 {
-    #ifdef debug
-    if ( new_size < 0 )
-        throw value_error("resize inplace_array with negative size {}", new_size);
-    if ( new_size > capacity() )
-        throw value_error("resize inplace_array with size {} out of capacity {}", new_size, capacity());
-    #endif
+    if constexpr ( debug )
+    {
+        if ( new_size < 0 )
+            throw value_error("cannot resize inplace_array (with size() = {}): size is negative", new_size);
+        if ( new_size > capacity() )
+            throw value_error("cannot resize inplace_array (with size() = {}, capacity = {}): size exceeds capacity", new_size, capacity());
+    }
 
     base::resize(new_size);
     return self;
@@ -246,10 +251,9 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::push ( type new_value )
     requires movable<type>
 {
-    #ifdef debug
-    if ( size() == capacity() )
-        throw value_error("cannot push into inplace_array: size has already reached capacity");
-    #endif
+    if constexpr ( debug )
+        if ( size() == capacity() )
+            throw value_error("cannot push into inplace_array (with size() = {}, capacity = {}): size has already reached capacity", size(), capacity());
 
     base::push(std::move(new_value));
     return self;
@@ -259,12 +263,11 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::pop ( int old_pos )
     requires movable<type>
 {
-    #ifdef debug
-    if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
-        throw value_error("index {} is out of range with size {}", old_pos, size());
-    #endif
+    if constexpr ( debug )
+        if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
+            throw index_error("index {} is out of range with size {}", old_pos, size());
 
-    base::erase(old_pos >= 0 ? begin() + old_pos - 1 : begin() + old_pos + size());
+    base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 : base::begin() + old_pos + size());
     return self;
 }
 
@@ -272,12 +275,13 @@ template < class type, int len, class device >
 constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::insert ( int new_pos, type new_value )
     requires movable<type>
 {
-    #ifdef debug
-    if ( size() == capacity() )
-        throw value_error("cannot insert into inplace_array: size has already reached capacity");
-    if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
-        throw value_error("index {} is out of range with size {}", new_pos, size());
-    #endif
+    if constexpr ( debug )
+    {
+        if ( size() == capacity() )
+            throw value_error("cannot insert into inplace_array (with size() = {}, capacity = {}): size has already reached capacity", size(), capacity());
+        if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
+            throw index_error("index {} is out of range with size {}", new_pos, size());
+    }
 
     base::insert(new_pos >= 0 ? begin() + new_pos - 1 : begin() + new_pos + size(), std::move(new_value));
     return self;
@@ -290,13 +294,12 @@ constexpr inplace_array<type,len,device>& inplace_array<type,len,device>::erase 
     auto p1 = old_pos_1 >= 0 ? old_pos_1 : old_pos_1 + size();
     auto p2 = old_pos_2 >= 0 ? old_pos_2 : old_pos_2 + size();
 
-    #ifdef debug
-    if ( ( ( p1 < 1 or p1 > size() ) or
-           ( p2 < 1 or p2 > size() ) )
-    and not // Except for below:
-         ( ( p1 == size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
-        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
-    #endif
+    if constexpr ( debug )
+        if ( ( ( p1 < 1 or p1 > size() ) or
+               ( p2 < 1 or p2 > size() ) )
+            and not // Except for below:
+             ( ( p1 == size() + 1 or p2 == 0 ) and p1 == p2 + 1 ) )
+            throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
 
     base::erase(begin() + p1 - 1, begin() + p2 - 1);
     return self;

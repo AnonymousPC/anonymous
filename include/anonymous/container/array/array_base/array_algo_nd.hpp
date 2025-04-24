@@ -1,5 +1,3 @@
-#pragma once
-
 template < class container,
            class type,
            int   dim,

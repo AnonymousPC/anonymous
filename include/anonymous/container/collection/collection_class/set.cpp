@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class compare, class device >
 constexpr set<type,compare,device>::set ( std::initializer_list<type> init )
     requires copyable<type>
@@ -55,7 +53,7 @@ constexpr set<type,compare,device>& set<type,compare,device>::push ( type k )
     if ( result.second == true )
         return self;
     else
-        throw key_error("key {} already exists", k);
+        throw key_error("key {} already found", k);
 }
 
 template < class type, class compare, class device >

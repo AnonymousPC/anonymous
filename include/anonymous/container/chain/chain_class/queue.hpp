@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 class queue
     extends public device::template queue<type>
@@ -18,7 +16,6 @@ class queue
         using  pointer         = device::template pointer        <type>;
         using  const_pointer   = device::template const_pointer  <type>;
         using  device_type     = device;
-        struct queue_tag { };
 
     public: // Core
         constexpr queue ( )                                                   = default;

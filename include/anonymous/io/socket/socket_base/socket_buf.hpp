@@ -1,5 +1,3 @@
-#pragma once
-
 template < class protocol >
 class basic_socket_buf
     extends public std::streambuf

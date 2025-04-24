@@ -1,5 +1,3 @@
-#pragma once
-
 class duration
     extends public tuple<int,int,int,int,int,int>
 {

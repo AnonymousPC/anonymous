@@ -1,5 +1,3 @@
-#pragma once
-
 template < input_range range >
     requires same_as<range_value<range>,char>
 constexpr ranges::encode_base64_view<range>::encode_base64_view ( range init_r )

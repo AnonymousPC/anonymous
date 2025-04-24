@@ -1,5 +1,3 @@
-#pragma once
-
 constexpr color::color ( )
     extends color ( 0.0, 0.0, 0.0, 1.0 )
 {

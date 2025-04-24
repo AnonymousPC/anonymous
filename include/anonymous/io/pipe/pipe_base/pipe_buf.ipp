@@ -1,5 +1,3 @@
-#pragma once
-
 struct pipe_buf::environment     extends public detail::io_mode<map<string,array<string>>> { using detail::io_mode<map<string,array<string>>>::io_mode; struct pipe_mode_tag { }; };
 struct pipe_buf::param           extends public detail::io_mode<array<string>>             { using detail::io_mode<array<string>>            ::io_mode; struct pipe_mode_tag { }; };
 struct pipe_buf::start_directory extends public detail::io_mode<path>                      { using detail::io_mode<path>                     ::io_mode; struct pipe_mode_tag { }; };

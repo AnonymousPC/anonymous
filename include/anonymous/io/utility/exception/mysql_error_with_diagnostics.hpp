@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     class mysql_error_with_diagnostics

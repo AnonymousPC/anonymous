@@ -1,5 +1,3 @@
-#pragma once
-
 class file_csv
     extends public file_interface<file_csv>,
             public matrix<string>

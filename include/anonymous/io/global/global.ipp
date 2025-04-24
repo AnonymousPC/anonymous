@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     struct io_initializer_t

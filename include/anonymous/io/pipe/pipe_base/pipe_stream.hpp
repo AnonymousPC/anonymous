@@ -1,5 +1,3 @@
-#pragma once
-
 class pipe_stream
     extends public std::iostream
 {

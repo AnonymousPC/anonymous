@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 class file_interface
 {

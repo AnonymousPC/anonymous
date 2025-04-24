@@ -1,5 +1,3 @@
-#pragma once
-
 // Include
 
 #include "http_base/http_buf.hpp"

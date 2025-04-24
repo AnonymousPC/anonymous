@@ -1,18 +1,3 @@
-#pragma once
-
-/** Some notes:
-  * Category 2 types of range by minusable<type> instead of
-  * initializer ways avoids crashes below:
-  *
-  * for ( float i in range ( 1.0, 2.5 ) ) ...;
-  *
-  * In initializer category mode, here decltype(range::step) == int, and
-  * second scope in ( auto iter = range.begin(), "iter != range.end()" )
-  * calls iter -> data != range.end() -> data instead of operator <=. Thus,
-  * an unexpected infinity for scope occured.
-  */
-
-
 template < class type >
 class range
 {

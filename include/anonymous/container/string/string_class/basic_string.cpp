@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 constexpr basic_string<type,device>::basic_string ( const type& init )
     extends base ( 1, init )
@@ -8,10 +6,13 @@ constexpr basic_string<type,device>::basic_string ( const type& init )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( int init_size, const type& init_char )
-    extends base ( init_size, init_char )
+constexpr basic_string<type,device>::basic_string ( int init_size, const type& init_value )
 {
-    
+    if constexpr ( debug )
+        if ( init_size < 0 )
+            throw value_error("cannot initialize string (with size() = {}): size is negative");
+
+    base::operator=(base(init_size, init_value));
 }
 
 template < class type, class device >
@@ -22,13 +23,6 @@ constexpr basic_string<type,device>::basic_string ( const type* init )
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::basic_string ( const basic_string_view<type,device>& cvt )
-    extends base ( cvt.data(), cvt.size() )
-{
-
-}
-
-template < class type, class device >
 template < class type2, class device2 >
 constexpr basic_string<type,device>::basic_string ( const basic_string<type2,device2>& cvt )
     requires same_as<type,type2> and 
@@ -36,7 +30,7 @@ constexpr basic_string<type,device>::basic_string ( const basic_string<type2,dev
     extends basic_string ( cvt.size() )
 {
     if constexpr ( same_as<device,device2> )
-        /*copy constructor*/;
+        static_assert(false, "should use copy constructor");
     else if constexpr ( same_as<device,cpu> )
         device2::copy(cvt.begin(), cvt.end(), begin());
     else // if constexpr ( same_as<device2,cpu> )
@@ -57,7 +51,7 @@ constexpr basic_string<type,device>::operator bool ( ) const
 {
     return self == "true"  ? true  :
            self == "false" ? false :
-                             throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(bool));
+                             throw value_error("cannot convert string into bool (with string = {}): expected true or false", self);
 }
 
 template < class type, class device >
@@ -66,10 +60,11 @@ constexpr basic_string<type,device>::basic_string ( const type2& cvt )
     requires same_as<type,char>
 {
     resize(64);
-    auto [p, ec] = std::to_chars ( data(), data() + size(), cvt );
+    auto [p, ec] = std::to_chars(begin(), end(), cvt);
     if ( ec != std::errc() )
-        throw value_error("cannot convert {} from {} into {}", cvt, typeid(cvt), typeid(self));
-    resize(p - data());
+        throw value_error("cannot convert {} into string (with value = {}): {}", typeid(cvt), cvt, std::make_error_code(ec).message());
+
+    self.resize(p - data());
 }
 
 template < class type, class device >
@@ -78,9 +73,12 @@ constexpr basic_string<type,device>::operator type2 ( ) const
     requires same_as<type,char>
 {
     auto cvt = type2();
-    auto [p, ec] = std::from_chars ( data(), data() + size(), cvt );
-    if ( p != data() + size() or ec != std::errc() )
-        throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
+    auto [p, ec] = std::from_chars(begin(), end(), cvt);
+    if ( ec != std::errc() )
+        throw value_error("cannot convert string into {} (with value = {}): {}", typeid(cvt), self, std::make_error_code(ec).message());
+    if ( p != end() )
+        throw value_error("cannot convert string into {} (with value = {}): failed on position {}", typeid(cvt), self, p - begin() + 1);
+
     return cvt;
 }
 
@@ -93,7 +91,10 @@ constexpr basic_string<type,device>::basic_string ( const type2& cvt )
 {
     auto stream = std::stringstream();
     stream << cvt;
-    self.base::operator=(stream.str());
+    if ( stream.fail() )
+        throw value_error("cannot convert {} into string (with value = {})", typeid(cvt), cvt);
+
+    self = stream.str();
 }
 
 template < class type, class device >
@@ -107,8 +108,10 @@ constexpr basic_string<type,device>::operator type2 ( ) const
     auto stream = std::stringstream();
     stream << self;
     stream >> cvt;
-    if ( not stream.eof() and stream.fail() ) // Not until the stream reaches end, that the stream fails.
-        throw value_error("cannot convert \"{}\" from {} into {}", self, typeid(self), typeid(cvt));
+    if ( not stream.eof() and stream.fail() ) // Not until the stream reaches end that the stream fails.
+        throw value_error("cannot convert string into {} (with value = {})", typeid(cvt), self);
+
+    return cvt;
 }
 
 template < class type, class device >
@@ -128,6 +131,10 @@ constexpr int basic_string<type,device>::size ( ) const
 template < class type, class device >
 constexpr basic_string<type,device>& basic_string<type,device>::resize ( int new_size )
 {
+    if constexpr ( debug )
+        if ( new_size < 0 )
+            throw value_error("cannot resize string (with size() = {}): size is negative", new_size);
+
     base::resize(new_size);
     return self;
 }
@@ -181,40 +188,41 @@ constexpr basic_string<type,device>::const_pointer basic_string<type,device>::c_
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::reference basic_string<type,device>::operator[] ( int pos )
+constexpr basic_string<type,device>::reference basic_string<type,device>::operator [] ( int pos )
 {
-    #ifdef debug
-    if ( pos < -size() or pos == 0 or pos > size() )
-        throw index_error("index {} is out of range with size {}", pos, size());
-    #endif
-    return base::operator[](pos >= 0 ? pos - 1 : pos+size());
+    if constexpr ( debug )
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
+
+    return base::operator[](pos >= 0 ? pos - 1 : pos + size());
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>::const_reference basic_string<type,device>::operator[] ( int pos ) const
+constexpr basic_string<type,device>::const_reference basic_string<type,device>::operator [] ( int pos ) const
 {
-    #ifdef debug
-    if ( pos < -size() or pos == 0 or pos > size() )
-        throw index_error("index {} is out of range with size {}", pos, size());
-    #endif
+    if constexpr ( debug )
+        if ( pos < -size() or pos == 0 or pos > size() )
+            throw index_error("index {} is out of range with size {}", pos, size());
+
     return base::operator[](pos >= 0 ? pos - 1 : pos + size());
-}   
+}
 
 template < class type, class device >
-constexpr basic_string_view<type,device> basic_string<type,device>::operator[] ( int pos_1, int pos_2 ) const
+constexpr basic_string<type,device> basic_string<type,device>::operator [] ( int pos_1, int pos_2 ) const
 {
-    auto abs_pos_1 = pos_1 >= 0 ? pos_1 : pos_1 + size() + 1;
-    auto abs_pos_2 = pos_2 >= 0 ? pos_2 : pos_2 + size() + 1;
+    auto abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 : old_pos_1 + size() + 1;
+    auto abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 : old_pos_2 + size() + 1;
 
-    #ifdef debug
-    if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
-           ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
-    and not // Except for below:
-         ( ( abs_pos_1 == size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
-        throw index_error("index [{}, {}] is out of range with size {}", pos_1, pos_2, size());
-    #endif
+    if constexpr ( debug )
+        if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
+               ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
+            and not // Except for below:
+             ( ( abs_pos_1 == size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
+            throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
 
-    return basic_string_view<type,device>(data() + abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
+    auto str = basic_string(abs_pos_2 - abs_pos_1 + 1);
+    device::copy(begin() + abs_pos_1 - 1, begin() + abs_pos_2 - 1, str.begin());
+    return str;
 }
 
 template < class type, class device >
@@ -230,31 +238,30 @@ constexpr basic_string<type,device>& basic_string<type,device>::erase ( int old_
     auto abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 : old_pos_1 + size() + 1;
     auto abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 : old_pos_2 + size() + 1;
 
-    #ifdef debug
-    if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
-           ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
-    and not // Except for below:
-         ( ( abs_pos_1 == size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
-        throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
-    #endif
+    if constexpr ( debug )
+        if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
+               ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
+            and not // Except for below:
+             ( ( abs_pos_1 == size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
+            throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
 
     base::erase(abs_pos_1 - 1, abs_pos_2 - abs_pos_1 + 1);
     return self;
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new_pos, basic_string_view<type,device> new_value )
+constexpr basic_string<type,device>& basic_string<type,device>::insert ( int new_pos, const basic_string& new_value )
 {
-    #ifdef debug
-    if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
-        throw index_error("index {} is out of range with size {}", new_pos, size());
-    #endif
+    if constexpr ( debug )
+        if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
+            throw index_error("index {} is out of range with size {}", new_pos, size());
+
     base::insert(new_pos >= 0 ? new_pos - 1 : new_pos + size(), new_value.data(), new_value.size());
     return self;
 }
 
 template < class type, class device >
-constexpr basic_string<type,device>& basic_string<type,device>::push ( basic_string_view<type,device> new_value )
+constexpr basic_string<type,device>& basic_string<type,device>::push ( const basic_string& new_value )
 {
     base::append(new_value.data(), new_value.size());
     return self;
@@ -263,10 +270,10 @@ constexpr basic_string<type,device>& basic_string<type,device>::push ( basic_str
 template < class type, class device >
 constexpr basic_string<type,device>& basic_string<type,device>::pop ( int old_pos )
 {
-    #ifdef debug
-    if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
-        throw index_error("index {} is out of range with size {}", old_pos, size());
-    #endif
+    if constexpr ( debug )
+        if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
+            throw index_error("index {} is out of range with size {}", old_pos, size());
+
     base::erase(old_pos >= 0 ? old_pos - 1 : old_pos + size(), 1);
     return self;
 }

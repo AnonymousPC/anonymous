@@ -1,5 +1,3 @@
-#pragma once
-
 class tls
     extends public tcp
 {

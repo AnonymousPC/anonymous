@@ -1,5 +1,3 @@
-#pragma once
-
 /* .ipp files are explicit externally included, which
  * instantiates array templates in a correct order
 
@@ -36,7 +34,6 @@ constexpr int max_dim = 3;
 // .ipp
 
 #include "array_base/array_global.cpp"
-#include "array_base/array_line_iterator.cpp"
 #include "array_base/array_upper.cpp"
 #include "array_base/array_lower.cpp"
 #include "array_base/array_info.cpp"

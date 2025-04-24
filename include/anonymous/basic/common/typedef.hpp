@@ -1,5 +1,3 @@
-#pragma once
-
 using float16_t = conditional<sizeof(float)      ==16/8,float,
                   conditional<sizeof(double)     ==16/8,double,
                   conditional<sizeof(long double)==16/8,long double,

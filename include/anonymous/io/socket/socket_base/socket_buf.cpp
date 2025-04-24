@@ -1,5 +1,3 @@
-#pragma once
-
 template < class protocol >
 void basic_socket_buf<protocol>::connect ( url website )
 {

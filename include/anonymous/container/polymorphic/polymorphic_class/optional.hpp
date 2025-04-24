@@ -1,5 +1,3 @@
-#pragma once
-
 using std::nullopt;
 using std::nullopt_t;
 

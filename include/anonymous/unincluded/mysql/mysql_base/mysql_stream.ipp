@@ -1,5 +1,3 @@
-#pragma once
-
 struct mysql_stream::username extends public detail::io_mode<string> { using detail::io_mode<string>::io_mode; struct mysql_mode_tag { }; };
 struct mysql_stream::password extends public detail::io_mode<string> { using detail::io_mode<string>::io_mode; struct mysql_mode_tag { }; };
 struct mysql_stream::database extends public detail::io_mode<string> { using detail::io_mode<string>::io_mode; struct mysql_mode_tag { }; };

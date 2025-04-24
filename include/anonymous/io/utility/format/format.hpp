@@ -1,5 +1,3 @@
-#pragma once
-
 } // Out of namespace anonymous
 
 template < >

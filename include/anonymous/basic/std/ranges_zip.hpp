@@ -298,7 +298,7 @@ namespace ranges {
 	operator() [[nodiscard]] (_Fp&& __f, _Ts&&... __ts) const
 	{
 	  if constexpr (sizeof...(_Ts) == 0)
-	    return views::empty<decay_t<invoke_result_t<decay_t<_Fp>&>>>;
+	    return views::empty<remove_cvref_t<invoke_result_t<remove_cvref_t<_Fp>&>>>;
 	  else
 	    return zip_transform_view(std::forward<_Fp>(__f), std::forward<_Ts>(__ts)...);
 	}
@@ -971,7 +971,7 @@ namespace ranges {
   {
       template<size_t _Nm, typename _Range, typename _Fp>
 	concept __can_adjacent_transform_view
-	  = requires { adjacent_transform_view<all_t<_Range>, decay_t<_Fp>, _Nm>
+	  = requires { adjacent_transform_view<all_t<_Range>, remove_cvref_t<_Fp>, _Nm>
 		         (std::declval<_Range>(), std::declval<_Fp>()); };
 
     template<size_t _Nm>
@@ -985,7 +985,7 @@ namespace ranges {
 	    if constexpr (_Nm == 0)
 	      return zip_transform(std::forward<_Fp>(__f));
 	    else
-	      return adjacent_transform_view<all_t<_Range>, decay_t<_Fp>, _Nm>
+	      return adjacent_transform_view<all_t<_Range>, remove_cvref_t<_Fp>, _Nm>
 		(std::forward<_Range>(__r), std::forward<_Fp>(__f));
 	  }
 

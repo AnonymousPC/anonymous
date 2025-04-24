@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type1, class type2, class compare, class device >
 constexpr map<type1,type2,compare,device>::map ( std::initializer_list<pair<const type1,type2>> init )
     requires copyable<type1> and copyable<type2>

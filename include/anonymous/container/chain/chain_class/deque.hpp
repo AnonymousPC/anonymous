@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 class deque
     extends public device::template deque<type>
@@ -20,7 +18,6 @@ class deque
         using  iterator        = base::iterator;
         using  const_iterator  = base::const_iterator;
         using  device_type     = device;
-        struct deque_tag { };
 
     public: // Core
         constexpr deque ( )                                                   = default;

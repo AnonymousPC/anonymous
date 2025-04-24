@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type > concept http_client_mode = requires { typename type::http_client_mode_tag; };
 template < class type > concept http_server_mode = requires { typename type::http_server_mode_tag; };
 

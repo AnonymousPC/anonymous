@@ -1,5 +1,3 @@
-#pragma once
-
 namespace ranges
 {
     template < input_range range >

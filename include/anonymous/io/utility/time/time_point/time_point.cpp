@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     constexpr int                date_to_int ( tuple<int,int,int> );

@@ -1,5 +1,3 @@
-#pragma once
-
 template < inputable input_type >
 constexpr ranges::istream_view<input_type>::istream_view ( std::istream& init_s )
     extends s_ptr ( &init_s )

@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     template < input_range range, class method >

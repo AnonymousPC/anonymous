@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class device >
 class list
     extends public device::template list<type>
@@ -20,7 +18,6 @@ class list
         using  iterator        = base::iterator;
         using  const_iterator  = base::const_iterator;
         using  device_type     = device;
-        struct list_tag { };
 
     public: // Core
         constexpr list ( )                                                  = default;

@@ -1,5 +1,3 @@
-#pragma once
-
 
 template < class type, class compare, class device >
 class priority_queue
@@ -21,7 +19,6 @@ class priority_queue
         using  const_pointer   = device::template const_pointer  <type>;
         using  compare_type    = compare;
         using  device_type     = device;
-        struct priority_queue_tag { };
 
     public: // Core
         constexpr priority_queue ( )                                                            = default;

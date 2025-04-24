@@ -1,5 +1,3 @@
-#pragma once
-
 tls::endpoint tls::socket::local_endpoint ( ) const
 {
     return self.next_layer().local_endpoint();

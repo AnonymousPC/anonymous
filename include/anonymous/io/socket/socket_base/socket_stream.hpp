@@ -1,5 +1,3 @@
-#pragma once
-
 template < class protocol >
 class basic_socket_stream
     extends public std::iostream

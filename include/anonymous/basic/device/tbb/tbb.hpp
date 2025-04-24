@@ -1,11 +1,11 @@
-#pragma once
+#include "detail/tbb_container.hpp"
 
 class tbb
     extends protected cpu
 {
     public: // Execution
-        using  execution_context_type = execpools::tbb_thread_pool;
-        static execution_context_type execution_context;
+        using execution_context_type = execpools::tbb_thread_pool;
+        inline static execution_context_type execution_context = execution_context_type(1);
 
     public: // Type
         using cpu::value_type;
@@ -46,20 +46,29 @@ class tbb
         using cpu::hash;
         
     public: // Container
-     // template < class type, int len >                                                                                                                 using array             = unsupported;
-     // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                    using basic_string      = unsupported;
-     // template < class type, class traits = std::char_traits<type> >                                                                                   using basic_string_view = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                           using deque             = unsupported;
-     // template < class type, int len >                                                                                                                 using inplace_vector    = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                           using list              = unsupported;
-        template < class type1, class type2, class compare = less<>, class alloc = allocator<std::pair<const type1,type2>> >                             using map               = ::tbb::concurrent_map<type1,type2,compare,alloc>;
-        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   class priority_queue;    // Override pop().
-        template < class type, class alloc = allocator<type> >                                                                                           class queue;             // Override size(), pop().
-        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using set               = ::tbb::concurrent_set<type,compare,alloc>;
-     // template < class type, class alloc = allocator<type> >                                                                                           using stack             = unsupported;
-        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map     = ::tbb::concurrent_unordered_map<type1,type2,hash,equal>; // Use default allocator<std::pair>
-        template < class type, class hash = hash<type>, class equal = equal_to<>,  class alloc = allocator<type> >                                       using unordered_set     = ::tbb::concurrent_unordered_set<type,hash,equal,alloc>;
-     // template < class type, class alloc = allocator<type> >                                                                                           using vector            = supported, and memory is not contiguous.
+     //                                                                                                                                                  using any            = unsupported;
+     // template < class type, int len >                                                                                                                 using array          = unsupported;
+     // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                    using basic_string   = unsupported;
+     // template < int len >                                                                                                                             using bitset         = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using deque          = unsupported;
+     // template < class type, class error >                                                                                                             using expected       = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using forward_list   = unsupported;
+     // template < class type >                                                                                                                          using function       = unsupported;
+     // template < class type, int len >                                                                                                                 using inplace_vector = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using list           = unsupported;
+        template < class type1, class type2, class compare = less<>, class alloc = allocator<std::pair<const type1,type2>> >                             using map            = ::tbb::concurrent_map<type1,type2,compare,alloc>;
+     // template < class type >                                                                                                                          using optional       = unsupported;
+     // template < class type1, class type2 >                                                                                                            using pair           = unsupported;
+        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using priority_queue = detail::tbb_container<::tbb::concurrent_priority_queue<type,compare,alloc>>;
+        template < class type, class alloc = allocator<type> >                                                                                           using queue          = detail::tbb_container<::tbb::concurrent_queue<type,alloc>>;
+        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using set            = ::tbb::concurrent_set<type,compare,alloc>;
+     // template < class type, class alloc = allocator<type> >                                                                                           using stack          = unsupported;
+     // template < class... types >                                                                                                                      using tuple          = unsupported;
+        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = ::tbb::concurrent_unordered_map<type1,type2,hash,equal>; // Use default allocator<std::pair>
+        template < class type, class hash = hash<type>, class equal = equal_to<>,  class alloc = allocator<type> >                                       using unordered_set  = ::tbb::concurrent_unordered_set<type,hash,equal,alloc>;
+     // template < class type, class alloc = allocator<type> >                                                                                           using valarray       = unsupported;
+     // template < class... types >                                                                                                                      using variant        = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using vector         = supported, but does not satisfy std::contiguous_range.
 
     public: // Algorithm
         using cpu::accumulate;
@@ -152,10 +161,3 @@ class tbb
         using cpu::unique_copy;
         using cpu::upper_bound;
 };
-
-#ifdef dll
-    #include "tbb.cpp"
-#endif
-
-#include "container/priority_queue.hpp"
-#include "container/queue.hpp"

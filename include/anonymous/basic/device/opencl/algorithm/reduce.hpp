@@ -1,5 +1,3 @@
-#pragma once
-
 decltype(auto) opencl::reduce ( auto&&... args )
 {
     static_assert(sizeof...(args) == 3 or sizeof...(args) == 4, "boost::compute::reduce() accepts 3 or 4 args");

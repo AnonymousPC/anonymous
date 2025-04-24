@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, int len, class device >
 class inplace_array
     extends public device::template inplace_vector<type,len>,
@@ -34,8 +32,8 @@ class inplace_array
     public: // Constructor
         constexpr explicit inplace_array ( int );
         constexpr          inplace_array ( int, const type& )                   requires copyable<type>;
-        constexpr          inplace_array ( int, function_type<type()   > auto ) requires movable <type>;
-        constexpr          inplace_array ( int, function_type<type(int)> auto ) requires movable <type>;
+        constexpr          inplace_array ( int, invocable_r<type>     auto ) requires movable <type>;
+        constexpr          inplace_array ( int, invocable_r<type,int> auto ) requires movable <type>;
         constexpr          inplace_array ( std::initializer_list<type> )        requires copyable<type>;
         constexpr          inplace_array ( range<type> )                        requires copyable<type>;
 

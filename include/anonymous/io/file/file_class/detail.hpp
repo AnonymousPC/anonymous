@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     string get_boost_gil_tag_name     (                             auto       );

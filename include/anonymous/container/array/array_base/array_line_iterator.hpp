@@ -1,5 +1,3 @@
-#pragma once
-
 // Class array_line_iterator iterates an array_upper, while provides array when dereferenced
 
 namespace detail

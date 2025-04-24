@@ -1,5 +1,3 @@
-#pragma once
-
 file_tiff::file_tiff ( path pth )
 {
     open(pth);

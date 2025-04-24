@@ -1,5 +1,3 @@
-#pragma once
-
 template < input_range range, class method >
     requires same_as<range_value<range>,char>
 constexpr detail::compress_view<range,method>::compress_view ( range init_r )

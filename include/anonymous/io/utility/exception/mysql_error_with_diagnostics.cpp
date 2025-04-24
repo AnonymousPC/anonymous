@@ -1,5 +1,3 @@
-#pragma once
-
 detail::mysql_error_with_diagnostics::mysql_error_with_diagnostics ( const boost::mysql::error_with_diagnostics& e )
     extends boost::mysql::error_with_diagnostics ( e )
 {

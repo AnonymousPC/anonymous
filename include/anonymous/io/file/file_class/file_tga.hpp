@@ -1,5 +1,3 @@
-#pragma once
-
 class file_tga
     extends public file_interface<file_tga>,
             public matrix<color>           

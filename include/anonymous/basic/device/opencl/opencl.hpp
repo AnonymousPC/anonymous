@@ -1,7 +1,6 @@
-#pragma once
-
 #include "execution/opencl_queue_context.hpp"
 #include "detail/opencl_queue_guard.hpp"
+#include "detail/opencl_container_decl.hpp"
 
 class opencl
 {
@@ -49,20 +48,30 @@ class opencl
         template < class type > using hash = boost::compute::hash<type>;
 
     public: // Container
-        template < class type, int len >                                                                                                                      class array;
-        template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                         class basic_string;     
-        template < class type, class traits = std::char_traits<type> >                                                                                        class basic_string_view;
-     // template < class type, class alloc = allocator<type> >                                                                                                using deque              = unsupported;
-     // template < class type, int len >                                                                                                                      using inplace_vector     = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                                using list               = unsupported;
-     // template < class type1, class type2, class compare = less<type1>, class alloc = allocator<std::pair<const type1,type2>> >                             using map                = supported, but too many bugs.
-     // template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    using priority_queue     = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                                using queue              = unsupported;
-        template < class type, class compare = less<type>, class alloc = allocator<type> >                                                                    class set;
-        template < class type, class alloc = allocator<type> >                                                                                                class stack;         
-     // template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<type1>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map      = unsupported;
-     // template < class type, class hash = hash<type>, class equal = equal_to<type>,  class alloc = allocator<type> >                                        using unordered_set      = unsupported;
-        template < class type, class alloc = allocator<type> >                                                                                                class vector;
+     //                                                                                                                                                  using any            = unsupported;
+        template < class type, int len >                                                                                                                 using array          = detail::opencl_container<boost::compute::array<type,len>>;
+        template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                    using basic_string   = detail::opencl_container<boost::compute::basic_string<type,traits>>;
+     // template < int len >                                                                                                                             using bitset         = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using deque          = unsupported;
+     // template < class type, class error >                                                                                                             using expected       = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using forward_list   = unsupported;
+        template < class type >                                                                                                                          using function       = boost::compute::function<type>;
+     // template < class type, class alloc = allocator<type> >                                                                                           using hive           = unsupported;
+     // template < class type, int len >                                                                                                                 using inplace_vector = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using list           = unsupported;
+        template < class type1, class type2, class compare = less<>, class alloc = allocator<std::pair<const type1,type2>> >                             using map            = detail::opencl_container<boost::compute::flat_map<type1,type2>>;
+     // template < class type >                                                                                                                          using optional       = unsupported;
+     // template < class type1, class type2 >                                                                                                            using pair           = unsupported;
+     // template < class type, class compare = less<type>, class alloc = allocator<type> >                                                               using priority_queue = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using queue          = unsupported;
+        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using set            = detail::opencl_container<boost::compute::flat_set<type>>;
+        template < class type, class alloc = allocator<type> >                                                                                           using stack          = detail::opencl_container<boost::compute::stack<type>>;
+     // template < class... types >                                                                                                                      using tuple          = unsupported;
+     // template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = unsupported;
+     // template < class type, class hash = hash<type>, class equal = equal_to<>,  class alloc = allocator<type> >                                       using unordered_set  = unsupported;
+        template < class type, class alloc = allocator<type> >                                                                                           using valarray       = detail::opencl_container<boost::compute::valarray<type>>;
+     // template < class... types >                                                                                                                      using variant        = unsupported;
+        template < class type, class alloc = allocator<type> >                                                                                           using vector         = detail::opencl_container<boost::compute::vector<type,alloc>>;
 
     public: // Algorithm
         static decltype(auto) accumulate                        ( auto&&... args ) { auto guard = detail::opencl_queue_guard(); return boost::compute::accumulate              (std::forward<decltype(args)>(args)..., guard.command_queue()); }
@@ -199,26 +208,17 @@ class opencl
         };
 };
 
-// #include "opencl.cpp"
+#include "detail/opencl_container.hpp"
 
-// #include "type/reference.hpp"
-// #include "type/pointer.hpp"
-// #include "type/stride_pointer.hpp"
-// #include "type/type_traits.hpp"
+#include "type/reference.hpp"
+#include "type/pointer.hpp"
+#include "type/stride_pointer.hpp"
 
-// #include "operator/operator.hpp"
-// #include "operator/type_traits.hpp"
+#include "operator/operator.hpp"
 
-// #include "memory/accessor_type.hpp"
+#include "memory/accessor_type.hpp"
 
-// #include "container/array.hpp"
-// #include "container/basic_string.hpp"
-// #include "container/basic_string_view.hpp"
-// #include "container/set.hpp"
-// #include "container/stack.hpp"
-// #include "container/vector.hpp"
+#include "algorithm/reduce.hpp"
 
-// #include "algorithm/reduce.hpp"
-
-// #include "linalg/linalg.hpp"
+#include "linalg/linalg.hpp"
 

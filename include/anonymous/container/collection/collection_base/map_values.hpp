@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {
     template < class collection_type, class type2, class device >

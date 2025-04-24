@@ -1,5 +1,3 @@
-#pragma once
-
 namespace detail
 {    
     constexpr const char* red        = "\033[38;2;240;0;0m";
@@ -139,9 +137,9 @@ std::string detail::format_stacktrace ( const std::stacktrace& trace )
 std::string detail::format_nested_exception ( const std::type_info& from_type, const std::string& from_what )
 {
     #if defined(__GNUC__) and not defined(__clang__) // terminate called after throwing an instance of '{typeid}'\n  what():  {what}
-        return std::format("after throwing another instance of '{}'\n  what(): {}", boost::core::demangle(from_type.name()), from_what);
+        return std::format("after throwing an instance of '{}'\n  what(): {}", boost::core::demangle(from_type.name()), from_what);
     #elifdef __clang__ // libc++abi: terminating due to uncaught exception of type {typeid}: {what}
-        return std::format("due to another exception of type {}: {}", boost::core::demangle(from_type.name()), from_what);
+        return std::format("due to uncaught exception of type {}: {}", boost::core::demangle(from_type.name()), from_what);
     #else
         return std::format("catch {}: {}", boost::core::demangle(from_type.name()), from_what);
     #endif
@@ -203,7 +201,7 @@ constexpr int detail::get_format_mode ( const char* str )
 
 constexpr decltype(auto) detail::make_formattable ( auto&& f )
 {
-    if constexpr ( std::formattable<decay<decltype(f)>,char> )
+    if constexpr ( formattable<remove_cvref<decltype(f)>> )
         return f;
     else if constexpr ( printable<decltype(f)> )
         return (std::stringstream()<<f).str();

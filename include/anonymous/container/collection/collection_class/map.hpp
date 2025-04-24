@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type1, class type2, class compare, class device >
 class map
     extends public  device::template map<type1,type2,compare>,

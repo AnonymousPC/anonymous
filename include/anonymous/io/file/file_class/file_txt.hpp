@@ -1,5 +1,3 @@
-#pragma once
-
 class file_txt
     extends public file_interface<file_txt>,
             public vector<string>

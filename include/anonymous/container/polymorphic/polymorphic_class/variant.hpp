@@ -1,7 +1,3 @@
-#pragma once
-
-/// Declaration
-
 template < class... types >
 class variant
     extends public std::variant<types...>

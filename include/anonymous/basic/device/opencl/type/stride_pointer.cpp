@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type >
 type opencl::stride_pointer<type>::read ( boost::compute::command_queue& cmd_queue ) const
 {

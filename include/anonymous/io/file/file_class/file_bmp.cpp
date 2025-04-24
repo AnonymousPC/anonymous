@@ -1,5 +1,3 @@
-#pragma once
-
 file_bmp::file_bmp ( path pth )
 {
     open(pth);

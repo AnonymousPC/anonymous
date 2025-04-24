@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, class compare, class device >
 class set
     extends public device::template set<type,compare>,

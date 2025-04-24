@@ -1,5 +1,4 @@
-#pragma once
-#include "concept.cpp" // This .ipp is included at the beinning instead of at the end.
+#include "detail/type_pack.cpp"
 
 /// Type traits
 
@@ -124,6 +123,8 @@ template < class type >                                    concept        bidire
 template < class type >                                    concept        random_access_range                = std::ranges::random_access_range       <type>;
 template < class type >                                    concept        contiguous_range                   = std::ranges::contiguous_range          <type>;            
 
+template < class type >                                    concept        hashable                           = std::default_initializable             <std::hash<type>>;
+template < class type >                                    concept        formattable                        = std::formattable                       <type,char>;
 /// Operator
 
 template < class type = void >                             using          plus                               = std::plus<type>;
@@ -171,13 +172,6 @@ template < class type >                                    concept        unsign
 template < class type >                                    concept        float_type                         = std::floating_point<type>                                    or requires { typename type::float_tag;        };
 template < class type >                                    concept        number_type                        = int_type<type> or float_type<type>                           or requires { typename type::number_tag;       };
 template < class type >                                    concept        complex_type                       =                                                                 requires { typename type::complex_tag;      };
-
-
-
-// Convertible since/until
-
-template < class result_type, int index, class... types >  constexpr bool convertible_since                  = detail::convertible_since_helper<result_type,index,types...>::value;
-template < class result_type, int index, class... types >  constexpr bool convertible_until                  = detail::convertible_until_helper<result_type,index,types...>::value;
 
 /// Argument pack
 

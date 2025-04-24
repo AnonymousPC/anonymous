@@ -1,5 +1,3 @@
-#pragma once
-
 class file_dll_any
 {
     public:

@@ -1,5 +1,3 @@
-#pragma once
-
 template < class type, int len, class device >
 class static_array
     extends public device::template array<type,len>,

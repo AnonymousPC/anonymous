@@ -1,8 +1,8 @@
 template < int min, int max, int stride >
 constexpr void for_constexpr ( auto&& operations )
 {
-    static_assert ( ( stride > 0 and min < max ) or
-                    ( stride < 0 and min > max ),
+    static_assert ( ( stride > 0 and min <= max ) or
+                    ( stride < 0 and min >= max ),
                     "invalid for-clause" );
 
     operations.template operator()<min>();

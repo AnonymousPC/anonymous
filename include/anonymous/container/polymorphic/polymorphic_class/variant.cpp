@@ -75,7 +75,7 @@ template < int value_index >
 constexpr const index_type_of<value_index,types...>& variant<types...>::value ( ) const
     requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) )
 {
-    if ( index() == value_index )
+    if ( index() == value_index ) [[likely]]
         return std::get<value_index-1>(static_cast<const base&>(self));
     else
         throw type_error("bad variant access (with index() = {}, access = {})", index(), value_index);

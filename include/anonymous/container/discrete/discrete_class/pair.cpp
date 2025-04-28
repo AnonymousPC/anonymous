@@ -6,10 +6,8 @@ constexpr pair<type1,type2,device>::pair ( type1 k, type2 v )
 }
 
 template < class type1, class type2, class device >
-template < class type3, class type4, class device2 >
-constexpr pair<type1,type2,device>::pair ( const pair<type3,type4,device2>& cvt )
-    requires convertible_to<type3,type1> and convertible_to<type4,type2> or 
-    
+constexpr pair<type1,type2,device>::pair ( const pair_type auto& cvt )
+    requires convertible_to<cvt_key_type,key_type> and convertible_to<cvt_value_type,value_type>
     extends pair ( cvt.key(), cvt.value() )
 {
 

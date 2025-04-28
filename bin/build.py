@@ -16,6 +16,7 @@ elif sys.platform == "darwin":
 
 modules = [
     "anonymous.basic",
+    "anonymous.container",
     "anonymous"
 ]
 compile_args = [

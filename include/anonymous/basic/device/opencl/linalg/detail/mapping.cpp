@@ -17,57 +17,51 @@ namespace detail
 
     void opencl_check_mdspan ( const auto left, auto output )
     {
-        static_assert ( same_as<typename decltype(output)::value_type,float16_t> or 
-                        same_as<typename decltype(output)::value_type,float32_t> or
-                        same_as<typename decltype(output)::value_type,float64_t> or
-                        same_as<opencl_nativize<typename decltype(output)::value_type>,std::complex<float32_t>> or
-                        same_as<opencl_nativize<typename decltype(output)::value_type>,std::complex<float64_t>>,
+        static_assert ( same_as<output_value_type,float16_t> or 
+                        same_as<output_value_type,float32_t> or
+                        same_as<output_value_type,float64_t> or
+                        same_as<opencl_nativize<output_value_type>,std::complex<float32_t>> or
+                        same_as<opencl_nativize<output_value_type>,std::complex<float64_t>>,
                         "value_type not supported on this device: should be one of { float16_t, float32_t, float64_t, complex<float32_t>, complex<float64_t> }" );
-        static_assert ( decltype(left)::rank <= 2,
+        static_assert ( left.rank() <= 2,
                         "dimension not supported on this device: should be no more than matrix" );
 
-        if constexpr ( is_contiguous_layout<typename decltype(left)::layout_type> )
-            return;
-        else
+        if constexpr ( not is_contiguous_layout<left_layout_type> )
             throw opencl_error("operation not supported: layout should be contiguous");
     }
 
     void opencl_check_mdspan ( const auto left, const auto right, auto output )
     {
-        static_assert ( same_as<typename decltype(output)::value_type,float16_t> or 
-                        same_as<typename decltype(output)::value_type,float32_t> or
-                        same_as<typename decltype(output)::value_type,float64_t> or
-                        same_as<opencl_nativize<typename decltype(output)::value_type>,std::complex<float32_t>> or
-                        same_as<opencl_nativize<typename decltype(output)::value_type>,std::complex<float64_t>>,
+        static_assert ( same_as<output_value_type,float16_t> or 
+                        same_as<output_value_type,float32_t> or
+                        same_as<output_value_type,float64_t> or
+                        same_as<opencl_nativize<output_value_type>,std::complex<float32_t>> or
+                        same_as<opencl_nativize<output_value_type>,std::complex<float64_t>>,
                         "value_type not supported on this device: should be one of { float16_t, float32_t, float64_t, complex<float32_t>, complex<float64_t> }" );
-        static_assert ( same_as<typename decltype(left)::value_type,typename decltype(right)::value_type>, 
+        static_assert ( same_as<left_value_type,right_value_type>, 
                         "value_type not supported on this device: should be same" );
-        static_assert ( decltype(left)::rank <= 2 and decltype(right)::rank <= 2,
+        static_assert ( left.rank() <= 2 and right.rank() <= 2,
                         "dimension not supported on this device: should be no more than matrix" );
 
-        if constexpr ( is_contiguous_layout<typename decltype(left)::layout_type> and is_contiguous_layout<typename decltype(right)::layout_type> )
-            return;
-        else
+        if constexpr ( not is_contiguous_layout<left_layout_type> or not is_contiguous_layout<right_layout_type> )
             throw opencl_error("operation not supported: layout should be contiguous");
     }
 
     void opencl_check_mdspan_allow_transpose ( const auto left, const auto right, auto output )
     {
-        static_assert ( same_as<typename decltype(output)::value_type,float16_t> or 
-                        same_as<typename decltype(output)::value_type,float32_t> or
-                        same_as<typename decltype(output)::value_type,float64_t> or
-                        same_as<opencl_nativize<typename decltype(output)::value_type>,std::complex<float32_t>> or
-                        same_as<opencl_nativize<typename decltype(output)::value_type>,std::complex<float64_t>>,
+        static_assert ( same_as<output_value_type,float16_t> or 
+                        same_as<output_value_type,float32_t> or
+                        same_as<output_value_type,float64_t> or
+                        same_as<opencl_nativize<output_value_type>,std::complex<float32_t>> or
+                        same_as<opencl_nativize<output_value_type>,std::complex<float64_t>>,
                         "value_type not supported on this device: should be one of { float16_t, float32_t, float64_t, complex<float32_t>, complex<float64_t> }" );
-        static_assert ( same_as<typename decltype(left)::value_type,typename decltype(right)::value_type>, 
+        static_assert ( same_as<left_value_type,right_value_type>, 
                         "value_type not supported on this device: should be same" );
-        static_assert ( decltype(left)::rank <= 2 and decltype(right)::rank <= 2,
+        static_assert ( left.rank() <= 2 and right.rank() <= 2,
                         "dimension not supported on this device: should be no more than matrix" );
 
-        if constexpr ( ( is_contiguous_layout<typename decltype(left)::layout_type>  or is_transposed_layout<typename decltype(left)::layout_type> ) and
-                       ( is_contiguous_layout<typename decltype(right)::layout_type> or is_transposed_layout<typename decltype(right)::layout_type> ) )
-            return;
-        else
+        if constexpr ( not ( is_contiguous_layout<left_layout_type>  or is_transposed_layout<left_layout_type> ) or
+                       not ( is_contiguous_layout<right_layout_type> or is_transposed_layout<right_layout_type> ) )
             throw opencl_error("operation not supported: layout should be contiguous or transposed");
     }
 
@@ -147,9 +141,9 @@ namespace detail
     void opencl_copy_mdspan ( const auto& left, auto& output )
     {
         auto status =
-            clblast::Copy<opencl_nativize<typename decltype(output)::value_type>>(
+            clblast::Copy<opencl_nativize<output_value_type>>(
                 left.size(),
-                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), is_contiguous_layout<typename decltype(left)::layout_type> ? 1 : left.stride(0),
+                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), is_contiguous_layout<left_layout_type> ? 1 : left.stride(0),
                 output.data_handle().get_buffer().get(), output.data_handle().get_index(), 1,
                 &opencl::execution_context.command_queue().get()
             );
@@ -159,13 +153,13 @@ namespace detail
 
     void opencl_add_scaled_mdspan_inplace ( auto scale, const auto right, auto output )
     {
-        static_assert(is_contiguous_layout<typename decltype(right)::layout_type>, "internal error");
+        static_assert(is_contiguous_layout<right_layout_type>, "internal error");
 
         auto status = 
-            clblast::Axpy<opencl_nativize<typename decltype(output)::value_type>>(
+            clblast::Axpy<opencl_nativize<output_value_type>>(
                 right.size(), 
                 scale,
-                right .data_handle().get_buffer().get(), right .data_handle().get_index(), not is_strided_layout<typename decltype(right)::layout_type> ? 1 : right.stride(0),
+                right .data_handle().get_buffer().get(), right .data_handle().get_index(), not is_strided_layout<right_layout_type> ? 1 : right.stride(0),
                 output.data_handle().get_buffer().get(), output.data_handle().get_index(), 1,
                 &opencl::execution_context.command_queue().get()
             );
@@ -176,14 +170,14 @@ namespace detail
     void opencl_multiply_matrix_inplace ( const auto& left, const auto& right, auto& output )
     {
         auto status = 
-            clblast::Gemm<opencl_nativize<typename decltype(output)::value_type>>(
+            clblast::Gemm<opencl_nativize<output_value_type>>(
                 clblast::Layout::kColMajor,
-                is_contiguous_layout<typename decltype(left)::layout_type > ? clblast::Transpose::kNo : clblast::Transpose::kYes,
-                is_contiguous_layout<typename decltype(right)::layout_type> ? clblast::Transpose::kNo : clblast::Transpose::kYes,
+                is_contiguous_layout<left_layout_type > ? clblast::Transpose::kNo : clblast::Transpose::kYes,
+                is_contiguous_layout<right_layout_type> ? clblast::Transpose::kNo : clblast::Transpose::kYes,
                 left.extent(0), right.extent(1), left.extent(1),
                 1,
-                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), is_contiguous_layout<typename decltype(left)::layout_type > ? left .extent(0) : left .extent(1),
-                right .data_handle().get_buffer().get(), right .data_handle().get_index(), is_contiguous_layout<typename decltype(right)::layout_type> ? right.extent(0) : right.extent(1),
+                left  .data_handle().get_buffer().get(), left  .data_handle().get_index(), is_contiguous_layout<left_layout_type > ? left .extent(0) : left .extent(1),
+                right .data_handle().get_buffer().get(), right .data_handle().get_index(), is_contiguous_layout<right_layout_type> ? right.extent(0) : right.extent(1),
                 0,
                 output.data_handle().get_buffer().get(), output.data_handle().get_index(), output.extent(0),
                 &opencl::execution_context.command_queue().get()

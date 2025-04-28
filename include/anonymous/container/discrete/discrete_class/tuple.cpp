@@ -7,17 +7,16 @@ constexpr tuple<types...>::tuple ( types... t )
 }
 
 template < class... types >
-template < class... types2 >
-constexpr tuple<types...>::tuple ( const tuple<types2...>& cvt )
-    requires ( sizeof...(types) == sizeof...(types2) ) and
-             ( ( convertible_to<types2,types> and ... ) )
+constexpr tuple<types...>::tuple ( const tuple_type auto& cvt )
+    requires ( sizeof...(types) >= 1 ) and 
+             detail::tuplewise_convertible_to<cvt_type,tuple>
 {
     for_constexpr<1,sizeof...(types)>([&] <int index> { self.template value<index>() = cvt.template value<index>(); });
 }
 
 template < class... types >
 template < int index >
-constexpr auto& tuple<types...>::value ( )
+constexpr tuple<types...>::reference<index> tuple<types...>::value ( )
     requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) )
 {
     if constexpr ( index > 0 )
@@ -28,7 +27,7 @@ constexpr auto& tuple<types...>::value ( )
 
 template < class... types >
 template < int index >
-constexpr const auto& tuple<types...>::value ( ) const
+constexpr tuple<types...>::const_reference<index> tuple<types...>::value ( ) const
     requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) )
 {
     if constexpr ( index > 0 )

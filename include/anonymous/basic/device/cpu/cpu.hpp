@@ -171,11 +171,11 @@ class cpu
             constexpr static void right_scale       ( const auto, const auto, auto );
             constexpr static void multiply          ( const auto, const auto, auto );
             constexpr static void divide            ( const auto, const auto, auto );
-            constexpr static void plus_equal        (       auto, const auto, auto );
-            constexpr static void minus_equal       (       auto, const auto, auto );
-            constexpr static void right_scale_equal (       auto, const auto, auto );
-            constexpr static void multiply_equal    (       auto, const auto, auto );
-            constexpr static void divide_equal      (       auto, const auto, auto );
+            constexpr static void plus_equal        (       auto, const auto );
+            constexpr static void minus_equal       (       auto, const auto );
+            constexpr static void right_scale_equal (       auto, const auto );
+            constexpr static void multiply_equal    (       auto, const auto );
+            constexpr static void divide_equal      (       auto, const auto );
 
             constexpr static void convolve          ( const auto, const auto, auto );
             constexpr static void cross             ( const auto, const auto, auto );

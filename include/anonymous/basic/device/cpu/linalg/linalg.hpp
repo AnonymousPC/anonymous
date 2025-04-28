@@ -2,7 +2,7 @@
 
 constexpr void cpu::linalg::unary_plus ( const auto right, auto output )
 {
-    detail::eigen_map(output).noalias() = + detail::eigen_map<output_value_type>(right);
+    detail::eigen_map(output).noalias() = /* + */ detail::eigen_map<output_value_type>(right);
 }
 
 constexpr void cpu::linalg::unary_minus ( const auto right, auto output )
@@ -40,27 +40,27 @@ constexpr void cpu::linalg::divide ( const auto left, const auto right, auto out
     detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left) / right;
 }
 
-constexpr void cpu::linalg::plus_equal ( auto left, const auto right, auto /*output*/ )
+constexpr void cpu::linalg::plus_equal ( auto left, const auto right )
 {
     detail::eigen_map(left) += detail::eigen_map<left_value_type>(right);
 }
 
-constexpr void cpu::linalg::minus_equal ( auto left, const auto right, auto /*output*/ )
+constexpr void cpu::linalg::minus_equal ( auto left, const auto right )
 {
     detail::eigen_map(left) -= detail::eigen_map<left_value_type>(right);
 }
 
-constexpr void cpu::linalg::right_scale_equal ( auto left, const auto right, auto /*output*/ )
+constexpr void cpu::linalg::right_scale_equal ( auto left, const auto right )
 {
     detail::eigen_map(left) *= right;
 }
 
-constexpr void cpu::linalg::multiply_equal ( auto left, const auto right, auto /*output*/ )
+constexpr void cpu::linalg::multiply_equal ( auto left, const auto right )
 {
     detail::eigen_map(left) *= detail::eigen_map<left_value_type>(right);
 }
 
-constexpr void cpu::linalg::divide_equal ( auto left, const auto right, auto /*output*/ )
+constexpr void cpu::linalg::divide_equal ( auto left, const auto right )
 {
     detail::eigen_map(left) /= right;
 }
@@ -70,7 +70,7 @@ constexpr void cpu::linalg::divide_equal ( auto left, const auto right, auto /*o
 
 constexpr void cpu::linalg::convolve ( const auto left, const auto right, auto output )
 {
-    detail::eigen_map<void,detail::eigen_map_tensor>(output) = detail::eigen_map<output_value_type,detail::eigen_map_tensor>(left).convolve(detail::eigen_map<output_value_type,detail::eigen_map_tensor>(right), detail::eigen_make_convolve_full_dims<decltype(left)::extents_type::rank()>());
+    detail::eigen_map<void,detail::eigen_map_tensor>(output) = detail::eigen_map<output_value_type,detail::eigen_map_tensor>(left).convolve(detail::eigen_map<output_value_type,detail::eigen_map_tensor>(right), detail::eigen_make_convolve_full_dims<left.rank()>());
 }
 
 constexpr void cpu::linalg::cross ( const auto left, const auto right, auto output )

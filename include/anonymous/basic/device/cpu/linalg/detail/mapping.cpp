@@ -48,7 +48,7 @@ namespace detail
         return arr;
     }
 
-    constexpr auto eigen_make_strided_full_extents ( auto extents, auto mapping )
+    constexpr auto eigen_make_stride_extents ( auto extents, auto mapping )
     {
         auto arr = std::array<int,extents.rank()+1>();
         for_constexpr<0,extents.rank()-1>([&] <int index> { arr[index] = extents.extent(index); });
@@ -63,13 +63,6 @@ namespace detail
         return arr;
     }
 
-
-    // constexpr auto eigen_make_stride ( auto mapping )
-    // {
-    //     auto arr = std::array<int,decltype(mapping)::extents::rank()>();
-    //     for_constexpr<0,rank-1>([&] <int index> { arr[index] = mapping.stride(index); });
-    //     return arr;
-    // }
     template < int rank >
     constexpr auto eigen_make_transpose_shuffle ( )
     {

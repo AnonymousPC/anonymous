@@ -53,12 +53,12 @@ string url::port ( ) const
     try
     {
         auto part = self.split(url::regex)[4];
-        return part.begins_with(':') ? part[2,-1] : part;
+        return part.begins_with(':') ? part[2,-1] : part;               
     }
     catch ( const regex_error& )
     {
         throw network_error("failed to parse url (with url = {}, example = {})", self, "https://username:password@www.host.com:12345/path/to/resource?key1=value1&key2=value2#fragment3");
-    }
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 }
 
 string url::path ( ) const

@@ -39,12 +39,24 @@ constexpr decltype(auto) get ( input_type&& p )
 
 
 
+namespace detail
+{
+    template < class input_type, int count = 1 >
+    constexpr size_t tuple_size_helper = []
+        {
+            if constexpr ( requires { typename input_type::template value_type<count>; } )
+                return tuple_size_helper<input_type,count+1>;
+            else
+                return count - 1;
+        } ();
+    
+} // namespace detail
 
 
 template < anonymous::tuple_type input_type >
 struct tuple_size<input_type>
 {
-    constexpr static const size_t value = std::tuple_size<decltype(std::tuple(std::declval<input_type>()))>::value;
+    constexpr static const size_t value = detail::tuple_size_helper<input_type>;
 };
 
 template < size_t index, anonymous::tuple_type input_type >

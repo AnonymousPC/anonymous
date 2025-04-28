@@ -2,6 +2,11 @@ namespace detail
 {
     // Concept
 
+    template < class type1, class type2 >
+    constexpr bool tuplewise_convertible_to = 
+        tuple_size<type1> == tuple_size<type2> and 
+        all_of_constexpr<1,tuple_size<type1>>([] <int index> { return convertible_to<tuple_element<index,type1>,tuple_element<index,type2>>; });
+
     template < class type, int count = 1 >
     constexpr bool tuplewise_printable = []
         {
@@ -12,36 +17,36 @@ namespace detail
         } ();
 
     template < class type1, class type2, int count = 1 >
-    constexpr bool tuplewise_equalable_to = []
+    constexpr bool tuplewise_equalable_to = tuple_size<type1> == tuple_size<type2> and []
         {
-            if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+            if constexpr ( count < tuple_size<type1> )
                 return equalable_to<tuple_element<count,type1>,tuple_element<count,type2>> and tuplewise_equalable_to<type1,type2,count+1>;
             else
                 return true;
         } ();
 
     template < class type1, class type2, int count = 1 >
-    constexpr bool tuplewise_comparable_to = []
+    constexpr bool tuplewise_comparable_to = tuple_size<type1> == tuple_size<type2> and []
         {
-            if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+            if constexpr ( count < tuple_size<type1> )
                 return comparable_to<tuple_element<count,type1>,tuple_element<count,type2>> and tuplewise_comparable_to<type1,type2,count+1>;
             else
                 return true;
         } ();
 
     template < class type1, class type2, int count = 1 >
-    constexpr bool tuplewise_plusable_to = []
+    constexpr bool tuplewise_plusable_to = tuple_size<type1> == tuple_size<type2> and []
         {
-            if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+            if constexpr ( count < tuple_size<type1> )
                 return plusable_to<tuple_element<count,type1>,tuple_element<count,type2>> and tuplewise_plusable_to<type1,type2,count+1>;
             else
                 return true;
         } ();
 
     template < class type1, class type2, int count = 1 >
-    constexpr bool tuplewise_minusable_to = []
+    constexpr bool tuplewise_minusable_to = tuple_size<type1> == tuple_size<type2> and []
         {
-            if constexpr ( tuple_size<type1> == tuple_size<type2> and count < tuple_size<type1> )
+            if constexpr ( count < tuple_size<type1> )
                 return minusable_to<tuple_element<count,type1>,tuple_element<count,type2>> and tuplewise_minusable_to<type1,type2,count+1>;
             else
                 return true;
@@ -76,9 +81,6 @@ namespace detail
             else
                 return true;
         } ();
-
-    template < class type1, class type2, int count = 1 >
-    constexpr bool tuplewise_convertible_to = 
         
 
 
@@ -167,26 +169,6 @@ namespace detail
     // Implemention
 
     template < int index = 1 >
-    constexpr void tuplewise_print_impl ( auto& left, const auto& right )
-    {
-        if constexpr ( tuple_size<decay<decltype(right)>> == 0 )
-            left << "()";
-        else
-        {
-            if constexpr ( index == 1 )
-                left << '(';
-            left << get<index-1>(right);
-            if constexpr ( index < tuple_size<decay<decltype(right)>> )
-            {
-                left << ", ";
-                tuplewise_print_impl<index+1> ( left, right );
-            }
-            else
-                left << ')';
-        }
-    }
-
-    template < int index = 1 >
     constexpr bool tuplewise_equal_impl ( const auto& left, const auto& right )
     {
         if constexpr ( index < tuple_size<decay<decltype(left)>> )
@@ -213,68 +195,6 @@ namespace detail
             return get<index-1>(left) <=> get<index-1>(right);
         else // tuple_size == 0.
             return std::strong_ordering::equal;
-    }
-
-
-
-
-
-    // Interface
-
-    constexpr auto& tuplewise_print ( auto& left, const auto& right )
-    {
-        tuplewise_print_impl(left, right);
-        return left;
-    }
-
-    constexpr bool tuplewise_equal ( const auto& left, const auto& right )
-    {
-        return tuplewise_equal_impl(left, right);
-    }
-
-    constexpr auto tuplewise_compare ( const auto& left, const auto& right )
-    {
-        return tuplewise_compare_impl(left, right);
-    }
-
-    constexpr auto tuplewise_plus ( const auto& left, const auto& right )
-    {
-        auto t = typename tuplewise_plus_result<decay<decltype(left)>,decay<decltype(right)>>::type();
-        if constexpr ( tuple_size<decay<decltype(left)>> > 0 )
-            for_constexpr<1,tuple_size<decay<decltype(left)>>>([&] <int index> { get<index-1>(t) = get<index-1>(left) + get<index-1>(right); });
-        return t;
-    }
-
-    constexpr auto tuplewise_minus ( const auto& left, const auto& right )
-    {
-        auto t = typename tuplewise_minus_result<decay<decltype(left)>,decay<decltype(right)>>::type();
-        if constexpr ( tuple_size<decay<decltype(left)>> > 0 )
-            for_constexpr<1,tuple_size<decay<decltype(left)>>>([&] <int index> { get<index-1>(t) = get<index-1>(left) - get<index-1>(right); });
-        return t;
-    }
-
-    constexpr auto tuplewise_each_multiply ( const auto& left, const auto& right )
-    {
-        auto t = typename tuplewise_each_multiply_result<decay<decltype(left)>,decay<decltype(right)>>::type();
-        if constexpr ( tuple_size<decay<decltype(left)>> > 0 )
-            for_constexpr<1,tuple_size<decay<decltype(left)>>>([&] <int index> { get<index-1>(t) = get<index-1>(left) * right; });
-        return t;
-    }
-
-    constexpr auto tuplewise_multiply_each ( const auto& left, const auto& right )
-    {
-        auto t = typename tuplewise_multiply_each_result<decay<decltype(left)>,decay<decltype(right)>>::type();
-        if constexpr ( tuple_size<decay<decltype(right)>> > 0 )
-            for_constexpr<1,tuple_size<decay<decltype(left)>>>([&] <int index> { get<index-1>(t) = left * get<index-1>(right); });
-        return t;
-    }
-
-    constexpr auto tuplewise_each_divide ( const auto& left, const auto& right )
-    {
-        auto t = typename tuplewise_each_divide_result<decay<decltype(left)>,decay<decltype(right)>>::type();
-        if constexpr ( tuple_size<decay<decltype(left)>> > 0 )
-            for_constexpr<1,tuple_size<decay<decltype(left)>>>([&] <int index> { get<index-1>(t) = get<index-1>(left) / right; });
-        return t;
     }
 
 } // namespace detail

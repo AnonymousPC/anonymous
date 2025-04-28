@@ -13,11 +13,12 @@ class tuple
         constexpr tuple ( types... ) requires ( sizeof...(types) >= 1 );
 
     public: // Conversion
-        template < class... types2 > constexpr tuple ( const tuple<types2...>& ) requires ( sizeof...(types) == sizeof...(types2) ) and ( ( convertible_to<types2,types> and ... ) )
+        constexpr tuple ( const tuple_type auto& cvt ) requires ( sizeof...(types) >= 1 ) and detail::tuplewise_convertible_to<cvt_type,tuple>;
 
     public: // Member
-        template < int index > constexpr       auto& value ( )       requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
-        template < int index > constexpr const auto& value ( ) const requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
+        template < int index > constexpr reference<index>       value ( )       requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
+        template < int index > constexpr const_reference<index> value ( ) const requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
 };
 
 #include "tuple.cpp"
+#include "detail/tuple_deduction.hpp"

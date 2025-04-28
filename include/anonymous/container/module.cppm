@@ -14,12 +14,8 @@ export namespace anonymous
 {
     /// Class
     template < class type, int dim = 1,                                    class device = cpu > class array;
-    template < class type,                                                 class device = cpu > using vector            = array<type,1,device>;
-    template < class type,                                                 class device = cpu > using matrix            = array<type,2,device>;
-    template < class type, int len,                                        class device = cpu > class static_array;
-    template < class type, int len,                                        class device = cpu > using static_vector     = static_array <type,len,device>;
-    template < class type, int len,                                        class device = cpu > class inplace_array;
-    template < class type, int len,                                        class device = cpu > using inplace_vector    = inplace_array<type,len,device>;
+    template < class type,                                                 class device = cpu > using vector = array<type,1,device>;
+    template < class type,                                                 class device = cpu > using matrix = array<type,2,device>;
 
     template < class type,                                                 class device = cpu > class deque;
     template < class type,                                                 class device = cpu > class forward_list;
@@ -43,11 +39,11 @@ export namespace anonymous
     template < class... types >                                          /*class device = cpu*/ class variant;
 
     template < class type,                                                 class device = cpu > class basic_string;
-                                                                                                using string            = basic_string<char>;
-                                                                                                using wstring           = basic_string<wchar_t>;
-                                                                                                using u8string          = basic_string<char8_t>;
-                                                                                                using u16string         = basic_string<char16_t>;
-                                                                                                using u32string         = basic_string<char32_t>;
+                                                                                                using string    = basic_string<char>;
+                                                                                                using wstring   = basic_string<wchar_t>;
+                                                                                                using u8string  = basic_string<char8_t>;
+                                                                                                using u16string = basic_string<char16_t>;
+                                                                                                using u32string = basic_string<char32_t>;
                                                                                             
     /// Concept
     template < class type > concept array_type = requires { typename type::array_tag; };
@@ -57,8 +53,9 @@ export namespace anonymous
     template < class type > concept tuple_type = requires { typename type::tuple_tag; };
 
     /// Include
+    #include "macro.cpp"
     #include "discrete/discrete.hpp"
-    // #include "polymorphic/polymorphic.hpp"
+    #include "polymorphic/polymorphic.hpp"
     // #include "array/array.hpp"
     // #include "chain/chain.hpp"
     // #include "collection/collection.hpp"
@@ -76,11 +73,6 @@ export namespace anonymous
     //     constexpr u8string       operator ""s   ( const char8_t*  ptr, std::size_t    ) { return u8string       ( ptr     );   }
     //     constexpr u16string      operator ""s   ( const char16_t* ptr, std::size_t    ) { return u16string      ( ptr     );   }
     //     constexpr u32string      operator ""s   ( const char32_t* ptr, std::size_t    ) { return u32string      ( ptr     );   }
-    //     constexpr string_view    operator ""sv  ( const char*     ptr, std::size_t sz ) { return string_view    ( ptr, sz );   }
-    //     constexpr wstring_view   operator ""sv  ( const wchar_t*  ptr, std::size_t sz ) { return wstring_view   ( ptr, sz );   }
-    //     constexpr u8string_view  operator ""sv  ( const char8_t*  ptr, std::size_t sz ) { return u8string_view  ( ptr, sz );   }
-    //     constexpr u16string_view operator ""sv  ( const char16_t* ptr, std::size_t sz ) { return u16string_view ( ptr, sz );   }
-    //     constexpr u32string_view operator ""sv  ( const char32_t* ptr, std::size_t sz ) { return u32string_view ( ptr, sz );   }
     // }
 
 } // namespace anonymous

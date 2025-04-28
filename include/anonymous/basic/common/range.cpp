@@ -39,13 +39,13 @@ constexpr range<type>::range ( range<type2> cvt )
 }
 
 template < class type >
-constexpr typename range<type>::const_iterator range<type>::begin ( ) const
+constexpr range<type>::const_iterator range<type>::begin ( ) const
 {
     return const_iterator ( low, step );
 }
 
 template < class type >
-constexpr typename range<type>::const_iterator range<type>::end ( ) const
+constexpr range<type>::const_iterator range<type>::end ( ) const
 {
     return const_iterator ( low + ( ( high - low ) / step + 1 ) * step, step );
 }

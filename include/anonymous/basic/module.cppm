@@ -5,15 +5,6 @@ module;
 #include <__ranges/non_propagating_cache.h>
 #include <__ranges/range_adaptor.h>
 
-#define left_value_type      typename remove_cvref<decltype(left  )>::value_type
-#define output_value_type    typename remove_cvref<decltype(output)>::value_type
-#define vector_value_type    typename remove_cvref<decltype(vector)>::value_type
-#define vector_layout_type   typename remove_cvref<decltype(vector)>::layout_type
-#define mdspan_value_type    typename remove_cvref<decltype(mdspan)>::value_type
-#define mdspan_extents_type  typename remove_cvref<decltype(mdspan)>::extents_type
-#define mdspan_layout_type   typename remove_cvref<decltype(mdspan)>::layout_type
-#define mdspan_accessor_type typename remove_cvref<decltype(mdspan)>::accessor_type
-
 export module anonymous.basic;
 import std;
 import stdexec;
@@ -109,7 +100,7 @@ export namespace anonymous
                 class key_error;
             class type_error;
         class runtime_error;
-            class string_error;
+            class text_error;
                 class encode_error;
                 class format_error;
                 class parse_error;
@@ -139,6 +130,7 @@ export namespace anonymous
     class tbb;
 
     /// Include
+    #include "macro.cpp"
     #include "common/common.hpp"
     #include "device/device.hpp"
     #include "init/init.hpp"

@@ -20,7 +20,7 @@ class unordered_set
         using  const_iterator  = base::const_iterator;
         using  hash_type       = hash;
         using  device_type     = device;
-        struct set_tag { };
+        struct set_concept { };
 
     public: // Core
         constexpr unordered_set ( )                                                           = default;

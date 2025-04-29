@@ -27,7 +27,7 @@ class array<type,max_dim,device>
         using  iterator        = detail::array_line_iterator      <type,max_dim,device>;
         using  const_iterator  = detail::array_line_const_iterator<type,max_dim,device>;
         using  device_type     = device;
-        struct array_tag { };
+        struct array_concept { };
 
     public: // Core
         constexpr          array ( ) = default;

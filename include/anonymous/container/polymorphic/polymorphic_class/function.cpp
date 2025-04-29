@@ -1,3 +1,36 @@
+template < class ret_type, class... arg_types, class device >
+constexpr function<ret_type(arg_types...),device>::function ( invocable_r<ret_type,arg_types...> auto f )
+    extends device::template function<ret_type(arg_types...)> ( std::move(f) )
+{
+    
+}
+
+template < class ret_type, class... arg_types, class device >
+constexpr ret_type function<ret_type(arg_types...),device>::operator() ( arg_types... args ) const
+{
+    if ( not empty() ) [[likely]]
+        return device::template function<ret_type(arg_types...)>::operator()(std::forward<decltype(args)>(args)...);
+    else
+        throw type_error("bad function call (with empty() = true)");       
+}
+
+template < class ret_type, class... arg_types, class device >
+constexpr bool function<ret_type(arg_types...),device>::empty ( ) const
+{
+    return not device::template function<ret_type(arg_types...)>::operator bool();    
+}
+
+template < class ret_type, class... arg_types, class device >
+constexpr const std::type_info& function<ret_type(arg_types...),device>::type ( ) const
+{
+    return device::template function<ret_type(arg_types...)>::target_type();  
+}
+
+
+
+
+
+
 namespace detail
 {
     template < class type >
@@ -49,33 +82,3 @@ function ( functor ) -> function<detail::member_function_deduction<decltype(&fun
 
 
 
-
-
-
-template < class ret_type, class... arg_types >
-constexpr function<ret_type(arg_types...)>::function ( invocable_r<ret_type,arg_types...> auto f )
-    extends base ( std::move(f) )
-{
-    
-}
-
-template < class ret_type, class... arg_types >
-constexpr bool function<ret_type(arg_types...)>::empty ( ) const
-{
-    return not base::operator bool();    
-}
-
-template < class ret_type, class... arg_types >
-constexpr const std::type_info& function<ret_type(arg_types...)>::type ( ) const
-{
-    return base::target_type();  
-}
-
-template < class ret_type, class... arg_types >
-constexpr ret_type function<ret_type(arg_types...)>::operator() ( arg_types... args ) const
-{
-    if ( not empty() ) [[likely]]
-        return base::operator()(std::forward<decltype(args)>(args)...);
-    else
-        throw type_error("bad function call (with empty() = true)");       
-}

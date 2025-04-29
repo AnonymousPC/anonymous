@@ -3,22 +3,22 @@ class tuple
     extends public std::tuple<types...>
 {
     public: // Typedef
-        template < int index > requires ( ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) ) ) using value_type      =       index_type_of<index,types...>;
-        template < int index > requires ( ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) ) ) using reference       =       index_type_of<index,types...>&;
-        template < int index > requires ( ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) ) ) using const_reference = const index_type_of<index,types...>&;
-        struct tuple_tag { };
+        template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using value_type      =       index_type_of<index,types...>;
+        template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using reference       =       index_type_of<index,types...>&;
+        template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using const_reference = const index_type_of<index,types...>&;
+        struct tuple_concept { };
     
     public: // Core
         constexpr tuple ( ) = default;
         constexpr tuple ( types... ) requires ( sizeof...(types) >= 1 );
 
     public: // Conversion
-        constexpr tuple ( const tuple_type auto& cvt ) requires ( sizeof...(types) >= 1 ) and detail::tuplewise_convertible_to<cvt_type,tuple>;
+        template < class... types2 >          constexpr tuple ( const tuple<types2...>& ) requires ( convertible_to  <types2,types> and ... );
+        template < class... types2 > explicit constexpr tuple ( const tuple<types2...>& ) requires ( constructible_to<types2,types> and ... );
 
     public: // Member
-        template < int index > constexpr reference<index>       value ( )       requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
-        template < int index > constexpr const_reference<index> value ( ) const requires ( index >= -int(sizeof...(types)) and index <= -1 ) or ( index >= 1 and index <= int(sizeof...(types)) );
+        template < int index > constexpr reference<index>       value ( )       requires ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) );
+        template < int index > constexpr const_reference<index> value ( ) const requires ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) );
 };
 
 #include "tuple.cpp"
-#include "detail/tuple_deduction.hpp"

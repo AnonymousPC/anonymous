@@ -11,17 +11,17 @@ namespace detail
 
 string detail::get_boost_gil_tag_name ( auto tag )
 {
-    if constexpr ( same_as<decltype(tag),boost::gil::bmp_tag> )
+    if constexpr ( same_as<decltype(tag),boost::gil::bmp_concept> )
         return "bmp";
-    else if constexpr ( same_as<decltype(tag),boost::gil::jpeg_tag> )
+    else if constexpr ( same_as<decltype(tag),boost::gil::jpeg_concept> )
         return "jpg";
-    else if constexpr ( same_as<decltype(tag),boost::gil::png_tag> )
+    else if constexpr ( same_as<decltype(tag),boost::gil::png_concept> )
         return "png";
-    else if constexpr ( same_as<decltype(tag),boost::gil::pnm_tag> )
+    else if constexpr ( same_as<decltype(tag),boost::gil::pnm_concept> )
         return "pnm";
-    else if constexpr ( same_as<decltype(tag),boost::gil::targa_tag> )
+    else if constexpr ( same_as<decltype(tag),boost::gil::targa_concept> )
         return "tga";
-    else if constexpr ( same_as<decltype(tag),boost::gil::tiff_tag> )
+    else if constexpr ( same_as<decltype(tag),boost::gil::tiff_concept> )
         return "tiff";
     else
         static_assert(false, "unrecognized tag");
@@ -31,22 +31,22 @@ void detail::read_from_boost_gil_header ( matrix<color>&, path pth, auto tag, in
 {
     try
     {
-        if constexpr ( same_as<decltype(tag),boost::gil::bmp_tag> )
+        if constexpr ( same_as<decltype(tag),boost::gil::bmp_concept> )
             dep = boost::gil::read_image_info(pth.c_str(), tag)._info._bits_per_pixel;
 
-        else if constexpr ( same_as<decltype(tag),boost::gil::jpeg_tag> )
+        else if constexpr ( same_as<decltype(tag),boost::gil::jpeg_concept> )
         {
             auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
             dep = info_head._data_precision * info_head._num_components;
         }
 
-        else if constexpr ( same_as<decltype(tag),boost::gil::png_tag> )
+        else if constexpr ( same_as<decltype(tag),boost::gil::png_concept> )
         {
             auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
             dep = info_head._bit_depth * info_head._num_channels;
         }
 
-        else if constexpr ( same_as<decltype(tag),boost::gil::pnm_tag> )
+        else if constexpr ( same_as<decltype(tag),boost::gil::pnm_concept> )
         {
             auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
             dep = info_head._type == boost::gil::pnm_image_type::mono_asc_t::value  or info_head._type == boost::gil::pnm_image_type::mono_bin_t::value  ? 1                                          :
@@ -54,10 +54,10 @@ void detail::read_from_boost_gil_header ( matrix<color>&, path pth, auto tag, in
                                    /*boost::gil::pnm_image_type::color_asc_t::value or info_head._type == boost::gil::pnm_image_type::color_bin_t::value*/ 3 * int(log2(int(info_head._max_value+1)));
         }
 
-        else if constexpr ( same_as<decltype(tag),boost::gil::targa_tag> )
+        else if constexpr ( same_as<decltype(tag),boost::gil::targa_concept> )
             dep = boost::gil::read_image_info(pth.c_str(), tag)._info._bits_per_pixel;
 
-        else if constexpr ( same_as<decltype(tag),boost::gil::tiff_tag> )
+        else if constexpr ( same_as<decltype(tag),boost::gil::tiff_concept> )
         {
             auto info_head = boost::gil::read_image_info(pth.c_str(), tag)._info;
             dep = info_head._bits_per_sample * info_head._samples_per_pixel;

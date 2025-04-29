@@ -22,7 +22,7 @@ class array<type,1,device>
         using  iterator        = device::template stride_pointer      <type>;
         using  const_iterator  = device::template const_stride_pointer<type>;
         using  device_type     = device;
-        struct array_tag { };
+        struct array_concept { };
 
     public: // Core
         constexpr          array ( ) = default;

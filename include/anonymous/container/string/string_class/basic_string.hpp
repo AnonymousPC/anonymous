@@ -21,7 +21,7 @@ class basic_string
         using  iterator        = pointer;
         using  const_iterator  = const_pointer;
         using  device_type     = device;
-        struct string_tag { };
+        struct string_concept { };
 
     public: // Core
         constexpr basic_string ( )                                  = default;

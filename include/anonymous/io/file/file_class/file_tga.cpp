@@ -9,7 +9,7 @@ file_tga& file_tga::open ( path pth )
     file_interface::open(pth);
 
     // Read data.
-    detail::read_from_boost_gil(self, self.operator path(), boost::gil::targa_tag(), depth());
+    detail::read_from_boost_gil(self, self.operator path(), boost::gil::targa_concept(), depth());
 
     return self;
 }
@@ -20,7 +20,7 @@ file_tga& file_tga::save ( )
     file_interface::save();
 
     // Write data.
-    detail::write_to_boost_gil(self, self.operator path(), boost::gil::targa_tag(), depth());
+    detail::write_to_boost_gil(self, self.operator path(), boost::gil::targa_concept(), depth());
 
     return self;
 }

@@ -36,7 +36,7 @@ class unordered_map
         class  const_iterator;      
         using  hash_type             = hash;
         using  device_type           = device;
-        struct map_tag { };
+        struct map_concept { };
 
     public: // Core
         constexpr unordered_map ( )                                                                                = default;

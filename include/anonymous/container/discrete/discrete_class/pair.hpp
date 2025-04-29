@@ -2,9 +2,6 @@ template < class type1, class type2, class device >
 class pair
     extends public device::template pair<type1,type2>
 {
-    private: // Typedef
-        using base = device::template pair<type1,type2>;
-
     public: // Typedef
         using key_type              = device::template value_type     <type1>;
         using key_reference         = device::template reference      <type1>;
@@ -12,7 +9,8 @@ class pair
         using value_type            = device::template value_type     <type2>;
         using value_reference       = device::template reference      <type2>;
         using const_value_reference = device::template const_reference<type2>;
-        struct pair_tag { };
+        using device_type           = device;
+        struct pair_concept { };
 
     public: // Core
         constexpr pair ( ) = default;         
@@ -30,4 +28,3 @@ class pair
 };
 
 #include "pair.cpp"
-#include "detail/pair_deduction.hpp"

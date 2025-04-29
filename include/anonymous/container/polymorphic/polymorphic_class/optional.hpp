@@ -1,15 +1,18 @@
 using std::nullopt;
 using std::nullopt_t;
 
-template < class types >
+template < class types, class device >
 class optional
-    extends public std::optional<types>
+    extends public device::template optional<types>
 {
     private: // Precondition
-        static_assert ( not is_const<types> and not is_volatile<types> and not is_reference<types> );
+        static_assert ( not is_void<types> and not is_reference<types> );
 
-    private: // Typedef
-        using base = std::optional<types>;
+    public: // Typedef
+        using value_type      = device::template value_type     <types>;
+        using reference       = device::template reference      <types>;
+        using const_reference = device::template const_reference<types>;
+        using device_type     = device;
 
     public: // Core
         constexpr optional ( )                                                       = default;
@@ -23,10 +26,10 @@ class optional
         constexpr optional ( nullopt_t );
 
     public: // Member
+        constexpr       reference       value ( );
+        constexpr       const_reference value ( ) const;
         constexpr       bool            empty ( ) const;
         constexpr const std::type_info& type  ( ) const;
-        constexpr       types&          value ( );
-        constexpr const types&          value ( ) const;
 };
 
 #include "optional.cpp"

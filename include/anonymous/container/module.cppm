@@ -32,7 +32,7 @@ export namespace anonymous
     template < class type1, class type2 = type1,                           class device = cpu > class pair;
     template < class... types >                                          /*class device = cpu*/ class tuple;
 
-    template <                                                             class device = cpu > class any;
+                                                                         /*class device = cpu*/ class any;
     template < class type,                                                 class device = cpu > class function;
     template < class type,                                                 class device = cpu > class optional;
     template < class type1, class type2,                                   class device = cpu > class expected;
@@ -46,11 +46,11 @@ export namespace anonymous
                                                                                                 using u32string = basic_string<char32_t>;
                                                                                             
     /// Concept
-    template < class type > concept array_type = requires { typename type::array_tag; };
-    template < class type > concept set_type   = requires { typename type::set_tag;   };
-    template < class type > concept map_type   = requires { typename type::map_tag;   };
-    template < class type > concept pair_type  = requires { typename type::pair_tag;  };
-    template < class type > concept tuple_type = requires { typename type::tuple_tag; };
+    template < class type > concept array_type = requires { typename type::array_concept; };
+    template < class type > concept set_type   = requires { typename type::set_concept;   };
+    template < class type > concept map_type   = requires { typename type::map_concept;   };
+    template < class type > concept pair_type  = requires { typename type::pair_concept;  };
+    template < class type > concept tuple_type = requires { typename type::tuple_concept; };
 
     /// Include
     #include "macro.cpp"

@@ -36,7 +36,7 @@ class map
         class  const_iterator;      
         using  compare_type          = compare;
         using  device_type           = device;
-        struct map_tag { };
+        struct map_concept { };
 
     public: // Core
         constexpr map ( )                                                                      = default;

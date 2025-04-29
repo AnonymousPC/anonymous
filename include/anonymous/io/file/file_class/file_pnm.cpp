@@ -9,7 +9,7 @@ file_pnm& file_pnm::open ( path pth )
     file_interface::open(pth);
 
     // Read data.
-    detail::read_from_boost_gil(self, self.operator path(), boost::gil::pnm_tag(), depth());
+    detail::read_from_boost_gil(self, self.operator path(), boost::gil::pnm_concept(), depth());
 
     return self;
 }
@@ -20,7 +20,7 @@ file_pnm& file_pnm::save ( )
     file_interface::save();
 
     // Write data.
-    detail::write_to_boost_gil(self, self.operator path(), boost::gil::pnm_tag(), depth());
+    detail::write_to_boost_gil(self, self.operator path(), boost::gil::pnm_concept(), depth());
 
     return self;
 }

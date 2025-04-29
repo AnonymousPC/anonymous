@@ -4,7 +4,7 @@ class complex
 {
     public: // Typedef
         using  value_type = type;
-        struct complex_tag { };
+        struct complex_concept { };
 
     public: // Core
         constexpr complex ( ) = default;

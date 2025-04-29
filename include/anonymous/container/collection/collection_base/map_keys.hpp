@@ -13,7 +13,7 @@ namespace detail
          // class  iterator; 
             class  const_iterator;      
             using  device_type           = device;
-            struct set_tag { };
+            struct set_concept { };
 
         public: // Member
             constexpr int size ( ) const

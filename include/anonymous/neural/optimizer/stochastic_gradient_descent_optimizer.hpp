@@ -11,7 +11,7 @@ class stochastic_gradient_descent_optimizer<type>
     public: // Typedef
         using  input_type       = type::input_type;
         using  batch_input_type = type::batch_input_type;
-        struct optimizer_tag { };
+        struct optimizer_concept { };
 
     private: // Data
         input_type       history_inputs       = {};
@@ -41,7 +41,7 @@ class stochastic_gradient_descent_optimizer
     extends public tuple<stochastic_gradient_descent_optimizer<types>...>
 {
     public: // Typedef
-        struct optimizer_tag { };
+        struct optimizer_concept { };
 };
 
 

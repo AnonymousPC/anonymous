@@ -3,12 +3,14 @@ class variant
     extends public std::variant<types...>
 {    
     private: // Precondition
-        static_assert ( sizeof...(types) >= 1 and detail::all_different<types...> );
-        static_assert ( not ( is_const<types> or ... ) and not ( is_volatile<types> or ... ) and not ( is_reference<types> or ... ) );
+        static_assert ( sizeof...(types) >= 1 );
+        static_assert ( not ( is_void<types> or ... ) and not ( is_reference<types> or ... ) );
         static_assert ( ( default_initializable<first_type_of<types...>> ) );
 
-    private: // Typedef
-        using base = std::variant<types...>;
+    public: // Typedef
+        template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using value_type      =       index_type_of<index,types...>;
+        template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using reference       =       index_type_of<index,types...>&;
+        template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using const_reference = const index_type_of<index,types...>&;
 
     public: // Core
         constexpr variant ( )                                                                  = default;
@@ -18,24 +20,20 @@ class variant
         constexpr variant& operator = (       variant&& ) requires ( movable <types> and ... ) = default;
 
     public: // Constructor 
-        constexpr          variant ( auto v ) requires ( same_as           <types,decltype(v)> or ... );
-        constexpr          variant ( auto v ) requires ( convertible_to    <decltype(v),types> or ... ) and ( not ( same_as       <types,decltype(v)> or ... ) );
-        constexpr explicit variant ( auto v ) requires ( constructible_from<types,decltype(v)> or ... ) and ( not ( convertible_to<decltype(v),types> or ... ) );
+        constexpr          variant ( auto v ) requires ( convertible_to  <decltype(v),types> or ... );
+        constexpr explicit variant ( auto v ) requires ( constructible_to<decltype(v),types> or ... );
 
     public: // Member
-                                       constexpr       int                                  index ( )          const;
-                                       constexpr const std::type_info&                      type  ( )          const;
-        template < class value_type  > constexpr       value_type&                          value ( )                requires ( same_as<types,value_type> or ... );
-        template < class value_type  > constexpr const value_type&                          value ( )          const requires ( same_as<types,value_type> or ... );
-        template < int   value_index > constexpr       index_type_of<value_index,types...>& value ( )                requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) );
-        template < int   value_index > constexpr const index_type_of<value_index,types...>& value ( )          const requires ( ( value_index >= -sizeof...(types) and value_index <= -1 ) or ( value_index >= 1 and value_index <= sizeof...(types) ) );
-                                       constexpr       decltype(auto)                       visit ( auto&& v )       requires detail::all_invocable_and_returns_same_type<decltype(v),types...>;
-                                       constexpr       decltype(auto)                       visit ( auto&& v ) const requires detail::all_invocable_and_returns_same_type<decltype(v),types...>;
+        template < class type  > constexpr       type&                  value ( )              requires ( same_as<types,type> or ... );
+        template < class type  > constexpr const type&                  value ( )        const requires ( same_as<types,type> or ... );
+        template < int   index > constexpr       reference<index>       value ( )              requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) );
+        template < int   index > constexpr       const_reference<index> value ( )        const requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) );
+                                 constexpr       int                    index ( )        const;
+                                 constexpr const std::type_info&        type  ( )        const;
 
-    public: // Traits
-        constexpr static int size ( );
+    public: // Visit
+        constexpr decltype(auto) visit ( auto&& );
+        constexpr decltype(auto) visit ( auto&& ) const;
 };
-
-template < class... types > std::ostream& operator << ( std::ostream&, const variant<types...>& ) requires ( printable<types> and ... ) and ( sizeof...(types) >= 1 );
 
 #include "variant.cpp"

@@ -96,35 +96,35 @@ detail::basic_initializer_t::basic_initializer_t ( )
 
 void detail::basic_initializer_t::signal_handler ( int, const char* msg )
 {
-    throw anonymous::signal("{}", msg);
+    throw signal("{}", msg);
 }
 
 void detail::basic_initializer_t::abort_signal_handler ( int )
 {
-    throw anonymous::abort_signal("SIGABRT (process abort signal)");
+    throw abort_signal("SIGABRT (process abort signal)");
 }
 
 void detail::basic_initializer_t::floating_point_exception_signal_handler ( int )
 {
-    throw anonymous::floating_point_exception_signal("SIGFPE (erroneous arithmetic operation)");
+    throw floating_point_exception_signal("SIGFPE (erroneous arithmetic operation)");
 }
 
 void detail::basic_initializer_t::illegal_instruction_signal_handler ( int )
 {
-    throw anonymous::illegal_instruction_signal("SIGILL (illegal instruction)");      
+    throw illegal_instruction_signal("SIGILL (illegal instruction)");      
 }
 
 void detail::basic_initializer_t::interrupt_signal_handler ( int )
 {
-    throw anonymous::interrupt_signal("SIGINT (terminal interrupt signal)");                
+    throw interrupt_signal("SIGINT (terminal interrupt signal)");                
 }
 
 void detail::basic_initializer_t::segmentation_violation_signal_handler ( int )
 {
-    throw anonymous::segmentation_violation_signal("SIGSEGV (invalid memory reference)");   
+    throw segmentation_violation_signal("SIGSEGV (invalid memory reference)");   
 }
 
 void detail::basic_initializer_t::terminate_signal_handler ( int )
 {
-    throw anonymous::terminate_signal("SIGTERM (termination signal)");
+    throw terminate_signal("SIGTERM (termination signal)");
 }

@@ -14,7 +14,7 @@ class softmax_layer<type1,type2>
         using  batch_output_type = array<typename output_type::value_type,output_type::dimension()+1>;
         using  ce_loss           = neural::ce_loss<output_type>;
         using  batch_ce_loss     = neural::ce_loss<batch_output_type>;
-        struct layer_tag { };
+        struct layer_concept { };
 
     public: // Interface
         constexpr output_type       forward  ( const input_type&                              ) const;

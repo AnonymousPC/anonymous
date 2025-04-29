@@ -20,7 +20,7 @@ class inplace_array
         using  iterator        = pointer;
         using  const_iterator  = const_pointer;
         using  device_type     = device;
-        struct array_tag { };
+        struct array_concept { };
 
     public: // Core
         constexpr inplace_array ( )                                                           = default;

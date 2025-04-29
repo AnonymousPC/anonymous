@@ -69,9 +69,9 @@ constexpr std::ostream& operator << ( std::ostream& left, const tuple_type auto&
     requires detail::tuplewise_printable<right_type>
 {
     left << '(';
-    for_constexpr<1,tuple_size<right_type>-1>([&] <int index> { left << right.template value<index>() << ", "; });
+    for_constexpr<1,tuple_size<right_type>-1>([&] <int index> { left << get<index-1>(right) << ", "; });
     if constexpr ( tuple_size<right_type> != 0 )
-        left << right.template value<-1>();
+        left << get<tuple_size<right_type>-1>(right);
     left << ')';
     return left;
 }
@@ -79,44 +79,44 @@ constexpr std::ostream& operator << ( std::ostream& left, const tuple_type auto&
 constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )
     requires detail::tuplewise_equalable_to<left_type,right_type>
 {
-    return all_of_constexpr<1,tuple_size<left_type>>([&] <int index> { return left.template value<index>() == right.template value<index>(); });
+    return all_of_constexpr<1,tuple_size<left_type>>([&] <int index> { return get<index-1>(left) == get<index-1>(right); });
 }
 
-// constexpr auto operator <=> ( const tuple_type auto& left, const tuple_type auto& right )
-//     requires detail::tuplewise_comparable_to<left_type,right_type>
-// {
-    
-// }
+constexpr auto operator <=> ( const tuple_type auto& left, const tuple_type auto& right )
+    requires detail::tuplewise_comparable_to<left_type,right_type>
+{
+    return detail::tuplewise_compare(left, right);
+}
 
-// constexpr tuple_type auto operator + ( const tuple_type auto& left, const tuple_type auto& right )
-//     requires detail::tuplewise_plusable_to<left_type,right_type>
-// {
-//     return detail::tuplewise_plus ( left, right );
-// }
+constexpr tuple_type auto operator + ( const tuple_type auto& left, const tuple_type auto& right )
+    requires detail::tuplewise_plusable_to<left_type,right_type>
+{
+    return detail::tuplewise_plus(left, right);
+}
 
-// constexpr tuple_type auto operator - ( const tuple_type auto& left, const tuple_type auto& right )
-//     requires detail::tuplewise_minusable_to<left_type,right_type>
-// {
-//     return detail::tuplewise_minus ( left, right );
-// }
+constexpr tuple_type auto operator - ( const tuple_type auto& left, const tuple_type auto& right )
+    requires detail::tuplewise_minusable_to<left_type,right_type>
+{
+    return detail::tuplewise_minus ( left, right );
+}
 
-// constexpr tuple_type auto operator * ( const tuple_type auto& left, const auto& right )
-//     requires detail::tuplewise_each_multipliable_to<left_type,right_type> and ( not tuple_type<right_type> )
-// {
-//     return detail::tuplewise_each_multiply ( left, right );
-// }
+constexpr tuple_type auto operator * ( const tuple_type auto& left, const auto& right )
+    requires detail::tuplewise_each_multipliable_to<left_type,right_type> and ( not tuple_type<right_type> )
+{
+    return detail::tuplewise_each_multiply ( left, right );
+}
 
-// constexpr tuple_type auto operator * ( const auto& left, const tuple_type auto& right )
-//     requires detail::tuplewise_multipliable_to_each<left_type,right_type> and ( not tuple_type<left_type> )
-// {
-//     return detail::tuplewise_multiply_each ( left, right );
-// }
+constexpr tuple_type auto operator * ( const auto& left, const tuple_type auto& right )
+    requires detail::tuplewise_multipliable_to_each<left_type,right_type> and ( not tuple_type<left_type> )
+{
+    return detail::tuplewise_multiply_each ( left, right );
+}
 
-// constexpr tuple_type auto operator / ( const tuple_type auto& left, const auto& right )
-//     requires detail::tuplewise_each_dividable_to<left_type,right_type> and ( not tuple_type<right_type> )
-// {
-//     return detail::tuplewise_each_divide ( left, right );
-// }
+constexpr tuple_type auto operator / ( const tuple_type auto& left, const auto& right )
+    requires detail::tuplewise_each_dividable_to<left_type,right_type> and ( not tuple_type<right_type> )
+{
+    return detail::tuplewise_each_divide ( left, right );
+}
 
 
 

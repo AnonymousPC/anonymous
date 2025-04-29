@@ -13,7 +13,7 @@ class relu_layer<type1,type2>
         using  batch_input_type  = array<typename input_type::value_type,input_type::dimension()+1>;
         using  output_type       = type2;
         using  batch_output_type = array<typename output_type::value_type,output_type::dimension()+1>;
-        struct layer_tag { };
+        struct layer_concept { };
 
     public: // Interface
         constexpr output_type       forward  ( const array_type auto& );

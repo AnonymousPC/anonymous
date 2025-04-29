@@ -1,10 +1,10 @@
 namespace anonymous::neural
 {
     /// Concept
-    template < class input_type > concept layer_type     = requires { typename input_type::layer_tag;     };
-    template < class input_type > concept loss_type      = requires { typename input_type::loss_tag;      };
-    template < class input_type > concept model_type     = requires { typename input_type::model_tag;     };
-    template < class input_type > concept optimizer_type = requires { typename input_type::optimizer_tag; };
+    template < class input_type > concept layer_type     = requires { typename input_type::layer_concept;     };
+    template < class input_type > concept loss_type      = requires { typename input_type::loss_concept;      };
+    template < class input_type > concept model_type     = requires { typename input_type::model_concept;     };
+    template < class input_type > concept optimizer_type = requires { typename input_type::optimizer_concept; };
 
     /// Layer
     template < array_type type1, array_type type2 > class convolve_layer;

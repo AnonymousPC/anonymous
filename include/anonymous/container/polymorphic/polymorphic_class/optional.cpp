@@ -1,43 +1,44 @@
-template < class types >
-constexpr optional<types>::optional ( types init )
-    extends base ( std::move(init) )
+template < class types, class device >
+constexpr optional<types,device>::optional ( types init )
+    extends device::template optional<types> ( std::move(init) )
 {
     
 }
 
-template < class types >
-constexpr optional<types>::optional ( nullopt_t )
-    extends base ( nullopt )
+template < class types, class device >
+constexpr optional<types,device>::optional ( nullopt_t )
+    extends device::template optional<types> ( nullopt )
 {
     
 }
 
-template < class types > 
-constexpr bool optional<types>::empty ( ) const
+template < class types, class device >
+constexpr optional<types,device>::reference optional<types,device>::value ( )
 {
-    return not base::has_value();
+    if ( not empty() ) [[likely]]
+        return device::template optional<types>::value();
+    else
+        throw type_error("bad optional access (with empty() = true)");
 }
 
-template < class types >
-constexpr const std::type_info& optional<types>::type ( ) const
+template < class types, class device >
+constexpr optional<types,device>::const_reference optional<types,device>::value ( ) const
+{
+    if ( not empty() ) [[likely]]
+        return device::template optional<types>::value();
+    else
+        throw type_error("bad optional access (with empty() = true)");
+}
+
+template < class types, class device >
+constexpr bool optional<types,device>::empty ( ) const
+{
+    return not device::template optional<types>::has_value();
+}
+
+template < class types, class device >
+constexpr const std::type_info& optional<types,device>::type ( ) const
 {
     return not empty() ? typeid(types) : typeid(void);
 }
 
-template < class types >
-constexpr types& optional<types>::value ( )
-{
-    if ( not empty() ) [[likely]]
-        return base::value();
-    else
-        throw type_error("bad optional access (with empty() = true)");
-}
-
-template < class types >
-constexpr const types& optional<types>::value ( ) const
-{
-    if ( not empty() ) [[likely]]
-        return base::value();
-    else
-        throw type_error("bad optional access (with empty() = true)");
-}

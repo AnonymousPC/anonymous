@@ -38,9 +38,9 @@ boost::compute::program opencl_queue_context::build_program ( std::string source
     {
         static_assert(sizeof...(args) % 2 == 0, "arguments should be like: type1(), 'type1', type2(), 'type2', , ...");
         for_constexpr<1,sizeof...(args),2>([&] <int index>
-        {
-            source = detail::opencl_source_replace(source, index_value_of<index+1>(args...), detail::opencl_type_name<index_type_of<index,decltype(args)...>>());
-        });
+            {
+                source = detail::opencl_source_replace(source, index_value_of<index+1>(args...), detail::opencl_type_name<index_type_of<index,decltype(args)...>>());
+            });
     }
 
     auto prog   = boost::compute::program();

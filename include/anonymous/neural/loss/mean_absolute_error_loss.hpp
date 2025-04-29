@@ -11,7 +11,7 @@ class mean_absolute_error_loss<type>
 
     public: // Typedef
         using  value_type = type::value_type;
-        struct loss_tag { };
+        struct loss_concept { };
 
     public: // Core
         constexpr mean_absolute_error_loss ( type, type );

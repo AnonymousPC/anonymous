@@ -11,7 +11,7 @@ class cross_entropy_loss<type>
 
     public: // Typedef
         using  value_type = type::value_type;
-        struct loss_tag { };
+        struct loss_concept { };
 
     public: // Core
         constexpr cross_entropy_loss ( type, type );

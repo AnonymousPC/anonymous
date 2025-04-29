@@ -11,9 +11,10 @@ namespace detail
     
     enum { implicit_mode, explicit_mode, default_mode };
 
-              std::string    format_stacktrace       ( const std::stacktrace& );
-              std::string    format_nested_exception ( const std::type_info&, const std::string& );
-              std::string    format_stacktrace_color ( std::string, int = 0, int = 0 );
+              std::string    format_stacktrace        ( const std::stacktrace& );
+              std::string    format_nested_exception  ( const std::type_info&, const std::string& );
+              std::string    format_stacktrace_color  ( std::string, int = 0, int = 0 );
+              std::string    format_stacktrace_module ( std::string );
     constexpr int            get_format_mode         ( const char* );
     constexpr decltype(auto) make_formattable        ( auto&& );
 }
@@ -122,12 +123,12 @@ std::string detail::format_stacktrace ( const std::stacktrace& trace )
                      {
                          if ( entry.source_file() != "" and entry.source_line() != 0 )
                              return std::format("    {}{} {}{} {}{} {}{}:{}{}",
-                                                yellow, "at", white, format_stacktrace_color(entry.description()),
+                                                yellow, "at", white, format_stacktrace_color(format_stacktrace_module(entry.description())),
                                                 green,  "in", grey,  entry.source_file(), entry.source_line(),
                                                 white);
                          else
                              return std::format("    {}{} {}{}{}",
-                                                yellow, "at", white, format_stacktrace_color(entry.description()),
+                                                yellow, "at", white, format_stacktrace_color(format_stacktrace_module(entry.description())),
                                                 white);
                      })
                  | std::views::join_with('\n')
@@ -175,6 +176,11 @@ std::string detail::format_stacktrace_color ( std::string str, int str_pos, int 
 
     // Continue.
     return format_stacktrace_color ( std::move(str), str_pos, colors_pos );
+}
+
+std::string detail::format_stacktrace_module ( std::string str )
+{
+    return std::regex_replace(str, std::regex(R"(@[\w\.]+)"), "");
 }
 
 constexpr int detail::get_format_mode ( const char* str )

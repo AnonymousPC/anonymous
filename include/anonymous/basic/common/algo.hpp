@@ -1,14 +1,13 @@
 template < int min, int max, int stride >
 constexpr void for_constexpr ( auto&& operations )
 {
-    static_assert ( ( stride > 0 and min <= max ) or
-                    ( stride < 0 and min >= max ),
-                    "invalid for-clause" );
+    if constexpr ( ( stride > 0 and min <= max ) or
+                   ( stride < 0 and min >= max ) )
+        operations.template operator()<min>();
 
-    operations.template operator()<min>();
     if constexpr ( ( stride > 0 and min <= max - stride ) or 
                    ( stride < 0 and min >= max - stride ) )
-    for_constexpr<min+stride,max,stride>(std::forward<decltype(operations)>(operations));
+        for_constexpr<min+stride,max,stride>(std::forward<decltype(operations)>(operations));
 }
 
 template < int min, int max, int stride >

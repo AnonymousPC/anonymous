@@ -22,7 +22,7 @@ class sigmoid_layer<type1,type2>
         using  batch_output_type = array<typename output_type::value_type,output_type::dimension()+1>;
         using  bce_loss          = neural::bce_loss<output_type>;
         using  batch_bce_loss    = neural::bce_loss<batch_output_type>;
-        struct layer_tag { };
+        struct layer_concept { };
 
     public: // Interface
         constexpr output_type       forward  ( const input_type&                              ) const;

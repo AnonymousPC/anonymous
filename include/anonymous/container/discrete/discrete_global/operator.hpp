@@ -1,4 +1,4 @@
-#include "detail/tuple_traits.hpp"
+#include "detail/tuplewise.cpp"
 
 constexpr            std::ostream& operator <<  (       std::ostream&    left, const pair_type  auto& right ) requires printable                    <right_key_type> and printable                      <right_value_type>;
 constexpr            bool          operator ==  ( const pair_type  auto& left, const pair_type  auto& right ) requires equalable_to   <left_key_type,right_key_type> and equalable_to   <left_value_type,right_value_type>;
@@ -19,4 +19,4 @@ constexpr tuple_type auto          operator  *  ( const tuple_type auto& left, c
 constexpr tuple_type auto          operator  *  ( const            auto& left, const tuple_type auto& right ) requires detail::tuplewise_multipliable_to_each<left_type,right_type> and ( not tuple_type<left_type > );
 constexpr tuple_type auto          operator  /  ( const tuple_type auto& left, const            auto& right ) requires detail::tuplewise_each_dividable_to   <left_type,right_type> and ( not tuple_type<right_type> );
 
-#include "discrete_global.cpp"
+#include "operator.cpp"

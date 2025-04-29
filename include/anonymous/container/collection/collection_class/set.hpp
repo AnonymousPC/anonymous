@@ -20,7 +20,7 @@ class set
         using  const_iterator  = base::const_iterator;
         using  compare_type    = compare;
         using  device_type     = device;
-        struct set_tag { };
+        struct set_concept { };
 
     public: // Core
         constexpr set ( )                                                 = default;

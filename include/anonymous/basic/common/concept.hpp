@@ -1,5 +1,3 @@
-#include "detail/type_pack.cpp"
-
 /// Type traits
 
 template < class type >                                    constexpr bool is_abstract                        = std::is_abstract                       <type>                 ::value;
@@ -77,9 +75,11 @@ template < class type >                                    using          range_
 template < class type >                                    constexpr int  tuple_size                         = std::tuple_size<type>::value;
 template < int index, class type >                         using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) : std::size_t(index+int(std::tuple_size<type>::value)),type>::type;
 
+
+
 /// Concepts
 
-template < class type >                                    concept        default_initializable              = std::default_initializable             <type>;
+template < class type >                                    concept        default_initializable              = std::default_initializable             <remove_cv<type>>; // std::default_initializable checks operator new, which does not accept cv-qualified ones.
 template < class type >                                    concept        nothrow_default_initializable      = std::is_nothrow_default_constructible  <type>::value;
 template < class type >                                    concept        trivially_default_initializable    = std::is_trivially_default_constructible<type>::value;
 template < class type, class... types >                    concept        constructible_from                 = std::constructible_from                <type,types...>;
@@ -105,8 +105,8 @@ template < class type1, class type2 >                      concept        base_o
 template < class type1, class type2 >                      concept        derived_from                       = std::derived_from                      <type1,type2>;
 template < class type1, class type2 >                      concept        constructible_to                   = std::constructible_from                <type2,type1>;
 template < class type1, class type2 >                      concept        nothrow_constructible_to           = std::is_nothrow_constructible          <type2,type1>::value;
-template < class type1, class type2 >                      concept        convertible_to                     = std::convertible_to                    <type1,type2>        and constructible_to        <type1,type2>; // Make convertible containing constructible.
-template < class type1, class type2 >                      concept        nothrow_convertible_to             = std::is_nothrow_convertible            <type1,type2>::value and nothrow_constructible_to<type1,type2>; // Make convertible containing constructible.
+template < class type1, class type2 >                      concept        convertible_to                     = std::convertible_to                    <type1,type2>        and constructible_to        <type1,type2>; // Make convertible >= constructible.
+template < class type1, class type2 >                      concept        nothrow_convertible_to             = std::is_nothrow_convertible            <type1,type2>::value and nothrow_constructible_to<type1,type2>; // Make convertible >= constructible.
 template < class type1, class type2 >                      concept        assignable_from                    = std::assignable_from                   <type1,type2>;
 template < class type1, class type2 >                      concept        nothrow_assignable_from            = std::is_nothrow_assignable             <type1,type2>::value;
 template < class type1, class type2 >                      concept        swappable_with                     = std::swappable_with                    <type1,type2>;
@@ -131,62 +131,68 @@ template < class type >                                    concept        contig
 template < class type >                                    concept        hashable                           = std::default_initializable             <std::hash<type>>;
 template < class type >                                    concept        formattable                        = std::formattable                       <type,char>;
 
+
+
 /// Operator
 
 template < class type = void >                             using          plus                               = std::plus<type>;
 template < class type >                                    concept        plusable                           = requires { std::declval<type >() + std::declval<type >(); };
-template < class type1, class type2 >                      concept        plusable_to                        = requires { std::declval<type1>() + std::declval<type2>(); std::declval<type2>() + std::declval<type1>(); };
+template < class type1, class type2 >                      concept        plusable_to                        = requires { std::declval<type1>() + std::declval<type2>(); };
 template < class type1, class type2 >                      using          plus_result                        = decltype ( std::declval<type1>() + std::declval<type2>()  );
 
 template < class type = void >                             using          minus                              = std::minus<type>;
 template < class type >                                    concept        minusable                          = requires { std::declval<type >() - std::declval<type >(); };
-template < class type1, class type2 >                      concept        minusable_to                       = requires { std::declval<type1>() - std::declval<type2>(); std::declval<type2>() - std::declval<type1>(); };
+template < class type1, class type2 >                      concept        minusable_to                       = requires { std::declval<type1>() - std::declval<type2>(); };
 template < class type1, class type2 >                      using          minus_result                       = decltype ( std::declval<type1>() - std::declval<type2>()  );
 
 template < class type = void >                             using          multiplies                         = std::multiplies<type>;
 template < class type >                                    concept        multipliable                       = requires { std::declval<type >() * std::declval<type >(); };
-template < class type1, class type2 >                      concept        multipliable_to                    = requires { std::declval<type1>() * std::declval<type2>(); std::declval<type2>() * std::declval<type1>(); };
+template < class type1, class type2 >                      concept        multipliable_to                    = requires { std::declval<type1>() * std::declval<type2>(); };
 template < class type1, class type2 >                      using          multiply_result                    = decltype ( std::declval<type1>() * std::declval<type2>()  );
 
 template < class type = void >                             using          divides                            = std::divides<type>;
 template < class type >                                    concept        dividable                          = requires { std::declval<type >() / std::declval<type >(); };
-template < class type1, class type2 >                      concept        dividable_to                       = requires { std::declval<type1>() / std::declval<type2>(); std::declval<type2>() / std::declval<type1>(); };
+template < class type1, class type2 >                      concept        dividable_to                       = requires { std::declval<type1>() / std::declval<type2>(); };
 template < class type1, class type2 >                      using          divide_result                      = decltype ( std::declval<type1>() / std::declval<type2>()  );
 
 template < class type = void >                             using          modulus                            = std::modulus<type>;
 template < class type >                                    concept        modulable                          = requires { std::declval<type >() % std::declval<type >(); };
-template < class type1, class type2 >                      concept        modulable_to                       = requires { std::declval<type1>() % std::declval<type2>(); std::declval<type2>() % std::declval<type1>(); };
+template < class type1, class type2 >                      concept        modulable_to                       = requires { std::declval<type1>() % std::declval<type2>(); };
 template < class type1, class type2 >                      using          modulus_result                     = decltype ( std::declval<type1>() % std::declval<type2>()  );
 
 template < class type >                                    using          equal                              = std::equal_to<type>;        
 template < class type >                                    concept        equalable                          = requires { std::declval<type >() == std::declval<type >(); };
-template < class type1, class type2 >                      concept        equalable_to                       = requires { std::declval<type1>() == std::declval<type2>(); std::declval<type2>() == std::declval<type1>(); };
+template < class type1, class type2 >                      concept        equalable_to                       = requires { std::declval<type1>() == std::declval<type2>(); };
 
 template < class type >                                    using          compare                            = std::compare_three_way;
 template < class type >                                    concept        comparable                         = requires { std::declval<type >() <=> std::declval<type >(); };
-template < class type1, class type2 >                      concept        comparable_to                      = requires { std::declval<type1>() <=> std::declval<type2>(); std::declval<type2>() <=> std::declval<type1>(); };
+template < class type1, class type2 >                      concept        comparable_to                      = requires { std::declval<type1>() <=> std::declval<type2>(); };
 template < class type1, class type2 >                      using          compare_result                     = decltype ( std::declval<type1>() <=> std::declval<type2>()  );
 
 template < class type >                                    concept        printable                          = requires ( type obj ) { std::cout << obj; };
 template < class type >                                    concept        inputable                          = requires ( type obj ) { std::cin  >> obj; };
 
+
+
 /// Is...type
 
-template < class type >                                    concept        char_type                          = same_as<remove_cv<type>,char> or same_as<remove_cv<type>,wchar_t> or same_as<remove_cv<type>,char8_t> or same_as<remove_cv<type>,char16_t> or same_as<remove_cv<type>,char32_t> or requires { typename type::char_tag;         };
-template < class type >                                    concept        int_type                           = ( std::signed_integral  <type> and ( not char_type<type> ) ) or requires { typename type::int_tag;          };
+template < class type >                                    concept        char_type                          = same_as<remove_cv<type>,char> or same_as<remove_cv<type>,wchar_t> or same_as<remove_cv<type>,char8_t> or same_as<remove_cv<type>,char16_t> or same_as<remove_cv<type>,char32_t> or requires { typename type::char_concept;         };
+template < class type >                                    concept        int_type                           = ( std::signed_integral  <type> and ( not char_type<type> ) ) or requires { typename type::int_concept;          };
 template < class type >                                    concept        unsigned_int_type                  = ( std::unsigned_integral<type> and ( not char_type<type> ) ) or requires { typename type::unsigned_int_tag; };
-template < class type >                                    concept        float_type                         = std::floating_point<type>                                    or requires { typename type::float_tag;        };
-template < class type >                                    concept        number_type                        = int_type<type> or float_type<type>                           or requires { typename type::number_tag;       };
-template < class type >                                    concept        complex_type                       =                                                                 requires { typename type::complex_tag;      };
+template < class type >                                    concept        float_type                         = std::floating_point<type>                                    or requires { typename type::float_concept;        };
+template < class type >                                    concept        number_type                        = int_type<type> or float_type<type>                           or requires { typename type::number_concept;       };
+template < class type >                                    concept        complex_type                       =                                                                 requires { typename type::complex_concept;      };
+
+
 
 /// Argument pack
 
-template <            class... types >                     using          first_type_of                      = detail::first_type_of_helper<types...>::type;
-template <            class... types >                     using          second_type_of                     = detail::second_type_of_helper<types...>::type;
-template <            class... types >                     using          last_type_of                       = detail::last_type_of_helper<types...>::type;
-template < int index, class... types >                     using          index_type_of                      = detail::index_type_of_helper<index,types...>::type;
+template <            class... types >                     using          first_type_of                      = types...[0];
+template <            class... types >                     using          second_type_of                     = types...[1];
+template <            class... types >                     using          last_type_of                       = types...[sizeof...(types)-1];
+template < int index, class... types >                     using          index_type_of                      = types...[index >= 0 ? index-1 : index+sizeof...(types)];
 
-                       constexpr decltype(auto) first_value_of  ( auto&&... args ) { return detail::first_value_of_helper       (std::forward<decltype(args)>(args)...); }
-                       constexpr decltype(auto) second_value_of ( auto&&... args ) { return detail::second_value_of_helper      (std::forward<decltype(args)>(args)...); }
-                       constexpr decltype(auto) last_value_of   ( auto&&... args ) { return detail::last_value_of_helper        (std::forward<decltype(args)>(args)...); }
-template < int index > constexpr decltype(auto) index_value_of  ( auto&&... args ) { return detail::index_value_of_helper<index>(std::forward<decltype(args)>(args)...); }
+                       constexpr decltype(auto) first_value_of  ( auto&&... args ) { return args...[0]; }
+                       constexpr decltype(auto) second_value_of ( auto&&... args ) { return args...[1]; }
+                       constexpr decltype(auto) last_value_of   ( auto&&... args ) { return args...[sizeof...(args)-1]; }
+template < int index > constexpr decltype(auto) index_value_of  ( auto&&... args ) { return args...[index >= 0 ? index-1 : index+sizeof...(args)]; }

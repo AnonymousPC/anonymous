@@ -8,5 +8,8 @@ using namespace anonymous;
 
 int main ( )
 {
-    print(variant<int,double>(2.3).template value<2>());
+    auto v = std::vector<int>(100);
+    int* p = nullptr;
+    auto mds = std::mdspan(p, std::dextents<int,3>(2, 3, 4));
+    print(mds.mapping()(10, 1, 1));
 }

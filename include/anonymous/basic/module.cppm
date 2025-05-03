@@ -23,35 +23,38 @@ import clblast;
     #include "std/is_layout_compatible.hpp"
 #endif
 
-#ifndef __cpp_lib_aligned_accessor
-    #include "std/detail/mdspan_aligned_accessor.cpp"
-#endif
-
 #ifndef __cpp_lib_mdspan
-    #include "std/detail/mdspan.cpp"
+    #include "std/mdspan.hpp"
 #else
-    #include "std/detail/mdspan_layout_transpose.cpp"
-    #include "std/detail/mdspan_aligned_accessor.cpp"
+    #include "std/mdspan/mdspan_layout_transpose.cpp"
+
+    #ifndef __cpp_lib_aligned_accessor
+        #include "std/mdspan/mdspan_aligned_accessor.cpp"
+    #endif
 #endif
 
-#ifndef __cpp_lib_ranges_chunk
-    #include "std/ranges_chunk.hpp"
-#endif
+#ifndef __cpp_lib_ranges
+    #include "std/ranges.hpp"
+#else
+    #ifndef __cpp_lib_ranges_chunk
+        #include "std/ranges/ranges_chunk.cpp"
+    #endif
 
-#ifndef __cpp_lib_ranges_join_with
-    #include "std/ranges_join_with.hpp"
-#endif 
+    #ifndef __cpp_lib_ranges_join_with
+        #include "std/ranges/ranges_join_with.cpp"
+    #endif 
 
-#ifndef __cpp_lib_ranges_starts_ends_with
-    #include "std/ranges_starts_ends_with.hpp"
-#endif
+    #ifndef __cpp_lib_ranges_starts_ends_with
+        #include "std/ranges/ranges_starts_ends_with.cpp"
+    #endif
 
-#ifndef __cpp_lib_ranges_stride
-    #include "std/ranges_stride.hpp"
-#endif
+    #ifndef __cpp_lib_ranges_stride
+        #include "std/ranges/ranges_stride.cpp"
+    #endif
 
-#ifndef __cpp_lib_ranges_zip
-    #include "std/ranges_zip.hpp"
+    #ifndef __cpp_lib_ranges_zip
+        #include "std/ranges/ranges_zip.cpp"
+    #endif
 #endif
 
 #ifndef __cpp_lib_stacktrace
@@ -82,12 +85,10 @@ export namespace anonymous
     #endif
 
     /// Common.algo
-    template < int min, int max, int stride = 1 > constexpr void for_constexpr        ( auto&& /*operations*/   );
-    template < int min, int max, int stride = 1 > constexpr bool all_of_constexpr     ( auto&& /*preds*/ );
-    template < int min, int max, int stride = 1 > constexpr bool any_of_constexpr     ( auto&& /*preds*/ );
-    template < int min, int max, int stride = 1 > constexpr bool none_of_constexpr    ( auto&& /*preds*/ );
-    template < int min, int max, int stride = 1 > constexpr auto accumulate_constexpr ( auto&& /*vals*/, auto&& /*init*/ );
-    template < int min, int max, int stride = 1 > constexpr auto accumulate_constexpr ( auto&& /*vals*/, auto&& /*init*/, auto&& /*op*/ );
+    template < int min, int max, int stride = 1 > constexpr void for_constexpr     ( auto&& /*operations*/   );
+    template < int min, int max, int stride = 1 > constexpr bool all_of_constexpr  ( auto&& /*preds*/ );
+    template < int min, int max, int stride = 1 > constexpr bool any_of_constexpr  ( auto&& /*preds*/ );
+    template < int min, int max, int stride = 1 > constexpr bool none_of_constexpr ( auto&& /*preds*/ );
 
     /// Common.concept
     // See concept.h.

@@ -37,7 +37,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
     else if ( not self.ownership() and right.ownership() )
     {
         if constexpr ( debug )
-            if ( self.upper::size() != int(right.base::size()) )
+            if ( self.size() != right.size() )
                 throw value_error("cannot assign array (with left.ownership() = false, left.size() = {}, right.size() = {}): size mismatches", self.size(), right.size());
 
         device::copy(right.base::begin(), right.base::end(), self.upper::begin());
@@ -45,7 +45,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( const array& 
     else // if ( not self.ownership() and not right.ownership() )
     {
         if constexpr ( debug )
-            if ( self.upper::size() != right.upper::size() )
+            if ( self.size() != right.size() )
                 throw value_error("cannot assign array (with left.ownership() = false, left.size() = {}, right.size() = {}): size mismatches", self.size(), right.size());
 
         device::copy(right.upper::begin(), right.upper::end(), self.upper::begin());
@@ -67,7 +67,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right
     else if ( not self.ownership() and right.ownership() )
     {
         if constexpr ( debug )
-            if ( self.upper::size() != int(right.base::size()) )
+            if ( self.size() != right.size() )
                 throw value_error("cannot assign array (with left.ownership() = false, left.size() = {}, right.size() = {}): size mismatches", self.size(), right.size());
 
         device::move(right.base::begin(), right.base::end(), self.upper::begin());
@@ -75,7 +75,7 @@ constexpr array<type,1,device>& array<type,1,device>::operator = ( array&& right
     else // if ( not self.ownership() and not right.ownership() )
     {
         if constexpr ( debug )
-            if ( self.upper::size() != right.upper::size() )
+            if ( self.size() != right.size() )
                 throw value_error("cannot assign array (with left.ownership() = false, left.size() = {}, right.size() = {}): size mismatches", self.size(), right.size());
 
         device::move(right.upper::begin(), right.upper::end(), self.upper::begin());
@@ -139,67 +139,37 @@ constexpr array<type,1,device>::array ( range<type> init )
 template < class type, class device >
 template < class type2, class device2 >
 constexpr array<type,1,device>::array ( const array<type2,1,device2>& cvt )
-    requires ( same_as<type,type2> or same_as<device,device2> ) and
-             convertible_to<type2,type> and  
-             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
+    requires convertible_to<type2,type>  
     extends array ( cvt.size() )
 {
     if constexpr ( same_as<type,type2> )
-        if constexpr ( same_as<device,device2> )
-            static_assert(false, "should use copy constructor");
-        else if constexpr ( same_as<device,cpu> )
-            if ( cvt.ownership() )
-                device2::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
-            else
-                device2::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
-        else // if constexpr ( same_as<device2,cpu> )
-            if ( cvt.ownership() )
-                device::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
-            else
-                device::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
-    else // if constexpr ( not same_as<type,type2> )
         if ( cvt.ownership() )
-            device::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+            common_type<device,device2>::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
         else
-            device::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+            common_type<device,device2>::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+    else
+        if ( cvt.ownership() )
+            common_type<device,device2>::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+        else
+            common_type<device,device2>::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
-template < class type2, int len, class device2 >
-constexpr array<type,1,device>::array ( const inplace_array<type2,len,device2>& cvt )
-    requires ( same_as<type,type2> or same_as<device,device2> ) and
-             convertible_to<type2,type> and  
-             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
+template < class type2, class device2 >
+constexpr array<type,1,device>::array ( const array<type2,1,device2>& cvt )
+    requires constructible_to<type2,type>  
     extends array ( cvt.size() )
 {
     if constexpr ( same_as<type,type2> )
-        if constexpr ( same_as<device,device2> )
-            device::copy(cvt.begin(), cvt.end(), self.base::begin());
-        else if constexpr ( same_as<device,cpu> )
-            device2::copy(cvt.begin(), cvt.end(), self.base::begin());
-        else // if constexpr ( same_as<device2,cpu> )
-            device::copy(cvt.begin(), cvt.end(), self.base::begin());
-    else // if constexpr ( not same_as<type,type2> )
-        device::transform(cvt.begin(), cvt.end(), self.base::begin(), [] (const auto& val) { return type(val); });
-}
-
-template < class type, class device >
-template < class type2, int len, class device2 >
-constexpr array<type,1,device>::array ( const static_array<type2,len,device2>& cvt )
-    requires ( same_as<type,type2> or same_as<device,device2> ) and
-             convertible_to<type2,type> and  
-             ( same_as<device,device2> or same_as<device,cpu> or same_as<device2,cpu> )
-    extends array ( cvt.size() )
-{
-    if constexpr ( same_as<type,type2> )
-        if constexpr ( same_as<device,device2> )
-            device::copy(cvt.begin(), cvt.end(), self.base::begin());
-        else if constexpr ( same_as<device,cpu> )
-            device2::copy(cvt.begin(), cvt.end(), self.base::begin());
-        else // if constexpr ( same_as<device2,cpu> )
-            device::copy(cvt.begin(), cvt.end(), self.base::begin());
-    else // if constexpr ( not same_as<type,type2> )
-        device::transform(cvt.begin(), cvt.end(), self.base::begin(), [] (const auto& val) { return type(val); });
+        if ( cvt.ownership() )
+            common_type<device,device2>::copy(cvt.array<type,1,device2>::base::begin(), cvt.array<type,1,device2>::base::end(), self.base::begin());
+        else
+            common_type<device,device2>::copy(cvt.array<type,1,device2>::upper::begin(), cvt.array<type,1,device2>::upper::end(), self.base::begin());
+    else
+        if ( cvt.ownership() )
+            common_type<device,device2>::transform(cvt.array<type2,1,device>::base::begin(), cvt.array<type2,1,device>::base::end(), self.base::begin(), [] (const auto& val) { return type(val); });
+        else
+            common_type<device,device2>::transform(cvt.array<type2,1,device>::upper::begin(), cvt.array<type2,1,device>::upper::end(), self.base::begin(), [] (const auto& val) { return type(val); });
 }
 
 template < class type, class device >
@@ -223,7 +193,7 @@ constexpr int array<type,1,device>::capacity ( ) const
 }
 
 template < class type, class device >
-constexpr static_array<int,1> array<type,1,device>::shape ( ) const
+constexpr array<int> array<type,1,device>::shape ( ) const
 {
     return { size() };
 }
@@ -313,7 +283,6 @@ constexpr array<type,1,device>& array<type,1,device>::clear ( )
             throw logic_error("cannot clear array (with ownership() = false): this array does not own its data");
 
     base::clear();
-    base::shrink_to_fit();
     return self;
 }
 
@@ -325,7 +294,7 @@ constexpr array<type,1,device>& array<type,1,device>::resize ( int new_size )
         if ( not ownership() ) 
             throw logic_error("cannot resize array (with ownership() = false): this array does not own its data");
         if ( new_size < 0 )
-            throw value_error("cannot resize array (with size() = {}): size is negative", new_size);
+            throw value_error("cannot resize array (with resize.size() = {}): size is negative", new_size);
     }
 
     base::resize(new_size);
@@ -333,7 +302,26 @@ constexpr array<type,1,device>& array<type,1,device>::resize ( int new_size )
 }
 
 template < class type, class device >
+constexpr array<type,1,device>& array<type,1,device>::resize ( array<int> new_shape )
+{
+    if constexpr ( debug )
+    {
+        if ( not ownership() ) 
+            throw logic_error("cannot resize array (with ownership() = false): this array does not own its data");
+        if ( new_shape.size() != 1 )
+            throw value_error("cannot resize array (with dimension() = 1, resize.shape() = {}): dimension mismatches", new_shape.size());
+        if ( new_shape.exist([] (int s) { return s < 0; }) )
+            throw value_error("cannot resize array (with resize.shape() = {}): shape is negative", new_shape);
+    }
+
+    base::resize(new_shape[1]);
+    return self;
+}
+
+template < class type, class device >
+template < int axis >
 constexpr array<type,1,device>& array<type,1,device>::push ( type new_value )
+    requires ( axis == 1 or axis == -1 )
 {
     if constexpr ( debug )
         if ( not ownership() ) 
@@ -344,14 +332,16 @@ constexpr array<type,1,device>& array<type,1,device>::push ( type new_value )
 }
 
 template < class type, class device >
+template < int axis >
 constexpr array<type,1,device>& array<type,1,device>::pop ( int old_pos )
+    requires ( axis == 1 or axis == -1 )
 {
     if constexpr ( debug )
     {
         if ( not ownership() ) 
             throw logic_error("cannot pop from array (with ownership() = false): this array does not own its data");
-        if ( old_pos < -int(base::size()) or old_pos == 0 or old_pos > int(base::size()) )
-            throw index_error("index {} is out of range with size {}", old_pos, base::size());
+        if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
+            throw index_error("index {} is out of range with size {}", old_pos, size());
     }
 
     base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 : base::begin() + old_pos + base::size());
@@ -359,14 +349,16 @@ constexpr array<type,1,device>& array<type,1,device>::pop ( int old_pos )
 }
 
 template < class type, class device >
+template < int axis >
 constexpr array<type,1,device>& array<type,1,device>::insert ( int new_pos, type new_value )
+    requires ( axis == 1 or axis == -1 )
 {
     if constexpr ( debug )
     {
         if ( not ownership() ) 
             throw logic_error("cannot insert into array (with ownership() = false): this array does not own its data");
-        if ( new_pos < -int(base::size()) or new_pos == 0 or new_pos > int(base::size()) )
-            throw index_error("index {} is out of range with size {}", new_pos, base::size());
+        if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
+            throw index_error("index {} is out of range with size {}", new_pos, size());
     }
         
     base::insert(new_pos >= 0 ? base::begin() + new_pos - 1 : base::begin() + new_pos + base::size(), std::move(new_value));
@@ -374,7 +366,9 @@ constexpr array<type,1,device>& array<type,1,device>::insert ( int new_pos, type
 }
 
 template < class type, class device >
+template < int axis >
 constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int old_pos_2 )
+    requires ( axis == 1 or axis == -1 )
 {
     if constexpr ( debug )
         if ( not ownership() ) 
@@ -386,10 +380,22 @@ constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int
         if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
                ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
             and not // Except for below:
-             ( ( abs_pos_1 == base::size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
-            throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, base::size());
+             ( ( abs_pos_1 == size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
+            throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
 
     base::erase(base::begin() + abs_pos_1 - 1, base::begin() + abs_pos_2 - 1);
+    return self;
+}
+
+template < class type, class device >
+constexpr array<type,1,device>& array<type,1,device>::flatten ( )
+{
+    return self;
+}
+
+template < class type, class device >
+constexpr const array<type,1,device>& array<type,1,device>::flatten ( ) const
+{
     return self;
 }
 
@@ -414,15 +420,15 @@ constexpr auto array<type,1,device>::mdspan ( )
     if ( contiguous() )
     {
         auto ptr = data();
-        auto shp = std::dextents<int,1> { size() };
+        auto shp = std::dextents<int,1>{size()};
         auto mds = type1(ptr, shp);
         return variant<type1,type2>(mds);
     }
     else
     {
         auto ptr  = upper::get_pointer(0);
-        auto shp  = std::dextents<int,1> { size() };
-        auto strd = std::array   <int,1> { upper::get_stride() };
+        auto shp  = std::dextents<int,1>{size()};
+        auto strd = std::array   <int,1>{upper::get_stride()};
         auto mp   = typename type2::mapping_type(shp, strd);
         auto mds  = type2(ptr, mp);
         return variant<type1,type2>(mds);
@@ -438,15 +444,15 @@ constexpr const auto array<type,1,device>::mdspan ( ) const
     if ( contiguous() )
     {
         auto ptr = data();
-        auto shp = std::dextents<int,1> { size() };
+        auto shp = std::dextents<int,1>{size()};
         auto mds = type1(ptr, shp);
         return variant<type1,type2>(mds);
     }
     else
     {
         auto ptr  = upper::get_pointer(0);
-        auto shp  = std::dextents<int,1> { size() };
-        auto strd = std::array   <int,1> { upper::get_stride() };
+        auto shp  = std::dextents<int,1>{size()};
+        auto strd = std::array   <int,1>{upper::get_stride()};
         auto mp   = typename type2::mapping_type(shp, strd);
         auto mds  = type2(ptr, mp);
         return variant<type1,type2>(mds);

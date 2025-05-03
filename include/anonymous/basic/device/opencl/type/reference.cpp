@@ -1,5 +1,3 @@
-#define OPENCL_SOURCE(...) #__VA_ARGS__
-
 template < class type >
 opencl::template reference<type> opencl::reference<type>::operator = ( const reference& right )
 {
@@ -782,6 +780,3 @@ type operator -- ( opencl::template reference<type> left, int )
     --left;
     return tmp;
 }
-
-
-#undef OPENCL_SOURCE

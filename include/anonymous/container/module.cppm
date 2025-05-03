@@ -56,7 +56,7 @@ export namespace anonymous
     #include "macro.cpp"
     #include "discrete/discrete.hpp"
     #include "polymorphic/polymorphic.hpp"
-    // #include "array/array.hpp"
+    #include "array/array.hpp"
     // #include "chain/chain.hpp"
     // #include "collection/collection.hpp"
     // #include "string/string.hpp"

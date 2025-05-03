@@ -1,3 +1,6 @@
+#include "detail/md_reverse.cpp"
+#include "detail/md_rotate.cpp"
+
 template < class container, class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr decltype(auto) array_algo<container,type,dim,device>::begin ( )

@@ -108,6 +108,8 @@
         "cuchar": "cpp",
         "latch": "cpp",
         "syncstream": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "mdspan": "cpp",
+        "__assert": "cpp"
     }
 }

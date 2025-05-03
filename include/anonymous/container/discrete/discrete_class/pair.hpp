@@ -3,13 +3,13 @@ class pair
     extends public device::template pair<type1,type2>
 {
     public: // Typedef
-        using key_type              = device::template value_type     <type1>;
-        using key_reference         = device::template reference      <type1>;
-        using const_key_reference   = device::template const_reference<type1>;
-        using value_type            = device::template value_type     <type2>;
-        using value_reference       = device::template reference      <type2>;
-        using const_value_reference = device::template const_reference<type2>;
-        using device_type           = device;
+        using  key_type              = device::template value_type     <type1>;
+        using  key_reference         = device::template reference      <type1>;
+        using  const_key_reference   = device::template const_reference<type1>;
+        using  value_type            = device::template value_type     <type2>;
+        using  value_reference       = device::template reference      <type2>;
+        using  const_value_reference = device::template const_reference<type2>;
+        using  device_type           = device;
         struct pair_concept { };
 
     public: // Core

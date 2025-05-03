@@ -334,11 +334,7 @@ namespace detail
         vct_other.template resize<attr>(shp, vct);
         return self;
     }
-
-
-
     
-
 } // namespace detail
 
 

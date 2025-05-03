@@ -33,17 +33,3 @@ constexpr bool none_of_constexpr ( auto&& preds )
     for_constexpr<min,max,stride>([&] <int index> { result = result and not preds.template operator()<index>(); });
     return result;
 }
-
-template < int min, int max, int stride >
-constexpr auto accumulate_constexpr ( auto&& vals, auto&& init )
-{
-    return accumulate_constexpr<min,max,stride>(std::forward<decltype(vals)>(vals), std::forward<decltype(init)>(init), std::plus<>());
-}
-
-template < int min, int max, int stride >
-constexpr auto accumulate_constexpr ( auto&& vals, auto&& init, auto&& op )
-{
-    auto result = init;
-    for_constexpr<min,max,stride>([&] <int index> { result = op(result, vals.template operator()<index>()); });
-    return result;
-}

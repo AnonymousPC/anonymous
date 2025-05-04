@@ -25,13 +25,13 @@ constexpr int detail::array_upper<type,1,device>::size ( ) const
 template < class type, class device >
 constexpr array<int> detail::array_upper<type,1,device>::shape ( ) const 
 {
-    return { size() };
+    return { get_shape()[1] };
 }
 
 template < class type, class device >
 constexpr bool detail::array_upper<type,1,device>::empty ( ) const 
 {
-    return size() == 0;
+    return get_host().empty();
 }
 
 template < class type, class device >

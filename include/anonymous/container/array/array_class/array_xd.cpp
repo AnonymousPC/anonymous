@@ -406,9 +406,7 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::resize ( array
             throw value_error("cannot resize array (with resize.shape() = {}): shape is negative", new_shape);
     }
 
-    auto new_shape_2 = detail::array_shape<max_dim>();
-    for_constexpr<1,max_dim>([&] <int index> { new_shape_2[index] = new_shape[index]; });
-    set_resize(new_shape_2);
+    set_resize([&] { auto shp = detail::array_shape<dim>(); for_constexpr<1,dim>([&] <int index> { shp[index] = new_shape[index]; }); return shp; } ());
     return self;
 }
 

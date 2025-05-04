@@ -450,21 +450,21 @@ constexpr array<type,dim,device>& array<type,dim,device>::resize ( int_type auto
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>& array<type,dim,device>::resize ( array<int> new_shape )
+constexpr array<type,dim,device>& array<type,dim,device>::resize ( array<int> dyn_shape )
 {
     if constexpr ( debug )
     {
         if ( not ownership() ) 
             throw logic_error("cannot resize array (with ownership() = false): this array does not own its data");
-        if ( new_shape.size() != dim )
-            throw value_error("cannot resize array (with dimension() = {}, resize.shape() = {}): dimension mismatches", self.dimension(), new_shape.size());
-        if ( new_shape.exist([] (int s) { return s < 0; }))
-            throw value_error("cannot resize array (with resize.shape() = {}): shape is negative", new_shape);
+        if ( dyn_shape.size() != dim )
+            throw value_error("cannot resize array (with dimension() = {}, resize.shape() = {}): dimension mismatches", self.dimension(), dyn_shape.size());
+        if ( dyn_shape.exist([] (int s) { return s < 0; }))
+            throw value_error("cannot resize array (with resize.shape() = {}): shape is negative", dyn_shape);
     }
 
-    auto new_shape_2 = detail::array_shape<dim>();
-    for_constexpr<1,dim>([&] <int index> { new_shape_2[index] = new_shape[index]; });
-    set_resize(new_shape_2);
+    auto new_shape = detail::array_shape<dim>();
+    for_constexpr<1,dim>([&] <int index> { new_shape[index] = dyn_shape[index]; });
+    set_resize(new_shape);
     return self;
 }
 

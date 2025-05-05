@@ -106,8 +106,9 @@ class array<type,dim,device>
 
     private: // Friend
         template < class type2, int dim2, class device2 > friend class array;
-        template < class type2, int dim2, class device2 > friend class detail::array_lower;
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
+        template < class type2, int dim2, class device2 > friend class detail::tuple_upper;
+        template < class type2, int dim2, class device2 > friend class detail::array_lower;
         template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
         template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
 

@@ -40,17 +40,18 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int detail::array_upper<type,dim,device>::size ( ) const
 {
-    return get_attribute() == rows_attribute    ? get_host<1>().size() / get_host().template get_size_axis<1>() :
-           get_attribute() == columns_attribute ? (get_host<1>().ownership() ? get_host<1>().size() / get_host<1>().template get_size_axis<-1>() : get_host<1>().size() / get_host<1>().template get_size_axis<1>()) :
-                                                  get_host<2>().size();
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute>().size() / get_host<rows_attribute>().template get_size_axis<1>() :
+           get_attribute() == columns_attribute ? (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().size() / get_host<columns_attribute>().template get_size_axis<-1>() : get_host<columns_attribute>().size() / get_host<columns_attribute>().template get_size_axis<1>()) :
+                                                  get_host<transpose_attribute>().size();
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<int> detail::array_upper<type,dim,device>::shape ( ) const
 {
-    return get_attribute() == rows_attribute    ? get_host<1>().shape().pop(1) : 
-           get_attribute() == columns_attribute ? 
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute>().shape().pop(1) :
+           get_attribute() == columns_attribute ? (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().shape().pop(-1).reverse() : get_host<columns_attribute>().shape().pop(1)) :
+                                                  get_host<transpose_attribute>().shape().reverse();
 }
 
 template < class type, int dim, class device >
@@ -72,8 +73,9 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr bool detail::array_upper<type,dim,device>::empty ( ) const
 {
-    return get_attribute() == rows_attribute or get_attribute() == columns_attribute ? get_host<1>().empty() :
-                                                                                       get_host<2>().empty();
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute     >().empty() :
+           get_attribute() == columns_attribute ? get_host<columns_attribute  >().empty() :
+                                                  get_host<transpose_attribute>().empty();
 }
 
 template < class type, int dim, class device >
@@ -81,10 +83,11 @@ template < class type, int dim, class device >
 constexpr detail::array_upper<type,dim,device>::pointer detail::array_upper<type,dim,device>::data ( )
 {
     if constexpr ( debug )
-        if ( not contiguous() )
+        if ( not contiguous() or get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_host<1>().data() + get_offset() * size();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().data() + get_offset() * size() :
+                                               get_host<columns_attribute>().data() + get_offset() * size();
 }
 
 template < class type, int dim, class device >
@@ -92,71 +95,71 @@ template < class type, int dim, class device >
 constexpr detail::array_upper<type,dim,device>::const_pointer detail::array_upper<type,dim,device>::data ( ) const
 {
     if constexpr ( debug )
-        if ( not contiguous() )
+        if ( not contiguous() or get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_host<1>().data() + get_offset() * size();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().data() + get_offset() * size() :
+                                               get_host<columns_attribute>().data() + get_offset() * size();
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr detail::array_upper<type,dim,device>::iterator detail::array_upper<type,dim,device>::begin ( )
 {
-    return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset()).begin() :
-           get_attribute() == columns_attribute ? get_host<1>().template get_columns<dim-1>(get_offset()).begin() : 
-                                                  get_host<2>().template get_columns<dim-1>().begin();
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute     >().template get_rows   <dim-1>(get_offset()).begin() :
+           get_attribute() == columns_attribute ? get_host<columns_attribute  >().template get_columns<dim-1>(get_offset()).begin() : 
+                                                  get_host<transpose_attribute>().template get_columns<dim-1>()            .begin();
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr detail::array_upper<type,dim,device>::const_iterator detail::array_upper<type,dim,device>::begin ( ) const
 {
-    return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset()).begin() :
-           get_attribute() == columns_attribute ? get_host<1>().template get_columns<dim-1>(get_offset()).begin() : 
-                                                  get_host<2>().template get_columns<dim-1>().begin();
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute     >().template get_rows   <dim-1>(get_offset()).begin() :
+           get_attribute() == columns_attribute ? get_host<columns_attribute  >().template get_columns<dim-1>(get_offset()).begin() : 
+                                                  get_host<transpose_attribute>().template get_columns<dim-1>()            .begin();
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr detail::array_upper<type,dim,device>::iterator detail::array_upper<type,dim,device>::end ( )
 {
-    return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset() + 1).begin() : // TODO: use get_rows<dim-1>(get_offset()).end() ?
-           get_attribute() == columns_attribute ? get_host<1>().template get_columns<dim-1>(get_offset() + 1).begin() :
-                                                  get_host<2>().template get_columns<dim-1>().end();
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute     >().template get_rows   <dim-1>(get_offset()).end() :
+           get_attribute() == columns_attribute ? get_host<columns_attribute  >().template get_columns<dim-1>(get_offset()).end() :
+                                                  get_host<transpose_attribute>().template get_columns<dim-1>()            .end();
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr detail::array_upper<type,dim,device>::const_iterator detail::array_upper<type,dim,device>::end ( ) const
 {
-    return get_attribute() == rows_attribute    ? get_host<1>().template get_rows   <dim-1>(get_offset() + 1).begin() :
-           get_attribute() == columns_attribute ? get_host<1>().template get_columns<dim-1>(get_offset() + 1).begin() :
-                                                  get_host<2>().template get_columns<dim-1>().end();
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute     >().template get_rows   <dim-1>(get_offset()).end() :
+           get_attribute() == columns_attribute ? get_host<columns_attribute  >().template get_columns<dim-1>(get_offset()).end() :
+                                                  get_host<transpose_attribute>().template get_columns<dim-1>()            .end();
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim-1,device>& detail::array_upper<type,dim,device>::operator [] ( int offset )
 {
-    return get_attribute() == rows_attribute    ? static_cast<array<type,dim-1,device>&>(get_host<1>().template get_rows   <dim-1>(get_offset())[offset]) :
-           get_attribute() == columns_attribute ? static_cast<array<type,dim-1,device>&>(get_host<1>().template get_columns<dim-1>(get_offset())[offset]) : 
-                                                  static_cast<array<type,dim-1,device>&>(get_host<2>().template get_columns<dim-1>()[offset]);
+    return get_attribute() == rows_attribute    ? static_cast<array<type,dim-1,device>&>(get_host<rows_attribute     >().template get_rows   <dim-1>(get_offset())[offset]) :
+           get_attribute() == columns_attribute ? static_cast<array<type,dim-1,device>&>(get_host<columns_attribute  >().template get_columns<dim-1>(get_offset())[offset]) : 
+                                                  static_cast<array<type,dim-1,device>&>(get_host<transpose_attribute>().template get_columns<dim-1>()            [offset]);
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr const array<type,dim-1,device>& detail::array_upper<type,dim,device>::operator [] ( int offset ) const
 {
-    return get_attribute() == rows_attribute    ? static_cast<const array<type,dim-1,device>&>(get_host<1>().template get_rows   <dim-1>(get_offset())[offset]) :
-           get_attribute() == columns_attribute ? static_cast<const array<type,dim-1,device>&>(get_host<1>().template get_columns<dim-1>(get_offset())[offset]) : 
-                                                  static_cast<const array<type,dim-1,device>&>(get_host<2>().template get_columns<dim-1>()[offset]);
+    return get_attribute() == rows_attribute    ? static_cast<const array<type,dim-1,device>&>(get_host<rows_attribute     >().template get_rows   <dim-1>(get_offset())[offset]) :
+           get_attribute() == columns_attribute ? static_cast<const array<type,dim-1,device>&>(get_host<columns_attribute  >().template get_columns<dim-1>(get_offset())[offset]) : 
+                                                  static_cast<const array<type,dim-1,device>&>(get_host<transpose_attribute>().template get_columns<dim-1>()            [offset]);
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr bool detail::array_upper<type,dim,device>::ownership ( ) const
 {
-    [[assume((ptr1 == nullptr and ptr2 == nullptr) == (atr == no_attribute))]];
     return ptr1 == nullptr and ptr2 == nullptr;
 }
 
@@ -166,12 +169,6 @@ constexpr bool detail::array_upper<type,dim,device>::contiguous ( ) const
 {
     return ( get_attribute() == rows_attribute    and same_as<typename device::layout_type,std::layout_right> ) or 
            ( get_attribute() == columns_attribute and same_as<typename device::layout_type,std::layout_left > );
-
-    /* Transpose-view is never considered contiguous.
-     * A contiguous array means that:
-     * - std::mdspan can directly apply on array.data() (with correct device::layout_type).
-     * - Two array which equals to each other are both contiguous must be memcpy-able.
-     */
 }
 
 template < class type, int dim, class device >
@@ -194,36 +191,36 @@ constexpr int detail::array_upper<type,dim,device>::get_offset ( ) const
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-template < int attr >
+template < auto attr >
 constexpr array<type,dim+1,device>& detail::array_upper<type,dim,device>::get_host ( )
-    requires ( attr == 1 )
+    requires ( attr == rows_attribute or attr == columns_attribute )
 {
     return *ptr1;
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-template < int attr >
+template < auto attr >
 constexpr const array<type,dim+1,device>& detail::array_upper<type,dim,device>::get_host ( ) const
-    requires ( attr == 1 )
+    requires ( attr == rows_attribute or attr == columns_attribute )
 {
     return *ptr1;
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-template < int attr >
+template < auto attr >
 constexpr array<type,dim,device>& detail::array_upper<type,dim,device>::get_host ( )
-    requires ( attr == 2 )
+    requires ( attr == transpose_attribute )
 {
     return *ptr2;
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-template < int attr >
+template < auto attr >
 constexpr const array<type,dim,device>& detail::array_upper<type,dim,device>::get_host ( ) const
-    requires ( attr == 2 )
+    requires ( attr == transpose_attribute )
 {
     return *ptr2;
 }
@@ -232,8 +229,9 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int detail::array_upper<type,dim,device>::get_size_top ( ) const
 {
-    return get_attribute() == rows_attribute or get_attribute() == columns_attribute ? get_host<1>().get_size_top() :
-                                                                                       get_host<2>().get_size_top();
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute     >().get_size_top() :
+           get_attribute() == columns_attribute ? get_host<columns_attribute  >().get_size_top() :
+                                                  get_host<transpose_attribute>().get_size_top();
 }
 
 template < class type, int dim, class device >
@@ -241,10 +239,14 @@ template < class type, int dim, class device >
 template < int axis >
 constexpr int detail::array_upper<type,dim,device>::get_size_axis ( ) const
 {
-    static_assert ( axis >= 1 and axis <= dim );
-    return get_attribute() == rows_attribute    ? get_host<1>().template get_size_axis<axis+1>() :
-           get_attribute() == columns_attribute ? (get_host<1>().ownership() ? get_host<1>().template get_size_axis<dim-axis+1>() : get_host<1>().template get_size_axis<axis+1>()) :
-                                                  get_host<2>().template get_size_axis<dim-axis+1>();
+    static_assert ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
+
+    if constexpr ( axis >= 0 )
+        return get_attribute() == rows_attribute    ? get_host<rows_attribute>().template get_size_axis<axis+1>() :
+               get_attribute() == columns_attribute ? (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().template get_size_axis<dim-axis+1>() : get_host<columns_attribute>().template get_size_axis<axis+1>()) :
+                                                      get_host<transpose_attribute>().template get_size_axis<dim-axis+1>();
+    else
+        return get_size_axis<axis+dim+1>();
 }
 
 template < class type, int dim, class device >
@@ -268,8 +270,8 @@ constexpr std::span<detail::array_upper<type,dim2,device>> detail::array_upper<t
         if ( get_attribute() == columns_attribute )
             throw internal_error();
 
-    return get_attribute() == rows_attribute ? get_host<1>().template get_rows   <dim2>(get_offset(), offsets...) :
-                                               get_host<2>().template get_columns<dim2>(offsets...);
+    return get_attribute() == rows_attribute ? get_host<rows_attribute     >().template get_rows   <dim2>(get_offset(), offsets...) :
+                                               get_host<transpose_attribute>().template get_columns<dim2>(offsets...);
 }
 
 template < class type, int dim, class device >
@@ -284,8 +286,8 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> detail::array_u
         if ( get_attribute() == columns_attribute )
             throw internal_error();
 
-    return get_attribute() == rows_attribute ? get_host<1>().template get_rows   <dim2>(get_offset(), offsets...) :
-                                               get_host<2>().template get_columns<dim2>(offsets...);
+    return get_attribute() == rows_attribute ? get_host<rows_attribute     >().template get_rows   <dim2>(get_offset(), offsets...) :
+                                               get_host<transpose_attribute>().template get_columns<dim2>(offsets...);
 }
 
 template < class type, int dim, class device >
@@ -297,11 +299,10 @@ constexpr std::span<detail::array_upper<type,dim2,device>> detail::array_upper<t
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
 
     if constexpr ( debug )
-        if ( get_attribute() == rows_attribute )
+        if ( get_attribute() == rows_attribute or get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_attribute() == columns_attribute ? get_host<1>().template get_columns<dim2>(offsets..., get_offset()) :
-                                                  get_host<2>().template get_columns<dim2>(offsets...);
+    return get_host<columns_attribute>().template get_columns<dim2>(offsets..., get_offset());
 }
 
 template < class type, int dim, class device >
@@ -313,11 +314,10 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> detail::array_u
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
 
     if constexpr ( debug )
-        if ( get_attribute() == rows_attribute )
+        if ( get_attribute() == rows_attribute or get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_attribute() == columns_attribute ? get_host<1>().template get_columns<dim2>(offsets..., get_offset()) :
-                                                  get_host<2>().template get_columns<dim2>(offsets...);
+    return get_host<columns_attribute>().template get_columns<dim2>(offsets..., get_offset());
 }
 
 template < class type, int dim, class device >
@@ -330,8 +330,8 @@ constexpr detail::array_upper<type,dim,device>::reference detail::array_upper<ty
         if ( get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_attribute() == rows_attribute ? get_host<1>().get_value(get_offset(), offsets...) :
-                                               get_host<1>().get_value(offsets..., get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_value(get_offset(), offsets...) :
+                                               get_host<columns_attribute>().get_value(offsets..., get_offset());
 }
 
 template < class type, int dim, class device >
@@ -344,8 +344,8 @@ constexpr detail::array_upper<type,dim,device>::const_reference detail::array_up
         if ( get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_attribute() == rows_attribute ? get_host<1>().get_value(get_offset(), offsets...) :
-                                               get_host<1>().get_value(offsets..., get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_value(get_offset(), offsets...) :
+                                               get_host<columns_attribute>().get_value(offsets..., get_offset());
 }
 
 template < class type, int dim, class device >
@@ -358,8 +358,8 @@ constexpr detail::array_upper<type,dim,device>::pointer detail::array_upper<type
         if ( get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_attribute() == rows_attribute ? get_host<1>().get_pointer(get_offset(), offsets...) :
-                                               get_host<1>().get_pointer(offsets..., get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_pointer(get_offset(), offsets...) :
+                                               get_host<columns_attribute>().get_pointer(offsets..., get_offset());
 }
 
 template < class type, int dim, class device >
@@ -372,8 +372,8 @@ constexpr detail::array_upper<type,dim,device>::const_pointer detail::array_uppe
         if ( get_attribute() == transpose_attribute )
             throw internal_error();
 
-    return get_attribute() == rows_attribute ? get_host<1>().get_pointer(get_offset(), offsets...) :
-                                               get_host<1>().get_pointer(offsets..., get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_pointer(get_offset(), offsets...) :
+                                               get_host<columns_attribute>().get_pointer(offsets..., get_offset());
 }
 
 template < class type, int dim, class device >

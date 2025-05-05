@@ -19,19 +19,22 @@ constexpr detail::array_upper<type,1,device>::array_upper ( const array<type,2,d
 template < class type, class device >
 constexpr int detail::array_upper<type,1,device>::size ( ) const 
 {
-    return get_size_axis<1>();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().size() / get_host<rows_attribute   >().template get_size_axis< 1>() :
+                                               get_host<columns_attribute>().size() / get_host<columns_attribute>().template get_size_axis<-1>();
 }
 
 template < class type, class device >
 constexpr array<int> detail::array_upper<type,1,device>::shape ( ) const 
 {
-    return { get_shape()[1] };
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().shape().pop( 1) :
+                                               get_host<columns_attribute>().shape().pop(-1);
 }
 
 template < class type, class device >
 constexpr bool detail::array_upper<type,1,device>::empty ( ) const 
 {
-    return get_host().empty();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().empty() :
+                                               get_host<columns_attribute>().empty();
 }
 
 template < class type, class device >
@@ -41,7 +44,8 @@ constexpr detail::array_upper<type,1,device>::pointer detail::array_upper<type,1
         if ( not contiguous() )
             throw internal_error();
 
-    return get_host().data() + get_offset() * size();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().data() + get_offset() * size() :
+                                               get_host<columns_attribute>().data() + get_offset() * size();
 }
 
 template < class type, class device >
@@ -51,7 +55,8 @@ constexpr detail::array_upper<type,1,device>::const_pointer detail::array_upper<
         if ( not contiguous() )
             throw internal_error();
 
-    return get_host().data() + get_offset() * size();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().data() + get_offset() * size() :
+                                               get_host<columns_attribute>().data() + get_offset() * size();
 }
 
 template < class type, class device >
@@ -99,7 +104,6 @@ constexpr detail::array_upper<type,1,device>::const_reference detail::array_uppe
 template < class type, class device >
 constexpr bool detail::array_upper<type,1,device>::ownership ( ) const
 {
-    [[assume((ptr == nullptr) == (atr == no_attribute))]];
     return ptr == nullptr;
 }
 
@@ -123,13 +127,17 @@ constexpr int detail::array_upper<type,1,device>::get_offset ( ) const
 }
 
 template < class type, class device >
+template < auto attr >
 constexpr array<type,2,device>& detail::array_upper<type,1,device>::get_host ( )
+    requires ( attr == rows_attribute or attr == columns_attribute )
 {
     return *ptr;
 }
 
 template < class type, class device >
+template < auto attr >
 constexpr const array<type,2,device>& detail::array_upper<type,1,device>::get_host ( ) const
+    requires ( attr == rows_attribute or attr == columns_attribute )
 {
     return *ptr;
 } 
@@ -137,7 +145,8 @@ constexpr const array<type,2,device>& detail::array_upper<type,1,device>::get_ho
 template < class type, class device >
 constexpr int detail::array_upper<type,1,device>::get_size_top ( ) const
 {
-    return get_host().get_size_top();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_size_top() :
+                                               get_host<columns_attribute>().get_size_top();
 }
 
 template < class type, class device >
@@ -145,41 +154,42 @@ template < int axis >
 constexpr int detail::array_upper<type,1,device>::get_size_axis ( ) const
 {
     static_assert ( axis == 1 or axis == -1 );
-    return get_host().template get_size_axis<2>();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().template get_size_axis<-1>() :
+                                               get_host<columns_attribute>().template get_size_axis< 1>();
 }
 
 template < class type, class device >
 constexpr detail::array_shape<1> detail::array_upper<type,1,device>::get_shape ( ) const
 {
-    return { size() };
+    return { get_size_axis<1>() };
 }
 
 template < class type, class device >
 constexpr detail::array_upper<type,1,device>::reference detail::array_upper<type,1,device>::get_value ( int offset )
 {
-    return get_attribute() == rows_attribute ? get_host().get_value(get_offset(), offset) :
-                                               get_host().get_value(offset, get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_value(get_offset(), offset) :
+                                               get_host<columns_attribute>().get_value(offset, get_offset());
 }
 
 template < class type, class device >
 constexpr detail::array_upper<type,1,device>::const_reference detail::array_upper<type,1,device>::get_value ( int offset ) const
 {
-    return get_attribute() == rows_attribute ? get_host().get_value(get_offset(), offset) :
-                                               get_host().get_value(offset, get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_value(get_offset(), offset) :
+                                               get_host<columns_attribute>().get_value(offset, get_offset());
 }
 
 template < class type, class device >
 constexpr detail::array_upper<type,1,device>::pointer detail::array_upper<type,1,device>::get_pointer ( int offset )
 {
-    return get_attribute() == rows_attribute ? get_host().get_pointer(get_offset(), offset) :
-                                               get_host().get_pointer(offset, get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_pointer(get_offset(), offset) :
+                                               get_host<columns_attribute>().get_pointer(offset, get_offset());
 }
 
 template < class type, class device >
 constexpr detail::array_upper<type,1,device>::const_pointer detail::array_upper<type,1,device>::get_pointer ( int offset ) const
 {
-    return get_attribute() == rows_attribute ? get_host().get_pointer(get_offset(), offset) :
-                                               get_host().get_pointer(offset, get_offset());
+    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().get_pointer(get_offset(), offset) :
+                                               get_host<columns_attribute>().get_pointer(offset, get_offset());
 }
 
 template < class type, class device >

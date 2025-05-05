@@ -139,9 +139,7 @@ constexpr array<type,dim,device>::array ( int_type auto... args )
         if ( ( ( args < 0 ) or ... ) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", array<int>{args...});
 
-    base ::operator=(base ((args * ...)));
-    info ::operator=(info ({args...}));
-    lower::operator=(lower({args...}));
+    set_resize({args...});
 }
 
 template < class type, int dim, class device >
@@ -155,14 +153,8 @@ constexpr array<type,dim,device>::array ( auto... args )
         if ( any_of_constexpr<1,dim>([&] <int index> { return index_value_of<index>(args...) < 0; }) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", [&] { auto shp = array<int>(dim); for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } () );
 
-    auto sz = 1;
-    for_constexpr<1,dim>([&] <int index> { sz *= index_value_of<index>(args...); });
-    auto shp = detail::array_shape<dim>();
-    for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-
-    base ::operator=(base (sz, last_value_of(args...)));
-    info ::operator=(info (shp));
-    lower::operator=(lower(shp));
+    set_resize([&] { auto shp = detail::array_shape<dim>(); for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } ());
+    device::fill(self.base::begin(), self.base::end(), last_value_of(args...));
 }
 
 template < class type, int dim, class device >
@@ -175,14 +167,7 @@ constexpr array<type,dim,device>::array ( auto... args )
         if ( any_of_constexpr<1,dim>([&] <int index> { return index_value_of<index>(args...) < 0; }) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", [&] { auto shp = array<int>(dim); for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } () );
 
-    auto sz = 1;
-    for_constexpr<1,dim>([&] <int index> { sz *= index_value_of<index>(args...); });
-    auto shp = detail::array_shape<dim>();
-    for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-
-    base ::operator=(base (sz ));
-    info ::operator=(info (shp));
-    lower::operator=(lower(shp));
+    set_resize([&] { auto shp = detail::array_shape<dim>(); for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } ());
     device::generate(self.base::begin(), self.base::end(), last_value_of(args...));
 }
 
@@ -196,14 +181,7 @@ constexpr array<type,dim,device>::array ( auto... args )
         if ( any_of_constexpr<1,dim>([&] <int index> { return index_value_of<index>(args...) < 0; }) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", [&] { auto shp = array<int>(dim); for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } () );
 
-    auto sz = 1;
-    for_constexpr<1,dim>([&] <int index> { sz *= index_value_of<index>(args...); });
-    auto shp = detail::array_shape<dim>();
-    for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-
-    base ::operator=(base (sz ));
-    info ::operator=(info (shp));
-    lower::operator=(lower(shp));
+    set_resize([&] { auto shp = detail::array_shape<dim>(); for_constexpr<1,dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } ());
     detail::md_generate(self, info::get_shape(), last_value_of(args...));
 }
 
@@ -299,7 +277,7 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int array<type,dim,device>::size ( ) const
 {
-    [[assume(int(base::size()) == info::size())]];
+    [[assume(base::size() == info::size())]];
     return ownership() ? info::size() :
                          upper::size();
 }
@@ -450,21 +428,19 @@ constexpr array<type,dim,device>& array<type,dim,device>::resize ( int_type auto
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>& array<type,dim,device>::resize ( array<int> dyn_shape )
+constexpr array<type,dim,device>& array<type,dim,device>::resize ( array<int> new_shape )
 {
     if constexpr ( debug )
     {
         if ( not ownership() ) 
             throw logic_error("cannot resize array (with ownership() = false): this array does not own its data");
-        if ( dyn_shape.size() != dim )
-            throw value_error("cannot resize array (with dimension() = {}, resize.shape() = {}): dimension mismatches", self.dimension(), dyn_shape.size());
-        if ( dyn_shape.exist([] (int s) { return s < 0; }))
-            throw value_error("cannot resize array (with resize.shape() = {}): shape is negative", dyn_shape);
+        if ( new_shape.size() != dim )
+            throw value_error("cannot resize array (with dimension() = {}, resize.shape() = {}): dimension mismatches", self.dimension(), new_shape.size());
+        if ( new_shape.exist([] (int s) { return s < 0; }))
+            throw value_error("cannot resize array (with resize.shape() = {}): shape is negative", new_shape);
     }
 
-    auto new_shape = detail::array_shape<dim>();
-    for_constexpr<1,dim>([&] <int index> { new_shape[index] = dyn_shape[index]; });
-    set_resize(new_shape);
+    set_resize([&] { auto shp = detail::array_shape<dim>(); for_constexpr<1,dim>([&] <int index> { shp[index] = new_shape[index]; }); return shp; } ());
     return self;
 }
 
@@ -633,8 +609,8 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<type,dim,device>& array<type,dim,device>::transpose ( )
 {
-    return ownership()                                           ? lower::transpose()            :
-           upper::get_attribute() == detail::transpose_attribute ? upper::template get_host<2>() :
+    return ownership()                                           ? lower::transpose() :
+           upper::get_attribute() == detail::transpose_attribute ? upper::template get_host<detail::transpose_attribute>() :
                                                                    throw logic_error("cannot transpose array (with ownership() = false): this array does not own its data");
 }
 
@@ -642,8 +618,8 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr const array<type,dim,device>& array<type,dim,device>::transpose ( ) const
 {
-    return ownership()                                           ? lower::transpose()            :
-           upper::get_attribute() == detail::transpose_attribute ? upper::template get_host<2>() :
+    return ownership()                                           ? lower::transpose() :
+           upper::get_attribute() == detail::transpose_attribute ? upper::template get_host<detail::transpose_attribute>() :
                                                                    throw logic_error("cannot transpose array (with ownership() = false): this array does not own its data");
 }
 
@@ -699,7 +675,7 @@ constexpr auto array<type,dim,device>::mdspan ( )
     }
     else // if ( upper::get_attribute() == detail::transpose_attribute )
     {
-        auto ptr = upper::template get_host<2>().data();
+        auto ptr = upper::template get_host<detail::transpose_attribute>().data();
         auto shp = std::dextents<int,dim>(get_shape());
         auto mds = type3(ptr, shp);
         return variant<type1,type2,type3>(mds);
@@ -744,7 +720,7 @@ constexpr const auto array<type,dim,device>::mdspan ( ) const
     }
     else // if ( upper::get_attribute() == detail::transpose_attribute )
     {
-        auto ptr = upper::template get_host<2>().data();
+        auto ptr = upper::template get_host<detail::transpose_attribute>().data();
         auto shp = std::dextents<int,dim>(get_shape());
         auto mds = type3(ptr, shp);
         return variant<type1,type2,type3>(mds);

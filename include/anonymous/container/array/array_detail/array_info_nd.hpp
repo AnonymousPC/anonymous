@@ -13,8 +13,8 @@ class detail::array_info<type,dim,device>
         using const_pointer   = device::template const_pointer  <type>;
 
     public: // Core
-        constexpr array_info ( ) = default;
-        constexpr array_info ( const detail::array_shape<dim>& );
+        constexpr array_info ( )                          = default;
+        constexpr array_info ( detail::array_shape<dim> );
 
     public: // Member
         constexpr int        size   ( ) const;

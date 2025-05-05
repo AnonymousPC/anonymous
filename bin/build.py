@@ -68,6 +68,7 @@ if system == "macos":
 
 if type == "debug":
     compile_args.append("-O0")
+    compile_args.append("-fno-inline")
 
 elif type == "release":
     compile_args.append("-O3")
@@ -132,14 +133,14 @@ def updatable(module):
     return update
 
 def run(command):
-    try:
-        command = re.sub(r'\s+', ' ', command)
-        log(command, color="green")
-        subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
-    except subprocess.CalledProcessError as e:
-        print(e.stderr, '\n', file=sys.stderr)
-        open(f"bin/{type}/log.txt", 'w').write(e.stderr)
-        exit(-1)
+    command = re.sub(r'\s+', ' ', command)
+    log(command, color="green")
+    output = subprocess.run(command, shell=True, check=False, capture_output=True, text=True)
+    print(output.stdout, end="", file=sys.stdout)
+    print(output.stderr, end="", file=sys.stderr)
+    print(output.stderr, end="", file=open(f"bin/{type}/log.txt", 'w'))
+    if output.returncode != 0:
+        exit(output.returncode)
 
 def log(message, color=None):
     colormap = {

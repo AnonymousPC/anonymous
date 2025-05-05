@@ -5,7 +5,6 @@ namespace detail
 {
     enum array_attribute
     {
-        no_attribute,
         rows_attribute,
         columns_attribute,
         transpose_attribute 
@@ -19,6 +18,9 @@ namespace detail
 
     template < class type, int dim, class device >
     class array_upper;
+
+    template < class type, int dim, class device >
+    class tuple_upper;
 
     template < class type, int dim, class device >
     class array_info;

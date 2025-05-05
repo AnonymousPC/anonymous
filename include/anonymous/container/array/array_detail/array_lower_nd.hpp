@@ -2,13 +2,6 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 class detail::array_lower<type,dim,device>
 {
-    private: // Subclass
-        template < class, int, class > 
-        class tuple_upper
-        {
-
-        };
-
     private: // Data
         tuple_upper<type,dim-1,device> rows_view;
         tuple_upper<type,dim-1,device> columns_view;
@@ -25,11 +18,8 @@ class detail::array_lower<type,dim,device>
 
     public: // Core
         constexpr array_lower ( );
-        constexpr array_lower ( const array_lower& ) = delete;
-
-    public: // Constructor
-        constexpr array_lower ( const auto&... );
-        constexpr array_lower ( const std::array<int,dim>& );
+        constexpr array_lower ( const array_lower&  ) = delete;
+        constexpr array_lower (       array_lower&& ) = delete;
 
     public: // Member
         constexpr       iterator                  begin        ( );

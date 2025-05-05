@@ -61,6 +61,6 @@ namespace detail
     template < class value_type, class... types >
     constexpr bool ints_until_last_function =  
         all_of_constexpr<1,sizeof...(types)-1>([] <int index> { return convertible_to<index_type_of<index,types...>,int>; }) and 
-        ( (     is_void<value_type> and invocable_by_n_ints  <last_type_of<types...>,           sizeof...(types)> ) or
-          ( not is_void<value_type> and invocable_r_by_n_ints<last_type_of<types...>,value_type,sizeof...(types)> ) );
+        ( (     is_void<value_type> and invocable_by_n_ints  <last_type_of<types...>,           sizeof...(types)-1> ) or
+          ( not is_void<value_type> and invocable_r_by_n_ints<last_type_of<types...>,value_type,sizeof...(types)-1> ) );
 }

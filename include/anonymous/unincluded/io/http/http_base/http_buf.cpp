@@ -67,8 +67,7 @@ template < class protocol >
 bool basic_http_buf<protocol>::is_open ( ) const
 {
     // Returns the tate stored in data.
-    [[assume((status != status_type::close) == handle.is_open())]];
-    return status != status_type::close;
+    return handle.is_open();
 }
 
 template < class protocol >

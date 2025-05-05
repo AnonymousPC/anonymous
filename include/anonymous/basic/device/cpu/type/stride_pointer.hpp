@@ -10,40 +10,24 @@ class cpu::stride_pointer
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = cpu::template value_type<type>;
         using reference         = cpu::template reference <type>;
-        using pointer           = cpu::template pointer   <type>;
+        using pointer           = cpu::template stride_pointer   <type>;
         using difference_type   = std::ptrdiff_t;
 
     public: // Core
         constexpr stride_pointer ( ) = default;
-        constexpr stride_pointer ( type* init_ptr, int init_step ) extends ptr ( init_ptr ), step ( init_step ) { }; 
+        constexpr stride_pointer ( type*, int );
 
     public: // Const
-        constexpr explicit stride_pointer ( const_stride_pointer<type> cvt ) extends ptr ( cvt.ptr ), step ( cvt.step ) { }
-        constexpr stride_pointer& operator = ( const_stride_pointer<type> ) = delete;
+        constexpr explicit stride_pointer ( const_stride_pointer<type> );
 
-    public: // Operator.member
-        constexpr reference operator *  ( )                   const { return *ptr;    }
-        constexpr pointer   operator -> ( )                   const { return  ptr;    }
-        constexpr reference operator [] ( difference_type t ) const { return  ptr[t]; }
+    public: // Operator
+        constexpr reference operator *  ( )                 const;
+        constexpr pointer   operator -> ( )                 const;
+        constexpr reference operator [] ( difference_type ) const;
 
-    public: // Operator.global
-        friend constexpr bool                 operator ==  ( const stride_pointer& left, const stride_pointer& right ) { return left.ptr ==  right.ptr; }
-        friend constexpr std::strong_ordering operator <=> ( const stride_pointer& left, const stride_pointer& right ) { return left.ptr <=> right.ptr; }
-        friend constexpr stride_pointer       operator  +  ( const stride_pointer& left,       difference_type right ) { return stride_pointer(left .ptr + left .step * right, left .step); }
-        friend constexpr stride_pointer       operator  +  (       difference_type left, const stride_pointer& right ) { return stride_pointer(right.ptr + right.step * left,  right.step); }
-        friend constexpr stride_pointer       operator  -  ( const stride_pointer& left,       difference_type right ) { return stride_pointer(left .ptr - left .step * right, left .step); }
-        friend constexpr difference_type      operator  -  ( const stride_pointer& left, const stride_pointer& right ) { if constexpr (debug) if (left.step != right.step) 
-                                                                                                                             throw logic_error("cannot minus stride_pointer (with left.step = {}, right.step = {}): inconsistent steps", left.step, right.step); 
-                                                                                                                         return (left.ptr - right.ptr) / left.step; }
-        friend constexpr stride_pointer&      operator ++  (       stride_pointer& left                              ) { left.ptr += left.step;         return left; }
-        friend constexpr stride_pointer       operator ++  (       stride_pointer& left,       int                   ) { auto it = left; ++left;        return it;   }
-        friend constexpr stride_pointer&      operator --  (       stride_pointer& left                              ) { left.ptr -= left.step;         return left; }
-        friend constexpr stride_pointer       operator --  (       stride_pointer& left,       int                   ) { auto it = left; --left;        return it;   }
-        friend constexpr stride_pointer&      operator +=  (       stride_pointer& left,       difference_type right ) { left.ptr += left.step * right; return left; }
-        friend constexpr stride_pointer&      operator -=  (       stride_pointer& left,       difference_type right ) { left.ptr -= left.step * right; return left; }
-
-    public: // Friend
-        friend class const_stride_pointer<type>;
+    public: // Access  
+        constexpr type* get_ptr  ( ) const;
+        constexpr int   get_step ( ) const;
 };
     
 template < class type >
@@ -58,38 +42,56 @@ class cpu::const_stride_pointer
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = cpu::template value_type     <type>;
         using reference         = cpu::template const_reference<type>;
-        using pointer           = cpu::template const_pointer  <type>;
+        using pointer           = cpu::template const_stride_pointer  <type>;
         using difference_type   = std::ptrdiff_t;
 
     public: // Core
         constexpr const_stride_pointer ( ) = default;
-        constexpr const_stride_pointer ( const type* init_ptr, int init_step ) extends ptr ( init_ptr ), step ( init_step ) { }; 
+        constexpr const_stride_pointer ( const type*, int );
 
     public: // Const
-        constexpr const_stride_pointer ( stride_pointer<type> cvt ) extends ptr ( cvt.ptr ), step ( cvt.step ) { }
-        constexpr const_stride_pointer& operator = ( stride_pointer<type> cvt ) { ptr = cvt.ptr; step = cvt.step; return self; }
+        constexpr const_stride_pointer ( stride_pointer<type> );
 
-    public: // Operator.member
-        constexpr reference operator *  ( )                   const { return *ptr;    }
-        constexpr pointer   operator -> ( )                   const { return  ptr;    }
-        constexpr reference operator [] ( difference_type t ) const { return  ptr[t]; }
+    public: // Operator
+        constexpr reference operator *  ( )                 const;
+        constexpr pointer   operator -> ( )                 const;
+        constexpr reference operator [] ( difference_type ) const;
 
-    public: // Operator.global
-        friend constexpr bool                  operator ==  ( const const_stride_pointer& left, const const_stride_pointer& right ) { return left.ptr ==  right.ptr; }
-        friend constexpr std::strong_ordering  operator <=> ( const const_stride_pointer& left, const const_stride_pointer& right ) { return left.ptr <=> right.ptr; }
-        friend constexpr const_stride_pointer  operator  +  ( const const_stride_pointer& left,       difference_type       right ) { return const_stride_pointer(left .ptr + left .step * right, left .step); }
-        friend constexpr const_stride_pointer  operator  +  (       difference_type       left, const const_stride_pointer& right ) { return const_stride_pointer(right.ptr + right.step * left,  right.step); }
-        friend constexpr const_stride_pointer  operator  -  ( const const_stride_pointer& left,       difference_type       right ) { return const_stride_pointer(left .ptr - left .step * right, left .step); }
-        friend constexpr difference_type       operator  -  ( const const_stride_pointer& left, const const_stride_pointer& right ) { if constexpr (debug) if (left.step != right.step) 
-                                                                                                                                          throw logic_error("cannot minus stride_pointer (with left.step = {}, right.step = {}): inconsistent steps", left.step, right.step); 
-                                                                                                                                      return (left.ptr - right.ptr) / left.step; }
-        friend constexpr const_stride_pointer& operator ++  (       const_stride_pointer& left                                    ) { left.ptr += left.step;         return left; }
-        friend constexpr const_stride_pointer  operator ++  (       const_stride_pointer& left,       int                         ) { auto it = left; ++left;        return it;   }
-        friend constexpr const_stride_pointer& operator --  (       const_stride_pointer& left                                    ) { left.ptr -= left.step;         return left; }
-        friend constexpr const_stride_pointer  operator --  (       const_stride_pointer& left,       int                         ) { auto it = left; --left;        return it;   }
-        friend constexpr const_stride_pointer& operator +=  (       const_stride_pointer& left,       difference_type       right ) { left.ptr += left.step * right; return left; }
-        friend constexpr const_stride_pointer& operator -=  (       const_stride_pointer& left,       difference_type       right ) { left.ptr -= left.step * right; return left; }
-
-    public: // Friend
-        friend class stride_pointer<type>;
+    public: // Access  
+        constexpr const type* get_ptr  ( ) const;
+        constexpr int         get_step ( ) const;
 };
+
+template < class type > bool                                      operator ==  ( cpu::template       stride_pointer<type>,  cpu::template       stride_pointer<type> );
+template < class type > bool                                      operator ==  ( cpu::template       stride_pointer<type>,  cpu::template const_stride_pointer<type> );
+template < class type > bool                                      operator ==  ( cpu::template const_stride_pointer<type>,  cpu::template       stride_pointer<type> );
+template < class type > bool                                      operator ==  ( cpu::template const_stride_pointer<type>,  cpu::template const_stride_pointer<type> );
+template < class type > std::strong_ordering                      operator <=> ( cpu::template       stride_pointer<type>,  cpu::template       stride_pointer<type> );
+template < class type > std::strong_ordering                      operator <=> ( cpu::template       stride_pointer<type>,  cpu::template const_stride_pointer<type> );
+template < class type > std::strong_ordering                      operator <=> ( cpu::template const_stride_pointer<type>,  cpu::template       stride_pointer<type> );
+template < class type > std::strong_ordering                      operator <=> ( cpu::template const_stride_pointer<type>,  cpu::template const_stride_pointer<type> );
+template < class type > cpu::template       stride_pointer<type>  operator  +  ( cpu::template       stride_pointer<type>,  std::ptrdiff_t                           );
+template < class type > cpu::template const_stride_pointer<type>  operator  +  ( cpu::template const_stride_pointer<type>,  std::ptrdiff_t                           );
+template < class type > cpu::template       stride_pointer<type>  operator  +  ( std::ptrdiff_t,                            cpu::template       stride_pointer<type> );
+template < class type > cpu::template const_stride_pointer<type>  operator  +  ( std::ptrdiff_t,                            cpu::template const_stride_pointer<type> );
+template < class type > cpu::template       stride_pointer<type>  operator  -  ( cpu::template       stride_pointer<type>,  std::ptrdiff_t                           );
+template < class type > cpu::template const_stride_pointer<type>  operator  -  ( cpu::template const_stride_pointer<type>,  std::ptrdiff_t                           );
+template < class type > std::ptrdiff_t                            operator  -  ( cpu::template       stride_pointer<type>,  cpu::template       stride_pointer<type> );
+template < class type > std::ptrdiff_t                            operator  -  ( cpu::template       stride_pointer<type>,  cpu::template const_stride_pointer<type> );
+template < class type > std::ptrdiff_t                            operator  -  ( cpu::template const_stride_pointer<type>,  cpu::template       stride_pointer<type> );
+template < class type > std::ptrdiff_t                            operator  -  ( cpu::template const_stride_pointer<type>,  cpu::template const_stride_pointer<type> );
+template < class type > cpu::template       stride_pointer<type>& operator  += ( cpu::template       stride_pointer<type>&, std::ptrdiff_t                           );
+template < class type > cpu::template const_stride_pointer<type>& operator  += ( cpu::template const_stride_pointer<type>&, std::ptrdiff_t                           );
+template < class type > cpu::template       stride_pointer<type>& operator  -= ( cpu::template       stride_pointer<type>&, std::ptrdiff_t                           );
+template < class type > cpu::template const_stride_pointer<type>& operator  -= ( cpu::template const_stride_pointer<type>&, std::ptrdiff_t                           );
+template < class type > cpu::template       stride_pointer<type>& operator  ++ ( cpu::template       stride_pointer<type>&                                           );
+template < class type > cpu::template const_stride_pointer<type>& operator  ++ ( cpu::template const_stride_pointer<type>&                                           );
+template < class type > cpu::template       stride_pointer<type>  operator  ++ ( cpu::template       stride_pointer<type>&, int                                      );
+template < class type > cpu::template const_stride_pointer<type>  operator  ++ ( cpu::template const_stride_pointer<type>&, int                                      );
+template < class type > cpu::template       stride_pointer<type>& operator  -- ( cpu::template       stride_pointer<type>&                                           );
+template < class type > cpu::template const_stride_pointer<type>& operator  -- ( cpu::template const_stride_pointer<type>&                                           );
+template < class type > cpu::template       stride_pointer<type>  operator  -- ( cpu::template       stride_pointer<type>&, int                                      );
+template < class type > cpu::template const_stride_pointer<type>  operator  -- ( cpu::template const_stride_pointer<type>&, int                                      );
+
+
+#include "stride_pointer.cpp"

@@ -408,7 +408,7 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::push ( array<t
     if constexpr ( axis == 1 or axis == -max_dim )
         self[-1] = std::move(new_value);
     else if constexpr ( axis == -1 or axis == max_dim )
-        if constexpr ( max_dim == 2 )
+        if constexpr ( new_value.dimension() == 1 )
             self.transpose()[-1] = std::move(new_value);
         else
             self.transpose()[-1] = std::move(new_value.transpose());
@@ -480,7 +480,7 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::insert ( int n
     else if constexpr ( axis == -1 or axis == max_dim )
     {
         device::move_backward(self.transpose().begin() + abs_pos - 1, self.transpose().end() - 1, self.transpose().end());
-        if constexpr ( max_dim == 2 )
+        if constexpr ( new_value.dimension() == 1 )
             self.transpose()[abs_pos] = std::move(new_value);
         else
             self.transpose()[abs_pos] = std::move(new_value.transpose());

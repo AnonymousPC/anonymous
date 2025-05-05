@@ -1,4 +1,3 @@
-
 template < class type, class compare, class device >
 class priority_queue
     extends public device::template priority_queue<type,compare>

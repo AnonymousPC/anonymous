@@ -465,7 +465,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::push ( array<type,dim-
     if constexpr ( axis == 1 or axis == -dim )
         self[-1] = std::move(new_value);
     else if constexpr ( axis == -1 or axis == dim )
-        if constexpr ( dim == 2 )
+        if constexpr ( new_value.dimension() == 1 )
             self.transpose()[-1] = std::move(new_value);
         else
             self.transpose()[-1] = std::move(new_value.transpose());
@@ -539,7 +539,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::insert ( int new_pos, 
     else if constexpr ( axis == -1 or axis == dim )
     {
         device::move_backward(self.transpose().begin() + abs_pos - 1, self.transpose().end() - 1, self.transpose().end());
-        if constexpr ( dim == 2 )
+        if constexpr ( new_value.dimension() == 1 )
             self.transpose()[abs_pos] = std::move(new_value);
         else
             self.transpose()[abs_pos] = std::move(new_value.transpose());

@@ -67,7 +67,7 @@ class cpu
         template < class type, class hash = hash<type>, class equal = equal_to<>, class alloc = allocator<type> >                                        using unordered_set  = std::unordered_set    <type,hash,equal,alloc>;
         template < class type, class alloc = allocator<type> >                                                                                           using valarray       = std::valarray         <type>;
         template < class... types >                                                                                                                      using variant        = std::variant          <types...>;
-        template < class type, class alloc = allocator<type> >                                                                                           using vector         = std::vector           <type,alloc>;
+        template < class type, class alloc = allocator<type> >                                                                                           class vector;        // Depecialize std::vector<bool>.
 
     public: // Algorithm
         constexpr static decltype(auto) accumulate                        ( auto&&... args ) { return std::accumulate                       (std::forward<decltype(args)>(args)...); }
@@ -208,6 +208,8 @@ class cpu
         inline static thread_local random_context_type random_context = random_context_type(std::random_device()());
 };
 
-#include "type/stride_pointer.hpp"
+#include "container/vector.hpp"
 
 #include "linalg/linalg.hpp"
+
+#include "type/stride_pointer.hpp"

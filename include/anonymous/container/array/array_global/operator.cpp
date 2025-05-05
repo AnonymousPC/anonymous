@@ -1,5 +1,7 @@
+#include "detail/stringalize.cpp"
+
 constexpr std::ostream& operator << ( std::ostream& left, const array_type auto& right )
-    requires printable<typename decay<decltype(right)>::value_type>
+    requires printable<right_value_type>
 {
     auto string_array = detail::stringalize_array(left, right);
     detail::align_array(string_array);
@@ -8,12 +10,14 @@ constexpr std::ostream& operator << ( std::ostream& left, const array_type auto&
 }
 
 constexpr bool operator == ( const array_type auto& left, const array_type auto& right )
-    requires equalable_to<typename decay<decltype(left)>::value_type,typename decay<decltype(right)>::value_type> and
-             (decay<decltype(left)>::dimension() == decay<decltype(right)>::dimension()) and
-             same_as<typename decay<decltype(left)>::device_type,typename decay<decltype(right)>::device_type>
+    requires equalable_to<left_value_type,right_value_type> and
+             (left.dimension() == right.dimension()) and
+             same_as<left_device_type,right_device_type>
 {
-    using device = typename decay<decltype(left)>::device_type;
-    if constexpr ( decay<decltype(left)>::dimension() == 1 )
+    constexpr int dim = left.dimension();
+    using device = left_device_type;
+
+    if constexpr ( dim == 1 )
         if ( left.contiguous() and right.contiguous() )
             return device::equal(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
         else
@@ -26,20 +30,20 @@ constexpr bool operator == ( const array_type auto& left, const array_type auto&
 }
 
 constexpr auto operator <=> ( const array_type auto& left, const array_type auto& right )
-    requires comparable_to<typename decay<decltype(left)>::value_type,typename decay<decltype(right)>::value_type> and
-             (decay<decltype(left)>::dimension() == decay<decltype(right)>::dimension()) and
-             same_as<typename decay<decltype(left)>::device_type,typename decay<decltype(right)>::device_type>
+    requires comparable_to<left_value_type,right_value_type> and
+             (left.dimension() == right.dimension()) and
+             same_as<left_device_type,right_device_type>
 {
-    using device = typename decay<decltype(left)>::device_type;
-    if constexpr ( decay<decltype(left)>::dimension() == 1 )
+    constexpr int dim = left.dimension();
+    using device = left_device_type;
+
+    if constexpr ( dim == 1 )
         if ( left.contiguous() and right.contiguous() )
             return device::lexicographical_compare_three_way(left.data(), left.data() + left.size(), right.data(), right.data() + right.size());
         else
             return device::lexicographical_compare_three_way(left.begin(), left.end(), right.begin(), right.end());
     else
-        if ( same_as<typename decay<decltype(left)>::device_type::layout_type,std::layout_right> and
-             left.contiguous() and right.contiguous() and 
-             left.shape() == right.shape() )
+        if ( same_as<typename device::layout_type,std::layout_right> and left.contiguous() and right.contiguous() and left.shape() == right.shape() )
             return device::lexicographical_compare_three_way(left.data(), left.data() + left.size(), right.data(), right.data() + right.size()); // Shape should be checked explicitly.
         else
             return device::lexicographical_compare_three_way(left.begin(), left.end(), right.begin(), right.end()); // Cannot flatten as shape might not equals.

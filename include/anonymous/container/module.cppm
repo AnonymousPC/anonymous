@@ -1,9 +1,13 @@
 module;
 #if defined(__GNUC__) and not defined(__clang__)
+    #pragma GCC diagnostic ignored "-Wassume"
     #pragma GCC diagnostic ignored "-Wuser-defined-literals"
 #elifdef __clang__
+    #pragma clang diagnostic ignored "-Wassume"
     #pragma clang diagnostic ignored "-Wuser-defined-literals"
 #endif
+
+#define private public
 
 export module anonymous.container;
 import std;

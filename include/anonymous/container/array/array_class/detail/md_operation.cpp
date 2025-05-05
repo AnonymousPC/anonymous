@@ -1,17 +1,18 @@
 namespace detail
 {
-    constexpr decltype(auto) md_helper ( auto& arr, int_type auto idx1, int_type auto... idxs )
+    // Helper
+    constexpr decltype(auto) md_access ( auto& arr, int_type auto idx1, int_type auto... idxs )
     {
         if constexpr ( sizeof...(idxs) >= 1 )
-            return md_helper(arr[idx1], idxs...);
+            return md_access(arr[idx1], idxs...);
         else
             return arr[idx1];
     }
 
-    constexpr decltype(auto) md_helper ( const auto& arr, int_type auto idx1, int_type auto... idxs )
+    constexpr decltype(auto) md_access ( const auto& arr, int_type auto idx1, int_type auto... idxs )
     {
         if constexpr ( sizeof...(idxs) >= 1 )
-            return md_helper(arr[idx1], idxs...);
+            return md_access(arr[idx1], idxs...);
         else
             return arr[idx1];
     }
@@ -31,7 +32,7 @@ namespace detail
                 md_generate(arr, shp, func, idx..., i);
         else
             for ( int i in range(shp[-1]) )
-                md_helper(arr, idx..., i) = func(idx..., i);
+                md_access(arr, idx..., i) = func(idx..., i);
     }
 
     template < class device >

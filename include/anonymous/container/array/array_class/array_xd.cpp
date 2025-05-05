@@ -108,9 +108,7 @@ constexpr array<type,max_dim,device>::array ( int_type auto... args )
         if ( ( ( args < 0 ) or ... ) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", array<int>{args...});
 
-    base ::operator=(base ((args * ...)));
-    info ::operator=(info ({args...}));
-    lower::operator=(lower({args...}));
+    set_resize({args...});
 }
 
 template < class type, class device >
@@ -123,14 +121,8 @@ constexpr array<type,max_dim,device>::array ( auto... args )
         if ( any_of_constexpr<1,max_dim>([&] <int index> { return index_value_of<index>(args...) < 0; }) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", [&] { auto shp = detail::array_shape<max_dim>(); for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } () );
 
-    auto sz = 1;
-    for_constexpr<1,max_dim>([&] <int index> { sz *= index_value_of<index>(args...); });
-    auto shp = detail::array_shape<max_dim>();
-    for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-
-    base ::operator=(base (sz, last_value_of(args...)));
-    info ::operator=(info (shp));
-    lower::operator=(lower(shp));
+    set_resize([&] { auto shp = detail::array_shape<max_dim>(); for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } ());
+    device::fill(self.base::begin(), self.base::end(), last_value_of(args...));
 }
 
 template < class type, class device >
@@ -142,14 +134,7 @@ constexpr array<type,max_dim,device>::array ( auto... args )
         if ( any_of_constexpr<1,max_dim>([&] <int index> { return index_value_of<index>(args...) < 0; }) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", [&] { auto shp = detail::array_shape<max_dim>(); for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } () );
 
-    auto sz = 1;
-    for_constexpr<1,max_dim>([&] <int index> { sz *= index_value_of<index>(args...); });
-    auto shp = detail::array_shape<max_dim>();
-    for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-
-    base ::operator=(base (sz, last_value_of(args...)));
-    info ::operator=(info (shp));
-    lower::operator=(lower(shp));
+    set_resize([&] { auto shp = detail::array_shape<max_dim>(); for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } ());
     device::generate(self.base::begin(), self.base::end(), last_value_of(args...));
 }
 
@@ -162,14 +147,7 @@ constexpr array<type,max_dim,device>::array ( auto... args )
         if ( any_of_constexpr<1,max_dim>([&] <int index> { return index_value_of<index>(args...) < 0; }) )
             throw value_error("cannot initialize array (with shape() = {}): shape is negative", [&] { auto shp = detail::array_shape<max_dim>(); for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } () );
 
-    auto sz = 1;
-    for_constexpr<1,max_dim>([&] <int index> { sz *= index_value_of<index>(args...); });
-    auto shp = detail::array_shape<max_dim>();
-    for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); });
-
-    base ::operator=(base (sz, last_value_of(args...)));
-    info ::operator=(info (shp));
-    lower::operator=(lower(shp));
+    set_resize([&] { auto shp = detail::array_shape<max_dim>(); for_constexpr<1,max_dim>([&] <int index> { shp[index] = index_value_of<index>(args...); }); return shp; } ());
     detail::md_generate(self, info::get_shape(), last_value_of(args...));
 }
 
@@ -260,7 +238,7 @@ constexpr int array<type,max_dim,device>::dimension ( )
 template < class type, class device >
 constexpr int array<type,max_dim,device>::size ( ) const
 {
-    [[assume(int(base::size()) == info::size())]];
+    [[assume(base::size() == info::size())]];
     return ownership() ? info::size() :
                          upper::size();
 }
@@ -406,7 +384,7 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::resize ( array
             throw value_error("cannot resize array (with resize.shape() = {}): shape is negative", new_shape);
     }
 
-    set_resize([&] { auto shp = detail::array_shape<dim>(); for_constexpr<1,dim>([&] <int index> { shp[index] = new_shape[index]; }); return shp; } ());
+    set_resize([&] { auto shp = detail::array_shape<max_dim>(); for_constexpr<1,max_dim>([&] <int index> { shp[index] = new_shape[index]; }); return shp; } ());
     return self;
 }
 
@@ -569,14 +547,14 @@ template < class type, class device >
 constexpr array<type,max_dim,device>& array<type,max_dim,device>::transpose ( )
 {
     return ownership() ? lower::transpose() :
-                         upper::get_host();
+                         upper::template get_host<detail::transpose_attribute>();
 }
 
 template < class type, class device >
 constexpr const array<type,max_dim,device>& array<type,max_dim,device>::transpose ( ) const
 {
     return ownership() ? lower::transpose() :
-                         upper::get_host();
+                         upper::template get_host<detail::transpose_attribute>();
 }
 
 template < class type, class device >
@@ -654,6 +632,12 @@ constexpr int array<type,max_dim,device>::get_size_axis ( ) const
 }
 
 template < class type, class device >
+constexpr detail::array_shape<max_dim> array<type,max_dim,device>::get_shape ( ) const
+{
+    return info::get_shape();
+}
+
+template < class type, class device >
 template < int dim2 >
 constexpr std::span<detail::array_upper<type,dim2,device>> array<type,max_dim,device>::get_rows ( int_type auto... offsets )
 {
@@ -728,15 +712,15 @@ constexpr array<type,max_dim,device>::const_pointer array<type,max_dim,device>::
 template < class type, class device >
 constexpr void array<type,max_dim,device>::set_resize ( detail::array_shape<max_dim> new_shape )
 {
-    auto [smaller_shape, smaller_size, smaller_resizable, smaller_relayoutable] = detail::md_common_smaller<device>(shape(), new_shape);
+    auto [smaller_shape, smaller_size, smaller_resizable, smaller_relayoutable] = detail::md_common_smaller<device>(get_shape(), new_shape);
     if ( smaller_resizable )
     {
         if ( smaller_relayoutable )
-            detail::md_relayout_strict_smaller(self, shape(), smaller_shape);
+            detail::md_relayout_strict_smaller(self, get_shape(), smaller_shape);
         base::resize(smaller_size);
     }
 
-    auto [larger_shape, larger_size, larger_resizable, larger_relayoutable] = detail::md_common_larger<device>(shape(), new_shape);
+    auto [larger_shape, larger_size, larger_resizable, larger_relayoutable] = detail::md_common_larger<device>(get_shape(), new_shape);
     if ( larger_resizable )
     {
         base::resize(larger_size);

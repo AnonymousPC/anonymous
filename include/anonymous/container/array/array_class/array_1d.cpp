@@ -91,7 +91,7 @@ constexpr array<type,1,device>::array ( int init_size )
         if ( init_size < 0 )
             throw value_error("cannot initialize array (with size() = {}): size is negative", init_size);
 
-    base::operator=(base(init_size));
+    resize(init_size);
 }
 
 template < class type, class device >
@@ -102,20 +102,29 @@ constexpr array<type,1,device>::array ( int init_size, const type& init_value )
         if ( init_size < 0 )
             throw value_error("cannot initialize array (with size() = {}): size is negative", init_size);
 
-    base::operator=(base(init_size, init_value));
+    resize(init_size);
+    device::fill(self.base::begin(), self.base::end(), init_value);
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size, invocable_r<type> auto init_value )
-    extends array ( init_size )
 {
+    if constexpr ( debug )
+        if ( init_size < 0 )
+            throw value_error("cannot initialize array (with size() = {}): size is negative", init_size);
+
+    resize(init_size);
     device::generate(self.base::begin(), self.base::end(), init_value);
 }
 
 template < class type, class device >
 constexpr array<type,1,device>::array ( int init_size, invocable_r<type,int> auto init_value )
-    extends array ( init_size )
 {
+    if constexpr ( debug )
+        if ( init_size < 0 )
+            throw value_error("cannot initialize array (with size() = {}): size is negative", init_size);
+
+    resize(init_size);
     for ( int i in range(init_size) )
         self.base::operator[](i-1) = init_value(i);
 }

@@ -19,15 +19,15 @@ constexpr detail::array_upper<type,1,device>::array_upper ( const array<type,2,d
 template < class type, class device >
 constexpr int detail::array_upper<type,1,device>::size ( ) const 
 {
-    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().size() / get_host<rows_attribute   >().template get_size_axis< 1>() :
-                                               get_host<columns_attribute>().size() / get_host<columns_attribute>().template get_size_axis<-1>();
+    return get_attribute() == rows_attribute ? get_host<rows_attribute>().size() / get_host<rows_attribute>().template get_size_axis<1>() :
+                                               (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().size() / get_host<columns_attribute>().template get_size_axis<-1>() : get_host<columns_attribute>().size() / get_host<columns_attribute>().template get_size_axis<1>());
 }
 
 template < class type, class device >
 constexpr array<int> detail::array_upper<type,1,device>::shape ( ) const 
 {
-    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().shape().pop( 1) :
-                                               get_host<columns_attribute>().shape().pop(-1);
+    return get_attribute() == rows_attribute ? get_host<rows_attribute>().shape().pop(1) :
+                                               (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().shape().pop(-1) : get_host<columns_attribute>().shape().pop(1));
 }
 
 template < class type, class device >
@@ -154,8 +154,12 @@ template < int axis >
 constexpr int detail::array_upper<type,1,device>::get_size_axis ( ) const
 {
     static_assert ( axis == 1 or axis == -1 );
-    return get_attribute() == rows_attribute ? get_host<rows_attribute   >().template get_size_axis<-1>() :
-                                               get_host<columns_attribute>().template get_size_axis< 1>();
+    
+    if constexpr ( axis == 1 )
+        return get_attribute() == rows_attribute ? get_host<rows_attribute>().template get_size_axis<axis+1>() :
+                                                   (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().template get_size_axis<1-axis+1>() : get_host<columns_attribute>().template get_size_axis<axis+1>());
+    else
+        return get_size_axis<axis+1+1>();
 }
 
 template < class type, class device >

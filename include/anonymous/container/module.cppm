@@ -7,8 +7,6 @@ module;
     #pragma clang diagnostic ignored "-Wuser-defined-literals"
 #endif
 
-#define private public
-
 export module anonymous.container;
 import std;
 import boost;
@@ -61,7 +59,7 @@ export namespace anonymous
     #include "discrete/discrete.hpp"
     #include "polymorphic/polymorphic.hpp"
     #include "array/array.hpp"
-    // #include "chain/chain.hpp"
+    #include "chain/chain.hpp"
     // #include "collection/collection.hpp"
     // #include "string/string.hpp"
     // #include "utility/utility.hpp"

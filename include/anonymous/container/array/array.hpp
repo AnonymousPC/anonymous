@@ -1,4 +1,4 @@
-constexpr int max_dim = 3;
+constexpr int max_dim = 4;
 
 #include "array_detail/declaration.hpp"
 

@@ -10,7 +10,6 @@ class array<type,max_dim,device>
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> );
-        static_assert ( not ( same_as<type,bool> and same_as<device,cpu> ) ); // std::vector<bool>.
 
     private: // Base
         using base   = device::template vector<type>;

@@ -13,8 +13,6 @@ class tbb
         using cpu::const_reference;
         using cpu::pointer;
         using cpu::const_pointer;
-        using cpu::stride_pointer;
-        using cpu::const_stride_pointer;
 
     public: // Allocator
         template < class type > using allocator = ::tbb::tbb_allocator<type>;

@@ -201,3 +201,17 @@ constexpr int detail::array_upper<type,1,device>::get_stride ( ) const
 {
     return get_size_top() / size();
 }
+
+template < class type, class device >
+class detail::array_upper<type,1,device>::iterator
+    extends public array<type,1,device>::iterator
+{
+
+};
+
+template < class type, class device >
+class detail::array_upper<type,1,device>::const_iterator
+    extends public array<type,1,device>::const_iterator
+{
+
+};

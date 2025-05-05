@@ -467,3 +467,61 @@ constexpr const auto array<type,1,device>::mdspan ( ) const
         return variant<type1,type2>(mds);
     }
 }
+
+template < class type, class device >
+class array<type,1,device>::iterator
+{
+    public: // Typedef
+        using iterator_concept  = std::random_access_iterator_tag;
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type        = device::template value_type<type>;
+        using reference         = device::template reference <type>;
+        using pointer           = device::template pointer   <type>;
+        using difference_type   = std::ptrdiff_t;
+
+    private: // Data
+        pointer         ptr  = pointer();
+        difference_type step = 1;
+
+    public: // Core
+        constexpr iterator ( ) = default;
+        constexpr iterator ( pointer, difference_type );
+
+    public: // Operator
+        constexpr reference operator *  ( )                 const;
+        constexpr pointer   operator -> ( )                 const;
+        constexpr reference operator [] ( difference_type ) const;
+
+    public: // Access  
+        constexpr pointer         get_ptr  ( ) const;
+        constexpr difference_type get_step ( ) const;
+};
+
+template < class type, class device >
+class array<type,1,device>::const_iterator
+{
+    public: // Typedef
+        using iterator_concept  = std::random_access_iterator_tag;
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type        = device::template value_type     <type>;
+        using reference         = device::template const_reference<type>;
+        using pointer           = device::template const_pointer  <type>;
+        using difference_type   = std::ptrdiff_t;
+
+    private: // Data
+        pointer         ptr  = pointer();
+        difference_type step = 1;
+
+    public: // Core
+        constexpr const_iterator ( ) = default;
+        constexpr const_iterator ( pointer, difference_type );
+
+    public: // Operator
+        constexpr reference operator *  ( )                 const;
+        constexpr pointer   operator -> ( )                 const;
+        constexpr reference operator [] ( difference_type ) const;
+
+    public: // Access  
+        constexpr pointer         get_ptr  ( ) const;
+        constexpr difference_type get_step ( ) const;
+};

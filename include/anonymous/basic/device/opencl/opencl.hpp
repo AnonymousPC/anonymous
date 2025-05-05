@@ -13,8 +13,6 @@ class opencl
         template < class type > class const_reference;
         template < class type > class pointer;
         template < class type > class const_pointer;
-        template < class type > class stride_pointer;
-        template < class type > class const_stride_pointer;
 
     public: // Allocator
         template < class type > using allocator = boost::compute::buffer_allocator<type>;
@@ -207,17 +205,11 @@ class opencl
         };
 };
 
+#include "algorithm/reduce.hpp"
+#include "container/opencl_container.hpp"
+#include "linalg/linalg.hpp"
+#include "memory/accessor_type.hpp"
+#include "operator/operator.hpp"
 #include "type/reference.hpp"
 #include "type/pointer.hpp"
-#include "type/stride_pointer.hpp"
-
-#include "operator/operator.hpp"
-
-#include "memory/accessor_type.hpp"
-
-#include "container/opencl_container.hpp"
-
-#include "algorithm/reduce.hpp"
-
-#include "linalg/linalg.hpp"
 

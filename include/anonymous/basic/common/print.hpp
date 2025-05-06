@@ -1,8 +1,4 @@
-class print_t
-{
-    public:
-        constexpr static void operator() (  const printable auto&... );
-};
+constexpr void print ( const printable auto&... );
 
 #include "print.cpp"
 

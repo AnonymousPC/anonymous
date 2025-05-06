@@ -12,7 +12,7 @@ import plf;
 import boost;
 import Eigen;
 import tbb;
-import clblast;
+import thrust.tbb;
 
 // Std.feature
 #ifndef __cpp_lib_inplace_vector
@@ -85,13 +85,13 @@ export namespace anonymous
     #endif
 
     /// Common.algo
-    template < int min, int max, int stride = 1 > constexpr void for_constexpr     ( auto&& /*operations*/   );
+    template < int min, int max, int stride = 1 > constexpr void for_constexpr     ( auto&& /*operations*/ );
     template < int min, int max, int stride = 1 > constexpr bool all_of_constexpr  ( auto&& /*preds*/ );
     template < int min, int max, int stride = 1 > constexpr bool any_of_constexpr  ( auto&& /*preds*/ );
     template < int min, int max, int stride = 1 > constexpr bool none_of_constexpr ( auto&& /*preds*/ );
 
     /// Common.concept
-    // See concept.h.
+    #include "common/concept.hpp"
 
     /// Common.exception
     class exception;
@@ -119,10 +119,12 @@ export namespace anonymous
                 class linalg_error;
 
     /// Common.print
-    class print_t;
+    constexpr void print ( const printable auto&... );
 
     /// Common.range
-    template < class type > class range;
+    constexpr auto range ( int_type auto );
+    constexpr auto range ( int_type auto, int_type auto );
+    constexpr auto range ( int_type auto, int_type auto, int_type auto );
 
     /// Device
     class cpu;
@@ -137,17 +139,16 @@ export namespace anonymous
     #include "init/init.hpp"
 
     /// Global
-    constexpr    print_t                      print             = print_t();
                  cpu::execution_context_type& execution_context = cpu::execution_context;
     thread_local cpu::random_context_type&    random_context    = cpu::random_context;
 
 } // namespace anonymous
 
-export namespace boost::compute
-{
-    #include "device/opencl/type/export/boost_compute.hpp"
-    #include "device/opencl/operator/export/boost_compute.hpp"
+// export namespace boost::compute
+// {
+//     #include "device/opencl/type/export/boost_compute.hpp"
+//     #include "device/opencl/operator/export/boost_compute.hpp"
     
-} // namespace boost::compute
+// } // namespace boost::compute
 
 

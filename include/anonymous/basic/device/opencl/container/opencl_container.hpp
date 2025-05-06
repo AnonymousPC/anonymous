@@ -71,4 +71,4 @@ namespace detail
     
 } // namespace detail
 
-#include "opencl_container_decl.hpp"
+#include "opencl_container.cpp"

@@ -1,13 +1,13 @@
 import anonymous;
 import std;
-import stdexec;
-import plf;
 import boost;
-import Eigen;
+import thrust.tbb;
 using namespace anonymous;
 
 int main ( )
 {
-    auto a = array<int,2,opencl>(2, 3);
-    print(a);
+    std::println("good");
+
+    thrust::device_vector<int> vct(10);
+    thrust::sort(vct.begin(), vct.end());
 }

@@ -1,0 +1,1 @@
+DEVICE_STRIDE_POINTER_IMPLEMENTION(cpu, std::strong_ordering);

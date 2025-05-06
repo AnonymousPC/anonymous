@@ -1,0 +1,183 @@
+In file included from include/anonymous/container/module.cppm:61:
+In file included from include/anonymous/container/array/array.hpp:36:
+[1minclude/anonymous/container/array/array_detail/array_upper_1d.cpp:65:36: [0m[0;1;31merror: [0m[1mno viable conversion from 'pointer' (aka 'int *') to 'array<int, 1, cpu>::iterator'[0m
+   65 |     return contiguous() ? iterator(data(), 1) : iterator(get_pointer(0), get_stride());[0m
+      | [0;1;32m                                   ^~~~~~
+[0m[1minclude/anonymous/container/array/array_class/array_1d.cpp:22:34: [0m[0;1;36mnote: [0min instantiation of member function 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::begin' requested here[0m
+   22 |         device::move(init.upper::begin(), init.upper::end(), self.base::begin());[0m
+      | [0;1;32m                                 ^
+[0m[1minclude/anonymous/container/array/array_detail/array_info_nd.cpp:26:16: [0m[0;1;36mnote: [0min instantiation of member function 'anonymous::array<int>::array' requested here[0m
+   26 |         return dyn;[0m
+      | [0;1;32m               ^
+[0m[1minclude/anonymous/container/array/array_class/array_1d.cpp:472:29: [0m[0;1;36mnote: [0mcandidate constructor (the implicit copy constructor) not viable: no known conversion from 'pointer' (aka 'int *') to 'const iterator &' for 1st argument[0m
+  472 | class array<type,1,device>::iterator[0m
+      | [0;1;32m                            ^~~~~~~~
+[0m[1minclude/anonymous/container/array/array_class/array_1d.cpp:472:29: [0m[0;1;36mnote: [0mcandidate constructor (the implicit move constructor) not viable: no known conversion from 'pointer' (aka 'int *') to 'iterator &&' for 1st argument[0m
+  472 | class array<type,1,device>::iterator[0m
+      | [0;1;32m                            ^~~~~~~~
+[0mIn file included from include/anonymous/container/module.cppm:61:
+In file included from include/anonymous/container/array/array.hpp:36:
+[1minclude/anonymous/container/array/array_detail/array_upper_1d.cpp:80:43: [0m[0;1;31merror: [0m[1mno viable conversion from 'pointer' (aka 'int *') to 'array<int, 1, cpu>::iterator'[0m
+   80 |     return contiguous() ? iterator(data() + size(), 1) : iterator(get_pointer(0) + get_size_top(), get_stride());[0m
+      | [0;1;32m                                   ~~~~~~~^~~~~~~~
+[0m[1minclude/anonymous/container/array/array_class/array_1d.cpp:22:55: [0m[0;1;36mnote: [0min instantiation of member function 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::end' requested here[0m
+   22 |         device::move(init.upper::begin(), init.upper::end(), self.base::begin());[0m
+      | [0;1;32m                                                      ^
+[0m[1minclude/anonymous/container/array/array_detail/array_info_nd.cpp:26:16: [0m[0;1;36mnote: [0min instantiation of member function 'anonymous::array<int>::array' requested here[0m
+   26 |         return dyn;[0m
+      | [0;1;32m               ^
+[0m[1minclude/anonymous/container/array/array_class/array_1d.cpp:472:29: [0m[0;1;36mnote: [0mcandidate constructor (the implicit copy constructor) not viable: no known conversion from 'pointer' (aka 'int *') to 'const iterator &' for 1st argument[0m
+  472 | class array<type,1,device>::iterator[0m
+      | [0;1;32m                            ^~~~~~~~
+[0m[1minclude/anonymous/container/array/array_class/array_1d.cpp:472:29: [0m[0;1;36mnote: [0mcandidate constructor (the implicit move constructor) not viable: no known conversion from 'pointer' (aka 'int *') to 'iterator &&' for 1st argument[0m
+  472 | class array<type,1,device>::iterator[0m
+      | [0;1;32m                            ^~~~~~~~
+[0mIn module 'std' imported from include/anonymous/container/module.cppm:11:
+[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/__algorithm/move.h:43:20: [0m[0;1;31merror: [0m[1minvalid operands to binary expression ('anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator' and 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator')[0m
+   43 |     while (__first != __last) {[0m
+      | [0;1;32m           ~~~~~~~ ^  ~~~~~~
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/__algorithm/copy_move_common.h:94:19: [0m[0;1;36mnote: [0min instantiation of function template specialization 'std::__move_impl<std::_ClassicAlgPolicy>::operator()<anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, int *>' requested here[0m
+   94 |   auto __result = _Algorithm()(std::move(__range.first), std::move(__range.second), std::__unwrap_iter(__out_first));[0m
+      | [0;1;32m                  ^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/__algorithm/move.h:112:15: [0m[0;1;36mnote: [0min instantiation of function template specialization 'std::__copy_move_unwrap_iters<std::__move_impl<std::_ClassicAlgPolicy>, anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, std::__wrap_iter<int *>, 0>' requested here[0m
+  112 |   return std::__copy_move_unwrap_iters<__move_impl<_AlgPolicy> >([0m
+      | [0;1;32m              ^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/__algorithm/move.h:122:15: [0m[0;1;36mnote: [0min instantiation of function template specialization 'std::__move<std::_ClassicAlgPolicy, anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, std::__wrap_iter<int *>>' requested here[0m
+  122 |   return std::__move<_ClassicAlgPolicy>(std::move(__first), std::move(__last), std::move(__result)).second;[0m
+      | [0;1;32m              ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/cpu/cpu.hpp:114:108: [0m[0;1;36mnote: [0min instantiation of function template specialization 'std::__1::move<anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, std::__wrap_iter<int *>>' requested here[0m
+  114 |         constexpr static decltype(auto) move                              ( auto&&... args ) { return std::move                             (std::forward<decltype(args)>(args)...); }[0m
+      | [0;1;32m                                                                                                           ^
+[0m[1minclude/anonymous/container/array/array_class/array_1d.cpp:22:17: [0m[0;1;36mnote: [0min instantiation of function template specialization 'anonymous::cpu::move<anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, std::__wrap_iter<int *>>' requested here[0m
+   22 |         device::move(init.upper::begin(), init.upper::end(), self.base::begin());[0m
+      | [0;1;32m                ^
+[0m[1minclude/anonymous/container/array/array_detail/array_info_nd.cpp:26:16: [0m[0;1;36mnote: [0min instantiation of member function 'anonymous::array<int>::array' requested here[0m
+   26 |         return dyn;[0m
+      | [0;1;32m               ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:73:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   73 | template < class type1, class type2 > bool                                 operator ==  ( opencl::template       reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a <=> b; };[0m
+      | [0;1;32m                                                                           ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:73:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:74:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   74 | template < class type1, class type2 > bool                                 operator ==  ( opencl::template       reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a <=> b; };[0m
+      | [0;1;32m                                                                           ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:74:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:75:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   75 | template < class type1, class type2 > bool                                 operator ==  ( opencl::template const_reference<type1>, opencl::template       reference<type2> ) requires requires ( type1 a, type2 b ) { a <=> b; };[0m
+      | [0;1;32m                                                                           ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:75:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:76:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   76 | template < class type1, class type2 > bool                                 operator ==  ( opencl::template const_reference<type1>, opencl::template const_reference<type2> ) requires requires ( type1 a, type2 b ) { a <=> b; };[0m
+      | [0;1;32m                                                                           ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.hpp:76:76: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:184:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  184 | bool operator == ( opencl::template reference<type1> left, opencl::template reference<type2> right )[0m
+      | [0;1;32m     ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:184:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:191:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  191 | bool operator == ( opencl::template reference<type1> left, opencl::template const_reference<type2> right )[0m
+      | [0;1;32m     ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:191:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:198:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  198 | bool operator == ( opencl::template const_reference<type1> left, opencl::template reference<type2> right )[0m
+      | [0;1;32m     ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:198:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:205:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  205 | bool operator == ( opencl::template const_reference<type1> left, opencl::template const_reference<type2> right )[0m
+      | [0;1;32m     ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/reference.cpp:205:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_reference<type1>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/pointer.cpp:149:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template pointer<type>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  149 | bool operator == ( opencl::template pointer<type> left, opencl::template pointer<type> right )[0m
+      | [0;1;32m     ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/pointer.cpp:156:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template pointer<type>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  156 | bool operator == ( opencl::template pointer<type> left, opencl::template const_pointer<type> right )[0m
+      | [0;1;32m     ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/pointer.cpp:156:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template pointer<type>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/pointer.cpp:163:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_pointer<type>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  163 | bool operator == ( opencl::template const_pointer<type> left, opencl::template pointer<type> right )[0m
+      | [0;1;32m     ^
+[0m[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/pointer.cpp:163:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_pointer<type>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/Users/anonymous/Code/anonymous/include/anonymous/basic/device/opencl/type/pointer.cpp:170:6: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'opencl::template const_pointer<type>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  170 | bool operator == ( opencl::template const_pointer<type> left, opencl::template const_pointer<type> right )[0m
+      | [0;1;32m     ^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/__utility/pair.h:453:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'pair<_T1, _T2>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  453 | operator==(const pair<_T1, _T2>& __x, const pair<_U1, _U2>& __y) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/__utility/pair.h:453:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'pair<_T1, _T2>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:995:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Tp>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+  995 | operator==(const optional<_Tp>& __x, const optional<_Up>& __y) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:1007:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Tp>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+ 1007 | operator!=(const optional<_Tp>& __x, const optional<_Up>& __y) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:1077:38: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Tp>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+ 1077 | _LIBCPP_HIDE_FROM_ABI constexpr bool operator==(const optional<_Tp>& __x, nullopt_t) noexcept {[0m
+      | [0;1;32m                                     ^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:1077:38: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Tp>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:1152:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Tp>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+ 1152 | operator==(const optional<_Tp>& __x, const _Up& __v) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:1160:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Up>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+ 1160 | operator==(const _Tp& __v, const optional<_Up>& __x) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:1168:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Tp>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+ 1168 | operator!=(const optional<_Tp>& __x, const _Up& __v) {[0m
+      | [0;1;32m^
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.3/bin/../include/c++/v1/optional:1176:1: [0m[0;1;36mnote: [0mcandidate template ignored: could not match 'optional<_Up>' against 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+ 1176 | operator!=(const _Tp& __v, const optional<_Up>& __x) {[0m
+      | [0;1;32m^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:8:16: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with left:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, right:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator][0m
+    8 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )[0m
+      | [0;1;32m               ^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:8:36: [0m[0;1;36mnote: [0mbecause 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator' does not satisfy 'pair_type'[0m
+    8 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )[0m
+      | [0;1;32m                                   ^
+[0m[1minclude/anonymous/container/module.cppm:54:76: [0m[0;1;36mnote: [0mbecause 'typename type::pair_concept' would be invalid: no type named 'pair_concept' in 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   54 |     template < class type > concept pair_type  = requires { typename type::pair_concept;  };[0m
+      | [0;1;32m                                                                           ^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:8:16: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with left:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, right:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator][0m
+    8 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )[0m
+      | [0;1;32m               ^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:8:36: [0m[0;1;36mnote: [0mbecause 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator' does not satisfy 'pair_type'[0m
+    8 | constexpr bool operator == ( const pair_type auto& left, const pair_type auto& right )[0m
+      | [0;1;32m                                   ^
+[0m[1minclude/anonymous/container/module.cppm:54:76: [0m[0;1;36mnote: [0mbecause 'typename type::pair_concept' would be invalid: no type named 'pair_concept' in 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   54 |     template < class type > concept pair_type  = requires { typename type::pair_concept;  };[0m
+      | [0;1;32m                                                                           ^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:79:16: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with left:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, right:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator][0m
+   79 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )[0m
+      | [0;1;32m               ^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:79:36: [0m[0;1;36mnote: [0mbecause 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator' does not satisfy 'tuple_type'[0m
+   79 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )[0m
+      | [0;1;32m                                   ^
+[0m[1minclude/anonymous/container/module.cppm:55:76: [0m[0;1;36mnote: [0mbecause 'typename type::tuple_concept' would be invalid: no type named 'tuple_concept' in 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   55 |     template < class type > concept tuple_type = requires { typename type::tuple_concept; };[0m
+      | [0;1;32m                                                                           ^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:79:16: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with left:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, right:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator][0m
+   79 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )[0m
+      | [0;1;32m               ^
+[0m[1minclude/anonymous/container/discrete/discrete_global/operator.cpp:79:36: [0m[0;1;36mnote: [0mbecause 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator' does not satisfy 'tuple_type'[0m
+   79 | constexpr bool operator == ( const tuple_type auto& left, const tuple_type auto& right )[0m
+      | [0;1;32m                                   ^
+[0m[1minclude/anonymous/container/module.cppm:55:76: [0m[0;1;36mnote: [0mbecause 'typename type::tuple_concept' would be invalid: no type named 'tuple_concept' in 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   55 |     template < class type > concept tuple_type = requires { typename type::tuple_concept; };[0m
+      | [0;1;32m                                                                           ^
+[0m[1minclude/anonymous/container/array/array_global/operator.hpp:4:25: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with left:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, right:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator][0m
+    4 | constexpr bool          operator ==  ( const array_type auto& left, const array_type auto& right ) requires equalable_to <left_value_type,right_value_type> and (left.dimension() == right.dimension()) and same_as<left_device_type,right_device_type>;[0m
+      | [0;1;32m                        ^
+[0m[1minclude/anonymous/container/array/array_global/operator.hpp:4:46: [0m[0;1;36mnote: [0mbecause 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator' does not satisfy 'array_type'[0m
+    4 | constexpr bool          operator ==  ( const array_type auto& left, const array_type auto& right ) requires equalable_to <left_value_type,right_value_type> and (left.dimension() == right.dimension()) and same_as<left_device_type,right_device_type>;[0m
+      | [0;1;32m                                             ^
+[0m[1minclude/anonymous/container/module.cppm:51:76: [0m[0;1;36mnote: [0mbecause 'typename type::array_concept' would be invalid: no type named 'array_concept' in 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   51 |     template < class type > concept array_type = requires { typename type::array_concept; };[0m
+      | [0;1;32m                                                                           ^
+[0m[1minclude/anonymous/container/array/array_global/operator.hpp:4:25: [0m[0;1;36mnote: [0mcandidate template ignored: constraints not satisfied [with left:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator, right:auto = anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator][0m
+    4 | constexpr bool          operator ==  ( const array_type auto& left, const array_type auto& right ) requires equalable_to <left_value_type,right_value_type> and (left.dimension() == right.dimension()) and same_as<left_device_type,right_device_type>;[0m
+      | [0;1;32m                        ^
+[0m[1minclude/anonymous/container/array/array_global/operator.hpp:4:46: [0m[0;1;36mnote: [0mbecause 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator' does not satisfy 'array_type'[0m
+    4 | constexpr bool          operator ==  ( const array_type auto& left, const array_type auto& right ) requires equalable_to <left_value_type,right_value_type> and (left.dimension() == right.dimension()) and same_as<left_device_type,right_device_type>;[0m
+      | [0;1;32m                                             ^
+[0m[1minclude/anonymous/container/module.cppm:51:76: [0m[0;1;36mnote: [0mbecause 'typename type::array_concept' would be invalid: no type named 'array_concept' in 'anonymous::detail::array_upper<int, 1, anonymous::cpu>::iterator'[0m
+   51 |     template < class type > concept array_type = requires { typename type::array_concept; };[0m
+      | [0;1;32m                                                                           ^
+[0m3 errors generated.

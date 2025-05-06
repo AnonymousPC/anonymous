@@ -1,8 +1,7 @@
-class input_t
+struct input_t
 {
-    public:
-        constexpr string operator() ( )                       const;
-        constexpr string operator() ( const printable auto& ) const;
+    constexpr string operator() ( )                       const;
+    constexpr string operator() ( const printable auto& ) const;
 };
 
 constexpr string input_t::operator() ( ) const

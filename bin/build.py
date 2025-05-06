@@ -16,7 +16,7 @@ elif sys.platform == "darwin":
 
 modules = [
     "anonymous.basic",
-    # "anonymous.container",
+    "anonymous.container",
     "anonymous"
 ]
 compile_args = [
@@ -62,6 +62,9 @@ elif system == "linux":
     compiler = "g++"
 elif system == "macos":
     compiler = "clang++"
+
+if system == "macos":
+    link_args.append("-framework OpenCL")
 
 if type == "debug":
     compile_args.append("-O0")

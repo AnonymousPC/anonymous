@@ -10,8 +10,6 @@ class cpu
         template < class type > using const_reference = const type&;
         template < class type > using pointer         =       type*;
         template < class type > using const_pointer   = const type*;
-        template < class type > class stride_pointer;
-        template < class type > class const_stride_pointer;
 
     public: // Allocator
         template < class type > using allocator = std::allocator<type>;
@@ -210,4 +208,3 @@ class cpu
 
 #include "container/vector.hpp"
 #include "linalg/linalg.hpp"
-#include "type/stride_pointer.hpp"

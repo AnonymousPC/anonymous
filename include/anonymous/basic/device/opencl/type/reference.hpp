@@ -1,34 +1,34 @@
 template < class type >
 class opencl::reference
 {
-    private: // Data
-        boost::compute::buffer buf = boost::compute::buffer();
-        size_t                 idx = 0;
-
     public: // Typedef
         using value_type = type;
 
+    private: // Data
+        boost::compute::buffer buf = boost::compute::buffer();
+        std::ptrdiff_t         idx = 0;
+
     public: // Core 
-        reference ( )                             = delete;
-        reference ( const reference& )            = default;
-        reference operator = ( const reference& );
+        constexpr reference ( )                             = delete;
+        constexpr reference ( const reference& )            = default;
+        constexpr reference operator = ( const reference& );
 
     public: // Assign
-                                 reference operator = (                 type   );
-     //                          reference operator = (       reference<type > );
-                                 reference operator = ( const_reference<type > );
-        template < class type2 > reference operator = (                 type2  ) requires convertible_to<type2,type>;
-        template < class type2 > reference operator = (       reference<type2> ) requires convertible_to<type2,type>;
-        template < class type2 > reference operator = ( const_reference<type2> ) requires convertible_to<type2,type>;
+                                 constexpr reference operator = (                 type   );
+     //                          constexpr reference operator = (       reference<type > );
+                                 constexpr reference operator = ( const_reference<type > );
+        template < class type2 > constexpr reference operator = (                 type2  ) requires convertible_to<type2,type>;
+        template < class type2 > constexpr reference operator = (       reference<type2> ) requires convertible_to<type2,type>;
+        template < class type2 > constexpr reference operator = ( const_reference<type2> ) requires convertible_to<type2,type>;
 
     public: // Conversion
-        explicit reference ( const_reference<type> );
-        operator type ( ) const;
+        constexpr explicit reference ( const_reference<type> );
+        constexpr operator type ( ) const;
 
     public: // Boost.compute
         reference ( boost::compute::buffer, size_t );
-        reference ( boost::compute::detail::buffer_value<type> );
-        operator    boost::compute::detail::buffer_value<type> ( ) const;
+        constexpr reference ( boost::compute::detail::buffer_value<type> );
+        constexpr operator    boost::compute::detail::buffer_value<type> ( ) const;
         boost::compute::buffer get_buffer ( ) const;
         size_t                 get_index  ( ) const;
 };
@@ -113,4 +113,4 @@ template < class type >               type                                 opera
 template < class type >               opencl::template reference<type>     operator --  ( opencl::template       reference<type>                                           ) requires requires ( type  a          ) {   --  a; };
 template < class type >               type                                 operator --  ( opencl::template       reference<type>, int                                      ) requires requires ( type  a          ) { a --;    };
 
-#include "reference.cpp"
+// #include "reference.cpp"

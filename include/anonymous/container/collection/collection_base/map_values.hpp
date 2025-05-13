@@ -1,8 +1,8 @@
 namespace detail
 {
-    template < class collection_type, class type2, class device >
+    template < class container, class type2, class device >
     class map_values
-        extends public collection_algo<map_values<collection_type,type2,device>,type2,device>
+        extends public collection_algo<map_values<container,type2,device>,type2,device>
     {
         public: // Typedef
             using  value_type            = device::template value_type     <type2>;
@@ -17,36 +17,36 @@ namespace detail
         public: // Member
             constexpr int size ( ) const
             {
-                return static_cast<const collection_type&>(self).size();
+                return static_cast<const container&>(self).size();
             }
 
             constexpr iterator begin ( )
             {
-                return static_cast<collection_type&>(self).begin();
+                return static_cast<container&>(self).begin();
             }
 
             constexpr const_iterator begin ( ) const
             {
-                return static_cast<const collection_type&>(self).begin();
+                return static_cast<const container&>(self).begin();
             }
 
             constexpr iterator end ( )
             {
-                return static_cast<collection_type&>(self).end();
+                return static_cast<container&>(self).end();
             }
 
             constexpr const_iterator end ( ) const
             {
-                return static_cast<const collection_type&>(self).end();
+                return static_cast<const container&>(self).end();
             }
     };
 
-    template < class collection_type, class type2, class device >
-    class map_values<collection_type,type2,device>::iterator
-        extends public collection_type::iterator
+    template < class container, class type2, class device >
+    class map_values<container,type2,device>::iterator
+        extends public container::iterator
     {
         private: // Typedef
-            using base = collection_type::iterator;
+            using base = container::iterator;
 
         public: // Typedef
             using value_type = device::template value_type<type2>;
@@ -127,12 +127,12 @@ namespace detail
             }      
     };
 
-    template < class collection_type, class type2, class device >
-    class map_values<collection_type,type2,device>::const_iterator
-        extends public collection_type::const_iterator
+    template < class container, class type2, class device >
+    class map_values<container,type2,device>::const_iterator
+        extends public container::const_iterator
     {
         private: // Typedef
-            using base = collection_type::const_iterator;
+            using base = container::const_iterator;
 
         public: // Typedef
             using value_type = device::template value_type     <type2>;

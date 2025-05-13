@@ -1,5 +1,8 @@
 class cpu
 {
+    public: // Typedef
+        struct device_concept { };
+
     public: // Execution
         using execution_context_type = exec::static_thread_pool;
         inline static execution_context_type execution_context = execution_context_type(1);

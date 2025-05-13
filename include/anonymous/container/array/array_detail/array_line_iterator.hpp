@@ -1,16 +1,13 @@
 template < class type, int dim, class device >
 class detail::array_line_iterator
+    extends public std::span<detail::array_upper<type,dim-1,device>>::iterator
 {
     public: // Typedef
-        using iterator_concept  = std::random_access_iterator_tag;
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = array<type,dim-1,device>;
         using reference         = array<type,dim-1,device>&;
         using pointer           = array<type,dim-1,device>*;
         using difference_type   = std::ptrdiff_t;
-
-    private: // Data
-        std::span<detail::array_upper<type,dim-1,device>>::iterator iter = std::span<detail::array_upper<type,dim-1,device>>::iterator();
 
     public: // Core
         constexpr array_line_iterator ( ) = default;
@@ -20,9 +17,6 @@ class detail::array_line_iterator
         constexpr reference operator *  ( )                 const;
         constexpr pointer   operator -> ( )                 const;
         constexpr reference operator [] ( difference_type ) const;
-
-    public: // Access
-        constexpr std::span<detail::array_upper<type,dim-1,device>>::iterator base ( ) const;
 };
 
 template < class type, int dim, class device > constexpr bool                                          operator ==  ( detail::array_line_iterator<type,dim,device>,  detail::array_line_iterator<type,dim,device> );
@@ -40,17 +34,14 @@ template < class type, int dim, class device > constexpr detail::array_line_iter
 
 template < class type, int dim, class device >
 class detail::const_array_line_iterator
+    extends public std::span<detail::array_upper<type,dim-1,device>>::iterator // TODO: use std::span::const_iterator once compiler supports it.
 {
     public: // Typedef
-        using iterator_concept  = std::random_access_iterator_tag;
         using iterator_category = std::random_access_iterator_tag;
         using value_type        =       array<type,dim-1,device>;
         using reference         = const array<type,dim-1,device>&;
         using pointer           = const array<type,dim-1,device>*;
         using difference_type   = std::ptrdiff_t;
-
-    private: // Data
-        std::span<detail::array_upper<type,dim-1,device>>::iterator iter = std::span<detail::array_upper<type,dim-1,device>>::iterator();
 
     public: // Core
         constexpr const_array_line_iterator ( ) = default;

@@ -1,6 +1,6 @@
 template < class type, int dim, class device >
-constexpr detail::array_line_iterator<type,dim,device>::array_line_iterator ( std::span<detail::array_upper<type,dim-1,device>>::iterator init_iter )
-    extends iter ( init_iter )
+constexpr detail::array_line_iterator<type,dim,device>::array_line_iterator ( std::span<detail::array_upper<type,dim-1,device>>::iterator init )
+    extends std::span<detail::array_upper<type,dim-1,device>>::iterator ( init )
 {
 
 }
@@ -8,79 +8,76 @@ constexpr detail::array_line_iterator<type,dim,device>::array_line_iterator ( st
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device>::reference detail::array_line_iterator<type,dim,device>::operator * ( ) const
 {
-    return static_cast<reference>(iter.operator*());
+    return static_cast<reference>(std::span<detail::array_upper<type,dim-1,device>>::iterator::operator*());
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device>::pointer detail::array_line_iterator<type,dim,device>::operator -> ( ) const
 {
-    return static_cast<pointer>(iter.operator->());
+    return static_cast<pointer>(std::span<detail::array_upper<type,dim-1,device>>::iterator::operator->());
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device>::reference detail::array_line_iterator<type,dim,device>::operator [] ( difference_type offset ) const
 {
-    return static_cast<reference>(iter.operator[](offset));
-}
-
-template < class type, int dim, class device >
-constexpr std::span<detail::array_upper<type,dim-1,device>>::iterator detail::array_line_iterator<type,dim,device>::base ( ) const
-{
-    return iter;
+    return static_cast<reference>(std::span<detail::array_upper<type,dim-1,device>>::iterator::operator[](offset));
 }
 
 template < class type, int dim, class device >
 constexpr bool operator == ( detail::array_line_iterator<type,dim,device> left, detail::array_line_iterator<type,dim,device> right )
 {
-    return left.base() == right.base();
+    return static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) == static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right);
 }
 
 template < class type, int dim, class device >
 constexpr std::strong_ordering operator <=> ( detail::array_line_iterator<type,dim,device> left, detail::array_line_iterator<type,dim,device> right )
 {
-    return left.base() <=> right.base();
+    return static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) <=> static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right);
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device> operator + ( detail::array_line_iterator<type,dim,device> left, std::ptrdiff_t right )
 {
-    return detail::array_line_iterator<type,dim,device>(left.base() + right);
+    return detail::array_line_iterator<type,dim,device>(static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) + right);
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device> operator + ( std::ptrdiff_t left, detail::array_line_iterator<type,dim,device> right )
 {
-    return detail::array_line_iterator<type,dim,device>(left + right.base());
+    return detail::array_line_iterator<type,dim,device>(left + static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right));
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device> operator - ( detail::array_line_iterator<type,dim,device> left, std::ptrdiff_t right )
 {
-    return detail::array_line_iterator<type,dim,device>(left.base() - right);
+    return detail::array_line_iterator<type,dim,device>(static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) - right);
 }
 
 template < class type, int dim, class device >
 constexpr std::ptrdiff_t operator - ( detail::array_line_iterator<type,dim,device> left, detail::array_line_iterator<type,dim,device> right )
 {
-    return left.base() - right.base();
+    return static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) - static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right);
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device>& operator += ( detail::array_line_iterator<type,dim,device>& left, std::ptrdiff_t right )
 {
-    return left = detail::array_line_iterator<type,dim,device>(left.base() + right);
+    static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left) += right;
+    return left;
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device>& operator -= ( detail::array_line_iterator<type,dim,device>& left, std::ptrdiff_t right )
 {
-    return left = detail::array_line_iterator<type,dim,device>(left.base() - right);
+    static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left) -= right;
+    return left;
 }
 
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device>& operator ++ ( detail::array_line_iterator<type,dim,device>& left )
 {
-    return left = detail::array_line_iterator<type,dim,device>(++left.base());
+    ++static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left);
+    return left;
 }
 
 template < class type, int dim, class device >
@@ -94,7 +91,8 @@ constexpr detail::array_line_iterator<type,dim,device> operator ++ ( detail::arr
 template < class type, int dim, class device >
 constexpr detail::array_line_iterator<type,dim,device>& operator -- ( detail::array_line_iterator<type,dim,device>& left )
 {
-    return left = detail::array_line_iterator<type,dim,device>(--left.base());
+    --static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left);
+    return left;
 }
 
 template < class type, int dim, class device >
@@ -106,8 +104,8 @@ constexpr detail::array_line_iterator<type,dim,device> operator -- ( detail::arr
 }
 
 template < class type, int dim, class device >
-constexpr detail::const_array_line_iterator<type,dim,device>::const_array_line_iterator ( std::span<detail::array_upper<type,dim-1,device>>::iterator init_iter )
-    extends iter ( init_iter )
+constexpr detail::const_array_line_iterator<type,dim,device>::const_array_line_iterator ( std::span<detail::array_upper<type,dim-1,device>>::iterator init )
+    extends std::span<detail::array_upper<type,dim-1,device>>::iterator ( init )
 {
 
 }
@@ -115,79 +113,76 @@ constexpr detail::const_array_line_iterator<type,dim,device>::const_array_line_i
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device>::reference detail::const_array_line_iterator<type,dim,device>::operator * ( ) const
 {
-    return static_cast<reference>(iter.operator*());
+    return static_cast<reference>(std::span<detail::array_upper<type,dim-1,device>>::iterator::operator*());
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device>::pointer detail::const_array_line_iterator<type,dim,device>::operator -> ( ) const
 {
-    return static_cast<pointer>(iter.operator->());
+    return static_cast<pointer>(std::span<detail::array_upper<type,dim-1,device>>::iterator::operator->());
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device>::reference detail::const_array_line_iterator<type,dim,device>::operator [] ( difference_type offset ) const
 {
-    return static_cast<reference>(iter.operator[](offset));
-}
-
-template < class type, int dim, class device >
-constexpr std::span<detail::array_upper<type,dim-1,device>>::iterator detail::const_array_line_iterator<type,dim,device>::base ( ) const
-{
-    return iter;
+    return static_cast<reference>(std::span<detail::array_upper<type,dim-1,device>>::iterator::operator[](offset));
 }
 
 template < class type, int dim, class device >
 constexpr bool operator == ( detail::const_array_line_iterator<type,dim,device> left, detail::const_array_line_iterator<type,dim,device> right )
 {
-    return left.base() == right.base();
+    return static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) == static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right);
 }
 
 template < class type, int dim, class device >
 constexpr std::strong_ordering operator <=> ( detail::const_array_line_iterator<type,dim,device> left, detail::const_array_line_iterator<type,dim,device> right )
 {
-    return left.base() <=> right.base();
+    return static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) <=> static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right);
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device> operator + ( detail::const_array_line_iterator<type,dim,device> left, std::ptrdiff_t right )
 {
-    return detail::const_array_line_iterator<type,dim,device>(left.base() + right);
+    return detail::const_array_line_iterator<type,dim,device>(static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) + right);
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device> operator + ( std::ptrdiff_t left, detail::const_array_line_iterator<type,dim,device> right )
 {
-    return detail::const_array_line_iterator<type,dim,device>(left + right.base());
+    return detail::const_array_line_iterator<type,dim,device>(left + static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right));
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device> operator - ( detail::const_array_line_iterator<type,dim,device> left, std::ptrdiff_t right )
 {
-    return detail::const_array_line_iterator<type,dim,device>(left.base() - right);
+    return detail::const_array_line_iterator<type,dim,device>(static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) - right);
 }
 
 template < class type, int dim, class device >
 constexpr std::ptrdiff_t operator - ( detail::const_array_line_iterator<type,dim,device> left, detail::const_array_line_iterator<type,dim,device> right )
 {
-    return left.base() - right.base();
+    return static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(left) - static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator>(right);
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device>& operator += ( detail::const_array_line_iterator<type,dim,device>& left, std::ptrdiff_t right )
 {
-    return left = detail::const_array_line_iterator<type,dim,device>(left.base() + right);
+    static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left) += right;
+    return left;
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device>& operator -= ( detail::const_array_line_iterator<type,dim,device>& left, std::ptrdiff_t right )
 {
-    return left = detail::const_array_line_iterator<type,dim,device>(left.base() - right);
+    static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left) -= right;
+    return left;
 }
 
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device>& operator ++ ( detail::const_array_line_iterator<type,dim,device>& left )
 {
-    return left = detail::const_array_line_iterator<type,dim,device>(++left.base());
+    ++static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left);
+    return left;
 }
 
 template < class type, int dim, class device >
@@ -201,7 +196,8 @@ constexpr detail::const_array_line_iterator<type,dim,device> operator ++ ( detai
 template < class type, int dim, class device >
 constexpr detail::const_array_line_iterator<type,dim,device>& operator -- ( detail::const_array_line_iterator<type,dim,device>& left )
 {
-    return left = detail::const_array_line_iterator<type,dim,device>(--left.base());
+    --static_cast<typename std::span<detail::array_upper<type,dim-1,device>>::iterator&>(left);
+    return left;
 }
 
 template < class type, int dim, class device >

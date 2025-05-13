@@ -3,7 +3,16 @@ namespace ranges {
 
     template<typename _Range, bool _Const>
       using __range_iter_cat
-	= typename iterator_traits<iterator_t<__maybe_const<_Const, _Range>>>::iterator_category;
+	    = typename iterator_traits<iterator_t<__maybe_const<_Const, _Range>>>::iterator_category;
+
+    template <class _Fun, class _Tuple>
+    _LIBCPP_HIDE_FROM_ABI constexpr auto __tu_local_tuple_transform(_Fun&& __f, _Tuple&& __tuple) {
+    return std::apply(
+        [&]<class... _Types>(_Types&&... __elements) {
+            return tuple<invoke_result_t<_Fun&, _Types>...>(std::invoke(__f, std::forward<_Types>(__elements))...);
+        },
+        std::forward<_Tuple>(__tuple));
+    }
 
   template<move_constructible _Fp, input_range... _Vs>
     requires (view<_Vs> && ...) && (sizeof...(_Vs) > 0) && is_object_v<_Fp>
@@ -456,9 +465,10 @@ namespace ranges {
   public:
     using iterator_category = input_iterator_tag;
     using iterator_concept = decltype(_S_iter_concept());
-    using value_type = conditional_t<_Nm == 2,
-				     pair<range_value_t<_Base>, range_value_t<_Base>>,
-				     __repeated_tuple<range_value_t<_Base>, _Nm>>;
+    // using value_type = conditional_t<_Nm == 2,
+	// 			     pair<range_value_t<_Base>, range_value_t<_Base>>,
+	// 			     __repeated_tuple<range_value_t<_Base>, _Nm>>;
+    using value_type = __repeated_tuple<range_value_t<_Base>, _Nm>; // I changed it.
     using difference_type = range_difference_t<_Base>;
 
     _Iterator() = default;
@@ -475,7 +485,7 @@ namespace ranges {
     operator*() const
     {
       auto __f = [](auto& __i) -> decltype(auto) { return *__i; };
-      return __tuple_transform(__f, _M_current);
+      return __tu_local_tuple_transform(__f, _M_current);
     }
 
     constexpr _Iterator&
@@ -533,7 +543,7 @@ namespace ranges {
       requires random_access_range<_Base>
     {
       auto __f = [&](auto& __i) -> decltype(auto) { return __i[__n]; };
-      return __tuple_transform(__f, _M_current);
+      return __tu_local_tuple_transform(__f, _M_current);
     }
 
     friend constexpr bool
@@ -600,7 +610,7 @@ namespace ranges {
 
     friend constexpr auto
     iter_move(const _Iterator& __i)
-    { return __tuple_transform(ranges::iter_move, __i._M_current); }
+    { return __tu_local_tuple_transform(ranges::iter_move, __i._M_current); }
 
     friend constexpr void
     iter_swap(const _Iterator& __l, const _Iterator& __r)

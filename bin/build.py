@@ -64,7 +64,7 @@ elif system == "linux":
 elif system == "macos":
     include_path = "/opt/homebrew/include"
     lib_path     = "/opt/homebrew/lib"
-    libs         = ["bz2", "crypto", "hwloc", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "ssl", "tiff", "tiffxx", "z", "zstd"]
+    libs         = ["bz2", "crypto", "hwloc", "iconv", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "ssl", "tiff", "tiffxx", "z", "zstd"]
 
 
 # Task

@@ -31,24 +31,20 @@ constexpr stack<type,device>::const_reference stack<type,device>::top ( ) const
 }
 
 template < class type, class device >
-constexpr void stack<type,device>::push ( type val )
+constexpr stack<type,device>::reference stack<type,device>::push ( type new_value )
 {
-    base::push(std::move(val));
+    base::push(std::move(new_value));
+    return top();
 }
 
 template < class type, class device >
-constexpr type stack<type,device>::pop ( )
+constexpr stack<type,device>::value_type stack<type,device>::pop ( )
 {
     if constexpr ( debug )
         if ( empty() )
             throw value_error("cannot pop from stack (with empty() = true)");
-            
-    if constexpr ( requires { { base::pop() } -> convertible_to<type>; } )
-        return base::pop();
-    else
-    {
-        auto poped = type(std::move(top()));
-        base::pop();
-        return poped;
-    }
+
+    auto old_value = value_type(std::move(top()));
+    base::pop();
+    return old_value;
 }

@@ -1,4 +1,4 @@
-#include "detail/enum_bool.hpp"
+#include "detail/enum_bool.cpp"
 
 template < class type, class alloc >
 class cpu::vector
@@ -11,9 +11,6 @@ template < class alloc >
 class cpu::vector<bool,alloc>
     extends public std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_alloc<detail::enum_bool>>
 {
-    private: // Typedef
-        using base = std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_alloc<detail::enum_bool>>;
-
     public: // Typedef
         using value_type      = bool;
         using reference       = bool&;
@@ -24,7 +21,7 @@ class cpu::vector<bool,alloc>
         using const_iterator  = const bool*;
 
     public: // Core
-        using base::base;
+        using std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_alloc<detail::enum_bool>>::vector;
         constexpr vector ( std::size_t, bool );
         constexpr vector ( std::initializer_list<bool> );
 

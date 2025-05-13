@@ -1,15 +1,6 @@
 template < class type, int dim, class device >
 class detail::array_line_iterator
 {
-    private: // Precondition
-        static_assert ( dim >= 2 );
-
-    private: // Typedef
-        using base = std::span<detail::array_upper<type,dim-1,device>>::iterator;
-
-    private: // Data
-        base iter = base();
-
     public: // Typedef
         using iterator_concept  = std::random_access_iterator_tag;
         using iterator_category = std::random_access_iterator_tag;
@@ -18,72 +9,72 @@ class detail::array_line_iterator
         using pointer           = array<type,dim-1,device>*;
         using difference_type   = std::ptrdiff_t;
 
+    private: // Data
+        std::span<detail::array_upper<type,dim-1,device>>::iterator iter = std::span<detail::array_upper<type,dim-1,device>>::iterator();
+
     public: // Core
         constexpr array_line_iterator ( ) = default;
-        constexpr array_line_iterator ( base init_iter ) extends iter ( init_iter ) { };
+        constexpr array_line_iterator ( std::span<detail::array_upper<type,dim-1,device>>::iterator );
 
-    public: // Operator.member
-        constexpr           operator base ( )                   const { return iter; }
-        constexpr reference operator *    ( )                   const { return static_cast<reference>(iter.operator*());   }
-        constexpr pointer   operator ->   ( )                   const { return static_cast<pointer>  (iter.operator->());  }
-        constexpr reference operator []   ( difference_type t ) const { return static_cast<reference>(iter.operator[](t)); }
+    public: // Operator
+        constexpr reference operator *  ( )                 const;
+        constexpr pointer   operator -> ( )                 const;
+        constexpr reference operator [] ( difference_type ) const;
 
-    public: // Operator.global
-        friend constexpr bool                 operator ==  ( const array_line_iterator& left, const array_line_iterator& right ) { return left.iter == right.iter; }
-        friend constexpr std::strong_ordering operator <=> ( const array_line_iterator& left, const array_line_iterator& right ) { return std::compare_strong_order_fallback(left.iter, right.iter); }
-        friend constexpr array_line_iterator  operator  +  ( const array_line_iterator& left,       difference_type      right ) { return array_line_iterator(left .iter + right); }
-        friend constexpr array_line_iterator  operator  +  (       difference_type      left, const array_line_iterator& right ) { return array_line_iterator(right.iter + left); }
-        friend constexpr array_line_iterator  operator  -  ( const array_line_iterator& left,       difference_type      right ) { return array_line_iterator(left .iter - right); }
-        friend constexpr difference_type      operator  -  ( const array_line_iterator& left, const array_line_iterator& right ) { return left.iter - right.iter; }
-        friend constexpr array_line_iterator& operator ++  (       array_line_iterator& left                                   ) { ++left.iter;            return left; }
-        friend constexpr array_line_iterator  operator ++  (       array_line_iterator& left,       int                        ) { auto it = left; ++left; return it;   }
-        friend constexpr array_line_iterator& operator --  (       array_line_iterator& left                                   ) { --left.iter;;           return left; }
-        friend constexpr array_line_iterator  operator --  (       array_line_iterator& left,       int                        ) { auto it = left; --left; return it;   }
-        friend constexpr array_line_iterator& operator +=  (       array_line_iterator& left,       difference_type      right ) { left.iter += right;     return left; }
-        friend constexpr array_line_iterator& operator -=  (       array_line_iterator& left,       difference_type      right ) { left.iter -= right;     return left; }
+    public: // Access
+        constexpr std::span<detail::array_upper<type,dim-1,device>>::iterator base ( ) const;
 };
 
+template < class type, int dim, class device > constexpr bool                                          operator ==  ( detail::array_line_iterator<type,dim,device>,  detail::array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr std::strong_ordering                          operator <=> ( detail::array_line_iterator<type,dim,device>,  detail::array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>  operator +   ( detail::array_line_iterator<type,dim,device>,  std::ptrdiff_t                               );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>  operator +   ( std::ptrdiff_t,                                detail::array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>  operator -   ( detail::array_line_iterator<type,dim,device>,  std::ptrdiff_t                               );
+template < class type, int dim, class device > constexpr std::ptrdiff_t                                operator -   ( detail::array_line_iterator<type,dim,device>,  detail::array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>& operator +=  ( detail::array_line_iterator<type,dim,device>&, std::ptrdiff_t                               );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>& operator -=  ( detail::array_line_iterator<type,dim,device>&, std::ptrdiff_t                               );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>& operator ++  ( detail::array_line_iterator<type,dim,device>&                                               );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>  operator ++  ( detail::array_line_iterator<type,dim,device>,  int                                          );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>& operator --  ( detail::array_line_iterator<type,dim,device>&                                               );
+template < class type, int dim, class device > constexpr detail::array_line_iterator<type,dim,device>  operator --  ( detail::array_line_iterator<type,dim,device>,  int                                          );
+
 template < class type, int dim, class device >
-class detail::array_line_const_iterator
+class detail::const_array_line_iterator
 {
-    private: // Precondition
-        static_assert ( dim >= 2 );
-
-    private: // Typedef
-        using base = std::span<array_upper<type,dim-1,device>>::iterator; // TODO: use span::const_iterator
-
-    private: // Data
-        base iter = base();
-
     public: // Typedef
         using iterator_concept  = std::random_access_iterator_tag;
         using iterator_category = std::random_access_iterator_tag;
-        using value_type        = array<type,dim-1,device>;
+        using value_type        =       array<type,dim-1,device>;
         using reference         = const array<type,dim-1,device>&;
         using pointer           = const array<type,dim-1,device>*;
         using difference_type   = std::ptrdiff_t;
 
+    private: // Data
+        std::span<detail::array_upper<type,dim-1,device>>::iterator iter = std::span<detail::array_upper<type,dim-1,device>>::iterator();
+
     public: // Core
-        constexpr array_line_const_iterator ( ) = default;
-        constexpr array_line_const_iterator ( base init_iter ) extends iter ( init_iter ) { };
+        constexpr const_array_line_iterator ( ) = default;
+        constexpr const_array_line_iterator ( std::span<detail::array_upper<type,dim-1,device>>::iterator );
 
-    public: // Operator.member
-        constexpr           operator base ( )                   const { return iter; }
-        constexpr reference operator *    ( )                   const { return static_cast<reference>(iter.operator*());   }
-        constexpr pointer   operator ->   ( )                   const { return static_cast<pointer>  (iter.operator->());  }
-        constexpr reference operator []   ( difference_type t ) const { return static_cast<reference>(iter.operator[](t)); }
+    public: // Operator
+        constexpr reference operator *  ( )                 const;
+        constexpr pointer   operator -> ( )                 const;
+        constexpr reference operator [] ( difference_type ) const;
 
-    public: // Operator.global
-        friend constexpr bool                       operator ==  ( const array_line_const_iterator& left, const array_line_const_iterator& right ) { return left.iter == right.iter; }
-        friend constexpr std::strong_ordering       operator <=> ( const array_line_const_iterator& left, const array_line_const_iterator& right ) { return std::compare_strong_order_fallback(left.iter, right.iter); }
-        friend constexpr array_line_const_iterator  operator  +  ( const array_line_const_iterator& left,       difference_type            right ) { return array_line_const_iterator(left .iter + right); }
-        friend constexpr array_line_const_iterator  operator  +  (       difference_type            left, const array_line_const_iterator& right ) { return array_line_const_iterator(right.iter + left);  }
-        friend constexpr array_line_const_iterator  operator  -  ( const array_line_const_iterator& left,       difference_type            right ) { return array_line_const_iterator(left .iter - right); }
-        friend constexpr difference_type            operator  -  ( const array_line_const_iterator& left, const array_line_const_iterator& right ) { return left.iter - right.iter; }
-        friend constexpr array_line_const_iterator& operator ++  (       array_line_const_iterator& left                                         ) { ++left.iter;            return left; }
-        friend constexpr array_line_const_iterator  operator ++  (       array_line_const_iterator& left,       int                              ) { auto it = left; ++left; return it;   }
-        friend constexpr array_line_const_iterator& operator --  (       array_line_const_iterator& left                                         ) { --left.iter;;           return left; }
-        friend constexpr array_line_const_iterator  operator --  (       array_line_const_iterator& left,       int                              ) { auto it = left; --left; return it;   }
-        friend constexpr array_line_const_iterator& operator +=  (       array_line_const_iterator& left,       difference_type            right ) { left.iter += right;     return left; }
-        friend constexpr array_line_const_iterator& operator -=  (       array_line_const_iterator& left,       difference_type            right ) { left.iter -= right;     return left; }
+    public: // Access
+        constexpr std::span<detail::array_upper<type,dim-1,device>>::iterator base ( ) const;
 };
+
+template < class type, int dim, class device > constexpr bool                                                operator ==  ( detail::const_array_line_iterator<type,dim,device>,  detail::const_array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr std::strong_ordering                                operator <=> ( detail::const_array_line_iterator<type,dim,device>,  detail::const_array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>  operator +   ( detail::const_array_line_iterator<type,dim,device>,  std::ptrdiff_t                                     );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>  operator +   ( std::ptrdiff_t,                                      detail::const_array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>  operator -   ( detail::const_array_line_iterator<type,dim,device>,  std::ptrdiff_t                                     );
+template < class type, int dim, class device > constexpr std::ptrdiff_t                                      operator -   ( detail::const_array_line_iterator<type,dim,device>,  detail::const_array_line_iterator<type,dim,device> );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>& operator +=  ( detail::const_array_line_iterator<type,dim,device>&, std::ptrdiff_t                                     );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>& operator -=  ( detail::const_array_line_iterator<type,dim,device>&, std::ptrdiff_t                                     );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>& operator ++  ( detail::const_array_line_iterator<type,dim,device>&                                                     );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>  operator ++  ( detail::const_array_line_iterator<type,dim,device>,  int                                                );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>& operator --  ( detail::const_array_line_iterator<type,dim,device>&                                                     );
+template < class type, int dim, class device > constexpr detail::const_array_line_iterator<type,dim,device>  operator --  ( detail::const_array_line_iterator<type,dim,device>,  int                                                );
+

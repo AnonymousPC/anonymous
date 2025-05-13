@@ -1,6 +1,113 @@
 #include "execution/opencl_queue_context.hpp"
 #include "container/opencl_container_decl.hpp"
 
+
+#define OPENCL_SOURCE(...) #__VA_ARGS__
+
+#define OPENCL_DEFINE_UNARY_OPERATOR($operator, $functor)                                                       \
+    template < class type >                                                                                     \
+    class opencl::$functor                                                                                      \
+        extends public std::$functor<type>                                                                      \
+    {                                                                                                           \
+        public:                                                                                                 \
+            using result_type = type;                                                                           \
+                                                                                                                \
+            constexpr decltype(auto) operator() ( const type& a ) const                                         \
+                requires ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> )                     \
+            {                                                                                                   \
+                return std::$functor<type>::operator()(a);                                                      \
+            }                                                                                                   \
+                                                                                                                \
+            constexpr decltype(auto) operator() ( const detail::opencl_kernel_inputable auto& a ) const         \
+            {                                                                                                   \
+                return boost::compute::detail::invoked_function<                                                \
+                           type,                                                                                \
+                           boost::tuple<remove_cvref<decltype(a)>>                                              \
+                       >(#$operator, std::string(), boost::make_tuple(a));                                      \
+            }                                                                                                   \
+    };                                                                                                          \
+                                                                                                                \
+    template < >                                                                                                \
+    class opencl::$functor<void>                                                                                \
+        extends public std::$functor<void>                                                                      \
+    {                                                                                                           \
+        public:                                                                                                 \
+            constexpr decltype(auto) operator() ( const auto& a ) const                                         \
+                requires requires { $operator a; } and                                                          \
+                        ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> )                      \
+            {                                                                                                   \
+                return std::$functor<void>::operator()(a);                                                      \
+            }                                                                                                   \
+                                                                                                                \
+            constexpr decltype(auto) operator() ( const detail::opencl_kernel_inputable auto& a ) const         \
+            {                                                                                                   \
+                return boost::compute::detail::invoked_function<                                                \
+                           decltype($operator std::declval<typename remove_cvref<decltype(a)>::result_type>()), \
+                           boost::tuple<remove_cvref<decltype(a)>>                                              \
+                       >(#$operator, std::string(), boost::make_tuple(a));                                      \
+            }                                                                                                   \
+    };
+
+#define OPENCL_DEFINE_BINARY_OPERATOR($operator, $functor)                                                                                             \
+    template < class type >                                                                                                                            \
+    class opencl::$functor                                                                                                                             \
+        extends public boost::compute::$functor<type>,                                                                                                 \
+                public std::$functor<type>                                                                                                             \
+    {                                                                                                                                                  \
+        public:                                                                                                                                        \
+            using boost::compute::$functor<type>::result_type;                                                                                         \
+                                                                                                                                                       \
+            constexpr decltype(auto) operator() ( const type& a, const type& b ) const                                                                 \
+                requires ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> ) and                                                        \
+                         ( not detail::opencl_kernel_inputable<remove_cvref<decltype(b)>> )                                                            \
+            {                                                                                                                                          \
+                return std::$functor<type>::operator()(a, b);                                                                                          \
+            }                                                                                                                                          \
+                                                                                                                                                       \
+            constexpr decltype(auto) operator() ( const detail::opencl_kernel_inputable auto& a, const detail::opencl_kernel_inputable auto& b ) const \
+            {                                                                                                                                          \
+                return boost::compute::$functor<type>::operator()(a, b);                                                                               \
+            }                                                                                                                                          \
+    };                                                                                                                                                 \
+                                                                                                                                                       \
+    template < >                                                                                                                                       \
+    class opencl::$functor<void>                                                                                                                       \
+        extends public std::$functor<void>                                                                                                             \
+    {                                                                                                                                                  \
+        public:                                                                                                                                        \
+            constexpr decltype(auto) operator() ( const auto& a, const auto& b ) const                                                                 \
+                requires requires { a $operator b; } and                                                                                               \
+                        ( not detail::opencl_kernel_inputable<remove_cvref<decltype(a)>> ) and                                                         \
+                        ( not detail::opencl_kernel_inputable<remove_cvref<decltype(b)>> )                                                             \
+            {                                                                                                                                          \
+                return std::$functor<void>::operator()(a, b);                                                                                          \
+            }                                                                                                                                          \
+                                                                                                                                                       \
+            constexpr decltype(auto) operator() ( const detail::opencl_kernel_inputable auto& a, const detail::opencl_kernel_inputable auto& b ) const \
+            {                                                                                                                                          \
+                return boost::compute::detail::invoked_binary_operator<                                                                                \
+                           remove_cvref<decltype(a)>,                                                                                                  \
+                           remove_cvref<decltype(b)>,                                                                                                  \
+                           decltype(std::declval<typename remove_cvref<decltype(a)>::result_type>() $operator                                          \
+                                    std::declval<typename remove_cvref<decltype(b)>::result_type>())                                                   \
+                       >(#$operator, a, b);                                                                                                            \
+            }                                                                                                                                          \
+    };
+
+#define OPENCL_DEFINE_RESULT_OF_UNARY_OPERATOR($operator, $functor)                   \
+    template < class type1 >                                                          \
+    struct result_of<anonymous::opencl::$functor<void>(type1)>                        \
+    {                                                                                 \
+        using type = decltype($operator std::declval<type1>());                       \
+    };
+
+#define OPENCL_DEFINE_RESULT_OF_BINARY_OPERATOR($operator, $functor)                  \
+    template < class type1, class type2 >                                             \
+    struct result_of<anonymous::opencl::$functor<void>(type1,type2)>                  \
+    {                                                                                 \
+        using type = decltype(std::declval<type1>() $operator std::declval<type2>()); \
+    };
+
 class opencl
 {
     public: // Execution
@@ -47,29 +154,29 @@ class opencl
         template < class type > using hash = boost::compute::hash<type>;
 
     public: // Container
-     //                                                                                                                                                  using any            = unsupported;
+     //                                                                                                                                                  using any            = not supported;
         template < class type, int len >                                                                                                                 using array          = detail::opencl_container<boost::compute::array<type,len>>;
         template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                    using basic_string   = detail::opencl_container<boost::compute::basic_string<type,traits>>;
-     // template < int len >                                                                                                                             using bitset         = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                           using deque          = unsupported;
-     // template < class type, class error >                                                                                                             using expected       = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                           using forward_list   = unsupported;
+     // template < int len >                                                                                                                             using bitset         = not supported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using deque          = not supported;
+     // template < class type, class error >                                                                                                             using expected       = not supported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using forward_list   = not supported;
         template < class type >                                                                                                                          using function       = boost::compute::function<type>;
-     // template < class type, class alloc = allocator<type> >                                                                                           using hive           = unsupported;
-     // template < class type, int len >                                                                                                                 using inplace_vector = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                           using list           = unsupported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using hive           = not supported;
+     // template < class type, int len >                                                                                                                 using inplace_vector = not supported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using list           = not supported;
         template < class type1, class type2, class compare = less<>, class alloc = allocator<std::pair<const type1,type2>> >                             using map            = detail::opencl_container<boost::compute::flat_map<type1,type2>>;
-     // template < class type >                                                                                                                          using optional       = unsupported;
-     // template < class type1, class type2 >                                                                                                            using pair           = unsupported;
-     // template < class type, class compare = less<type>, class alloc = allocator<type> >                                                               using priority_queue = unsupported;
-     // template < class type, class alloc = allocator<type> >                                                                                           using queue          = unsupported;
+     // template < class type >                                                                                                                          using optional       = not supported;
+     // template < class type1, class type2 >                                                                                                            using pair           = not supported;
+     // template < class type, class compare = less<type>, class alloc = allocator<type> >                                                               using priority_queue = not supported;
+     // template < class type, class alloc = allocator<type> >                                                                                           using queue          = not supported;
         template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using set            = detail::opencl_container<boost::compute::flat_set<type>>;
         template < class type, class alloc = allocator<type> >                                                                                           using stack          = detail::opencl_container<boost::compute::stack<type>>;
-     // template < class... types >                                                                                                                      using tuple          = unsupported;
-     // template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = unsupported;
-     // template < class type, class hash = hash<type>, class equal = equal_to<>,  class alloc = allocator<type> >                                       using unordered_set  = unsupported;
+     // template < class... types >                                                                                                                      using tuple          = not supported;
+     // template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = not supported;
+     // template < class type, class hash = hash<type>, class equal = equal_to<>,  class alloc = allocator<type> >                                       using unordered_set  = not supported;
         template < class type, class alloc = allocator<type> >                                                                                           using valarray       = detail::opencl_container<boost::compute::valarray<type>>;
-     // template < class... types >                                                                                                                      using variant        = unsupported;
+     // template < class... types >                                                                                                                      using variant        = not supported;
         template < class type, class alloc = allocator<type> >                                                                                           using vector         = detail::opencl_container<boost::compute::vector<type,alloc>>;
 
     public: // Algorithm
@@ -80,7 +187,7 @@ class opencl
         static decltype(auto) any_of                            ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::any_of                  (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) binary_search                     ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::binary_search           (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) copy                              ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::copy                    (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) copy_backward                     ( auto&&... args ) { unsupported }
+     // static decltype(auto) copy_backward                     ( auto&&... args ) { not supported }
         static decltype(auto) copy_if                           ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::copy_if                 (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) copy_n                            ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::copy_n                  (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) count                             ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::count                   (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
@@ -92,7 +199,7 @@ class opencl
         static decltype(auto) fill_n                            ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::fill_n                  (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) find                              ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::find                    (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) find_end                          ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::find_end                (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) find_first_of                     ( auto&&... args ) { unsupported }
+     // static decltype(auto) find_first_of                     ( auto&&... args ) { not supported }
         static decltype(auto) find_if                           ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::find_if                 (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) find_if_not                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::find_if_not             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) for_each                          ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::for_each                (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
@@ -102,27 +209,27 @@ class opencl
         static decltype(auto) includes                          ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::includes                (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) inclusive_scan                    ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::inclusive_scan          (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) inner_product                     ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::inner_product           (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) inplace_merge                     ( auto&&... args ) { unsupported }
+     // static decltype(auto) inplace_merge                     ( auto&&... args ) { not supported }
         static decltype(auto) iota                              ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::iota                    (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) is_partitioned                    ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::is_partitioned          (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) is_permutation                    ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::is_permutation          (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) is_sorted                         ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::is_sorted               (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) is_sorted_until                   ( auto&&... args ) { unsupported }
+     // static decltype(auto) is_sorted_until                   ( auto&&... args ) { not supported }
         static decltype(auto) lower_bound                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::lower_bound             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) lexicographical_compare           ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::lexicographical_compare (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) lexicographical_compare_three_way ( auto&&... args ) { unsupported }
+     // static decltype(auto) lexicographical_compare_three_way ( auto&&... args ) { not supported }
         static decltype(auto) max_element                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::max_element             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) merge                             ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::merge                   (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) min_element                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::min_element             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) minmax_element                    ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::minmax_element          (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) mismatch                          ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::mismatch                (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
   /*!*/ static decltype(auto) move                              ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::copy                    (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) move_backward                     ( auto&&... args ) { unsupported }
+     // static decltype(auto) move_backward                     ( auto&&... args ) { not supported }
         static decltype(auto) next_permutation                  ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::next_permutation        (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) none_of                           ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::none_of                 (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) nth_element                       ( auto&&... args ) { unsupported }
-     // static decltype(auto) partial_sort                      ( auto&&... args ) { unsupported }
-     // static decltype(auto) partial_sort_copy                 ( auto&&... args ) { unsupported }
+     // static decltype(auto) nth_element                       ( auto&&... args ) { not supported }
+     // static decltype(auto) partial_sort                      ( auto&&... args ) { not supported }
+     // static decltype(auto) partial_sort_copy                 ( auto&&... args ) { not supported }
         static decltype(auto) partial_sum                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::partial_sum             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) partition                         ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::partition               (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) partition_copy                    ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::partition_copy          (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
@@ -130,18 +237,18 @@ class opencl
         static decltype(auto) prev_permutation                  ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::prev_permutation        (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) reduce                            ( auto&&... args ); 
         static decltype(auto) remove                            ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::remove                  (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) remove_copy                       ( auto&&... args ) { unsupported }
-     // static decltype(auto) remove_copy_if                    ( auto&&... args ) { unsupported }
+     // static decltype(auto) remove_copy                       ( auto&&... args ) { not supported }
+     // static decltype(auto) remove_copy_if                    ( auto&&... args ) { not supported }
         static decltype(auto) remove_if                         ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::remove_if               (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) replace                           ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::replace                 (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) replace_copy                      ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::replace_copy            (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) replace_copy_if                   ( auto&&... args ) { unsupported }
-     // static decltype(auto) replace_if                        ( auto&&... args ) { unsupported }
+     // static decltype(auto) replace_copy_if                   ( auto&&... args ) { not supported }
+     // static decltype(auto) replace_if                        ( auto&&... args ) { not supported }
         static decltype(auto) reverse                           ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::reverse                 (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) reverse_copy                      ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::reverse_copy            (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) rotate                            ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::rotate                  (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) rotate_copy                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::rotate_copy             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) sample                            ( auto&&... args ) { unsupported }
+     // static decltype(auto) sample                            ( auto&&... args ) { not supported }
         static decltype(auto) search                            ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::search                  (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) search_n                          ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::search_n                (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) set_difference                    ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::set_difference          (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
@@ -150,14 +257,14 @@ class opencl
         static decltype(auto) set_union                         ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::set_union               (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) shift_left                        ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::shift_left              (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) shift_right                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::shift_right             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) shuffle                           ( auto&&... args ) { unsupported }
+     // static decltype(auto) shuffle                           ( auto&&... args ) { not supported }
         static decltype(auto) sort                              ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::sort                    (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) stable_partition                  ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::stable_partition        (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) stable_sort                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::stable_sort             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) swap_ranges                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::swap_ranges             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) transform                         ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::transform               (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
-     // static decltype(auto) transform_exclusive_scan          ( auto&&... args ) { unsupported }
-     // static decltype(auto) transform_inclusive_scan          ( auto&&... args ) { unsupported }
+     // static decltype(auto) transform_exclusive_scan          ( auto&&... args ) { not supported }
+     // static decltype(auto) transform_inclusive_scan          ( auto&&... args ) { not supported }
         static decltype(auto) transform_reduce                  ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::transform_reduce        (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) unique                            ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::unique                  (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }
         static decltype(auto) unique_copy                       ( auto&&... args ) { auto que = std::unique_ptr(nullptr, [] (auto) { execution_context.command_queue().finish(); }); return boost::compute::unique_copy             (std::forward<decltype(args)>(args)..., execution_context.command_queue()); }

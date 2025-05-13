@@ -10,8 +10,6 @@ class cpu
         template < class type > using const_reference = const type&;
         template < class type > using pointer         =       type*;
         template < class type > using const_pointer   = const type*;
-        template < class type > class stride_pointer;
-        template < class type > class const_stride_pointer;
 
     public: // Allocator
         template < class type > using allocator = std::allocator<type>;
@@ -43,31 +41,40 @@ class cpu
     public: // Hash
         template < class type > using hash = std::hash<type>;
 
+    public: // Struct
+        template < class type1, class type2 > using pair  = std::pair <type1,type2>;
+        template < class... types >           using tuple = std::tuple<types...>;
+
     public: // Container
-                                                                                                                                                         using any            = std::any;
-        template < class type, int len >                                                                                                                 using array          = std::array            <type,len>;
-        template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                                    using basic_string   = std::basic_string     <type,traits,alloc>;
-        template < int len >                                                                                                                             using bitset         = std::bitset           <len>;
-        template < class type, class alloc = allocator<type> >                                                                                           using deque          = std::deque            <type,alloc>;
-        template < class type, class error >                                                                                                             using expected       = std::expected         <type,error>;
-        template < class type, class alloc = allocator<type> >                                                                                           using forward_list   = std::forward_list     <type,alloc>;
-        template < class type >                                                                                                                          using function       = std::function         <type>;
-        template < class type, class alloc = allocator<type> >                                                                                           using hive           = std::hive             <type,alloc>;
-        template < class type, int len >                                                                                                                 using inplace_vector = std::inplace_vector   <type,len>;
-        template < class type, class alloc = allocator<type> >                                                                                           using list           = std::list             <type,alloc>;
-        template < class type1, class type2, class compare = less<>, class alloc = allocator<std::pair<const type1,type2>> >                             using map            = std::map              <type1,type2,compare,alloc>;
-        template < class type >                                                                                                                          using optional       = std::optional         <type>;
-        template < class type1, class type2 >                                                                                                            using pair           = std::pair             <type1,type2>;
-        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using priority_queue = std::priority_queue   <type,std::vector<type,alloc>,compare>;
-        template < class type, class alloc = allocator<type> >                                                                                           using queue          = std::queue            <type,std::vector<type,alloc>>;
-        template < class type, class compare = less<>, class alloc = allocator<type> >                                                                   using set            = std::set              <type,compare,alloc>;
-        template < class type, class alloc = allocator<type> >                                                                                           using stack          = std::stack            <type,std::vector<type,alloc>>;
-        template < class... types >                                                                                                                      using tuple          = std::tuple            <types...>;
-        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<std::pair<const type1,type2>> > using unordered_map  = std::unordered_map    <type1,type2,hash,equal,alloc>;
-        template < class type, class hash = hash<type>, class equal = equal_to<>, class alloc = allocator<type> >                                        using unordered_set  = std::unordered_set    <type,hash,equal,alloc>;
-        template < class type, class alloc = allocator<type> >                                                                                           using valarray       = std::valarray         <type>;
-        template < class... types >                                                                                                                      using variant        = std::variant          <types...>;
-        template < class type, class alloc = allocator<type> >                                                                                           class vector;        // Depecialize std::vector<bool>.
+                                                                                                                                                    using any            = std::any;
+        template < class type, int len >                                                                                                            using array          = std::array            <type,len>;
+        template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                               using basic_string   = std::basic_string     <type,traits,alloc>;
+        template < int len >                                                                                                                        using bitset         = std::bitset           <len>;
+        template < class type, class alloc = allocator<type> >                                                                                      using deque          = std::deque            <type,alloc>;
+        template < class type, class error >                                                                                                        using expected       = std::expected         <type,error>;
+        template < class type, class alloc = allocator<type> >                                                                                      using forward_list   = std::forward_list     <type,alloc>;
+        template < class type >                                                                                                                     using function       = std::function         <type>;
+        template < class type, class alloc = allocator<type> >                                                                                      using hive           = std::hive             <type,alloc>;
+        template < class type, int len >                                                                                                            using inplace_vector = std::inplace_vector   <type,len>;
+        template < class type, class alloc = allocator<type> >                                                                                      using list           = std::list             <type,alloc>;
+        template < class type1, class type2, class compare = less<>, class alloc = allocator<pair<const type1,type2>> >                             using map            = std::map              <type1,type2,compare,alloc>;
+        template < class type >                                                                                                                     using optional       = std::optional         <type>;
+        template < class type, class compare = less<>, class alloc = allocator<type> >                                                              using priority_queue = std::priority_queue   <type,std::vector<type,alloc>,compare>;
+        template < class type, class alloc = allocator<type> >                                                                                      using queue          = std::queue            <type,std::vector<type,alloc>>;
+        template < class type, class compare = less<>, class alloc = allocator<type> >                                                              using set            = std::set              <type,compare,alloc>;
+        template < class type, class alloc = allocator<type> >                                                                                      using stack          = std::stack            <type,std::vector<type,alloc>>;
+        template < class type1, class type2, class hash = hash<type1>, class equal = equal_to<>, class alloc = allocator<pair<const type1,type2>> > using unordered_map  = std::unordered_map    <type1,type2,hash,equal,alloc>;
+        template < class type, class hash = hash<type>, class equal = equal_to<>, class alloc = allocator<type> >                                   using unordered_set  = std::unordered_set    <type,hash,equal,alloc>;
+        template < class type, class alloc = allocator<type> >                                                                                      using valarray       = std::valarray         <type>;
+        template < class... types >                                                                                                                 using variant        = std::variant          <types...>;
+        template < class type, class alloc = allocator<type> >                                                                                      class vector;        // Depecialize std::vector<bool>.
+
+    public: // Iterator
+        template < class iterator > using const_iterator   = std::const_iterator  <iterator>;
+        template < class iterator > using move_iterator    = std::move_iterator   <iterator>;
+        template < class iterator > using counted_iterator = std::counted_iterator<iterator>;
+        template < class iterator > using reverse_iterator = std::reverse_iterator<iterator>;
+        template < class iterator > class stride_iterator;
 
     public: // Algorithm
         constexpr static decltype(auto) accumulate                        ( auto&&... args ) { return std::accumulate                       (std::forward<decltype(args)>(args)...); }
@@ -204,10 +211,31 @@ class cpu
         };
 
     public: // Random
-        using random_context_type = std::mt19937;
+        using random_context_type = std::default_random_engine;
         inline static thread_local random_context_type random_context = random_context_type(std::random_device()());
+
+                                     using bernoulli_distribution          = std::bernoulli_distribution;
+        template < int_type   type > using binomial_distribution           = std::binomial_distribution          <type>;
+        template < float_type type > using cauchy_distribution             = std::cauchy_distribution            <type>;
+        template < float_type type > using chi_squared_distribution        = std::chi_squared_distribution       <type>;
+        template < int_type   type > using discrete_distribution           = std::discrete_distribution          <type>;
+        template < float_type type > using exponential_distribution        = std::exponential_distribution       <type>;
+        template < float_type type > using extreme_value_distribution      = std::extreme_value_distribution     <type>;
+        template < float_type type > using fisher_f_distribution           = std::fisher_f_distribution          <type>;
+        template < float_type type > using gamma_distribution              = std::gamma_distribution             <type>;
+        template < int_type   type > using geometric_distribution          = std::geometric_distribution         <type>;
+        template < int_type   type > using lognormal_distribution          = std::lognormal_distribution         <type>;
+        template < int_type   type > using negative_binomial_distribution  = std::negative_binomial_distribution <type>;
+        template < int_type   type > using normal_distribution             = std::normal_distribution            <type>;
+        template < float_type type > using piecewise_constant_distribution = std::piecewise_constant_distribution<type>;
+        template < float_type type > using piecewise_linear_distribution   = std::piecewise_linear_distribution  <type>;
+        template < int_type   type > using poisson_distribution            = std::poisson_distribution           <type>;
+        template < float_type type > using student_t_distribution          = std::student_t_distribution         <type>;
+        template < int_type   type > using uniform_int_distribution        = std::uniform_int_distribution       <type>;
+        template < float_type type > using uniform_real_distribution       = std::uniform_real_distribution      <type>;
+        template < float_type type > using weibull_distribution            = std::weibull_distribution           <type>;
 };
 
 #include "container/vector.hpp"
+#include "iterator/stride_iterator.hpp"
 #include "linalg/linalg.hpp"
-#include "type/stride_pointer.hpp"

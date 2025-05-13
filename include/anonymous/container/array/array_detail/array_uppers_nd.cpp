@@ -1,7 +1,7 @@
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < auto attr, int dim2 >
-constexpr std::span<detail::array_upper<type,dim2,device>> detail::tuple_upper<type,dim,device>::value ( const auto& shp, const int_type auto&... offsets )
+constexpr std::span<detail::array_upper<type,dim2,device>> detail::array_uppers<type,dim,device>::value ( const auto& shp, const int_type auto&... offsets )
 {
     static_assert ( dim2 >= 1 and dim2 <= dim );
     if constexpr ( dim2 == dim )
@@ -14,7 +14,7 @@ constexpr std::span<detail::array_upper<type,dim2,device>> detail::tuple_upper<t
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < auto attr, int dim2 >
-constexpr const std::span<detail::array_upper<type,dim2,device>> detail::tuple_upper<type,dim,device>::value ( const auto& shp, const int_type auto&... offsets ) const
+constexpr const std::span<detail::array_upper<type,dim2,device>> detail::array_uppers<type,dim,device>::value ( const auto& shp, const int_type auto&... offsets ) const
 {
     static_assert ( dim2 >= 1 and dim2 <= dim );
     if constexpr ( dim2 == dim )
@@ -26,7 +26,7 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> detail::tuple_u
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr detail::tuple_upper<type,dim,device>& detail::tuple_upper<type,dim,device>::clear ( )
+constexpr detail::array_uppers<type,dim,device>& detail::array_uppers<type,dim,device>::clear ( )
 {
     vct.clear();
     vct_other.clear();
@@ -36,7 +36,7 @@ constexpr detail::tuple_upper<type,dim,device>& detail::tuple_upper<type,dim,dev
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < auto attr >
-constexpr detail::tuple_upper<type,dim,device>& detail::tuple_upper<type,dim,device>::resize ( const auto& shp, array<type,dim+1,device>& arr )
+constexpr detail::array_uppers<type,dim,device>& detail::array_uppers<type,dim,device>::resize ( const auto& shp, array<type,dim+1,device>& arr )
 {
     auto s = 1;
     if constexpr ( attr == rows_attribute )
@@ -55,7 +55,7 @@ constexpr detail::tuple_upper<type,dim,device>& detail::tuple_upper<type,dim,dev
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < auto attr >
-constexpr detail::tuple_upper<type,dim,device>& detail::tuple_upper<type,dim,device>::resize ( const auto& shp, std::vector<detail::array_upper<type,dim+1,device>>& arrs )
+constexpr detail::array_uppers<type,dim,device>& detail::array_uppers<type,dim,device>::resize ( const auto& shp, std::vector<detail::array_upper<type,dim+1,device>>& arrs )
 {
     auto s = 1;
     if constexpr ( attr == rows_attribute )

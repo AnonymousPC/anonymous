@@ -21,24 +21,20 @@ constexpr priority_queue<type,compare,device>::const_reference priority_queue<ty
 }
 
 template < class type, class compare, class device >
-constexpr void priority_queue<type,compare,device>::push ( type val )
+constexpr void priority_queue<type,compare,device>::push ( type new_value )
 {
-    base::push(std::move(val));
+    base::push(std::move(new_value));
+    return self;
 }
 
 template < class type, class compare, class device >
-constexpr type priority_queue<type,compare,device>::pop ( )
+constexpr priority_queue<type,compare,device>::value_type priority_queue<type,compare,device>::pop ( )
 {
     if constexpr ( debug )
         if ( empty() )
             throw value_error("cannot pop from priority_queue (with empty() = true)");
 
-    if constexpr ( requires { { base::pop() } -> convertible_to<type>; } )
-        return base::pop();
-    else
-    {
-        auto poped = type(std::move(top()));
-        base::pop();
-        return poped;
-    }
+    auto old_value = value_type(std::move(top()));
+    base::pop();
+    return old_value;
 }

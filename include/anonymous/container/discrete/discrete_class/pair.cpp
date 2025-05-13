@@ -1,6 +1,6 @@
 template < class type1, class type2, class device >
 constexpr pair<type1,type2,device>::pair ( type1 k, type2 v )
-    extends device::template pair<type1,type2> ( std::move(k), std::move(v) )
+    extends base ( std::move(k), std::move(v) )
 {
 
 }
@@ -26,23 +26,23 @@ constexpr pair<type1,type2,device>::pair ( const pair<type3,type4,device2>& cvt 
 template < class type1, class type2, class device >
 constexpr pair<type1,type2,device>::key_reference pair<type1,type2,device>::key ( )
 {
-    return device::template pair<type1,type2>::first;
+    return base::first;
 }
 
 template < class type1, class type2, class device >
 constexpr pair<type1,type2,device>::const_key_reference pair<type1,type2,device>::key ( ) const
 {
-    return device::template pair<type1,type2>::first;
+    return base::first;
 }
 
 template < class type1, class type2, class device >
 constexpr pair<type1,type2,device>::value_reference pair<type1,type2,device>::value ( )
 {
-    return device::template pair<type1,type2>::second;
+    return base::second;
 }
 
 template < class type1, class type2, class device >
 constexpr pair<type1,type2,device>::const_value_reference pair<type1,type2,device>::value ( ) const
 {
-    return device::template pair<type1,type2>::second;
+    return base::second;
 }

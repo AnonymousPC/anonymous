@@ -1,13 +1,16 @@
 import anonymous;
 import std;
 import boost;
-import thrust.tbb;
+import cuda;
+import thrust;
+
 using namespace anonymous;
 
-int main ( )
+int main () 
 {
-    std::println("good");
+    auto init = {1, 2, 3, 4, 5};
+    static_assert(same_as<decltype(init),std::initializer_list<int>>);
+    
 
-    thrust::device_vector<int> vct(10);
-    thrust::sort(vct.begin(), vct.end()); 
 }
+

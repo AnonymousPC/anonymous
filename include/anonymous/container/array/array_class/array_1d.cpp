@@ -138,14 +138,6 @@ constexpr array<type,1,device>::array ( std::initializer_list<type> init )
 }
 
 template < class type, class device >
-constexpr array<type,1,device>::array ( range<type> init )
-    requires copyable<type> and number_type<type>
-    extends base ( init.begin(), init.end() )
-{
-
-}
-
-template < class type, class device >
 template < class type2, class device2 >
 constexpr array<type,1,device>::array ( const array<type2,1,device2>& cvt )
     requires convertible_to<type2,type>  
@@ -342,18 +334,18 @@ constexpr array<type,1,device>& array<type,1,device>::push ( type new_value )
 
 template < class type, class device >
 template < int axis >
-constexpr array<type,1,device>& array<type,1,device>::pop ( int old_pos )
+constexpr array<type,1,device>& array<type,1,device>::pop ( )
     requires ( axis == 1 or axis == -1 )
 {
     if constexpr ( debug )
     {
         if ( not ownership() ) 
             throw logic_error("cannot pop from array (with ownership() = false): this array does not own its data");
-        if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
-            throw index_error("index {} is out of range with size {}", old_pos, size());
+        if ( empty() )
+            throw value_error("cannot pop from array (with empty() = true)");
     }
 
-    base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 : base::begin() + old_pos + base::size());
+    base::pop_back();
     return self;
 }
 
@@ -376,23 +368,18 @@ constexpr array<type,1,device>& array<type,1,device>::insert ( int new_pos, type
 
 template < class type, class device >
 template < int axis >
-constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos_1, int old_pos_2 )
+constexpr array<type,1,device>& array<type,1,device>::erase ( int old_pos )
     requires ( axis == 1 or axis == -1 )
 {
     if constexpr ( debug )
+    {
         if ( not ownership() ) 
             throw logic_error("cannot erase from array (with ownership() = false): this array does not own its data");
+        if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
+            throw index_error("index {} is out of range with size {}", old_pos, size());
+    }
 
-    auto abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 : old_pos_1 + base::size() + 1;
-    auto abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 : old_pos_2 + base::size() + 1;
-    if constexpr ( debug )
-        if ( ( ( abs_pos_1 < 1 or abs_pos_1 > size() ) or
-               ( abs_pos_2 < 1 or abs_pos_2 > size() ) )
-            and not // Except for below:
-             ( ( abs_pos_1 == size() + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
-            throw index_error("index [{}, {}] is out of range with size {}", old_pos_1, old_pos_2, size());
-
-    base::erase(base::begin() + abs_pos_1 - 1, base::begin() + abs_pos_2 - 1);
+    base::erase(old_pos >= 0 ? base::begin() + old_pos - 1 : base::begin() + old_pos + base::size());
     return self;
 }
 
@@ -469,59 +456,7 @@ constexpr const auto array<type,1,device>::mdspan ( ) const
 }
 
 template < class type, class device >
-class array<type,1,device>::iterator
+constexpr detail::array_shape<1> array<type,1,device>::get_shape ( ) const
 {
-    public: // Typedef
-        using iterator_concept  = std::random_access_iterator_tag;
-        using iterator_category = std::random_access_iterator_tag;
-        using value_type        = device::template value_type<type>;
-        using reference         = device::template reference <type>;
-        using pointer           = device::template pointer   <type>;
-        using difference_type   = std::ptrdiff_t;
-
-    private: // Data
-        pointer         ptr  = pointer();
-        difference_type step = 1;
-
-    public: // Core
-        constexpr iterator ( ) = default;
-        constexpr iterator ( pointer, difference_type );
-
-    public: // Operator
-        constexpr reference operator *  ( )                 const;
-        constexpr pointer   operator -> ( )                 const;
-        constexpr reference operator [] ( difference_type ) const;
-
-    public: // Access  
-        constexpr pointer         get_ptr  ( ) const;
-        constexpr difference_type get_step ( ) const;
-};
-
-template < class type, class device >
-class array<type,1,device>::const_iterator
-{
-    public: // Typedef
-        using iterator_concept  = std::random_access_iterator_tag;
-        using iterator_category = std::random_access_iterator_tag;
-        using value_type        = device::template value_type     <type>;
-        using reference         = device::template const_reference<type>;
-        using pointer           = device::template const_pointer  <type>;
-        using difference_type   = std::ptrdiff_t;
-
-    private: // Data
-        pointer         ptr  = pointer();
-        difference_type step = 1;
-
-    public: // Core
-        constexpr const_iterator ( ) = default;
-        constexpr const_iterator ( pointer, difference_type );
-
-    public: // Operator
-        constexpr reference operator *  ( )                 const;
-        constexpr pointer   operator -> ( )                 const;
-        constexpr reference operator [] ( difference_type ) const;
-
-    public: // Access  
-        constexpr pointer         get_ptr  ( ) const;
-        constexpr difference_type get_step ( ) const;
-};
+    return { size() };
+}

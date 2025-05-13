@@ -19,16 +19,15 @@ class array_algo<container,type,1,device>
         using const_pointer   = device::template const_pointer  <type>;
 
     private: // Abbreviation
-        constexpr decltype(auto) begin      ( );
-        constexpr decltype(auto) begin      ( ) const;
-        constexpr decltype(auto) end        ( );
-        constexpr decltype(auto) end        ( ) const;
-        constexpr decltype(auto) data       ( );
-        constexpr decltype(auto) data       ( ) const;
-        constexpr decltype(auto) size       ( ) const;
-        constexpr decltype(auto) empty      ( ) const;
-        constexpr decltype(auto) ownership  ( ) const;
-        constexpr decltype(auto) contiguous ( ) const;
+        constexpr auto begin      ( );
+        constexpr auto begin      ( ) const;
+        constexpr auto end        ( );
+        constexpr auto end        ( ) const;
+        constexpr auto data       ( );
+        constexpr auto data       ( ) const;
+        constexpr auto size       ( ) const;
+        constexpr auto empty      ( ) const;
+        constexpr auto contiguous ( ) const;
 
     public: // Member
         constexpr       int             adjacent_find       (                                       ) const requires equalable<type>;
@@ -83,11 +82,12 @@ class array_algo<container,type,1,device>
         constexpr       type            sum                 (                                       ) const requires default_initializable<type> and plusable<type>;
         constexpr       type            product             (                                       ) const requires convertible_to   <int,type> and multipliable<type>;
 
-        constexpr       container&      for_each            (       invocable     <reference> auto  );
-        constexpr const container&      for_each            (       invocable     <type>      auto  ) const;
         constexpr       container&      fill                ( const convertible_to<type>      auto& );
         constexpr       container&      generate            (       invocable_r   <type>      auto  );
         constexpr       container&      transform           (       invocable_r   <type,type> auto  );
-        constexpr       container&      replace             ( const equalable_to  <type>      auto&, const convertible_to<type> auto& );
-        constexpr       container&      replace             (       predicate     <type>      auto,  const convertible_to<type> auto& );
+
+        constexpr       container&      for_each            (       invocable     <reference>       auto );
+        constexpr const container&      for_each            (       invocable     <const_reference> auto ) const;
+        constexpr       container&      replace             ( const equalable_to  <type>  auto&, const convertible_to<type> auto& );
+        constexpr       container&      replace             (       predicate     <type>  auto,  const convertible_to<type> auto& );
 };

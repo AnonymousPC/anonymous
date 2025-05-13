@@ -14,8 +14,8 @@ class detail::array_upper<type,dim,device>
         using const_reference = device::template const_reference <type>;
         using pointer         = device::template pointer         <type>;
         using const_pointer   = device::template const_pointer   <type>;
-        using iterator        = detail::array_line_iterator      <type,dim,device>;
-        using const_iterator  = detail::array_line_const_iterator<type,dim,device>;
+        using iterator        = detail::      array_line_iterator<type,dim,device>;
+        using const_iterator  = detail::const_array_line_iterator<type,dim,device>;
     
     public: // Core
         constexpr array_upper ( )                                                               = default;

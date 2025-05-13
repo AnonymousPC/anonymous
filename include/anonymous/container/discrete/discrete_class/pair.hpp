@@ -2,6 +2,9 @@ template < class type1, class type2, class device >
 class pair
     extends public device::template pair<type1,type2>
 {
+    private: // Base
+        using base = device::template pair<type1,type2>;
+
     public: // Typedef
         using  key_type              = device::template value_type     <type1>;
         using  key_reference         = device::template reference      <type1>;

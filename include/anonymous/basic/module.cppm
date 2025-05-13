@@ -6,13 +6,18 @@ module;
 #include <__ranges/range_adaptor.h>
 
 export module anonymous.basic;
+
 import std;
 import stdexec;
 import plf;
 import boost;
+
 import Eigen;
+
 import tbb;
-import thrust.tbb;
+
+import cuda;
+import thrust;
 
 // Std.feature
 #ifndef __cpp_lib_inplace_vector
@@ -36,6 +41,12 @@ import thrust.tbb;
 #ifndef __cpp_lib_ranges
     #include "std/ranges.hpp"
 #else
+    #include "std/ranges/ranges_typedef.cpp"
+
+    #ifndef __cpp_lib_ranges_as_const
+        #include "std/ranges/iterator_const.cpp"
+    #endif
+    
     #ifndef __cpp_lib_ranges_chunk
         #include "std/ranges/ranges_chunk.cpp"
     #endif
@@ -128,7 +139,7 @@ export namespace anonymous
 
     /// Device
     class cpu;
-    class opencl;
+    class cuda;
     class system;
     class tbb;
 

@@ -51,24 +51,20 @@ constexpr queue<type,device>::const_reference queue<type,device>::back ( ) const
 }
 
 template < class type, class device >
-constexpr void queue<type,device>::push ( type val )
+constexpr queue<type,device>::reference queue<type,device>::push ( type new_value )
 {
-    return base::push(std::move(val));
+    base::push(std::move(new_value));
+    return base::back();
 }
 
 template < class type, class device >
-constexpr type queue<type,device>::pop ( )
+constexpr queue<type,device>::value_type queue<type,device>::pop ( )
 {
     if constexpr ( debug )
         if ( empty() )
             throw value_error("cannot pop from queue (with empty() = true)");
 
-    if constexpr ( requires { { base::pop() } -> convertible_to<type>; } )
-        return base::pop();
-    else
-    {
-        auto poped = type(std::move(front()));
-        base::pop();
-        return poped;
-    }
+    auto old_value = value_type(std::move(front()));
+    base::pop();
+    return old_value;
 }

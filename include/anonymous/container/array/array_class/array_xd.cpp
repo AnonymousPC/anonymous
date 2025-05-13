@@ -397,7 +397,7 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::push ( array<t
     {
         if ( not ownership() ) 
             throw logic_error("cannot push into array (with ownership() = false): this array does not own its data");
-        if ( self.shape().pop(axis) != new_value.shape() )
+        if ( self.shape().erase(axis) != new_value.shape() )
             throw value_error("cannot push into array (with axis = {}, shape() = {}, push.shape() = {}): shape is inhomogeneous", axis, self.shape(), new_value.shape());
     }
 
@@ -423,31 +423,19 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::push ( array<t
 
 template < class type, class device >
 template < int axis >
-constexpr array<type,max_dim,device>& array<type,max_dim,device>::pop ( int old_pos )
+constexpr array<type,max_dim,device>& array<type,max_dim,device>::pop ( )
     requires ( ( axis >= -max_dim and axis <= -1 ) or ( axis >= 1 and axis <= max_dim ) )
 {
     if constexpr ( debug )
     {
         if ( not ownership() ) 
             throw logic_error("cannot pop from array (with ownership() = false): this array does not own its data");
-        if ( old_pos < -shape()[axis] or old_pos == 0 or old_pos > shape()[axis] )
-            throw index_error("index {} is out of range with shape {} axis {}", old_pos, shape(), axis);
+        if ( empty() )
+            throw value_error("cannot pop from array (with empty() = true)");
     }
 
-    auto abs_pos = old_pos >= 0 ? old_pos : old_pos + get_size_axis<axis>() + 1;
     auto new_shape = get_shape();
-    new_shape[axis] -= 1;
-
-    if constexpr ( axis == 1 or axis == -max_dim )
-        device::move(self.begin() + abs_pos, self.end(), self.begin() + abs_pos - 1);
-    else if constexpr ( axis == -1 or axis == max_dim )
-        device::move(self.transpose().begin() + abs_pos, self.transpose().end(), self.transpose().begin() + abs_pos - 1);
-    else
-        if constexpr ( axis > 0 )
-            detail::md_pop<device,axis>          (self, get_shape(), abs_pos);
-        else 
-            detail::md_pop<device,axis+max_dim+1>(self, get_shape(), abs_pos);
-
+    new_shape[axis] += 1;
     set_resize(new_shape);
     return self;
 }
@@ -463,15 +451,15 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::insert ( int n
             throw logic_error("cannot insert into array (with ownership() = false): this array does not own its data");
         if ( new_pos < -shape()[axis] or new_pos == 0 or new_pos > shape()[axis] )
             throw index_error("index {} is out of range with shape {} axis = {}", new_pos, shape(), axis);
-        if ( self.shape().pop(axis) != new_value.shape() )
+        if ( self.shape().erase(axis) != new_value.shape() )
             throw value_error("cannot insert into array (with axis = {}, shape() = {}, insert.shape() = {}): shape is inhomogeneous", axis, self.shape(), new_value.shape());
     }
 
-    auto abs_pos = new_pos >= 0 ? new_pos : new_pos + get_size_axis<axis>() + 1;
     auto new_shape = get_shape();
     new_shape[axis] += 1;
     set_resize(new_shape);
 
+    auto abs_pos = new_pos >= 0 ? new_pos : new_pos + get_size_axis<axis>() + 1;
     if constexpr ( axis == 1 or axis == -max_dim )
     {
         device::move_backward(self.begin() + abs_pos - 1, self.end() - 1, self.end());
@@ -496,34 +484,30 @@ constexpr array<type,max_dim,device>& array<type,max_dim,device>::insert ( int n
 
 template < class type, class device >
 template < int axis >
-constexpr array<type,max_dim,device>& array<type,max_dim,device>::erase ( int old_pos_1, int old_pos_2 )
+constexpr array<type,max_dim,device>& array<type,max_dim,device>::erase ( int old_pos )
     requires ( ( axis >= -max_dim and axis <= -1 ) or ( axis >= 1 and axis <= max_dim ) )
 {
     if constexpr ( debug )
+    {
         if ( not ownership() ) 
             throw logic_error("cannot erase from array (with ownership() = false): this array does not own its data");
-
-    auto abs_pos_1 = old_pos_1 >= 0 ? old_pos_1 : old_pos_1 + get_size_axis<axis>() + 1;
-    auto abs_pos_2 = old_pos_2 >= 0 ? old_pos_2 : old_pos_2 + get_size_axis<axis>() + 1;
-    if constexpr ( debug )
-        if ( ( ( abs_pos_1 < 1 or abs_pos_1 > shape()[axis] ) or
-               ( abs_pos_2 < 1 or abs_pos_2 > shape()[axis] ) )
-            and not // Except for below:
-             ( ( abs_pos_1 == shape()[axis] + 1 or abs_pos_2 == 0 ) and abs_pos_1 == abs_pos_2 + 1 ) )
-            throw index_error("index [{}, {}] is out of range with shape {} axis {}", old_pos_1, old_pos_2, shape(), axis);
+        if ( old_pos < -shape()[axis] or old_pos == 0 or old_pos > shape()[axis] )
+            throw index_error("index {} is out of range with shape {} axis {}", old_pos, shape(), axis);
+    }
 
     auto new_shape = get_shape();
-    new_shape[axis] -= (abs_pos_2 - abs_pos_1 + 1);
+    new_shape[axis] -= 1;
 
+    auto abs_pos = old_pos >= 0 ? old_pos : old_pos + get_size_axis<axis>() + 1;
     if constexpr ( axis == 1 or axis == -max_dim )
-        device::move(self.begin() + abs_pos_2, self.end(), self.begin() + abs_pos_1 - 1);
+        device::move(self.begin() + abs_pos, self.end(), self.begin() + abs_pos - 1);
     else if constexpr ( axis == -1 or axis == max_dim )
-        device::move(self.transpose().begin() + abs_pos_2, self.transpose().end(), self.transpose().begin() + abs_pos_1 - 1);
+        device::move(self.transpose().begin() + abs_pos, self.transpose().end(), self.transpose().begin() + abs_pos - 1);
     else
         if constexpr ( axis > 0 )
-            detail::md_erase<device,axis>          (self, get_shape(), abs_pos_1, abs_pos_2);
+            detail::md_erase<device,axis>          (self, get_shape(), abs_pos);
         else 
-            detail::md_erase<device,axis+max_dim+1>(self, get_shape(), abs_pos_1, abs_pos_2);
+            detail::md_erase<device,axis+max_dim+1>(self, get_shape(), abs_pos);
 
     set_resize(new_shape);
     return self;

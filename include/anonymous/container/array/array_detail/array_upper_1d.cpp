@@ -26,8 +26,8 @@ constexpr int detail::array_upper<type,1,device>::size ( ) const
 template < class type, class device >
 constexpr array<int> detail::array_upper<type,1,device>::shape ( ) const 
 {
-    return get_attribute() == rows_attribute ? get_host<rows_attribute>().shape().pop(1) :
-                                               (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().shape().pop(-1) : get_host<columns_attribute>().shape().pop(1));
+    return get_attribute() == rows_attribute ? get_host<rows_attribute>().shape().erase(1) :
+                                               (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().shape().erase(-1) : get_host<columns_attribute>().shape().erase(1));
 }
 
 template < class type, class device >
@@ -201,17 +201,3 @@ constexpr int detail::array_upper<type,1,device>::get_stride ( ) const
 {
     return get_size_top() / size();
 }
-
-template < class type, class device >
-class detail::array_upper<type,1,device>::iterator
-    extends public array<type,1,device>::iterator
-{
-
-};
-
-template < class type, class device >
-class detail::array_upper<type,1,device>::const_iterator
-    extends public array<type,1,device>::const_iterator
-{
-
-};

@@ -49,8 +49,8 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr array<int> detail::array_upper<type,dim,device>::shape ( ) const
 {
-    return get_attribute() == rows_attribute    ? get_host<rows_attribute>().shape().pop(1) :
-           get_attribute() == columns_attribute ? (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().shape().pop(-1).reverse() : get_host<columns_attribute>().shape().pop(1)) :
+    return get_attribute() == rows_attribute    ? get_host<rows_attribute>().shape().erase(1) :
+           get_attribute() == columns_attribute ? (get_host<columns_attribute>().ownership() ? get_host<columns_attribute>().shape().erase(-1).reverse() : get_host<columns_attribute>().shape().erase(1)) :
                                                   get_host<transpose_attribute>().shape().reverse();
 }
 

@@ -75,51 +75,57 @@ constexpr list<type,device>::const_reference list<type,device>::back ( ) const
 }
 
 template < class type, class device >
-constexpr void list<type,device>::push_front ( type val )
-    requires movable<type>
+constexpr list<type,device>::reference list<type,device>::push_front ( type new_value )
 {
-    base::push_front(std::move(val));
+    base::push_front(std::move(new_value));
+    return front();
 }
 
 template < class type, class device >
-constexpr void list<type,device>::push_back ( type val )
-    requires movable<type>
+constexpr list<type,device>::reference list<type,device>::push_back ( type new_value )
 {
-    base::push_back(std::move(val));
+    base::push_back(std::move(new_value));
+    return back();
 }
 
 template < class type, class device >
-constexpr type list<type,device>::pop_front ( )
-    requires movable<type>
+constexpr list<type,device>::value_type list<type,device>::pop_front ( )
 {
     if constexpr ( debug ) 
         if ( empty() )
             throw value_error("cannot pop front from list (with empty() = true");
 
-    if constexpr ( requires { { base::pop_front() } -> convertible_to<type>; } )
-        return base::pop_front();
-    else
-    {
-        auto poped = type(std::move(front()));
-        base::pop_front();
-        return poped;
-    }
+    auto old_value = value_type(std::move(front()));
+    base::pop_front();
+    return old_value;
 }
 
 template < class type, class device >
-constexpr type list<type,device>::pop_back ( )
-    requires movable<type>
+constexpr list<type,device>::value_type list<type,device>::pop_back ( )
 {
     if constexpr ( debug )
         if ( empty() )
             throw value_error("cannot pop back from list (with empty() = true)");
 
-    if constexpr ( requires { { base::pop_back() } -> convertible_to<type>; } )
-        return base::pop();
-    else
-    {
-        auto poped = type(std::move(front()));
-        base::pop_back();
-        return poped;
-    }
+    auto old_value = value_type(std::move(back()));
+    base::pop_back();
+    return old_value;
+}
+
+template < class type, class device >
+constexpr list<type,device>::reference list<type,device>::insert ( iterator new_pos, type new_value )
+{
+    return *base::insert(new_pos, std::move(new_value));
+}
+
+template < class type, class device >
+constexpr list<type,device>::value_type list<type,device>::erase ( iterator old_pos )
+{
+    if constexpr ( debug )
+        if ( empty() )
+            throw value_error("cannot erase from list (with empty() = true)");
+
+    auto old_value = value_type(std::move(*old_pos));
+    base::erase(old_pos);
+    return old_value;
 }

@@ -7,17 +7,15 @@ class priority_queue
         static_assert ( default_initializable<type> and movable<type> );
         static_assert ( relation<compare,type,type> );
 
-    private: // Typedef
+    private: // Base
         using base = device::template priority_queue<type,compare>;
 
     public: // Typedef
-        using  value_type      = device::template value_type     <type>;
-        using  reference       = device::template reference      <type>;
-        using  const_reference = device::template const_reference<type>;
-        using  pointer         = device::template pointer        <type>;
-        using  const_pointer   = device::template const_pointer  <type>;
-        using  compare_type    = compare;
-        using  device_type     = device;
+        using value_type      = device::template value_type     <type>;
+        using reference       = device::template reference      <type>;
+        using const_reference = device::template const_reference<type>;
+        using compare_type    = compare;
+        using device_type     = device;
 
     public: // Core
         constexpr priority_queue ( )                                                            = default;
@@ -29,9 +27,11 @@ class priority_queue
     public: // Member
         constexpr int             size  ( )      const;
         constexpr bool            empty ( )      const;
+
         constexpr const_reference top   ( )      const;
+
         constexpr void            push  ( type );
-        constexpr type            pop   ( );
+        constexpr value_type      pop   ( );
 };
 
 

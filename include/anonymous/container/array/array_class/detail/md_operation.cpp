@@ -185,23 +185,9 @@ namespace detail
     }
 
     template < class device, int axis, int depth = 1 >
-    constexpr void md_pop ( auto& arr, const auto& shp, int pos )
-    {
-        static_assert ( axis >= 1 and axis <= arr.dimension() );
-        
-
-        if constexpr ( axis == 1 )
-            device::move(arr.begin() + pos, arr.end(), arr.begin() + pos - 1);
-        else
-            for ( int i in range(shp[depth]) )
-                md_pop<device,axis-1,depth+1>(arr[i], shp, pos); 
-    }
-
-    template < class device, int axis, int depth = 1 >
     constexpr void md_insert ( auto& arr, const auto& shp, int pos, auto&& new_value )
     {
         static_assert ( axis >= 1 and axis <= arr.dimension() );
-
         if constexpr ( axis == 1 )
         {
             device::move_backward(arr.begin() + pos - 1, arr.end() - 1, arr.end());
@@ -213,14 +199,13 @@ namespace detail
     }
 
     template < class device, int axis, int depth = 1 >
-    constexpr void md_erase ( auto& arr, const auto& shp, int pos_1, int pos_2 )
+    constexpr void md_erase ( auto& arr, const auto& shp, int pos )
     {
         static_assert ( axis >= 1 and axis <= arr.dimension() );
-
         if constexpr ( axis == 1 )
-            device::move(arr.begin() + pos_2, arr.end(), arr.begin() + pos_1 - 1);
+            device::move(arr.begin() + pos, arr.end(), arr.begin() + pos - 1);
         else
             for ( int i in range(shp[depth]) )
-                md_erase<device,axis-1,depth+1>(arr[i], shp, pos_1, pos_2); 
+                md_erase<device,axis-1,depth+1>(arr[i], shp, pos); 
     }
 }

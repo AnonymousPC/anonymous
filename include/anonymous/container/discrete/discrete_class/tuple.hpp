@@ -2,6 +2,9 @@ template < class... types >
 class tuple
     extends public std::tuple<types...>
 {
+    private: // Base
+        using base = std::tuple<types...>;
+
     public: // Typedef
         template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using value_type      =       index_type_of<index,types...>;
         template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using reference       =       index_type_of<index,types...>&;
@@ -17,7 +20,7 @@ class tuple
         template < class... types2 > explicit constexpr tuple ( const tuple<types2...>& ) requires ( constructible_to<types2,types> and ... );
 
     public: // Member
-        template < int index > constexpr reference<index>       value ( )       requires ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) );
+        template < int index > constexpr reference      <index> value ( )       requires ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) );
         template < int index > constexpr const_reference<index> value ( ) const requires ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) );
 };
 

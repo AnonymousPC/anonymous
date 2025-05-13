@@ -1,3 +1,5 @@
+#include "detail/get_concept.cpp"
+
 /// Type traits
 
 template < class type >                                    constexpr bool is_abstract                        = std::is_abstract                       <type>                 ::value;
@@ -56,24 +58,22 @@ template < class type >                                    using          remove
 template < class type >                                    using          remove_reference                   = std::remove_reference                  <type>                 ::type;
 template < class type >                                    using          type_identity                      = std::type_identity                     <type>                 ::type;
 
-template < class type >                                    using          iter_value                         = std::iter_value_t                      <type>;
-template < class type >                                    using          iter_reference                     = std::iter_reference_t                  <type>;
-template < class type >                                    using          iter_const_reference               = std::iter_const_reference_t            <type>;
-template < class type >                                    using          iter_rvalue_reference              = std::iter_rvalue_reference_t           <type>;
-template < class type >                                    using          iter_common_reference              = std::iter_common_reference_t           <type>;
-template < class type >                                    using          iter_difference                    = std::iter_difference_t                 <type>;
-template < class type >                                    using          range_value                        = std::ranges::range_value_t             <type>;
+template < class type >                                    constexpr int  tuple_size                         = std::tuple_size<type>::value;
+template < int index, class type >                         using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) : std::size_t(index+int(std::tuple_size<type>::value)),type>::type;
+
+template < class type >                                    using          iterator_concept                   = detail::get_iterator_concept           <type>;
+template < class type >                                    using          iterator_value_type                = std::iter_value_t                      <type>;
+template < class type >                                    using          iterator_reference                 = std::iter_reference_t                  <type>;
+template < class type >                                    using          iterator_pointer                   = std::iterator_traits                   <type>::pointer;
+template < class type >                                    using          iterator_difference_type           = std::iter_difference_t                 <type>;
+template < class type >                                    using          range_concept                      = detail::get_range_concept              <type>;
+template < class type >                                    using          range_value_type                   = std::ranges::range_value_t             <type>;
 template < class type >                                    using          range_reference                    = std::ranges::range_reference_t         <type>;
-template < class type >                                    using          range_const_reference              = std::ranges::range_const_reference_t   <type>;
-template < class type >                                    using          range_rvalue_reference             = std::ranges::range_rvalue_reference_t  <type>;
-template < class type >                                    using          range_difference                   = std::ranges::range_difference_t        <type>;                       
+template < class type >                                    using          range_difference_type              = std::ranges::range_difference_t        <type>;                       
 template < class type >                                    using          range_iterator                     = std::ranges::iterator_t                <type>; 
 template < class type >                                    using          range_const_iterator               = std::ranges::const_iterator_t          <type>;
 template < class type >                                    using          range_sentinel                     = std::ranges::sentinel_t                <type>; 
 template < class type >                                    using          range_const_sentinel               = std::ranges::const_sentinel_t          <type>;
-
-template < class type >                                    constexpr int  tuple_size                         = std::tuple_size<type>::value;
-template < int index, class type >                         using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) : std::size_t(index+int(std::tuple_size<type>::value)),type>::type;
 
 
 
@@ -113,7 +113,7 @@ template < class type1, class type2 >                      concept        swappa
 template < class type1, class type2 >                      concept        nothrow_swappable_with             = std::is_nothrow_swappable_with         <type1,type2>::value;
 template < class type1, class type2 >                      concept        common_with                        = std::common_with                       <type1,type2>;
 template < class type1, class type2 >                      concept        common_reference_with              = std::common_reference_with             <type1,type2>;
-template < class type1, class type2 >                      concept        layout_compatible_with             = std::is_layout_compatible              <type1,type2>::value;
+template < class type1, class type2 >                      concept        layout_compatible_with             = std::is_layout_compatible              <type1,type2>::value;        
 
 template < class type >                                    concept        input_iterator                     = std::input_iterator                    <type>;
 template < class type >                                    concept        output_iterator                    = std::input_or_output_iterator          <type>;
@@ -122,14 +122,16 @@ template < class type >                                    concept        bidire
 template < class type >                                    concept        random_access_iterator             = std::random_access_iterator            <type>;
 template < class type >                                    concept        contiguous_iterator                = std::contiguous_iterator               <type>;
 template < class type >                                    concept        input_range                        = std::ranges::input_range               <type>;
-template < class type >                                    concept        output_range                       = output_iterator                        <range_iterator<type>>;
+template < class type >                                    concept        output_range                       = std::input_or_output_iterator          <std::ranges::iterator_t<type>>;
 template < class type >                                    concept        forward_range                      = std::ranges::forward_range             <type>;
 template < class type >                                    concept        bidirectional_range                = std::ranges::bidirectional_range       <type>;
 template < class type >                                    concept        random_access_range                = std::ranges::random_access_range       <type>;
-template < class type >                                    concept        contiguous_range                   = std::ranges::contiguous_range          <type>;            
+template < class type >                                    concept        contiguous_range                   = std::ranges::contiguous_range          <type>; 
 
 template < class type >                                    concept        hashable                           = std::default_initializable             <std::hash<type>>;
 template < class type >                                    concept        formattable                        = std::formattable                       <type,char>;
+
+   
 
 
 

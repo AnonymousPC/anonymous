@@ -7,16 +7,16 @@ class detail::array_upper<type,1,device>
         int                     ofs = 0;
 
     public: // Typedef
-        using value_type      = device::template value_type          <type>;
-        using reference       = device::template reference           <type>;
-        using const_reference = device::template const_reference     <type>;
-        using pointer         = device::template pointer             <type>;
-        using const_pointer   = device::template const_pointer       <type>;
-        class iterator;
-        class const_iterator;
+        using value_type      = device::template value_type     <type>;
+        using reference       = device::template reference      <type>;
+        using const_reference = device::template const_reference<type>;
+        using pointer         = device::template pointer        <type>;
+        using const_pointer   = device::template const_pointer  <type>;
+        using iterator        = device::template stride_iterator<pointer>;
+        using const_iterator  = device::template stride_iterator<const_pointer>;
     
     public: // Core
-        constexpr array_upper ( )                                                           = default;
+        constexpr array_upper ( ) = default;
         constexpr array_upper (       array<type,2,device>&, detail::array_attribute, int );
         constexpr array_upper ( const array<type,2,device>&, detail::array_attribute, int );
 

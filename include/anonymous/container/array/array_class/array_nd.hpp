@@ -26,8 +26,8 @@ class array<type,dim,device>
         using  const_reference = device::template const_reference <type>;
         using  pointer         = device::template pointer         <type>;
         using  const_pointer   = device::template const_pointer   <type>;
-        using  iterator        = detail::array_line_iterator      <type,dim,device>;
-        using  const_iterator  = detail::array_line_const_iterator<type,dim,device>;
+        using  iterator        = detail::      array_line_iterator<type,dim,device>;
+        using  const_iterator  = detail::const_array_line_iterator<type,dim,device>;
         using  device_type     = device;
         struct array_concept { };
 
@@ -71,9 +71,9 @@ class array<type,dim,device>
                                   constexpr array& resize ( int_type auto... args )         requires ( sizeof...(args) == dim );
                                   constexpr array& resize ( array<int> );
         template < int axis = 1 > constexpr array& push   (      array<type,dim-1,device> ) requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
-        template < int axis = 1 > constexpr array& pop    ( int = -1 )                      requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
+        template < int axis = 1 > constexpr array& pop    ( )                               requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
         template < int axis = 1 > constexpr array& insert ( int, array<type,dim-1,device> ) requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
-        template < int axis = 1 > constexpr array& erase  ( int, int )                      requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
+        template < int axis = 1 > constexpr array& erase  ( int )                           requires ( ( axis >= -dim and axis <= -1 ) or ( axis >= 1 and axis <= dim ) );
 
     public: // View
         constexpr       array<type,1,device>&   flatten   ( );
@@ -106,10 +106,10 @@ class array<type,dim,device>
     private: // Friend
         template < class type2, int dim2, class device2 > friend class array;
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
-        template < class type2, int dim2, class device2 > friend class detail::tuple_upper;
+        template < class type2, int dim2, class device2 > friend class detail::array_uppers;
         template < class type2, int dim2, class device2 > friend class detail::array_lower;
         template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
-        template < class type2, int dim2, class device2 > friend class detail::array_line_const_iterator;
+        template < class type2, int dim2, class device2 > friend class detail::const_array_line_iterator;
 
     protected: // ADL
         template < class type2, class device2 = cpu > using vector = array<type2,1,device2>; // Redirect to global array instead of extended one.

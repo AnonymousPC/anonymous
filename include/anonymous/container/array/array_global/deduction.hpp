@@ -37,13 +37,6 @@ namespace detail
         using value_type = type;
         constexpr static const int dim = 1;
     };
-
-    template < class type >
-    struct array_deduction<range<type>>
-    {
-        using value_type = type;
-        constexpr static const int dim = 1;
-    };
     
 } // namespace detail
 

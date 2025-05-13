@@ -20,7 +20,6 @@ export namespace anonymous
     template < class type,                                                 class device = cpu > using matrix = array<type,2,device>;
 
     template < class type,                                                 class device = cpu > class deque;
-    template < class type,                                                 class device = cpu > class forward_list;
     template < class type,                                                 class device = cpu > class list;
     template < class type,               class compare = std::less<type>,  class device = cpu > class priority_queue;
     template < class type,                                                 class device = cpu > class queue;

@@ -11,12 +11,22 @@ elif sys.platform == "linux":
 elif sys.platform == "darwin":
     system = "macos"
 
+if system == "windows":
+    compiler = "g++"
+elif system == "linux":
+    compiler = "g++"
+elif system == "macos":
+    compiler = "clang++"
+
+type = sys.argv[1] # debug/release
+
+
 
 # Input
 
 modules = [
     "anonymous.basic",
-    # "anonymous.container",
+    "anonymous.container",
     "anonymous"
 ]
 compile_args = [
@@ -25,85 +35,86 @@ compile_args = [
     "-Wall", 
     "-fdiagnostics-color=always"
 ]
+if compiler == "g++":
+    compile_args.append("-fmodules")
+elif compiler == "clang++":
+    compile_args.append("-fprebuilt-module-path=./pcm.cache")
+if type == "debug":
+    compile_args.append("-O0")
+    compile_args.append("-fno-inline")
+elif type == "release":
+    compile_args.append("-O3")
+    compile_args.append("-DNDEBUG")
+
 link_args = [
     "-fuse-ld=lld",
     "-fdiagnostics-color=always"
 ]
-define_args = {
-    "abstract": '0', 
-    "extends" : ':', 
-    "in"      : ":",
-    "self"    : "(*this)"
-}
-module_path   = ""
 include_path  = ""
 lib_path      = ""
 libs          = []
 if system == "windows":
     include_path = "F:/msys/ucrt64/include"
     lib_path     = "F:/msys/ucrt64/lib"
-    module_path  = "F:/msys/ucrt64/module"
-    libs         = ["advapi32", "bcrypt", "crypto", "kernel32", "mswsock", "ntdll",  "OpenCL", "shell32", "ssl", "stdc++exp", "tiff", "user32", "ws2_32"]
+    libs         = ["advapi32", "bcrypt", "crypto", "kernel32", "mswsock", "ntdll", "shell32", "ssl", "stdc++exp", "tiff", "user32", "ws2_32"]
+elif system == "linux":
+    include_path = "/usr/include"
+    lib_path     = "/usr/lib"
+    libs         = []
 elif system == "macos":
-    module_path  = "/opt/homebrew/module"
     include_path = "/opt/homebrew/include"
     lib_path     = "/opt/homebrew/lib"
-    libs         = ["bz2", "crypto", "hwloc", "iconv", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "ssl", "tbb", "tiff", "tiffxx", "z", "zstd"]
-
-
-
-# Config
-
-type = sys.argv[1] # debug/release
-
-if system == "windows":
-    compiler = "g++"
-elif system == "linux":
-    compiler = "g++"
-elif system == "macos":
-    compiler = "clang++"
-
-if type == "debug":
-    compile_args.append("-O0")
-    compile_args.append("-fno-inline")
-
-elif type == "release":
-    compile_args.append("-O3")
-    define_args["NDEBUG"] = ""
-
+    libs         = ["bz2", "crypto", "hwloc", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "ssl", "tiff", "tiffxx", "z", "zstd"]
 
 
 # Task
-
-compile_args_cmd  = ' '.join(compile_args)
-link_args_cmd     = ' '.join(link_args)
-define_args_cmd   = ' '.join(f"-D{key}=\"{value}\"" for key, value in define_args.items())
-module_path_cmd   = f"-fprebuilt-module-path={module_path} -fprebuilt-module-path=module/{type}"
-include_path_cmd  = f"-I{include_path}"
-lib_path_cmd      = f"-L{lib_path}"
-libs_cmd          = ' '.join(f"-l{lib}" for lib in libs)
 
 def compile():
     for module in modules:
         log(module, color="yellow")
         if updatable(module):
-            run(f"{compiler} {compile_args_cmd} {define_args_cmd} {module_path_cmd} {include_path_cmd} include/{module.replace('.', '/')}/module.cppm --precompile -o module/{type}/{module}.pcm ")
-            run(f"{compiler} {compile_args_cmd}                   {module_path_cmd}                    module/{type}/{module}.pcm                     -c           -o bin/{type}/{module}.o      ")
-    
+            if compiler == "g++":
+                run(f"{compiler} "
+                    f"{' '.join(compile_args)} "
+                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
+                    f"-c ./include/{module.replace('.', '/')}/module.cppm "
+                    f"-o ./gcm.cache/{module}.pcm")
+            elif compiler == "clang++":
+                run(f"{compiler} "
+                    f"{' '.join(compile_args)} "
+                    f"-Dabstract=0 -Dextends=':' -Din=':' -Dself='(*this)' "
+                    f"--precompile ./include/{module.replace('.', '/')}/module.cppm "
+                    f"-o ./pcm.cache/{module}.pcm")
+                run(f"{compiler} "
+                    f"{' '.join(compile_args)} "
+                    f"-c ./pcm.cache/{module}.pcm "
+                    f"-o ./pcm.cache/{module}.o")
+                        
     log("main", color="yellow")
-    run(f"{compiler} {compile_args_cmd} {define_args_cmd} {module_path_cmd} {include_path_cmd} main.cpp -c -o bin/{type}/main.o")
+    run(f"{compiler} "
+        f"{' '.join(compile_args)} "
+        f"-Dabstract=0 -Dextends=':' -Din=':' -Dself='(*this)' "
+        f"-c ./main.cpp "
+        f"-o ./bin/main.o")
 
 
 def link():
-    linkable = [f"bin/{type}/main.o"]
-    for module in modules:
-        linkable.append(f"bin/{type}/{module}.o")
-    for file in os.listdir(module_path):
-        if file.endswith(".o"):
-            linkable.append(f"{module_path}/{file}")
-    linkable = ' '.join(linkable)
+    linkable = [f"./bin/main.o"]
+    if compiler == "g++":
+        for file in os.listdir(f"./gcm.cache"):
+            if file.endswith(".o"):
+                linkable.append(f"./gcm.cache/{file}")
+    elif compiler == "clang++":
+        for file in os.listdir(f"./pcm.cache"):
+            if file.endswith(".o"):
+                linkable.append(f"./pcm.cache/{file}")
     
-    run(f"{compiler} {link_args_cmd} {linkable} {lib_path_cmd} {libs_cmd} -o bin/{type}/main")
+    run (f"{compiler} "
+         f"{' '.join(link_args)} "
+         f"{' '.join(linkable)} "
+         f"-L{lib_path} "
+         f"{' '.join(f"-l{lib}" for lib in libs)} "
+         f"-o ./bin/main")
 
 
 
@@ -112,17 +123,19 @@ def link():
 update = False
 
 def updatable(module):
+    bin_time = 0
     try:
-        m_time = os.path.getmtime(f"module/{type}/{module}.pcm")
-        o_time = os.path.getmtime(f"bin/{type}/{module}.o")
-        bin_time = max(m_time, o_time)
+        if compiler == "g++":
+            bin_time = max(os.path.getmtime(f"./gcm.cache/{module}.gcm"), os.path.getmtime(f"./gcm.cache/{module}.o"))
+        elif compiler == "clang++":
+            bin_time = max(os.path.getmtime(f"./pcm.cache/{module}.pcm"), os.path.getmtime(f"./pcm.cache/{module}.o"))
     except OSError:
-        bin_time = 0
+        pass
     
     src_time = 0
-    for root, _, files in os.walk(f"include/{module.replace('.', '/')}"):
+    for root, _, files in os.walk(f"./include/{module.replace('.', '/')}"):
         for file in files:
-            src_time = max(src_time, os.path.getmtime(f"{root}/{file}"))
+            src_time = max(src_time, os.path.getmtime(f"./{root}/{file}"))
 
     global update
     if src_time >= bin_time:
@@ -135,7 +148,7 @@ def run(command):
     output = subprocess.run(command, shell=True, check=False, capture_output=True, text=True)
     print(output.stdout, end="", file=sys.stdout)
     print(output.stderr, end="", file=sys.stderr)
-    print(output.stderr, end="", file=open(f"bin/{type}/log.txt", 'w'))
+    print(output.stderr, end="", file=open(f"./bin/log.txt", 'w'))
     if output.returncode != 0:
         exit(output.returncode)
 

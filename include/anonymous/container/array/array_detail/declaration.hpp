@@ -20,7 +20,7 @@ namespace detail
     class array_upper;
 
     template < class type, int dim, class device >
-    class tuple_upper;
+    class array_uppers;
 
     template < class type, int dim, class device >
     class array_info;
@@ -29,6 +29,6 @@ namespace detail
     class array_line_iterator;
 
     template < class type, int dim, class device >
-    class array_line_const_iterator;
+    class const_array_line_iterator;
     
 } // namespace detail

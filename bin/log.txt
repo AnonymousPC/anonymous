@@ -1,0 +1,4 @@
+ld64.lld: error: undefined symbol: boost::locale::create_iconv_converter@boost(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+>>> referenced by /Users/anonymous/Code/cpp-module-builder/src/boost.pcm
+>>>               ./pcm.cache/boost.o:(symbol boost::locale::impl_posix::create_codecvt@boost(std::__1::locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::char_facet_t@boost)+0x15c)
+clang++: [0;1;31merror: [0m[1mlinker command failed with exit code 1 (use -v to see invocation)[0m

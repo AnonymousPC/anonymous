@@ -103,6 +103,7 @@ export namespace anonymous
 
     /// Common.concept
     #include "common/concept.hpp"
+    template < class type > concept device_type = requires { typename type::device_concept; };
 
     /// Common.exception
     class exception;
@@ -155,11 +156,11 @@ export namespace anonymous
 
 } // namespace anonymous
 
-// export namespace boost::compute
-// {
-//     #include "device/opencl/type/export/boost_compute.hpp"
-//     #include "device/opencl/operator/export/boost_compute.hpp"
+export namespace std
+{
+    #include "utility/common_type/export/std.hpp"
     
-// } // namespace boost::compute
+} // namespace std
+
 
 

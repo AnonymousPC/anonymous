@@ -3,14 +3,13 @@ class cuda::stride_iterator
     extends public thrust::iterator_adaptor<stride_iterator<iterator>,iterator>
 {
     public: // Typedef
-        using iterator_concept  = ::cuda::std::common_type_t<typename ::cuda::std::iterator_traits<iterator>::iterator_category,::cuda::std::random_access_iterator_tag>;
         using iterator_category = ::cuda::std::common_type_t<typename ::cuda::std::iterator_traits<iterator>::iterator_category,::cuda::std::random_access_iterator_tag>;
         using value_type        = ::cuda::std::iterator_traits<iterator>::value_type;
         using reference         = ::cuda::std::iterator_traits<iterator>::reference;
         using pointer           = ::cuda::std::iterator_traits<iterator>::pointer;
         using difference_type   = ::cuda::std::iterator_traits<iterator>::difference_type;
 
-    public: // Data
+    private: // Data
         difference_type strd = difference_type();
 
     public: // Core

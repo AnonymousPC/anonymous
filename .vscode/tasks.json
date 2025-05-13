@@ -14,13 +14,13 @@
             "group": "test",
             "type": "shell",
             "windows": { 
-                "command": "bin\\debug\\main.exe"
+                "command": "bin\\main.exe"
             },
             "linux": {
-                "command": "bin/debug/main"
+                "command": "bin/main"
             },
             "osx": {
-                "command": "bin/debug/main"
+                "command": "bin/main"
             }
         },
         {
@@ -47,13 +47,13 @@
             "group": "test",
             "type": "shell",
             "windows": { 
-                "command": "bin\\release\\main.exe"
+                "command": "bin\\main.exe"
             },
             "linux": {
-                "command": "bin/release/main"
+                "command": "bin/main"
             },
             "osx": {
-                "command": "bin/release/main"
+                "command": "bin/main"
             }
         },
         {

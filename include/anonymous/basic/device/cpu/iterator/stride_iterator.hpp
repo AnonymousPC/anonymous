@@ -2,14 +2,13 @@ template < class iterator >
 class cpu::stride_iterator
 {
     public: // Typedef
-        using iterator_concept  = std::common_type_t<typename std::iterator_traits<iterator>::iterator_category,std::random_access_iterator_tag>;
         using iterator_category = std::common_type_t<typename std::iterator_traits<iterator>::iterator_category,std::random_access_iterator_tag>;
         using value_type        = std::iterator_traits<iterator>::value_type;
         using reference         = std::iterator_traits<iterator>::reference;
         using pointer           = std::iterator_traits<iterator>::pointer;
         using difference_type   = std::iterator_traits<iterator>::difference_type;
 
-    public: // Data
+    private: // Data
         iterator        iter = iterator();
         difference_type strd = difference_type();
 

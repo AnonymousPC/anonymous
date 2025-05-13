@@ -12,19 +12,19 @@ class collection_algo
         using  const_pointer   = device::template const_pointer  <type>;
 
     private: // Abbreviation
-        constexpr decltype(auto) begin ( );
-        constexpr decltype(auto) begin ( ) const;
-        constexpr decltype(auto) end   ( );
-        constexpr decltype(auto) end   ( ) const;
-        constexpr decltype(auto) size  ( ) const;
+        constexpr auto begin ( );
+        constexpr auto begin ( ) const;
+        constexpr auto end   ( );
+        constexpr auto end   ( ) const;
+        constexpr auto size  ( ) const;
 
     public: // Algorithm
-        constexpr       auto       average  ( )                       const requires default_initializable<type> and plusable    <type> and dividable_to<type,int>;
-        constexpr       auto       sum      ( )                       const requires default_initializable<type> and plusable    <type>;
-        constexpr       auto       product  ( )                       const requires convertible_to<int,type>    and multipliable<type>;
+        constexpr       auto       average  ( )                                  const requires default_initializable<type> and plusable    <type> and dividable_to<type,int>;
+        constexpr       auto       sum      ( )                                  const requires default_initializable<type> and plusable    <type>;
+        constexpr       auto       product  ( )                                  const requires convertible_to<int,type>    and multipliable<type>;
 
-        constexpr       container& for_each ( invocable<type&> auto );
-        constexpr const container& for_each ( invocable<type>  auto ) const;
+        constexpr       container& for_each ( invocable<reference>        auto );
+        constexpr const container& for_each ( invocable<const_reference>  auto ) const;
 };
 
 

@@ -110,6 +110,7 @@
         "syncstream": "cpp",
         "*.inc": "cpp",
         "mdspan": "cpp",
-        "__assert": "cpp"
+        "__assert": "cpp",
+        "__undef_macros": "cpp"
     }
 }

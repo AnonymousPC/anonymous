@@ -1,5 +1,8 @@
 class cuda
 {
+    public: // Typedef
+        struct device_concept { };
+
     public: // Execution
      // using execution_context_type = not supported;
      // inline static execution_context_type execution_context = not supported;

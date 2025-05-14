@@ -6,7 +6,7 @@ class set
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> and movable<type> );
-        static_assert ( [] { if constexpr ( same_as<device,cpu> ) return relation<compare,type,type>; else return true; } () );
+        static_assert ( relation<compare,type,type> );
 
     private: // Typedef
         using base = device::template set<type,compare>;

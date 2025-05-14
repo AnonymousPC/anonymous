@@ -82,26 +82,25 @@ class array<type,1,device>
         constexpr const auto mdspan ( ) const;
 
     private: // Detail
-                              constexpr       int                                              get_size_top  ( )                        const = delete;
-        template < int axis > constexpr       int                                              get_size_axis ( )                        const = delete;
-                              constexpr       detail::array_shape<1>                           get_shape     ( )                        const;
-        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... )             = delete;
-        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_rows      ( int_type auto... )       const = delete;
-        template < int dim2 > constexpr       std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... )             = delete;
-        template < int dim2 > constexpr const std::span<detail::array_upper<type,dim2,device>> get_columns   ( int_type auto... )       const = delete;
-                              constexpr       reference                                        get_value     ( int_type auto... )             = delete;
-                              constexpr       const_reference                                  get_value     ( int_type auto... )       const = delete;
-                              constexpr       pointer                                          get_pointer   ( )                              = delete;
-                              constexpr       const_pointer                                    get_pointer   ( )                        const = delete;
-                              constexpr       void                                             set_resize    ( detail::array_shape<1> )       = delete;
+                              constexpr int                                                get_size_top  ( )                        const = delete;
+        template < int axis > constexpr int                                                get_size_axis ( )                        const = delete;
+                              constexpr detail::array_shape<1>                             get_shape     ( )                        const;
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... )             = delete;
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... )       const = delete;
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... )             = delete;
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... )       const = delete;
+                              constexpr reference                                          get_value     ( int_type auto... )             = delete;
+                              constexpr const_reference                                    get_value     ( int_type auto... )       const = delete;
+                              constexpr pointer                                            get_pointer   ( )                              = delete;
+                              constexpr const_pointer                                      get_pointer   ( )                        const = delete;
+                              constexpr void                                               set_resize    ( detail::array_shape<1> )       = delete;
   
     private: // Friend
         template < class type2, int dim2, class device2 > friend class array;
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
         template < class type2, int dim2, class device2 > friend class detail::array_uppers;
         template < class type2, int dim2, class device2 > friend class detail::array_lower;
-        template < class type2, int dim2, class device2 > friend class detail::array_line_iterator;
-        template < class type2, int dim2, class device2 > friend class detail::const_array_line_iterator;
+                                                          friend class detail::to_array_pointer;
 
     protected: // ADL
         template < class type2, class device2 = cpu > using vector = array<type2,1,device2>; // Redirect to global array instead of extended one.

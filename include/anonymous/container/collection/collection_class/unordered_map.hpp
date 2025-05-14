@@ -10,7 +10,7 @@ class unordered_map
         static_assert ( default_initializable<type1> and movable<type1> );
         static_assert ( not is_const<type2> and not is_volatile<type2> and not is_reference<type2> );
         static_assert ( default_initializable<type2> and movable<type2> );
-        static_assert ( [] { if constexpr ( same_as<device,cpu> ) return invocable<hash,type1>; else return true; } () );
+        static_assert ( invocable<hash,type1> );
 
     private: // Typedef
         using base = device::template unordered_map<type1,type2,hash>;

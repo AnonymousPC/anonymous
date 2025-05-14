@@ -10,42 +10,42 @@ template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr detail::array_lower<type,dim,device>::iterator detail::array_lower<type,dim,device>::begin ( )
 {
-    return get_rows<dim-1>().begin();
+    return get_rows<dim-1>().first;
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr detail::array_lower<type,dim,device>::const_iterator detail::array_lower<type,dim,device>::begin ( ) const
 {
-    return get_rows<dim-1>().begin();
+    return get_rows<dim-1>().first;
 }
 
 template < class type, int dim, class device > 
     requires ( dim >= 2 )
 constexpr detail::array_lower<type,dim,device>::iterator detail::array_lower<type,dim,device>::end ( )
 {
-    return get_rows<dim-1>().end();
+    return get_rows<dim-1>().second;
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 constexpr detail::array_lower<type,dim,device>::const_iterator detail::array_lower<type,dim,device>::end ( ) const
 {
-    return get_rows<dim-1>().end();
+    return get_rows<dim-1>().second;
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr array<type,dim-1,device>& detail::array_lower<type,dim,device>::operator [] ( int ofs )
+constexpr array<type,dim-1,device>& detail::array_lower<type,dim,device>::operator [] ( int offset )
 {
-    return static_cast<array<type,dim-1,device>&>(get_rows<dim-1>()[ofs]);
+    return begin()[offset];
 }
 
 template < class type, int dim, class device >
     requires ( dim >= 2 )
-constexpr const array<type,dim-1,device>& detail::array_lower<type,dim,device>::operator [] ( int ofs ) const
+constexpr const array<type,dim-1,device>& detail::array_lower<type,dim,device>::operator [] ( int offset ) const
 {
-    return static_cast<const array<type,dim-1,device>&>(get_rows<dim-1>()[ofs]);
+    return begin()[offset];
 }
 
 template < class type, int dim, class device >
@@ -74,7 +74,7 @@ constexpr const array<type,dim,device>& detail::array_lower<type,dim,device>::tr
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < int dim2 >
-constexpr std::span<detail::array_upper<type,dim2,device>> detail::array_lower<type,dim,device>::get_rows ( int_type auto... offsets )
+constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_lower<type,dim,device>::get_rows ( int_type auto... offsets )
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -84,7 +84,7 @@ constexpr std::span<detail::array_upper<type,dim2,device>> detail::array_lower<t
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < int dim2 >
-constexpr const std::span<detail::array_upper<type,dim2,device>> detail::array_lower<type,dim,device>::get_rows ( int_type auto... offsets ) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_lower<type,dim,device>::get_rows ( int_type auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -94,7 +94,7 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> detail::array_l
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < int dim2 >
-constexpr std::span<detail::array_upper<type,dim2,device>> detail::array_lower<type,dim,device>::get_columns ( int_type auto... offsets )
+constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_lower<type,dim,device>::get_columns ( int_type auto... offsets )
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -104,7 +104,7 @@ constexpr std::span<detail::array_upper<type,dim2,device>> detail::array_lower<t
 template < class type, int dim, class device >
     requires ( dim >= 2 )
 template < int dim2 >
-constexpr const std::span<detail::array_upper<type,dim2,device>> detail::array_lower<type,dim,device>::get_columns ( int_type auto... offsets ) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_lower<type,dim,device>::get_columns ( int_type auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );

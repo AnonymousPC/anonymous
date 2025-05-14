@@ -745,7 +745,7 @@ constexpr detail::array_shape<dim> array<type,dim,device>::get_shape ( ) const
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_rows ( int_type auto... offsets ) 
+constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_rows ( int_type auto... offsets ) 
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -756,7 +756,7 @@ constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_rows ( int_type auto... offsets ) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_rows ( int_type auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -767,7 +767,7 @@ constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_columns ( int_type auto... offsets ) 
+constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_columns ( int_type auto... offsets ) 
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -778,7 +778,7 @@ constexpr std::span<detail::array_upper<type,dim2,device>> array<type,dim,device
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr const std::span<detail::array_upper<type,dim2,device>> array<type,dim,device>::get_columns ( int_type auto... offsets) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_columns ( int_type auto... offsets) const
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );

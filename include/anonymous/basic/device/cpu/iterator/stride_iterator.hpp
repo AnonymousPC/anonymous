@@ -22,20 +22,21 @@ class cpu::stride_iterator
         constexpr reference operator [] ( difference_type ) const requires std::random_access_iterator<iterator>;
 
     public: // Access
+        constexpr iterator        base   ( ) const;
         constexpr difference_type stride ( ) const;
 };
 
 template < class iterator > constexpr bool                                               operator ==  ( cpu::template stride_iterator<iterator>,  cpu::template stride_iterator<iterator> ) requires std::sentinel_for          <iterator,iterator>;
 template < class iterator > constexpr std::compare_three_way_result_t<iterator,iterator> operator <=> ( cpu::template stride_iterator<iterator>,  cpu::template stride_iterator<iterator> ) requires std::totally_ordered       <iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>            operator +   ( cpu::template stride_iterator<iterator>,  std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>            operator +   ( std::iter_difference_t       <iterator>,  cpu::template stride_iterator<iterator> ) requires std::random_access_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>            operator -   ( cpu::template stride_iterator<iterator>,  std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
-template < class iterator > constexpr std::iter_difference_t       <iterator>            operator -   ( cpu::template stride_iterator<iterator>,  cpu::template stride_iterator<iterator> ) requires std::random_access_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>&           operator +=  ( cpu::template stride_iterator<iterator>&, std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>&           operator -=  ( cpu::template stride_iterator<iterator>&, std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>&           operator ++  ( cpu::template stride_iterator<iterator>&                                          ) requires std::bidirectional_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>            operator ++  ( cpu::template stride_iterator<iterator>&, int                                     ) requires std::bidirectional_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>&           operator --  ( cpu::template stride_iterator<iterator>&                                          ) requires std::bidirectional_iterator<iterator>;
-template < class iterator > constexpr cpu::template stride_iterator<iterator>            operator --  ( cpu::template stride_iterator<iterator>&, int                                     ) requires std::bidirectional_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>           operator +   ( cpu::template stride_iterator<iterator>,  std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>           operator +   ( std::iter_difference_t       <iterator>,  cpu::template stride_iterator<iterator> ) requires std::random_access_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>           operator -   ( cpu::template stride_iterator<iterator>,  std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
+template < class iterator > constexpr std::iter_difference_t        <iterator>           operator -   ( cpu::template stride_iterator<iterator>,  cpu::template stride_iterator<iterator> ) requires std::random_access_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>&          operator +=  ( cpu::template stride_iterator<iterator>&, std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>&          operator -=  ( cpu::template stride_iterator<iterator>&, std::iter_difference_t       <iterator> ) requires std::random_access_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>&          operator ++  ( cpu::template stride_iterator<iterator>&                                          ) requires std::bidirectional_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>           operator ++  ( cpu::template stride_iterator<iterator>&, int                                     ) requires std::bidirectional_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>&          operator --  ( cpu::template stride_iterator<iterator>&                                          ) requires std::bidirectional_iterator<iterator>;
+template < class iterator > constexpr cpu::template stride_iterator <iterator>           operator --  ( cpu::template stride_iterator<iterator>&, int                                     ) requires std::bidirectional_iterator<iterator>;
         
 #include "stride_iterator.cpp"

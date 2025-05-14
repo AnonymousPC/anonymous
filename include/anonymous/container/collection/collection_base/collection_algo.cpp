@@ -40,9 +40,9 @@ constexpr auto collection_algo<container,type,device>::sum ( ) const
     requires default_initializable<type> and plusable<type>
 {
     if constexpr ( number_type<type> )
-        return device::reduce    (begin(), end(), type(0));
+        return device::reduce    (begin(), end(), type());
     else
-        return device::accumulate(begin(), end(), type(0));
+        return device::accumulate(begin(), end(), type());
 }
 
 template < class container, class type, class device > 

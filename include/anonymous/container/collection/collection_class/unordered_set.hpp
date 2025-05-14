@@ -6,7 +6,7 @@ class unordered_set
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> and movable<type> );
-        static_assert ( [] { if constexpr ( same_as<device,cpu> ) return invocable<hash,type>; else return true; } () );
+        static_assert ( invocable<hash,type> );
 
     private: // Typedef
         using base = device::template unordered_set<type,hash>;

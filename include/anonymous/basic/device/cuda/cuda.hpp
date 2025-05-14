@@ -73,11 +73,12 @@ class cuda
         template < class type, class alloc = allocator<type> >                                                                                      using vector         = thrust::device_vector      <type,alloc>;
 
     public: // Iterator
-     // template < class iterator > using const_iterator   = not supported;
-     // template < class iterator > using move_iterator    = not supported;
-     // template < class iterator > using counted_iterator = not supported;
-        template < class iterator > using reverse_iterator = thrust::reverse_iterator<iterator>;
-        template < class iterator > class stride_iterator;
+     // template < class iterator >                 using const_iterator     = not supported;
+     // template < class iterator >                 using move_iterator      = not supported;
+     // template < class iterator >                 using counted_iterator   = not supported;
+        template < class iterator >                 using reverse_iterator   = thrust::reverse_iterator<iterator>;
+        template < class iterator >                 class stride_iterator;
+        template < class iterator, class function > using transform_iterator = thrust::transform_iterator<function,iterator>;
 
     public: // Algorithm
      // constexpr static decltype(auto) accumulate                        ( auto&&... args ) { return thrust::accumulate                       (std::forward<decltype(args)>(args)...); }

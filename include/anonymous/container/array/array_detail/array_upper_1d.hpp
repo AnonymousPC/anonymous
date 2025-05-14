@@ -41,21 +41,21 @@ class detail::array_upper<type,1,device>
         constexpr bool contiguous ( ) const;
 
     public: // Detail
-                               constexpr       int                                              get_size_top    ( )     const;
-        template < int axis >  constexpr       int                                              get_size_axis   ( )     const;
-                               constexpr       detail::array_shape<1>                           get_shape       ( )     const;
-        template < int dim2 >  constexpr       std::span<detail::array_upper<type,dim2,device>> get_rows        ( )           = delete;
-        template < int dim2 >  constexpr const std::span<detail::array_upper<type,dim2,device>> get_rows        ( )     const = delete;
-        template < int dim2 >  constexpr       std::span<detail::array_upper<type,dim2,device>> get_columns     ( )           = delete;
-        template < int dim2 >  constexpr const std::span<detail::array_upper<type,dim2,device>> get_columns     ( )     const = delete;
-                               constexpr       reference                                        get_value       ( int );
-                               constexpr       const_reference                                  get_value       ( int ) const;
-                               constexpr       pointer                                          get_pointer     ( int );
-                               constexpr       const_pointer                                    get_pointer     ( int ) const;
+                               constexpr       int                                                get_size_top    ( )     const;
+        template < int axis >  constexpr       int                                                get_size_axis   ( )     const;
+                               constexpr       detail::array_shape<1>                             get_shape       ( )     const;
+        template < int dim2 >  constexpr       pair<      detail::array_upper<type,dim2,device>*> get_rows        ( )           = delete;
+        template < int dim2 >  constexpr       pair<const detail::array_upper<type,dim2,device>*> get_rows        ( )     const = delete;
+        template < int dim2 >  constexpr       pair<      detail::array_upper<type,dim2,device>*> get_columns     ( )           = delete;
+        template < int dim2 >  constexpr       pair<const detail::array_upper<type,dim2,device>*> get_columns     ( )     const = delete;
+                               constexpr       reference                                          get_value       ( int );
+                               constexpr       const_reference                                    get_value       ( int ) const;
+                               constexpr       pointer                                            get_pointer     ( int );
+                               constexpr       const_pointer                                      get_pointer     ( int ) const;
 
-                               constexpr       detail::array_attribute                          get_attribute   ( )     const;
-                               constexpr       int                                              get_offset      ( )     const;
-        template < auto attr > constexpr       array<type,2,device>&                            get_host        ( )           requires ( attr == rows_attribute or attr == columns_attribute );
-        template < auto attr > constexpr const array<type,2,device>&                            get_host        ( )     const requires ( attr == rows_attribute or attr == columns_attribute );
-                               constexpr       int                                              get_stride      ( )     const;
+                               constexpr       detail::array_attribute                            get_attribute   ( )     const;
+                               constexpr       int                                                get_offset      ( )     const;
+        template < auto attr > constexpr       array<type,2,device>&                              get_host        ( )           requires ( attr == rows_attribute or attr == columns_attribute );
+        template < auto attr > constexpr const array<type,2,device>&                              get_host        ( )     const requires ( attr == rows_attribute or attr == columns_attribute );
+                               constexpr       int                                                get_stride      ( )     const;
 };

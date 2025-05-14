@@ -10,7 +10,7 @@ class map
         static_assert ( default_initializable<type1> and movable<type1> );
         static_assert ( not is_const<type2> and not is_volatile<type2> and not is_reference<type2> );
         static_assert ( default_initializable<type2> and movable<type2> );
-        static_assert ( [] { if constexpr ( same_as<device,cpu> ) return relation<compare,type1,type1>; else return true; } () );
+        static_assert ( relation<compare,type1,type1> );
 
     private: // Typedef
         using base = device::template map<type1,type2,compare>;
@@ -49,24 +49,23 @@ class map
         constexpr map ( std::initializer_list<pair<const type1,type2>> ) requires copyable<type1> and copyable<type2>;
 
     public: // Member
-        constexpr        int                   size        ( )               const;
-        constexpr        bool                  empty       ( )               const;
+        constexpr        int                   size        ( )              const;
+        constexpr        bool                  empty       ( )              const;
         constexpr        iterator              begin       ( );
-        constexpr        const_iterator        begin       ( )               const;
+        constexpr        const_iterator        begin       ( )              const;
         constexpr        iterator              end         ( );
-        constexpr        const_iterator        end         ( )               const;
-        constexpr        value_reference       operator [] ( const type1&  );
-        constexpr        value_reference       operator [] (       type1&& );
-        constexpr        const_value_reference operator [] ( const type1&  ) const;
-        constexpr        bool                  contains    ( const type1&  ) const;
+        constexpr        const_iterator        end         ( )              const;
+        constexpr        value_reference       operator [] ( const type1& );
+        constexpr        const_value_reference operator [] ( const type1& ) const;
+        constexpr        bool                  contains    ( const type1& ) const;
 
-        constexpr const  auto&                 keys        ( )               const;
+        constexpr const  auto&                 keys        ( )              const;
         constexpr        auto&                 values      ( );
-        constexpr const  auto&                 values      ( )               const;
+        constexpr const  auto&                 values      ( )              const;
         
         constexpr        map&                  clear       ( );
-        constexpr        map&                  pop         ( const type1&  );
-        constexpr        map&                  update      ( const map&    );
+        constexpr        map&                  pop         ( const type1& );
+        constexpr        map&                  update      ( const map&   );
 
     public: // Override
         constexpr auto emplace ( auto&&... args ) requires constructible_from<typename base::value_type,decltype(args)...>;

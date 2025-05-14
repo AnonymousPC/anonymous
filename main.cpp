@@ -17,4 +17,5 @@ int main ()
     auto arr2 = array<int,2>(arr);
     for ( auto val in arr2.flatten() )
         print(val);
+
 }

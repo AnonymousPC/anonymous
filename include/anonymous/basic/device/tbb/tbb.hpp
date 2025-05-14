@@ -72,11 +72,12 @@ class tbb
      // template < class type, class alloc = allocator<type> >                                                                                      using vector          = supported, but does not satisfy std::contiguous_range.
 
     public: // Iterator
-     // template < class iterator > using const_iterator   = not supported;
-     // template < class iterator > using move_iterator    = not supported;
-     // template < class iterator > using counted_iterator = not supported;
-     // template < class iterator > using reverse_iterator = not supported;
-     // template < class iterator > using stride_iterator  = not supported;
+     // template < class iterator >                 using const_iterator     = not supported;
+     // template < class iterator >                 using move_iterator      = not supported;
+     // template < class iterator >                 using counted_iterator   = not supported;
+     // template < class iterator >                 using reverse_iterator   = not supported;
+     // template < class iterator >                 using stride_iterator    = not supported;
+     // template < class iterator, class function > using transform_iterator = not supported;
 
     public: // Algorithm
      // constexpr static decltype(auto) accumulate                        ( auto&&... args ) { not supported }

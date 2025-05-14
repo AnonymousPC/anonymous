@@ -1,11 +1,9 @@
 constexpr int max_dim = 4;
 
+#include "array_base/array_algo_1d.hpp"
+#include "array_base/array_algo_nd.hpp"
+
 #include "array_detail/declaration.hpp"
-
-#include "array_class/array_1d.hpp"
-#include "array_class/array_nd.hpp"
-#include "array_class/array_xd.hpp"
-
 #include "array_detail/array_shape.hpp"
 #include "array_detail/array_upper_1d.hpp"
 #include "array_detail/array_upper_nd.hpp"
@@ -14,10 +12,11 @@ constexpr int max_dim = 4;
 #include "array_detail/array_uppers_nd.hpp"
 #include "array_detail/array_lower_nd.hpp"
 #include "array_detail/array_info_nd.hpp"
-#include "array_detail/array_line_iterator.hpp"
+#include "array_detail/to_array_pointer.hpp"
 
-#include "array_base/array_algo_1d.hpp"
-#include "array_base/array_algo_nd.hpp"
+#include "array_class/array_1d.hpp"
+#include "array_class/array_nd.hpp"
+#include "array_class/array_xd.hpp"
 
 #include "array_global/deduction.hpp"
 #include "array_global/operator.hpp"
@@ -40,7 +39,7 @@ constexpr int max_dim = 4;
 #include "array_detail/array_uppers_nd.cpp"
 #include "array_detail/array_lower_nd.cpp"
 #include "array_detail/array_info_nd.cpp"
-#include "array_detail/array_line_iterator.cpp"
+#include "array_detail/to_array_pointer.cpp"
 
 #include "array_base/array_algo_1d.cpp"
 #include "array_base/array_algo_nd.cpp"

@@ -73,11 +73,12 @@ class cpu
         template < class type, class alloc = allocator<type> >                                                                                      class vector;        // Depecialize std::vector<bool>.
 
     public: // Iterator
-        template < class iterator > using const_iterator   = std::const_iterator  <iterator>;
-        template < class iterator > using move_iterator    = std::move_iterator   <iterator>;
-        template < class iterator > using counted_iterator = std::counted_iterator<iterator>;
-        template < class iterator > using reverse_iterator = std::reverse_iterator<iterator>;
-        template < class iterator > class stride_iterator;
+        template < class iterator >                 using const_iterator   = std::const_iterator  <iterator>;
+        template < class iterator >                 using move_iterator    = std::move_iterator   <iterator>;
+        template < class iterator >                 using counted_iterator = std::counted_iterator<iterator>;
+        template < class iterator >                 using reverse_iterator = std::reverse_iterator<iterator>;
+        template < class iterator >                 class stride_iterator;
+        template < class iterator, class function > class transform_iterator;
 
     public: // Algorithm
         constexpr static decltype(auto) accumulate                        ( auto&&... args ) { return std::accumulate                       (std::forward<decltype(args)>(args)...); }
@@ -241,4 +242,5 @@ class cpu
 
 #include "container/vector.hpp"
 #include "iterator/stride_iterator.hpp"
+#include "iterator/transform_iterator.hpp"
 #include "linalg/linalg.hpp"

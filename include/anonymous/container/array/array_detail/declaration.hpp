@@ -25,10 +25,6 @@ namespace detail
     template < class type, int dim, class device >
     class array_info;
 
-    template < class type, int dim, class device >
-    class array_line_iterator;
-
-    template < class type, int dim, class device >
-    class const_array_line_iterator;
+    class to_array_pointer;
     
 } // namespace detail

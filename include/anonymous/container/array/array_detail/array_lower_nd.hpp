@@ -13,8 +13,8 @@ class detail::array_lower<type,dim,device>
         using const_reference = device::template const_reference <type>;
         using pointer         = device::template pointer         <type>;
         using const_pointer   = device::template const_pointer   <type>;
-        using iterator        = cpu   ::template transform_iterator<      detail::array_upper<type,dim-1,device>*,detail::to_array_pointer>;
-        using const_iterator  = cpu   ::template transform_iterator<const detail::array_upper<type,dim-1,device>*,detail::to_array_pointer>;
+        using iterator        = cpu   ::template transform_iterator<      detail::array_upper<type,dim-1,device>*,detail::transform_to_array<type,dim-1,device>>;
+        using const_iterator  = cpu   ::template transform_iterator<const detail::array_upper<type,dim-1,device>*,detail::transform_to_array<type,dim-1,device>>;
 
     public: // Core
         constexpr array_lower ( );
@@ -37,9 +37,9 @@ class detail::array_lower<type,dim,device>
         constexpr const array<type,dim,device>& transpose ( ) const;
 
     public: // Detail
-        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_rows    ( int_type auto... );
-        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_rows    ( int_type auto... )         const; 
-        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_columns ( int_type auto... );
-        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_columns ( int_type auto... )         const;
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_rows    ( integral auto... );
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_rows    ( integral auto... )         const; 
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_columns ( integral auto... );
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_columns ( integral auto... )         const;
                               constexpr void                                               set_resize  ( detail::array_shape<dim> );
 };

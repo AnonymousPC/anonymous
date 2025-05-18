@@ -1,4 +1,4 @@
-constexpr array_type auto xavier_uniform_initialize ( array_type auto arr, int_type auto fan_in, int_type auto fan_out )
+constexpr array_type auto xavier_uniform_initialize ( array_type auto arr, integral auto fan_in, integral auto fan_out )
 {
     using type = decltype(arr)::value_type;
 

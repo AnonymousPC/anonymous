@@ -1,8 +1,5 @@
 class cpu
 {
-    public: // Typedef
-        struct device_concept { };
-
     public: // Execution
         using execution_context_type = exec::static_thread_pool;
         inline static execution_context_type execution_context = execution_context_type(1);
@@ -218,26 +215,26 @@ class cpu
         using random_context_type = std::default_random_engine;
         inline static thread_local random_context_type random_context = random_context_type(std::random_device()());
 
-                                     using bernoulli_distribution          = std::bernoulli_distribution;
-        template < int_type   type > using binomial_distribution           = std::binomial_distribution          <type>;
-        template < float_type type > using cauchy_distribution             = std::cauchy_distribution            <type>;
-        template < float_type type > using chi_squared_distribution        = std::chi_squared_distribution       <type>;
-        template < int_type   type > using discrete_distribution           = std::discrete_distribution          <type>;
-        template < float_type type > using exponential_distribution        = std::exponential_distribution       <type>;
-        template < float_type type > using extreme_value_distribution      = std::extreme_value_distribution     <type>;
-        template < float_type type > using fisher_f_distribution           = std::fisher_f_distribution          <type>;
-        template < float_type type > using gamma_distribution              = std::gamma_distribution             <type>;
-        template < int_type   type > using geometric_distribution          = std::geometric_distribution         <type>;
-        template < int_type   type > using lognormal_distribution          = std::lognormal_distribution         <type>;
-        template < int_type   type > using negative_binomial_distribution  = std::negative_binomial_distribution <type>;
-        template < int_type   type > using normal_distribution             = std::normal_distribution            <type>;
-        template < float_type type > using piecewise_constant_distribution = std::piecewise_constant_distribution<type>;
-        template < float_type type > using piecewise_linear_distribution   = std::piecewise_linear_distribution  <type>;
-        template < int_type   type > using poisson_distribution            = std::poisson_distribution           <type>;
-        template < float_type type > using student_t_distribution          = std::student_t_distribution         <type>;
-        template < int_type   type > using uniform_int_distribution        = std::uniform_int_distribution       <type>;
-        template < float_type type > using uniform_real_distribution       = std::uniform_real_distribution      <type>;
-        template < float_type type > using weibull_distribution            = std::weibull_distribution           <type>;
+                                         using bernoulli_distribution          = std::bernoulli_distribution;
+        template < integral       type > using binomial_distribution           = std::binomial_distribution          <type>;
+        template < floating_point type > using cauchy_distribution             = std::cauchy_distribution            <type>;
+        template < floating_point type > using chi_squared_distribution        = std::chi_squared_distribution       <type>;
+        template < integral       type > using discrete_distribution           = std::discrete_distribution          <type>;
+        template < floating_point type > using exponential_distribution        = std::exponential_distribution       <type>;
+        template < floating_point type > using extreme_value_distribution      = std::extreme_value_distribution     <type>;
+        template < floating_point type > using fisher_f_distribution           = std::fisher_f_distribution          <type>;
+        template < floating_point type > using gamma_distribution              = std::gamma_distribution             <type>;
+        template < integral       type > using geometric_distribution          = std::geometric_distribution         <type>;
+        template < integral       type > using lognormal_distribution          = std::lognormal_distribution         <type>;
+        template < integral       type > using negative_binomial_distribution  = std::negative_binomial_distribution <type>;
+        template < integral       type > using normal_distribution             = std::normal_distribution            <type>;
+        template < floating_point type > using piecewise_constant_distribution = std::piecewise_constant_distribution<type>;
+        template < floating_point type > using piecewise_linear_distribution   = std::piecewise_linear_distribution  <type>;
+        template < integral       type > using poisson_distribution            = std::poisson_distribution           <type>;
+        template < floating_point type > using student_t_distribution          = std::student_t_distribution         <type>;
+        template < integral       type > using uniform_int_distribution        = std::uniform_int_distribution       <type>;
+        template < floating_point type > using uniform_real_distribution       = std::uniform_real_distribution      <type>;
+        template < floating_point type > using weibull_distribution            = std::weibull_distribution           <type>;
 };
 
 #include "container/vector.hpp"

@@ -25,6 +25,7 @@ namespace detail
     template < class type, int dim, class device >
     class array_info;
 
-    class to_array_pointer;
+    template < class type, int dim, class device >
+    class transform_to_array;
     
 } // namespace detail

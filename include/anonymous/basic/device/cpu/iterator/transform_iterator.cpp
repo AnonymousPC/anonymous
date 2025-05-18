@@ -21,12 +21,6 @@ constexpr cpu::template transform_iterator<iterator,function>::reference cpu::tr
 }
 
 template < class iterator, class function >
-constexpr cpu::template transform_iterator<iterator,function>::pointer cpu::transform_iterator<iterator,function>::operator -> ( ) const
-{
-    return func(iter);
-}
-
-template < class iterator, class function >
 constexpr cpu::template transform_iterator<iterator,function>::reference cpu::transform_iterator<iterator,function>::operator [] ( difference_type offset ) const
     requires std::random_access_iterator<iterator>
 {

@@ -1,5 +1,5 @@
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr cross_entropy_loss<type>::cross_entropy_loss ( type init_outputs, type init_labels )
     extends outputs ( std::move ( init_outputs ) ),
             labels  ( std::move ( init_labels  ) )
@@ -9,7 +9,7 @@ constexpr cross_entropy_loss<type>::cross_entropy_loss ( type init_outputs, type
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 template < array_type type2 >
 constexpr cross_entropy_loss<type>::operator cross_entropy_loss<type2> ( ) const
 {
@@ -17,28 +17,28 @@ constexpr cross_entropy_loss<type>::operator cross_entropy_loss<type2> ( ) const
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr const type& cross_entropy_loss<type>::from ( ) const
 {
     return outputs;
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr const type& cross_entropy_loss<type>::to ( ) const
 {
     return labels;
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr type cross_entropy_loss<type>::grad ( ) const
 {
     static_assert(false, "not coded yet");
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr typename cross_entropy_loss<type>::value_type cross_entropy_loss<type>::value ( ) const
 {
     static_assert(false, "not coded yet");

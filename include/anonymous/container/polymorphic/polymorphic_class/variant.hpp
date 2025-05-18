@@ -7,6 +7,9 @@ class variant
         static_assert ( not ( is_void<types> or ... ) and not ( is_reference<types> or ... ) );
         static_assert ( ( default_initializable<first_type_of<types...>> ) );
 
+    private: // Base
+        using base = std::variant<types...>;
+
     public: // Typedef
         template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using value_type      =       index_type_of<index,types...>;
         template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using reference       =       index_type_of<index,types...>&;

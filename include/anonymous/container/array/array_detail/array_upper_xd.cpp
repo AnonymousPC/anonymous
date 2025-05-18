@@ -129,7 +129,7 @@ constexpr detail::array_shape<max_dim> detail::array_upper<type,max_dim,device>:
 
 template < class type, class device >
 template < int dim2 >
-constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_rows ( int_type auto... offsets )
+constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_rows ( integral auto... offsets )
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
@@ -138,7 +138,7 @@ constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_upper<type,
 
 template < class type, class device >
 template < int dim2 >
-constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_rows ( int_type auto... offsets ) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_rows ( integral auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
@@ -147,7 +147,7 @@ constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_upper
 
 template < class type, class device >
 template < int dim2 >
-constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_columns ( int_type auto... offsets )
+constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_columns ( integral auto... offsets )
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );
@@ -156,7 +156,7 @@ constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_upper<type,
 
 template < class type, class device >
 template < int dim2 >
-constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_columns ( int_type auto... offsets ) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_upper<type,max_dim,device>::get_columns ( integral auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < max_dim );
     static_assert ( sizeof...(offsets) == max_dim - dim2 - 1 );

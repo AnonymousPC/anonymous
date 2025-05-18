@@ -10,7 +10,7 @@ class system_scheduler
 
     public: // Interface
         constexpr static std::execution::sender auto schedule ( )                                                        noexcept;  
-        constexpr static std::execution::sender auto bulk     ( std::execution::sender auto&&, int_type auto&&, auto&& ) noexcept;
+        constexpr static std::execution::sender auto bulk     ( std::execution::sender auto&&, integral auto&&, auto&& ) noexcept;
 
     public: // Query
         constexpr static auto query ( std::execution::get_env_t )                        noexcept;

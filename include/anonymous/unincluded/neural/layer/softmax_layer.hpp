@@ -3,8 +3,8 @@ class softmax_layer;
 
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and ( type1::dimension() == 1 ) and
-             float_type<typename type2::value_type> and ( type2::dimension() == 1 )
+    requires floating_point<typename type1::value_type> and ( type1::dimension() == 1 ) and
+             floating_point<typename type2::value_type> and ( type2::dimension() == 1 )
 class softmax_layer<type1,type2>
 {
     public: // Typedef

@@ -132,7 +132,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::operator = ( array&& r
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>::array ( int_type auto... args )
+constexpr array<type,dim,device>::array ( integral auto... args )
     requires ( sizeof...(args) == dim )
 {
     if constexpr ( debug )
@@ -411,7 +411,7 @@ constexpr array<type,dim,device>& array<type,dim,device>::clear ( )
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>& array<type,dim,device>::resize ( int_type auto... args )
+constexpr array<type,dim,device>& array<type,dim,device>::resize ( integral auto... args )
     requires ( sizeof...(args) == dim )
 {
     if constexpr ( debug )
@@ -745,7 +745,7 @@ constexpr detail::array_shape<dim> array<type,dim,device>::get_shape ( ) const
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_rows ( int_type auto... offsets ) 
+constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_rows ( integral auto... offsets ) 
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -756,7 +756,7 @@ constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::g
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_rows ( int_type auto... offsets ) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_rows ( integral auto... offsets ) const
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -767,7 +767,7 @@ constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,devi
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_columns ( int_type auto... offsets ) 
+constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_columns ( integral auto... offsets ) 
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -778,7 +778,7 @@ constexpr pair<detail::array_upper<type,dim2,device>*> array<type,dim,device>::g
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 template < int dim2 >
-constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_columns ( int_type auto... offsets) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,device>::get_columns ( integral auto... offsets) const
 {
     static_assert ( dim2 > 0 and dim2 < dim );
     static_assert ( sizeof...(offsets) == dim - dim2 - 1 );
@@ -788,7 +788,7 @@ constexpr pair<const detail::array_upper<type,dim2,device>*> array<type,dim,devi
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>::reference array<type,dim,device>::get_value ( int_type auto... offsets )
+constexpr array<type,dim,device>::reference array<type,dim,device>::get_value ( integral auto... offsets )
 {
     static_assert ( sizeof...(offsets) == dim );
     using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
@@ -798,7 +798,7 @@ constexpr array<type,dim,device>::reference array<type,dim,device>::get_value ( 
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>::const_reference array<type,dim,device>::get_value ( int_type auto... offsets ) const
+constexpr array<type,dim,device>::const_reference array<type,dim,device>::get_value ( integral auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == dim );
     using mdspan = std::mdspan<const type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<const type>>;
@@ -808,7 +808,7 @@ constexpr array<type,dim,device>::const_reference array<type,dim,device>::get_va
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>::pointer array<type,dim,device>::get_pointer ( int_type auto... offsets )
+constexpr array<type,dim,device>::pointer array<type,dim,device>::get_pointer ( integral auto... offsets )
 {
     static_assert ( sizeof...(offsets) == dim );
     using mdspan = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<type>>;
@@ -818,7 +818,7 @@ constexpr array<type,dim,device>::pointer array<type,dim,device>::get_pointer ( 
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
-constexpr array<type,dim,device>::const_pointer array<type,dim,device>::get_pointer ( int_type auto... offsets ) const
+constexpr array<type,dim,device>::const_pointer array<type,dim,device>::get_pointer ( integral auto... offsets ) const
 {
     static_assert ( sizeof...(offsets) == dim );
     using mdspan = std::mdspan<const type,std::dextents<int,dim>,typename device::layout_type,typename device::template accessor_type<const type>>;

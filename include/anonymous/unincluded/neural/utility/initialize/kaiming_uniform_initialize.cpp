@@ -1,4 +1,4 @@
-constexpr array_type auto kaiming_uniform_initialize ( array_type auto arr, int_type auto fan_in )
+constexpr array_type auto kaiming_uniform_initialize ( array_type auto arr, integral auto fan_in )
 {
     using type = decltype(arr)::value_type;
 

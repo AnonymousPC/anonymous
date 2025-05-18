@@ -120,7 +120,7 @@ auto mysql_stream::make_stmt_arg ( const auto& val )
 {
     using type = decay<decltype(val)>;
 
-    if constexpr ( same_as<type,std::nullptr_t> or same_as<type,bool> or char_type<type> or number_type<type> )
+    if constexpr ( same_as<type,std::nullptr_t> or same_as<type,bool> or char_type<type> or numeric<type> )
         return val;
     else if constexpr ( same_as<type,const char*> )
         return val;

@@ -1,7 +1,7 @@
 namespace detail
 {
     // Helper
-    constexpr decltype(auto) md_access ( auto& arr, int_type auto idx1, int_type auto... idxs )
+    constexpr decltype(auto) md_access ( auto& arr, integral auto idx1, integral auto... idxs )
     {
         if constexpr ( sizeof...(idxs) >= 1 )
             return md_access(arr[idx1], idxs...);
@@ -9,7 +9,7 @@ namespace detail
             return arr[idx1];
     }
 
-    constexpr decltype(auto) md_access ( const auto& arr, int_type auto idx1, int_type auto... idxs )
+    constexpr decltype(auto) md_access ( const auto& arr, integral auto idx1, integral auto... idxs )
     {
         if constexpr ( sizeof...(idxs) >= 1 )
             return md_access(arr[idx1], idxs...);
@@ -25,7 +25,7 @@ namespace detail
 
 
 
-    constexpr void md_generate ( auto& arr, const auto& shp, const auto& func, int_type auto... idx )
+    constexpr void md_generate ( auto& arr, const auto& shp, const auto& func, integral auto... idx )
     {
         if constexpr ( sizeof...(idx) <= arr.dimension() - 2 )
             for ( int i in range(shp[sizeof...(idx)+1]) )
@@ -87,7 +87,7 @@ namespace detail
         return tuple(larger_shape, larger_size, larger_resize_needed > 0, larger_relayout_needed);
     }
 
-    constexpr void md_relayout_strict_smaller ( auto& arr, const auto& old_shape, const auto& new_shape, int_type auto... idx )
+    constexpr void md_relayout_strict_smaller ( auto& arr, const auto& old_shape, const auto& new_shape, integral auto... idx )
     {   
         using device_type   = remove_cvref<decltype(arr)>::device_type;
         using value_type    = remove_cvref<decltype(arr)>::value_type;
@@ -127,7 +127,7 @@ namespace detail
             static_assert(false, "not supported");
     }
 
-    constexpr void md_relayout_strict_larger ( auto& arr, const auto& old_shape, const auto& new_shape, int_type auto... idx )
+    constexpr void md_relayout_strict_larger ( auto& arr, const auto& old_shape, const auto& new_shape, integral auto... idx )
     {
         using device_type   = remove_cvref<decltype(arr)>::device_type;
         using value_type    = remove_cvref<decltype(arr)>::value_type;

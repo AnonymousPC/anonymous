@@ -1,5 +1,5 @@
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr binary_cross_entropy_loss<type>::binary_cross_entropy_loss ( type init_outputs, type init_labels )
     extends outputs ( std::move ( init_outputs ) ),
             labels  ( std::move ( init_labels  ) )
@@ -9,7 +9,7 @@ constexpr binary_cross_entropy_loss<type>::binary_cross_entropy_loss ( type init
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 template < array_type type2 >
 constexpr binary_cross_entropy_loss<type>::operator binary_cross_entropy_loss<type2> ( ) const
 {
@@ -17,28 +17,28 @@ constexpr binary_cross_entropy_loss<type>::operator binary_cross_entropy_loss<ty
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr const type& binary_cross_entropy_loss<type>::from ( ) const
 {
     return outputs;
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr const type& binary_cross_entropy_loss<type>::to ( ) const
 {
     return labels;
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr type binary_cross_entropy_loss<type>::grad ( ) const
 {
     static_assert(false, "not coded yet");
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr typename binary_cross_entropy_loss<type>::value_type binary_cross_entropy_loss<type>::value ( ) const
 {
     static_assert(false, "not coded yet");

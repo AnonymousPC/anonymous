@@ -61,7 +61,7 @@ constexpr string_type auto& operator += ( string_type auto& left, const string_t
     return left;
 }
 
-constexpr string_type auto operator * ( const string_type auto& left, int_type auto right )
+constexpr string_type auto operator * ( const string_type auto& left, integral auto right )
 {
     #ifdef debug
         if ( right < 0 )
@@ -75,7 +75,7 @@ constexpr string_type auto operator * ( const string_type auto& left, int_type a
     return str;
 }
 
-constexpr string_type auto operator * ( int_type auto left, const string_type auto& right )
+constexpr string_type auto operator * ( integral auto left, const string_type auto& right )
 {
     #ifdef debug
         if ( left < 0 )
@@ -89,7 +89,7 @@ constexpr string_type auto operator * ( int_type auto left, const string_type au
     return str;
 }
 
-constexpr string_type auto& operator *= ( string_type auto& left, int_type auto right )
+constexpr string_type auto& operator *= ( string_type auto& left, integral auto right )
     requires ( decay<decltype(left)>::ownership() )
 {    
     #ifdef debug

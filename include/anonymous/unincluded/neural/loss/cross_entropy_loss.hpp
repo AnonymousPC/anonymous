@@ -2,7 +2,7 @@ template < array_type type >
 class cross_entropy_loss;
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 class cross_entropy_loss<type>
 {
     private: // Data

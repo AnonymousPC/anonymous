@@ -3,9 +3,6 @@
 
 class system
 {
-    public: // Typedef
-        struct device_concept { };
-
     public: // Execution
         using execution_context_type = system_context;
         inline static execution_context_type execution_context = execution_context_type();

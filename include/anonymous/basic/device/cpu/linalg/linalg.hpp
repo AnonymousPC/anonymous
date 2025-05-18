@@ -92,12 +92,12 @@ constexpr void cpu::linalg::fft ( const auto vector, auto output )
     auto vector_map = [&]
         {
             if constexpr ( detail::is_contiguous_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
+                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
             else // if constexpr ( detail::is_strided_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
+                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
         } ();
     auto output_map = detail::eigen_map(output);
-    Eigen::FFT<detail::eigen_nativize<output_value_type::value_type>>().fwd(output_map, vector_map);
+    Eigen::FFT<output_value_type::value_type>().fwd(output_map, vector_map);
 }
 
 constexpr void cpu::linalg::ifft ( const auto vector, auto output )
@@ -109,12 +109,12 @@ constexpr void cpu::linalg::ifft ( const auto vector, auto output )
     auto vector_map = [&]
         {
             if constexpr ( detail::is_contiguous_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
+                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
             else // if constexpr ( detail::is_strided_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<detail::eigen_nativize<vector_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
+                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
         } ();
     auto output_map = detail::eigen_map(output);
-    Eigen::FFT<detail::eigen_nativize<output_value_type::value_type>>().inv(output_map, vector_map);
+    Eigen::FFT<output_value_type::value_type>().inv(output_map, vector_map);
 }
 
 constexpr void cpu::linalg::tensor ( const auto left, const auto right, auto output )

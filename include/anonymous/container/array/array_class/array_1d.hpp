@@ -2,7 +2,7 @@ template < class type, class device >
 class array<type,1,device>
     extends private device::template vector<type>,      // (Static  extends) Data storage.
             private detail::array_upper<type,1,device>, // (Dyanmic extends) Manages the upper-dimension host arrays. Only transposable.
-            public  array_algo<array<type,1,device>,type,1,device>
+            public  container_interface<array<type,1,device>,type,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -13,15 +13,14 @@ class array<type,1,device>
         using upper = detail::array_upper<type,1,device>;
 
     public: // Typedef
-        using  value_type      = device::template value_type     <type>;
-        using  reference       = device::template reference      <type>;
-        using  const_reference = device::template const_reference<type>;
-        using  pointer         = device::template pointer        <type>;
-        using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = device::template stride_iterator<pointer>;
-        using  const_iterator  = device::template stride_iterator<const_pointer>;
-        using  device_type     = device;
-        struct array_concept { };
+        using value_type      = device::template value_type     <type>;
+        using reference       = device::template reference      <type>;
+        using const_reference = device::template const_reference<type>;
+        using pointer         = device::template pointer        <type>;
+        using const_pointer   = device::template const_pointer  <type>;
+        using iterator        = device::template stride_iterator<pointer>;
+        using const_iterator  = device::template stride_iterator<const_pointer>;
+        using device_type     = device;
 
     public: // Core
         constexpr          array ( ) = default;
@@ -85,12 +84,12 @@ class array<type,1,device>
                               constexpr int                                                get_size_top  ( )                        const = delete;
         template < int axis > constexpr int                                                get_size_axis ( )                        const = delete;
                               constexpr detail::array_shape<1>                             get_shape     ( )                        const;
-        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... )             = delete;
-        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... )       const = delete;
-        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... )             = delete;
-        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... )       const = delete;
-                              constexpr reference                                          get_value     ( int_type auto... )             = delete;
-                              constexpr const_reference                                    get_value     ( int_type auto... )       const = delete;
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_rows      ( integral auto... )             = delete;
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_rows      ( integral auto... )       const = delete;
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_columns   ( integral auto... )             = delete;
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_columns   ( integral auto... )       const = delete;
+                              constexpr reference                                          get_value     ( integral auto... )             = delete;
+                              constexpr const_reference                                    get_value     ( integral auto... )       const = delete;
                               constexpr pointer                                            get_pointer   ( )                              = delete;
                               constexpr const_pointer                                      get_pointer   ( )                        const = delete;
                               constexpr void                                               set_resize    ( detail::array_shape<1> )       = delete;
@@ -100,7 +99,7 @@ class array<type,1,device>
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
         template < class type2, int dim2, class device2 > friend class detail::array_uppers;
         template < class type2, int dim2, class device2 > friend class detail::array_lower;
-                                                          friend class detail::to_array_pointer;
+        template < class type2, int dim2, class device2 > friend class detail::transform_to_array;
 
     protected: // ADL
         template < class type2, class device2 = cpu > using vector = array<type2,1,device2>; // Redirect to global array instead of extended one.

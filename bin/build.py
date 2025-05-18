@@ -12,7 +12,7 @@ elif sys.platform == "darwin":
     system = "macos"
 
 if system == "windows":
-    compiler = "g++"
+    compiler = "cl"
 elif system == "linux":
     compiler = "g++"
 elif system == "macos":
@@ -29,33 +29,42 @@ modules = [
     "anonymous.container",
     "anonymous"
 ]
-compile_args = [
-    "-std=c++26", 
-    "-g", 
-    "-Wall", 
-    "-fdiagnostics-color=always"
-]
-if compiler == "g++":
-    compile_args.append("-fmodules")
-elif compiler == "clang++":
-    compile_args.append("-fprebuilt-module-path=./pcm.cache")
-if type == "debug":
-    compile_args.append("-O0")
-    compile_args.append("-fno-inline")
-elif type == "release":
-    compile_args.append("-O3")
-    compile_args.append("-DNDEBUG")
+compile_args = []
+if compiler == "g++" or compiler == "clang++":
+    compile_args = [
+        "-std=c++26", 
+        "-g", 
+        "-Wall", 
+        "-fdiagnostics-color=always"
+    ]
+    if compiler == "g++":
+        compile_args.append("-fmodules")
+    elif compiler == "clang++":
+        compile_args.append("-fprebuilt-module-path=./pcm.cache")
+    if type == "debug":
+        compile_args.append("-O0")
+        compile_args.append("-fno-inline")
+    elif type == "release":
+        compile_args.append("-O3")
+        compile_args.append("-DNDEBUG")
+elif compiler == "cl":
+    compiler_args = [
+        "/std:c++latest"
+    ]
+    
+link_args = []
+if compiler == "g++" or compiler == "clang++":
+    link_args = [
+        "-fuse-ld=lld",
+        "-fdiagnostics-color=always"
+    ]
 
-link_args = [
-    "-fuse-ld=lld",
-    "-fdiagnostics-color=always"
-]
 include_path  = ""
 lib_path      = ""
 libs          = []
 if system == "windows":
-    include_path = "F:/msys/ucrt64/include"
-    lib_path     = "F:/msys/ucrt64/lib"
+    include_path = ""
+    lib_path     = ""
     libs         = ["advapi32", "bcrypt", "crypto", "kernel32", "mswsock", "ntdll", "shell32", "ssl", "stdc++exp", "tiff", "user32", "ws2_32"]
 elif system == "linux":
     include_path = "/usr/include"
@@ -65,6 +74,14 @@ elif system == "macos":
     include_path = "/opt/homebrew/include"
     lib_path     = "/opt/homebrew/lib"
     libs         = ["bz2", "crypto", "hwloc", "iconv", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "ssl", "tiff", "tiffxx", "z", "zstd"]
+
+cache_path = ""
+if compiler == "g++":
+    cache_path = "pcm.cache"
+elif compiler == "clang++":
+    cache_path = "pcm.cache"
+elif compiler == "cl":
+    cache_path = "ifc.cache"
 
 
 # Task
@@ -78,43 +95,40 @@ def compile():
                     f"{' '.join(compile_args)} "
                     f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
                     f"-c ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./gcm.cache/{module}.pcm")
+                    f"-o ./{cache_path}/{module}.pcm")
             elif compiler == "clang++":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
                     f"-Dabstract=0 -Dextends=':' -Din=':' -Dself='(*this)' "
                     f"--precompile ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./pcm.cache/{module}.pcm")
+                    f"-o ./{cache_path}/{module}.pcm")
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f"-c ./pcm.cache/{module}.pcm "
-                    f"-o ./pcm.cache/{module}.o")
+                    f"-c ./{cache_path}/{module}.pcm "
+                    f"-o ./{cache_path}/{module}.o")
                         
     log("main", color="yellow")
-    run(f"{compiler} "
-        f"{' '.join(compile_args)} "
-        f"-Dabstract=0 -Dextends=':' -Din=':' -Dself='(*this)' "
-        f"-c ./main.cpp "
-        f"-o ./bin/main.o")
+    if compiler == "g++" or compiler == "clang++":
+        run(f"{compiler} "
+            f"{' '.join(compile_args)} "
+            f"-Dabstract=0 -Dextends=':' -Din=':' -Dself='(*this)' "
+            f"-c ./main.cpp "
+            f"-o ./{cache_path}/main.o")
 
 
 def link():
-    linkable = [f"./bin/main.o"]
-    if compiler == "g++":
-        for file in os.listdir(f"./gcm.cache"):
-            if file.endswith(".o"):
-                linkable.append(f"./gcm.cache/{file}")
-    elif compiler == "clang++":
-        for file in os.listdir(f"./pcm.cache"):
-            if file.endswith(".o"):
-                linkable.append(f"./pcm.cache/{file}")
+    linkable = []
+    for file in os.listdir(f"./{cache_path}"):
+        if file.endswith(".o"):
+            linkable.append(f"./{cache_path}/{file}")
     
-    run (f"{compiler} "
-         f"{' '.join(link_args)} "
-         f"{' '.join(linkable)} "
-         f"-L{lib_path} "
-         f"{' '.join(f"-l{lib}" for lib in libs)} "
-         f"-o ./bin/main")
+    if compiler == "g++" or compiler == "clang++":
+        run (f"{compiler} "
+            f"{' '.join(link_args)} "
+            f"{' '.join(linkable)} "
+            f"-L{lib_path} "
+            f"{' '.join(f"-l{lib}" for lib in libs)} "
+            f"-o ./bin/main")
 
 
 
@@ -125,10 +139,7 @@ update = False
 def updatable(module):
     bin_time = 0
     try:
-        if compiler == "g++":
-            bin_time = max(os.path.getmtime(f"./gcm.cache/{module}.gcm"), os.path.getmtime(f"./gcm.cache/{module}.o"))
-        elif compiler == "clang++":
-            bin_time = max(os.path.getmtime(f"./pcm.cache/{module}.pcm"), os.path.getmtime(f"./pcm.cache/{module}.o"))
+        bin_time = max(os.path.getmtime(f"./{cache_path}/{module}.gcm"), os.path.getmtime(f"./{cache_path}/{module}.o"))
     except OSError:
         pass
     

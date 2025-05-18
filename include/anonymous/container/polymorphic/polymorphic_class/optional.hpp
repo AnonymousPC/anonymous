@@ -1,18 +1,20 @@
 using std::nullopt;
 using std::nullopt_t;
 
-template < class types, class device >
+template < class types >
 class optional
-    extends public device::template optional<types>
+    extends public std::optional<types>
 {
     private: // Precondition
         static_assert ( not is_void<types> and not is_reference<types> );
 
+    private: // Base
+        using base = std::optional<types>;
+
     public: // Typedef
-        using value_type      = device::template value_type     <types>;
-        using reference       = device::template reference      <types>;
-        using const_reference = device::template const_reference<types>;
-        using device_type     = device;
+        using value_type      =       types;
+        using reference       =       types&;
+        using const_reference = const types&;
 
     public: // Core
         constexpr optional ( )                                                       = default;

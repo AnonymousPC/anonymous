@@ -6,7 +6,7 @@ constexpr detail::array_shape<dim>::array_shape ( )
 }
 
 template < int dim >
-constexpr detail::array_shape<dim>::array_shape ( int_type auto... args )
+constexpr detail::array_shape<dim>::array_shape ( integral auto... args )
     requires ( sizeof...(args) == dim )
     extends std::array<int,dim>({std::forward<decltype(args)>(args)...})
 {

@@ -1,9 +1,9 @@
 /// Declaration
 
 constexpr pair_type auto eigen ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    if constexpr ( int_type<matrix_value_type> or complex_int_type<matrix_value_type> )
+    if constexpr ( integral<matrix_value_type> or complex_int_type<matrix_value_type> )
         return eigen ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
     {
@@ -14,7 +14,7 @@ constexpr pair_type auto eigen ( const array_type auto& matrix )
 
         try
         {
-            using solver_type = conditional<number_type<matrix_value_type>,
+            using solver_type = conditional<numeric<matrix_value_type>,
                                             Eigen::EigenSolver<decltype(aux::to_eigen(matrix))>,
                                             Eigen::ComplexEigenSolver<decltype(aux::to_eigen(matrix))>>;
             auto solver = solver_type(aux::to_eigen(matrix));
@@ -28,9 +28,9 @@ constexpr pair_type auto eigen ( const array_type auto& matrix )
 }
 
 constexpr array_type auto eigen_value ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    if constexpr ( int_type<matrix_value_type> or complex_int_type<matrix_value_type> )
+    if constexpr ( integral<matrix_value_type> or complex_int_type<matrix_value_type> )
         return eigen_value ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
     {
@@ -41,7 +41,7 @@ constexpr array_type auto eigen_value ( const array_type auto& matrix )
 
         try
         {
-            using solver_type = conditional<number_type<matrix_value_type>,
+            using solver_type = conditional<numeric<matrix_value_type>,
                                             Eigen::EigenSolver<decltype(aux::to_eigen(matrix))>,
                                             Eigen::ComplexEigenSolver<decltype(aux::to_eigen(matrix))>>;
             return aux::from_eigen(solver_type(aux::to_eigen(matrix)).eigenvalues());
@@ -54,9 +54,9 @@ constexpr array_type auto eigen_value ( const array_type auto& matrix )
 }
 
 constexpr array_type auto eigen_vector ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    if constexpr ( int_type<matrix_value_type> )
+    if constexpr ( integral<matrix_value_type> )
         return eigen_vector ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
     {
@@ -67,7 +67,7 @@ constexpr array_type auto eigen_vector ( const array_type auto& matrix )
 
         try
         {
-            using solver_type = conditional<number_type<matrix_value_type>,
+            using solver_type = conditional<numeric<matrix_value_type>,
                                             Eigen::EigenSolver<decltype(aux::to_eigen(matrix))>,
                                             Eigen::ComplexEigenSolver<decltype(aux::to_eigen(matrix))>>;
             auto solver = solver_type(aux::to_eigen(matrix));

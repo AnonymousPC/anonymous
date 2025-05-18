@@ -1,5 +1,0 @@
-constexpr std::ostream& operator <<  (       std::ostream&    left, const array_type auto& right ) requires printable                    <right_value_type>;
-constexpr bool          operator ==  ( const array_type auto& left, const array_type auto& right ) requires equalable_to <left_value_type,right_value_type> and (left.dimension() == right.dimension()) and same_as<left_device_type,right_device_type>;
-
-constexpr bool          operator ==  ( const array_type auto& left, const array_type auto& right ) requires equalable_to <left_value_type,right_value_type> and (left.dimension() == right.dimension()) and same_as<left_device_type,right_device_type>;
-constexpr auto          operator <=> ( const array_type auto& left, const array_type auto& right ) requires comparable_to<left_value_type,right_value_type> and (left.dimension() == right.dimension()) and same_as<left_device_type,right_device_type>;

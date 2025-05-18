@@ -133,19 +133,23 @@ constexpr deque<type,device>::value_type deque<type,device>::pop_back ( )
 }
 
 template < class type, class device >
-constexpr deque<type,device>::reference deque<type,device>::insert ( iterator new_pos, type new_value )
+constexpr deque<type,device>::reference deque<type,device>::insert ( int new_pos, type new_value )
 {
-    return *base::insert(new_pos, std::move(new_value));
+    if constexpr ( debug )
+        if ( new_pos < -size() or new_pos == 0 or new_pos > size() )
+            throw index_error("index {} is out of range with size {}", new_pos, size());
+
+    return *base::insert(new_pos >= 0 ? begin() + new_pos - 1 : begin() + new_pos + size(), std::move(new_value));
 }
 
 template < class type, class device >
-constexpr deque<type,device>::value_type deque<type,device>::erase ( iterator old_pos )
+constexpr deque<type,device>::value_type deque<type,device>::erase ( int old_pos )
 {
     if constexpr ( debug )
-        if ( empty() )
-            throw value_error("cannot erase from deque (with empty() = true)");
+        if ( old_pos < -size() or old_pos == 0 or old_pos > size() )
+            throw index_error("index {} is out of range with size {}", old_pos, size());
     
-    auto old_value = value_type(std::move(*old_pos));
-    base::erase(old_pos);
+    auto old_value = std::move(self[old_pos]);
+    base::erase(old_pos >= 0 ? begin() + old_pos - 1 : begin() + old_pos + size());
     return old_value;
 }

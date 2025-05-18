@@ -1,7 +1,7 @@
 [[deprecated("if your code depends on this function, probably you should review your code as it's time-complexity == O(N^4)...")]]
 constexpr array_type auto convolve ( const array_type auto& left, const array_type auto& right )
-    requires ( left. dimension() == 2 ) and ( number_type<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
-             ( right.dimension() == 2 ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( left. dimension() == 2 ) and ( numeric<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
+             ( right.dimension() == 2 ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {
     using type = common_type<typename decay<decltype(left )>::value_type,typename decay<decltype(right)>::value_type>;
 
@@ -15,8 +15,8 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
 }
 
 constexpr array_type auto convolve ( const array_type auto& left, const array_type auto& right )
-    requires ( left. dimension() == 2 ) and ( number_type<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
-             ( right.dimension() == 1 ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( left. dimension() == 2 ) and ( numeric<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
+             ( right.dimension() == 1 ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {
     using type = common_type<typename decay<decltype(left )>::value_type,typename decay<decltype(right)>::value_type>;
 
@@ -25,8 +25,8 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
 }
 
 constexpr array_type auto convolve ( const array_type auto& left, const array_type auto& right )
-    requires ( left. dimension() ==  2 ) and ( number_type<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
-             ( right.dimension() == -1 ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( left. dimension() ==  2 ) and ( numeric<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
+             ( right.dimension() == -1 ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {
     return transpose ( convolve ( transpose(left), transpose(right) ) );
 }

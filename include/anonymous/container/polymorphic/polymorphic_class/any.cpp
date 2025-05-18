@@ -1,5 +1,5 @@
 constexpr any::any ( copyable auto init )
-    extends std::any ( std::move(init) )
+    extends base ( std::move(init) )
 {
 
 }
@@ -26,10 +26,10 @@ constexpr const value_type& any::value ( ) const
 
 constexpr bool any::empty ( ) const 
 {
-    return not std::any::has_value();
+    return not base::has_value();
 }
 
 constexpr const std::type_info& any::type ( ) const
 {
-    return std::any::type();
+    return base::type();
 } 

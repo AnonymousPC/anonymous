@@ -1,5 +1,5 @@
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr mean_absolute_error_loss<type>::mean_absolute_error_loss ( type init_outputs, type init_labels )
     extends outputs ( std::move ( init_outputs ) ),
             labels  ( std::move ( init_labels  ) )
@@ -9,7 +9,7 @@ constexpr mean_absolute_error_loss<type>::mean_absolute_error_loss ( type init_o
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 template < array_type type2 >
 constexpr mean_absolute_error_loss<type>::operator mean_absolute_error_loss<type2> ( ) const
 {
@@ -17,21 +17,21 @@ constexpr mean_absolute_error_loss<type>::operator mean_absolute_error_loss<type
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr const type& mean_absolute_error_loss<type>::from ( ) const
 {
     return outputs;
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr const type& mean_absolute_error_loss<type>::to ( ) const
 {
     return labels;
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr type mean_absolute_error_loss<type>::grad ( ) const
 {
     if constexpr ( type::dimension() == 1 )
@@ -46,7 +46,7 @@ constexpr type mean_absolute_error_loss<type>::grad ( ) const
 }
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 constexpr typename mean_absolute_error_loss<type>::value_type mean_absolute_error_loss<type>::value ( ) const
 {
     auto losses = from() - to();

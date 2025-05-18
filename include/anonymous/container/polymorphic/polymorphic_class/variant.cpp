@@ -42,9 +42,7 @@ namespace detail
 template < class... types >
 constexpr variant<types...>::variant ( auto v )
     requires ( convertible_to<decltype(v),types> or ... )
-    extends std::variant<types...> ( std::in_place_index<(same_as<decltype(v),types> or ...) ? detail::find_same_type       <decltype(v),types...>-1 : 
-                                                                                               detail::find_convertible_type<decltype(v),types...>-1>, 
-                                     std::move(v) )
+    extends base ( std::in_place_index<(same_as<decltype(v),types> or ...) ? detail::find_same_type<decltype(v),types...>-1 : detail::find_convertible_type<decltype(v),types...>-1>, std::move(v) )
 {
 
 }
@@ -52,8 +50,7 @@ constexpr variant<types...>::variant ( auto v )
 template < class... types >
 constexpr variant<types...>::variant ( auto v )
     requires ( constructible_to<decltype(v),types> or ... )
-    extends std::variant<types...> ( std::in_place_index<detail::find_constructible_type<decltype(v),types...>-1>, 
-                                     std::move(v) )
+    extends base ( std::in_place_index<detail::find_constructible_type<decltype(v),types...>-1>, std::move(v) )
 {
 
 }
@@ -64,7 +61,7 @@ constexpr type& variant<types...>::value ( )
     requires ( same_as<types,type> or ... )
 {
     if ( self.index() == detail::find_same_type<type,types...> ) [[likely]]
-        return std::get<type>(static_cast<std::variant<types...>&>(self));
+        return std::get<type>(static_cast<base&>(self));
     else
         throw type_error("bad variant access (with type() = {}, access = {})", self.type(), typeid(type));
 }
@@ -75,7 +72,7 @@ constexpr const type& variant<types...>::value ( ) const
     requires ( same_as<types,type> or ... )
 {
     if ( self.index() == detail::find_same_type<type,types...> ) [[likely]]
-        return std::get<type>(static_cast<const std::variant<types...>&>(self));
+        return std::get<type>(static_cast<const base&>(self));
     else
         throw type_error("bad variant access (with type() = {}, access = {})", self.type(), typeid(type));
 }
@@ -86,7 +83,7 @@ constexpr variant<types...>::template reference<index> variant<types...>::value 
     requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) )
 {
     if ( self.index() == index ) [[likely]]
-        return std::get<index-1>(static_cast<std::variant<types...>&>(self));
+        return std::get<index-1>(static_cast<base&>(self));
     else
         throw type_error("bad variant access (with index() = {}, access = {})", self.index(), index);
 }
@@ -97,7 +94,7 @@ constexpr variant<types...>::template const_reference<index> variant<types...>::
     requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) )
 {
     if ( self.index() == index ) [[likely]]
-        return std::get<index-1>(static_cast<const std::variant<types...>&>(self));
+        return std::get<index-1>(static_cast<const base&>(self));
     else
         throw type_error("bad variant access (with index() = {}, access = {})", self.index(), index);
 }
@@ -105,8 +102,8 @@ constexpr variant<types...>::template const_reference<index> variant<types...>::
 template < class... types >
 constexpr int variant<types...>::index ( ) const
 {
-    if ( not std::variant<types...>::valueless_by_exception() ) [[likely]]
-        return std::variant<types...>::index() + 1;
+    if ( not base::valueless_by_exception() ) [[likely]]
+        return base::index() + 1;
     else
         return 0;
 }
@@ -114,7 +111,7 @@ constexpr int variant<types...>::index ( ) const
 template < class... types >
 constexpr const std::type_info& variant<types...>::type ( ) const
 {
-    if ( not std::variant<types...>::valueless_by_exception() ) [[likely]]
+    if ( not base::valueless_by_exception() ) [[likely]]
         return *(std::array<const std::type_info*,sizeof...(types)>{&typeid(types)...}[index()-1]);
     else
         return typeid(void);
@@ -124,11 +121,11 @@ constexpr const std::type_info& variant<types...>::type ( ) const
 template < class... types >
 constexpr decltype(auto) variant<types...>::visit ( auto&& visitor )
 {
-    return std::variant<types...>::visit(std::forward<decltype(visitor)>(visitor));
+    return base::visit(std::forward<decltype(visitor)>(visitor));
 }
 
 template < class... types >
 constexpr decltype(auto) variant<types...>::visit ( auto&& visitor ) const
 {
-    return std::variant<types...>::visit(std::forward<decltype(visitor)>(visitor));
+    return base::visit(std::forward<decltype(visitor)>(visitor));
 }

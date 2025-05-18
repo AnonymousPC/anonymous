@@ -1,6 +1,6 @@
 constexpr array_type auto cross ( const array_type auto& left, const array_type auto& right )
-    requires ( left. dimension() == 1 ) and number_type<typename decay<decltype(left )>::value_type > and
-             ( right.dimension() == 1 ) and number_type<typename decay<decltype(right)>::value_type>
+    requires ( left. dimension() == 1 ) and numeric<typename decay<decltype(left )>::value_type > and
+             ( right.dimension() == 1 ) and numeric<typename decay<decltype(right)>::value_type>
 {
     #ifdef debug
         if ( left.size() != 3 or right.size() != 3 )

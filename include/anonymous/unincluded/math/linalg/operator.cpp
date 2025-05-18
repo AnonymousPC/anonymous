@@ -1,6 +1,6 @@
 
 constexpr array_type auto operator + ( const array_type auto& right )
-    requires number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type>
+    requires numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type>
 {
     using device     = typename decay<decltype(right)>::device_type;
     using value_type = decltype(+std::declval<typename decay<decltype(right)>::value_type>());
@@ -10,7 +10,7 @@ constexpr array_type auto operator + ( const array_type auto& right )
 }
 
 constexpr array_type auto operator - ( const array_type auto& right )
-    requires number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type>
+    requires numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type>
 {
     using device     = typename decay<decltype(right)>::device_type;
     using value_type = decltype(-std::declval<typename decay<decltype(right)>::value_type>());
@@ -20,7 +20,7 @@ constexpr array_type auto operator - ( const array_type auto& right )
 }
 
 constexpr array_type auto operator + ( const array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == right_dimension ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -37,7 +37,7 @@ constexpr array_type auto operator + ( const array_type auto& left, const array_
 }
 
 constexpr array_type auto operator - ( const array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == right_dimension ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -54,7 +54,7 @@ constexpr array_type auto operator - ( const array_type auto& left, const array_
 }
 
 constexpr array_type auto operator * ( const auto& left, const array_type auto& right )
-    requires ( number_type<decay<decltype(left)>> or complex_type<decay<decltype(left)>> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( numeric<decay<decltype(left)>> or complex_type<decay<decltype(left)>> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {    
     using device     = typename decay<decltype(right)>::device_type;
     using value_type = decltype(std::declval<decay<decltype(left)>>() * std::declval<typename decay<decltype(right)>::value_type>());
@@ -64,7 +64,7 @@ constexpr array_type auto operator * ( const auto& left, const array_type auto& 
 }
 
 constexpr array_type auto operator * ( const array_type auto& left, const auto& right )
-    requires ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
+    requires ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
 {    
     using device     = typename decay<decltype(left )>::device_type;
     using value_type = decltype(std::declval<typename decay<decltype(left )>::value_type>() * std::declval<decay<decltype(right)>>());
@@ -74,7 +74,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const auto& 
 }
 
 constexpr array_type auto operator * ( const array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == 2 and right_dimension == 2 ) and
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -91,7 +91,7 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
 }
 
 constexpr array_type auto operator / ( const array_type auto& left, const auto& right )
-    requires ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
+    requires ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
 {    
     using device     = typename decay<decltype(left )>::device_type;
     using value_type = decltype(std::declval<typename decay<decltype(left )>::value_type>() / std::declval<decay<decltype(right)>>());
@@ -101,7 +101,7 @@ constexpr array_type auto operator / ( const array_type auto& left, const auto& 
 }
 
 constexpr array_type auto& operator += ( array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == right_dimension ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -117,7 +117,7 @@ constexpr array_type auto& operator += ( array_type auto& left, const array_type
 }
 
 constexpr array_type auto& operator -= ( array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == right_dimension ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -133,7 +133,7 @@ constexpr array_type auto& operator -= ( array_type auto& left, const array_type
 }
 
 constexpr array_type auto& operator *= ( array_type auto& left, const auto& right )
-    requires ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
+    requires ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
 {   
     using device = typename decay<decltype(left )>::device_type;
     auto& output = left;
@@ -142,7 +142,7 @@ constexpr array_type auto& operator *= ( array_type auto& left, const auto& righ
 }
 
 constexpr array_type auto& operator *= ( array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == 2 and right_dimension == 2 ) and
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -158,7 +158,7 @@ constexpr array_type auto& operator *= ( array_type auto& left, const array_type
 }
 
 constexpr array_type auto& operator /= ( array_type auto& left, const auto& right )
-    requires ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
+    requires ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<decay<decltype(right)>> or complex_type<decay<decltype(right)>> )
 {   
     using device = typename decay<decltype(left )>::device_type;
     auto& output = left;

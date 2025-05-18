@@ -2,7 +2,7 @@
 
 template < class type, class device >
 template < auto attr, int dim2 >
-constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_uppers<type,1,device>::value ( const auto& shp, const int_type auto&... offsets )
+constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_uppers<type,1,device>::value ( const auto& shp, const integral auto&... offsets )
 {
     static_assert ( dim2 == 1 );
     return pair(vct.data() + detail::view_offset_begin<attr>(shp, offsets...),
@@ -11,11 +11,11 @@ constexpr pair<detail::array_upper<type,dim2,device>*> detail::array_uppers<type
 
 template < class type, class device >
 template < auto attr, int dim2 >
-constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_uppers<type,1,device>::value ( const auto& shp, const int_type auto&... offsets ) const
+constexpr pair<const detail::array_upper<type,dim2,device>*> detail::array_uppers<type,1,device>::value ( const auto& shp, const integral auto&... offsets ) const
 {
     static_assert ( dim2 == 1 );
-    return pair(const_cast<detail::array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_begin<attr>(shp, offsets...)),
-                const_cast<detail::array_upper<type,dim2,device>*>(vct.data() + detail::view_offset_end  <attr>(shp, offsets...)));
+    return pair(vct.data() + detail::view_offset_begin<attr>(shp, offsets...),
+                vct.data() + detail::view_offset_end  <attr>(shp, offsets...));
 }
 
 template < class type, class device >

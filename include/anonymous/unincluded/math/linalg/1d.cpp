@@ -1,5 +1,5 @@
 constexpr array_type auto convolve ( const array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == 1 and right_dimension == 1 ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -11,7 +11,7 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
 }
 
 constexpr array_type auto cross ( const array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == 1 and right_dimension == 1 ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -28,7 +28,7 @@ constexpr array_type auto cross ( const array_type auto& left, const array_type 
 }
 
 constexpr auto dot ( const array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == 1 and right_dimension == 1 ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {
@@ -45,7 +45,7 @@ constexpr auto dot ( const array_type auto& left, const array_type auto& right )
 }
 
 constexpr array_type auto fft ( const array_type auto& vector )
-    requires ( number_type<vector_value_type> or complex_type<vector_value_type> ) and
+    requires ( numeric<vector_value_type> or complex_type<vector_value_type> ) and
              ( vector_dimension == 1 )
 {
     using device = vector_device_type;
@@ -67,7 +67,7 @@ constexpr array_type auto ifft ( const array_type auto& vector )
 } 
 
 constexpr array_type auto tensor ( const array_type auto& left, const array_type auto& right )
-    requires ( ( number_type<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
+    requires ( ( numeric<typename decay<decltype(left )>::value_type> or complex_type<typename decay<decltype(left )>::value_type> ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> ) ) and
              ( left_dimension == 1 and right_dimension == 1 ) and 
              same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>
 {    

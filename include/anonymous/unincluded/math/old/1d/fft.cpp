@@ -1,13 +1,13 @@
 constexpr array_type auto fft ( const array_type auto& vector )
-    requires ( vector.dimension() == 1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> )
+    requires ( vector.dimension() == 1 ) and ( numeric<vector_value_type> or complex_type<vector_value_type> )
 {
-    if constexpr ( int_type<vector_value_type> or complex_int_type<vector_value_type> )
+    if constexpr ( integral<vector_value_type> or complex_int_type<vector_value_type> )
         return fft ( vector.template as_type<int_to_float_type<vector_value_type>>() );
-    else if constexpr ( float_type<vector_value_type> or complex_float_type<vector_value_type> )
+    else if constexpr ( floating_point<vector_value_type> or complex_float_type<vector_value_type> )
     {
         try
         {
-            if constexpr ( float_type<vector_value_type> )
+            if constexpr ( floating_point<vector_value_type> )
             {
                 auto a = aux::to_eigen(vector);
                 auto b = Eigen::Vector<std::complex<vector_value_type>,Eigen::Dynamic>(a.size());
@@ -30,11 +30,11 @@ constexpr array_type auto fft ( const array_type auto& vector )
 }
 
 constexpr array_type auto ifft ( const array_type auto& vector )
-    requires ( vector.dimension() == 1 ) and ( number_type<vector_value_type> or complex_type<vector_value_type> )
+    requires ( vector.dimension() == 1 ) and ( numeric<vector_value_type> or complex_type<vector_value_type> )
 {
-    if constexpr ( int_type<vector_value_type> )
+    if constexpr ( integral<vector_value_type> )
         return ifft ( vector.template as_type<complex<int_to_float_type<vector_value_type>>>() );
-    else if constexpr ( float_type<vector_value_type> )
+    else if constexpr ( floating_point<vector_value_type> )
         return ifft ( vector.template as_type<complex<vector_value_type>>() );
     else if constexpr ( complex_int_type<vector_value_type> )
         return ifft ( vector.template as_type<int_to_float_type<vector_value_type>>() );

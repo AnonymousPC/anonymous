@@ -15,11 +15,11 @@ constexpr auto aux::from_eigen ( const auto& matrix )
                                   >;
 
     static_assert ( dimension == 1 or dimension == -1 or dimension == 2, "unhandlable dimension"  );
-    static_assert ( number_type<value_type> or complex_type<value_type>, "unhandlable value_type" );
+    static_assert ( numeric<value_type> or complex_type<value_type>, "unhandlable value_type" );
 
     if constexpr ( dimension == 1 or dimension == -1 )
     {
-        if constexpr ( number_type<value_type> )
+        if constexpr ( numeric<value_type> )
             return array<value_type,dimension> ( int(matrix.size()), [&] (int i) { return matrix(i-1); } );
         else if constexpr ( complex_type<value_type> )
             return array<value_type,dimension> ( int(matrix.size()), [&] (int i) { return value_type(matrix(i-1).real(), matrix(i-1).imag()); } );
@@ -27,7 +27,7 @@ constexpr auto aux::from_eigen ( const auto& matrix )
 
     else if constexpr ( dimension == 2 )
     {
-        if constexpr ( number_type<value_type> )
+        if constexpr ( numeric<value_type> )
             return array<value_type,dimension> ( int(matrix.rows()), int(matrix.cols()), [&] (int i, int j) { return matrix(i-1, j-1); } );
         else if constexpr ( complex_type<value_type> )
             return array<value_type,dimension> ( int(matrix.rows()), int(matrix.cols()), [&] (int i, int j) { return value_type(matrix(i-1, j-1).real(), matrix(i-1, j-1).imag()); } );
@@ -40,14 +40,14 @@ constexpr auto aux::to_eigen ( const auto& matrix )
     using value_type = matrix_value_type;
 
     static_assert ( dimension == 1 or dimension == -1 or dimension == 2, "unhandlable dimension"  );
-    static_assert ( number_type<value_type> or complex_type<value_type>, "unhandlable value_type" );
+    static_assert ( numeric<value_type> or complex_type<value_type>, "unhandlable value_type" );
 
     if constexpr ( dimension == 1 or dimension == -1 )
     {
         constexpr int row    = dimension == 1 ? Eigen::Dynamic : 1;
         constexpr int column = dimension == 1 ? 1 : Eigen::Dynamic;
 
-        if constexpr ( number_type<matrix_value_type> )
+        if constexpr ( numeric<matrix_value_type> )
         {
             auto m = Eigen::Matrix<typename matrix_type::value_type,row,column> ( matrix.size() );
             for ( int i in range(matrix.size()) ) // TODO: Vectorize.
@@ -65,7 +65,7 @@ constexpr auto aux::to_eigen ( const auto& matrix )
 
     else if constexpr ( matrix.dimension() == 2 )
     {
-        if constexpr ( number_type<matrix_value_type> )
+        if constexpr ( numeric<matrix_value_type> )
         {
             auto m = Eigen::Matrix<typename matrix_type::value_type,Eigen::Dynamic,Eigen::Dynamic> ( matrix.row(), matrix.column() );
             for ( int i in range(matrix.row()) ) // TODO: Vectorize.

@@ -4,8 +4,7 @@ class array<type,max_dim,device>
             private detail::array_upper<type,1,      device>, // (Static  extends) Make abi compatible with array<type,1,device>, required from flatten().
             private detail::array_info <type,max_dim,device>, // (Dyanmic extends) Manages the shape info of array.
             private detail::array_upper<type,max_dim,device>, // (Dyanmic extends) Manages the upper-dimension host arrays. Only transposable.
-            private detail::array_lower<type,max_dim,device>, // (Dyanmic extends) Manages the lower-dimension sub  arrays.
-            public  array_algo<array<type,max_dim,device>,type,max_dim,device>
+            private detail::array_lower<type,max_dim,device>  // (Dyanmic extends) Manages the lower-dimension sub  arrays.
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -18,15 +17,14 @@ class array<type,max_dim,device>
         using lower  = detail::array_lower<type,max_dim,device>;
 
     public: // Typedef
-        using  value_type      = device::template value_type      <type>;
-        using  reference       = device::template reference       <type>;
-        using  const_reference = device::template const_reference <type>;
-        using  pointer         = device::template pointer         <type>;
-        using  const_pointer   = device::template const_pointer   <type>;
-        using  iterator        = cpu   ::template transform_iterator<      detail::array_upper<type,max_dim-1,device>*,detail::to_array_pointer>;
-        using  const_iterator  = cpu   ::template transform_iterator<const detail::array_upper<type,max_dim-1,device>*,detail::to_array_pointer>;
-        using  device_type     = device;
-        struct array_concept { };
+        using value_type      = device::template value_type      <type>;
+        using reference       = device::template reference       <type>;
+        using const_reference = device::template const_reference <type>;
+        using pointer         = device::template pointer         <type>;
+        using const_pointer   = device::template const_pointer   <type>;
+        using iterator        = cpu   ::template transform_iterator<      detail::array_upper<type,max_dim-1,device>*,detail::transform_to_array<type,max_dim-1,device>>;
+        using const_iterator  = cpu   ::template transform_iterator<const detail::array_upper<type,max_dim-1,device>*,detail::transform_to_array<type,max_dim-1,device>>;
+        using device_type     = device;
 
     public: // Core
         constexpr          array ( ) = default;
@@ -36,7 +34,7 @@ class array<type,max_dim,device>
         constexpr          array& operator = (       array&& );
 
     public: // Constructor
-        constexpr explicit array ( int_type auto... args )                               requires                    ( sizeof...(args)     == max_dim );
+        constexpr explicit array ( integral auto... args )                               requires                    ( sizeof...(args)     == max_dim );
         constexpr          array ( auto... args )                                        requires copyable<type> and ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_type     <type,decltype(args)...>;
         constexpr          array ( auto... args )                                        requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_generator<type,decltype(args)...>;
         constexpr          array ( auto... args )                                        requires                    ( sizeof...(args) - 1 == max_dim ) and detail::ints_until_last_function <type,decltype(args)...>;
@@ -65,7 +63,7 @@ class array<type,max_dim,device>
 
     public: // Member
                                   constexpr array& clear  ( );
-                                  constexpr array& resize ( int_type auto... args )             requires ( sizeof...(args) == max_dim );
+                                  constexpr array& resize ( integral auto... args )             requires ( sizeof...(args) == max_dim );
                                   constexpr array& resize ( array<int> );
         template < int axis = 1 > constexpr array& push   (      array<type,max_dim-1,device> ) requires ( ( axis >= -max_dim and axis <= -1 ) or ( axis >= 1 and axis <= max_dim ) );
         template < int axis = 1 > constexpr array& pop    ( )                                   requires ( ( axis >= -max_dim and axis <= -1 ) or ( axis >= 1 and axis <= max_dim ) );
@@ -90,14 +88,14 @@ class array<type,max_dim,device>
                               constexpr int                                                get_size_top  ( )                              const;
         template < int axis > constexpr int                                                get_size_axis ( )                              const;
                               constexpr detail::array_shape<max_dim>                       get_shape     ( )                              const;
-        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... );
-        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... )             const;
-        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... );
-        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... )             const;
-                              constexpr reference                                          get_value     ( int_type auto... );
-                              constexpr const_reference                                    get_value     ( int_type auto... )             const;
-                              constexpr pointer                                            get_pointer   ( int_type auto... );
-                              constexpr const_pointer                                      get_pointer   ( int_type auto... )             const;
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_rows      ( integral auto... );
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_rows      ( integral auto... )             const;
+        template < int dim2 > constexpr pair<      detail::array_upper<type,dim2,device>*> get_columns   ( integral auto... );
+        template < int dim2 > constexpr pair<const detail::array_upper<type,dim2,device>*> get_columns   ( integral auto... )             const;
+                              constexpr reference                                          get_value     ( integral auto... );
+                              constexpr const_reference                                    get_value     ( integral auto... )             const;
+                              constexpr pointer                                            get_pointer   ( integral auto... );
+                              constexpr const_pointer                                      get_pointer   ( integral auto... )             const;
                               constexpr void                                               set_resize    ( detail::array_shape<max_dim> );
 
     private: // Friend
@@ -105,7 +103,7 @@ class array<type,max_dim,device>
         template < class type2, int dim2, class device2 > friend class detail::array_upper;
         template < class type2, int dim2, class device2 > friend class detail::array_uppers;
         template < class type2, int dim2, class device2 > friend class detail::array_lower;
-                                                          friend class detail::to_array_pointer;
+        template < class type2, int dim2, class device2 > friend class detail::transform_to_array;
 
     protected: // ADL
         template < class type2, class device2 = cpu > using vector = array<type2,1,device2>; // Redirect to global array instead of extended one.

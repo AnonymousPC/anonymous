@@ -1,9 +1,9 @@
 /// Declaration
 
 constexpr tuple_type auto singular ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    if constexpr ( int_type<matrix_value_type> or complex_int_type<matrix_value_type> )
+    if constexpr ( integral<matrix_value_type> or complex_int_type<matrix_value_type> )
         return singular ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
         try
@@ -20,9 +20,9 @@ constexpr tuple_type auto singular ( const array_type auto& matrix )
 }
 
 constexpr array_type auto singular_value ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    if constexpr ( int_type<matrix_value_type> or complex_int_type<matrix_value_type> )
+    if constexpr ( integral<matrix_value_type> or complex_int_type<matrix_value_type> )
         return singular_value ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
         try
@@ -36,9 +36,9 @@ constexpr array_type auto singular_value ( const array_type auto& matrix )
 }
 
 constexpr pair_type auto singular_vector ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    if constexpr ( int_type<matrix_value_type> or complex_int_type<matrix_value_type> )
+    if constexpr ( integral<matrix_value_type> or complex_int_type<matrix_value_type> )
         return singular_vector ( matrix.template as_type<int_to_float_type<matrix_value_type>>() );
     else
         try

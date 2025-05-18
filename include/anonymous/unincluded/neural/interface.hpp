@@ -36,15 +36,15 @@ namespace anonymous::neural
     template < layer_type... types >                using sgd     = stochastic_gradient_descent_optimizer <types...>;
 
     /// Utility.Initialize
-    constexpr array_type auto kaiming_normal_initialize  ( array_type auto, int_type   auto );
-    constexpr array_type auto kaiming_uniform_initialize ( array_type auto, int_type   auto );
-    constexpr array_type auto normal_initialize          ( array_type auto, float_type auto, float_type auto );
+    constexpr array_type auto kaiming_normal_initialize  ( array_type auto, integral   auto );
+    constexpr array_type auto kaiming_uniform_initialize ( array_type auto, integral   auto );
+    constexpr array_type auto normal_initialize          ( array_type auto, floating_point auto, floating_point auto );
     constexpr array_type auto ones_initialize            ( array_type auto );
     constexpr array_type auto orthogonal_initialize      ( array_type auto );
     constexpr array_type auto sparse_initialize          ( array_type auto );
-    constexpr array_type auto uniform_initialize         ( array_type auto, float_type auto, float_type auto );
-    constexpr array_type auto xavier_normal_initialize   ( array_type auto, int_type   auto, int_type   auto );
-    constexpr array_type auto xavier_uniform_initialize  ( array_type auto, int_type   auto, int_type   auto );
+    constexpr array_type auto uniform_initialize         ( array_type auto, floating_point auto, floating_point auto );
+    constexpr array_type auto xavier_normal_initialize   ( array_type auto, integral   auto, integral   auto );
+    constexpr array_type auto xavier_uniform_initialize  ( array_type auto, integral   auto, integral   auto );
     constexpr array_type auto zeros_initialize           ( array_type auto );
 
 

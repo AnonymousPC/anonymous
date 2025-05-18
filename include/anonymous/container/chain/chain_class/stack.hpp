@@ -6,7 +6,7 @@ class stack
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> and movable<type> );
 
-    private: // Typedef
+    private: // Base
         using base = device::template stack<type>;
 
     public: // Typedef

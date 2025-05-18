@@ -1,8 +1,8 @@
 class any
     extends public std::any
 {
-    public: // Typedef
-        using device_type = cpu;
+    private: // Base
+        using base = std::any;
 
     public: // Core
         constexpr any ( ) = default;

@@ -33,10 +33,7 @@ constexpr set<type,compare,device>::const_iterator set<type,compare,device>::end
 template < class type, class compare, class device >
 constexpr bool set<type,compare,device>::contains ( const type& k ) const
 {
-    if constexpr ( requires { base::contains(k); } )
-        return base::contains(k);
-    else
-        return base::find(k) != base::end();
+    return base::contains(k);
 }
 
 template < class type, class compare, class device >
@@ -59,25 +56,33 @@ constexpr set<type,compare,device>& set<type,compare,device>::push ( type k )
 template < class type, class compare, class device >
 constexpr set<type,compare,device>& set<type,compare,device>::pop ( const type& k )
 {
-    auto pop_count = base::erase(k);
-    if ( pop_count >= 1 )
+    auto result = base::erase(k);
+    if ( result >= 1 )
         return self;
     else
         throw key_error("key {} not found", k);
 }
 
 template < class type, class compare, class device >
-constexpr set<type,compare,device>& set<type,compare,device>::update ( const set& s )
+constexpr bool set<type,compare,device>::all ( const equalable_to<type> auto& val ) const
 {
-    for ( const auto& k in s )
-        push(k);
-
-    return self;
+    return empty() or (size() == 1 and *begin() == val);
 }
 
 template < class type, class compare, class device >
-constexpr auto set<type,compare,device>::emplace ( auto&&... args )
-    requires constructible_from<typename base::value_type,decltype(args)...>
+constexpr int set<type,compare,device>::count ( const equalable_to<type> auto& val ) const
 {
-    return base::emplace(std::forward<decltype(args)>(args)...);
+    return contains(val) ? 1 : 0;
+}
+
+template < class type, class compare, class device >
+constexpr bool set<type,compare,device>::exist ( const equalable_to<type> auto& val ) const
+{
+    return contains(val);
+}
+
+template < class type, class compare, class device >
+constexpr bool set<type,compare,device>::none ( const equalable_to<type> auto& val ) const
+{
+    return not contains(val);
 }

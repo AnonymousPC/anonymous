@@ -1,6 +1,7 @@
 template < class... types >
 class tuple
-    extends public std::tuple<types...>
+    extends public std::tuple<types...>,
+            public structure_interface<tuple<types...>,types...>
 {
     private: // Base
         using base = std::tuple<types...>;
@@ -9,7 +10,6 @@ class tuple
         template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using value_type      =       index_type_of<index,types...>;
         template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using reference       =       index_type_of<index,types...>&;
         template < int index > requires ( ( index >= -sizeof...(types) and index <= -1 ) or ( index >= 1 and index <= sizeof...(types) ) ) using const_reference = const index_type_of<index,types...>&;
-        struct tuple_concept { };
     
     public: // Core
         constexpr tuple ( ) = default;

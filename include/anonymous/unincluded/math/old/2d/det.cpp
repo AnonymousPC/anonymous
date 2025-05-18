@@ -1,9 +1,9 @@
 /// Declaration
 
 constexpr /*value_type*/ auto det ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
-    if constexpr ( int_type<matrix_value_type> or complex_int_type<matrix_value_type> )
+    if constexpr ( integral<matrix_value_type> or complex_int_type<matrix_value_type> )
         return matrix_value_type ( round ( det ( matrix.template as_type<int_to_float_type<matrix_value_type>>() ) ) );
     else
     {
@@ -14,7 +14,7 @@ constexpr /*value_type*/ auto det ( const array_type auto& matrix )
 
         try
         {
-            if constexpr ( number_type<matrix_value_type> )
+            if constexpr ( numeric<matrix_value_type> )
                 return aux::to_eigen(matrix).determinant();
             else if constexpr ( complex_type<matrix_value_type> )
             {

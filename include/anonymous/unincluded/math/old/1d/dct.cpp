@@ -1,10 +1,10 @@
-template < int_type auto version >
+template < integral auto version >
 constexpr array_type auto dct ( const array_type auto& vector )
-    requires ( vector.dimension() == 1 ) and number_type<vector_value_type>
+    requires ( vector.dimension() == 1 ) and numeric<vector_value_type>
 {
-    if constexpr ( int_type<vector_value_type> )
+    if constexpr ( integral<vector_value_type> )
         return dct<version> ( vector.template as_type<int_to_float_type<vector_value_type>>() );
-    else if constexpr ( float_type<vector_value_type> )
+    else if constexpr ( floating_point<vector_value_type> )
     {
         if constexpr ( version == 1 )
         {

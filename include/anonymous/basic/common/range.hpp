@@ -1,5 +1,5 @@
-constexpr auto range ( int_type auto );
-constexpr auto range ( int_type auto, int_type auto );
-constexpr auto range ( int_type auto, int_type auto, int_type auto );
+constexpr auto range ( integral auto );
+constexpr auto range ( integral auto, integral auto );
+constexpr auto range ( integral auto, integral auto, integral auto );
 
 #include "range.cpp"

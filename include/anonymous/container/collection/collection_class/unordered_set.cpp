@@ -67,17 +67,25 @@ constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::pop 
 }
 
 template < class type, class hash, class device >
-constexpr unordered_set<type,hash,device>& unordered_set<type,hash,device>::update ( const unordered_set& s )
+constexpr bool unordered_set<type,hash,device>::all ( const equalable_to<type> auto& val ) const
 {
-    for ( const auto& k in s )
-        push(k);
-
-    return self;
+    return empty() or (size() == 1 and *begin() == val);
 }
 
 template < class type, class hash, class device >
-constexpr auto unordered_set<type,hash,device>::emplace ( auto&&... args )
-    requires constructible_from<typename base::value_type,decltype(args)...>
+constexpr int unordered_set<type,hash,device>::count ( const equalable_to<type> auto& val ) const
 {
-    return base::emplace(std::forward<decltype(args)>(args)...);
+    return contains(val) ? 1 : 0;
+}
+
+template < class type, class hash, class device >
+constexpr bool unordered_set<type,hash,device>::exist ( const equalable_to<type> auto& val ) const
+{
+    return contains(val);
+}
+
+template < class type, class hash, class device >
+constexpr bool unordered_set<type,hash,device>::none ( const equalable_to<type> auto& val ) const
+{
+    return not contains(val);
 }

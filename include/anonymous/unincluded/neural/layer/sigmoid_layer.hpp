@@ -10,8 +10,8 @@ template < array_type type1, array_type type2 >
 class sigmoid_layer;
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 class sigmoid_layer<type1,type2>
 {

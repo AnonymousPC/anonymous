@@ -209,10 +209,6 @@ constexpr decltype(auto) detail::make_formattable ( auto&& f )
 {
     if constexpr ( formattable<remove_cvref<decltype(f)>> )
         return f;
-    else if constexpr ( printable<decltype(f)> )
-        return (std::stringstream()<<f).str();
-    else if constexpr ( same_as<decltype(f),const std::type_info&> )
-        return boost::core::demangle(f.name());
     else
         return std::format("[[{} object at {}]]", boost::core::demangle(typeid(f).name()), static_cast<const void*>(&f));
 } 

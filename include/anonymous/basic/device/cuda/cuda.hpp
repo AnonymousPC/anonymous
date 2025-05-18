@@ -1,8 +1,5 @@
 class cuda
 {
-    public: // Typedef
-        struct device_concept { };
-
     public: // Execution
      // using execution_context_type = not supported;
      // inline static execution_context_type execution_context = not supported;
@@ -218,26 +215,26 @@ class cuda
         using random_context_type = thrust::default_random_engine;
         inline static thread_local random_context_type random_context = random_context_type(std::random_device()());
 
-     //                              using bernoulli_distribution          = not supported;
-     // template < int_type   type > using binomial_distribution           = not supported;
-     // template < float_type type > using cauchy_distribution             = not supported;
-     // template < float_type type > using chi_squared_distribution        = not supported;
-     // template < int_type   type > using discrete_distribution           = not supported;
-     // template < float_type type > using exponential_distribution        = not supported;
-     // template < float_type type > using extreme_value_distribution      = not supported;
-     // template < float_type type > using fisher_f_distribution           = not supported;
-     // template < float_type type > using gamma_distribution              = not supported;
-     // template < int_type   type > using geometric_distribution          = not supported;
-     // template < int_type   type > using lognormal_distribution          = not supported;
-     // template < int_type   type > using negative_binomial_distribution  = not supported;
-        template < int_type   type > using normal_distribution             = thrust::normal_distribution      <type>;
-     // template < float_type type > using piecewise_constant_distribution = not supported;
-     // template < float_type type > using piecewise_linear_distribution   = not supported;
-     // template < int_type   type > using poisson_distribution            = not supported;
-     // template < float_type type > using student_t_distribution          = not supported;
-        template < int_type   type > using uniform_int_distribution        = thrust::uniform_int_distribution <type>;
-        template < float_type type > using uniform_real_distribution       = thrust::uniform_real_distribution<type>;
-     // template < float_type type > using weibull_distribution            = not supported;
+     //                                  using bernoulli_distribution          = not supported;
+     // template < integral       type > using binomial_distribution           = not supported;
+     // template < floating_point type > using cauchy_distribution             = not supported;
+     // template < floating_point type > using chi_squared_distribution        = not supported;
+     // template < integral       type > using discrete_distribution           = not supported;
+     // template < floating_point type > using exponential_distribution        = not supported;
+     // template < floating_point type > using extreme_value_distribution      = not supported;
+     // template < floating_point type > using fisher_f_distribution           = not supported;
+     // template < floating_point type > using gamma_distribution              = not supported;
+     // template < integral       type > using geometric_distribution          = not supported;
+     // template < integral       type > using lognormal_distribution          = not supported;
+     // template < integral       type > using negative_binomial_distribution  = not supported;
+        template < integral       type > using normal_distribution             = thrust::normal_distribution      <type>;
+     // template < floating_point type > using piecewise_constant_distribution = not supported;
+     // template < floating_point type > using piecewise_linear_distribution   = not supported;
+     // template < integral       type > using poisson_distribution            = not supported;
+     // template < floating_point type > using student_t_distribution          = not supported;
+        template < integral       type > using uniform_int_distribution        = thrust::uniform_int_distribution <type>;
+        template < floating_point type > using uniform_real_distribution       = thrust::uniform_real_distribution<type>;
+     // template < floating_point type > using weibull_distribution            = not supported;
 };
 
 #include "iterator/stride_iterator.hpp"

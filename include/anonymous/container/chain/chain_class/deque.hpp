@@ -1,6 +1,7 @@
 template < class type, class device >
 class deque
-    extends public device::template deque<type>
+    extends public device::template deque<type>,
+            public container_interface<deque<type,device>,type,device>
 {
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
@@ -45,8 +46,8 @@ class deque
         constexpr reference       push_back   ( type );
         constexpr value_type      pop_front   ( );
         constexpr value_type      pop_back    ( );
-        constexpr reference       insert      ( iterator, type );
-        constexpr value_type      erase       ( iterator );
+        constexpr reference       insert      ( int, type );
+        constexpr value_type      erase       ( int );
 };
 
 

@@ -4,7 +4,7 @@ class detail::array_shape
 {
     public: // Core
         constexpr array_shape ( );
-        constexpr array_shape ( int_type auto... args ) requires ( sizeof...(args) == dim );
+        constexpr array_shape ( integral auto... args ) requires ( sizeof...(args) == dim );
 
     public: // Member
         constexpr static int  size        ( );

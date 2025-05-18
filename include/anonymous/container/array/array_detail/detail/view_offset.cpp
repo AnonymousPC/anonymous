@@ -1,7 +1,7 @@
 namespace detail
 {
     template < auto attr >
-    constexpr int view_offset_begin ( const auto& shp, int_type auto... offsets )
+    constexpr int view_offset_begin ( const auto& shp, integral auto... offsets )
     {
         if constexpr ( sizeof...(offsets) == 0 )
             return 0;
@@ -35,7 +35,7 @@ namespace detail
     }
 
     template < auto attr >
-    constexpr int view_offset_end ( const auto& shp, int_type auto... offsets )
+    constexpr int view_offset_end ( const auto& shp, integral auto... offsets )
     {
         if constexpr ( attr == rows_attribute )
             return view_offset_begin<attr>(shp, offsets...) + shp[1+sizeof...(offsets)];

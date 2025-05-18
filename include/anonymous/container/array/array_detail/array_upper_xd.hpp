@@ -10,8 +10,8 @@ class detail::array_upper<type,max_dim,device>
         using const_reference = device::template const_reference <type>;
         using pointer         = device::template pointer         <type>;
         using const_pointer   = device::template const_pointer   <type>;
-        using iterator        = cpu   ::template transform_iterator<      detail::array_upper<type,max_dim-1,device>*,detail::to_array_pointer>;
-        using const_iterator  = cpu   ::template transform_iterator<const detail::array_upper<type,max_dim-1,device>*,detail::to_array_pointer>;
+        using iterator        = cpu   ::template transform_iterator<      detail::array_upper<type,max_dim-1,device>*,detail::transform_to_array<type,max_dim-1,device>>;
+        using const_iterator  = cpu   ::template transform_iterator<const detail::array_upper<type,max_dim-1,device>*,detail::transform_to_array<type,max_dim-1,device>>;
     
     public: // Core
         constexpr array_upper ( ) = default;
@@ -42,14 +42,14 @@ class detail::array_upper<type,max_dim,device>
                                constexpr       int                                                get_size_top  ( )                  const;
         template < int axis >  constexpr       int                                                get_size_axis ( )                  const;
                                constexpr       detail::array_shape<max_dim>                       get_shape     ( )                  const;
-        template < int dim2 >  constexpr       pair<      detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... );
-        template < int dim2 >  constexpr       pair<const detail::array_upper<type,dim2,device>*> get_rows      ( int_type auto... ) const;
-        template < int dim2 >  constexpr       pair<      detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... );
-        template < int dim2 >  constexpr       pair<const detail::array_upper<type,dim2,device>*> get_columns   ( int_type auto... ) const;
-                               constexpr       reference                                          get_value     ( int_type auto... )       = delete;
-                               constexpr       const_reference                                    get_value     ( int_type auto... ) const = delete;
-                               constexpr       pointer                                            get_pointer   ( int_type auto... )       = delete;
-                               constexpr       const_pointer                                      get_pointer   ( int_type auto... ) const = delete;
+        template < int dim2 >  constexpr       pair<      detail::array_upper<type,dim2,device>*> get_rows      ( integral auto... );
+        template < int dim2 >  constexpr       pair<const detail::array_upper<type,dim2,device>*> get_rows      ( integral auto... ) const;
+        template < int dim2 >  constexpr       pair<      detail::array_upper<type,dim2,device>*> get_columns   ( integral auto... );
+        template < int dim2 >  constexpr       pair<const detail::array_upper<type,dim2,device>*> get_columns   ( integral auto... ) const;
+                               constexpr       reference                                          get_value     ( integral auto... )       = delete;
+                               constexpr       const_reference                                    get_value     ( integral auto... ) const = delete;
+                               constexpr       pointer                                            get_pointer   ( integral auto... )       = delete;
+                               constexpr       const_pointer                                      get_pointer   ( integral auto... ) const = delete;
 
                                constexpr       array_attribute                                    get_attribute ( )                  const;
                                constexpr       int                                                get_offset    ( )                  const;

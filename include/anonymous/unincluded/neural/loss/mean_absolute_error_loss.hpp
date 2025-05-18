@@ -2,7 +2,7 @@ template < array_type type >
 class mean_absolute_error_loss;
 
 template < array_type type >
-    requires float_type<typename type::value_type>
+    requires floating_point<typename type::value_type>
 class mean_absolute_error_loss<type>
 {
     private: // Data

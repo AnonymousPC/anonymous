@@ -275,7 +275,7 @@ constexpr std::execution::sender auto system_scheduler::schedule ( ) noexcept
     return sender();
 }
 
-constexpr std::execution::sender auto system_scheduler::bulk ( std::execution::sender auto&& snd, int_type auto&& shp, auto&& func ) noexcept
+constexpr std::execution::sender auto system_scheduler::bulk ( std::execution::sender auto&& snd, integral auto&& shp, auto&& func ) noexcept
 {
     return bulk_sender(std::forward<decltype(snd)>(snd), std::forward<decltype(shp)>(shp), std::forward<decltype(func)>(func));
 }

@@ -102,8 +102,7 @@ export namespace anonymous
     template < int min, int max, int stride = 1 > constexpr bool none_of_constexpr ( auto&& /*preds*/ );
 
     /// Common.concept
-    #include "common/concept.hpp"
-    template < class type > concept device_type = requires { typename type::device_concept; };
+    #include "concept/concept.hpp"
 
     /// Common.exception
     class exception;
@@ -130,13 +129,10 @@ export namespace anonymous
             class math_error;
                 class linalg_error;
 
-    /// Common.print
-    constexpr void print ( const printable auto&... );
-
     /// Common.range
-    constexpr auto range ( int_type auto );
-    constexpr auto range ( int_type auto, int_type auto );
-    constexpr auto range ( int_type auto, int_type auto, int_type auto );
+    constexpr auto range ( integral auto );
+    constexpr auto range ( integral auto, integral auto );
+    constexpr auto range ( integral auto, integral auto, integral auto );
 
     /// Device
     class cpu;
@@ -156,9 +152,15 @@ export namespace anonymous
 
 } // namespace anonymous
 
+export inline namespace __global__
+{
+    #include "utility/export/typedef.hpp"
+}
+
 export namespace std
 {
-    #include "utility/common_type/export/std.hpp"
+    #include "utility/export/std/common_type.hpp"
+    #include "utility/export/std/formatter.hpp"
     
 } // namespace std
 

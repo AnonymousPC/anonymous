@@ -1,6 +1,6 @@
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::output_type sigmoid_layer<type1,type2>::forward ( const input_type& inputs ) const
 {
@@ -16,8 +16,8 @@ constexpr typename sigmoid_layer<type1,type2>::output_type sigmoid_layer<type1,t
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::batch_output_type sigmoid_layer<type1,type2>::forward ( const batch_input_type& inputs ) const
 {
@@ -25,8 +25,8 @@ constexpr typename sigmoid_layer<type1,type2>::batch_output_type sigmoid_layer<t
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::output_type sigmoid_layer<type1,type2>::forward ( input_type inputs, optimizer_type auto& optimizer ) const
 {
@@ -34,8 +34,8 @@ constexpr typename sigmoid_layer<type1,type2>::output_type sigmoid_layer<type1,t
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::batch_output_type sigmoid_layer<type1,type2>::forward ( batch_input_type inputs, optimizer_type auto& optimizer ) const
 {
@@ -43,8 +43,8 @@ constexpr typename sigmoid_layer<type1,type2>::batch_output_type sigmoid_layer<t
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::input_type sigmoid_layer<type1,type2>::backward ( const output_type& losses, optimizer_type auto& optimizer )
 {
@@ -53,8 +53,8 @@ constexpr typename sigmoid_layer<type1,type2>::input_type sigmoid_layer<type1,ty
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::batch_input_type sigmoid_layer<type1,type2>::backward ( const batch_output_type& losses, optimizer_type auto& optimizer )
 {
@@ -63,8 +63,8 @@ constexpr typename sigmoid_layer<type1,type2>::batch_input_type sigmoid_layer<ty
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::input_type sigmoid_layer<type1,type2>::backward ( const bce_loss& losses, optimizer_type auto& /*optimizer*/ )
 {
@@ -72,8 +72,8 @@ constexpr typename sigmoid_layer<type1,type2>::input_type sigmoid_layer<type1,ty
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr typename sigmoid_layer<type1,type2>::batch_input_type sigmoid_layer<type1,type2>::backward ( const batch_bce_loss& losses, optimizer_type auto& /*optimizer*/ )
 {
@@ -81,8 +81,8 @@ constexpr typename sigmoid_layer<type1,type2>::batch_input_type sigmoid_layer<ty
 }
 
 template < array_type type1, array_type type2 >
-    requires float_type<typename type1::value_type> and
-             float_type<typename type2::value_type> and
+    requires floating_point<typename type1::value_type> and
+             floating_point<typename type2::value_type> and
              ( type1::dimension() == type2::dimension() )
 constexpr auto sigmoid_layer<type1,type2>::backward_one_sample ( const auto& losses, auto& inputs )
 {

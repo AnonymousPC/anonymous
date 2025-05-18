@@ -15,27 +15,6 @@ namespace detail
 
 
 
-
-
-    template < class input_type >
-    struct eigen_nativize_helper
-    {
-        using type = input_type;
-    };
-
-    template < complex_type input_type >
-    struct eigen_nativize_helper<input_type>
-    {
-        using type = std::complex<typename input_type::value_type>;
-    };
-
-    template < class type >
-    using eigen_nativize = eigen_nativize_helper<type>::type;
-
-
-
-
-
     enum { eigen_map_default,
            eigen_map_vector,
            eigen_map_matrix,
@@ -79,46 +58,46 @@ namespace detail
         if constexpr ( ( mode == eigen_map_default and mdspan.rank() == 1 ) or mode == eigen_map_vector )
             if constexpr ( is_contiguous_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )
-                    return Eigen::Map<      Eigen::Vector<eigen_nativize<mdspan_value_type>,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size());
+                    return Eigen::Map<      Eigen::Vector<mdspan_value_type,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size());
                 else  
-                    return Eigen::Map<const Eigen::Vector<eigen_nativize<mdspan_value_type>,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size());
+                    return Eigen::Map<const Eigen::Vector<mdspan_value_type,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size());
             else // if constexpr ( is_strided_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )
-                    return Eigen::Map<      Eigen::Vector<eigen_nativize<mdspan_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size(), mdspan.stride(0));
+                    return Eigen::Map<      Eigen::Vector<mdspan_value_type,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size(), mdspan.stride(0));
                 else
-                    return Eigen::Map<const Eigen::Vector<eigen_nativize<mdspan_value_type>,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size(), mdspan.stride(0));
+                    return Eigen::Map<const Eigen::Vector<mdspan_value_type,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(mdspan.data_handle(), mdspan.size(), mdspan.stride(0));
         else if constexpr ( ( mode == eigen_map_default and mdspan.rank() == 2 ) or mode == eigen_map_matrix )
             if constexpr ( is_contiguous_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )
-                    return Eigen::Map<      Eigen::Matrix<eigen_nativize<mdspan_value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1));
+                    return Eigen::Map<      Eigen::Matrix<mdspan_value_type,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1));
                 else 
-                    return Eigen::Map<const Eigen::Matrix<eigen_nativize<mdspan_value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1));
+                    return Eigen::Map<const Eigen::Matrix<mdspan_value_type,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1));
             else if constexpr ( is_strided_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )
-                    return Eigen::Map<      Eigen::Matrix<eigen_nativize<mdspan_value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mdspan.stride(0), mdspan.stride(1)));
+                    return Eigen::Map<      Eigen::Matrix<mdspan_value_type,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mdspan.stride(0), mdspan.stride(1)));
                 else
-                    return Eigen::Map<const Eigen::Matrix<eigen_nativize<mdspan_value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mdspan.stride(0), mdspan.stride(1)));
+                    return Eigen::Map<const Eigen::Matrix<mdspan_value_type,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>,Eigen::Unaligned,Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>>(mdspan.data_handle(), mdspan.extent(0), mdspan.extent(1), Eigen::Stride<Eigen::Dynamic,Eigen::Dynamic>(mdspan.stride(0), mdspan.stride(1)));
             else // if constexpr ( is_transposed_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )
-                    return Eigen::Map<      Eigen::Matrix<eigen_nativize<mdspan_value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(1), mdspan.extent(0)).transpose();
+                    return Eigen::Map<      Eigen::Matrix<mdspan_value_type,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(1), mdspan.extent(0)).transpose();
                 else
-                    return Eigen::Map<const Eigen::Matrix<eigen_nativize<mdspan_value_type>,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(1), mdspan.extent(0)).transpose();
+                    return Eigen::Map<const Eigen::Matrix<mdspan_value_type,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>(mdspan.data_handle(), mdspan.extent(1), mdspan.extent(0)).transpose();
         else // if constexpr ( ( mode == eigen_map_default and mdspan.rank() >= 3 ) or mode == eigen_map_tensor )
             if constexpr ( is_contiguous_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )   
-                    return Eigen::TensorMap<      Eigen::Tensor<eigen_nativize<mdspan_value_type>,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_extents(mdspan.extents()));
+                    return Eigen::TensorMap<      Eigen::Tensor<mdspan_value_type,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_extents(mdspan.extents()));
                 else
-                    return Eigen::TensorMap<const Eigen::Tensor<eigen_nativize<mdspan_value_type>,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_extents(mdspan.extents()));
+                    return Eigen::TensorMap<const Eigen::Tensor<mdspan_value_type,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_extents(mdspan.extents()));
             else if constexpr ( is_strided_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )
-                    return Eigen::TensorMap<      Eigen::Tensor<eigen_nativize<mdspan_value_type>,mdspan.rank()+1,Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_strided_full_extents(mdspan.extents(), mdspan.mapping())).template chip<mdspan.rank()>(0).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
+                    return Eigen::TensorMap<      Eigen::Tensor<mdspan_value_type,mdspan.rank()+1,Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_strided_full_extents(mdspan.extents(), mdspan.mapping())).template chip<mdspan.rank()>(0).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
                 else
-                    return Eigen::TensorMap<const Eigen::Tensor<eigen_nativize<mdspan_value_type>,mdspan.rank()+1,Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_strided_full_extents(mdspan.extents(), mdspan.mapping())).template chip<mdspan.rank()>(0).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
+                    return Eigen::TensorMap<const Eigen::Tensor<mdspan_value_type,mdspan.rank()+1,Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_strided_full_extents(mdspan.extents(), mdspan.mapping())).template chip<mdspan.rank()>(0).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
             else // if constexpr ( is_transposed_layout<mdspan_layout_type> )
                 if constexpr ( is_non_const_accessor<mdspan_accessor_type> )
-                    return Eigen::TensorMap<      Eigen::Tensor<eigen_nativize<mdspan_value_type>,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_transpose_extents(mdspan.extents())).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
+                    return Eigen::TensorMap<      Eigen::Tensor<mdspan_value_type,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_transpose_extents(mdspan.extents())).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
                 else 
-                    return Eigen::TensorMap<const Eigen::Tensor<eigen_nativize<mdspan_value_type>,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_transpose_extents(mdspan.extents())).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
+                    return Eigen::TensorMap<const Eigen::Tensor<mdspan_value_type,mdspan.rank(),Eigen::RowMajor>>(mdspan.data_handle(), eigen_make_transpose_extents(mdspan.extents())).shuffle(eigen_make_transpose_shuffle<mdspan.rank()>());
     }
 
     template < class type = void, auto mode = eigen_map_default >

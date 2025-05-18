@@ -1,5 +1,5 @@
 constexpr /*value_type*/ auto tr ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
     #ifdef debug
         if ( matrix.row() != matrix.column() )

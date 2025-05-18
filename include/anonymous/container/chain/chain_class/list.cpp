@@ -113,19 +113,52 @@ constexpr list<type,device>::value_type list<type,device>::pop_back ( )
 }
 
 template < class type, class device >
-constexpr list<type,device>::reference list<type,device>::insert ( iterator new_pos, type new_value )
+constexpr list<type,device>& list<type,device>::remove ( const equalable_to<type> auto& val )
 {
-    return *base::insert(new_pos, std::move(new_value));
+    base::remove(val);
+    return self;
 }
 
 template < class type, class device >
-constexpr list<type,device>::value_type list<type,device>::erase ( iterator old_pos )
+constexpr list<type,device>& list<type,device>::remove ( predicate<type> auto pred )
 {
-    if constexpr ( debug )
-        if ( empty() )
-            throw value_error("cannot erase from list (with empty() = true)");
+    base::remove_if(pred);
+    return self;
+}
 
-    auto old_value = value_type(std::move(*old_pos));
-    base::erase(old_pos);
-    return old_value;
+template < class type, class device >
+constexpr list<type,device>& list<type,device>::reverse ( )
+{
+    base::reverse();
+    return self;
+}
+
+template < class type, class device >
+constexpr list<type,device>& list<type,device>::sort ( )
+    requires comparable<type>
+{
+    base::sort();
+    return self;
+}
+
+template < class type, class device >
+constexpr list<type,device>& list<type,device>::sort ( relation<type,type> auto rel )
+{
+    base::sort(rel);
+    return self;
+}
+
+template < class type, class device >
+constexpr list<type,device>& list<type,device>::unique ( )
+    requires equalable<type>
+{
+    base::unique();
+    return self;
+}
+
+template < class type, class device >
+constexpr list<type,device>& list<type,device>::unique ( relation<type,type> auto rel )
+{
+    base::unique(rel);
+    return self;
 }

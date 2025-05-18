@@ -87,7 +87,7 @@ constexpr void opencl::linalg::divide ( const auto left, const auto right, auto 
     detail::opencl_check_mdspan(left, output);
 
     if constexpr ( left.rank() == 1 )
-        detail::opencl_add_scaled_mdspan_inplace(1 / right, left, output); // As right is always float_type (or complex<float_type>).
+        detail::opencl_add_scaled_mdspan_inplace(1 / right, left, output); // As right is always floating_point (or complex<floating_point>).
     else // if constexpr ( left.rank() == 2 )
         divide(std::mdspan<const left_value_type,  std::dextents<int,1>,typename opencl::layout_type,left_accessor_type  >(left  .data_handle(), left  .size()),
                right,

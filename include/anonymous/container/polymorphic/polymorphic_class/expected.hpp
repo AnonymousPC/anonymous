@@ -1,21 +1,23 @@
-template < class type1, class type2, class device >
+template < class type1, class type2 >
 class expected
-    extends public device::template expected<type1,type2>
+    extends public std::expected<type1,type2>
 {
     private: // Precondition
         static_assert ( not is_void<type1> and not is_reference<type1> );
         static_assert ( not is_void<type2> and not is_reference<type2> );
-        static_assert ( default_initializable<type1> );
         static_assert ( not same_as<type1,type2> );
+        static_assert ( default_initializable<type1> );
+
+    private: // Base
+        using base = std::expected<type1,type2>;
 
     public: // Typedef
-        using value_type            = device::template value_type           <type1>;
-        using value_reference       = device::template reference            <type1>;
-        using const_value_reference = device::template const_value_reference<type1>;
-        using error_type            = device::template value_type           <type2>;
-        using error_reference       = device::template reference            <type2>;
-        using const_error_reference = device::template const_reference      <type2>;
-        using device_type           = device;
+        using value_type            =       type1;
+        using value_reference       =       type1&;
+        using const_value_reference = const type1&;
+        using error_type            =       type2;
+        using error_reference       =       type2&;
+        using const_error_reference = const type2&;
 
     public: // Core
         constexpr expected ( )                                                                           = default;

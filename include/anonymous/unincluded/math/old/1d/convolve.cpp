@@ -1,6 +1,6 @@
 constexpr array_type auto convolve ( const array_type auto& left, const array_type auto& right )
-    requires ( left. dimension() == 1 ) and ( number_type<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
-             ( right.dimension() == 1 ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( left. dimension() == 1 ) and ( numeric<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
+             ( right.dimension() == 1 ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {
     using type = common_type<typename decay<decltype(left )>::value_type,typename decay<decltype(right)>::value_type>;
 
@@ -24,9 +24,9 @@ constexpr array_type auto convolve ( const array_type auto& left, const array_ty
         auto c = array(a.size(), [&] (int i) { return a[i] * b[i]; });
         auto d = ifft(c).resize(left.size() + right.size() - 1);
 
-        if constexpr ( int_type<type> )
+        if constexpr ( integral<type> )
             return array<type> ( d.size(), [&] (int i) { return type(round(d[i].real())); });
-        else if constexpr ( float_type<type> )
+        else if constexpr ( floating_point<type> )
             return array<type> ( d.size(), [&] (int i) { return d[i].real(); });
         else if constexpr ( complex_int_type<type> )
             return array<type> ( d.size(), [&] (int i) { return type(round(d[i])); });

@@ -1,5 +1,5 @@
 constexpr tuple_type auto svd ( const array_type auto& matrix )
-    requires ( matrix.dimension() == 2 ) and ( number_type<matrix_value_type> or complex_type<matrix_value_type> )
+    requires ( matrix.dimension() == 2 ) and ( numeric<matrix_value_type> or complex_type<matrix_value_type> )
 {
     auto [vals, l_vcts, r_vcts] = singular ( matrix );
     auto u = transpose(l_vcts);

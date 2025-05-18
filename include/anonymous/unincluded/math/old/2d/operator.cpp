@@ -1,8 +1,8 @@
 /// Declaration
 
 constexpr array_type auto operator * ( const array_type auto& left, const array_type auto& right )
-    requires ( left .dimension() == 2 ) and ( number_type<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
-             ( right.dimension() == 2 ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( left .dimension() == 2 ) and ( numeric<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
+             ( right.dimension() == 2 ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {
     #ifdef debug
         if ( left.column() != right.row() )
@@ -21,8 +21,8 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
 }
 
 constexpr array_type auto operator * ( const array_type auto& left, const array_type auto& right )
-    requires ( left .dimension() == 2 ) and ( number_type<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
-             ( right.dimension() == 1 ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( left .dimension() == 2 ) and ( numeric<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
+             ( right.dimension() == 1 ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {
     #ifdef debug
         if ( left.column() != right.size() )
@@ -33,8 +33,8 @@ constexpr array_type auto operator * ( const array_type auto& left, const array_
 }
 
 constexpr array_type auto operator * ( const array_type auto& left, const array_type auto& right )
-    requires ( left .dimension() == -1 ) and ( number_type<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
-             ( right.dimension() ==  2 ) and ( number_type<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
+    requires ( left .dimension() == -1 ) and ( numeric<typename decay<decltype(left )>::value_type > or complex_type<typename decay<decltype(left )>::value_type > ) and
+             ( right.dimension() ==  2 ) and ( numeric<typename decay<decltype(right)>::value_type> or complex_type<typename decay<decltype(right)>::value_type> )
 {
     #ifdef debug
         if ( left.size() != right.row() )

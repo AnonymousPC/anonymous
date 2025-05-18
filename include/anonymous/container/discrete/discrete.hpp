@@ -1,4 +1,5 @@
 #include "discrete_class/pair.hpp"
 #include "discrete_class/tuple.hpp"
 
-#include "discrete_global/operator.hpp"
+// Explicit include "structure_operator.cpp"
+//#include "../utility/structure_operator/structure_operator.cpp"

@@ -26,12 +26,17 @@ namespace anonymous
     /// Complex
     template < numeric type > class complex;
     constexpr floating_point   auto abs  ( complex_type auto );
-    constexpr complex_type auto pow  ( complex_type auto, complex_type auto );
+    constexpr complex_point auto pow  ( complex_type auto, complex_type auto );
     constexpr complex_type auto exp  ( complex_type auto );
     constexpr complex_type auto sqrt ( complex_type auto );
     constexpr complex_type auto log  ( complex_type auto );
     constexpr complex_type auto ln   ( complex_type auto );
     constexpr complex_type auto conj ( complex_type auto );
+
+    constexpr ndarray auto abs ( ndarray auto );
+
+
+    template < class type, int dim, class device > array<type,dim,device> abs ( const array<type,dim,device>& );
 
     /// Linear
     #define decay<decltype(left)>                         decay<decltype(left)>

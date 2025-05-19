@@ -139,7 +139,7 @@ update = False
 def updatable(module):
     bin_time = 0
     try:
-        bin_time = max(os.path.getmtime(f"./{cache_path}/{module}.gcm"), os.path.getmtime(f"./{cache_path}/{module}.o"))
+        bin_time = min(os.path.getmtime(f"./{cache_path}/{module}.{cache_path.partition('.')[0]}"), os.path.getmtime(f"./{cache_path}/{module}.o"))
     except OSError:
         pass
     
@@ -151,6 +151,7 @@ def updatable(module):
     global update
     if src_time >= bin_time:
         update = True
+
     return update
 
 def run(command):

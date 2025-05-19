@@ -1,10 +1,12 @@
 module;
-#if defined(__GNUC__) and not defined(__clang__)
+#ifdef __GNUC__
     #pragma GCC diagnostic ignored "-Wassume"
     #pragma GCC diagnostic ignored "-Wuser-defined-literals"
 #elifdef __clang__
     #pragma clang diagnostic ignored "-Wassume"
     #pragma clang diagnostic ignored "-Wuser-defined-literals"
+#elifdef _MSC_VER
+    #pragma cl what?
 #endif
 
 export module anonymous.container;
@@ -14,12 +16,11 @@ import anonymous.basic;
 
 export namespace anonymous
 {
+    /// Macro
+    #include "macro.cpp"
+
     /// Concept
-    // template < class type > concept container             = forward_range<type> and not std::ranges::enable_view<type>;
-    // template < class type > concept sequence_container    = container<type> and random_access_range<type>;
-    // template < class type > concept associative_container = container<type> and requires { typename type::compare_type: };
-    // template < class type > concept unordered_container   = container<type> and requires { typename type::hash_type;    }; 
-    // template < class type > concept structure             = 
+    #include "concept.cpp"
     
     /// Class
     template < class type1, class type2 = type1 >                                               class pair;
@@ -49,7 +50,6 @@ export namespace anonymous
     template < class type,                                                 class device = cpu > class string;
                                                                                             
     /// Include
-    #include "macro.cpp"
     #include "utility/utility.hpp"
     #include "discrete/discrete.hpp"
     #include "polymorphic/polymorphic.hpp"

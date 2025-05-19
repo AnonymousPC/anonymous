@@ -11,10 +11,8 @@ class tbb
         template < class type > using pointer         =       type*;
         template < class type > using const_pointer   = const type*;
 
-    public: // Allocator
-        template < class type > using allocator = ::tbb::tbb_allocator<type>;
-
     public: // Memory
+        template < class type > using allocator = ::tbb::tbb_allocator<type>;
      //                         using layout_type   = not supported;
      // template < class type > using accessor_type = not supported;
 
@@ -23,6 +21,7 @@ class tbb
         template < class type = void > using minus         = std::minus        <type>;
         template < class type = void > using multiplies    = std::multiplies   <type>;
         template < class type = void > using divides       = std::divides      <type>;
+        template < class type = void > using modulus       = std::modulus      <type>;
         template < class type = void > using negate        = std::negate       <type>;
         template < class type = void > using equal_to      = std::equal_to     <type>;
         template < class type = void > using not_equal_to  = std::not_equal_to <type>;
@@ -39,7 +38,9 @@ class tbb
         template < class type = void > using bit_not       = std::bit_not      <type>;
 
     public: // Hash
-        template < class type > using hash = std::hash<type>;
+        template < class type > using hash        = std::hash<type>;
+     // template < class type > using char_traits = not supported;
+     // template < class type > using formatter   = not supported;
 
     public: // Struct
         template < class type1, class type2 > using pair  = std::pair <type1,type2>;

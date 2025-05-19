@@ -11,10 +11,8 @@ class cpu
         template < class type > using pointer         =       type*;
         template < class type > using const_pointer   = const type*;
 
-    public: // Allocator
-        template < class type > using allocator = std::allocator<type>;
-
     public: // Memory
+        template < class type > using allocator     = std::allocator<type>;
                                 using layout_type   = std::layout_right;
         template < class type > using accessor_type = std::default_accessor<type>;
 
@@ -23,6 +21,7 @@ class cpu
         template < class type = void > using minus         = std::minus        <type>;
         template < class type = void > using multiplies    = std::multiplies   <type>;
         template < class type = void > using divides       = std::divides      <type>;
+        template < class type = void > using modulus       = std::modulus      <type>;
         template < class type = void > using negate        = std::negate       <type>;
         template < class type = void > using equal_to      = std::equal_to     <type>;
         template < class type = void > using not_equal_to  = std::not_equal_to <type>;
@@ -38,17 +37,19 @@ class cpu
         template < class type = void > using bit_xor       = std::bit_xor      <type>;
         template < class type = void > using bit_not       = std::bit_not      <type>;
 
-    public: // Hash
-        template < class type > using hash = std::hash<type>;
+    public: // Traits
+        template < class type > using hash        = std::hash       <type>;
+        template < class type > using char_traits = std::char_traits<type>;
+        template < class type > using formatter   = std::formatter  <type,char>;
 
-    public: // Struct
+    public: // Structure
         template < class type1, class type2 > using pair  = std::pair <type1,type2>;
         template < class... types >           using tuple = std::tuple<types...>;
 
     public: // Container
                                                                                                                                                     using any            = std::any;
         template < class type, int len >                                                                                                            using array          = std::array            <type,len>;
-        template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                               using basic_string   = std::basic_string     <type,traits,alloc>;
+        template < class type, class traits = char_traits<type>, class alloc = allocator<type> >                                                    using basic_string   = std::basic_string     <type,traits,alloc>;
         template < int len >                                                                                                                        using bitset         = std::bitset           <len>;
         template < class type, class alloc = allocator<type> >                                                                                      using deque          = std::deque            <type,alloc>;
         template < class type, class error >                                                                                                        using expected       = std::expected         <type,error>;

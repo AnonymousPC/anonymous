@@ -5,12 +5,12 @@ import cuda;
 import thrust;
 using namespace anonymous;
 
-int main ( )
+void sort ( int*, int*, predicate<int> auto )
 {
-    auto v = variant<int,double>(2);
-    std::println("{}", v.template value<double>());
+
 }
- 
+
+
 // int main()
 // {
 //     auto stream = http_stream();

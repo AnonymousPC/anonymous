@@ -11,10 +11,8 @@ class cuda
         template < class type > using pointer         = thrust::device_ptr      <      type>;
         template < class type > using const_pointer   = thrust::device_ptr      <const type>;
         
-    public: // Allocator
-        template < class type > using allocator = thrust::device_allocator<type>;
-
     public: // Memory
+        template < class type > using allocator   = thrust::device_allocator<type>;
                                 using layout_type = std::layout_left;
         template < class type > class accessor_type;
 
@@ -23,6 +21,7 @@ class cuda
         template < class type = void > using minus         = ::cuda::std::minus        <type>;
         template < class type = void > using multiplies    = ::cuda::std::multiplies   <type>;
         template < class type = void > using divides       = ::cuda::std::divides      <type>;
+        template < class type = void > using modulus       = ::cuda::std::modulus      <type>;
         template < class type = void > using negate        = ::cuda::std::negate       <type>;
         template < class type = void > using equal_to      = ::cuda::std::equal_to     <type>;
         template < class type = void > using not_equal_to  = ::cuda::std::not_equal_to <type>;
@@ -38,8 +37,10 @@ class cuda
         template < class type = void > using bit_xor       = ::cuda::std::bit_xor      <type>;
         template < class type = void > using bit_not       = ::cuda::std::bit_not      <type>;
 
-    public: // Hash
-        template < class type > using hash = std::hash<type>;
+    public: // Traits
+     // template < class type > using hash        = not supported;
+        template < class type > using char_traits = ::cuda::std::hash<type>;
+     // template < class type > using formatter   = not supported;
 
     public: // Struct
         template < class type1, class type2 > using pair  = ::cuda::std::pair <type1,type2>;

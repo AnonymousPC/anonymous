@@ -1,4 +1,5 @@
-class string
+template < class type, class device >
+class basic_string
     extends public device::template basic_string<type>,
             public container_interface<basic_string<type,device>,type,1,device>,
             public string_algo<basic_string<type,device>,type,  device>

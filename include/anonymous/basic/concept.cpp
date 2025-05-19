@@ -1,5 +1,43 @@
-#include "detail/iterator_concept.cpp"
-#include "detail/range_concept.cpp"
+namespace detail
+{ 
+    template < class type > 
+    constexpr auto get_iterator_concept_tag ( )
+    {
+        if constexpr ( std::contiguous_iterator<type> )
+            return std::contiguous_iterator_tag();
+        else if constexpr ( std::random_access_iterator<type> )
+            return std::random_access_iterator_tag();
+        else if constexpr ( std::bidirectional_iterator<type> )
+            return std::bidirectional_iterator_tag();
+        else if constexpr ( std::input_iterator<type> )
+            return std::input_iterator_tag();
+        else
+            static_assert(false, "no iterator_concept");
+    }
+
+    template < class type >
+    using get_iterator_concept = decltype(get_iterator_concept_tag<type>());
+
+    template < class type > 
+    constexpr auto get_range_concept_tag ( )
+    {
+        if constexpr ( std::ranges::contiguous_range<type> )
+            return std::contiguous_iterator_tag();
+        else if constexpr ( std::ranges::random_access_range<type> )
+            return std::random_access_iterator_tag();
+        else if constexpr ( std::ranges::bidirectional_range<type> )
+            return std::bidirectional_iterator_tag();
+        else if constexpr ( std::ranges::input_range<type> )
+            return std::input_iterator_tag();
+        else
+            static_assert(false, "no range_concept");
+    }
+
+    template < class type >
+    using get_range_concept = decltype(get_range_concept_tag<type>());
+    
+} // namespace detail
+
 
 /// Type traits
 
@@ -76,7 +114,7 @@ template < int index, class type >                         using          tuple_
 
 /// Concepts
 
-template < class type >                                    concept        default_initializable              = std::default_initializable             <remove_cv<type>>; // std::default_initializable checks operator new, which does not accept cv-qualified ones.
+template < class type >                                    concept        default_initializable              = std::is_default_constructible          <type>::value; // std::default_initializable checks operator new, which does not accept cv-qualified ones.
 template < class type >                                    concept        nothrow_default_initializable      = std::is_nothrow_default_constructible  <type>::value;
 template < class type >                                    concept        trivially_default_initializable    = std::is_trivially_default_constructible<type>::value;
 template < class type, class... types >                    concept        constructible_from                 = std::constructible_from                <type,types...>;
@@ -94,12 +132,12 @@ template < class type >                                    concept        swappa
 template < class type >                                    concept        nothrow_swappable                  = std::is_nothrow_swappable              <type>::value;
 template < class type, class... types >                    concept        invocable                          = std::invocable                         <type,types...>;
 template < class type, class result_type, class... types > concept        invocable_r                        = std::is_invocable_r                    <result_type,type,types...>::value;
-template < class type, class type2 >                       concept        predicate                          = std::predicate                         <type,type2>;
-template < class type, class type2, class type3 >          concept        relation                           = std::relation                          <type,type2,type3>;
+template < class type, class type2 >                       concept        predicate_for                      = std::predicate                         <type,type2>;
+template < class type, class type2, class type3 >          concept        relation_between                   = std::relation                          <type,type2,type3>;
 
 template < class type1, class type2 >                      concept        same_as                            = std::same_as                           <type1,type2>;
-template < class type1, class type2 >                      concept        base_of                            = std::derived_from                      <type2,type1>        and ( not same_as<type1,type2> ); // std::is_base_of allows private/protected extends, while std::derived_from does not.
-template < class type1, class type2 >                      concept        derived_from                       = std::derived_from                      <type1,type2>        and ( not same_as<type1,type2> ); // std::derived_from<type,type> (where type is class or union) is true.
+template < class type1, class type2 >                      concept        base_of                            = std::derived_from                      <type2,type1>        and ( not std::same_as<type1,type2> ); // std::is_base_of allows private/protected extends, while std::derived_from does not.
+template < class type1, class type2 >                      concept        derived_from                       = std::derived_from                      <type1,type2>        and ( not std::same_as<type1,type2> ); // std::derived_from<type,type> (where type is class or union) is true.
 template < class type1, class type2 >                      concept        constructible_to                   = std::constructible_from                <type2,type1>;
 template < class type1, class type2 >                      concept        nothrow_constructible_to           = std::is_nothrow_constructible          <type2,type1>::value;
 template < class type1, class type2 >                      concept        convertible_to                     = std::convertible_to                    <type1,type2>        and constructible_to        <type1,type2>; // Make convertible >= constructible.
@@ -123,12 +161,14 @@ template < class type >                                    concept        bidire
 template < class type >                                    concept        random_access_range                = std::ranges::random_access_range       <type>;
 template < class type >                                    concept        contiguous_range                   = std::ranges::contiguous_range          <type>;
 
-template < class type >                                    concept        integral                           = std::signed_integral<type>;
-template < class type >                                    concept        floating_point                     = std::floating_point <type>;
-template < class type >                                    concept        numeric                            = std::signed_integral<type> or std::floating_point<type>;
+template < class type >                                    concept        boolean                            = std::same_as<type,bool>;
+template < class type >                                    concept        character                          = std::same_as<type,char> or std::same_as<type,signed char> or std::same_as<type,unsigned char> or std::same_as<type,wchar_t> or std::same_as<type,char8_t> or std::same_as<type,char16_t> or std::same_as<type,char32_t>;
+template < class type >                                    concept        integral                           = std::signed_integral<type> and not char_type<type>;
+template < class type >                                    concept        floating_point                     = std::floating_point<type>;
+template < class type >                                    concept        numeric                            = integral<type> or floating_point<type>;
 
-template < class type >                                    concept        hashable                           = std::default_initializable             <std::hash<type>>;
-template < class type >                                    concept        formattable                        = std::formattable                       <type,char>;
+template < class type >                                    concept        hashable                           = std::default_initializable             <std::hash       <type>>;
+template < class type >                                    concept        formattable                        = std::default_initializable             <std::formatter  <type,char>>;
 
    
 
@@ -136,36 +176,29 @@ template < class type >                                    concept        format
 
 /// Operator
 
-template < class type = void >                             using          plus                               = std::plus<type>;
 template < class type >                                    concept        plusable                           = requires { std::declval<type >() + std::declval<type >(); };
 template < class type1, class type2 >                      concept        plusable_to                        = requires { std::declval<type1>() + std::declval<type2>(); };
 template < class type1, class type2 >                      using          plus_result                        = decltype ( std::declval<type1>() + std::declval<type2>()  );
 
-template < class type = void >                             using          minus                              = std::minus<type>;
 template < class type >                                    concept        minusable                          = requires { std::declval<type >() - std::declval<type >(); };
 template < class type1, class type2 >                      concept        minusable_to                       = requires { std::declval<type1>() - std::declval<type2>(); };
 template < class type1, class type2 >                      using          minus_result                       = decltype ( std::declval<type1>() - std::declval<type2>()  );
 
-template < class type = void >                             using          multiplies                         = std::multiplies<type>;
 template < class type >                                    concept        multipliable                       = requires { std::declval<type >() * std::declval<type >(); };
 template < class type1, class type2 >                      concept        multipliable_to                    = requires { std::declval<type1>() * std::declval<type2>(); };
 template < class type1, class type2 >                      using          multiply_result                    = decltype ( std::declval<type1>() * std::declval<type2>()  );
 
-template < class type = void >                             using          divides                            = std::divides<type>;
 template < class type >                                    concept        dividable                          = requires { std::declval<type >() / std::declval<type >(); };
 template < class type1, class type2 >                      concept        dividable_to                       = requires { std::declval<type1>() / std::declval<type2>(); };
 template < class type1, class type2 >                      using          divide_result                      = decltype ( std::declval<type1>() / std::declval<type2>()  );
 
-template < class type = void >                             using          modulus                            = std::modulus<type>;
 template < class type >                                    concept        modulable                          = requires { std::declval<type >() % std::declval<type >(); };
 template < class type1, class type2 >                      concept        modulable_to                       = requires { std::declval<type1>() % std::declval<type2>(); };
 template < class type1, class type2 >                      using          modulus_result                     = decltype ( std::declval<type1>() % std::declval<type2>()  );
 
-template < class type >                                    using          equal                              = std::equal_to<type>;        
 template < class type >                                    concept        equalable                          = requires { std::declval<type >() == std::declval<type >(); };
 template < class type1, class type2 >                      concept        equalable_to                       = requires { std::declval<type1>() == std::declval<type2>(); };
 
-template < class type >                                    using          compare                            = std::compare_three_way;
 template < class type >                                    concept        comparable                         = requires { std::declval<type >() <=> std::declval<type >(); };
 template < class type1, class type2 >                      concept        comparable_to                      = requires { std::declval<type1>() <=> std::declval<type2>(); };
 template < class type1, class type2 >                      using          compare_result                     = decltype ( std::declval<type1>() <=> std::declval<type2>()  );

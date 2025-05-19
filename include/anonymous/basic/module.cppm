@@ -95,14 +95,17 @@ export namespace anonymous
         constexpr bool debug = true;
     #endif
 
+    /// Macro
+    #include "macro.cpp"
+
+    /// Concept
+    #include "concept.cpp"
+
     /// Common.algo
     template < int min, int max, int stride = 1 > constexpr void for_constexpr     ( auto&& /*operations*/ );
     template < int min, int max, int stride = 1 > constexpr bool all_of_constexpr  ( auto&& /*preds*/ );
     template < int min, int max, int stride = 1 > constexpr bool any_of_constexpr  ( auto&& /*preds*/ );
     template < int min, int max, int stride = 1 > constexpr bool none_of_constexpr ( auto&& /*preds*/ );
-
-    /// Common.concept
-    #include "concept/concept.hpp"
 
     /// Common.exception
     class exception;
@@ -141,7 +144,6 @@ export namespace anonymous
     class tbb;
 
     /// Include
-    #include "macro.cpp"
     #include "common/common.hpp"
     #include "device/device.hpp"
     #include "init/init.hpp"

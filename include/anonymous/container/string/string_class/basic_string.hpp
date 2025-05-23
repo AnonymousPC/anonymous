@@ -1,6 +1,6 @@
-template < class type, class device >
+template < class device >
 class basic_string
-    extends public device::template basic_string<type>,
+    extends public device::template basic_string<char>,
             public container_interface<basic_string<type,device>,type,1,device>,
             public string_algo<basic_string<type,device>,type,  device>
 {
@@ -8,20 +8,17 @@ class basic_string
         static_assert ( char_type<type> );
 
     private: // Base
-        using base        = device::template basic_string<type>;
-        using array_algo  = array_algo <basic_string<type,device>,type,1,device>;
-        using string_algo = string_algo<basic_string<type,device>,type,  device>;
+        using base = device::template basic_string<type>;
 
     public: // Typedef
-        using  value_type      = device::template value_type     <type>;
-        using  reference       = device::template reference      <type>;
-        using  const_reference = device::template const_reference<type>;
-        using  pointer         = device::template pointer        <type>;
-        using  const_pointer   = device::template const_pointer  <type>;
-        using  iterator        = pointer;
-        using  const_iterator  = const_pointer;
-        using  device_type     = device;
-        struct string_concept { };
+        using value_type      = device::template value_type     <type>;
+        using reference       = device::template reference      <type>;
+        using const_reference = device::template const_reference<type>;
+        using pointer         = device::template pointer        <type>;
+        using const_pointer   = device::template const_pointer  <type>;
+        using iterator        = pointer;
+        using const_iterator  = const_pointer;
+        using device_type     = device;
 
     public: // Core
         constexpr basic_string ( )                                  = default;
@@ -90,3 +87,5 @@ class basic_string
 
 template < char_type type > basic_string ( type )        -> basic_string<type>;
 template < char_type type > basic_string ( const type* ) -> basic_string<type>;
+
+#include "basic_string.cpp"

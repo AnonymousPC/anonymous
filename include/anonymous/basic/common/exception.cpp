@@ -11,12 +11,11 @@ namespace detail
     
     enum { implicit_mode, explicit_mode, default_mode };
 
-              std::string    format_stacktrace        ( const std::stacktrace& );
-              std::string    format_nested_exception  ( const std::type_info&, const std::string& );
-              std::string    format_stacktrace_color  ( std::string, int = 0, int = 0 );
-              std::string    format_stacktrace_module ( std::string );
-    constexpr int            get_format_mode         ( const char* );
-    constexpr decltype(auto) make_formattable        ( auto&& );
+    std::string   format_stacktrace        ( const std::stacktrace& );
+    std::string   format_nested_exception  ( const std::type_info&, const std::string& );
+    std::string   format_stacktrace_color  ( std::string, int = 0, int = 0 );
+    std::string   format_stacktrace_module ( std::string );
+    constexpr int get_format_mode          ( const char* );
 }
 
 
@@ -82,7 +81,7 @@ class exception::format_string
 
     public: // Core
         consteval format_string ( const char* );
-        constexpr std::string format ( types&&... ) const;
+                  std::string format ( types&&... ) const;
 };
 
 template < class... types >
@@ -96,14 +95,14 @@ consteval exception::format_string<types...>::format_string ( const char* init_s
 }
 
 template < class... types >
-constexpr std::string exception::format_string<types...>::format ( types&&... args ) const
+std::string exception::format_string<types...>::format ( types&&... args ) const
 {
     switch ( detail::get_format_mode(str) )
     {
         case detail::explicit_mode:
-            return std::format(std::runtime_format(std::string("{0}") + str), "", detail::make_formattable(args)...);
+            return std::format(std::runtime_format(std::string("{0}") + str), "", args...);
         case detail::implicit_mode:
-            return std::format(std::runtime_format(                     str),     detail::make_formattable(args)...);
+            return std::format(std::runtime_format(                     str),     args...);
         case detail::default_mode:
             return str;
         default:
@@ -204,14 +203,4 @@ constexpr int detail::get_format_mode ( const char* str )
             { b = p + 2; continue; }
     }
 }
-
-constexpr decltype(auto) detail::make_formattable ( auto&& f )
-{
-    if constexpr ( formattable<remove_cvref<decltype(f)>> )
-        return f;
-    else
-        return std::format("[[{} object at {}]]", boost::core::demangle(typeid(f).name()), static_cast<const void*>(&f));
-} 
-
-
 

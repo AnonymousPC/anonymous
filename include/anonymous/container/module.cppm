@@ -18,9 +18,6 @@ export namespace anonymous
 {
     /// Macro
     #include "macro.cpp"
-
-    /// Concept
-    #include "concept.cpp"
     
     /// Class
     template < class type1, class type2 = type1 >                                               class pair;
@@ -50,13 +47,14 @@ export namespace anonymous
     template < class type,                                                 class device = cpu > class string;
                                                                                             
     /// Include
-    #include "utility/utility.hpp"
+    #include "utility/utility1.hpp"
     #include "discrete/discrete.hpp"
     #include "polymorphic/polymorphic.hpp"
     #include "array/array.hpp"
     #include "chain/chain.hpp"
     #include "collection/collection.hpp"
-    // #include "string/string.hpp"
+    #include "string/string.hpp"
+    #include "utility/utility2.hpp"
 
 } // namespace anonymous
 

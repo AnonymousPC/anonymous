@@ -1,0 +1,11 @@
+constexpr std::istream&        operator >>  (       std::istream&     left,       string_type auto& right ) requires is_class<decay<decltype(right)>> and ( decay<decltype(right)>::ownership() );
+constexpr std::ostream&        operator <<  (       std::ostream&     left, const string_type auto& right ) requires is_class<decay<decltype(right)>>;
+constexpr bool                 operator ==  ( const string_type auto& left, const string_type auto& right ) requires same_as<typename decay<decltype(left)>::value_type,typename decay<decltype(right)>::value_type> and same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>;
+constexpr std::strong_ordering operator <=> ( const string_type auto& left, const string_type auto& right ) requires same_as<typename decay<decltype(left)>::value_type,typename decay<decltype(right)>::value_type> and same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>;
+constexpr string_type auto     operator  +  ( const string_type auto& left, const string_type auto& right ) requires same_as<typename decay<decltype(left)>::value_type,typename decay<decltype(right)>::value_type> and same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type>;
+constexpr string_type auto&    operator  += (       string_type auto& left, const string_type auto& right ) requires same_as<typename decay<decltype(left)>::value_type,typename decay<decltype(right)>::value_type> and same_as<typename decay<decltype(left )>::device_type,typename decay<decltype(right)>::device_type> and ( decay<decltype(left)>::ownership() );
+constexpr string_type auto     operator  *  ( const string_type auto& left,       integral    auto  right );
+constexpr string_type auto     operator  *  (       integral    auto  left, const string_type auto& right );
+constexpr string_type auto&    operator  *= (       string_type auto& left,       integral    auto  right ) requires ( decay<decltype(left)>::ownership() );
+
+#include "operator.cpp"

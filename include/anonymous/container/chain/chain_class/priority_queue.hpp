@@ -5,7 +5,7 @@ class priority_queue
     private: // Precondition
         static_assert ( not is_const<type> and not is_volatile<type> and not is_reference<type> );
         static_assert ( default_initializable<type> and movable<type> );
-        static_assert ( relation<compare,type,type> );
+        static_assert ( relation_between<compare,type,type> );
 
     private: // Base
         using base = device::template priority_queue<type,compare>;

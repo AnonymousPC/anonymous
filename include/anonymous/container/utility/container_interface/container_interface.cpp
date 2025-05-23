@@ -43,7 +43,7 @@ constexpr int container_interface<container,type,device>::adjacent_find ( ) cons
 }
 
 template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::adjacent_find ( relation<type,type> auto rel ) const
+constexpr int container_interface<container,type,device>::adjacent_find ( relation_between<type,type> auto rel ) const
     requires random_access_range<container>
 {
     auto pos = device::adjacent_find(begin(), end(), rel) - begin() + 1;
@@ -61,7 +61,7 @@ constexpr array<int> container_interface<container,type,device>::adjacent_where 
 }
 
 template < class container, class type, class device >
-constexpr array<int> container_interface<container,type,device>::adjacent_where ( relation<type,type> auto rel ) const
+constexpr array<int> container_interface<container,type,device>::adjacent_where ( relation_between<type,type> auto rel ) const
     requires random_access_range<container>
 {
     auto pos = array<int>();
@@ -78,7 +78,7 @@ constexpr bool container_interface<container,type,device>::all ( const equalable
 }
 
 template < class container, class type, class device >
-constexpr bool container_interface<container,type,device>::all ( predicate<type> auto pred ) const
+constexpr bool container_interface<container,type,device>::all ( predicate_for<type> auto pred ) const
     requires forward_range<container>
 {
     return device::all_of(begin(), end(), pred);
@@ -92,7 +92,7 @@ constexpr bool container_interface<container,type,device>::contains ( const equa
 }
 
 template < class container, class type, class device >
-constexpr bool container_interface<container,type,device>::contains ( predicate<type> auto pred ) const
+constexpr bool container_interface<container,type,device>::contains ( predicate_for<type> auto pred ) const
     requires forward_range<container>
 {
     return device::any_of(begin(), end(), pred);
@@ -106,7 +106,7 @@ constexpr int container_interface<container,type,device>::count ( const equalabl
 }
 
 template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::count ( predicate<type> auto pred ) const
+constexpr int container_interface<container,type,device>::count ( predicate_for<type> auto pred ) const
     requires forward_range<container>
 {
     return device::count(begin(), end(), pred);
@@ -120,7 +120,7 @@ constexpr bool container_interface<container,type,device>::exist ( const equalab
 }
 
 template < class container, class type, class device >
-constexpr bool container_interface<container,type,device>::exist ( predicate<type> auto pred ) const
+constexpr bool container_interface<container,type,device>::exist ( predicate_for<type> auto pred ) const
     requires forward_range<container>
 {
     return device::any_of(begin(), end(), pred);
@@ -135,7 +135,7 @@ constexpr int container_interface<container,type,device>::find ( const equalable
 }
 
 template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::find ( predicate<type> auto pred ) const
+constexpr int container_interface<container,type,device>::find ( predicate_for<type> auto pred ) const
     requires random_access_range<container>
 {
     auto pos = device::find_if(begin(), end(), pred) - begin() + 1;
@@ -143,7 +143,7 @@ constexpr int container_interface<container,type,device>::find ( predicate<type>
 }
 
 template < class container, class type, class device >
-constexpr bool container_interface<container,type,device>::is_partitioned ( predicate<type> auto pred ) const
+constexpr bool container_interface<container,type,device>::is_partitioned ( predicate_for<type> auto pred ) const
     requires forward_range<container>
 {
     return device::is_partitioned(begin(), end(), pred);
@@ -157,7 +157,7 @@ constexpr bool container_interface<container,type,device>::is_sorted ( ) const
 }
 
 template < class container, class type, class device >
-constexpr bool container_interface<container,type,device>::is_sorted ( relation<type,type> auto rel ) const
+constexpr bool container_interface<container,type,device>::is_sorted ( relation_between<type,type> auto rel ) const
     requires forward_range<container>
 {
     return device::is_sorted(begin(), end(), rel);
@@ -175,7 +175,7 @@ constexpr container_interface<container,type,device>::reference container_interf
 }
 
 template < class container, class type, class device >
-constexpr container_interface<container,type,device>::const_reference container_interface<container,type,device>::max ( relation<type,type> auto rel ) const
+constexpr container_interface<container,type,device>::const_reference container_interface<container,type,device>::max ( relation_between<type,type> auto rel ) const
     requires forward_range<container>
 {
     if constexpr ( debug )
@@ -197,7 +197,7 @@ constexpr container_interface<container,type,device>::reference container_interf
 }
 
 template < class container, class type, class device >
-constexpr container_interface<container,type,device>::const_reference container_interface<container,type,device>::min ( relation<type,type> auto rel ) const
+constexpr container_interface<container,type,device>::const_reference container_interface<container,type,device>::min ( relation_between<type,type> auto rel ) const
     requires forward_range<container>
 {
     if constexpr ( debug )
@@ -216,7 +216,7 @@ constexpr container& container_interface<container,type,device>::next_permutatio
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::next_permutation ( relation<type,type> auto rel )
+constexpr container& container_interface<container,type,device>::next_permutation ( relation_between<type,type> auto rel )
     requires bidirectional_range<container>
 {
     device::next_permutation(begin(), end(), rel);
@@ -231,7 +231,7 @@ constexpr bool container_interface<container,type,device>::none ( const equalabl
 }
 
 template < class container, class type, class device >
-constexpr bool container_interface<container,type,device>::none ( predicate<type> auto pred ) const
+constexpr bool container_interface<container,type,device>::none ( predicate_for<type> auto pred ) const
     requires forward_range<container>
 {
     return device::none_of(begin(), end(), pred);
@@ -250,7 +250,7 @@ constexpr container& container_interface<container,type,device>::partial_sort ( 
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::partial_sort ( int n, relation<type,type> auto rel )
+constexpr container& container_interface<container,type,device>::partial_sort ( int n, relation_between<type,type> auto rel )
     requires random_access_range<container>
 {
     if constexpr ( debug )
@@ -262,7 +262,7 @@ constexpr container& container_interface<container,type,device>::partial_sort ( 
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::partition ( predicate<type> auto pred )
+constexpr container& container_interface<container,type,device>::partition ( predicate_for<type> auto pred )
     requires forward_range<container>
 {
     device::partition(begin(), end(), pred);
@@ -278,7 +278,7 @@ constexpr container& container_interface<container,type,device>::prev_permutatio
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::prev_permutation ( relation<type,type> auto rel )
+constexpr container& container_interface<container,type,device>::prev_permutation ( relation_between<type,type> auto rel )
     requires bidirectional_range<container>
 {
     device::prev_permutation(begin(), end(), rel);
@@ -293,7 +293,7 @@ constexpr container& container_interface<container,type,device>::remove ( const 
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::remove ( predicate<type> auto pred )
+constexpr container& container_interface<container,type,device>::remove ( predicate_for<type> auto pred )
     requires forward_range<container>
 {
     return static_cast<container&>(self).resize(device::remove_if(begin(), end(), pred) - begin());
@@ -318,7 +318,7 @@ constexpr int container_interface<container,type,device>::right_adjacent_find ( 
 }
 
 template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::right_adjacent_find ( relation<type,type> auto rel ) const
+constexpr int container_interface<container,type,device>::right_adjacent_find ( relation_between<type,type> auto rel ) const
     requires random_access_range<container>
 {
     for ( auto it = end() - 2; it != begin() - 1; --it )
@@ -338,7 +338,7 @@ constexpr int container_interface<container,type,device>::right_find ( const equ
 }
 
 template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::right_find ( predicate<type> auto pred ) const
+constexpr int container_interface<container,type,device>::right_find ( predicate_for<type> auto pred ) const
     requires random_access_range<container>
 {
     for ( auto it = end() - 1; it != begin() - 1; --it )
@@ -361,7 +361,7 @@ constexpr container& container_interface<container,type,device>::rotate ( int n 
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::stable_partition ( predicate<type> auto pred )
+constexpr container& container_interface<container,type,device>::stable_partition ( predicate_for<type> auto pred )
     requires bidirectional_range<container>
 {
     device::stable_partition(begin(), end(), pred);
@@ -377,7 +377,7 @@ constexpr container& container_interface<container,type,device>::stable_sort ( )
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::stable_sort ( relation<type,type> auto rel )
+constexpr container& container_interface<container,type,device>::stable_sort ( relation_between<type,type> auto rel )
     requires random_access_range<container>
 {
     device::stable_sort(begin(), end(), rel);
@@ -393,7 +393,7 @@ constexpr container& container_interface<container,type,device>::sort ( )
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::sort ( relation<type,type> auto rel )
+constexpr container& container_interface<container,type,device>::sort ( relation_between<type,type> auto rel )
     requires random_access_range<container>
 {    
     device::sort(begin(), end(), rel);
@@ -408,7 +408,7 @@ constexpr container& container_interface<container,type,device>::unique ( )
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::unique ( relation<type,type> auto rel )
+constexpr container& container_interface<container,type,device>::unique ( relation_between<type,type> auto rel )
     requires forward_range<container>
 {
     return static_cast<container&>(self).resize(device::unique(begin(), end()) - begin(), rel);
@@ -425,7 +425,7 @@ constexpr array<int> container_interface<container,type,device>::where ( const e
 }
 
 template < class container, class type, class device >
-constexpr array<int> container_interface<container,type,device>::where ( predicate<type> auto pred ) const
+constexpr array<int> container_interface<container,type,device>::where ( predicate_for<type> auto pred ) const
     requires random_access_range<container>
 {
     auto pos = array<int>();
@@ -508,7 +508,7 @@ constexpr container& container_interface<container,type,device>::replace ( const
 }
 
 template < class container, class type, class device >
-constexpr container& container_interface<container,type,device>::replace ( predicate<type> auto old_pred, const convertible_to<type> auto& new_val )
+constexpr container& container_interface<container,type,device>::replace ( predicate_for<type> auto old_pred, const convertible_to<type> auto& new_val )
     requires forward_range<container>
 {
     device::replace_if(begin(), end(), old_pred, new_val);

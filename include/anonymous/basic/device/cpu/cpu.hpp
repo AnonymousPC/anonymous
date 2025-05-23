@@ -36,11 +36,12 @@ class cpu
         template < class type = void > using bit_or        = std::bit_or       <type>;
         template < class type = void > using bit_xor       = std::bit_xor      <type>;
         template < class type = void > using bit_not       = std::bit_not      <type>;
+        template < class type = void > using hash          = std::hash         <type>;
 
     public: // Traits
-        template < class type > using hash        = std::hash       <type>;
-        template < class type > using char_traits = std::char_traits<type>;
-        template < class type > using formatter   = std::formatter  <type,char>;
+        template < class type > using allocator_traits = std::allocator_traits<type>;
+        template < class type > using iterator_traits  = std::iterator_traits <type>;
+        template < class type > using char_traits      = std::char_traits     <type>;
 
     public: // Structure
         template < class type1, class type2 > using pair  = std::pair <type1,type2>;

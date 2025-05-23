@@ -3,7 +3,8 @@ import re
 import subprocess
 import sys
 
-system = ""
+# Global
+
 if sys.platform == "win32":
     system = "windows"
 elif sys.platform == "linux":
@@ -11,77 +12,84 @@ elif sys.platform == "linux":
 elif sys.platform == "darwin":
     system = "macos"
 
-if system == "windows":
-    compiler = "cl"
-elif system == "linux":
-    compiler = "g++"
-elif system == "macos":
-    compiler = "clang++"
-
 type = sys.argv[1] # debug/release
 
 
-
-# Input
+# Config
 
 modules = [
     "anonymous.basic",
     "anonymous.container",
     "anonymous"
 ]
-compile_args = []
-if compiler == "g++" or compiler == "clang++":
+
+if system == "windows":
+    compiler          = "cl"
+    include_path      = ""
+    lib_path          = ""
+    libs              = ["advapi32", "bcrypt", "crypto", "kernel32", "mswsock", "ntdll", "shell32", "ssl", "stdc++exp", "tiff", "user32", "ws2_32"]
+    executable_suffix = ".exe"
+elif system == "linux":
+    compiler          = "g++"
+    include_path      = "/usr/include"
+    lib_path          = "/usr/lib"
+    libs              = []
+    executable_suffix = ""
+elif system == "macos":
+    compiler          = "clang++"
+    include_path      = "/opt/homebrew/include"
+    lib_path          = "/opt/homebrew/lib"
+    libs              = ["bz2", "crypto", "hwloc", "iconv", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "ssl", "tiff", "tiffxx", "z", "zstd"]
+    executable_suffix = ""
+
+if compiler == "g++":
     compile_args = [
         "-std=c++26", 
         "-g", 
         "-Wall", 
-        "-fdiagnostics-color=always"
+        "-fdiagnostics-color=always",
+        "-fmodules"
     ]
-    if compiler == "g++":
-        compile_args.append("-fmodules")
-    elif compiler == "clang++":
-        compile_args.append("-fprebuilt-module-path=./pcm.cache")
     if type == "debug":
         compile_args.append("-O0")
         compile_args.append("-fno-inline")
     elif type == "release":
         compile_args.append("-O3")
         compile_args.append("-DNDEBUG")
+
+    link_args = ["-fdiagnostics-color=always"]
+    cache_path = "gcm.cache"
+    object_suffix = ".o"
+elif compiler == "clang++":
+    compile_args = [
+        "-std=c++26", 
+        "-g", 
+        "-Wall", 
+        "-fdiagnostics-color=always",
+        "-fprebuilt-module-path=./pcm.cache"
+    ]
+    if type == "debug":
+        compile_args.append("-O0")
+        compile_args.append("-fno-inline")
+    elif type == "release":
+        compile_args.append("-O3")
+        compile_args.append("-DNDEBUG")
+
+    link_args = ["-fdiagnostics-color=always"]
+    cache_path = "pcm.cache"
+    object_suffix = ".o"
 elif compiler == "cl":
     compiler_args = [
-        "/std:c++latest"
+        "/std:c++latest",
+        "/EHsc",
+        "/Z7",
+        "/W4"
     ]
-    
-link_args = []
-if compiler == "g++" or compiler == "clang++":
-    link_args = [
-        "-fuse-ld=lld",
-        "-fdiagnostics-color=always"
-    ]
-
-include_path  = ""
-lib_path      = ""
-libs          = []
-if system == "windows":
-    include_path = ""
-    lib_path     = ""
-    libs         = ["advapi32", "bcrypt", "crypto", "kernel32", "mswsock", "ntdll", "shell32", "ssl", "stdc++exp", "tiff", "user32", "ws2_32"]
-elif system == "linux":
-    include_path = "/usr/include"
-    lib_path     = "/usr/lib"
-    libs         = []
-elif system == "macos":
-    include_path = "/opt/homebrew/include"
-    lib_path     = "/opt/homebrew/lib"
-    libs         = ["bz2", "crypto", "hwloc", "iconv", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "ssl", "tiff", "tiffxx", "z", "zstd"]
-
-cache_path = ""
-if compiler == "g++":
-    cache_path = "pcm.cache"
-elif compiler == "clang++":
-    cache_path = "pcm.cache"
-elif compiler == "cl":
+    link_args = []
     cache_path = "ifc.cache"
+    object_suffix = ".obj"
+
+
 
 
 # Task
@@ -95,40 +103,61 @@ def compile():
                     f"{' '.join(compile_args)} "
                     f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
                     f"-c ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./{cache_path}/{module}.pcm")
+                    f"-o ./gcm.cache/{module}.gcm")
             elif compiler == "clang++":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f"-Dabstract=0 -Dextends=':' -Din=':' -Dself='(*this)' "
+                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
                     f"--precompile ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./{cache_path}/{module}.pcm")
+                    f"-o ./pcm.cache/{module}.pcm")
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f"-c ./{cache_path}/{module}.pcm "
-                    f"-o ./{cache_path}/{module}.o")
+                    f"-c ./pcm.cache/{module}.pcm "
+                    f"-o ./pcm.cache/{module}.o")
+            elif compiler == "cl":
+                run(f"{compiler} "
+                    f"{' '.join(compiler_args)} "
+                    f'/D "abstract=0;extends=:;in=:;self=\"(*this)\"" '
+                    f"/c /interface /TP ./include/{module.replace('.', '.')}/module.cppm "
+                    f"/ifcOutput ./ifc.cache/{module}.ifc "
+                    f"/Fo ./ifc.cache/{module}.obj")
+
                         
     log("main", color="yellow")
     if compiler == "g++" or compiler == "clang++":
         run(f"{compiler} "
             f"{' '.join(compile_args)} "
-            f"-Dabstract=0 -Dextends=':' -Din=':' -Dself='(*this)' "
+            f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
             f"-c ./main.cpp "
             f"-o ./{cache_path}/main.o")
+    elif compiler == "cl":
+        run(f"{compiler} "
+            f"{' '.join(compile_args)} "
+            f'/D "abstract=0;extends=:;in=:;self=\"(*this)\"" '
+            f"/c ./main.cpp "
+            f"/Fo ./ifc.cache/main.obj")
 
 
 def link():
     linkable = []
     for file in os.listdir(f"./{cache_path}"):
-        if file.endswith(".o"):
+        if file.endswith(object_suffix):
             linkable.append(f"./{cache_path}/{file}")
     
     if compiler == "g++" or compiler == "clang++":
         run (f"{compiler} "
             f"{' '.join(link_args)} "
             f"{' '.join(linkable)} "
-            f"-L{lib_path} "
-            f"{' '.join(f"-l{lib}" for lib in libs)} "
-            f"-o ./bin/main")
+            f"-L {lib_path} "
+            f"{' '.join(f"-l {lib}" for lib in libs)} "
+            f"-o ./bin/main{executable_suffix}")
+    elif compiler == "cl":
+        run(f"{compiler} "
+            f"{' '.join(link_args)} "
+            f"{' '.join(linkable)} "
+            f'/LIBPATH:"{lib_path}"'
+            f"{' '.join(lib for lib in libs)} "
+            f"/Fe ./bin/main{executable_suffix}")
 
 
 

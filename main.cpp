@@ -12,8 +12,7 @@ struct world
 
 int main ( )
 {
-    
-    bo
+
 }
 
 

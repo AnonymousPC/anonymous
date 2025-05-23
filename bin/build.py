@@ -58,7 +58,7 @@ if compiler == "g++":
         compile_args.append("-DNDEBUG")
 
     link_args = ["-fdiagnostics-color=always"]
-    cache_path = "gcm.cache"
+    module_suffix = ".gcm"
     object_suffix = ".o"
 elif compiler == "clang++":
     compile_args = [
@@ -66,7 +66,7 @@ elif compiler == "clang++":
         "-g", 
         "-Wall", 
         "-fdiagnostics-color=always",
-        "-fprebuilt-module-path=./pcm.cache"
+        "-fprebuilt-module-path=./module"
     ]
     if type == "debug":
         compile_args.append("-O0")
@@ -76,7 +76,7 @@ elif compiler == "clang++":
         compile_args.append("-DNDEBUG")
 
     link_args = ["-fdiagnostics-color=always"]
-    cache_path = "pcm.cache"
+    module_suffix = ".pcm"
     object_suffix = ".o"
 elif compiler == "cl":
     compiler_args = [
@@ -86,7 +86,7 @@ elif compiler == "cl":
         "/W4"
     ]
     link_args = []
-    cache_path = "ifc.cache"
+    module_suffix = ".ifc"
     object_suffix = ".obj"
 
 
@@ -103,24 +103,24 @@ def compile():
                     f"{' '.join(compile_args)} "
                     f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
                     f"-c ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./gcm.cache/{module}.gcm")
+                    f"-o ./module/{module}.gcm")
             elif compiler == "clang++":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
                     f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
                     f"--precompile ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./pcm.cache/{module}.pcm")
+                    f"-o ./module/{module}.pcm")
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f"-c ./pcm.cache/{module}.pcm "
-                    f"-o ./pcm.cache/{module}.o")
+                    f"-c ./module/{module}.pcm "
+                    f"-o ./module/{module}.o")
             elif compiler == "cl":
                 run(f"{compiler} "
                     f"{' '.join(compiler_args)} "
                     f'/D "abstract=0;extends=:;in=:;self=\"(*this)\"" '
                     f"/c /interface /TP ./include/{module.replace('.', '.')}/module.cppm "
-                    f"/ifcOutput ./ifc.cache/{module}.ifc "
-                    f"/Fo ./ifc.cache/{module}.obj")
+                    f"/ifcOutput ./module/{module}.ifc "
+                    f"/Fo ./module/{module}.obj")
 
                         
     log("main", color="yellow")
@@ -129,20 +129,20 @@ def compile():
             f"{' '.join(compile_args)} "
             f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
             f"-c ./main.cpp "
-            f"-o ./{cache_path}/main.o")
+            f"-o ./module/main.o")
     elif compiler == "cl":
         run(f"{compiler} "
             f"{' '.join(compile_args)} "
             f'/D "abstract=0;extends=:;in=:;self=\"(*this)\"" '
             f"/c ./main.cpp "
-            f"/Fo ./ifc.cache/main.obj")
+            f"/Fo ./module/main.obj")
 
 
 def link():
     linkable = []
-    for file in os.listdir(f"./{cache_path}"):
+    for file in os.listdir(f"./module"):
         if file.endswith(object_suffix):
-            linkable.append(f"./{cache_path}/{file}")
+            linkable.append(f"./module/{file}")
     
     if compiler == "g++" or compiler == "clang++":
         run (f"{compiler} "
@@ -168,7 +168,7 @@ update = False
 def updatable(module):
     bin_time = 0
     try:
-        bin_time = min(os.path.getmtime(f"./{cache_path}/{module}.{cache_path.partition('.')[0]}"), os.path.getmtime(f"./{cache_path}/{module}.o"))
+        bin_time = min(os.path.getmtime(f"./module/{module}{module_suffix}"), os.path.getmtime(f"./module/{module}.o"))
     except OSError:
         pass
     

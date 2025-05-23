@@ -5,9 +5,14 @@ import cuda;
 import thrust;
 using namespace anonymous;
 
-void sort ( int*, int*, predicate<int> auto )
+struct world
 {
+    friend std::ostream& operator << ( std::ostream& left, world ) { return left << "world"; }
+};
 
+int main ( )
+{
+    
 }
 
 

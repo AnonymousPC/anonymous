@@ -16,6 +16,7 @@ constexpr int max_dim = 4;
 #include "array_class/array_nd.hpp"
 #include "array_class/array_xd.hpp"
 
+#include "array_global/operator.hpp"
 
 
 
@@ -38,7 +39,4 @@ constexpr int max_dim = 4;
 #include "array_class/array_nd.cpp"
 #include "array_class/array_xd.cpp"
 
-
-
-// Explicit include "container_interface.cpp"
-//#include "../utility/container_interface/container_interface.cpp"
+#include "array_global/operator.cpp"

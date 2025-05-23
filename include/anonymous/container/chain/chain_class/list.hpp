@@ -47,12 +47,12 @@ class list
 
     public: // Algorithm
         constexpr list& remove  ( const equalable_to<type>      auto& );
-        constexpr list& remove  (       predicate   <type>      auto  );
+        constexpr list& remove  (       predicate_for   <type>      auto  );
         constexpr list& reverse (                                     );
         constexpr list& sort    (                                     ) requires comparable<type>;
-        constexpr list& sort    (       relation    <type,type> auto  );
+        constexpr list& sort    (       relation_between    <type,type> auto  );
         constexpr list& unique  (                                     ) requires equalable <type>;
-        constexpr list& unique  (       relation    <type,type> auto  );
+        constexpr list& unique  (       relation_between    <type,type> auto  );
 };
 
 

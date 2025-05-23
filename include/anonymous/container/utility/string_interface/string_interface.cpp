@@ -1,157 +1,157 @@
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::begin ( )
+constexpr auto string_interface<container,type,device>::begin ( )
 {
     return static_cast<container&>(self).begin();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::begin ( ) const
+constexpr auto string_interface<container,type,device>::begin ( ) const
 {
     return static_cast<const container&>(self).begin();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::end ( )
+constexpr auto string_interface<container,type,device>::end ( )
 {
     return static_cast<container&>(self).end();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::end ( ) const
+constexpr auto string_interface<container,type,device>::end ( ) const
 {
     return static_cast<const container&>(self).end();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::data ( )
+constexpr auto string_interface<container,type,device>::data ( )
 {
     return static_cast<container&>(self).data();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::data ( ) const
+constexpr auto string_interface<container,type,device>::data ( ) const
 {
     return static_cast<const container&>(self).data();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::size ( ) const
+constexpr auto string_interface<container,type,device>::size ( ) const
 {
     return static_cast<const container&>(self).size();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::empty ( ) const
+constexpr auto string_interface<container,type,device>::empty ( ) const
 {
     return static_cast<const container&>(self).empty();
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::operator [] ( int pos )
+constexpr auto string_interface<container,type,device>::operator [] ( int pos )
 {
     return static_cast<container&>(self).operator[](pos);
 }
 
 template < class container, class type, class device >
-constexpr decltype(auto) string_algo<container,type,device>::operator [] ( int pos ) const
+constexpr auto string_interface<container,type,device>::operator [] ( int pos ) const
 {
     return static_cast<const container&>(self).operator[](pos);
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::begins_with ( const container& str ) const
+constexpr bool string_interface<container,type,device>::begins_with ( const container& str ) const
 {
-    return self.size() >= str.size() and device::equal(self.begin(), self.begin() + str.size(), str.begin(), str.end());
+    return self.size() >= str.size() and device::equal(self.begin(), self.begin() + str.size(), str.begin(), str.end(), std::char_traits<type>::eq);
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::ends_with ( const container& str ) const
+constexpr bool string_interface<container,type,device>::ends_with ( const container& str ) const
 {
     return self.size() >= str.size() and device::equal(self.end() - str.size(), self.end(), str.begin(), str.end());
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_alnum ( ) const
+constexpr bool string_interface<container,type,device>::is_alnum ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::isalnum(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_alpha ( ) const
+constexpr bool string_interface<container,type,device>::is_alpha ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::isalpha(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_ascii ( ) const
+constexpr bool string_interface<container,type,device>::is_ascii ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return ch >= char(0) and ch <= char(127); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_blank ( ) const
+constexpr bool string_interface<container,type,device>::is_blank ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::isblank(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_cntrl ( ) const
+constexpr bool string_interface<container,type,device>::is_cntrl ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::iscntrl(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_digit ( ) const
+constexpr bool string_interface<container,type,device>::is_digit ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::isdigit(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_lower ( ) const
+constexpr bool string_interface<container,type,device>::is_lower ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::islower(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_punct ( ) const
+constexpr bool string_interface<container,type,device>::is_punct ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::ispunct(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_space ( ) const
+constexpr bool string_interface<container,type,device>::is_space ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::isspace(ch); });
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_title ( ) const
+constexpr bool string_interface<container,type,device>::is_title ( ) const
 {
     return device::adjacent_find(begin(), end(), [] (const auto& a, const auto& b) { return std::isupper(a) and std::isupper(b); }) == end();
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::is_upper ( ) const
+constexpr bool string_interface<container,type,device>::is_upper ( ) const
 {
     return device::all_of(begin(), end(), [] (const auto& ch) { return std::isupper(ch); });
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::lower ( )
+constexpr container& string_interface<container,type,device>::lower ( )
 {
     device::transform(begin(), end(), begin(), [] (const auto& ch) { return std::tolower(ch); });
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::upper ( )
+constexpr container& string_interface<container,type,device>::upper ( )
 {
     device::transform(begin(), end(), begin(), [] (const auto& ch) { return std::toupper(ch); });
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::swap_case ( )
+constexpr container& string_interface<container,type,device>::swap_case ( )
 {
     device::transform(begin(), end(), begin(), [] (const auto& ch)
         {
@@ -166,7 +166,7 @@ constexpr container& string_algo<container,type,device>::swap_case ( )
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::capitalize ( )
+constexpr container& string_interface<container,type,device>::capitalize ( )
 {
     if ( not empty() )
         self[1] = std::isupper(self[1]);
@@ -175,7 +175,7 @@ constexpr container& string_algo<container,type,device>::capitalize ( )
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::title ( )
+constexpr container& string_interface<container,type,device>::title ( )
 {
     for ( auto it = begin(); it != end() + 1; it = device::adjacent_find(it, end(), [] (const auto& a, const auto& b) { return not std::isalpha(a) and std::islower(b); }) + 1 )
         *it = std::toupper(*it);
@@ -184,7 +184,7 @@ constexpr container& string_algo<container,type,device>::title ( )
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::expand_tabs ( int tabs_size )
+constexpr container& string_interface<container,type,device>::expand_tabs ( int tabs_size )
 {
     if constexpr ( debug )
         if ( tabs_size < 0 )
@@ -193,8 +193,10 @@ constexpr container& string_algo<container,type,device>::expand_tabs ( int tabs_
     return replace('\t', basic_string<type,device>(tabs_size,' '));
 }
 
+
+
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::center ( int new_size, type ch )
+constexpr container& string_interface<container,type,device>::center ( int new_size, type ch )
 {
     if constexpr ( debug )
         if ( new_size < 0 )
@@ -205,7 +207,7 @@ constexpr container& string_algo<container,type,device>::center ( int new_size, 
         auto old_size    = size();
         auto left_space  = (new_size - old_size )    / 2;
         auto right_space = (new_size - old_size + 1) / 2;
-        static_cast<container&>(self).resize(len);
+        static_cast<container&>(self).resize(new_size);
         device::copy_backward(begin(), begin() + old_size, end() - right_space);
         device::fill(begin(), begin() + left_space, ch);
         device::fill(end() - right_space, end(), ch);
@@ -214,7 +216,7 @@ constexpr container& string_algo<container,type,device>::center ( int new_size, 
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::left_justify ( int new_size, type ch )
+constexpr container& string_interface<container,type,device>::left_justify ( int new_size, type ch )
 {    
     if constexpr ( debug )
         if ( new_size < 0 )
@@ -231,7 +233,7 @@ constexpr container& string_algo<container,type,device>::left_justify ( int new_
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::right_justify ( int new_size, type ch )
+constexpr container& string_interface<container,type,device>::right_justify ( int new_size, type ch )
 {
     if constexpr ( debug )
         if ( new_size < 0 )
@@ -249,7 +251,7 @@ constexpr container& string_algo<container,type,device>::right_justify ( int new
 }
 
 template < class container, class type, class device >
-constexpr array<container> string_algo<container,type,device>::partition ( const container& sep ) const
+constexpr array<container> string_interface<container,type,device>::partition ( const container& sep ) const
 {
     if constexpr ( debug )
         if ( sep.empty() )
@@ -260,7 +262,7 @@ constexpr array<container> string_algo<container,type,device>::partition ( const
 }
 
 template < class container, class type, class device >
-constexpr array<container> string_algo<container,type,device>::right_partition ( const container& sep ) const
+constexpr array<container> string_interface<container,type,device>::right_partition ( const container& sep ) const
 {
     if constexpr ( debug )
         if ( sep.empty() )
@@ -271,7 +273,7 @@ constexpr array<container> string_algo<container,type,device>::right_partition (
 }
 
 template < class container, class type, class device >
-constexpr array<container> string_algo<container,type,device>::split ( const container& sep, int times ) const
+constexpr array<container> string_interface<container,type,device>::split ( const container& sep, int times ) const
 {
     if constexpr ( debug )
     {
@@ -305,7 +307,7 @@ constexpr array<container> string_algo<container,type,device>::split ( const con
 }
 
 template < class container, class type, class device >
-constexpr array<container> string_algo<container,type,device>::right_split ( const container& sep, int times ) const
+constexpr array<container> string_interface<container,type,device>::right_split ( const container& sep, int times ) const
 {
     if constexpr ( debug )
     {
@@ -334,13 +336,13 @@ constexpr array<container> string_algo<container,type,device>::right_split ( con
 }
 
 template < class container, class type, class device >
-constexpr array<typename string_algo<container,type,device>::view> string_algo<container,type,device>::split_lines ( ) const
+constexpr array<typename string_interface<container,type,device>::view> string_interface<container,type,device>::split_lines ( ) const
 {
     return split('\n');
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::strip ( view chars )
+constexpr container& string_interface<container,type,device>::strip ( view chars )
 {
     if constexpr ( debug )
     {
@@ -362,7 +364,7 @@ constexpr container& string_algo<container,type,device>::strip ( view chars )
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::left_strip ( view chars )
+constexpr container& string_interface<container,type,device>::left_strip ( view chars )
 {
     if constexpr ( debug )
     {
@@ -377,7 +379,7 @@ constexpr container& string_algo<container,type,device>::left_strip ( view chars
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::right_strip ( view chars )
+constexpr container& string_interface<container,type,device>::right_strip ( view chars )
 {
     if constexpr ( debug )
     {
@@ -392,7 +394,7 @@ constexpr container& string_algo<container,type,device>::right_strip ( view char
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::encode ( code old_encode, code new_encode )
+constexpr container& string_interface<container,type,device>::encode ( code old_encode, code new_encode )
     requires same_as<type,char> and same_as<device,cpu> 
 {
     if ( old_encode != new_encode )
@@ -419,7 +421,7 @@ constexpr container& string_algo<container,type,device>::encode ( code old_encod
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::format ( auto&&... f )
+constexpr container& string_interface<container,type,device>::format ( auto&&... f )
     requires same_as<type,char> and same_as<device,cpu> and
              ( ( std::formattable<decay<decltype(f)>,char> or constructible_from<container,decay<decltype(f)>> ) and ... )
 {
@@ -436,21 +438,8 @@ constexpr container& string_algo<container,type,device>::format ( auto&&... f )
     }
 }
 
-namespace detail
-{
-    auto string_join ( const auto& sep, auto&& arg1, auto&&... args )
-    {
-        if constexpr ( sizeof...(args) >= 1 )
-            return string_join(arg1 + sep, std::forward<decltype(args)>(args)...);
-        else
-            return arg1 + sep;
-    }
-    
-} // namespace detail
-
-
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::join ( string_type auto&&... str )
+constexpr container& string_interface<container,type,device>::join ( string_type auto&&... str )
 {
     if constexpr ( sizeof...(str) >= 1 )
         return static_cast<container&>(self) = detail::string_join(static_cast<const container&>(self), std::forward<decltype(str)>(str)...);
@@ -466,13 +455,13 @@ constexpr container& string_algo<container,type,device>::join ( string_type auto
 // Array algo (update)
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::contains ( view str ) const
+constexpr bool string_interface<container,type,device>::contains ( view str ) const
 {
     return device::search(self.begin(), self.end(), str.begin(), str.end()) != self.end();
 }
 
 template < class container, class type, class device >
-constexpr int string_algo<container,type,device>::count ( view str ) const
+constexpr int string_interface<container,type,device>::count ( view str ) const
 {
     if ( str.empty() )
         throw value_error("count string with empty substr");
@@ -494,26 +483,26 @@ constexpr int string_algo<container,type,device>::count ( view str ) const
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::exist ( view str ) const
+constexpr bool string_interface<container,type,device>::exist ( view str ) const
 {
     return device::search(self.begin(), self.end(), str.begin(), str.end()) != self.end();
 }
 
 template < class container, class type, class device >
-constexpr int string_algo<container,type,device>::find ( view str ) const
+constexpr int string_interface<container,type,device>::find ( view str ) const
 {
     auto pos = device::search(self.begin(), self.end(), str.begin(), str.end());
     return pos != end() ? pos - begin() + 1 : 0;
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::none ( view str ) const
+constexpr bool string_interface<container,type,device>::none ( view str ) const
 {
     return device::search(self.begin(), self.end(), str.begin(), str.end()) == self.end();
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::remove ( view str )
+constexpr container& string_interface<container,type,device>::remove ( view str )
 {
     if ( str.empty() )
         throw value_error("remove string with empty substr");
@@ -535,7 +524,7 @@ constexpr container& string_algo<container,type,device>::remove ( view str )
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::replace ( view old_str, view new_str )
+constexpr container& string_interface<container,type,device>::replace ( view old_str, view new_str )
 {
     auto pos = begin();
     while ( true )
@@ -557,14 +546,14 @@ constexpr container& string_algo<container,type,device>::replace ( view old_str,
 }
 
 template < class container, class type, class device >
-constexpr int string_algo<container,type,device>::right_find ( view str ) const
+constexpr int string_interface<container,type,device>::right_find ( view str ) const
 {
     auto pos = device::find_end(self.begin(), self.end(), str.begin(), str.end());
     return pos != end() ? pos - begin() + 1 : 0;
 }
 
 template < class container, class type, class device >
-constexpr array<int> string_algo<container,type,device>::where ( view str ) const
+constexpr array<int> string_interface<container,type,device>::where ( view str ) const
 {
     auto pos = begin();
     auto arr = array<int>();
@@ -588,35 +577,35 @@ constexpr array<int> string_algo<container,type,device>::where ( view str ) cons
 // Regex
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::all ( const regex& rgx ) const
+constexpr bool string_interface<container,type,device>::all ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     return std::regex_match(begin(), end(), rgx);
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::contains ( const regex& rgx ) const
+constexpr bool string_interface<container,type,device>::contains ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     return std::regex_search(begin(), end(), rgx);
 }
 
 template < class container, class type, class device >
-constexpr int string_algo<container,type,device>::count ( const regex& rgx ) const
+constexpr int string_interface<container,type,device>::count ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     return std::distance(std::regex_iterator<typename container::const_iterator>(begin(), end(), rgx), std::regex_iterator<typename container::const_iterator>());
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::exist ( const regex& rgx ) const
+constexpr bool string_interface<container,type,device>::exist ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     return std::regex_search(begin(), end(), rgx);
 }
 
 template < class container, class type, class device >
-constexpr int string_algo<container,type,device>::find ( const regex& rgx ) const
+constexpr int string_interface<container,type,device>::find ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     auto mtc   = std::match_results<typename container::const_iterator>();
@@ -625,21 +614,21 @@ constexpr int string_algo<container,type,device>::find ( const regex& rgx ) cons
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::match ( const regex& rgx ) const
+constexpr bool string_interface<container,type,device>::match ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     return std::regex_match(begin(), end(), rgx);
 }
 
 template < class container, class type, class device >
-constexpr bool string_algo<container,type,device>::none ( const regex& rgx ) const
+constexpr bool string_interface<container,type,device>::none ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     return not std::regex_search(begin(), end(), rgx);
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::remove ( const regex& rgx )
+constexpr container& string_interface<container,type,device>::remove ( const regex& rgx )
     requires same_as<device,cpu>
 {
     return static_cast<container&>(self) =
@@ -647,7 +636,7 @@ constexpr container& string_algo<container,type,device>::remove ( const regex& r
 }
 
 template < class container, class type, class device >
-constexpr container& string_algo<container,type,device>::replace ( const regex& rgx, view str )
+constexpr container& string_interface<container,type,device>::replace ( const regex& rgx, view str )
     requires same_as<device,cpu>
 {
     return static_cast<container&>(self) =
@@ -655,7 +644,7 @@ constexpr container& string_algo<container,type,device>::replace ( const regex& 
 }
 
 template < class container, class type, class device >
-constexpr int string_algo<container,type,device>::right_find ( const regex& rgx ) const
+constexpr int string_interface<container,type,device>::right_find ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     auto mtc = std::match_results<typename container::const_iterator>();
@@ -666,7 +655,7 @@ constexpr int string_algo<container,type,device>::right_find ( const regex& rgx 
 }
 
 template < class container, class type, class device >
-constexpr array<typename string_algo<container,type,device>::view> string_algo<container,type,device>::split ( const regex& rgx ) const
+constexpr array<typename string_interface<container,type,device>::view> string_interface<container,type,device>::split ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     if ( std::basic_regex<type>(rgx).mark_count() == 0 )
@@ -684,7 +673,7 @@ constexpr array<typename string_algo<container,type,device>::view> string_algo<c
 }
 
 template < class container, class type, class device >
-constexpr array<int> string_algo<container,type,device>::where ( const regex& rgx ) const
+constexpr array<int> string_interface<container,type,device>::where ( const regex& rgx ) const
     requires same_as<device,cpu>
 {
     return std::views::iota(std::regex_iterator(begin(), end(), rgx), std::regex_iterator<typename container::const_iterator>())

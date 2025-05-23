@@ -12,7 +12,7 @@ class tbb
         template < class type > using const_pointer   = const type*;
 
     public: // Memory
-        template < class type > using allocator = ::tbb::tbb_allocator<type>;
+        template < class type > using allocator     = ::tbb::tbb_allocator<type>;
      //                         using layout_type   = not supported;
      // template < class type > using accessor_type = not supported;
 
@@ -36,20 +36,21 @@ class tbb
         template < class type = void > using bit_or        = std::bit_or       <type>;
         template < class type = void > using bit_xor       = std::bit_xor      <type>;
         template < class type = void > using bit_not       = std::bit_not      <type>;
+        template < class type = void > using hash          = std::hash         <type>;
 
-    public: // Hash
-        template < class type > using hash        = std::hash<type>;
-     // template < class type > using char_traits = not supported;
-     // template < class type > using formatter   = not supported;
-
-    public: // Struct
+    public: // Traits
+        template < class type > using allocator_traits = std::allocator_traits<type>;
+        template < class type > using iterator_traits  = std::iterator_traits <type>;
+        template < class type > using char_traits      = std::char_traits     <type>;
+     
+    public: // Structure
         template < class type1, class type2 > using pair  = std::pair <type1,type2>;
         template < class... types >           using tuple = std::tuple<types...>;
 
     public: // Container
      //                                                                                                                                             using any             = not supported;
      // template < class type, int len >                                                                                                            using array           = not supported;
-     // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                               using basic_string    = not supported;
+     // template < class type, class traits = char_traits<type>, class alloc = allocator<type> >                                                    using basic_string    = not supported;
      // template < int len >                                                                                                                        using bitset          = not supported;
      // template < class type, class alloc = allocator<type> >                                                                                      using deque           = not supported;
      // template < class type, class error >                                                                                                        using expected        = not supported;

@@ -7,3 +7,5 @@ constexpr string_type auto&    operator  += (       string_type auto& left, cons
 constexpr string_type auto     operator  *  ( const string_type auto& left,       integral    auto  right );
 constexpr string_type auto     operator  *  (       integral    auto  left, const string_type auto& right );
 constexpr string_type auto&    operator  *= (       string_type auto& left,       integral    auto  right ) requires ( decay<decltype(left)>::ownership() );
+
+#include "operator.cpp"

@@ -8,7 +8,7 @@ class map
         static_assert ( default_initializable<type1> and movable<type1> );
         static_assert ( not is_const<type2> and not is_volatile<type2> and not is_reference<type2> );
         static_assert ( default_initializable<type2> and movable<type2> );
-        static_assert ( relation<compare,type1,type1> );
+        static_assert ( relation_between<compare,type1,type1> );
 
     private: // Base
         using base = device::template map<type1,type2,compare>;

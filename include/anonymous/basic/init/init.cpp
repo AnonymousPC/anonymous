@@ -5,8 +5,8 @@ detail::basic_initializer_t::basic_initializer_t ( )
 
     // Stdio.windows
     #ifdef _WIN32
-        SetConsoleCP      (CP_UTF8);
-        SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP      (CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
     #endif
 
     // Signal.standard

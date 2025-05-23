@@ -36,20 +36,21 @@ class cuda
         template < class type = void > using bit_or        = ::cuda::std::bit_or       <type>;
         template < class type = void > using bit_xor       = ::cuda::std::bit_xor      <type>;
         template < class type = void > using bit_not       = ::cuda::std::bit_not      <type>;
+     // template < class type = void > using hash          = not supported;
 
     public: // Traits
-     // template < class type > using hash        = not supported;
-        template < class type > using char_traits = ::cuda::std::hash<type>;
-     // template < class type > using formatter   = not supported;
+        template < class type > using allocator_traits = ::cuda::std::allocator_traits<type>;
+        template < class type > using iterator_traits  = ::cuda::std::iterator_traits <type>;
+        template < class type > using char_traits      = ::cuda::std::char_traits     <type>;
 
-    public: // Struct
+    public: // Structure
         template < class type1, class type2 > using pair  = ::cuda::std::pair <type1,type2>;
         template < class... types >           using tuple = ::cuda::std::tuple<types...>;
 
     public: // Container
      //                                                                                                                                             using any            = not supported;
         template < class type, int len >                                                                                                            using array          = ::cuda::std::array         <type,len>;
-     // template < class type, class traits = std::char_traits<type>, class alloc = allocator<type> >                                               using basic_string   = not supported;
+     // template < class type, class traits = char_traits<type>, class alloc = allocator<type> >                                                    using basic_string   = not supported;
         template < int len >                                                                                                                        using bitset         = ::cuda::std::bitset        <len>;
      // template < class type, class alloc = allocator<type> >                                                                                      using deque          = not supported;
         template < class type, class error >                                                                                                        using expected       = ::cuda::std::expected      <type,error>;

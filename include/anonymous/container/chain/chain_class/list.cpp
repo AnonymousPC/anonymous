@@ -120,7 +120,7 @@ constexpr list<type,device>& list<type,device>::remove ( const equalable_to<type
 }
 
 template < class type, class device >
-constexpr list<type,device>& list<type,device>::remove ( predicate<type> auto pred )
+constexpr list<type,device>& list<type,device>::remove ( predicate_for<type> auto pred )
 {
     base::remove_if(pred);
     return self;
@@ -142,7 +142,7 @@ constexpr list<type,device>& list<type,device>::sort ( )
 }
 
 template < class type, class device >
-constexpr list<type,device>& list<type,device>::sort ( relation<type,type> auto rel )
+constexpr list<type,device>& list<type,device>::sort ( relation_between<type,type> auto rel )
 {
     base::sort(rel);
     return self;
@@ -157,7 +157,7 @@ constexpr list<type,device>& list<type,device>::unique ( )
 }
 
 template < class type, class device >
-constexpr list<type,device>& list<type,device>::unique ( relation<type,type> auto rel )
+constexpr list<type,device>& list<type,device>::unique ( relation_between<type,type> auto rel )
 {
     base::unique(rel);
     return self;

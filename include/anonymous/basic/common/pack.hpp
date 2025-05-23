@@ -1,13 +1,29 @@
+constexpr auto&& first_value_of ( auto&&... args )
+{
+    return args...[0];
+}
+
+constexpr auto&& last_value_of ( auto&&... args )
+{
+    return args...[sizeof...(args)-1];
+}
+
+template < int index >
+constexpr auto&& index_value_of ( auto&&... args )
+{
+    return args...[index >= 0 ? index-1 : index+sizeof...(args)];
+}
+
 template < int min, int max, int stride >
-constexpr void for_constexpr ( auto&& operations )
+constexpr void for_constexpr ( auto&& ops )
 {
     if constexpr ( ( stride > 0 and min <= max ) or
                    ( stride < 0 and min >= max ) )
-        operations.template operator()<min>();
+        ops.template operator()<min>();
 
     if constexpr ( ( stride > 0 and min <= max - stride ) or 
                    ( stride < 0 and min >= max - stride ) )
-        for_constexpr<min+stride,max,stride>(std::forward<decltype(operations)>(operations));
+        for_constexpr<min+stride,max,stride>(std::forward<decltype(ops)>(ops));
 }
 
 template < int min, int max, int stride >

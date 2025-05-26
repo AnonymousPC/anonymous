@@ -79,12 +79,18 @@ elif compiler == "clang++":
     module_suffix = ".pcm"
     object_suffix = ".o"
 elif compiler == "cl":
-    compiler_args = [
+    compile_args = [
         "/std:c++latest",
         "/EHsc",
         "/Z7",
         "/W4"
     ]
+    if type == "debug":
+        compile_args.append("/Od")
+    elif type == "release":
+        compile_args.append("/O2")
+        compile_args.append("/DNDEBUG")
+
     link_args = []
     module_suffix = ".ifc"
     object_suffix = ".obj"
@@ -92,7 +98,7 @@ elif compiler == "cl":
 
 
 
-# Task
+# Core
 
 def compile():
     for module in modules:
@@ -101,13 +107,13 @@ def compile():
             if compiler == "g++":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
+                    f'-D abstract=0 -D extends=: -D in=: -D self="(*this)" '
                     f"-c ./include/{module.replace('.', '/')}/module.cppm "
                     f"-o ./module/{module}.gcm")
             elif compiler == "clang++":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
+                    f'-D abstract=0 -D extends=: -D in=: -D self="(*this)" '
                     f"--precompile ./include/{module.replace('.', '/')}/module.cppm "
                     f"-o ./module/{module}.pcm")
                 run(f"{compiler} "
@@ -116,8 +122,8 @@ def compile():
                     f"-o ./module/{module}.o")
             elif compiler == "cl":
                 run(f"{compiler} "
-                    f"{' '.join(compiler_args)} "
-                    f'/D "abstract=0;extends=:;in=:;self=\"(*this)\"" '
+                    f"{' '.join(compile_args)} "
+                    f'/D abstract=0 /D extends=: /D in=: /D "self=(*this)" '
                     f"/c /interface /TP ./include/{module.replace('.', '.')}/module.cppm "
                     f"/ifcOutput ./module/{module}.ifc "
                     f"/Fo ./module/{module}.obj")
@@ -127,13 +133,13 @@ def compile():
     if compiler == "g++" or compiler == "clang++":
         run(f"{compiler} "
             f"{' '.join(compile_args)} "
-            f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
+            f'-D abstract=0 -D extends=: -D in=: -D self="(*this)" '
             f"-c ./main.cpp "
             f"-o ./module/main.o")
     elif compiler == "cl":
         run(f"{compiler} "
             f"{' '.join(compile_args)} "
-            f'/D "abstract=0;extends=:;in=:;self=\"(*this)\"" '
+            f'/D abstract=0 /D extends=: /D in=: /D "self=(*this)" '
             f"/c ./main.cpp "
             f"/Fo ./module/main.obj")
 
@@ -160,8 +166,7 @@ def link():
             f"/Fe ./bin/main{executable_suffix}")
 
 
-
-# Detail
+# Utility
 
 update = False
 

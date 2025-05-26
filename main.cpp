@@ -1,41 +1,13 @@
 import anonymous;
 import std;
-import boost;
-import cuda;
-import thrust;
-using namespace anonymous;
-
-struct world
-{
-    friend std::ostream& operator << ( std::ostream& left, world ) { return left << "world"; }
-};
 
 int main ( )
 {
+    auto m = std::vector<int>(10) 
+           | std::views::transform([] (const auto& val) { return std::pair(val, val); })
+           | std::views::elements<3>
+           | std::ranges::to<std::map<int,std::string>>();
 
+    auto n = std::map<int,std::string>();
+    n = n + n;
 }
-
-
-// int main()
-// {
-//     auto stream = http_stream();
-//     stream.listen("http://127.0.0.1:33210");
-
-//     auto response1 = string();
-//     auto task1 = std::execution::just(std::move(stream1))
-//                | std::execution::let_value([] (auto&& stream1)
-//                    {
-//                        return stream1 > response1;
-//                    })
-//                | std::execution::let_value([] (auto&& stream2)
-//                    {
-//                        return stream1 < response1;     
-//                    });
-//     auto response2 = string();
-//     auto task2 = std::execution::just(std::move(stream2))
-//                | std::execution::let_value([] (auto&& stream2)
-//                    {
-//                        return stream2 > response2;
-//                    });
-//     std::execution::sync_wait(std::execution::when_all(task1, task2));
-// }

@@ -13,6 +13,7 @@ export module anonymous.container;
 import std;
 import boost;
 import anonymous.basic;
+import stdexec;
 
 export namespace anonymous
 {
@@ -53,8 +54,8 @@ export namespace anonymous
     #include "array/array.hpp"
     #include "chain/chain.hpp"
     #include "collection/collection.hpp"
-    #include "string/string.hpp"
-    #include "utility/utility2.hpp"
+   // #include "string/string.hpp"
+   #include "utility/utility2.hpp"
 
 } // namespace anonymous
 

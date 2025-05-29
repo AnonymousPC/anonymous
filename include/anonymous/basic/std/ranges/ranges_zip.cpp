@@ -675,7 +675,7 @@ namespace ranges {
 	  = requires { adjacent_view<all_t<_Range>, _Nm>(std::declval<_Range>()); };
 
     template<size_t _Nm>
-      struct _Adjacent : __range_adaptor_closure<_Adjacent<_Nm>>
+      struct _Adjacent : range_adaptor_closure<_Adjacent<_Nm>>
       {
 	template<viewable_range _Range>
 	  requires (_Nm == 0) || __can_adjacent_view<_Nm, _Range>
@@ -985,7 +985,7 @@ namespace ranges {
 		         (std::declval<_Range>(), std::declval<_Fp>()); };
 
     template<size_t _Nm>
-      struct _AdjacentTransform : __range_adaptor_closure<_AdjacentTransform<_Nm>>
+      struct _AdjacentTransform : range_adaptor_closure<_AdjacentTransform<_Nm>>
       {
 	template<viewable_range _Range, typename _Fp>
 	  requires (_Nm == 0) || __can_adjacent_transform_view<_Nm, _Range, _Fp>
@@ -1003,7 +1003,7 @@ namespace ranges {
       constexpr auto
       operator() [[nodiscard]] (_Pattern&& __f) const
       {
-        return __pipeable(std::__bind_back(*this, std::forward<_Pattern>(__f)));
+        return __pipeable(std::bind_back(*this, std::forward<_Pattern>(__f)));
       }
 
 	static constexpr int _S_arity = 2;

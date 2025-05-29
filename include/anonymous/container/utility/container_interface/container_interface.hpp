@@ -50,10 +50,6 @@ class container_interface
         constexpr       container&      remove              ( const equalable_to    <type>      auto& )       requires forward_range      <container>;
         constexpr       container&      remove              (       predicate_for   <type>      auto  )       requires forward_range      <container>;
         constexpr       container&      reverse             (                                         )       requires bidirectional_range<container>;
-        constexpr       int             right_adjacent_find (                                         ) const requires random_access_range<container> and equalable<type>;
-        constexpr       int             right_adjacent_find (       relation_between<type,type> auto  ) const requires random_access_range<container>;
-        constexpr       int             right_find          ( const equalable_to    <type>      auto& ) const requires random_access_range<container>;
-        constexpr       int             right_find          (       predicate_for   <type>      auto  ) const requires random_access_range<container>;
         constexpr       container&      rotate              ( int                                     )       requires forward_range      <container>;
         constexpr       container&      stable_partition    (       predicate_for   <type>      auto  )       requires bidirectional_range<container>;
         constexpr       container&      stable_sort         (                                         )       requires random_access_range<container> and comparable<type>;

@@ -331,7 +331,7 @@ template<input_range _Vp>
 	concept __can_stride_view
 	  = requires { stride_view(std::declval<_Range>(), std::declval<_Dp>()); };
 
-    struct _Stride : __range_adaptor_closure<_Stride>
+    struct _Stride : range_adaptor_closure<_Stride>
     {
       template<viewable_range _Range, typename _Dp = range_difference_t<_Range>>
 	requires __can_stride_view<_Range, _Dp>
@@ -343,7 +343,7 @@ template<input_range _Vp>
     constexpr auto
     operator() [[nodiscard]] (_Dp&& __r) const
     {
-      return __pipeable(std::__bind_back(*this, std::forward<_Dp>(__r)));
+      return __pipeable(std::bind_back(*this, std::forward<_Dp>(__r)));
     }
 
       static constexpr int _S_arity = 2;

@@ -519,7 +519,7 @@ namespace ranges {
 	concept __can_chunk_view
 	  = requires { chunk_view(std::declval<_Range>(), std::declval<_Dp>()); };
 
-    struct _Chunk : __range_adaptor_closure<_Chunk>
+    struct _Chunk : range_adaptor_closure<_Chunk>
     {
       template<viewable_range _Range, typename _Dp = range_difference_t<_Range>>
 	requires __can_chunk_view<_Range, _Dp>
@@ -533,7 +533,7 @@ namespace ranges {
     constexpr auto
     operator() [[nodiscard]] (_Dp&& __n) const
     {
-      return __pipeable(std::__bind_back(*this, std::forward<_Dp>(__n)));
+      return __pipeable(std::bind_back(*this, std::forward<_Dp>(__n)));
     }
 
 

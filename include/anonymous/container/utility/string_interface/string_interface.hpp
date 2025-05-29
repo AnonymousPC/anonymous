@@ -10,31 +10,29 @@ class string_interface
 
     private: // Abbreviation
         constexpr auto             begin           ( );
-        constexpr auto             begin           ( )                                                               const;
+        constexpr auto             begin           ( )                                         const;
         constexpr auto             end             ( );
-        constexpr auto             end             ( )                                                               const;
+        constexpr auto             end             ( )                                         const;
         constexpr auto             data            ( );
-        constexpr auto             data            ( )                                                               const;
-        constexpr auto             size            ( )                                                               const;
-        constexpr auto             empty           ( )                                                               const;
+        constexpr auto             data            ( )                                         const;
+        constexpr auto             size            ( )                                         const;
+        constexpr auto             empty           ( )                                         const;
         constexpr auto             operator []     ( int );
-        constexpr auto             operator []     ( int )                                                           const; 
+        constexpr auto             operator []     ( int )                                     const; 
     
     public: // Member
-        constexpr bool             begins_with     ( const container& )                                              const;
-        constexpr bool             ends_with       ( const container& )                                              const;
-
-        constexpr bool             is_alnum        ( )                                                               const;
-        constexpr bool             is_alpha        ( )                                                               const;
-        constexpr bool             is_ascii        ( )                                                               const;
-        constexpr bool             is_blank        ( )                                                               const;
-        constexpr bool             is_cntrl        ( )                                                               const;
-        constexpr bool             is_digit        ( )                                                               const;
-        constexpr bool             is_lower        ( )                                                               const;
-        constexpr bool             is_punct        ( )                                                               const;
-        constexpr bool             is_space        ( )                                                               const;
-        constexpr bool             is_title        ( )                                                               const;
-        constexpr bool             is_upper        ( )                                                               const;
+        constexpr bool             is_ascii        ( )                                         const;
+        constexpr bool             is_print        ( )                                         const;
+        constexpr bool             is_alnum        ( )                                         const;
+        constexpr bool             is_alpha        ( )                                         const;
+        constexpr bool             is_lower        ( )                                         const;
+        constexpr bool             is_upper        ( )                                         const;
+        constexpr bool             is_digit        ( )                                         const;
+        constexpr bool             is_space        ( )                                         const;
+        constexpr bool             is_blank        ( )                                         const;
+        constexpr bool             is_punct        ( )                                         const;
+        constexpr bool             is_cntrl        ( )                                         const;
+        constexpr bool             is_title        ( )                                         const;
 
         constexpr container&       lower           ( );
         constexpr container&       upper           ( );
@@ -44,6 +42,8 @@ class string_interface
         constexpr container&       expand_tabs     ( int = 8 );
         constexpr container&       encode          ( std::text_encoding, std::text_encoding );
 
+        constexpr bool             begins_with     ( const container& )                        const;
+        constexpr bool             ends_with       ( const container& )                        const;
         constexpr container&       center          ( int,  type = ' ' );
         constexpr container&       left_justify    ( int,  type = ' ' );
         constexpr container&       right_justify   ( int,  type = ' ' );
@@ -52,11 +52,8 @@ class string_interface
         constexpr container&       right_strip     ( const type = ' ' );
 
         constexpr container&       join            ( const array<container>& );
-        constexpr array<container> partition       ( const container& )                                              const;
-        constexpr array<container> right_partition ( const container& )                                              const;
-        constexpr array<container> split           ( const container& = ' ', int = std::numeric_limits<int>::max() ) const;
-        constexpr array<container> right_split     ( const container& = ' ', int = std::numeric_limits<int>::max() ) const;
-        constexpr array<container> split_lines     ( )                                                               const;
+        constexpr array<container> partition       ( const container& )                        const;
+        constexpr array<container> split           ( const container& = ' ' )                  const;
 
         constexpr container&       format          ( std::formattable<type> auto&&... );
 
@@ -68,6 +65,5 @@ class string_interface
         constexpr bool             none            ( const container& )                                              const;
         constexpr container&       remove          ( const container& );
         constexpr container&       replace         ( const container&, const container& );
-        constexpr int              right_find      ( const container& )                                              const;
         constexpr array<int>       where           ( const container& )                                              const;
 };

@@ -507,7 +507,7 @@ namespace ranges {
 	concept __can_join_with_view
 	  = requires { join_with_view(std::declval<_Range>(), std::declval<_Pattern>()); };
 
-    struct _JoinWith : __range_adaptor_closure<_JoinWith>
+    struct _JoinWith : range_adaptor_closure<_JoinWith>
     {
       template<viewable_range _Range, typename _Pattern>
 	requires __can_join_with_view<_Range, _Pattern>
@@ -521,7 +521,7 @@ namespace ranges {
   constexpr auto
   operator() [[nodiscard]] (_Pattern&& __f) const
   {
-    return __pipeable(std::__bind_back(*this, std::forward<_Pattern>(__f)));
+    return __pipeable(std::bind_back(*this, std::forward<_Pattern>(__f)));
   }
 
 

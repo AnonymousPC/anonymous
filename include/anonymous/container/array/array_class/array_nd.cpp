@@ -277,7 +277,6 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr int array<type,dim,device>::size ( ) const
 {
-    [[assume(base::size() == info::size())]];
     return ownership() ? info::size() :
                          upper::size();
 }
@@ -312,7 +311,6 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr bool array<type,dim,device>::empty ( ) const
 {
-    [[assume(base::empty() == info::empty())]];
     return ownership() ? info::empty() :
                          upper::empty();
 }

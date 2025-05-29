@@ -1,15 +1,15 @@
-constexpr auto&& first_value_of ( auto&&... args )
+constexpr decltype(auto) first_value_of ( auto&&... args )
 {
     return args...[0];
 }
 
-constexpr auto&& last_value_of ( auto&&... args )
+constexpr decltype(auto) last_value_of ( auto&&... args )
 {
     return args...[sizeof...(args)-1];
 }
 
 template < int index >
-constexpr auto&& index_value_of ( auto&&... args )
+constexpr decltype(auto) index_value_of ( auto&&... args )
 {
     return args...[index >= 0 ? index-1 : index+sizeof...(args)];
 }

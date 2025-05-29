@@ -1,19 +1,7 @@
-module;
-#ifdef __GNUC__
-    #pragma GCC diagnostic ignored "-Wassume"
-    #pragma GCC diagnostic ignored "-Wuser-defined-literals"
-#elifdef __clang__
-    #pragma clang diagnostic ignored "-Wassume"
-    #pragma clang diagnostic ignored "-Wuser-defined-literals"
-#elifdef _MSC_VER
-    #pragma cl what?
-#endif
-
 export module anonymous.container;
+import anonymous.basic;
 import std;
 import boost;
-import anonymous.basic;
-import stdexec;
 
 export namespace anonymous
 {
@@ -48,14 +36,14 @@ export namespace anonymous
     template < class type,                                                 class device = cpu > class string;
                                                                                             
     /// Include
-    #include "utility/utility1.hpp"
+    #include "utility/utility.hpp"
     #include "discrete/discrete.hpp"
     #include "polymorphic/polymorphic.hpp"
     #include "array/array.hpp"
     #include "chain/chain.hpp"
     #include "collection/collection.hpp"
    // #include "string/string.hpp"
-   #include "utility/utility2.hpp"
+    #include "utility/utility.cpp"
 
 } // namespace anonymous
 

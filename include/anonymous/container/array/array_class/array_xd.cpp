@@ -238,7 +238,6 @@ constexpr int array<type,max_dim,device>::dimension ( )
 template < class type, class device >
 constexpr int array<type,max_dim,device>::size ( ) const
 {
-    [[assume(base::size() == info::size())]];
     return ownership() ? info::size() :
                          upper::size();
 }
@@ -269,7 +268,6 @@ constexpr int array<type,max_dim,device>::column ( ) const
 template < class type, class device >
 constexpr bool array<type,max_dim,device>::empty ( ) const
 {
-    [[assume(base::empty() == info::empty())]];
     return ownership() ? info::empty() :
                          upper::empty();
 }

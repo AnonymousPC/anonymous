@@ -308,46 +308,6 @@ constexpr container& container_interface<container,type,device>::reverse ( )
 }
 
 template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::right_adjacent_find ( ) const
-    requires random_access_range<container> and equalable<type>
-{
-    for ( auto it = end() - 2; it != begin() - 1; --it )
-        if ( device::equal_to()(*it, *(it+1)) )
-            return it - begin() + 1;
-    return 0;
-}
-
-template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::right_adjacent_find ( relation_between<type,type> auto rel ) const
-    requires random_access_range<container>
-{
-    for ( auto it = end() - 2; it != begin() - 1; --it )
-        if ( pred(*it, *(it+1)) )
-            return it - begin() + 1;
-    return 0;
-}
-
-template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::right_find ( const equalable_to<type> auto& val ) const
-    requires random_access_range<container>
-{
-    for ( auto it = end() - 1; it != begin() - 1; --it )
-        if ( device::equal_to()(*it, val) )
-            return it - begin() + 1;
-    return 0;
-}
-
-template < class container, class type, class device >
-constexpr int container_interface<container,type,device>::right_find ( predicate_for<type> auto pred ) const
-    requires random_access_range<container>
-{
-    for ( auto it = end() - 1; it != begin() - 1; --it )
-        if ( pred(*it) )
-            return it - begin() + 1;
-    return 0;
-}
-
-template < class container, class type, class device >
 constexpr container& container_interface<container,type,device>::rotate ( int n )
     requires forward_range<container>
 {

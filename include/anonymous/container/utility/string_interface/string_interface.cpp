@@ -1,3 +1,5 @@
+#include "detail/char_category.hpp"
+
 template < class container, class type, class device >
 constexpr auto string_interface<container,type,device>::begin ( )
 {
@@ -59,109 +61,95 @@ constexpr auto string_interface<container,type,device>::operator [] ( int pos ) 
 }
 
 template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::begins_with ( const container& str ) const
+constexpr bool string_interface<container,type,device>::is_ascii ( ) const
 {
-    return self.size() >= str.size() and device::equal(self.begin(), self.begin() + str.size(), str.begin(), str.end());
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_ascii);
 }
 
 template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::ends_with ( const container& str ) const
+constexpr bool string_interface<container,type,device>::is_print ( ) const
 {
-    return self.size() >= str.size() and device::equal(self.end() - str.size(), self.end(), str.begin(), str.end());
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_print);
 }
 
 template < class container, class type, class device >
 constexpr bool string_interface<container,type,device>::is_alnum ( ) const
 {
-    return device::all_of(begin(), end(), [] (const auto& ch) { return (ch >= '0' and ch <= '9') or (ch >= 'A' and ch <= 'Z') or (ch >= 'a' and ch <= 'z'); });
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_alnum);
 }
 
 template < class container, class type, class device >
 constexpr bool string_interface<container,type,device>::is_alpha ( ) const
 {
-    return device::all_of(begin(), end(), [] (const auto& ch) { return (ch >= 'A' and ch <= 'Z') or (ch >= 'a' and ch <= 'z'); });
-}
-
-template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::is_ascii ( ) const
-{
-    return device::all_of(begin(), end(), [] (const auto& ch) { return ch >= '\0' and ch <= '\x7f'; });
-}
-
-template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::is_blank ( ) const
-{
-    return device::all_of(begin(), end(), [] (const auto& ch) { return ch == '\t' or ch == ' '; });
-}
-
-template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::is_cntrl ( ) const
-{
-    return device::all_of(begin(), end(), [] (const auto& ch) { return ch >= '\0' and ch <= '\x1f'; });
-}
-
-template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::is_digit ( ) const
-{
-    return device::all_of(begin(), end(), [] (const auto& ch) { return ch >= '0' and ch <= '9'; });
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_alpha);
 }
 
 template < class container, class type, class device >
 constexpr bool string_interface<container,type,device>::is_lower ( ) const
 {
-    return device::all_of(begin(), end(), [] (const auto& ch) { return ch >= 'a' and ch <= 'z'; });
-}
-
-template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::is_punct ( ) const
-{
-    return device::all_of(begin(), end(), [] (const auto& ch) { return (ch >= '!' and ch <= '/') or (ch >= ':' and ch <= '@') or (ch >= '[' or ch <= '`') or (ch >= '{' and ch <= '~'); });
-}
-
-template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::is_space ( ) const
-{
-    return device::all_of(begin(), end(), [] (const auto& ch) { return ch == '\t' or ch == '\n' or ch == '\v' or ch == '\f' or ch == '\r' or ch == ' '; });
-}
-
-template < class container, class type, class device >
-constexpr bool string_interface<container,type,device>::is_title ( ) const
-{
-    return device::adjacent_find(begin(), end(), [] (const auto& a, const auto& b) { return (a >= 'A' and a <= 'Z') and (b >= 'A' and b <= 'Z'); }) == end();
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_lower);
 }
 
 template < class container, class type, class device >
 constexpr bool string_interface<container,type,device>::is_upper ( ) const
 {
-    return device::all_of(begin(), end(), [] (const auto& ch) { return std::isupper(ch); });
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_upper);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::is_digit ( ) const
+{
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_digit);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::is_space ( ) const
+{
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_space);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::is_blank ( ) const
+{
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_blank);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::is_punct ( ) const
+{
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_punct);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::is_cntrl ( ) const
+{
+    return device::all_of(begin(), end(), detail::char_category<type,device>::is_cntrl);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::is_title ( ) const
+{
+    return device::adjacent_find(begin(), end(), detail::char_category<type,device>::is_title) == end();
 }
 
 template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::lower ( )
 {
-    device::transform(begin(), end(), begin(), [] (const auto& ch) { return std::tolower(ch); });
+    device::for_each(begin(), end(), detail::char_category<type,device>::lower);
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::upper ( )
 {
-    device::transform(begin(), end(), begin(), [] (const auto& ch) { return std::toupper(ch); });
+    device::for_each(begin(), end(), detail::char_category<type,device>::upper);
     return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::swap_case ( )
 {
-    device::transform(begin(), end(), begin(), [] (const auto& ch)
-        {
-            if ( std::islower(ch) )
-                return std::toupper(ch);
-            else if ( std::isupper(ch) )
-                return std::tolower(ch);
-            else
-                return int(ch);
-        });
+    device::for_each(begin(), end(), detail::char_category<type,device>::swap_case);
     return static_cast<container&>(self);
 }
 
@@ -169,7 +157,10 @@ template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::capitalize ( )
 {
     if ( not empty() )
-        self[1] = std::isupper(self[1]);
+    {
+        device::for_each(begin(),     begin() + 1, detail::char_category<type,device>::upper);
+        device::for_each(begin() + 1, end(),       detail::char_category<type,device>::lower);
+    }
 
     return static_cast<container&>(self);
 }
@@ -177,8 +168,9 @@ constexpr container& string_interface<container,type,device>::capitalize ( )
 template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::title ( )
 {
-    for ( auto it = begin(); (it = device::adjacent_find(it, end(), [] (const auto& a, const auto& b) { return not std::isalpha(a) and std::islower(b); })) != end(); ++it )
-        (*it+1) = std::to_upper(*it+1);
+    detail::char_category<type,device>::title(' ', *begin());
+    for ( auto it = begin(); it != end() - 1; ++it )
+        detail::char_category<type,device>::title(*it, *it+1);
     
     return static_cast<container&>(self);
 }
@@ -188,7 +180,7 @@ constexpr container& string_interface<container,type,device>::expand_tabs ( int 
 {
     if constexpr ( debug )
         if ( tabs_size < 0 )
-            throw value_error("cannot expand tabs to string (with tabs.size() = {}): size is negative", tabs_size);
+            throw value_error("cannot expand tabs in string (with tabs.size() = {}): size is negative", tabs_size);
 
     return replace('\t', container(tabs_size, ' '));
 }
@@ -196,22 +188,30 @@ constexpr container& string_interface<container,type,device>::expand_tabs ( int 
 template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::encode ( std::text_encoding old_encode, std::text_encoding new_encode )
 {
+    static_assert(derived_from<container,std::string>, "only supported for container derived from std::string");
+
     try
     {
-        static_cast<typename device::template basic_string<type>&>(static_cast<container&>(self)) =
-            boost::locale::conv::between(
-                static_cast<typename const device::template basic_string<type>&>(static_cast<const container&>(self)),
-                new_encode.name(),
-                old_encode.name(),
-                boost::locale::conv::stop
-            ); 
+        static_cast<container&>(self) = boost::locale::conv::between(static_cast<const container&>(self), new_encode.name(), old_encode.name(), boost::locale::conv::stop); 
     }
     catch ( const std::runtime_error& e )
     {
-        throw encode_error("cannot encode string from {} into {}", sold_encode.name(), new_encode.name()).from(e);
+        throw encode_error("cannot encode string from {} into {}", old_encode.name(), new_encode.name()).from(e);
     }
 
     return static_cast<container&>(self);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::begins_with ( const container& str ) const
+{
+    return self.size() >= str.size() and device::equal(self.begin(), self.begin() + str.size(), str.begin(), str.end(), detail::char_category<type,device>::equal_to);
+}
+
+template < class container, class type, class device >
+constexpr bool string_interface<container,type,device>::ends_with ( const container& str ) const
+{
+    return self.size() >= str.size() and device::equal(self.end() - str.size(), self.end(), str.begin(), str.end(), detail::char_category<type,device>::equal_to);
 }
 
 template < class container, class type, class device >
@@ -244,7 +244,7 @@ constexpr container& string_interface<container,type,device>::left_justify ( int
 
     if ( new_size > size() )
     {
-        int old_size = size();
+        auto old_size = size();
         static_cast<container&>(self).resize(new_size);
         device::fill(begin() + old_size, end(), filled);
     }
@@ -273,52 +273,24 @@ constexpr container& string_interface<container,type,device>::right_justify ( in
 template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::strip ( type stripped )
 {
-    return static_cast<container&>(self)
-               .erase(1,    find([] (const auto& ch) { return ch != stripped; })
-               .erase(right_find([] (const auto& ch) { return ch != stripped})
-
-
-    auto pos1 = 0;
-    while ( pos <= size() and not chars.contains(self[pos1]) )
-        pos1++;
-
-    auto pos2 = size();
-    while ( pos2 >= 1 and not chars.contains(self[pos2]) )
-        pos2--;
-
-    device::copy_backward(begin() + pos1 - 1, )
-
 
 }
 
 template < class container, class type, class device >
-constexpr container& string_interface<container,type,device>::left_strip ( view chars )
+constexpr container& string_interface<container,type,device>::left_strip ( type stripped )
 {
-    if constexpr ( debug )
-    {
-        if ( chars.empty() )
-            throw value_error("cannot left_strip string (with chars = \"\"): nothing to strip");
-    }
-
-    auto pos = 0;
-    while ( pos <= size() and not chars.contains(self[pos]) )
-        pos++;
-    return static_cast<container&>(self).erase(1, pos - 1);
+    auto it = device::find_if(begin(), end(), stripped, detail::char_category<type,device>::not_equal_to);
+    device::copy(it, end(), begin());
+    static_cast<container&>(self).resize(it - begin() + 1);
+    return static_cast<container&>(self);
 }
 
 template < class container, class type, class device >
-constexpr container& string_interface<container,type,device>::right_strip ( view chars )
+constexpr container& string_interface<container,type,device>::right_strip ( type stripped )
 {
-    if constexpr ( debug )
-    {
-        if ( chars.empty() )
-            throw value_error("cannot right_strip string (with chars = \"\"): nothing to strip");
-    }
-
-    auto pos = size();
-    while ( pos >= 1 and not chars.contains(self[pos]) )
-        pos--;
-    return static_cast<container&>(self).erase(pos + 1, size());
+    auto it = end() - 1;
+    while ( it != begin() - 1 and detail::char_category<type,device>::not_equal_to )
+        
 }
 
 template < class container, class type, class device >
@@ -333,26 +305,11 @@ constexpr array<container> string_interface<container,type,device>::partition ( 
 }
 
 template < class container, class type, class device >
-constexpr array<container> string_interface<container,type,device>::right_partition ( const container& sep ) const
+constexpr array<container> string_interface<container,type,device>::split ( const container& sep ) const
 {
     if constexpr ( debug )
-        if ( sep.empty() )
-            throw value_error("cannot right_partition string (with seperator = \"\"): seperator is empty");
-
-    auto pos = device::find_end(self.begin(), self.end(), sep.begin(), self.end()) - self.begin() + 1;
-    return array<container>{self[1,pos-1], self[pos,pos+sep.size()-1], self[pos+sep.size(),-1]};
-}
-
-template < class container, class type, class device >
-constexpr array<container> string_interface<container,type,device>::split ( const container& sep, int times ) const
-{
-    if constexpr ( debug )
-    {
         if ( sep.empty() )
             throw value_error("cannot split string (with seperator = \"\"): seperator is empty");
-        if ( times < 0 )
-            throw value_error("cannot split string (with times = {}): times is negative", times);
-    }
 
     auto arr = array<container>();
     auto pos_1 = 1;
@@ -370,35 +327,6 @@ constexpr array<container> string_interface<container,type,device>::split ( cons
         arr.push(view(pos_1, pos_2 - pos_1));
         if ( pos_2 != self.data() + self.size() )
             pos_1 = pos_2 + sep.size();
-        else
-            break;
-    }
-
-    return arr;
-}
-
-template < class container, class type, class device >
-constexpr array<container> string_interface<container,type,device>::right_split ( const container& sep, int times ) const
-{
-    if constexpr ( debug )
-    {
-        if ( sep.empty() )
-            throw value_error("cannot right_split string (with seperator = \"\"): seperator is empty");
-        if ( times < 0 )
-            throw value_error("cannot right_split string (with times = {}): times is negative", times);
-    }
-
-    auto arr = array<view>();
-    for ( auto pos_2 = self.data() + self.size(); times >= 0; times-- )
-    {
-        auto pos_1 = times >= 1 ? device::find_end(self.data(), pos_2, sep.data(), sep.data() + sep.size()) :
-                                  pos_2;
-        if ( pos_1 == pos_2 )
-            pos_1 = self.data() - sep.size();
-        arr.empty() ? arr.push  (   view(pos_1 + sep.size(), pos_2 - pos_1 - sep.size())) :
-                      arr.insert(1, view(pos_1 + sep.size(), pos_2 - pos_1 - sep.size()));
-        if ( pos_1 != self.data() - sep.size() )
-            pos_2 = pos_1;
         else
             break;
     }

@@ -351,15 +351,7 @@ export namespace std {
     static text_encoding
     environment()
     {
-        #ifdef _WIN32
-            return GBK;
-        #elifdef __linux__
-            return UTF8;
-        #elifdef __APPLE__
-            return UTF8;
-        #else
-            return unknown;
-        #endif
+        return unknown;
     }
 
     template<id _Id>

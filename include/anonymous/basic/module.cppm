@@ -1,9 +1,6 @@
 module;
 #include <csignal> // macros: SIGINT, SIGABRT, ...
-#include <__functional/bind_back.h>
 #include <__type_traits/maybe_const.h>
-#include <__ranges/non_propagating_cache.h>
-#include <__ranges/range_adaptor.h>
 
 export module anonymous.basic;
 
@@ -11,11 +8,8 @@ import std;
 import stdexec;
 import plf;
 import boost;
-
 import Eigen;
-
 import tbb;
-
 import cuda;
 import thrust;
 
@@ -44,11 +38,11 @@ import thrust;
     #include "std/ranges/ranges_typedef.cpp"
 
     #ifndef __cpp_lib_ranges_as_const
-        #include "std/ranges/iterator_const.cpp"
+        #include "std/ranges/const_iterator.cpp"
     #endif
     
     #ifndef __cpp_lib_ranges_chunk
-        #include "std/ranges/ranges_chunk.cpp"
+        #include "std/ranges/chunk_range.cpp"
     #endif
 
     #ifndef __cpp_lib_ranges_join_with
@@ -94,9 +88,6 @@ export namespace anonymous
     #else
         constexpr bool debug = true;
     #endif
-
-    /// Macro
-    #include "macro.cpp"
 
     /// Concept
     template < class type >                                    constexpr bool is_abstract                        = std::is_abstract                       <type>                 ::value;
@@ -268,13 +259,13 @@ export namespace anonymous
     template <            class... types > using last_type_of  = types...[sizeof...(types)-1];
     template < int index, class... types > using index_type_of = types...[index >= 0 ? index-1 : index+sizeof...(types)];
 
-                                                  constexpr auto&& first_value_of    ( auto&&... );
-                                                  constexpr auto&& last_value_of     ( auto&&... );
-    template < int index >                        constexpr auto&& index_value_of    ( auto&&... );
-    template < int min, int max, int stride = 1 > constexpr void   for_constexpr     ( auto&& );
-    template < int min, int max, int stride = 1 > constexpr bool   all_of_constexpr  ( auto&& );
-    template < int min, int max, int stride = 1 > constexpr bool   any_of_constexpr  ( auto&& );
-    template < int min, int max, int stride = 1 > constexpr bool   none_of_constexpr ( auto&& );
+                                                  constexpr decltype(auto) first_value_of    ( auto&&... );
+                                                  constexpr decltype(auto) last_value_of     ( auto&&... );
+    template < int index >                        constexpr decltype(auto) index_value_of    ( auto&&... );
+    template < int min, int max, int stride = 1 > constexpr void           for_constexpr     ( auto&& );
+    template < int min, int max, int stride = 1 > constexpr bool           all_of_constexpr  ( auto&& );
+    template < int min, int max, int stride = 1 > constexpr bool           any_of_constexpr  ( auto&& );
+    template < int min, int max, int stride = 1 > constexpr bool           none_of_constexpr ( auto&& );
 
     /// Common.range
     constexpr random_access_range auto range ( integral auto );
@@ -288,6 +279,7 @@ export namespace anonymous
     class tbb;
 
     /// Include
+    #include "macro.cpp"
     #include "common/common.hpp"
     #include "device/device.hpp"
     #include "init/init.hpp"
@@ -301,7 +293,8 @@ export namespace anonymous
 export inline namespace __global__
 {
     #include "utility/export/typedef.hpp"
-}
+
+} // inline namespace __global__
 
 export namespace std
 {

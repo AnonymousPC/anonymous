@@ -1,14 +1,5 @@
 detail::basic_initializer_t::basic_initializer_t ( )
 {
-    // Stdio
-    std::cout << std::boolalpha;
-
-    // Stdio.windows
-    #ifdef _WIN32
-    SetConsoleCP      (CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
-    #endif
-
     // Signal.standard
     std::signal(SIGFPE,  floating_point_exception_signal_handler);
     std::signal(SIGILL,  illegal_instruction_signal_handler);
@@ -67,30 +58,6 @@ detail::basic_initializer_t::basic_initializer_t ( )
     #endif
     #ifdef SIGXFSZ
     std::signal(SIGXCPU,   [] (int s) { signal_handler(s, "SIGXFSZ (file size limit exceeded)"); });
-    #endif
-
-    // Stack-overflow.windows
-    #ifdef _WIN32
-    SetUnhandledExceptionFilter([] WINAPI (PEXCEPTION_POINTERS ptrs) -> LONG
-        {
-            if ( ptrs->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW )
-                segmentation_violation_signal_handler(SIGSEGV);
-            return EXCEPTION_CONTINUE_SEARCH;
-        });
-    #endif
-
-    // Stack-overflow.posix
-    #if defined(SIGSTKSZ) and defined(SA_ONSTACK)
-    stack_t ss;
-    ss.ss_sp    = new char[SIGSTKSZ] {};
-    ss.ss_size  = SIGSTKSZ;
-    ss.ss_flags = 0;
-    sigaltstack(&ss, nullptr);
-    struct sigaction sa_segv;
-    sa_segv.sa_handler = segmentation_violation_signal_handler;
-    sa_segv.sa_flags   = SA_ONSTACK;
-    sigemptyset(&sa_segv.sa_mask);
-    sigaction  (SIGSEGV, &sa_segv, nullptr);
     #endif
 }
 

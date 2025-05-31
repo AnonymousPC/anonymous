@@ -273,7 +273,8 @@ constexpr container& string_interface<container,type,device>::right_justify ( in
 template < class container, class type, class device >
 constexpr container& string_interface<container,type,device>::strip ( type stripped )
 {
-
+    auto it1 = device::find_if(begin(), end(), stripped, detail::char_category<type,device>::not_equal_to);
+    auto it2 = device::find_if(reverse_iterator(begin()), )
 }
 
 template < class container, class type, class device >
@@ -301,7 +302,7 @@ constexpr array<container> string_interface<container,type,device>::partition ( 
             throw value_error("cannot partition string (with seperator = \"\"): seperator is empty");
 
     auto pos = device::search(self.begin(), self.end(), sep.begin(), sep.end()) - self.begin() + 1;
-    return array<container>{self[1,pos-1], self[pos,pos+sep.size()-1], self[pos+sep.size(),-1]};
+    return array<container>{static_cast<const container&>(self).substr(1,pos-1), static_cast<const container&>(self).substr(pos,pos+sep.size()-1), static_cast<const container&>(self).substr(pos+sep.size(),-1)};
 }
 
 template < class container, class type, class device >
@@ -332,12 +333,6 @@ constexpr array<container> string_interface<container,type,device>::split ( cons
     }
 
     return arr;
-}
-
-template < class container, class type, class device >
-constexpr array<typename string_interface<container,type,device>::view> string_interface<container,type,device>::split_lines ( ) const
-{
-    return split('\n');
 }
 
 template < class container, class type, class device >

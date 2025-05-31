@@ -72,6 +72,9 @@
         "unordered_map": "cpp",
         "unordered_set": "cpp",
         "valarray": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "syncstream": "cpp",
+        "ranges": "cpp",
+        "mdspan": "cpp"
     }
 }

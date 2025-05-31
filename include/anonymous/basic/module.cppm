@@ -1,6 +1,7 @@
 module;
+#include <cassert> // macro: aassert.
 #include <csignal> // macros: SIGINT, SIGABRT, ...
-#include <__type_traits/maybe_const.h>
+#include <ranges> // utilities for ranges.
 
 export module anonymous.basic;
 
@@ -24,42 +25,36 @@ import thrust;
 
 #ifndef __cpp_lib_mdspan
     #include "std/mdspan.hpp"
-#else
-    #include "std/mdspan/mdspan_layout_transpose.cpp"
-
-    #ifndef __cpp_lib_aligned_accessor
-        #include "std/mdspan/mdspan_aligned_accessor.cpp"
-    #endif
+#else  
+    #include "std/mdspan/layout_transpose.cpp"
 #endif
 
-#ifndef __cpp_lib_ranges
-    #include "std/ranges.hpp"
-#else
-    #include "std/ranges/ranges_typedef.cpp"
+#ifndef __cpp_lib_aligned_accessor
+    #include "std/aligned_accessor.hpp"
+#endif
 
-    #ifndef __cpp_lib_ranges_as_const
-        #include "std/ranges/const_iterator.cpp"
-    #endif
-    
-    #ifndef __cpp_lib_ranges_chunk
-        #include "std/ranges/chunk_range.cpp"
-    #endif
+#ifndef __cpp_lib_ranges_as_const
+    #include "std/ranges/const_iterator.cpp"
+#endif
 
-    #ifndef __cpp_lib_ranges_join_with
-        #include "std/ranges/ranges_join_with.cpp"
-    #endif 
+#ifndef __cpp_lib_ranges_chunk
+    #include "std/ranges/chunk_view.cpp"
+#endif
 
-    #ifndef __cpp_lib_ranges_starts_ends_with
-        #include "std/ranges/ranges_starts_ends_with.cpp"
-    #endif
+#ifndef __cpp_lib_ranges_join_with
+    #include "std/ranges/join_with_view.cpp"
+#endif 
 
-    #ifndef __cpp_lib_ranges_stride
-        #include "std/ranges/ranges_stride.cpp"
-    #endif
+#ifndef __cpp_lib_ranges_starts_ends_with
+    #include "std/ranges/starts_ends_with.cpp"
+#endif
 
-    #ifndef __cpp_lib_ranges_zip
-        #include "std/ranges/ranges_zip.cpp"
-    #endif
+#ifndef __cpp_lib_ranges_stride
+    #include "std/ranges/stride_view.cpp"
+#endif
+
+#ifndef __cpp_lib_ranges_zip
+    #include "std/ranges/zip_view.cpp"
 #endif
 
 #ifndef __cpp_lib_stacktrace

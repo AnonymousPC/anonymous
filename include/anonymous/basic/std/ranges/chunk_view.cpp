@@ -10,16 +10,6 @@ namespace ranges {
       return __r;
     }
 
-  template<class _Tp>
-    struct __my_non_propagating_cache_helper { struct type { }; };
-
-  template<class _Tp>
-    requires is_object_v<_Tp>
-    struct __my_non_propagating_cache_helper<_Tp> { using type = __non_propagating_cache<_Tp>; };
-
-  template<class _Tp>
-    using __my_non_propagating_cache = __my_non_propagating_cache_helper<_Tp>::type;
-
   template<view _Vp>
     requires input_range<_Vp>
   class chunk_view : public view_interface<chunk_view<_Vp>>
@@ -27,7 +17,7 @@ namespace ranges {
     _Vp _M_base;
     range_difference_t<_Vp> _M_n;
     range_difference_t<_Vp> _M_remainder = 0;
-    __my_non_propagating_cache<iterator_t<_Vp>> _M_current;
+    __non_propagating_cache<iterator_t<_Vp>> _M_current;
 
     class _OuterIter;
     class _InnerIter;

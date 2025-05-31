@@ -1,4 +1,12 @@
 export namespace std {
+namespace ranges
+{
+  template<range _Range> using range_const_reference_t = range_reference_t<const _Range>;
+  template<range _Range> using const_iterator_t        = iterator_t       <const _Range>;
+  template<range _Range> using const_sentinel_t        = sentinel_t       <const _Range>;
+    
+} // namespace ranges
+
     
   template<indirectly_readable _It>
     using iter_const_reference_t
@@ -36,7 +44,7 @@ export namespace std {
 
   template<input_iterator _It>
     using const_iterator
-      = __conditional_t<__detail::__constant_iterator<_It>, _It, basic_const_iterator<_It>>;
+      = std::conditional_t<__detail::__constant_iterator<_It>, _It, basic_const_iterator<_It>>;
 
   namespace __detail
   {

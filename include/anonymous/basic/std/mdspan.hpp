@@ -1,13 +1,11 @@
 #define libcpp_assert(expr, message) assert(expr)
 
-// #include "mdspan/mdspan_fwd.cpp"
-// #include "mdspan/mdspan_default_accessor.cpp"
-// #include "mdspan/mdspan_extents.cpp"
-// #include "mdspan/mdspan_layout_left.cpp"
-// #include "mdspan/mdspan_layout_right.cpp"
-// #include "mdspan/mdspan_layout_stride.cpp"
-#include "mdspan/mdspan_layout_transpose.cpp"
-#include "mdspan/mdspan_aligned_accessor.cpp"
+#include "mdspan/default_accessor.cpp"
+#include "mdspan/extents.cpp"
+#include "mdspan/layout_left.cpp"
+#include "mdspan/layout_right.cpp"
+#include "mdspan/layout_stride.cpp"
+#include "mdspan/layout_transpose.cpp"
 
 
 export namespace std

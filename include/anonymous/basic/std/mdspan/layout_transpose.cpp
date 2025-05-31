@@ -1,5 +1,4 @@
-export namespace std
-{
+export namespace std{
 
 template <class _Layout>
 struct layout_transpose {

@@ -1,4 +1,10 @@
 export namespace std {
+
+struct layout_stride {
+  template <class _Extents>
+  class mapping;
+};
+
 namespace __mdspan_detail {
 template <class _Layout, class _Mapping>
 constexpr bool __is_mapping_of =

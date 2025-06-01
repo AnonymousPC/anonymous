@@ -10,5 +10,6 @@
 #define vector_value_type    typename remove_cvref<decltype(vector)>::value_type
 #define vector_layout_type   typename remove_cvref<decltype(vector)>::layout_type
 #define mdspan_value_type    typename remove_cvref<decltype(mdspan)>::value_type
+#define mdspan_element_type  typename remove_cvref<decltype(mdspan)>::element_type
 #define mdspan_layout_type   typename remove_cvref<decltype(mdspan)>::layout_type
 #define mdspan_accessor_type typename remove_cvref<decltype(mdspan)>::accessor_type

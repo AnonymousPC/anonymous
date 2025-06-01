@@ -15,6 +15,10 @@ import cuda;
 import thrust;
 
 // Std.feature
+#ifndef __cpp_lib_aligned_accessor
+    #include "std/aligned_accessor.hpp"
+#endif
+
 #ifndef __cpp_lib_inplace_vector
     #include "std/inplace_vector.hpp"
 #endif
@@ -25,36 +29,30 @@ import thrust;
 
 #ifndef __cpp_lib_mdspan
     #include "std/mdspan.hpp"
-#else  
-    #include "std/mdspan/layout_transpose.cpp"
-#endif
-
-#ifndef __cpp_lib_aligned_accessor
-    #include "std/aligned_accessor.hpp"
 #endif
 
 #ifndef __cpp_lib_ranges_as_const
-    #include "std/ranges/const_iterator.cpp"
+    #include "std/ranges/const_iterator.hpp"
 #endif
 
 #ifndef __cpp_lib_ranges_chunk
-    #include "std/ranges/chunk_view.cpp"
+    #include "std/ranges/chunk_view.hpp"
 #endif
 
 #ifndef __cpp_lib_ranges_join_with
-    #include "std/ranges/join_with_view.cpp"
+    #include "std/ranges/join_with_view.hpp"
 #endif 
 
 #ifndef __cpp_lib_ranges_starts_ends_with
-    #include "std/ranges/starts_ends_with.cpp"
+    #include "std/ranges/starts_ends_with.hpp"
 #endif
 
 #ifndef __cpp_lib_ranges_stride
-    #include "std/ranges/stride_view.cpp"
+    #include "std/ranges/stride_view.hpp"
 #endif
 
 #ifndef __cpp_lib_ranges_zip
-    #include "std/ranges/zip_view.cpp"
+    #include "std/ranges/zip_view.hpp"
 #endif
 
 #ifndef __cpp_lib_stacktrace

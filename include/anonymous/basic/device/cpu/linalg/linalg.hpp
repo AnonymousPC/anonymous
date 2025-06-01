@@ -70,7 +70,7 @@ constexpr void cpu::linalg::divide_equal ( auto left, const auto right )
 
 constexpr void cpu::linalg::convolve ( const auto left, const auto right, auto output )
 {
-    detail::eigen_map<void,detail::eigen_map_tensor>(output) = detail::eigen_map<output_value_type,detail::eigen_map_tensor>(left).convolve(detail::eigen_map<output_value_type,detail::eigen_map_tensor>(right), detail::eigen_make_convolve_full_dims<left.rank()>());
+    detail::eigen_map<output_value_type,detail::eigen_map_tensor>(output) = detail::eigen_map<output_value_type,detail::eigen_map_tensor>(left).convolve(detail::eigen_map<output_value_type,detail::eigen_map_tensor>(right), detail::eigen_make_convolve_full_dims<left.rank()>());
 }
 
 constexpr void cpu::linalg::cross ( const auto left, const auto right, auto output )
@@ -80,41 +80,17 @@ constexpr void cpu::linalg::cross ( const auto left, const auto right, auto outp
 
 constexpr void cpu::linalg::dot ( const auto left, const auto right, auto output )
 {
-    output = detail::eigen_map<decltype(output)>(left).dot(detail::eigen_map<decltype(output)>(right));
+    detail::eigen_map(output).noalias() = detail::eigen_map<output_value_type>(left).dot(detail::eigen_map<output_value_type>(right));
 }
 
 constexpr void cpu::linalg::fft ( const auto vector, auto output )
 {
-    /* Eigen::Map<const Eigen::Matrix> has bug in Eigen::FFT, as
-     * eigen_map[index] returns a rvalue instead of const lvalue&.
-     * So we must map it manually.
-     */
-    auto vector_map = [&]
-        {
-            if constexpr ( detail::is_contiguous_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
-            else // if constexpr ( detail::is_strided_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
-        } ();
-    auto output_map = detail::eigen_map(output);
-    Eigen::FFT<output_value_type::value_type>().fwd(output_map, vector_map);
+    Eigen::FFT<output_value_type::value_type>().fwd(detail::eigen_map(output), detail::eigen_map<output_value_type>(vector));
 }
 
 constexpr void cpu::linalg::ifft ( const auto vector, auto output )
 {
-    /* Eigen::Map<const Eigen::Matrix> has bug in Eigen::FFT, as
-     * eigen_map[index] returns a rvalue instead of const lvalue&.
-     * So we must map it manually.
-     */
-    auto vector_map = [&]
-        {
-            if constexpr ( detail::is_contiguous_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size());
-            else // if constexpr ( detail::is_strided_layout<vector_layout_type> )
-                return Eigen::Map</*non-const*/Eigen::Vector<vector_value_type,Eigen::Dynamic>,Eigen::Unaligned,Eigen::InnerStride<Eigen::Dynamic>>(const_cast<vector_value_type*>(vector.data_handle()), vector.size(), vector.stride(0));
-        } ();
-    auto output_map = detail::eigen_map(output);
-    Eigen::FFT<output_value_type::value_type>().inv(output_map, vector_map);
+    Eigen::FFT<output_value_type::value_type>().inv(detail::eigen_map(output), detail::eigen_map<output_value_type>(vector));
 }
 
 constexpr void cpu::linalg::tensor ( const auto left, const auto right, auto output )

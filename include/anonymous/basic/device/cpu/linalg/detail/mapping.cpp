@@ -24,7 +24,15 @@ namespace detail
     constexpr auto eigen_make_transpose_shuffle ( )
     {
         auto arr = std::array<int,rank>();
-        for_cons
+        for_constexpr<0,rank-1>([&] <int index> { arr[index] = rank - index - 1; });
+        return arr;
+    }
+
+    template < int rank >
+    constexpr auto eigen_make_convolve_full_dims ( )
+    {
+        auto arr = std::array<int,rank>();
+        for_constexpr<0,
     }
 
     template < auto mode = eigen_map_default >

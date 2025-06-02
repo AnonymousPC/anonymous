@@ -1,7 +1,5 @@
 #define libcpp_assert(expr, message) assert(expr)
 
-export namespace std {
-
 template <class _ElementType>
 struct default_accessor {
   static_assert(!is_array_v<_ElementType>, "default_accessor: template argument may not be an array type");
@@ -1373,5 +1371,3 @@ mdspan(const typename _AccessorType::data_handle_type, const _MappingType&, cons
               typename _MappingType::extents_type,
               typename _MappingType::layout_type,
               _AccessorType>;
-
-} // namespace std

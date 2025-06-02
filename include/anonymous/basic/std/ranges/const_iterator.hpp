@@ -1,4 +1,3 @@
-export namespace std {
 namespace ranges
 {
   template<range _Range> using range_const_reference_t = range_reference_t<const _Range>;
@@ -380,6 +379,4 @@ namespace ranges
     make_const_sentinel(_Sent __s)
     noexcept(is_nothrow_convertible_v<_Sent, const_sentinel<_Sent>>)
     { return __s; }
-
-} // namespace std
 

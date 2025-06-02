@@ -1,4 +1,3 @@
-export namespace std {
 namespace ranges {
 
   template<typename _Range, typename _Pattern>
@@ -538,4 +537,3 @@ namespace ranges {
 
 
 } // namespace range
-} // namespace std

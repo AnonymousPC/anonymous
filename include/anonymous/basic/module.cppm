@@ -14,63 +14,70 @@ import tbb;
 import cuda;
 import thrust;
 
-// Std.feature
-#ifndef __cpp_lib_aligned_accessor
-    #include "std/aligned_accessor.hpp"
-#endif
-
-#ifndef __cpp_lib_inplace_vector
-    #include "std/inplace_vector.hpp"
-#endif
-
-#ifndef __cpp_lib_is_layout_compatible
-    #include "std/is_layout_compatible.hpp"
-#endif
-
-#ifndef __cpp_lib_mdspan
-    #include "std/mdspan.hpp"
-#endif
-
-#ifndef __cpp_lib_ranges_as_const
-    #include "std/ranges/const_iterator.hpp"
-#endif
-
-#ifndef __cpp_lib_ranges_chunk
-    #include "std/ranges/chunk_view.hpp"
-#endif
-
-#ifndef __cpp_lib_ranges_join_with
-    #include "std/ranges/join_with_view.hpp"
-#endif 
-
-#ifndef __cpp_lib_ranges_starts_ends_with
-    #include "std/ranges/starts_ends_with.hpp"
-#endif
-
-#ifndef __cpp_lib_ranges_stride
-    #include "std/ranges/stride_view.hpp"
-#endif
-
-#ifndef __cpp_lib_ranges_zip
-    #include "std/ranges/zip_view.hpp"
-#endif
-
-#ifndef __cpp_lib_stacktrace
-    #include "std/stacktrace.hpp"
-#endif
-
-#ifndef __cpp_lib_text_encoding
-    #include "std/text_encoding.hpp"
-#endif
-
-export namespace std::execution
+export namespace std
 {
-    using namespace stdexec; // C++26 proposal.
-}
+    // Std.feature
+    #ifndef __cpp_lib_aligned_accessor
+        #include "std/aligned_accessor.hpp"
+    #endif
+
+    #ifndef __cpp_lib_inplace_vector
+        #include "std/inplace_vector.hpp"
+    #endif
+
+    #ifndef __cpp_lib_is_layout_compatible
+        #include "std/is_layout_compatible.hpp"
+    #endif
+
+    #ifndef __cpp_lib_mdspan
+        #include "std/mdspan.hpp"
+    #endif
+
+    #ifndef __cpp_lib_ranges_as_const
+        #include "std/ranges/const_iterator.hpp"
+    #endif
+
+    #ifndef __cpp_lib_ranges_chunk
+        #include "std/ranges/chunk_view.hpp"
+    #endif
+
+    #ifndef __cpp_lib_ranges_join_with
+        #include "std/ranges/join_with_view.hpp"
+    #endif 
+
+    #ifndef __cpp_lib_ranges_starts_ends_with
+        #include "std/ranges/starts_ends_with.hpp"
+    #endif
+
+    #ifndef __cpp_lib_ranges_stride
+        #include "std/ranges/stride_view.hpp"
+    #endif
+
+    #ifndef __cpp_lib_ranges_zip
+        #include "std/ranges/zip_view.hpp"
+    #endif
+
+    #ifndef __cpp_lib_stacktrace
+        #include "std/stacktrace.hpp"
+    #endif
+
+    #ifndef __cpp_lib_submdspan
+        #include "std/layout_padded.hpp"
+    #endif
+
+    #ifndef __cpp_lib_text_encoding
+        #include "std/text_encoding.hpp"
+    #endif
+} // namespace std
 
 export namespace std
 {
     using namespace plf; // C++26 proposal.
+}
+
+export namespace std::execution
+{
+    using namespace stdexec; // C++26 proposal.
 }
 
 export namespace anonymous

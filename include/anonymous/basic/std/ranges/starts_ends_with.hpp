@@ -1,4 +1,3 @@
-export namespace std {
 namespace ranges {  
 
 struct starts_with_fn
@@ -82,4 +81,3 @@ struct ends_with_fn
 inline constexpr ends_with_fn ends_with{};
 
 } // namespace ranges
-} // namespace std

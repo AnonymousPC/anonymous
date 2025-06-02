@@ -1,4 +1,3 @@
-export namespace std {
 namespace ranges {
 
     template<typename _Range, bool _Const>
@@ -1018,4 +1017,3 @@ namespace ranges {
 
 
 } // namespace ranges
-} // namespace std

@@ -1,4 +1,5 @@
 #include "detail/md_operation.cpp"
+#include "detail/transpose_layout_of.cpp"
 
 template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
@@ -624,9 +625,9 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr auto array<type,dim,device>::mdspan ( )
 {
-    using type1 = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,                       typename device::template accessor_type<type>>;
-    using type2 = std::mdspan<type,std::dextents<int,dim>,std::layout_stride,                                 typename device::template accessor_type<type>>;
-    using type3 = std::mdspan<type,std::dextents<int,dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<type>>;
+    using type1 = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,                             typename device::template accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,dim>,std::layout_stride,                                       typename device::template accessor_type<type>>;
+    using type3 = std::mdspan<type,std::dextents<int,dim>,detail::transpose_layout_of<typename device::layout_type>,typename device::template accessor_type<type>>;
     if ( contiguous() )
     {
         auto ptr = data();

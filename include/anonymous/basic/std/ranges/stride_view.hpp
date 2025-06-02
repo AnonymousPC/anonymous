@@ -1,4 +1,3 @@
-export namespace std { 
 namespace ranges {
 
 template<input_range _Vp>
@@ -355,4 +354,3 @@ template<input_range _Vp>
 
 
 } // namespace ranges
-} // namespace std

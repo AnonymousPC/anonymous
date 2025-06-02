@@ -1,4 +1,3 @@
-export namespace std {
   /**
    * @brief An interface for accessing the IANA Character Sets registry.
    * @ingroup locales
@@ -1453,12 +1452,10 @@ export namespace std {
   -> _Iterator
   { return _Iterator(_M_begin); }
 
-namespace ranges
-{
-  // Opt-in to borrowed_range concept
-  template<>
-    inline constexpr bool
-    enable_borrowed_range<std::text_encoding::aliases_view> = true;
-}
-
-} // namespace std
+    namespace ranges
+    {
+    // Opt-in to borrowed_range concept
+    template<>
+        inline constexpr bool
+        enable_borrowed_range<std::text_encoding::aliases_view> = true;
+    }

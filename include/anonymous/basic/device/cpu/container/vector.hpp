@@ -22,7 +22,7 @@ class cpu::vector<bool,alloc>
 
     public: // Core
         using std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_alloc<detail::enum_bool>>::vector;
-        constexpr vector ( std::size_t, bool );
+        constexpr vector ( size_t, bool );
         constexpr vector ( std::initializer_list<bool> );
 
     public: // Member 
@@ -36,15 +36,15 @@ class cpu::vector<bool,alloc>
         constexpr const_reference front       ( )             const;
         constexpr reference       back        ( );
         constexpr const_reference back        ( )             const;
-        constexpr reference       at          ( std::size_t );
-        constexpr const_reference at          ( std::size_t ) const;
-        constexpr reference       operator [] ( std::size_t );
-        constexpr const_reference operator [] ( std::size_t ) const;
+        constexpr reference       at          ( size_t );
+        constexpr const_reference at          ( size_t ) const;
+        constexpr reference       operator [] ( size_t );
+        constexpr const_reference operator [] ( size_t ) const;
 
-        constexpr void            resize       ( std::size_t );
-        constexpr void            resize       ( std::size_t, bool );
+        constexpr void            resize       ( size_t );
+        constexpr void            resize       ( size_t, bool );
         constexpr iterator        insert       ( const_iterator, bool );
-        constexpr iterator        insert       ( const_iterator, std::size_t, bool );
+        constexpr iterator        insert       ( const_iterator, size_t, bool );
         constexpr iterator        erase        ( const_iterator );
         constexpr iterator        erase        ( const_iterator, const_iterator );
         constexpr iterator        emplace      ( const_iterator, auto&&... );

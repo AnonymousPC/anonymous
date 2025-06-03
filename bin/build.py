@@ -18,8 +18,8 @@ type = sys.argv[1] # debug/release
 # Config
 
 modules = [
-    "anonymous.basic",
-    "anonymous.container",
+    "anonymous:basic",
+    "anonymous:container",
     "anonymous"
 ]
 
@@ -107,39 +107,39 @@ def compile():
             if compiler == "g++":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f'-D abstract=0 -D extends=: -D in=: -D self="(*this)" '
-                    f"-c ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./module/{module}.gcm")
+                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
+                    f"-c ./include/{module.replace(':', '/')}/module.cppm "
+                    f"-o ./module/{module.replace(':', '-')}.gcm")
             elif compiler == "clang++":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f'-D abstract=0 -D extends=: -D in=: -D self="(*this)" '
-                    f"--precompile ./include/{module.replace('.', '/')}/module.cppm "
-                    f"-o ./module/{module}.pcm")
+                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
+                    f"--precompile ./include/{module.replace(':', '/')}/module.cppm "
+                    f"-o ./module/{module.replace(':', '-')}.pcm")
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f"-c ./module/{module}.pcm "
-                    f"-o ./module/{module}.o")
+                    f"-c ./module/{module.replace(':', '-')}.pcm "
+                    f"-o ./module/{module.replace(':', '-')}.o")
             elif compiler == "cl":
                 run(f"{compiler} "
                     f"{' '.join(compile_args)} "
-                    f'/D abstract=0 /D extends=: /D in=: /D "self=(*this)" '
-                    f"/c /interface /TP ./include/{module.replace('.', '.')}/module.cppm "
-                    f"/ifcOutput ./module/{module}.ifc "
-                    f"/Fo ./module/{module}.obj")
+                    f'/Dabstract=0 /Dextends=: /Din=: /D"self=(*this)" '
+                    f"/c /interface /TP ./include/{module.replace(':', '/')}/module.cppm "
+                    f"/ifcOutput ./module/{module.replace(':', '-')}.ifc "
+                    f"/Fo ./module/{module.replace(':', '-')}.obj")
 
                         
     log("main", color="yellow")
     if compiler == "g++" or compiler == "clang++":
         run(f"{compiler} "
             f"{' '.join(compile_args)} "
-            f'-D abstract=0 -D extends=: -D in=: -D self="(*this)" '
+            f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
             f"-c ./main.cpp "
             f"-o ./module/main.o")
     elif compiler == "cl":
         run(f"{compiler} "
             f"{' '.join(compile_args)} "
-            f'/D abstract=0 /D extends=: /D in=: /D "self=(*this)" '
+            f'/Dabstract=0 /Dextends=: /Din=: /D"self=(*this)" '
             f"/c ./main.cpp "
             f"/Fo ./module/main.obj")
 
@@ -154,8 +154,8 @@ def link():
         run (f"{compiler} "
             f"{' '.join(link_args)} "
             f"{' '.join(linkable)} "
-            f"-L {lib_path} "
-            f"{' '.join(f"-l {lib}" for lib in libs)} "
+            f"-L{lib_path} "
+            f"{' '.join(f"-l{lib}" for lib in libs)} "
             f"-o ./bin/main{executable_suffix}")
     elif compiler == "cl":
         run(f"{compiler} "
@@ -173,7 +173,7 @@ update = False
 def updatable(module):
     bin_time = 0
     try:
-        bin_time = min(os.path.getmtime(f"./module/{module}{module_suffix}"), os.path.getmtime(f"./module/{module}.o"))
+        bin_time = min(os.path.getmtime(f"./module/{module.replace(':', '-')}{module_suffix}"), os.path.getmtime(f"./module/{module.replace(':', '-')}.o"))
     except OSError:
         pass
     

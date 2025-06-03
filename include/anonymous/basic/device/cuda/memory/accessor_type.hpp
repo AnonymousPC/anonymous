@@ -8,8 +8,8 @@ class cuda::accessor_type
         using data_handle_type = cuda::template pointer   <type>;
 
     public: // Member
-        constexpr reference        access ( data_handle_type, std::size_t ) const;
-        constexpr data_handle_type offset ( data_handle_type, std::size_t ) const;
+        constexpr reference        access ( data_handle_type, size_t ) const;
+        constexpr data_handle_type offset ( data_handle_type, size_t ) const;
 };
 
 #include "accessor_type.cpp"

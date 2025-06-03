@@ -7,7 +7,7 @@ class opencl::pointer
         using value_type        = opencl::template value_type<type>;
         using reference         = opencl::template reference <type>;
      // using pointer           = opencl::template pointer   <type>;
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 
     private: // Data
         boost::compute::buffer buf = boost::compute::buffer();
@@ -52,7 +52,7 @@ class opencl::const_pointer
         using value_type        = opencl::template value_type     <type>;
         using reference         = opencl::template const_reference<type>;
      // using pointer           = opencl::template const_pointer  <type>;
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 
     private: // Data
         boost::compute::buffer buf = boost::compute::buffer();
@@ -96,20 +96,20 @@ template < class type > constexpr std::partial_ordering                 operator
 template < class type > constexpr std::partial_ordering                 operator <=> ( opencl::template       pointer<type>,  opencl::template const_pointer<type> );
 template < class type > constexpr std::partial_ordering                 operator <=> ( opencl::template const_pointer<type>,  opencl::template       pointer<type> );
 template < class type > constexpr std::partial_ordering                 operator <=> ( opencl::template const_pointer<type>,  opencl::template const_pointer<type> );
-template < class type > constexpr opencl::template       pointer<type>  operator  +  ( opencl::template       pointer<type>,  std::ptrdiff_t                       );
-template < class type > constexpr opencl::template const_pointer<type>  operator  +  ( opencl::template const_pointer<type>,  std::ptrdiff_t                       );
-template < class type > constexpr opencl::template       pointer<type>  operator  +  ( std::ptrdiff_t,                        opencl::template       pointer<type> );
-template < class type > constexpr opencl::template const_pointer<type>  operator  +  ( std::ptrdiff_t,                        opencl::template const_pointer<type> );
-template < class type > constexpr opencl::template       pointer<type>  operator  -  ( opencl::template       pointer<type>,  std::ptrdiff_t                       );
-template < class type > constexpr opencl::template const_pointer<type>  operator  -  ( opencl::template const_pointer<type>,  std::ptrdiff_t                       );
-template < class type > constexpr std::ptrdiff_t                        operator  -  ( opencl::template       pointer<type>,  opencl::template       pointer<type> );
-template < class type > constexpr std::ptrdiff_t                        operator  -  ( opencl::template       pointer<type>,  opencl::template const_pointer<type> );
-template < class type > constexpr std::ptrdiff_t                        operator  -  ( opencl::template const_pointer<type>,  opencl::template       pointer<type> );
-template < class type > constexpr std::ptrdiff_t                        operator  -  ( opencl::template const_pointer<type>,  opencl::template const_pointer<type> );
-template < class type > constexpr opencl::template       pointer<type>& operator  += ( opencl::template       pointer<type>&, std::ptrdiff_t                       );
-template < class type > constexpr opencl::template const_pointer<type>& operator  += ( opencl::template const_pointer<type>&, std::ptrdiff_t                       );
-template < class type > constexpr opencl::template       pointer<type>& operator  -= ( opencl::template       pointer<type>&, std::ptrdiff_t                       );
-template < class type > constexpr opencl::template const_pointer<type>& operator  -= ( opencl::template const_pointer<type>&, std::ptrdiff_t                       );
+template < class type > constexpr opencl::template       pointer<type>  operator  +  ( opencl::template       pointer<type>,  ptrdiff_t                       );
+template < class type > constexpr opencl::template const_pointer<type>  operator  +  ( opencl::template const_pointer<type>,  ptrdiff_t                       );
+template < class type > constexpr opencl::template       pointer<type>  operator  +  ( ptrdiff_t,                        opencl::template       pointer<type> );
+template < class type > constexpr opencl::template const_pointer<type>  operator  +  ( ptrdiff_t,                        opencl::template const_pointer<type> );
+template < class type > constexpr opencl::template       pointer<type>  operator  -  ( opencl::template       pointer<type>,  ptrdiff_t                       );
+template < class type > constexpr opencl::template const_pointer<type>  operator  -  ( opencl::template const_pointer<type>,  ptrdiff_t                       );
+template < class type > constexpr ptrdiff_t                        operator  -  ( opencl::template       pointer<type>,  opencl::template       pointer<type> );
+template < class type > constexpr ptrdiff_t                        operator  -  ( opencl::template       pointer<type>,  opencl::template const_pointer<type> );
+template < class type > constexpr ptrdiff_t                        operator  -  ( opencl::template const_pointer<type>,  opencl::template       pointer<type> );
+template < class type > constexpr ptrdiff_t                        operator  -  ( opencl::template const_pointer<type>,  opencl::template const_pointer<type> );
+template < class type > constexpr opencl::template       pointer<type>& operator  += ( opencl::template       pointer<type>&, ptrdiff_t                       );
+template < class type > constexpr opencl::template const_pointer<type>& operator  += ( opencl::template const_pointer<type>&, ptrdiff_t                       );
+template < class type > constexpr opencl::template       pointer<type>& operator  -= ( opencl::template       pointer<type>&, ptrdiff_t                       );
+template < class type > constexpr opencl::template const_pointer<type>& operator  -= ( opencl::template const_pointer<type>&, ptrdiff_t                       );
 template < class type > constexpr opencl::template       pointer<type>& operator  ++ ( opencl::template       pointer<type>&                                       );
 template < class type > constexpr opencl::template const_pointer<type>& operator  ++ ( opencl::template const_pointer<type>&                                       );
 template < class type > constexpr opencl::template       pointer<type>  operator  ++ ( opencl::template       pointer<type>&, int                                  );

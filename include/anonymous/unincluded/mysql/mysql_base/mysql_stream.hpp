@@ -13,7 +13,7 @@ class mysql_stream
                     vector<char>,
                     time_point,
                     duration,
-                    std::nullptr_t
+                    nullptr_t
                    >;
 
     public: // Core

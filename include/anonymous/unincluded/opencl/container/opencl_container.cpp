@@ -143,7 +143,7 @@ detail::opencl_container<base>::const_iterator detail::opencl_container<base>::f
 }
 
 template < class base >
-std::size_t detail::opencl_container<base>::count ( auto&&... args ) const
+size_t detail::opencl_container<base>::count ( auto&&... args ) const
 {
     auto result = base::count(std::forward<decltype(args)>(args)..., opencl::execution_context.command_queue());
     opencl::execution_context.command_queue().finish();
@@ -213,7 +213,7 @@ auto detail::opencl_container<base>::erase ( auto&&... args )
     
     if constexpr ( same_as<decltype(result),typename base::iterator> )
         return iterator(result);
-    else if constexpr ( same_as<decltype(result),std::size_t> )
+    else if constexpr ( same_as<decltype(result),size_t> )
         return size_t(result);
     else
         return result;

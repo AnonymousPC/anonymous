@@ -2,26 +2,14 @@ import anonymous;
 import std;
 import boost;
 import Eigen;
-
+import thrust;
+using namespace anonymous;
 
 int main ( )
 {
-    my_namespace::my_class a;
-
-    std::println("1");
-    swap(a, a);
-
-
-    swap(my_namespace::my_class, my_namespace::my_class); // 不存在::swap
-
-    std::println("2");
-
-    my_namespace::swap(a, a);
-
-    std::println("3");
-    std::swap(a, a);
-
-    
+    auto vct1 = vector<float>(10);
+    auto vct2 = vector<std::complex<float>>(10);
+    cpu::fft(vct1.mdspan().template value<1>(), vct2.mdspan().template value<1>());
 }
 
 

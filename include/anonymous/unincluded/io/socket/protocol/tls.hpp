@@ -26,8 +26,8 @@ class tls::socket
         void        connect         ( auto&&... );
         void        shutdown        ( auto&&... );
         void        close           ( auto&&... );
-        std::size_t send            ( auto&&... );
-        std::size_t receive         ( auto&&... );
+        size_t send            ( auto&&... );
+        size_t receive         ( auto&&... );
         endpoint    local_endpoint  ( )           const;
         endpoint    remote_endpoint ( )           const;
 };

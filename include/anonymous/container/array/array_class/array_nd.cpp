@@ -628,6 +628,7 @@ constexpr auto array<type,dim,device>::mdspan ( )
     using type1 = std::mdspan<type,std::dextents<int,dim>,typename device::layout_type,                             typename device::template accessor_type<type>>;
     using type2 = std::mdspan<type,std::dextents<int,dim>,std::layout_stride,                                       typename device::template accessor_type<type>>;
     using type3 = std::mdspan<type,std::dextents<int,dim>,detail::transpose_layout_of<typename device::layout_type>,typename device::template accessor_type<type>>;
+    
     if ( contiguous() )
     {
         auto ptr = data();
@@ -651,9 +652,9 @@ constexpr auto array<type,dim,device>::mdspan ( )
         auto ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
         auto shp      = std::dextents<int,dim>(get_shape());
         auto strd     = std::array   <int,dim>();
-        auto map_base = typename std::layout_transpose<typename device::layout_type>::template mapping<std::dextents<int,dim>>(shp);
+        auto map_base = detail::transpose_layout_of<typename device::layout_type>::template mapping<std::dextents<int,dim>>(shp);
         for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index) * upper::get_stride(); });
-        auto mp      = typename type2::mapping_type(shp, strd);
+        auto mp       = typename type2::mapping_type(shp, strd);
         auto mds      = type2(ptr, mp);
         return variant<type1,type2,type3>(mds);   
     }
@@ -670,9 +671,10 @@ template < class type, int dim, class device >
     requires ( dim >= 2 and dim <= max_dim - 1 )
 constexpr const auto array<type,dim,device>::mdspan ( ) const
 {
-    using type1 = std::mdspan<const type,std::dextents<int,dim>,typename device::layout_type,                       typename device::template accessor_type<const type>>;
-    using type2 = std::mdspan<const type,std::dextents<int,dim>,std::layout_stride,                                 typename device::template accessor_type<const type>>;
-    using type3 = std::mdspan<const type,std::dextents<int,dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<const type>>;
+    using type1 = std::mdspan<const type,std::dextents<int,dim>,typename device::layout_type,                             typename device::template accessor_type<const type>>;
+    using type2 = std::mdspan<const type,std::dextents<int,dim>,std::layout_stride,                                       typename device::template accessor_type<const type>>;
+    using type3 = std::mdspan<const type,std::dextents<int,dim>,detail::transpose_layout_of<typename device::layout_type>,typename device::template accessor_type<const type>>;
+    
     if ( contiguous() )
     {
         auto ptr = data();
@@ -696,7 +698,7 @@ constexpr const auto array<type,dim,device>::mdspan ( ) const
         auto ptr      = [&] <int... index> ( std::integer_sequence<int,index...> ) { return upper::get_pointer((index * 0)...); } ( std::make_integer_sequence<int,dim>() );
         auto shp      = std::dextents<int,dim>(get_shape());
         auto strd     = std::array   <int,dim>();
-        auto map_base = typename std::layout_transpose<typename device::layout_type>::template mapping<std::dextents<int,dim>>(shp);
+        auto map_base = detail::transpose_layout_of<typename device::layout_type>::template mapping<std::dextents<int,dim>>(shp);
         for_constexpr<0,dim-1>([&] <int index> { strd[index] = map_base.stride(index) * upper::get_stride(); });
         auto mp       = typename type2::mapping_type(shp, strd);
         auto mds      = type2(ptr, mp);

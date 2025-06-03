@@ -253,43 +253,43 @@ constexpr std::partial_ordering operator <=> ( opencl::template const_pointer<ty
 }
 
 template < class type >
-constexpr opencl::template pointer<type> operator + ( opencl::template pointer<type> left, std::ptrdiff_t right )
+constexpr opencl::template pointer<type> operator + ( opencl::template pointer<type> left, ptrdiff_t right )
 {
     return opencl::template pointer<type>(left.get_buffer(), left.get_index() + right);
 }
 
 template < class type >
-constexpr opencl::template const_pointer<type> operator + ( opencl::template const_pointer<type> left, std::ptrdiff_t right )
+constexpr opencl::template const_pointer<type> operator + ( opencl::template const_pointer<type> left, ptrdiff_t right )
 {
     return opencl::template const_pointer<type>(left.get_buffer(), left.get_index() + right);
 }
 
 template < class type >
-constexpr opencl::template pointer<type> operator + ( std::ptrdiff_t left, opencl::template pointer<type> right )
+constexpr opencl::template pointer<type> operator + ( ptrdiff_t left, opencl::template pointer<type> right )
 {
     return opencl::template pointer<type>(right.get_buffer(), left + right.get_index());
 }
 
 template < class type >
-constexpr opencl::template const_pointer<type> operator + ( std::ptrdiff_t left, opencl::template const_pointer<type> right )
+constexpr opencl::template const_pointer<type> operator + ( ptrdiff_t left, opencl::template const_pointer<type> right )
 {
     return opencl::template const_pointer<type>(right.get_buffer(), left + right.get_index());
 }
 
 template < class type >
-constexpr opencl::template pointer<type> operator - ( opencl::template pointer<type> left, std::ptrdiff_t right )
+constexpr opencl::template pointer<type> operator - ( opencl::template pointer<type> left, ptrdiff_t right )
 {
     return opencl::template pointer<type>(left.get_buffer(), left.get_index() - right);
 }
 
 template < class type >
-constexpr opencl::template const_pointer<type> operator - ( opencl::template const_pointer<type> left, std::ptrdiff_t right )
+constexpr opencl::template const_pointer<type> operator - ( opencl::template const_pointer<type> left, ptrdiff_t right )
 {
     return opencl::template const_pointer<type>(left.get_buffer(), left.get_index() - right);
 }
 
 template < class type >
-constexpr std::ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template pointer<type> right )
+constexpr ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template pointer<type> right )
 {
     if constexpr ( debug )
         if ( left.get_buffer() != right.get_buffer() )
@@ -299,7 +299,7 @@ constexpr std::ptrdiff_t operator - ( opencl::template pointer<type> left, openc
 }
 
 template < class type >
-constexpr std::ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template const_pointer<type> right )
+constexpr ptrdiff_t operator - ( opencl::template pointer<type> left, opencl::template const_pointer<type> right )
 {
     if constexpr ( debug )
         if ( left.get_buffer() != right.get_buffer() )
@@ -309,7 +309,7 @@ constexpr std::ptrdiff_t operator - ( opencl::template pointer<type> left, openc
 }
 
 template < class type >
-constexpr std::ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template pointer<type> right )
+constexpr ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template pointer<type> right )
 {
     if constexpr ( debug )
         if ( left.get_buffer() != right.get_buffer() )
@@ -319,7 +319,7 @@ constexpr std::ptrdiff_t operator - ( opencl::template const_pointer<type> left,
 }
 
 template < class type >
-constexpr std::ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template const_pointer<type> right )
+constexpr ptrdiff_t operator - ( opencl::template const_pointer<type> left, opencl::template const_pointer<type> right )
 {
     if constexpr ( debug )
         if ( left.get_buffer() != right.get_buffer() )
@@ -329,25 +329,25 @@ constexpr std::ptrdiff_t operator - ( opencl::template const_pointer<type> left,
 }
 
 template < class type >
-constexpr opencl::template pointer<type>& operator += ( opencl::template pointer<type>& left, std::ptrdiff_t right )
+constexpr opencl::template pointer<type>& operator += ( opencl::template pointer<type>& left, ptrdiff_t right )
 {
     return left = left + right;
 }
 
 template < class type >
-constexpr opencl::template const_pointer<type>& operator += ( opencl::template const_pointer<type>& left, std::ptrdiff_t right )
+constexpr opencl::template const_pointer<type>& operator += ( opencl::template const_pointer<type>& left, ptrdiff_t right )
 {
     return left = left + right;
 }
 
 template < class type >
-constexpr opencl::template pointer<type>& operator -= ( opencl::template pointer<type>& left, std::ptrdiff_t right )
+constexpr opencl::template pointer<type>& operator -= ( opencl::template pointer<type>& left, ptrdiff_t right )
 {
     return left = left - right;
 }
 
 template < class type >
-constexpr opencl::template const_pointer<type>& operator -= ( opencl::template const_pointer<type>& left, std::ptrdiff_t right )
+constexpr opencl::template const_pointer<type>& operator -= ( opencl::template const_pointer<type>& left, ptrdiff_t right )
 {
     return left = left - right;
 }

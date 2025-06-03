@@ -6,7 +6,7 @@ class opencl::reference
 
     private: // Data
         boost::compute::buffer buf = boost::compute::buffer();
-        std::ptrdiff_t         idx = 0;
+        ptrdiff_t         idx = 0;
 
     public: // Core 
         constexpr reference ( )                             = delete;

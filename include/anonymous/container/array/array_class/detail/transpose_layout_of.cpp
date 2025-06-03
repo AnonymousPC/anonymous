@@ -15,13 +15,13 @@ namespace detail
         using type = std::layout_right;
     };
 
-    template < std::size_t padding >
+    template < size_t padding >
     struct transpose_layout_of_helper<std::layout_right_padded<padding>>
     {
         using type = std::layout_left_padded<padding>;
     };
 
-    template < std::size_t padding >
+    template < size_t padding >
     struct transpose_layout_of_helper<std::layout_left_padded<padding>>
     {
         using type = std::layout_right_padded<padding>;

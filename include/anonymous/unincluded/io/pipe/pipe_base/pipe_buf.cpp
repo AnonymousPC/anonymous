@@ -50,7 +50,7 @@ int pipe_buf::underflow ( )
     // Post task.
     auto stdout_errc = boost::system::error_code();
     stdout_pipe.async_read_some(boost::asio::mutable_buffer(stdout_buff.begin(), stdout_buff.size()),
-                                [&] (const boost::system::error_code& errc, std::size_t bytes)
+                                [&] (const boost::system::error_code& errc, size_t bytes)
                                 {
                                     if ( errc == boost::system::error_code() )
                                     {
@@ -64,7 +64,7 @@ int pipe_buf::underflow ( )
                                 });
     auto stderr_errc = boost::system::error_code();
     stderr_pipe.async_read_some(boost::asio::mutable_buffer(stderr_buff.begin(), stderr_buff.size()),
-                                [&] (const boost::system::error_code& errc, std::size_t bytes)
+                                [&] (const boost::system::error_code& errc, size_t bytes)
                                 {
                                     if ( errc == boost::system::error_code() )
                                     {

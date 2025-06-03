@@ -3,7 +3,7 @@ module;
 #include <csignal> // macros: SIGINT, SIGABRT, ...
 #include <ranges> // utilities for ranges.
 
-export module anonymous.basic;
+export module anonymous:basic;
 
 import std;
 import stdexec;
@@ -155,7 +155,7 @@ export namespace anonymous
     template < class type >                                    using          range_const_sentinel               = std::ranges::const_sentinel_t          <type>;
 
     template < class type >                                    constexpr int  tuple_size                         = std::tuple_size<type>::value;
-    template < int index, class type >                         using          tuple_element                      = std::tuple_element<(index>=0) ? std::size_t(index-1) : std::size_t(index+int(std::tuple_size<type>::value)),type>::type;
+    template < int index, class type >                         using          tuple_element                      = std::tuple_element<(index>=0) ? size_t(index-1) : size_t(index+int(std::tuple_size<type>::value)),type>::type;
 
     template < class type >                                    concept        default_initializable              = std::is_default_constructible          <type>::value; // std::default_initializable checks operator new, which does not accept cv-qualified ones.
     template < class type >                                    concept        nothrow_default_initializable      = std::is_nothrow_default_constructible  <type>::value;
@@ -287,21 +287,13 @@ export namespace anonymous
     /// Global
                  cpu::execution_context_type& execution_context = cpu::execution_context;
     thread_local cpu::random_context_type&    random_context    = cpu::random_context;
-
-} // namespace anonymous
-
-export inline namespace __global__
-{
-    #include "utility/export/typedef.hpp"
-
-} // inline namespace __global__
+}
 
 export namespace std
 {
     #include "utility/export/std/common_type.hpp"
-    #include "utility/export/std/formatter.hpp"
-    
-} // namespace std
+    #include "utility/export/std/formatter.hpp"   
+}
 
 
 

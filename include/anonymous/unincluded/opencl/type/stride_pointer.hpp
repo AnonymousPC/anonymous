@@ -7,7 +7,7 @@ class opencl::stride_pointer
         using value_type        = opencl::template value_type<type>;
         using reference         = opencl::template reference <type>;
         using pointer           = opencl::template pointer   <type>;
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 
     private: // Data
         pointer         ptr  = pointer();
@@ -49,7 +49,7 @@ class opencl::const_stride_pointer
         using value_type        = opencl::template value_type     <type>;
         using reference         = opencl::template const_reference<type>;
         using pointer           = opencl::template const_pointer  <type>;
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 
     private: // Data
         pointer         ptr  = pointer();
@@ -90,20 +90,20 @@ template < class type > constexpr std::partial_ordering                        o
 template < class type > constexpr std::partial_ordering                        operator <=> ( opencl::template       stride_pointer<type>,  opencl::template const_stride_pointer<type> );
 template < class type > constexpr std::partial_ordering                        operator <=> ( opencl::template const_stride_pointer<type>,  opencl::template       stride_pointer<type> );
 template < class type > constexpr std::partial_ordering                        operator <=> ( opencl::template const_stride_pointer<type>,  opencl::template const_stride_pointer<type> );
-template < class type > constexpr opencl::template       stride_pointer<type>  operator  +  ( opencl::template       stride_pointer<type>,  std::ptrdiff_t                           );
-template < class type > constexpr opencl::template const_stride_pointer<type>  operator  +  ( opencl::template const_stride_pointer<type>,  std::ptrdiff_t                           );
-template < class type > constexpr opencl::template       stride_pointer<type>  operator  +  ( std::ptrdiff_t,                            opencl::template       stride_pointer<type> );
-template < class type > constexpr opencl::template const_stride_pointer<type>  operator  +  ( std::ptrdiff_t,                            opencl::template const_stride_pointer<type> );
-template < class type > constexpr opencl::template       stride_pointer<type>  operator  -  ( opencl::template       stride_pointer<type>,  std::ptrdiff_t                           );
-template < class type > constexpr opencl::template const_stride_pointer<type>  operator  -  ( opencl::template const_stride_pointer<type>,  std::ptrdiff_t                           );
-template < class type > constexpr std::ptrdiff_t                               operator  -  ( opencl::template       stride_pointer<type>,  opencl::template       stride_pointer<type> );
-template < class type > constexpr std::ptrdiff_t                               operator  -  ( opencl::template       stride_pointer<type>,  opencl::template const_stride_pointer<type> );
-template < class type > constexpr std::ptrdiff_t                               operator  -  ( opencl::template const_stride_pointer<type>,  opencl::template       stride_pointer<type> );
-template < class type > constexpr std::ptrdiff_t                               operator  -  ( opencl::template const_stride_pointer<type>,  opencl::template const_stride_pointer<type> );
-template < class type > constexpr opencl::template       stride_pointer<type>& operator  += ( opencl::template       stride_pointer<type>&, std::ptrdiff_t                           );
-template < class type > constexpr opencl::template const_stride_pointer<type>& operator  += ( opencl::template const_stride_pointer<type>&, std::ptrdiff_t                           );
-template < class type > constexpr opencl::template       stride_pointer<type>& operator  -= ( opencl::template       stride_pointer<type>&, std::ptrdiff_t                           );
-template < class type > constexpr opencl::template const_stride_pointer<type>& operator  -= ( opencl::template const_stride_pointer<type>&, std::ptrdiff_t                           );
+template < class type > constexpr opencl::template       stride_pointer<type>  operator  +  ( opencl::template       stride_pointer<type>,  ptrdiff_t                           );
+template < class type > constexpr opencl::template const_stride_pointer<type>  operator  +  ( opencl::template const_stride_pointer<type>,  ptrdiff_t                           );
+template < class type > constexpr opencl::template       stride_pointer<type>  operator  +  ( ptrdiff_t,                            opencl::template       stride_pointer<type> );
+template < class type > constexpr opencl::template const_stride_pointer<type>  operator  +  ( ptrdiff_t,                            opencl::template const_stride_pointer<type> );
+template < class type > constexpr opencl::template       stride_pointer<type>  operator  -  ( opencl::template       stride_pointer<type>,  ptrdiff_t                           );
+template < class type > constexpr opencl::template const_stride_pointer<type>  operator  -  ( opencl::template const_stride_pointer<type>,  ptrdiff_t                           );
+template < class type > constexpr ptrdiff_t                               operator  -  ( opencl::template       stride_pointer<type>,  opencl::template       stride_pointer<type> );
+template < class type > constexpr ptrdiff_t                               operator  -  ( opencl::template       stride_pointer<type>,  opencl::template const_stride_pointer<type> );
+template < class type > constexpr ptrdiff_t                               operator  -  ( opencl::template const_stride_pointer<type>,  opencl::template       stride_pointer<type> );
+template < class type > constexpr ptrdiff_t                               operator  -  ( opencl::template const_stride_pointer<type>,  opencl::template const_stride_pointer<type> );
+template < class type > constexpr opencl::template       stride_pointer<type>& operator  += ( opencl::template       stride_pointer<type>&, ptrdiff_t                           );
+template < class type > constexpr opencl::template const_stride_pointer<type>& operator  += ( opencl::template const_stride_pointer<type>&, ptrdiff_t                           );
+template < class type > constexpr opencl::template       stride_pointer<type>& operator  -= ( opencl::template       stride_pointer<type>&, ptrdiff_t                           );
+template < class type > constexpr opencl::template const_stride_pointer<type>& operator  -= ( opencl::template const_stride_pointer<type>&, ptrdiff_t                           );
 template < class type > constexpr opencl::template       stride_pointer<type>& operator  ++ ( opencl::template       stride_pointer<type>&                                           );
 template < class type > constexpr opencl::template const_stride_pointer<type>& operator  ++ ( opencl::template const_stride_pointer<type>&                                           );
 template < class type > constexpr opencl::template       stride_pointer<type>  operator  ++ ( opencl::template       stride_pointer<type>&, int                                      );

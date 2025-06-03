@@ -1,5 +1,5 @@
 template < class alloc >
-constexpr cpu::vector<bool,alloc>::vector ( std::size_t init_size, bool init_value )
+constexpr cpu::vector<bool,alloc>::vector ( size_t init_size, bool init_value )
     extends std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>> ( init_size, init_value )
 {
 
@@ -73,37 +73,37 @@ constexpr cpu::vector<bool,alloc>::const_reference cpu::vector<bool,alloc>::back
 }
 
 template < class alloc >
-constexpr cpu::vector<bool,alloc>::reference cpu::vector<bool,alloc>::at ( std::size_t pos )
+constexpr cpu::vector<bool,alloc>::reference cpu::vector<bool,alloc>::at ( size_t pos )
 {
     return reinterpret_cast<reference>(std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::at(pos));
 }
 
 template < class alloc >
-constexpr cpu::vector<bool,alloc>::const_reference cpu::vector<bool,alloc>::at ( std::size_t pos ) const
+constexpr cpu::vector<bool,alloc>::const_reference cpu::vector<bool,alloc>::at ( size_t pos ) const
 {
     return reinterpret_cast<const_reference>(std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::at(pos));
 }
 
 template < class alloc >
-constexpr cpu::vector<bool,alloc>::reference cpu::vector<bool,alloc>::operator [] ( std::size_t pos )
+constexpr cpu::vector<bool,alloc>::reference cpu::vector<bool,alloc>::operator [] ( size_t pos )
 {
     return reinterpret_cast<reference>(std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::operator[](pos));
 }
 
 template < class alloc >
-constexpr cpu::vector<bool,alloc>::const_reference cpu::vector<bool,alloc>::operator [] ( std::size_t pos ) const
+constexpr cpu::vector<bool,alloc>::const_reference cpu::vector<bool,alloc>::operator [] ( size_t pos ) const
 {
     return reinterpret_cast<const_reference>(std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::operator[](pos));
 }
 
 template < class alloc >
-constexpr void cpu::vector<bool,alloc>::resize ( std::size_t new_size )
+constexpr void cpu::vector<bool,alloc>::resize ( size_t new_size )
 {
     std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::resize(new_size);
 }
 
 template < class alloc >
-constexpr void cpu::vector<bool,alloc>::resize ( std::size_t new_size, bool new_value )
+constexpr void cpu::vector<bool,alloc>::resize ( size_t new_size, bool new_value )
 {
     std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::resize(new_size, static_cast<detail::enum_bool>(new_value));
 }
@@ -115,7 +115,7 @@ constexpr cpu::vector<bool,alloc>::iterator cpu::vector<bool,alloc>::insert ( co
 }
 
 template < class alloc >
-constexpr cpu::vector<bool,alloc>::iterator cpu::vector<bool,alloc>::insert ( const_iterator it, std::size_t new_size, bool new_value )
+constexpr cpu::vector<bool,alloc>::iterator cpu::vector<bool,alloc>::insert ( const_iterator it, size_t new_size, bool new_value )
 {
     return reinterpret_cast<iterator>(std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::insert(reinterpret_cast<std::vector<detail::enum_bool,typename std::allocator_traits<alloc>::template rebind_allocator<detail::enum_bool>>::const_iterator>(it), new_size, static_cast<detail::enum_bool>(new_value)));
 }

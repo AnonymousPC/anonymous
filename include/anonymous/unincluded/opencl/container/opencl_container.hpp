@@ -27,7 +27,7 @@ namespace detail
             opencl_container ( auto&&... args ) requires ( not constructible_from<base,decltype(args)...,const boost::compute::context&> ) and constructible_from<base,decltype(args)...,boost::compute::command_queue&>; 
         
         public: // Vector
-            std::size_t       size          ( )           const;
+            size_t       size          ( )           const;
             bool              empty         ( )           const;
             iterator          begin         ( );
             const_iterator    begin         ( )           const;
@@ -43,7 +43,7 @@ namespace detail
             const_reference   operator []   ( auto&&... ) const;
             iterator          find          ( auto&&... );
             const_iterator    find          ( auto&&... ) const;
-            std::size_t       count         ( auto&&... ) const;
+            size_t       count         ( auto&&... ) const;
             void              resize        ( auto&&... );
             void              reserve       ( auto&&... );
             void              shrink_to_fit ( auto&&... );

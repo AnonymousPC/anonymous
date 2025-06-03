@@ -33,12 +33,12 @@ void tls::socket::close ( auto&&... args )
     self.next_layer().close(std::forward<decltype(args)>(args)...);
 }
 
-std::size_t tls::socket::send ( auto&&... args )
+size_t tls::socket::send ( auto&&... args )
 {
     return self.boost::asio::ssl::stream<typename tcp::socket>::write_some(std::forward<decltype(args)>(args)...);
 }
 
-std::size_t tls::socket::receive ( auto&&... args )
+size_t tls::socket::receive ( auto&&... args )
 {
     return self.boost::asio::ssl::stream<typename tcp::socket>::read_some(std::forward<decltype(args)>(args)...);
 }

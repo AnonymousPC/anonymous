@@ -1,5 +1,5 @@
-export module anonymous.container;
-import anonymous.basic;
+export module anonymous:container;
+import :basic;
 import std;
 import boost;
 
@@ -44,8 +44,7 @@ export namespace anonymous
     #include "collection/collection.hpp"
    // #include "string/string.hpp"
    // #include "utility/utility.cpp"
-
-} // namespace anonymous
+}
 
 export namespace std
 {
@@ -53,6 +52,5 @@ export namespace std
     // #include "utility/export/std/hash.hpp"
     // #include "utility/export/std/tuple_size.hpp"
     // #include "utility/export/std/tuple_element.hpp"
-    // #include "utility/export/std/get.hpp"
-    
-} // namespace std
+    // #include "utility/export/std/get.hpp"   
+}

@@ -8,12 +8,12 @@ class opencl::accessor_type
         using data_handle_type = opencl::template pointer  <type>;
 
     public: // Member
-        constexpr reference access ( data_handle_type p, std::size_t i ) const
+        constexpr reference access ( data_handle_type p, size_t i ) const
         {
             return *(p + i);
         }
 
-        constexpr data_handle_type offset ( data_handle_type p, std::size_t i ) const
+        constexpr data_handle_type offset ( data_handle_type p, size_t i ) const
         {
             return p + i;
         }
@@ -29,12 +29,12 @@ class opencl::accessor_type<const type>
         using data_handle_type = opencl::template const_pointer  <type>;
 
     public: // Member
-        constexpr reference access ( data_handle_type p, std::size_t i ) const
+        constexpr reference access ( data_handle_type p, size_t i ) const
         {
             return *(p + i);
         }
 
-        constexpr data_handle_type offset ( data_handle_type p, std::size_t i ) const
+        constexpr data_handle_type offset ( data_handle_type p, size_t i ) const
         {
             return p + i;
         }

@@ -43,7 +43,7 @@ class ranges::encode_base64_view<range>::iterator
         using iterator_concept  = std::input_iterator_tag;
      // using iterator_category = not supported; 
         using value_type        = char;
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 
     public: // Interface
         constexpr iterator ( ) = default;
@@ -167,7 +167,7 @@ class ranges::decode_base64_view<range>::iterator
         using iterator_concept  = std::input_iterator_tag;
      // using iterator_category = not supported; 
         using value_type        = char;
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 
     public: // Interface
         constexpr iterator ( ) = default;

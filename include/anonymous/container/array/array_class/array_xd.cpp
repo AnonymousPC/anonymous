@@ -554,8 +554,9 @@ constexpr bool array<type,max_dim,device>::contiguous ( ) const
 template < class type, class device >
 constexpr auto array<type,max_dim,device>::mdspan ( )
 {
-    using type1 = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template accessor_type<type>>;
-    using type2 = std::mdspan<type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<type>>;
+    using type1 = std::mdspan<type,std::dextents<int,max_dim>,typename device::layout_type,                             typename device::template accessor_type<type>>;
+    using type2 = std::mdspan<type,std::dextents<int,max_dim>,detail::transpose_layout_of<typename device::layout_type>,typename device::template accessor_type<type>>;
+    
     if ( contiguous() )
     {
         auto ptr = data();
@@ -575,8 +576,8 @@ constexpr auto array<type,max_dim,device>::mdspan ( )
 template < class type, class device >
 constexpr const auto array<type,max_dim,device>::mdspan ( ) const
 {
-    using type1 = std::mdspan<const type,std::dextents<int,max_dim>,typename device::layout_type,                       typename device::template accessor_type<const type>>;
-    using type2 = std::mdspan<const type,std::dextents<int,max_dim>,std::layout_transpose<typename device::layout_type>,typename device::template accessor_type<const type>>;
+    using type1 = std::mdspan<const type,std::dextents<int,max_dim>,typename device::layout_type,                             typename device::template accessor_type<const type>>;
+    using type2 = std::mdspan<const type,std::dextents<int,max_dim>,detail::transpose_layout_of<typename device::layout_type>,typename device::template accessor_type<const type>>;
     if ( contiguous() )
     {
         auto ptr = data();

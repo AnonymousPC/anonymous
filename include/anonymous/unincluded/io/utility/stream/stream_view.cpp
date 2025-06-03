@@ -24,7 +24,7 @@ class ranges::istream_view<input_type>::iterator
         using iterator_concept  = std::input_iterator_tag;
      // using iterator_category = not supported; 
         using value_type        = input_type;
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 
     private: // Data
         istream_view* v_ptr;

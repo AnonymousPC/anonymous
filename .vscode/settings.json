@@ -75,6 +75,7 @@
         "vector": "cpp",
         "syncstream": "cpp",
         "ranges": "cpp",
-        "mdspan": "cpp"
+        "mdspan": "cpp",
+        "cstddef": "cpp"
     }
 }

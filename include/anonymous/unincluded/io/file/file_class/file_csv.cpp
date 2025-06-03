@@ -96,7 +96,7 @@ class ranges::csv_lazy_split_view<range,pattern>::iterator
         using iterator_concept  = std::input_iterator_tag;
      // using iterator_category = not supported;
         class value_type; 
-        using difference_type   = std::ptrdiff_t;
+        using difference_type   = ptrdiff_t;
 };
 
 template < input_range range, class pattern >

@@ -3,7 +3,16 @@ import re
 import subprocess
 import sys
 
-# Global
+
+
+# Config
+
+config = "debug"
+
+
+
+
+# Platform
 
 if sys.platform == "win32":
     system = "windows"
@@ -12,29 +21,20 @@ elif sys.platform == "linux":
 elif sys.platform == "darwin":
     system = "macos"
 
-type = sys.argv[1] # debug/release
-
-
-# Config
-
-modules = [
-    "anonymous:basic",
-    "anonymous:container",
-    "anonymous"
-]
-
 if system == "windows":
     compiler          = "cl"
     include_path      = ""
     lib_path          = ""
     libs              = ["advapi32", "bcrypt", "crypto", "kernel32", "mswsock", "ntdll", "shell32", "ssl", "stdc++exp", "tiff", "user32", "ws2_32"]
     executable_suffix = ".exe"
+
 elif system == "linux":
     compiler          = "g++"
     include_path      = "/usr/include"
     lib_path          = "/usr/lib"
     libs              = []
     executable_suffix = ""
+
 elif system == "macos":
     compiler          = "clang++"
     include_path      = "/opt/homebrew/include"
@@ -49,35 +49,37 @@ if compiler == "g++":
         "-Wall", 
         "-fdiagnostics-color=always",
         "-fmodules"
+        "-Wno-reserved-module-identifier"
     ]
-    if type == "debug":
+    if config == "debug":
         compile_args.append("-O0")
         compile_args.append("-fno-inline")
-    elif type == "release":
+    elif config == "release":
         compile_args.append("-O3")
         compile_args.append("-DNDEBUG")
-
     link_args = ["-fdiagnostics-color=always"]
     module_suffix = ".gcm"
     object_suffix = ".o"
+
 elif compiler == "clang++":
     compile_args = [
         "-std=c++26", 
         "-g", 
         "-Wall", 
         "-fdiagnostics-color=always",
-        "-fprebuilt-module-path=./module"
+        "-fprebuilt-module-path=./bin/module",
+        "-Wno-reserved-module-identifier"
     ]
-    if type == "debug":
+    if config == "debug":
         compile_args.append("-O0")
         compile_args.append("-fno-inline")
-    elif type == "release":
+    elif config == "release":
         compile_args.append("-O3")
         compile_args.append("-DNDEBUG")
-
     link_args = ["-fdiagnostics-color=always"]
     module_suffix = ".pcm"
     object_suffix = ".o"
+
 elif compiler == "cl":
     compile_args = [
         "/std:c++latest",
@@ -85,9 +87,9 @@ elif compiler == "cl":
         "/Z7",
         "/W4"
     ]
-    if type == "debug":
+    if config == "debug":
         compile_args.append("/Od")
-    elif type == "release":
+    elif config == "release":
         compile_args.append("/O2")
         compile_args.append("/DNDEBUG")
 
@@ -95,129 +97,170 @@ elif compiler == "cl":
     module_suffix = ".ifc"
     object_suffix = ".obj"
 
+define_args = {
+    "abstract": '0', 
+    "extends" : ':',
+    "in"      : ':', 
+    "self"    : "(*this)"
+}
 
 
+class Error(Exception):
+    def __init__(self, message, prefix=""):
+        if type(message) == str:
+            self.message = message
+            self.prefix = prefix
+        elif type(message) == Error:
+            self.message = message.message
+            self.prefix = f"{prefix}\n{message.prefix}"
+        else:
+            assert False
 
-# Core
+    def __str__(self):
+        return f"{self.prefix}\n{self.message}"
 
-def compile():
-    for module in modules:
-        log(module, color="yellow")
-        if updatable(module):
-            if compiler == "g++":
-                run(f"{compiler} "
+def compile(source_path, module_path, object_path):
+    if compiler == "g++":
+        commands = [f"g++ "
                     f"{' '.join(compile_args)} "
-                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
-                    f"-c ./include/{module.replace(':', '/')}/module.cppm "
-                    f"-o ./module/{module.replace(':', '-')}.gcm")
-            elif compiler == "clang++":
-                run(f"{compiler} "
+                    f"-I{include_path} "
+                    f"{' '.join(f'-D{key}="{value}"' for key, value in define_args.items())} "
+                    f"-c {source_path} "
+                    f"-o {module_path}"]
+    elif compiler == "clang++":
+        commands = [f"clang++ "
                     f"{' '.join(compile_args)} "
-                    f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
-                    f"--precompile ./include/{module.replace(':', '/')}/module.cppm "
-                    f"-o ./module/{module.replace(':', '-')}.pcm")
-                run(f"{compiler} "
+                    f"-I{include_path} "
+                    f"{' '.join(f'-D{key}="{value}"' for key, value in define_args.items())} "
+                    f"--precompile -x c++-module {source_path} "
+                    f"-o                         {module_path}",
+                    
+                    f"clang++ "
                     f"{' '.join(compile_args)} "
-                    f"-c ./module/{module.replace(':', '-')}.pcm "
-                    f"-o ./module/{module.replace(':', '-')}.o")
-            elif compiler == "cl":
-                run(f"{compiler} "
-                    f"{' '.join(compile_args)} "
-                    f'/Dabstract=0 /Dextends=: /Din=: /D"self=(*this)" '
-                    f"/c /interface /TP ./include/{module.replace(':', '/')}/module.cppm "
-                    f"/ifcOutput ./module/{module.replace(':', '-')}.ifc "
-                    f"/Fo ./module/{module.replace(':', '-')}.obj")
-
-                        
-    log("main", color="yellow")
-    if compiler == "g++" or compiler == "clang++":
-        run(f"{compiler} "
-            f"{' '.join(compile_args)} "
-            f'-Dabstract=0 -Dextends=: -Din=: -Dself="(*this)" '
-            f"-c ./main.cpp "
-            f"-o ./module/main.o")
+                    f"-c {module_path} "
+                    f"-o {object_path}"]
     elif compiler == "cl":
-        run(f"{compiler} "
-            f"{' '.join(compile_args)} "
-            f'/Dabstract=0 /Dextends=: /Din=: /D"self=(*this)" '
-            f"/c ./main.cpp "
-            f"/Fo ./module/main.obj")
+        commands = [f"cl "
+                    f"{' '.join(compile_args)} "
+                    f"/I{include_path} "
+                    f"{' '.join(f'/D{key}="{value}"' for key, value in define_args.items())} "
+                    f"/c /interface /TP {source_path} "
+                    f"/ifcOutput        {module_path} "
+                    f"/Fo               {object_path}"]
+        
+    for command in commands:
+        try:
+            output = subprocess.run(command, shell=True, capture_output=True, check=True, text=True)
+            print(output.stdout, end="", file=sys.stdout)
+            print(output.stderr, end="", file=sys.stderr)       
+        except subprocess.CalledProcessError as e:
+            raise Error(e.stderr)
+
+def link(object_dir, exe_path):
+    if compiler == "g++" or compiler == "clang++":
+        commands = [f"{compiler} "
+                    f"{' '.join(link_args)} "
+                    f"{object_dir}/*.o "
+                    f"-L{lib_path} "
+                    f"{' '.join(f"-l{lib}" for lib in libs)} "
+                    f"-o {exe_path}"]
+    elif compiler == "cl":
+        commands = ["echo what??"]
+
+    for command in commands:
+        try:
+            output = subprocess.run(command, shell=True, capture_output=True, check=True, text=True)
+            print(output.stdout, end="", file=sys.stdout)
+            print(output.stderr, end="", file=sys.stderr)       
+        except subprocess.CalledProcessError as e:
+            raise Error(e.stderr)
+        
 
 
-def link():
-    linkable = []
-    for file in os.listdir(f"./module"):
-        if file.endswith(object_suffix):
-            linkable.append(f"./module/{file}")
+# Module
+
+class Module:
+    modules = []
+
+    def __init__(self, export):
+        self.export         = export
+        self.source_path    = f"./include/{export.replace('.', '/')}.cpp"
+        self.module_path    = f"./bin/module/{export}{module_suffix}"
+        self.object_path    = f"./bin/module/{export}{object_suffix}"
+        try:
+            self.import_modules = [self._get_module(import_str) for import_str in re.findall(r'^\s*(?:export)?\s*import\s+([\w\.:]+)\s*;\s*$', self._read_file(), re.MULTILINE)]
+        except Error as e:
+            raise Error(e, prefix=f"In module imported from {self.export}:")
+        self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.module_path) and os.path.getmtime(self.source_path) <= os.path.getmtime(self.module_path)
+
+        export_strs = re.findall(r'^\s*export\s+module\s+([\w\.:]+)\s*;\s*$', self._read_file(), re.MULTILINE)
+        if len(export_strs) != 1 or export_strs[0] != self.export:
+            raise Error(f"fatal error: file {self.source_path} should export module {self.export}")
+
+    def build(self):
+        for import_module in self.import_modules:
+            if not import_module.is_built:
+                try:
+                    import_module.build()
+                except Error as e:
+                    raise Error(e, prefix=f"In module imported from {self.export}:")
+            
+        print(f"build module: {self.export}")
+        compile(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
+        self.is_built = True
+
+    def _get_module(self, import_str):
+        for module in Module.modules:
+            if module.export == import_str:
+                return module
+            
+        module = Module(import_str)
+        Module.modules.append(module)
+        return module
     
-    if compiler == "g++" or compiler == "clang++":
-        run (f"{compiler} "
-            f"{' '.join(link_args)} "
-            f"{' '.join(linkable)} "
-            f"-L{lib_path} "
-            f"{' '.join(f"-l{lib}" for lib in libs)} "
-            f"-o ./bin/main{executable_suffix}")
-    elif compiler == "cl":
-        run(f"{compiler} "
-            f"{' '.join(link_args)} "
-            f"{' '.join(linkable)} "
-            f'/LIBPATH:"{lib_path}"'
-            f"{' '.join(lib for lib in libs)} "
-            f"/Fe ./bin/main{executable_suffix}")
-
-
-# Utility
-
-update = False
-
-def updatable(module):
-    bin_time = 0
-    try:
-        bin_time = min(os.path.getmtime(f"./module/{module.replace(':', '-')}{module_suffix}"), os.path.getmtime(f"./module/{module.replace(':', '-')}.o"))
-    except OSError:
+    def _read_file(self):
+        try:
+            return open(self.source_path, 'r').read()
+        except FileNotFoundError as e:
+            raise Error(f"fatal error: {e.filename} not found")
+    
+class Object:
+    def __init__(self, export):
         pass
+
+    def build(self):
+        link(object_dir="./bin/module", exe_path=f"./bin/main{executable_suffix}")
     
-    src_time = 0
-    for root, _, files in os.walk(f"./include/{module.replace('.', '/')}"):
-        for file in files:
-            src_time = max(src_time, os.path.getmtime(f"./{root}/{file}"))
-
-    global update
-    if src_time >= bin_time:
-        update = True
-
-    return update
-
-def run(command):
-    command = re.sub(r'\s+', ' ', command)
-    log(command, color="green")
-    output = subprocess.run(command, shell=True, check=False, capture_output=True, text=True)
-    print(output.stdout, end="", file=sys.stdout)
-    print(output.stderr, end="", file=sys.stderr)
-    print(output.stderr, end="", file=open(f"./bin/log.txt", 'w'))
-    if output.returncode != 0:
-        exit(output.returncode)
-
-def log(message, color=None):
-    colormap = {
-        "red"   : "\033[38;2;240;240;0m",
-        "yellow": "\033[38;2;240;240;0m",
-        "green" : "\033[38;2;0;240;0m",
-        "white" : "\033[38;2;192;192;192m"
-    }
-
-    if color is None:
-        print(message)
-    else:
-        print(f"{colormap[color]}{message}{colormap["white"]}")
-
 
 
 
 # Main
 
 if __name__ == "__main__":
-    compile()
-    link()
+    try:
+        # Config
+        if len(sys.argv) == 2 and sys.argv[1] in ["debug", "release", "clean"]:
+            config = sys.argv[1]
+        else:
+            raise Error("fatal error: python build.py debug|release|clean")
 
+        # Clear error outputs
+        open("./bin/log.txt", 'w').write("")
 
+        # Build
+        if config == "debug" or config == "release":
+            Module("main").build()
+            Object("main").build()
+        
+        # Clean
+        elif config == "clean":
+            for file in os.listdir("./bin/module"):
+                os.remove(f"./bin/module/{file}")
+    
+    except Error as e:
+        print(e, file=sys.stderr)
+        print(e, file=open("./bin/log.txt", 'w'))
+        exit(-1)
+
+    except KeyboardInterrupt as e:
+        exit(-1)

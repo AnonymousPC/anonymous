@@ -65,5 +65,15 @@
             "dependsOrder": "sequence",
         },
 
+
+
+        {
+            "label": "clean",
+            "detail": "clean",
+            "group": "build",
+            "type": "shell",
+            "command": "python bin/build.py clean"
+        }
+
     ]
 }

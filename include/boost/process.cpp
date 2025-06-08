@@ -28,6 +28,8 @@ module;
 #include <git/boost/libs/process/src/windows/default_launcher.cpp>
 
 export module boost.process;
+import std;
+
 export namespace boost::process
 {
     

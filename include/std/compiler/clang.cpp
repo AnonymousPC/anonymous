@@ -14,8 +14,6 @@
 module;
 #undef in
 
-#ifdef __clang__
-
 #include <__config>
 
 // The headers of Table 24: C++ library headers [tab:headers.cpp]
@@ -197,11 +195,7 @@ module;
 #  endif // __has_include(<text_encoding>)
 #endif // _WIN32
 
-#endif
-
 export module std.compiler.clang;
-
-#ifdef __clang__
 
 export namespace std {
   namespace ranges {
@@ -3227,5 +3221,3 @@ export namespace std {
 }
 export namespace std {
 }
-
-#endif

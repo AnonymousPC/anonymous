@@ -2,8 +2,6 @@ export module std.feature.stacktrace;
 import std.compiler;
 export import boost.stacktrace;
 
-#ifndef __cpp_lib_stacktrace
-
 export namespace std
 {
 
@@ -59,5 +57,3 @@ struct stacktrace
 };
 
 }
-
-#endif

@@ -248,7 +248,7 @@ template <integral _To, class _From, size_t _Size>
   return true;
 }
 
-} // namespace __mdspan_detail
+}
 
 // ------------------------------------------------------------------
 // ------------ extents ---------------------------------------------
@@ -492,7 +492,7 @@ template <class _Extents, class... _From>
       make_index_sequence<_Extents::rank()>(), __ext, __values...);
 }
 
-} // namespace __mdspan_detail
+}
 
 struct layout_left {
   template <class _Extents>
@@ -831,7 +831,7 @@ concept __layout_mapping_alike = requires {
   bool_constant<_Mapping::is_always_exhaustive()>::value;
   bool_constant<_Mapping::is_always_unique()>::value;
 };
-} // namespace __mdspan_detail
+}
 
 template <class _Extents>
 class layout_stride::mapping {
@@ -1133,7 +1133,7 @@ private:
 namespace __mdspan_detail {
 template <class _Layout, class _Extents>
 concept __has_invalid_mapping = !requires { typename _Layout::template mapping<_Extents>; };
-} // namespace __mdspan_detail
+}
 
 template <class _ElementType,
           class _Extents,

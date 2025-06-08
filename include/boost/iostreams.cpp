@@ -16,6 +16,8 @@ module;
 #include <git/boost/libs/iostreams/src/zstd.cpp>
 
 export module boost.iostreams;
+import std;
+
 export namespace boost::iostreams
 {
     

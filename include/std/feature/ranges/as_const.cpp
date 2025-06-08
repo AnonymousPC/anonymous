@@ -1,7 +1,7 @@
 module;
 #include <ranges>
 
-export module std.feature.ranges.const_iterator;
+export module std.feature.ranges.as_const;
 import std.compiler;
 
 #ifndef __cpp_lib_ranges_as_const
@@ -15,7 +15,7 @@ namespace ranges
   template<range _Range> using const_iterator_t        = iterator_t       <const _Range>;
   template<range _Range> using const_sentinel_t        = sentinel_t       <const _Range>;
     
-} // namespace ranges
+}
 
     
   template<indirectly_readable _It>
@@ -50,7 +50,7 @@ namespace ranges
     template<forward_iterator _It>
       struct __basic_const_iterator_iter_cat<_It>
       { using iterator_category = std::iterator_traits<_It>::iterator_category; };
-  } // namespace detail
+  }
 
   template<input_iterator _It>
     using const_iterator
@@ -65,7 +65,7 @@ namespace ranges
     template<input_iterator _Sent>
       struct __const_sentinel<_Sent>
       { using type = const_iterator<_Sent>; };
-  } // namespace __detail
+  }
 
   template<semiregular _Sent>
     using const_sentinel = typename __detail::__const_sentinel<_Sent>::type;

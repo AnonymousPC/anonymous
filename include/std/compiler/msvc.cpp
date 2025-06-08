@@ -4,8 +4,6 @@
 // In a module-file, the optional `module;` must appear first; see [cpp.pre].
 module;
 
-#if defined(_MSC_VER) and not defined(__clang__)
-
 // This named module expects to be built with classic headers, not header units.
 #define _BUILD_STD_MODULE
 
@@ -36,11 +34,7 @@ module;
 // <intrin.h> defines some types outside of `extern "C"` or `extern "C++"`.
 #include <intrin.h>
 
-#endif
-
 export module std.compiler.msvc;
-
-#if defined(_MSC_VER) and not defined(__clang__)
 
 #pragma warning(push)
 #pragma warning(disable : 5244) // '#include <meow>' in the purview of module 'std' appears erroneous.
@@ -171,5 +165,3 @@ export module std.compiler.msvc;
 #include <cwctype>
 
 #pragma warning(pop)
-
-#endif

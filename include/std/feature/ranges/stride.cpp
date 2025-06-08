@@ -1,10 +1,8 @@
 module;
 #include <ranges>
 
-export module std.feature.ranges.stride_view;
+export module std.feature.ranges.stride;
 import std.compiler;
-
-#ifndef __cpp_lib_ranges_stride
 
 export namespace std
 {
@@ -367,5 +365,3 @@ template<input_range _Vp>
 }
 
 }
-
-#endif

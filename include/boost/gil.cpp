@@ -4,6 +4,8 @@ module;
 #include <boost/gil.hpp>
 
 export module boost.gil;
+import std;
+
 export namespace boost::gil
 {
     

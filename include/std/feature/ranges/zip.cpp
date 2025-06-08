@@ -1,10 +1,8 @@
 module;
 #include <ranges>
 
-export module std.feature.ranges.zip_view;
+export module std.feature.ranges.zip;
 import std.compiler;
-
-#ifndef __cpp_lib_ranges_zip
 
 export namespace std
 {
@@ -1030,5 +1028,3 @@ namespace ranges
 }
 
 }
-
-#endif

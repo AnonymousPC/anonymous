@@ -1,4 +1,9 @@
 export module std.compiler;
-export import std.compiler.gcc;
-export import std.compiler.clang;
-export import std.compiler.msvc;
+
+#if defined(__GNUC__) and not defined(__clang__)
+    export import std.compiler.gcc;
+#elifdef __clang__
+    export import std.compiler.clang;
+#elifdef _MSC_VER
+    export import std.compiler.msvc;
+#endif

@@ -1,9 +1,12 @@
 module;
+#define BOOST_LOCALE_WITH_ICU
+#ifdef _WIN32
+    #define BOOST_LOCALE_NO_POSIX_BACKEND
+#elif defined(__linux__) or defined(__MACH__)
+    #define BOOST_LOCALE_NO_WINAPI_BACKEND
+#endif
 #undef in
 #undef self
-#define BOOST_LOCALE_WITH_ICU
-#define BOOST_LOCALE_NO_POSIX_BACKEND
-#define BOOST_LOCALE_NO_WINAPI_BACKEND
 #include <boost/locale.hpp>
 #include <git/boost/libs/locale/src/util/gregorian.cpp> // Include this file first
 #include <git/boost/libs/locale/src/encoding/codepage.cpp>
@@ -18,11 +21,6 @@ module;
 #include <git/boost/libs/locale/src/icu/formatters_cache.cpp>
 #include <git/boost/libs/locale/src/icu/icu_backend.cpp>
 #include <git/boost/libs/locale/src/icu/numeric.cpp>
-// #include <git/boost/libs/locale/src/posix/codecvt.cpp>
-// #include <git/boost/libs/locale/src/posix/collate.cpp>
-// #include <git/boost/libs/locale/src/posix/converter.cpp>
-// #include <git/boost/libs/locale/src/posix/numeric.cpp>
-// #include <git/boost/libs/locale/src/posix/posix_backend.cpp>
 #include <git/boost/libs/locale/src/shared/date_time.cpp>
 #include <git/boost/libs/locale/src/shared/format.cpp>
 #include <git/boost/libs/locale/src/shared/formatting.cpp>
@@ -42,14 +40,23 @@ module;
 #include <git/boost/libs/locale/src/util/encoding.cpp>
 #include <git/boost/libs/locale/src/util/info.cpp>
 #include <git/boost/libs/locale/src/util/locale_data.cpp>
-// #include <git/boost/libs/locale/src/win32/collate.cpp>
-// #include <git/boost/libs/locale/src/win32/converter.cpp>
-// #include <git/boost/libs/locale/src/win32/lcid.cpp>
-// #include <git/boost/libs/locale/src/win32/numeric.cpp>
-// #include <git/boost/libs/locale/src/win32/win_backend.cpp>
-
+#ifdef _WIN32
+    #include <git/boost/libs/locale/src/win32/collate.cpp>
+    #include <git/boost/libs/locale/src/win32/converter.cpp>
+    #include <git/boost/libs/locale/src/win32/lcid.cpp>
+    #include <git/boost/libs/locale/src/win32/numeric.cpp>
+    #include <git/boost/libs/locale/src/win32/win_backend.cpp>
+#elif defined(__linux__) or defined(__MACH__)
+    #include <git/boost/libs/locale/src/posix/codecvt.cpp>
+    #include <git/boost/libs/locale/src/posix/collate.cpp>
+    #include <git/boost/libs/locale/src/posix/converter.cpp>
+    #include <git/boost/libs/locale/src/posix/numeric.cpp>
+    #include <git/boost/libs/locale/src/posix/posix_backend.cpp>
+#endif
 
 export module boost.locale;
+import std;
+
 export namespace boost::locale
 {
     

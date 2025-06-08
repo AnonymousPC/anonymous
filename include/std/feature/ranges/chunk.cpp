@@ -1,10 +1,8 @@
 module;
 #include <ranges>
 
-export module std.feature.ranges.chunk_view;
+export module std.feature.ranges.chunk;
 import std.compiler;
-
-#ifndef __cpp_lib_ranges_chunk
 
 export namespace std
 {
@@ -549,5 +547,3 @@ namespace ranges
 }
 
 }
-
-#endif

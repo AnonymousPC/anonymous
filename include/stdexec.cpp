@@ -11,6 +11,10 @@ module;
 #include <execpools/tbb/tbb_thread_pool.hpp>
 
 export module stdexec;
+import std.compiler;  // This library might be depended by std.sender.
+import cuda;
+import tbb;
+
 export namespace stdexec
 {
     using stdexec::receiver;

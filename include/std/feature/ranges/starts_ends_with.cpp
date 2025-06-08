@@ -1,7 +1,5 @@
-export module std.feature.ranges.starts_with;
+export module std.feature.ranges.starts_ends_with;
 import std.compiler;
-
-#ifndef __cpp_lib_ranges_starts_ends_with
 
 export namespace std
 {
@@ -92,5 +90,3 @@ inline constexpr ends_with_fn ends_with{};
 }
 
 }
-
-#endif

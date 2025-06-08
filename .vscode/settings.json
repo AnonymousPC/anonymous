@@ -79,6 +79,11 @@
         "regex": "cpp",
         "algorithm": "cpp",
         "dense": "cpp",
-        "target": "cpp"
+        "target": "cpp",
+        "linalg": "cpp",
+        "version": "cpp",
+        "bio_ssl.c": "cpp",
+        "__config": "c",
+        "t1_trce.c": "cpp"
     }
 }

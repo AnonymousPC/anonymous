@@ -1,7 +1,5 @@
 export module std.feature.is_layout_compatible;
 
-#ifndef __cpp_lib_is_layout_compatible
-
 export namespace std
 {
     template < class type1, class type2 >
@@ -11,4 +9,3 @@ export namespace std
     };
 }
 
-#endif

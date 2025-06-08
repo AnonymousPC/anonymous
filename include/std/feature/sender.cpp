@@ -1,8 +1,6 @@
-export module std.feature.execution;
+export module std.feature.sender;
 import std.compiler;
 export import stdexec;
-
-#ifndef __cpp_lib_sender
 
 export namespace std
 {
@@ -11,5 +9,3 @@ export namespace std
         using namespace ::stdexec;
     }
 }
-
-#endif

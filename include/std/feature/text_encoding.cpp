@@ -1,8 +1,8 @@
-  /**
-   * @brief An interface for accessing the IANA Character Sets registry.
-   * @ingroup locales
-   * @since C++23
-   */
+export module std.feature.text_encoding;
+import std.compiler;
+
+export namespace std
+{
   struct text_encoding
   {
   private:
@@ -1459,3 +1459,5 @@
         inline constexpr bool
         enable_borrowed_range<std::text_encoding::aliases_view> = true;
     }
+
+}

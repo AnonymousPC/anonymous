@@ -23,8 +23,6 @@
 
 module;
 
-#if defined(__GNUC__) and not defined(__clang__)
-
 // stdc++.h doesn't include <execution> because of TBB issues;
 // FIXME for now let's avoid the problem by suppressing TBB.
 #define _GLIBCXX_USE_TBB_PAR_BACKEND 0
@@ -36,11 +34,7 @@ module;
 #undef __DEPRECATED
 #include <strstream>
 
-#endif
-
 export module std.compiler.gcc;
-
-#if defined(__GNUC__) and not defined(__clang__)
 
 // C library exports are appended from std-clib.cc.in.
 
@@ -1623,7 +1617,7 @@ export namespace std
   // _Cpo is an implementation detail we can't avoid exposing; if we do the
   // using in ranges directly, it conflicts with any friend functions of the
   // same name, which is why the customization points are in an inline
-  // namespace in the first place.
+
   namespace ranges::inline _Cpo
   {
     using _Cpo::iter_move;
@@ -4033,6 +4027,4 @@ export C_LIB_NAMESPACE
   using std::wctype_t;
   using std::wint_t;
 }
-#endif
-
 #endif

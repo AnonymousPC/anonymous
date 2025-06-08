@@ -1,6 +1,8 @@
 export module boost;
 export import boost.asio;
 export import boost.beast;
+export import boost.charconv;
+export import boost.date_time;
 export import boost.dll;
 export import boost.filesystem;
 export import boost.gil;
@@ -10,4 +12,5 @@ export import boost.mysql;
 export import boost.process;
 export import boost.spirit;
 export import boost.stacktrace;
+export import boost.system;
 export import boost.thread;

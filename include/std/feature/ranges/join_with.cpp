@@ -1,10 +1,8 @@
 module;
 #include <ranges>
 
-export module std.feature.ranges.join_with_view;
+export module std.feature.ranges.join_with;
 import std.compiler;
-
-#ifndef __cpp_lib_ranges_join_with
 
 export namespace std
 {
@@ -543,12 +541,10 @@ namespace ranges
     };
 
     inline constexpr _JoinWith join_with;
-  } // namespace views
+  }
     
 
 
 }
 
 }
-
-#endif

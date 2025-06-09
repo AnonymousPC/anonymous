@@ -15,8 +15,8 @@ import std.compiler;  // This library might be depended by std.sender.
 import cuda;
 import tbb;
 
-export namespace stdexec
+namespace stdexec
 {
-    using stdexec::receiver;
-    using stdexec::sender;
+    export using stdexec::receiver;
+    export using stdexec::sender;
 }

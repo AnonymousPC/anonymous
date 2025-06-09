@@ -18,7 +18,7 @@ module;
 export module boost.spirit;
 import std;
 
-export namespace boost::spirit
+namespace boost::spirit
 {
     
 }

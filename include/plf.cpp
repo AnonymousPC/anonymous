@@ -5,7 +5,7 @@ module;
 export module plf;
 import std.compiler; // This library might be depended by std.hive.
 
-export namespace plf
+namespace plf
 {
-    using plf::hive;
+    export using plf::hive;
 }

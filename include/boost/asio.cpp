@@ -8,14 +8,14 @@ export module boost.asio;
 import std;
 import openssl;
 
-export namespace boost::asio
+namespace boost::asio
 {
-    using boost::asio::buffer;
-    using boost::asio::io_context;
+    export using boost::asio::buffer;
+    export using boost::asio::io_context;
     
     namespace ip
     {
-        using boost::asio::ip::tcp;
-        using boost::asio::ip::udp;
+        export using boost::asio::ip::tcp;
+        export using boost::asio::ip::udp;
     }
 }

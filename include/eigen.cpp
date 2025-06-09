@@ -7,13 +7,13 @@ module;
 export module eigen;
 import std;
 
-export namespace Eigen
+namespace Eigen
 {
-    using Eigen::Dynamic;
-    using Eigen::FFT;
-    using Eigen::Matrix;
-    using Eigen::Map;
-    using Eigen::Tensor;
-    using Eigen::TensorMap;
-    using Eigen::Vector;
+    export using Eigen::Dynamic;
+    export using Eigen::FFT;
+    export using Eigen::Matrix;
+    export using Eigen::Map;
+    export using Eigen::Tensor;
+    export using Eigen::TensorMap;
+    export using Eigen::Vector;
 }

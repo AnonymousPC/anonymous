@@ -64,7 +64,7 @@ module;
 export module cuda;
 import std.compiler; // This library might be depended by stdexec, which might be depended by std.sender.
 
-export namespace cuda
+namespace cuda
 {
 
 }

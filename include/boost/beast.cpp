@@ -6,7 +6,7 @@ module;
 export module boost.beast;
 import std;
 
-export namespace boost::beast
+namespace boost::beast
 {
     
 }

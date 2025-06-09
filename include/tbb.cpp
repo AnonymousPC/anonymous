@@ -60,10 +60,10 @@ export module tbb;
 import std.compiler; // This library might be depended by stdexec, which might be depended by std.sender.
 import hwloc;
 
-export namespace tbb
+namespace tbb
 {
-    using tbb::concurrent_map;
-    using tbb::concurrent_set;
-    using tbb::concurrent_unordered_map;
-    using tbb::concurrent_unordered_set;
+    export using tbb::concurrent_map;
+    export using tbb::concurrent_set;
+    export using tbb::concurrent_unordered_map;
+    export using tbb::concurrent_unordered_set;
 }

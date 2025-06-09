@@ -30,7 +30,7 @@ module;
 export module boost.process;
 import std;
 
-export namespace boost::process
+namespace boost::process
 {
     
 }

@@ -57,7 +57,7 @@ module;
 export module boost.locale;
 import std;
 
-export namespace boost::locale
+namespace boost::locale
 {
     
 }

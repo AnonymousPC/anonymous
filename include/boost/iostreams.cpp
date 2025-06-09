@@ -18,7 +18,7 @@ module;
 export module boost.iostreams;
 import std;
 
-export namespace boost::iostreams
+namespace boost::iostreams
 {
     
 }

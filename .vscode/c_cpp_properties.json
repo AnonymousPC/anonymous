@@ -3,11 +3,9 @@
         {
             "name": "Mac",
             "includePath": [
-                "/opt/homebrew/include/*",
-                "/opt/homebrew/include/**"
+                "./lib/include"
             ],
             "defines": [],
-            "compilerPath": "/opt/llvm/bin/clang++",
             "cStandard": "c23",
             "cppStandard": "c++23",
             "intelliSenseMode": "macos-clang-arm64"

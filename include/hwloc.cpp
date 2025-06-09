@@ -1,5 +1,16 @@
 module;
+#include <boost/process/pid.hpp>
 #include <hwloc.h>
+struct compatible_void_pointer
+{
+    void* ptr = nullptr;
+    constexpr compatible_void_pointer ( ) = default;
+    constexpr compatible_void_pointer ( auto init_ptr ) extends ptr ( init_ptr ) { }
+    template < class type > constexpr operator type* ( ) const { return static_cast<type*>(ptr); }
+};
+#undef hwloc_pid_t
+using hwloc_pid_t = boost::process::pid_type;
+#define void compatible_void_pointer
 #include <hwloc/base64.c>
 #include <hwloc/bind.c>
 #include <hwloc/bitmap.c>

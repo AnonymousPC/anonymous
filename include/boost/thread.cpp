@@ -17,7 +17,7 @@ module;
 
 export module boost.thread;
 import std;
-export namespace boost
+namespace boost
 {
 
 }

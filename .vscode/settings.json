@@ -88,6 +88,22 @@
         "tuple": "cpp",
         "bio_lib.c": "cpp",
         "chrono": "cpp",
-        "base64.c": "cpp"
+        "base64.c": "cpp",
+        "core": "cpp",
+        "superlusupport": "cpp",
+        "*.evaluator": "cpp",
+        "*.traits": "cpp",
+        "adolcforward": "cpp",
+        "alignedvector3": "cpp",
+        "autodiff": "cpp",
+        "bvh": "cpp",
+        "eulerangles": "cpp",
+        "kroneckerproduct": "cpp",
+        "mprealsupport": "cpp",
+        "nnls": "cpp",
+        "numericaldiff": "cpp",
+        "openglsupport": "cpp",
+        "specialfunctions": "cpp",
+        "splines": "cpp"
     }
 }

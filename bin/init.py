@@ -50,3 +50,8 @@ for lib in os.listdir  ( "./git/boost/libs"):
         shutil.copytree(f"./git/boost/libs/{lib}/include/boost", f"./include/boost", dirs_exist_ok=True)
     if os.path.isdir   (f"./git/boost/libs/{lib}/src"):
         shutil.copytree(f"./git/boost/libs/{lib}/src",           f"./include/boost", dirs_exist_ok=True)
+
+for root, _, files in os.walk("./include"):
+    for file in files:
+        if file.endswith(".in"):
+            shutil.copyfile(f"{root}/{file}", f"{root}/{file[:-3]}")

@@ -7,7 +7,7 @@ module;
 export module boost.system;
 import std;
 
-export namespace boost::system
+namespace boost::system
 {
     
 }

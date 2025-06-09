@@ -1,5 +1,5 @@
 export module main;
-import openssl;
+import boost.stacktrace;
 
 export int main ( )
 {

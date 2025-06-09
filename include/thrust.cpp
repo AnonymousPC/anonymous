@@ -139,7 +139,7 @@ export module thrust;
 import std;
 import cuda;
 
-export namespace thrust
+namespace thrust
 {
 
 }

@@ -6,7 +6,7 @@ module;
 export module boost.dll;
 import std;
 
-export namespace boost::dll
+namespace boost::dll
 {
     
 }

@@ -6,7 +6,7 @@ module;
 export module boost.gil;
 import std;
 
-export namespace boost::gil
+namespace boost::gil
 {
     
 }

@@ -6,7 +6,7 @@ module;
 export module boost.mysql;
 import std;
 
-export namespace boost::mysql
+namespace boost::mysql
 {
     
 }

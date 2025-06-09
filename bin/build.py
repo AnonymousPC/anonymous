@@ -15,29 +15,16 @@ config = "debug"
 # Platform
 
 if sys.platform == "win32":
-    system = "windows"
-elif sys.platform == "linux":
-    system = "linux"
-elif sys.platform == "darwin":
-    system = "macos"
-
-if system == "windows":
+    system            = "windows"
     compiler          = "cl"
-    include_path      = ""
-    lib_path          = ""
-    libs              = ["advapi32", "bcrypt", "crypto", "kernel32", "mswsock", "ntdll", "shell32", "ssl", "stdc++exp", "tiff", "user32", "ws2_32"]
     executable_suffix = ".exe"
-elif system == "linux":
+elif sys.platform == "linux":
+    system            = "linux"
     compiler          = "g++"
-    include_path      = "/usr/include"
-    lib_path          = "/usr/lib"
-    libs              = []
     executable_suffix = ""
-elif system == "macos":
+elif sys.platform == "darwin":
+    system            = "macos"
     compiler          = "clang++"
-    include_path      = "/opt/homebrew/include"
-    lib_path          = "/opt/homebrew/lib"
-    libs              = ["bz2", "hwloc", "iconv", "icudata", "icui18n", "icuio", "icutu", "icuuc", "jpeg", "lzma", "png", "tiff", "tiffxx", "z", "zstd"]
     executable_suffix = ""
 
 if compiler == "g++":
@@ -139,14 +126,14 @@ def compile(source_path, module_path, object_path):
     if compiler == "g++":
         commands = [f"g++ "
                     f"{' '.join(compile_args)} "
-                    f"-I{include_path} "
+                    f"-I./lib/include "
                     f"{' '.join(f'-D{key}="{value}"' for key, value in define_args.items())} "
                     f"-c {source_path} "
                     f"-o {module_path}"]
     elif compiler == "clang++":
         commands = [f"clang++ "
                     f"{' '.join(compile_args)} "
-                    f"-I{include_path} "
+                    f"-I./lib/include "
                     f"{' '.join(f'-D{key}="{value}"' for key, value in define_args.items())} "
                     f"--precompile -x c++-module {source_path} "
                     f"-o                         {module_path}",
@@ -158,7 +145,7 @@ def compile(source_path, module_path, object_path):
     elif compiler == "cl":
         commands = [f"cl "
                     f"{' '.join(compile_args)} "
-                    f"/I{include_path} "
+                    f"/I./lib/include "
                     f"{' '.join(f'/D{key}="{value}"' for key, value in define_args.items())} "
                     f"/c /interface /TP {source_path} "
                     f"/ifcOutput        {module_path} "
@@ -177,8 +164,6 @@ def link(object_dir, exe_path):
         commands = [f"{compiler} "
                     f"{' '.join(link_args)} "
                     f"{object_dir}/*.o "
-                    f"-L{lib_path} "
-                    f"{' '.join(f"-l{lib}" for lib in libs)} "
                     f"-o {exe_path}"]
     elif compiler == "cl":
         commands = ["echo what??"]
@@ -209,14 +194,14 @@ class Module:
         
         content = preprocess(self.source_path)
         try:
-            self.import_modules = [self.get_module(import_str) for import_str in re.findall(r'^\s*(?:export)?\s*import\s+([\w\.:]+)\s*;\s*$', content, re.MULTILINE)]
+            self.import_modules = [self.get_module(import_str) for import_str in re.findall(r'\bimport\s+([\w\.:]+)\s*;', content, re.MULTILINE)]
         except Error as e:
             raise Error(e, prefix=f"In module imported from {self.export}:")
         self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.module_path) and os.path.getmtime(self.source_path) <= os.path.getmtime(self.module_path)
         if not self.is_built:
             Module.total += 1
 
-        export_strs = re.findall(r'^\s*export\s+module\s+([\w\.:]+)\s*;\s*$', content, re.MULTILINE)
+        export_strs = re.findall(r'\bexport\s+module\s+([\w\.:]+)\s*;', content, re.MULTILINE)
         if len(export_strs) != 1 or export_strs[0] != self.export:
             raise Error(f"fatal error: file {self.source_path} should export module {self.export}")
 
@@ -277,7 +262,8 @@ if __name__ == "__main__":
         # Clean
         elif config == "clean":
             for file in os.listdir("./bin/module"):
-                os.remove(f"./bin/module/{file}")
+                if file.endswith(module_suffix) or file.endswith(object_suffix) or (executable_suffix != "" and file.endswith(executable_suffix)):
+                    os.remove(f"./bin/module/{file}")
     
     except Error as e:
         print(e, file=sys.stderr)

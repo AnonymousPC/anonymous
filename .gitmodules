@@ -1,24 +1,13 @@
-[submodule "lib/git/boost"]
-	path = lib/git/boost
+
+[submodule "lib/git/c++/boost"]
+	path = lib/git/c++/boost
 	url = https://github.com/boostorg/boost
-[submodule "lib/git/cccl"]
-	path = lib/git/cccl
+[submodule "lib/git/c++/cccl"]
+	path = lib/git/c++/cccl
 	url = https://github.com/NVIDIA/cccl
-[submodule "lib/git/eigen"]
-	path = lib/git/eigen
+[submodule "lib/git/c++/eigen"]
+	path = lib/git/c++/eigen
 	url = https://gitlab.com/libeigen/eigen
-[submodule "lib/git/oneTBB"]
-	path = lib/git/oneTBB
-	url = https://github.com/uxlfoundation/oneTBB
-[submodule "lib/git/plf_hive"]
-	path = lib/git/plf_hive
-	url = https://github.com/mattreecebentley/plf_hive
-[submodule "lib/git/stdexec"]
-	path = lib/git/stdexec
-	url = https://github.com/NVIDIA/stdexec
-[submodule "lib/git/openssl"]
-	path = lib/git/openssl
-	url = https://github.com/openssl/openssl
-[submodule "lib/git/hwloc"]
-	path = lib/git/hwloc
-	url = https://github.com/open-mpi/hwloc
+[submodule "lib/git/c++/icu"]
+	path = lib/git/c++/icu
+	url = https://github.com/unicode-org/icu

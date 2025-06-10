@@ -11,3 +11,4 @@
 [submodule "lib/git/c++/icu"]
 	path = lib/git/c++/icu
 	url = https://github.com/unicode-org/icu
+	shallow = true

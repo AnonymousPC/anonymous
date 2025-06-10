@@ -1,0 +1,54 @@
+In module imported from main:
+In module imported from std:
+In module imported from std.feature:
+In module imported from std.feature.sender:
+In module imported from stdexec:
+In module imported from tbb:
+In file included from ./include/hwloc.cpp:3:
+[1m./lib/include/hwloc.h:1487:70: [0m[0;1;31merror: [0m[1munknown type name 'hwloc_pid_t'; did you mean 'hwloc_obj_t'?[0m
+ 1487 | HWLOC_DECLSPEC [0;34mint[0m hwloc_set_proc_cpubind(hwloc_topology_t topology, hwloc_pid_t pid, hwloc_const_cpuset_t set, [0;34mint[0m flags);[0m
+      | [0;1;32m                                                                     ^~~~~~~~~~~
+[0m      | [0;32m                                                                     hwloc_obj_t
+[0m[1m./lib/include/hwloc.h:686:28: [0m[0;1;36mnote: [0m'hwloc_obj_t' declared here[0m
+  686 | [0;34mtypedef[0m [0;34mstruct[0m hwloc_obj * hwloc_obj_t;[0m
+      | [0;1;32m                           ^
+[0m[1m./lib/include/hwloc.h:1506:70: [0m[0;1;31merror: [0m[1munknown type name 'hwloc_pid_t'; did you mean 'hwloc_obj_t'?[0m
+ 1506 | HWLOC_DECLSPEC [0;34mint[0m hwloc_get_proc_cpubind(hwloc_topology_t topology, hwloc_pid_t pid, hwloc_cpuset_t set, [0;34mint[0m flags);[0m
+      | [0;1;32m                                                                     ^~~~~~~~~~~
+[0m      | [0;32m                                                                     hwloc_obj_t
+[0m[1m./lib/include/hwloc.h:686:28: [0m[0;1;36mnote: [0m'hwloc_obj_t' declared here[0m
+  686 | [0;34mtypedef[0m [0;34mstruct[0m hwloc_obj * hwloc_obj_t;[0m
+      | [0;1;32m                           ^
+[0m[1m./lib/include/hwloc.h:1581:80: [0m[0;1;31merror: [0m[1munknown type name 'hwloc_pid_t'; did you mean 'hwloc_obj_t'?[0m
+ 1581 | HWLOC_DECLSPEC [0;34mint[0m hwloc_get_proc_last_cpu_location(hwloc_topology_t topology, hwloc_pid_t pid, hwloc_cpuset_t set, [0;34mint[0m flags);[0m
+      | [0;1;32m                                                                               ^~~~~~~~~~~
+[0m      | [0;32m                                                                               hwloc_obj_t
+[0m[1m./lib/include/hwloc.h:686:28: [0m[0;1;36mnote: [0m'hwloc_obj_t' declared here[0m
+  686 | [0;34mtypedef[0m [0;34mstruct[0m hwloc_obj * hwloc_obj_t;[0m
+      | [0;1;32m                           ^
+[0m[1m./lib/include/hwloc.h:1874:70: [0m[0;1;31merror: [0m[1munknown type name 'hwloc_pid_t'; did you mean 'hwloc_obj_t'?[0m
+ 1874 | HWLOC_DECLSPEC [0;34mint[0m hwloc_set_proc_membind(hwloc_topology_t topology, hwloc_pid_t pid, hwloc_const_bitmap_t set, hwloc_membind_policy_t policy, [0;34mint[0m flags);[0m
+      | [0;1;32m                                                                     ^~~~~~~~~~~
+[0m      | [0;32m                                                                     hwloc_obj_t
+[0m[1m./lib/include/hwloc.h:686:28: [0m[0;1;36mnote: [0m'hwloc_obj_t' declared here[0m
+  686 | [0;34mtypedef[0m [0;34mstruct[0m hwloc_obj * hwloc_obj_t;[0m
+      | [0;1;32m                           ^
+[0m[1m./lib/include/hwloc.h:1920:70: [0m[0;1;31merror: [0m[1munknown type name 'hwloc_pid_t'; did you mean 'hwloc_obj_t'?[0m
+ 1920 | HWLOC_DECLSPEC [0;34mint[0m hwloc_get_proc_membind(hwloc_topology_t topology, hwloc_pid_t pid, hwloc_bitmap_t set, hwloc_membind_policy_t * policy, [0;34mint[0m flags);[0m
+      | [0;1;32m                                                                     ^~~~~~~~~~~
+[0m      | [0;32m                                                                     hwloc_obj_t
+[0m[1m./lib/include/hwloc.h:686:28: [0m[0;1;36mnote: [0m'hwloc_obj_t' declared here[0m
+  686 | [0;34mtypedef[0m [0;34mstruct[0m hwloc_obj * hwloc_obj_t;[0m
+      | [0;1;32m                           ^
+[0m[1m./lib/include/hwloc.h:2088:87: [0m[0;1;31merror: [0m[1munknown type name 'hwloc_pid_t'; did you mean 'hwloc_obj_t'?[0m
+ 2088 | HWLOC_DECLSPEC [0;34mint[0m hwloc_topology_set_pid(hwloc_topology_t __hwloc_restrict topology, hwloc_pid_t pid);[0m
+      | [0;1;32m                                                                                      ^~~~~~~~~~~
+[0m      | [0;32m                                                                                      hwloc_obj_t
+[0m[1m./lib/include/hwloc.h:686:28: [0m[0;1;36mnote: [0m'hwloc_obj_t' declared here[0m
+  686 | [0;34mtypedef[0m [0;34mstruct[0m hwloc_obj * hwloc_obj_t;[0m
+      | [0;1;32m                           ^
+[0m[1m./include/hwloc.cpp:4:9: [0m[0;1;35mwarning: [0m[1munknown pragma ignored [-Wunknown-pragmas][0m
+    4 | #pragma cmake .[0m
+      | [0;1;32m        ^
+[0m1 warning and 6 errors generated.
+

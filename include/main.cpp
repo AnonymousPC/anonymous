@@ -1,5 +1,5 @@
 export module main;
-import boost.stacktrace;
+import std;
 
 export int main ( )
 {

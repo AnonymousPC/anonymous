@@ -52,7 +52,7 @@ elif compiler == "clang++":
         "-Wall", 
         "-fdiagnostics-color=always",
         "-fprebuilt-module-path=./bin/module",
-        "-Wno-reserved-module-identifier"
+        "-Wno-reserved-module-identifier",
     ]
     if config == "debug":
         compile_args.append("-O0")
@@ -88,19 +88,13 @@ define_args = {
 }
 
 
-class Error(Exception):
-    def __init__(self, message, prefix=""):
-        if type(message) == str:
-            self.message = message
-            self.prefix = prefix
-        elif type(message) == Error:
-            self.message = message.message
-            self.prefix = f"{prefix}\n{message.prefix}"
-        else:
-            assert False
 
-    def __str__(self):
-        return f"{self.prefix}\n{self.message}"
+
+
+# Command
+
+class Error(Exception):
+    pass
 
 def preprocess(source_path):
     if compiler == "g++" or compiler == "clang++":    
@@ -158,7 +152,7 @@ def compile(source_path, module_path, object_path):
             print(output.stderr, end="", file=sys.stderr)       
         except subprocess.CalledProcessError as e:
             raise Error(e.stderr)
-
+        
 def link(object_dir, exe_path):
     if compiler == "g++" or compiler == "clang++":
         commands = [f"{compiler} "
@@ -178,6 +172,12 @@ def link(object_dir, exe_path):
         
 
 
+
+
+
+
+
+
 # Module
 
 class Module:
@@ -185,18 +185,15 @@ class Module:
     current = 1
     total = 0
 
-    def __init__(self, export, required_by=[]):
-        self.export      = export
-        self.source_path = f"./include/{export.replace('.', '/')}.cpp"
-        self.module_path = f"./bin/module/{export}{module_suffix}"
-        self.object_path = f"./bin/module/{export}{object_suffix}"
-        self.required_by = required_by
+    def __init__(self, export, from_modules=[]):
+        self.export       = export
+        self.source_path  = f"./include/{export.replace('.', '/')}.cpp"
+        self.module_path  = f"./bin/module/{export}{module_suffix}"
+        self.object_path  = f"./bin/module/{export}{object_suffix}"
+        self.from_modules = from_modules
         
         content = preprocess(self.source_path)
-        try:
-            self.import_modules = [self.get_module(import_str) for import_str in re.findall(r'\bimport\s+([\w\.:]+)\s*;', content, re.MULTILINE)]
-        except Error as e:
-            raise Error(e, prefix=f"In module imported from {self.export}:")
+        self.import_modules = [self.get_module(import_str) for import_str in re.findall(r'\bimport\s+([\w\.:]+)\s*;', content, re.MULTILINE)]
         self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.module_path) and os.path.getmtime(self.source_path) <= os.path.getmtime(self.module_path)
         if not self.is_built:
             Module.total += 1
@@ -208,14 +205,14 @@ class Module:
     def build(self):
         for import_module in self.import_modules:
             if not import_module.is_built:
-                try:
-                    import_module.build()
-                except Error as e:
-                    raise Error(e, prefix=f"In module imported from {self.export}:")
+                import_module.build()
             
         if not self.is_built:
             print(f"build module [{Module.current}/{Module.total}]: {self.export}")
-            compile(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
+            try:
+                compile(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
+            except Error as e:
+                raise Error('\n'.join([f"In module imported from {from_module}:" for from_module in self.from_modules] + [f"{e}"]))
             self.is_built = True
             Module.current += 1
 
@@ -224,8 +221,8 @@ class Module:
             if module.export == import_str:
                 return module
             
-        if not import_str in self.required_by:
-            module = Module(import_str, self.required_by + [self.export])
+        if not import_str in self.from_modules:
+            module = Module(import_str, self.from_modules + [self.export])
             Module.modules.append(module)
             return module
         else:
@@ -238,6 +235,11 @@ class Object:
     def build(self):
         link(object_dir="./bin/module", exe_path=f"./bin/main{executable_suffix}")
     
+
+
+
+
+
 
 
 

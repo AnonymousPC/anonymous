@@ -112,7 +112,7 @@ def preprocess(source_path):
             reader = re.sub(r'^\s*#\s*include.*$', "", reader, flags=re.MULTILINE)
             return subprocess.run(command, shell=True, capture_output=True, check=True, text=True, input=reader).stdout
         except FileNotFoundError as e:
-            raise Error(e.filename)
+            raise Error(f"fatal error: {e.filename} not found")
         except subprocess.CalledProcessError as e:
             raise Error(e.stderr)
 
@@ -153,12 +153,12 @@ def compile(source_path, module_path, object_path):
         except subprocess.CalledProcessError as e:
             raise Error(e.stderr)
         
-def link(object_dir, exe_path):
+def link(object_dir, executable_path):
     if compiler == "g++" or compiler == "clang++":
         commands = [f"{compiler} "
                     f"{' '.join(link_args)} "
                     f"{object_dir}/*.o "
-                    f"-o {exe_path}"]
+                    f"-o {executable_path}"]
     elif compiler == "cl":
         commands = ["echo what??"]
 
@@ -185,38 +185,39 @@ class Module:
     current = 1
     total = 0
 
-    def __init__(self, export, from_modules=[]):
-        self.export       = export
-        self.source_path  = f"./include/{export.replace('.', '/')}.cpp"
-        self.module_path  = f"./bin/module/{export}{module_suffix}"
-        self.object_path  = f"./bin/module/{export}{object_suffix}"
-        self.from_modules = from_modules
-        
-        content = preprocess(self.source_path)
-        self.import_modules = [self.get_module(import_str) for import_str in re.findall(r'\bimport\s+([\w\.:]+)\s*;', content, re.MULTILINE)]
-        self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.module_path) and os.path.getmtime(self.source_path) <= os.path.getmtime(self.module_path)
-        if not self.is_built:
-            Module.total += 1
+    def __init__(self, export, from_modules=[]):        
+        try:
+            self.export       = export
+            self.source_path  = f"./include/{export.replace('.', '/')}.cpp"
+            self.module_path  = f"./bin/module/{export}{module_suffix}"
+            self.object_path  = f"./bin/module/{export}{object_suffix}"
+            self.from_modules = from_modules
 
-        export_strs = re.findall(r'\bexport\s+module\s+([\w\.:]+)\s*;', content, re.MULTILINE)
-        if len(export_strs) != 1 or export_strs[0] != self.export:
-            raise Error(f"fatal error: file {self.source_path} should export module {self.export}")
+            content = preprocess(self.source_path)
+            self.import_modules = [self._get_module(import_str) for import_str in re.findall(r'\bimport\s+([\w\.:]+)\s*(?:\[\[.*\]\]\s*)?;', content, flags=re.DOTALL)]
+            self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.module_path) and os.path.getmtime(self.source_path) <= os.path.getmtime(self.module_path)
+            if not self.is_built:
+                Module.total += 1
+            export_strs = re.findall(r'\bexport\s+module\s+([\w\.:]+)\s*(?:\[\[.*\]\]\s*)?;', content, flags=re.DOTALL)
+            if len(export_strs) != 1 or export_strs[0] != self.export:
+                raise Error(f"fatal error: file {self.source_path} should export module {self.export}")
+        except Error as e:
+            raise Error(f"In module imported from {self.export}:\n{e}")
 
     def build(self):
-        for import_module in self.import_modules:
-            if not import_module.is_built:
-                import_module.build()
-            
-        if not self.is_built:
-            print(f"build module [{Module.current}/{Module.total}]: {self.export}")
-            try:
+        try:
+            for import_module in self.import_modules:
+                if not import_module.is_built:
+                    import_module.build()
+            if not self.is_built:
+                print(f"build module [{Module.current}/{Module.total}]: {self.export}")
                 compile(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
-            except Error as e:
-                raise Error('\n'.join([f"In module imported from {from_module}:" for from_module in self.from_modules] + [f"{e}"]))
-            self.is_built = True
-            Module.current += 1
+                self.is_built = True
+                Module.current += 1
+        except Error as e:
+            raise Error(f"In module imported from {self.export}:\n{e}")
 
-    def get_module(self, import_str):
+    def _get_module(self, import_str):
         for module in Module.modules:
             if module.export == import_str:
                 return module
@@ -226,18 +227,7 @@ class Module:
             Module.modules.append(module)
             return module
         else:
-            raise Error(f"fatal error: dependency circle detected when importing {import_str}")
-    
-class Object:
-    def __init__(self, export):
-        pass
-
-    def build(self):
-        link(object_dir="./bin/module", exe_path=f"./bin/main{executable_suffix}")
-    
-
-
-
+            raise Error(f"fatal error: dependency circle detected when trying to import module {import_str}")
 
 
 
@@ -251,7 +241,7 @@ if __name__ == "__main__":
         if len(sys.argv) == 2 and sys.argv[1] in ["debug", "release", "clean"]:
             config = sys.argv[1]
         else:
-            raise Error("fatal error: python build.py debug|release|clean")
+            raise Error("fatal error: python build.py (debug|release|clean)")
 
         # Clear error outputs
         open("./bin/log.txt", 'w').write("")
@@ -259,12 +249,12 @@ if __name__ == "__main__":
         # Build
         if config == "debug" or config == "release":
             Module("main").build()
-            Object("main").build()
+            link(object_dir="./bin/module", executable_path=f"./bin/main{executable_suffix}")
         
         # Clean
         elif config == "clean":
             for file in os.listdir("./bin/module"):
-                if file.endswith(module_suffix) or file.endswith(object_suffix) or (executable_suffix != "" and file.endswith(executable_suffix)):
+                if file != ".gitignore":
                     os.remove(f"./bin/module/{file}")
     
     except Error as e:

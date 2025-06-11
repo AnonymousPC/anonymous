@@ -3,11 +3,11 @@ module;
 
 export module hwloc 
 #ifdef _WIN32
-    [[cmake("mkdir build", "cd build", "cmake ..", "cmake --build .")]]
+    [[cmake("lib/git/hwloc/contrib/windows-cmake")]]
 #elif defined(__linux__) or defined(__MACH__)
-    [[make("sh autogen.sh", "sh configure", "make")]]
+    [[autogen("lib/git/hwloc"), configure("lib/git/hwloc"), make("lib/git/hwloc")]]
 #endif
-;
+    [[cp("<hwloc/autogen/config.h>")]];
 
 export
 {

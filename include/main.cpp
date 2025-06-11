@@ -1,5 +1,5 @@
 export module main;
-import std;
+import jpeg;
 
 export int main ( )
 {

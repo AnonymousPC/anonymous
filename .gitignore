@@ -1,0 +1,3 @@
+bin/cmake/*
+bin/module/*
+lib/include/*

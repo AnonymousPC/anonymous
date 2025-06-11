@@ -44,8 +44,9 @@ if compiler == "g++":
         compile_args.append("-O3")
         compile_args.append("-DNDEBUG")
     link_args = ["-fdiagnostics-color=always"]
-    module_suffix = ".gcm"
-    object_suffix = ".o"
+    module_suffix  = ".gcm"
+    object_suffix  = ".o"
+    library_suffix = ".a"
 elif compiler == "clang++":
     compile_args = [
         "-std=c++26", 
@@ -62,8 +63,9 @@ elif compiler == "clang++":
         compile_args.append("-O3")
         compile_args.append("-DNDEBUG")
     link_args = ["-fdiagnostics-color=always"]
-    module_suffix = ".pcm"
-    object_suffix = ".o"
+    module_suffix  = ".pcm"
+    object_suffix  = ".o"
+    library_suffix = ".a"
 elif compiler == "cl":
     compile_args = [
         "/std:c++latest",
@@ -76,10 +78,10 @@ elif compiler == "cl":
     elif config == "release":
         compile_args.append("/O2")
         compile_args.append("/DNDEBUG")
-
     link_args = []
-    module_suffix = ".ifc"
-    object_suffix = ".obj"
+    module_suffix  = ".ifc"
+    object_suffix  = ".obj"
+    library_suffix = ".lib"
 
 define_args = {
     "abstract": '0', 
@@ -182,6 +184,9 @@ def cmake(module, dir):
         subprocess.run(f"cmake -S {dir} -B ./bin/cmake/{module}-build",                                     shell=True, capture_output=True, check=True, text=True)
         subprocess.run(f"cmake --build   ./bin/cmake/{module}-build",                                       shell=True, capture_output=True, check=True, text=True)
         subprocess.run(f"cmake --install ./bin/cmake/{module}-build --prefix=./bin/cmake/{module}-install", shell=True, capture_output=True, check=True, text=True)
+        for file in os.listdir(f"./bin/cmake/{module}-install"):
+            if file.endswith(library_suffix):
+                shutil.copyfile(f"./bin/cmake/{module}-install/{file}", f"./bin/module/{file}")
     except subprocess.CalledProcessError as e:
         raise Error(e.stderr)
         
@@ -279,37 +284,37 @@ class Module:
             raise Error(f"fatal error: file {self.source_path} should export module {self.export}")
 
     def _run_attribute(self):
-        re_attr_key        = r'(?:[\w:]+)'                                             # cmake || gnu::always_inline
-        re_attr_value      = r'(?:".*?")'                                              # "./CMakeLists.txt"
-        re_attr_value_list = rf'(?:{re_attr_value}?(?:\s*,\s*{re_attr_value})*)'       # "./dir1/CMakeLists.txt", "./dir2/CMakeLists.txt"
-        re_attr            = rf'({re_attr_key}(?:\s*\(\s*{re_attr_value_list}\s*\))?)' # cmake || cmake("./CMakeLists.txt")
-        re_attr_list       = rf'(?:{re_attr}?(?:\s*,\s*{re_attr})*)'                   # cmake, autogen, configure
-        re_attr_quote      = rf'(?:\[\[\s*{re_attr_list}\s*\]\])'                      # [[cmake, autogen, configure]]
-        re_attr_quote_list = rf'(?:{re_attr_quote}?(?:\s*{re_attr_quote})*)'           # [[cmake, autogen, configuree]] [[makefile]] [[other]]
+        regex_attr_name   = rf'(?:[\w:]+)'                                               # cmake || gnu::always_inline
+        regex_attr_arg    = rf'(?:".*?")'                                                # "./dir"
+        regex_attr_args   = rf'(?:{regex_attr_arg}?(?:\s*,\s*{regex_attr_arg})*)'        # "./dir1", "./dir2"
+        regex_attr        = rf'(?:{regex_attr_name}(?:\s*\(\s*{regex_attr_args}\s*\))?)' # cmake || cmake("./dir")
+        regex_attrs       = rf'(?:{regex_attr}?(?:\s*,\s*{regex_attr})*)'                # cmake, autogen, configure
+        regex_attr_quote  = rf'(?:\[\[\s*{regex_attrs}\s*\]\])'                          # [[cmake, autogen, configure]]
+  
+        match_attr_name   = rf'([\w:]+)'
+        match_attr_arg    = rf'(".*?")'
+        match_attr        = rf'({regex_attr_name}(?:\s*\(\s*{regex_attr_args}\s*\))?)'
+        match_attr_quote  = rf'(\[\[\s*{regex_attrs}\s*\]\])'
 
-        for attributes in re.findall(re_attr_quote, self.content, flags=re.DOTALL): # Not to make match results overwritten in (attr_quote_list)*
-            for attribute in attributes:
-                if attribute != "":
-                    args = re.findall(r'"(.*?)"', attribute)
-                    if attribute.startswith("cmake"):
-                        if len(args) != 1:
-                            raise Error('error: module attribute [[cmake]] accepts 1 argument')
+
+        for attr_quote in re.findall(match_attr_quote, self.content, flags=re.DOTALL):
+            for attr   in re.findall(match_attr,       attr_quote,   flags=re.DOTALL):
+                name =    re.findall(match_attr_name,  attr,         flags=re.DOTALL)[0]
+                args =    re.findall(match_attr_arg,   attr,         flags=re.DOTALL)
+                print(name, args)
+                if attr != "":
+                    if len(args) != 1:
+                        raise Error(f"error: module attribute [[{name}]] accepts 1 argument")
+                    
+                    if name == "cmake":
                         cmake(module=self.export, dir=args[0])
-                    elif attribute.startswith("autogen"):
-                        if len(args) != 1:
-                            raise Error('error: module attribute [[autogen]] accepts 1 argument')
+                    elif name == autogen:
                         autogen(dir=args[0])
-                    elif attribute.startswith("configure"):
-                        if len(args) != 1:
-                            raise Error('error: module attribute [[configure]] accepts 1 argument')
+                    elif name == configure:
                         configure(dir=args[0])
-                    elif attribute.startswith("make"):
-                        if len(args) != 1:
-                            raise Error('error: module attribute [[make]] accepts 1 argument')
+                    elif name == make:
                         make(dir=args[0])
-                    elif attribute.startswith("cp"):
-                        if len(args) != 1:
-                            raise Error('error: module attribute [[cp]] accepts 1 argument')
+                    elif name == cp:
                         cp(module=self.export, file=args[0])
 
         

@@ -1,0 +1,8 @@
+In module imported from main:
+In module imported from png:
+In file included from ./include/png.cpp:3:
+[1m./lib/include/png.h:333:12: [0m[0;1;31mfatal error: [0m[1m'pngconf.h' file not found[0m
+  333 | #  include [0;32m"pngconf.h"[0m
+      | [0;1;32m           ^~~~~~~~~~~
+[0m1 error generated.
+

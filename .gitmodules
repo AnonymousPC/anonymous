@@ -42,3 +42,6 @@
 [submodule "lib/git/zstd"]
 	path = lib/git/zstd
 	url = https://github.com/facebook/zstd
+[submodule "lib/git/openssl"]
+	path = lib/git/openssl
+	url = https://github.com/openssl/openssl

@@ -273,10 +273,12 @@ class Module:
                         self._cmake_directory(dir =attr_vals[0], args=attr_vals[1:])
                     elif attr_key == "anonymous::make_directory":
                         self._make_directory (dir =attr_vals[0], args=attr_vals[1:])
-                    elif attr_key == "anonymous::shell_configure":
-                        self._shell_configure(file=attr_vals[0], args=attr_vals[1:])
-                    elif attr_key == "anonymous::perl_configure":
-                        self._perl_configure (file=attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::autogen_file":
+                        self._autogen_file   (file=attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::configure_file":
+                        self._configure_file (file=attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::perl_file":
+                        self._perl_file      (file=attr_vals[0], args=attr_vals[1:])
                     elif attr_key == "anonymous::update_header":
                         self._update_header  (file=attr_vals[0], args=attr_vals[1:])
                     elif attr_key == "anonymous::update_library":
@@ -326,17 +328,20 @@ class Module:
             os.mkdir(f"./bin/{type}/cmake/{self.export}-install")
         except:
             pass
-        self._run_subbuild(f"make BUILD_TYPE={type.capitalize()}", cwd=f"./bin/{type}/cmake/{self.export}-build")
-        self._run_subbuild(f"make install",                        cwd=f"./bin/{type}/cmake/{self.export}-build")
+        self._run_subbuild(f"make",         cwd=f"./bin/{type}/cmake/{self.export}-build")
+        self._run_subbuild(f"make install", cwd=f"./bin/{type}/cmake/{self.export}-build")
 
-    def _shell_configure(self, file, args):
+    def _autogen_file(self, file, args):
+        self._run_subbuild(f"sh ./autogen.sh", cwd=file.rpartition('/')[0])
+
+    def _configure_file(self, file, args):
         try:
             os.mkdir(f"./bin/{type}/cmake/{self.export}-build")
         except:
             pass
-        self._run_subbuild(f"{os.path.abspath(file)} --prefix={os.path.abspath(f"./bin/{type}/cmake/{self.export}-install")}", cwd=f"./bin/{type}/cmake/{self.export}-build")
+        self._run_subbuild(f"sh {os.path.abspath(file)} --prefix={os.path.abspath(f"./bin/{type}/cmake/{self.export}-install")}", cwd=f"./bin/{type}/cmake/{self.export}-build")
     
-    def _perl_configure(self, file, args):
+    def _perl_file(self, file, args):
         try:
             os.mkdir(f"./bin/{type}/cmake/{self.export}-build")
         except:

@@ -3,11 +3,7 @@ module;
 #include <openssl/ssl.h>
 
 export module openssl
-#ifdef _WIN32
-    [[anonymous::perl_configure("lib/git/openssl/Configure")]]
-    [[anonymous::fixme, nmake]]
-#elif defined(__linux__) or defined(__MACH__)
-    [[anonymous::perl_configure("lib/git/openssl/Configure")]]
+    [[anonymous::perl_file     ("lib/git/openssl/Configure")]]
     [[anonymous::make_directory("lib/git/openssl"          )]]
     [[anonymous::update_header ("<openssl/asn1.h>"         )]]
     [[anonymous::update_header ("<openssl/bio.h>"          )]]
@@ -25,4 +21,4 @@ export module openssl
     [[anonymous::update_header ("<openssl/x509_vfy.h>"     )]]
     [[anonymous::update_library("libssl"                   )]]
     [[anonymous::update_library("libcrypto"                )]];
-#endif
+import zlib;

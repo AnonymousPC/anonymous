@@ -2,78 +2,67 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "debug.build",
-            "detail": "debug.build",
+            "label": "debug.clean",
             "group": "none",
             "type": "shell",
-            "command": "python bin/build.py debug"
+            "problemMatcher": [],
+            "command": "python bin/build.py --type=debug --clean"
+        },
+        {
+            "label": "debug.build",
+            "group": "none",
+            "type": "shell",
+            "problemMatcher": [],
+            "command": "python bin/build.py --type=debug"
         },
         {
             "label": "debug.run",
-            "detail": "debug.run",
             "group": "test",
             "type": "shell",
-            "windows": { 
-                "command": "bin\\main.exe"
-            },
-            "linux": {
-                "command": "bin/main"
-            },
-            "osx": {
-                "command": "bin/main"
-            }
+            "problemMatcher": [],
+            "command": "./bin/main"
         },
         {
             "label": "debug",
-            "detail": "debug",
             "group": "build",
             "type": "shell",
+            "problemMatcher": [],
             "dependsOn": ["debug.build", "debug.run"],
             "dependsOrder": "sequence",
         },
 
 
 
+
         {
-            "label": "release.build",
-            "detail": "release.build",
+            "label": "release.clean",
             "group": "none",
             "type": "shell",
-            "command": "python bin/build.py release"
+            "problemMatcher": [],
+            "command": "python bin/build.py --type=release --clean"
+        },
+        {
+            "label": "release.build",
+            "group": "none",
+            "type": "shell",
+            "problemMatcher": [],
+            "command": "python bin/build.py --type=release"
         },
         {
             "label": "release.run",
-            "detail": "release.run",
             "group": "test",
             "type": "shell",
-            "windows": { 
-                "command": "bin\\main.exe"
-            },
-            "linux": {
-                "command": "bin/main"
-            },
-            "osx": {
-                "command": "bin/main"
-            }
+            "problemMatcher": [],
+            "command": "./bin/main"
         },
         {
             "label": "release",
-            "detail": "release",
             "group": "build",
             "type": "shell",
+            "problemMatcher": [],
             "dependsOn": ["release.build", "release.run"],
             "dependsOrder": "sequence",
         },
-
-
-
-        {
-            "label": "clean",
-            "detail": "clean",
-            "group": "build",
-            "type": "shell",
-            "command": "python bin/build.py clean"
-        }
 
     ]
 }

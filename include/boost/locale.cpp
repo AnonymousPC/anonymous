@@ -56,6 +56,7 @@ module;
 
 export module boost.locale;
 import std;
+import icu;
 
 namespace boost::locale
 {

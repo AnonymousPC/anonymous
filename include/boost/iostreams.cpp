@@ -17,6 +17,9 @@ module;
 
 export module boost.iostreams;
 import std;
+import bzip2;
+import zlib;
+import zstd;
 
 namespace boost::iostreams
 {

@@ -1,3 +1,5 @@
-bin/cmake/*
-bin/module/*
+bin/debug/cmake/*
+bin/debug/module/*
+bin/release/cmake/*
+bin/release/module/*
 lib/include/*

@@ -1,6 +1,5 @@
 import os
 import shutil
-from build import *
 
 # Environment
 os.chdir(f"{os.path.dirname(__file__)}/..")
@@ -19,12 +18,20 @@ open("./lib/include/.gitignore", 'w').write("*\n!.gitignore")
 
 
 # Copy
-for lib in os.listdir  ( "./lib/git/boost/libs"):
-    if os.path.isdir   (f"./lib/git/boost/libs/{lib}/include/boost"):
-        shutil.copytree(f"./lib/git/boost/libs/{lib}/include/boost", f"./lib/include/boost",           dirs_exist_ok=True)
-    if os.path.isdir   (f"./lib/git/boost/libs/{lib}/src"):
-        shutil.copytree(f"./lib/git/boost/libs/{lib}/src",           f"./lib/include/boost/{lib}/src", dirs_exist_ok=True)
-
+for lib in os.listdir              (f"./lib/git/boost/libs"):
+    if os.path.isdir               (f"./lib/git/boost/libs/{lib}"):
+        if os.path.isdir           (f"./lib/git/boost/libs/{lib}/include/boost"):
+            shutil.copytree        (f"./lib/git/boost/libs/{lib}/include/boost",       f"./lib/include/boost",                 dirs_exist_ok=True)
+        else:
+            for sub in os.listdir  (f"./lib/git/boost/libs/{lib}"):
+                if os.path.isdir   (f"./lib/git/boost/libs/{lib}/{sub}/include/boost"):
+                    shutil.copytree(f"./lib/git/boost/libs/{lib}/{sub}/include/boost", f"./lib/include/boost",                 dirs_exist_ok=True)
+        if os.path.isdir           (f"./lib/git/boost/libs/{lib}/src"):
+            shutil.copytree        (f"./lib/git/boost/libs/{lib}/src",                 f"./lib/include/boost/{lib}/src",       dirs_exist_ok=True)
+        else:
+            for sub in os.listdir  (f"./lib/git/boost/libs/{lib}"):
+                if os.path.isdir   (f"./lib/git/boost/libs/{lib}/{sub}/src"):
+                    shutil.copytree(f"./lib/git/boost/libs/{lib}/{sub}/src",           f"./lib/include/boost/{lib}/{sub}/src", dirs_exist_ok=True)
 shutil.copyfile("./lib/git/bzip2/bzlib.h",                   "./lib/include/bzlib.h"                                    )
 shutil.copytree("./lib/git/cccl/libcudacxx/include/cuda",    "./lib/include/cuda",                    dirs_exist_ok=True)
 shutil.copytree("./lib/git/cccl/libcudacxx/include/nv",      "./lib/include/nv",                      dirs_exist_ok=True)
@@ -44,6 +51,8 @@ shutil.copytree("./lib/git/oneTBB/src/tbb",                  "./lib/include/tbb/
 shutil.copytree("./lib/git/oneTBB/src/tbbbind",              "./lib/include/tbb/src/tbbbind",         dirs_exist_ok=True)
 shutil.copytree("./lib/git/oneTBB/src/tbbmalloc",            "./lib/include/tbb/src/tbbmalloc",       dirs_exist_ok=True)
 shutil.copytree("./lib/git/oneTBB/src/tbbmalloc_proxy",      "./lib/include/tbb/src/tbbmalloc_proxy", dirs_exist_ok=True)
+shutil.copytree("./lib/git/openssl/include/crypto",          "./lib/include/crypto",                  dirs_exist_ok=True)
+shutil.copytree("./lib/git/openssl/include/openssl",         "./lib/include/openssl",                 dirs_exist_ok=True)
 shutil.copyfile("./lib/git/plf_hive/plf_hive.h",             "./lib/include/plf_hive.h"                                 )
 shutil.copytree("./lib/git/stdexec/include/asioexec",        "./lib/include/asioexec",                dirs_exist_ok=True)
 shutil.copytree("./lib/git/stdexec/include/exec",            "./lib/include/exec",                    dirs_exist_ok=True)

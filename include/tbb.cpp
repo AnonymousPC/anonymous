@@ -57,7 +57,7 @@ module;
 #include <tbb/src/tbb/misc.cpp> // Include last
 
 export module tbb;
-import std.compiler; // This library might be depended by stdexec, which might be depended by std.sender.
+import std;
 import hwloc;
 
 namespace tbb

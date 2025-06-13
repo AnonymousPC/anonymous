@@ -2,24 +2,15 @@
 [submodule "lib/git/boost"]
 	path = lib/git/boost
 	url = https://github.com/boostorg/boost
+[submodule "lib/git/bzip2"]
+	path = lib/git/bzip2
+	url = https://gitlab.com/bzip2/bzip2
 [submodule "lib/git/cccl"]
 	path = lib/git/cccl
 	url = https://github.com/NVIDIA/cccl
 [submodule "lib/git/eigen"]
 	path = lib/git/eigen
 	url = https://gitlab.com/libeigen/eigen
-[submodule "lib/git/oneTBB"]
-	path = lib/git/oneTBB
-	url = https://github.com/uxlfoundation/oneTBB
-[submodule "lib/git/plf_hive"]
-	path = lib/git/plf_hive
-	url = https://github.com/mattreecebentley/plf_hive
-[submodule "lib/git/stdexec"]
-	path = lib/git/stdexec
-	url = https://github.com/NVIDIA/stdexec
-[submodule "lib/git/bzip2"]
-	path = lib/git/bzip2
-	url = https://gitlab.com/bzip2/bzip2
 [submodule "lib/git/hwloc"]
 	path = lib/git/hwloc
 	url = https://github.com/open-mpi/hwloc
@@ -36,12 +27,22 @@
 [submodule "lib/git/libtiff"]
 	path = lib/git/libtiff
 	url = https://gitlab.com/libtiff/libtiff
+[submodule "lib/git/oneTBB"]
+	path = lib/git/oneTBB
+	url = https://github.com/uxlfoundation/oneTBB
+[submodule "lib/git/openssl"]
+	path = lib/git/openssl
+	url = https://github.com/openssl/openssl
+[submodule "lib/git/plf_hive"]
+	path = lib/git/plf_hive
+	url = https://github.com/mattreecebentley/plf_hive
+[submodule "lib/git/stdexec"]
+	path = lib/git/stdexec
+	url = https://github.com/NVIDIA/stdexec
 [submodule "lib/git/zlib"]
 	path = lib/git/zlib
 	url = https://github.com/madler/zlib
 [submodule "lib/git/zstd"]
 	path = lib/git/zstd
 	url = https://github.com/facebook/zstd
-[submodule "lib/git/openssl"]
-	path = lib/git/openssl
-	url = https://github.com/openssl/openssl
+

@@ -1,0 +1,150 @@
+Entering 'lib/git/boost'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/boost
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/bzip2'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/bzip2
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/cccl'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/cccl
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/eigen'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/eigen
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/hwloc'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/hwloc
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/icu'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/icu
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/libjpeg-turbo'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/libjpeg-turbo
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/libpng'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/libpng
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/libtiff'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/libtiff
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/oneTBB'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/oneTBB
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/openssl'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/openssl
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   cloudflare-quiche (new commits)
+	modified:   gost-engine (new commits, modified content)
+	modified:   krb5 (new commits)
+	modified:   oqs-provider (new commits)
+	modified:   pkcs11-provider (new commits)
+	modified:   pyca-cryptography (new commits)
+	modified:   python-ecdsa (new commits)
+	modified:   tlsfuzzer (new commits)
+	modified:   tlslite-ng (new commits)
+	modified:   wycheproof (new commits)
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Entering 'lib/git/plf_hive'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/plf_hive
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/stdexec'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/stdexec
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/zlib'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/zlib
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+Entering 'lib/git/zstd'
+
+
+
+/Users/anonymous/Code/anonymous/lib/git/zstd
+On branch dev
+Your branch is up to date with 'origin/dev'.
+
+nothing to commit, working tree clean

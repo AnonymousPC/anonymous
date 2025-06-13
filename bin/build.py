@@ -1,14 +1,22 @@
+import argparse
 import os
 import re
 import shutil
 import subprocess
 import sys
+import threading
+
+# Environment
+os.chdir(f"{os.path.dirname(__file__)}/..")
+
+
+
 
 
 
 # Config
 
-config = "debug"
+type = "debug"
 
 
 
@@ -34,13 +42,14 @@ if compiler == "g++":
         "-g",
         "-Wall", 
         "-fdiagnostics-color=always",
-        "-fmodules"
-        "-Wno-reserved-module-identifier"
+        "-fmodules",
+        "-Wno-reserved-module-identifier",
+        "-Wno-unknown-attributes"
     ]
-    if config == "debug":
+    if type == "debug":
         compile_args.append("-O0")
         compile_args.append("-fno-inline")
-    elif config == "release":
+    elif type == "release":
         compile_args.append("-O3")
         compile_args.append("-DNDEBUG")
     link_args = ["-fdiagnostics-color=always"]
@@ -53,13 +62,14 @@ elif compiler == "clang++":
         "-g", 
         "-Wall", 
         "-fdiagnostics-color=always",
-        "-fprebuilt-module-path=./bin/module",
+       f"-fprebuilt-module-path=./bin/{type}/module",
         "-Wno-reserved-module-identifier",
+        "-Wno-unknown-attributes"
     ]
-    if config == "debug":
+    if type == "debug":
         compile_args.append("-O0")
         compile_args.append("-fno-inline")
-    elif config == "release":
+    elif type == "release":
         compile_args.append("-O3")
         compile_args.append("-DNDEBUG")
     link_args = ["-fdiagnostics-color=always"]
@@ -73,9 +83,9 @@ elif compiler == "cl":
         "/Z7",
         "/W4"
     ]
-    if config == "debug":
+    if type == "debug":
         compile_args.append("/Od")
-    elif config == "release":
+    elif type == "release":
         compile_args.append("/O2")
         compile_args.append("/DNDEBUG")
     link_args = []
@@ -156,11 +166,12 @@ def compile(source_path, module_path, object_path):
         except subprocess.CalledProcessError as e:
             raise Error(e.stderr)
         
-def link(object_dir, executable_path):
+def link(executable_path):
     if compiler == "g++" or compiler == "clang++":
         commands = [f"{compiler} "
                     f"{' '.join(link_args)} "
-                    f"{object_dir}/*.o "
+                    f"./bin/{type}/module/*{object_suffix} "
+                    f"./bin/{type}/module/*{library_suffix} "
                     f"-o {executable_path}"]
     elif compiler == "cl":
         commands = ["echo what??"]
@@ -173,51 +184,8 @@ def link(object_dir, executable_path):
         except subprocess.CalledProcessError as e:
             raise Error(e.stderr)
         
-def cmake(module, dir):
-    try:
-        os.mkdir(f"./bin/cmake/{module}-build")
-        os.mkdir(f"./bin/cmake/{module}-install")
-    except:
-        pass
-    
-    try:
-        subprocess.run(f"cmake -S {dir} -B ./bin/cmake/{module}-build",                                     shell=True, capture_output=True, check=True, text=True)
-        subprocess.run(f"cmake --build   ./bin/cmake/{module}-build",                                       shell=True, capture_output=True, check=True, text=True)
-        subprocess.run(f"cmake --install ./bin/cmake/{module}-build --prefix=./bin/cmake/{module}-install", shell=True, capture_output=True, check=True, text=True)
-        for file in os.listdir(f"./bin/cmake/{module}-install"):
-            if file.endswith(library_suffix):
-                shutil.copyfile(f"./bin/cmake/{module}-install/{file}", f"./bin/module/{file}")
-    except subprocess.CalledProcessError as e:
-        raise Error(e.stderr)
-        
-def autogen(dir):
-    try:
-        subprocess.run("./autogen.sh", shell=True, cwd=dir, capture_output=True, check=True, text=True)
-    except subprocess.CalledProcessError as e:
-        raise Error(e.stderr)
-    
-def configure(dir):
-    try:
-        subprocess.run("./configure", shell=True, cwd=dir, capture_output=True, check=True, text=True)
-    except subprocess.CalledProcessError as e:
-        raise Error(e.stderr)
-    
-def make(dir):
-    try:
-        subprocess.run("make", shell=True, cwd=dir, capture_output=True, check=True, text=True)
-    except subprocess.CalledProcessError as e:
-        raise Error(e.stderr)
-    
-def cp(module, file):
-    file = file.strip("<>")
-    try:
-        shutil.copyfile(f"./bin/cmake/{module}-install/include/{file}", f"./lib/include/{file}")
-    except Exception as e:
-        raise Error(f"{e}")
-    
 
     
-
 
 
 
@@ -236,8 +204,8 @@ class Module:
         try:
             self.export         = export
             self.source_path    = f"./include/{export.replace('.', '/')}.cpp"
-            self.module_path    = f"./bin/module/{export}{module_suffix}"
-            self.object_path    = f"./bin/module/{export}{object_suffix}"
+            self.module_path    = f"./bin/{type}/module/{export}{module_suffix}"
+            self.object_path    = f"./bin/{type}/module/{export}{object_suffix}"
             self.from_modules   = from_modules
 
             self.content        = preprocess(self.source_path)
@@ -252,17 +220,17 @@ class Module:
         except Error as e:
             raise Error(f"In module imported from {self.export}:\n{e}")
 
-    def build(self):
+    def compile(self):
         try:
             for import_module in self.import_modules:
                 if not import_module.is_built:
-                    import_module.build()
+                    import_module.compile()
             if not self.is_built:
-                print(f"build module [{Module.current}/{Module.total}]: {self.export}")
-                self._run_attribute()
-                compile(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
-                self.is_built = True
-                Module.current += 1
+                with Logger().prefix(f"compile module [{Module.current}/{Module.total}]: {self.export}") as self.logger:
+                    self._run_attribute()
+                    compile(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
+                    self.is_built = True
+                    Module.current += 1
         except Error as e:
             raise Error(f"In module imported from {self.export}:\n{e}")
 
@@ -285,38 +253,138 @@ class Module:
 
     def _run_attribute(self):
         regex_attr_name   = rf'(?:[\w:]+)'                                               # cmake || gnu::always_inline
-        regex_attr_arg    = rf'(?:".*?")'                                                # "./dir"
-        regex_attr_args   = rf'(?:{regex_attr_arg}?(?:\s*,\s*{regex_attr_arg})*)'        # "./dir1", "./dir2"
-        regex_attr        = rf'(?:{regex_attr_name}(?:\s*\(\s*{regex_attr_args}\s*\))?)' # cmake || cmake("./dir")
+        regex_attr_val    = rf'(?:".*?")'                                                # "./dir"
+        regex_attr_vals   = rf'(?:{regex_attr_val}?(?:\s*,\s*{regex_attr_val})*)'        # "./dir1", "./dir2"
+        regex_attr        = rf'(?:{regex_attr_name}(?:\s*\(\s*{regex_attr_vals}\s*\))?)' # cmake || cmake("./dir")
         regex_attrs       = rf'(?:{regex_attr}?(?:\s*,\s*{regex_attr})*)'                # cmake, autogen, configure
         regex_attr_quote  = rf'(?:\[\[\s*{regex_attrs}\s*\]\])'                          # [[cmake, autogen, configure]]
   
         match_attr_name   = rf'([\w:]+)'
-        match_attr_arg    = rf'(".*?")'
-        match_attr        = rf'({regex_attr_name}(?:\s*\(\s*{regex_attr_args}\s*\))?)'
+        match_attr_val    = rf'"(.*?)"'
+        match_attr        = rf'({regex_attr_name}(?:\s*\(\s*{regex_attr_vals}\s*\))?)'
         match_attr_quote  = rf'(\[\[\s*{regex_attrs}\s*\]\])'
 
-
-        for attr_quote in re.findall(match_attr_quote, self.content, flags=re.DOTALL):
-            for attr   in re.findall(match_attr,       attr_quote,   flags=re.DOTALL):
-                name =    re.findall(match_attr_name,  attr,         flags=re.DOTALL)[0]
-                args =    re.findall(match_attr_arg,   attr,         flags=re.DOTALL)
-                print(name, args)
-                if attr != "":
-                    if len(args) != 1:
-                        raise Error(f"error: module attribute [[{name}]] accepts 1 argument")
+        for attr_quote in   re.findall(match_attr_quote, self.content, flags=re.DOTALL):
+            for attr   in   re.findall(match_attr,       attr_quote,   flags=re.DOTALL):
+                attr_key  = re.findall(match_attr_name,  attr,         flags=re.DOTALL)[0]
+                attr_vals = re.findall(match_attr_val,   attr,         flags=re.DOTALL)
+                if attr_key.startswith("anonymous::"):
+                    if attr_key == "anonymous::cmake_directory":
+                        self._cmake_directory(dir =attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::make_directory":
+                        self._make_directory (dir =attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::shell_configure":
+                        self._shell_configure(file=attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::perl_configure":
+                        self._perl_configure (file=attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::update_header":
+                        self._update_header  (file=attr_vals[0], args=attr_vals[1:])
+                    elif attr_key == "anonymous::update_library":
+                        self._update_library (file=attr_vals[0], args=attr_vals[1:])
+                    else:
+                        raise Error(f"error: unknown module attribute [[{attr_key}]]")
                     
-                    if name == "cmake":
-                        cmake(module=self.export, dir=args[0])
-                    elif name == autogen:
-                        autogen(dir=args[0])
-                    elif name == configure:
-                        configure(dir=args[0])
-                    elif name == make:
-                        make(dir=args[0])
-                    elif name == cp:
-                        cp(module=self.export, file=args[0])
+    def _run_subbuild(self, command, **kwargs):
+        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, **kwargs)
+        stderr = ""
 
+        def read_stdout():
+            while proc.poll() is None:
+                self.logger.suffix(proc.stdout.readline().removesuffix('\n'))
+        
+        def read_stderr():
+            nonlocal stderr
+            while proc.poll() is None:
+                stderr += proc.stderr.readline()
+
+        stdout_thread = threading.Thread(target=read_stdout)
+        stderr_thread = threading.Thread(target=read_stderr)
+        stdout_thread.start()
+        stderr_thread.start()
+        stdout_thread.join()
+        stderr_thread.join()
+
+        if proc.returncode != 0:
+            raise Error(stderr)
+                    
+    def _cmake_directory(self, dir, args):
+        try:
+            os.mkdir(f"./bin/{type}/cmake/{self.export}-build")
+            os.mkdir(f"./bin/{type}/cmake/{self.export}-install")
+        except:
+            pass
+        self._run_subbuild(f"cmake -S {dir} -B ./bin/{type}/cmake/{self.export}-build "
+                           f"--install-prefix={os.path.abspath(f"./bin/{type}/cmake/{self.export}-install")} "
+                           f"-DCMAKE_BUILD_TYPE={type.capitalize()} {' '.join(args)}")
+        self._run_subbuild(f"cmake --build   ./bin/{type}/cmake/{self.export}-build")
+        self._run_subbuild(f"cmake --install ./bin/{type}/cmake/{self.export}-build")
+
+
+    def _make_directory(self, dir, args):
+        try:
+            os.mkdir(f"./bin/{type}/cmake/{self.export}-build")
+            os.mkdir(f"./bin/{type}/cmake/{self.export}-install")
+        except:
+            pass
+        self._run_subbuild(f"make BUILD_TYPE={type.capitalize()}", cwd=f"./bin/{type}/cmake/{self.export}-build")
+        self._run_subbuild(f"make install",                        cwd=f"./bin/{type}/cmake/{self.export}-build")
+
+    def _shell_configure(self, file, args):
+        try:
+            os.mkdir(f"./bin/{type}/cmake/{self.export}-build")
+        except:
+            pass
+        self._run_subbuild(f"{os.path.abspath(file)} --prefix={os.path.abspath(f"./bin/{type}/cmake/{self.export}-install")}", cwd=f"./bin/{type}/cmake/{self.export}-build")
+    
+    def _perl_configure(self, file, args):
+        try:
+            os.mkdir(f"./bin/{type}/cmake/{self.export}-build")
+        except:
+            pass
+        self._run_subbuild(f"perl {os.path.abspath(file)} --prefix={os.path.abspath(f"./bin/{type}/cmake/{self.export}-install")} --{type}", cwd=f"./bin/{type}/cmake/{self.export}-build")
+        
+    def _update_header(self, file, args):
+        if not file.startswith("<") or not file.endswith(">"):
+            raise Error("error: module attribute [[anonymous::update_header]] accepts an argument with <> quoted")
+        try:
+            shutil.copyfile(f"./bin/{type}/cmake/{self.export}-install/include/{file.strip("<>")}", f"./lib/include/{file.strip("<>")}")
+        except FileNotFoundError as e:
+            raise Error(f"error: header {file} not found and not updated")
+        
+    def _update_library(self, file, args):
+        try:
+            if '.' in file:
+                shutil.copyfile(f"./bin/{type}/cmake/{self.export}-install/lib/{file}",                 f"./bin/{type}/module/{file}"                )
+            else:
+                shutil.copyfile(f"./bin/{type}/cmake/{self.export}-install/lib/{file}{library_suffix}", f"./bin/{type}/module/{file}{library_suffix}")
+        except Exception as e:
+            raise Error(f"error: library {file} not found and not updated")
+
+
+class Binary:
+    def __init__(self, executable):
+        self.executable = executable
+
+    def link(self):
+        print(f"link binary [1/1]: {self.executable}")
+        link(executable_path=f"./bin/{self.executable}{executable_suffix}")
+
+class Logger:
+    def prefix(self, prefix_str):
+        self.prefix_str = prefix_str
+        return self
+
+    def suffix(self, suffix_str):
+        print(f"\r{self.prefix_str} {suffix_str}".replace('\t', ' ').ljust(os.get_terminal_size().columns)[:os.get_terminal_size().columns], end="")
+        return self
+
+    def __enter__(self):
+        print(f"\r{self.prefix_str}"             .replace('\t', ' ').ljust(os.get_terminal_size().columns)[:os.get_terminal_size().columns], end="")
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        print(f"\r{self.prefix_str}"             .replace('\t', ' ').ljust(os.get_terminal_size().columns)[:os.get_terminal_size().columns], end="")
+        print()
         
         
         
@@ -330,32 +398,30 @@ class Module:
 
 if __name__ == "__main__":
     try:
-        # Config
-        if len(sys.argv) == 2 and sys.argv[1] in ["debug", "release", "clean"]:
-            config = sys.argv[1]
-        else:
-            raise Error("fatal error: python build.py (debug|release|clean)")
+        parser = argparse.ArgumentParser(description="build.py")
+        parser.add_argument("--type",  choices=["debug", "release"], default="debug")
+        parser.add_argument("--clean", action="store_true")
 
-        # Clear error outputs
-        open("./bin/log.txt", 'w').write("")
-
-        # Build
-        if config == "debug" or config == "release":
-            Module("main").build()
-            link(object_dir="./bin/module", executable_path=f"./bin/main{executable_suffix}")
+        try:
+            args = parser.parse_args()
+        except argparse.ArgumentError:
+            raise Error("Usage: [--type {debug,release}] [--clean]")
         
-        # Clean
-        elif config == "clean":
-            for file in os.listdir("./bin/module"):
-                if file != ".gitignore":
-                    os.remove(f"./bin/module/{file}")
-            for dir in os.listdir("./bin/cmake"):
-                if dir != ".gitignore":
-                    shutil.rmtree(f"./bin/module/{dir}")
+
+        if not args.clean:
+            type = args.type
+            Module("main").compile()
+            Binary("main").link()
+
+        else:
+            for dir in os.listdir (f"./bin/{type}/cmake"):
+                shutil.rmtree     (f"./bin/{type}/cmake/{dir}")
+            for file in os.listdir(f"./bin/{type}/module"):
+                os.remove         (f"./bin/{type}/module/{file}")
     
     except Error as e:
         print(e, file=sys.stderr)
-        print(e, file=open("./bin/log.txt", 'w'))
+        print(e, file=open(f"./bin/log.txt", 'w'))
         exit(-1)
 
     except KeyboardInterrupt as e:

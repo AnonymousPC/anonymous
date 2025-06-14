@@ -2,4 +2,4 @@ bin/debug/cmake/*
 bin/debug/module/*
 bin/release/cmake/*
 bin/release/module/*
-lib/include/*
+third_party/include/*

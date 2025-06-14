@@ -6,21 +6,21 @@
             "group": "none",
             "type": "shell",
             "problemMatcher": [],
-            "command": "python bin/build.py --type=debug --clean"
+            "command": "python bin/build/build.py --type=debug --clean"
         },
         {
             "label": "debug.build",
             "group": "none",
             "type": "shell",
             "problemMatcher": [],
-            "command": "python bin/build.py --type=debug"
+            "command": "python bin/build/build.py --type=debug"
         },
         {
             "label": "debug.run",
             "group": "test",
             "type": "shell",
             "problemMatcher": [],
-            "command": "./bin/main"
+            "command": "./bin/build/main"
         },
         {
             "label": "debug",
@@ -39,21 +39,21 @@
             "group": "none",
             "type": "shell",
             "problemMatcher": [],
-            "command": "python bin/build.py --type=release --clean"
+            "command": "python bin/build/build.py --type=release --clean"
         },
         {
             "label": "release.build",
             "group": "none",
             "type": "shell",
             "problemMatcher": [],
-            "command": "python bin/build.py --type=release"
+            "command": "python bin/build/build.py --type=release"
         },
         {
             "label": "release.run",
             "group": "test",
             "type": "shell",
             "problemMatcher": [],
-            "command": "./bin/main"
+            "command": "./bin/build/main"
         },
         {
             "label": "release",

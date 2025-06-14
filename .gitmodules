@@ -13,6 +13,10 @@
 [submodule "third_party/git/hwloc"]
 	path = third_party/git/hwloc
 	url = https://github.com/open-mpi/hwloc
+[submodule "third_party/git/icu"]
+	path = third_party/git/icu
+	url = https://github.com/unicode-org/icu
+	shallow = true
 [submodule "third_party/git/libjpeg-turbo"]
 	path = third_party/git/libjpeg-turbo
 	url = https://github.com/libjpeg-turbo/libjpeg-turbo
@@ -25,9 +29,6 @@
 [submodule "third_party/git/oneTBB"]
 	path = third_party/git/oneTBB
 	url = https://github.com/uxlfoundation/oneTBB
-[submodule "third_party/git/icu"]
-	path = third_party/git/icu
-	url = https://github.com/unicode-org/icu
 [submodule "third_party/git/openssl"]
 	path = third_party/git/openssl
 	url = https://github.com/openssl/openssl

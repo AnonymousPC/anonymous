@@ -12,9 +12,6 @@ try:
 except FileNotFoundError:
     pass
 os.mkdir("./third_party/include")
-open("./third_party/include/.gitignore", 'w').write("*\n!.gitignore")
-
-
 
 
 # Copy

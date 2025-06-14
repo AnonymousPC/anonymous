@@ -1,6 +1,7 @@
+import sys
+sys.dont_write_bytecode = True
 import argparse
 import os
-import sys
 from attribute import *
 from binary import *
 from compiler import *

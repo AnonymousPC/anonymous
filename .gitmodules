@@ -44,3 +44,6 @@
 [submodule "third_party/git/zstd"]
 	path = third_party/git/zstd
 	url = https://github.com/facebook/zstd
+[submodule "third_party/git/xz"]
+	path = third_party/git/xz
+	url = https://github.com/tukaani-project/xz

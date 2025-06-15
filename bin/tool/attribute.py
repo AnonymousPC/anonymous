@@ -53,7 +53,7 @@ _compile_env["CFLAGS"]   = ' '.join(c_compile_args)
 _compile_env["CXXFLAGS"] = ' '.join(compile_args)
 
 def _run_command(command, **kwargs):
-    print(command)
+    # print(f"\n{command}\n")
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, **kwargs)
     stderr = ""
 
@@ -74,7 +74,11 @@ def _run_command(command, **kwargs):
     stderr_thread.join()
 
     if proc.returncode == 0:
-        print(stderr, file=sys.stderr)
+        # if stderr != "":
+        #     print(stderr, end="", file=sys.stderr)
+        pass
+    else:
+        raise Exception(stderr)
                 
 def _cmake_directory(module, dir, args):
     try:
@@ -82,12 +86,9 @@ def _cmake_directory(module, dir, args):
         os.mkdir(f"./bin/{type}/cmake/{module.export_name}-install")
     except:
         pass
-    _run_command(f"cmake -S {dir} -B ./bin/{type}/cmake/{module.export_name}-build " 
-                 f"--install-prefix={os.path.abspath(f"./bin/{type}/cmake/{module.export_name}-install")} "
-                 f"-DCMAKE_BUILD_TYPE={type.capitalize()}",
-                 env=_compile_env)
-    _run_command(f"cmake --build -j{os.cpu_count()} ./bin/{type}/cmake/{module.export_name}-build")
-    _run_command(f"cmake --install                  ./bin/{type}/cmake/{module.export_name}-build")
+    _run_command(f"cmake --install-prefix={os.path.abspath(f"./bin/{type}/cmake/{module.export_name}-install")} -DCMAKE_BUILD_TYPE={type.capitalize()} {' '.join(args)} -S ./{dir} -B ./bin/{type}/cmake/{module.export_name}-build", env=_compile_env)
+    _run_command(f"cmake --build   ./bin/{type}/cmake/{module.export_name}-build  -j{os.cpu_count()}")
+    _run_command(f"cmake --install ./bin/{type}/cmake/{module.export_name}-build")
 
 
 def _make_directory(module, dir, args):
@@ -107,9 +108,7 @@ def _configure_file(module, file, args):
         os.mkdir(f"./bin/{type}/cmake/{module.export_name}-build")
     except:
         pass
-    _run_command(f"sh {os.path.abspath(file)} --prefix={os.path.abspath(f"./bin/{type}/cmake/{module.export_name}-install")}", 
-                 cwd=f"./bin/{type}/cmake/{module.export_name}-build",
-                 env=_compile_env)
+    _run_command(f"sh {os.path.abspath(file)} --prefix={os.path.abspath(f"./bin/{type}/cmake/{module.export_name}-install")}", cwd=f"./bin/{type}/cmake/{module.export_name}-build", env=_compile_env)
 
 def _perl_file(module, file, args):
     try:

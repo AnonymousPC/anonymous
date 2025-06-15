@@ -21,11 +21,15 @@ if compiler == "g++":
         "-std=c++26", 
         "-g",
         "-Wall", 
+        "-fdiagnostics-color=always",
         "-fmodules",
         "-Wno-reserved-module-identifier",
         "-Wno-unknown-attributes"
     ]
-    c_compile_args = ["-g"]
+    c_compile_args = [
+        "-g",
+        "-fdiagnostics-color=always"
+    ]
     if type == "debug":
         compile_args   += ["-O0", "-fno-inline"]
         c_compile_args += ["-O0", "-fno-inline"]
@@ -42,11 +46,15 @@ elif compiler == "clang++":
         "-std=c++26", 
         "-g", 
         "-Wall", 
+        "-fdiagnostics-color=always",
        f"-fprebuilt-module-path=./bin/{type}/module",
         "-Wno-reserved-module-identifier",
         "-Wno-unknown-attributes"
     ]
-    c_compile_args = ["-g"]
+    c_compile_args = [
+        "-g",
+        "-fdiagnostics-color=always"
+    ]
     if type == "debug":
         compile_args   += ["-O0", "-fno-inline"]
         c_compile_args += ["-O0", "-fno-inline"]
@@ -82,4 +90,3 @@ define_args = {
     "in"      : ':', 
     "self"    : "(*this)"
 }
-

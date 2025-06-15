@@ -1,6 +1,8 @@
 In module imported from main:
 In module imported from boost:
-In module imported from boost.asio:
-In module imported from openssl:
-In module imported from zlib:
-error: library libz not found and not updated
+In module imported from boost.iostreams:
+In file included from ./include/boost/iostreams.cpp:13:
+[1m./third_party/include/boost/iostreams/src/lzma.cpp:15:10: [0m[0;1;31mfatal error: [0m[1m'lzma.h' file not found[0m
+   15 | #include <lzma.h>[0m
+      | [0;1;32m         ^~~~~~~~
+[0m1 error generated.

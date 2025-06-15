@@ -57,6 +57,8 @@ shutil.copytree("./third_party/git/stdexec/include/execpools",       "./third_pa
 shutil.copytree("./third_party/git/stdexec/include/nvexec",          "./third_party/include/nvexec",                  dirs_exist_ok=True)
 shutil.copytree("./third_party/git/stdexec/include/stdexec",         "./third_party/include/stdexec",                 dirs_exist_ok=True)
 shutil.copytree("./third_party/git/stdexec/include/tbbexec",         "./third_party/include/tbbexec",                 dirs_exist_ok=True)
+shutil.copyfile("./third_party/git/xz/src/liblzma/api/lzma.h",       "./third_party/include/lzma.h"                                     )
+shutil.copytree("./third_party/git/xz/src/liblzma/api/lzma",         "./third_party/include/lzma",                    dirs_exist_ok=True)
 shutil.copyfile("./third_party/git/zlib/zlib.h",                     "./third_party/include/zlib.h"                                     )
 shutil.copyfile("./third_party/git/zlib/zconf.h",                    "./third_party/include/zconf.h"                                    )
 shutil.copyfile("./third_party/git/zstd/lib/zstd.h",                 "./third_party/include/zstd.h"                                     )

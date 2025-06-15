@@ -7,6 +7,5 @@ export module png
     [[anonymous::update_header  ("<pngconf.h>"   )]]
     [[anonymous::update_header  ("<pnglibconf.h>")]]
     [[anonymous::update_library ("libpng"        )]];
-import zlib;
  
 

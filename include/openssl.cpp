@@ -12,13 +12,15 @@ export module openssl
     [[anonymous::update_header ("<openssl/comp.h>"                 )]]
     [[anonymous::update_header ("<openssl/ct.h>"                   )]]
     [[anonymous::update_header ("<openssl/crypto.h>"               )]]
+    [[anonymous::update_header ("<openssl/err.h>"                  )]]
     [[anonymous::update_header ("<openssl/lhash.h>"                )]]
     [[anonymous::update_header ("<openssl/opensslv.h>"             )]]
     [[anonymous::update_header ("<openssl/pkcs7.h>"                )]]
     [[anonymous::update_header ("<openssl/safestack.h>"            )]]
     [[anonymous::update_header ("<openssl/ssl.h>"                  )]]
+    [[anonymous::update_header ("<openssl/ui.h>"                   )]]
     [[anonymous::update_header ("<openssl/x509.h>"                 )]]
+    [[anonymous::update_header ("<openssl/x509v3.h>"               )]]
     [[anonymous::update_header ("<openssl/x509_vfy.h>"             )]]
     [[anonymous::update_library("libssl"                           )]]
     [[anonymous::update_library("libcrypto"                        )]];
-import zlib;

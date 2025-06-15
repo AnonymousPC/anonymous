@@ -7,17 +7,18 @@ module;
 #include <boost/iostreams/filter/lzma.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
 #include <boost/iostreams/filter/zstd.hpp>
-#include <boost/iostreams/bzip2.cpp>
-#include <boost/iostreams/file_descriptor.cpp>
-#include <boost/iostreams/gzip.cpp>
-#include <boost/iostreams/lzma.cpp>
-#include <boost/iostreams/mapped_file.cpp>
-#include <boost/iostreams/zlib.cpp>
-#include <boost/iostreams/zstd.cpp>
+#include <boost/iostreams/src/bzip2.cpp>
+#include <boost/iostreams/src/file_descriptor.cpp>
+#include <boost/iostreams/src/gzip.cpp>
+#include <boost/iostreams/src/lzma.cpp>
+#include <boost/iostreams/src/mapped_file.cpp>
+#include <boost/iostreams/src/zlib.cpp>
+#include <boost/iostreams/src/zstd.cpp>
 
 export module boost.iostreams;
 import std;
 import bzip2;
+import xz;
 import zlib;
 import zstd;
 

@@ -4,4 +4,4 @@ module;
 
 export module zlib
     [[anonymous::cmake_directory("third_party/git/zlib")]]
-    [[anonymous::update_library ("libz"        )]];
+    [[anonymous::update_library ("libz"                )]];

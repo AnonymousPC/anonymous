@@ -3,7 +3,7 @@
         {
             "name": "Mac",
             "includePath": [
-                "./lib/include"
+                "./third_party/include"
             ],
             "defines": [],
             "cStandard": "c23",

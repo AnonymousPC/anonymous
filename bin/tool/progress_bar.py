@@ -20,7 +20,7 @@ class ProgressBar:
 
 
 def _print_progress(str):
-    print(f"\r{str}".replace('\t', ' ').ljust(os.get_terminal_size().columns)[:os.get_terminal_size().columns], end="")
+    print(f"\r{str}".replace('\t', ' ').ljust(os.get_terminal_size().columns)[:os.get_terminal_size().columns+1], end="")
 
 
 progress_bar = ProgressBar()

@@ -53,7 +53,6 @@ _compile_env["CFLAGS"]   = ' '.join(c_compile_args)
 _compile_env["CXXFLAGS"] = ' '.join(compile_args)
 
 def _run_command(command, **kwargs):
-    # print(f"\n{command}\n")
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, **kwargs)
     stderr = ""
 
@@ -74,9 +73,8 @@ def _run_command(command, **kwargs):
     stderr_thread.join()
 
     if proc.returncode == 0:
-        # if stderr != "":
-        #     print(stderr, end="", file=sys.stderr)
-        pass
+        if stderr != "":
+            print(stderr, end="", file=sys.stderr)
     else:
         raise Exception(stderr)
                 

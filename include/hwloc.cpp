@@ -5,8 +5,8 @@ export module hwloc
 #ifdef _WIN32
     [[anonymous::cmake_directory("third_party/git/hwloc/contrib/windows-cmake")]]
 #elif defined(__linux__) or defined(__MACH__)
-    [[anonymous::shell_configure("third_party/git/hwloc/autogen.sh")]]
-    [[anonymous::shell_configure("third_party/git/hwloc/configure" )]]
+    [[anonymous::autogen_file   ("third_party/git/hwloc/autogen.sh")]]
+    [[anonymous::configure_file ("third_party/git/hwloc/configure" )]]
     [[anonymous::make_directory ("third_party/git/hwloc"           )]]
 #endif
     [[anonymous::update_header  ("<hwloc/autogen/config.h>")]]

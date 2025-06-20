@@ -1,5 +1,3 @@
-bin/debug/cmake/*
-bin/debug/module/*
-bin/release/cmake/*
-bin/release/module/*
+bin/*
+!bin/tool
 third_party/include/*

@@ -1,3 +1,0 @@
-main ./bin/debug/module/main.gcm
-std.compiler.gcc ./bin/debug/module/std.compiler.gcc.gcm
-bzip2 ./bin/debug/module/bzip2.gcm

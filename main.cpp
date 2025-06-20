@@ -1,7 +1,6 @@
-import std.compiler.gcc;
-import bzip2;
+import icu;
 
 int main ( )
 {
-    std::cout << "Hello" << std::endl;
+   // std::cout << "Hello" << std::endl;
 }

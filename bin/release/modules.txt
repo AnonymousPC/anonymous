@@ -1,0 +1,3 @@
+main ./bin/release/module/main.gcm
+main ./main.cpp
+std.compiler.gcc ./include/std/compiler/gcc.cpp

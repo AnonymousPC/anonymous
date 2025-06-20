@@ -1,6 +1,25 @@
+import argparse
+import os
+import shutil
 import sys
 
-type = "debug"
+# Arguments
+
+parser = argparse.ArgumentParser(description="build.py")
+parser.add_argument("--type",  choices=["debug", "release"], default="debug")
+parser.add_argument("--clean", action="store_true")
+argv = parser.parse_args()
+type = argv.type
+if argv.clean:
+    for file in os.listdir(f"./bin/{type}/module"):
+        os.remove         (f"./bin/{type}/module/{file}")
+    for dir  in os.listdir(f"./bin/{type}/cmake"):
+        shutil.rmtree     (f"./bin/{type}/cmake/{dir}")
+    exit(0)
+
+
+
+# Config
 
 if sys.platform == "win32":
     system            = "windows"
@@ -23,8 +42,8 @@ if compiler == "g++":
         "-Wall", 
         "-fdiagnostics-color=always",
         "-fmodules",
-        "-Wno-reserved-module-identifier",
-        "-Wno-unknown-attributes"
+       f"-fmodule-mapper=./bin/{type}/modules.txt",
+        "-Wno-unknown-pragmas"
     ]
     c_compile_args = [
         "-g",
@@ -49,7 +68,6 @@ elif compiler == "clang++":
         "-fdiagnostics-color=always",
        f"-fprebuilt-module-path=./bin/{type}/module",
         "-Wno-reserved-module-identifier",
-        "-Wno-unknown-attributes"
     ]
     c_compile_args = [
         "-g",
@@ -90,3 +108,20 @@ define_args = {
     "in"      : ':', 
     "self"    : "(*this)"
 }
+
+
+
+
+
+# Initialize
+
+try: os.mkdir(f"./bin/{type}")
+except: pass
+try: os.mkdir(f"./bin/{type}/cmake")
+except: pass
+try: os.mkdir(f"./bin/{type}/module")
+except: pass
+
+open("./bin/log.txt", 'w')
+if compiler == "g++":
+    open(f"./bin/{type}/modules.txt", 'w')

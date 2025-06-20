@@ -1,3 +1,0 @@
-In module imported from main:
-In module imported from bzip2:
-fatal error: file ./include/bzip2.cpp should export module bzip2

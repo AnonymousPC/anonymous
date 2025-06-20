@@ -22,6 +22,7 @@
 // <http://www.gnu.org/licenses/>.
 
 module;
+#undef in
 
 // stdc++.h doesn't include <execution> because of TBB issues;
 // FIXME for now let's avoid the problem by suppressing TBB.
@@ -1315,8 +1316,7 @@ export namespace std
   using std::format_to_n;
   using std::format_to_n_result;
   using std::formatted_size;
-// FIXME __cpp_lib_format_ranges
-#if __cplusplus > 202002L
+#if __cpp_lib_format_ranges
   using std::formattable;
 #endif
   using std::formatter;
@@ -1332,8 +1332,7 @@ export namespace std
   using std::wformat_context;
   using std::wformat_parse_context;
   using std::wformat_string;
-// FIXME __cpp_lib_format_ranges
-#ifdef __glibcxx_format_ranges
+#ifdef __cpp_lib_format_ranges
   using std::format_kind;
   using std::range_format;
   using std::range_formatter;
@@ -1617,7 +1616,7 @@ export namespace std
   // _Cpo is an implementation detail we can't avoid exposing; if we do the
   // using in ranges directly, it conflicts with any friend functions of the
   // same name, which is why the customization points are in an inline
-
+  // namespace in the first place.
   namespace ranges::inline _Cpo
   {
     using _Cpo::iter_move;

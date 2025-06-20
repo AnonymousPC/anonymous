@@ -1,357 +1,314 @@
 In module imported from main:
 In module imported from boost:
 In module imported from boost.locale:
-In module imported from icu:
-In file included from ./include/icu.cpp:363:
-[1m./third_party/include/unicode/src/ubrk.cpp:179:12: [0m[0;1;35mwarning: [0m[1m'ubrk_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
-  179 |     [0;34mreturn[0m ubrk_safeClone(bi, [0;32mnullptr[0m, [0;32mnullptr[0m, status);[0m
+In file included from ./include/boost/locale.cpp:31:
+In file included from ./third_party/include/boost/locale/src/shared/message.cpp:26:
+[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:11:12: [0m[0;1;31merror: [0m[1mredefinition of 'pj_winberger_hash'[0m
+   11 |     [0;34mstruct[0m pj_winberger_hash {[0m
       | [0;1;32m           ^
-[0m[1m./third_party/include/unicode/urename.h:515:24: [0m[0;1;36mnote: [0mexpanded from macro 'ubrk_safeClone'[0m
-  515 | #define ubrk_safeClone U_ICU_ENTRY_POINT_RENAME(ubrk_safeClone)[0m
-      | [0;1;32m                       ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:42:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-   42 | ubrk_safeClone_78[0m
+[0m[1m./third_party/include/boost/locale/src/icu/collator.cpp:10:10: [0m[0;1;36mnote: [0m'./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp' included multiple times, additional include site in header from module '<global>'[0m
+   10 | #include [0;32m"../shared/mo_hash.hpp"[0m
+      | [0;1;32m         ^
+[0m[1m./include/boost/locale.cpp:1:1: [0m[0;1;36mnote: [0m<global> defined here[0m
+    1 | module;[0m
       | [0;1;32m^
-[0m[1m./third_party/include/unicode/ubrk.h:320:1: [0m[0;1;36mnote: [0m'ubrk_safeClone_78' has been explicitly marked deprecated here[0m
-  320 | U_DEPRECATED UBreakIterator * U_EXPORT2[0m
+[0m[1m./third_party/include/boost/locale/src/shared/message.cpp:26:10: [0m[0;1;36mnote: [0m'./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp' included multiple times, additional include site in header from module '<global>'[0m
+   26 | #include [0;32m"mo_hash.hpp"[0m
+      | [0;1;32m         ^
+[0m[1m./include/boost/locale.cpp:1:1: [0m[0;1;36mnote: [0m<global> defined here[0m
+    1 | module;[0m
       | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:410:
-[1m./third_party/include/unicode/src/ucnv.cpp:326:12: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
-  326 |     [0;34mreturn[0m ucnv_safeClone(cnv, [0;32mnullptr[0m, [0;32mnullptr[0m, status);[0m
+[0m[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:11:12: [0m[0;1;36mnote: [0munguarded header; consider using #ifdef guards or #pragma once[0m
+   11 |     [0;34mstruct[0m pj_winberger_hash {[0m
       | [0;1;32m           ^
-[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
-  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
-      | [0;1;32m                       ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:29:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-   29 | ucnv_safeClone_78[0m
+[0mIn file included from ./include/boost/locale.cpp:31:
+In file included from ./third_party/include/boost/locale/src/shared/message.cpp:26:
+[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:38:42: [0m[0;1;31merror: [0m[1mredefinition of 'pj_winberger_hash_function'[0m
+   38 |     [0;34minline[0m pj_winberger_hash::state_type pj_winberger_hash_function([0;34mconst[0m [0;34mchar[0m* ptr)[0m
+      | [0;1;32m                                         ^
+[0m[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:38:42: [0m[0;1;36mnote: [0mprevious definition is here[0m
+   38 |     [0;34minline[0m pj_winberger_hash::state_type pj_winberger_hash_function([0;34mconst[0m [0;34mchar[0m* ptr)[0m
+      | [0;1;32m                                         ^
+[0mIn file included from ./include/boost/locale.cpp:31:
+In file included from ./third_party/include/boost/locale/src/shared/message.cpp:26:
+[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:45:42: [0m[0;1;31merror: [0m[1mredefinition of 'pj_winberger_hash_function'[0m
+   45 |     [0;34minline[0m pj_winberger_hash::state_type pj_winberger_hash_function([0;34mconst[0m [0;34mchar[0m* begin, [0;34mconst[0m [0;34mchar[0m* end)[0m
+      | [0;1;32m                                         ^
+[0m[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:45:42: [0m[0;1;36mnote: [0mprevious definition is here[0m
+   45 |     [0;34minline[0m pj_winberger_hash::state_type pj_winberger_hash_function([0;34mconst[0m [0;34mchar[0m* begin, [0;34mconst[0m [0;34mchar[0m* end)[0m
+      | [0;1;32m                                         ^
+[0mIn file included from ./include/boost/locale.cpp:51:
+In file included from ./third_party/include/boost/locale/src/posix/collate.cpp:11:
+[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:11:12: [0m[0;1;31merror: [0m[1mredefinition of 'pj_winberger_hash'[0m
+   11 |     [0;34mstruct[0m pj_winberger_hash {[0m
+      | [0;1;32m           ^
+[0m[1m./third_party/include/boost/locale/src/icu/collator.cpp:10:10: [0m[0;1;36mnote: [0m'./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp' included multiple times, additional include site in header from module '<global>'[0m
+   10 | #include [0;32m"../shared/mo_hash.hpp"[0m
+      | [0;1;32m         ^
+[0m[1m./include/boost/locale.cpp:1:1: [0m[0;1;36mnote: [0m<global> defined here[0m
+    1 | module;[0m
       | [0;1;32m^
-[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
-  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
+[0m[1m./third_party/include/boost/locale/src/posix/collate.cpp:11:10: [0m[0;1;36mnote: [0m'./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp' included multiple times, additional include site in header from module '<global>'[0m
+   11 | #include [0;32m"../shared/mo_hash.hpp"[0m
+      | [0;1;32m         ^
+[0m[1m./include/boost/locale.cpp:1:1: [0m[0;1;36mnote: [0m<global> defined here[0m
+    1 | module;[0m
       | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:410:
-[1m./third_party/include/unicode/src/ucnv.cpp:492:13: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
-  492 |     clone = ucnv_safeClone(cnv, cloneBuffer, &cloneSize, err);[0m
-      | [0;1;32m            ^
-[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
-  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
-      | [0;1;32m                       ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:55:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-   55 | ucnv_safeClone_78[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
-  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:413:
-[1m./third_party/include/unicode/src/ucnv2022.cpp:3620:13: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
- 3620 |             ucnv_safeClone(cnvData->currentConverter,[0m
-      | [0;1;32m            ^
-[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
-  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
-      | [0;1;32m                       ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:86:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-   86 | ucnv_safeClone_78[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
-  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:416:
-[1m./third_party/include/unicode/src/ucnvhz.cpp:558:9: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
-  558 |         ucnv_safeClone(((UConverterDataHZ*)cnv->extraInfo)->gbConverter, &localClone->subCnv, &size, status);[0m
+[0m[1m./third_party/include/boost/locale/src/icu/../shared/mo_hash.hpp:11:12: [0m[0;1;36mnote: [0munguarded header; consider using #ifdef guards or #pragma once[0m
+   11 |     [0;34mstruct[0m pj_winberger_hash {[0m
+      | [0;1;32m           ^
+[0mIn file included from ./include/boost/locale.cpp:12:
+In file included from ./third_party/include/boost/locale/src/encoding/codepage.cpp:18:
+In file included from ./third_party/include/boost/locale/src/encoding/uconv_converter.hpp:12:
+In file included from ./third_party/include/boost/locale/src/encoding/../icu/uconv.hpp:18:
+In file included from ./third_party/include/unicode/unistr.h:41:
+[1m./third_party/include/unicode/bytestream.h:250:9: [0m[0;1;35mwarning: [0m[1mprivate field 'outbuf_' is not used [-Wunused-private-field][0m
+  250 |   char* outbuf_;[0m
       | [0;1;32m        ^
-[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
-  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
-      | [0;1;32m                       ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:116:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-  116 | ucnv_safeClone_78[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
-  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:442:
-[1m./third_party/include/unicode/src/uidna.cpp:523:17: [0m[0;1;35mwarning: [0m[1m'uidna_toASCII_78' is deprecated [-Wdeprecated-declarations][0m
-  523 |         b3Len = uidna_toASCII(b2, b2Len, b3, b3Capacity, options, parseError, &bufferStatus);[0m
+[0m[1m./third_party/include/unicode/bytestream.h:251:17: [0m[0;1;35mwarning: [0m[1mprivate field 'capacity_' is not used [-Wunused-private-field][0m
+  251 |   const int32_t capacity_;[0m
       | [0;1;32m                ^
-[0m[1m./third_party/include/unicode/urename.h:1058:23: [0m[0;1;36mnote: [0mexpanded from macro 'uidna_toASCII'[0m
- 1058 | #define uidna_toASCII U_ICU_ENTRY_POINT_RENAME(uidna_toASCII)[0m
-      | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:163:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-  163 | uidna_toASCII_78[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/uidna.h:597:1: [0m[0;1;36mnote: [0m'uidna_toASCII_78' has been explicitly marked deprecated here[0m
-  597 | U_DEPRECATED int32_t U_EXPORT2[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:442:
-[1m./third_party/include/unicode/src/uidna.cpp:536:22: [0m[0;1;35mwarning: [0m[1m'uidna_toASCII_78' is deprecated [-Wdeprecated-declarations][0m
-  536 |             b3Len =  uidna_toASCII(b2,b2Len,b3,b3Len,options,parseError,&bufferStatus);[0m
-      | [0;1;32m                     ^
-[0m[1m./third_party/include/unicode/urename.h:1058:23: [0m[0;1;36mnote: [0mexpanded from macro 'uidna_toASCII'[0m
- 1058 | #define uidna_toASCII U_ICU_ENTRY_POINT_RENAME(uidna_toASCII)[0m
-      | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:165:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-  165 | uidna_toASCII_78[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/uidna.h:597:1: [0m[0;1;36mnote: [0m'uidna_toASCII_78' has been explicitly marked deprecated here[0m
-  597 | U_DEPRECATED int32_t U_EXPORT2[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:1116:
-[1m./third_party/include/unicode/src/ucol.cpp:108:12: [0m[0;1;35mwarning: [0m[1m'ucol_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
-  108 |     [0;34mreturn[0m ucol_safeClone(coll, [0;32mnullptr[0m, [0;32mnullptr[0m, status);[0m
+[0mIn file included from ./include/boost/locale.cpp:14:
+In file included from ./third_party/include/boost/locale/src/icu/boundary.cpp:12:
+In file included from ./third_party/include/boost/locale/src/icu/cdata.hpp:13:
+[1m./third_party/include/unicode/locid.h:1165:10: [0m[0;1;35mwarning: [0m[1mprivate field 'fullNameBuffer' is not used [-Wunused-private-field][0m
+ 1165 |     char fullNameBuffer[ULOC_FULLNAME_CAPACITY];[0m
+      | [0;1;32m         ^
+[0mIn file included from ./include/boost/locale.cpp:14:
+In file included from ./third_party/include/boost/locale/src/icu/boundary.cpp:19:
+[1m./third_party/include/unicode/brkiter.h:651:17: [0m[0;1;35mwarning: [0m[1mprivate field 'actualLocale' is not used [-Wunused-private-field][0m
+  651 |     CharString* actualLocale = nullptr;[0m
+      | [0;1;32m                ^
+[0m[1m./third_party/include/unicode/brkiter.h:652:17: [0m[0;1;35mwarning: [0m[1mprivate field 'validLocale' is not used [-Wunused-private-field][0m
+  652 |     CharString* validLocale = nullptr;[0m
+      | [0;1;32m                ^
+[0m[1m./third_party/include/unicode/brkiter.h:653:17: [0m[0;1;35mwarning: [0m[1mprivate field 'requestLocale' is not used [-Wunused-private-field][0m
+  653 |     CharString* requestLocale = nullptr;[0m
+      | [0;1;32m                ^
+[0mIn file included from ./include/boost/locale.cpp:14:
+In file included from ./third_party/include/boost/locale/src/icu/boundary.cpp:20:
+[1m./third_party/include/unicode/rbbi.h:127:12: [0m[0;1;35mwarning: [0m[1mprivate field 'fText' is not used [-Wunused-private-field][0m
+  127 |     UText  fText = UTEXT_INITIALIZER;[0m
       | [0;1;32m           ^
-[0m[1m./third_party/include/unicode/urename.h:787:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucol_safeClone'[0m
-  787 | #define ucol_safeClone U_ICU_ENTRY_POINT_RENAME(ucol_safeClone)[0m
+[0m[1m./third_party/include/unicode/rbbi.h:144:21: [0m[0;1;35mwarning: [0m[1mprivate field 'fErrorCode' is not used [-Wunused-private-field][0m
+  144 |     UErrorCode      fErrorCode = U_ZERO_ERROR;[0m
+      | [0;1;32m                    ^
+[0m[1m./third_party/include/unicode/rbbi.h:150:21: [0m[0;1;35mwarning: [0m[1mprivate field 'fPosition' is not used [-Wunused-private-field][0m
+  150 |     int32_t         fPosition = 0;[0m
+      | [0;1;32m                    ^
+[0m[1m./third_party/include/unicode/rbbi.h:155:21: [0m[0;1;35mwarning: [0m[1mprivate field 'fRuleStatusIndex' is not used [-Wunused-private-field][0m
+  155 |     int32_t         fRuleStatusIndex = 0;[0m
+      | [0;1;32m                    ^
+[0m[1m./third_party/include/unicode/rbbi.h:161:25: [0m[0;1;35mwarning: [0m[1mprivate field 'fBreakCache' is not used [-Wunused-private-field][0m
+  161 |     BreakCache         *fBreakCache = nullptr;[0m
+      | [0;1;32m                        ^
+[0m[1m./third_party/include/unicode/rbbi.h:168:22: [0m[0;1;35mwarning: [0m[1mprivate field 'fDictionaryCache' is not used [-Wunused-private-field][0m
+  168 |     DictionaryCache *fDictionaryCache = nullptr;[0m
+      | [0;1;32m                     ^
+[0m[1m./third_party/include/unicode/rbbi.h:177:26: [0m[0;1;35mwarning: [0m[1mprivate field 'fLanguageBreakEngines' is not used [-Wunused-private-field][0m
+  177 |     UStack              *fLanguageBreakEngines = nullptr;[0m
+      | [0;1;32m                         ^
+[0m[1m./third_party/include/unicode/rbbi.h:186:26: [0m[0;1;35mwarning: [0m[1mprivate field 'fUnhandledBreakEngine' is not used [-Wunused-private-field][0m
+  186 |     UnhandledEngine     *fUnhandledBreakEngine = nullptr;[0m
+      | [0;1;32m                         ^
+[0m[1m./third_party/include/unicode/rbbi.h:193:25: [0m[0;1;35mwarning: [0m[1mprivate field 'fDictionaryCharCount' is not used [-Wunused-private-field][0m
+  193 |     uint32_t            fDictionaryCharCount = 0;[0m
+      | [0;1;32m                        ^
+[0m[1m./third_party/include/unicode/rbbi.h:200:25: [0m[0;1;35mwarning: [0m[1mprivate field 'fCharIter' is not used [-Wunused-private-field][0m
+  200 |     CharacterIterator  *fCharIter = &fSCharIter;[0m
+      | [0;1;32m                        ^
+[0m[1m./third_party/include/unicode/rbbi.h:212:20: [0m[0;1;35mwarning: [0m[1mprivate field 'fDone' is not used [-Wunused-private-field][0m
+  212 |     bool           fDone = false;[0m
+      | [0;1;32m                   ^
+[0m[1m./third_party/include/unicode/rbbi.h:217:14: [0m[0;1;35mwarning: [0m[1mprivate field 'fLookAheadMatches' is not used [-Wunused-private-field][0m
+  217 |     int32_t *fLookAheadMatches = nullptr;[0m
+      | [0;1;32m             ^
+[0m[1m./third_party/include/unicode/rbbi.h:222:11: [0m[0;1;35mwarning: [0m[1mprivate field 'fIsPhraseBreaking' is not used [-Wunused-private-field][0m
+  222 |     UBool fIsPhraseBreaking = false;[0m
+      | [0;1;32m          ^
+[0mIn file included from ./include/boost/locale.cpp:17:
+In file included from ./third_party/include/boost/locale/src/icu/conversion.cpp:15:
+In file included from ./third_party/include/unicode/normlzr.h:26:
+[1m./third_party/include/unicode/normalizer2.h:781:24: [0m[0;1;35mwarning: [0m[1mprivate field 'norm2' is not used [-Wunused-private-field][0m
+  781 |     const Normalizer2 &norm2;[0m
       | [0;1;32m                       ^
-[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
-  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
-      | [0;1;32m                                              ^
-[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
-  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
-      | [0;1;32m                                                  ^
-[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
-  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
-      | [0;1;32m                                                 ^
-[0m[1m<scratch space>:22:1: [0m[0;1;36mnote: [0mexpanded from here[0m
-   22 | ucol_safeClone_78[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/ucol.h:1359:1: [0m[0;1;36mnote: [0m'ucol_safeClone_78' has been explicitly marked deprecated here[0m
- 1359 | U_DEPRECATED UCollator* U_EXPORT2[0m
-      | [0;1;32m^
-[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
-  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
-   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
-      | [0;1;32m                                                   ^
-[0mIn file included from ./include/icu.cpp:1134:
-[1m./third_party/include/unicode/src/uni2name.cpp:29:23: [0m[0;1;31merror: [0m[1mredefinition of 'OPEN_DELIM' with a different type: 'const char16_t[]' vs 'const char16_t'[0m
-   29 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m OPEN_DELIM[] = {[0;32m92[0m,[0;32m78[0m,[0;32m123[0m,[0;32m0[0m}; [0;33m// "\N{"[0m
+[0m[1m./third_party/include/unicode/normalizer2.h:782:23: [0m[0;1;35mwarning: [0m[1mprivate field 'set' is not used [-Wunused-private-field][0m
+  782 |     const UnicodeSet &set;[0m
       | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/name2uni.cpp:33:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
-   33 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m OPEN_DELIM  = [0;32m92[0m;  [0;33m// '\\' first char of OPEN[0m
+[0mIn file included from ./include/boost/locale.cpp:17:
+In file included from ./third_party/include/boost/locale/src/icu/conversion.cpp:15:
+[1m./third_party/include/unicode/normlzr.h:758:23: [0m[0;1;35mwarning: [0m[1mprivate field 'fFilteredNorm2' is not used [-Wunused-private-field][0m
+  758 |   FilteredNormalizer2*fFilteredNorm2;  // owned if not nullptr[0m
       | [0;1;32m                      ^
-[0mIn file included from ./include/icu.cpp:1134:
-[1m./third_party/include/unicode/src/uni2name.cpp:30:23: [0m[0;1;31merror: [0m[1mredefinition of 'CLOSE_DELIM'[0m
-   30 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m CLOSE_DELIM  = [0;32m125[0m; [0;33m// "}"[0m
+[0m[1m./third_party/include/unicode/normlzr.h:759:23: [0m[0;1;35mwarning: [0m[1mprivate field 'fNorm2' is not used [-Wunused-private-field][0m
+  759 |   const Normalizer2  *fNorm2;  // not owned; may be equal to fFilteredNorm2[0m
       | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/name2uni.cpp:34:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
-   34 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m CLOSE_DELIM = [0;32m125[0m; [0;33m// '}'[0m
+[0m[1m./third_party/include/unicode/normlzr.h:760:23: [0m[0;1;35mwarning: [0m[1mprivate field 'fUMode' is not used [-Wunused-private-field][0m
+  760 |   UNormalizationMode  fUMode;  // deprecated[0m
       | [0;1;32m                      ^
-[0mIn file included from ./include/icu.cpp:1147:
-[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;31merror: [0m[1mexpected unqualified-id[0m
- 1318 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m BACKSLASH  = [0;32m0x5c[0m;[0m
+[0m[1m./third_party/include/unicode/normlzr.h:761:23: [0m[0;1;35mwarning: [0m[1mprivate field 'fOptions' is not used [-Wunused-private-field][0m
+  761 |   int32_t             fOptions;[0m
       | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/selfmtimpl.h:33:29: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
-   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
-      | [0;1;32m                            ^
-[0mIn file included from ./include/icu.cpp:1147:
-[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
-[1m./third_party/include/unicode/src/selfmtimpl.h:33:29: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
-   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;36mnote: [0mto match this '('[0m
-[1m./third_party/include/unicode/src/selfmtimpl.h:33:28: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
-   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
-      | [0;1;32m                           ^
-[0mIn file included from ./include/icu.cpp:1147:
-[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
- 1318 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m BACKSLASH  = [0;32m0x5c[0m;[0m
+[0m[1m./third_party/include/unicode/normlzr.h:764:23: [0m[0;1;35mwarning: [0m[1mprivate field 'text' is not used [-Wunused-private-field][0m
+  764 |   CharacterIterator  *text;[0m
       | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/selfmtimpl.h:33:38: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
-   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
-      | [0;1;32m                                     ^
-[0m[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;36mnote: [0mto match this '('[0m
-[1m./third_party/include/unicode/src/selfmtimpl.h:33:27: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
-   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
-      | [0;1;32m                          ^
-[0mIn file included from ./include/icu.cpp:1156:
-[1m./third_party/include/unicode/src/uspoof.cpp:733:45: [0m[0;1;35mwarning: [0m[1mresult of comparison of constant 16777216 with expression of type 'UBiDiDirection' is always true [-Wtautological-constant-out-of-range-compare][0m
-  733 |     [0;34mif[0m (direction != UBIDI_LTR && direction != UBIDI_RTL) {[0m
-      | [0;1;32m                                  ~~~~~~~~~ ^  ~~~~~~~~~
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:28:23: [0m[0;1;31merror: [0m[1mexpected unqualified-id[0m
-   28 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m COLON = [0;32m0x3A[0m; [0;33m/* : */[0m
-      | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/timezone.cpp:105:15: [0m[0;1;36mnote: [0mexpanded from macro 'COLON'[0m
-  105 | #define COLON [0;32m0x003A[0m
-      | [0;1;32m              ^
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;31merror: [0m[1mexpected unqualified-id[0m
-   31 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m COMMA = [0;32m0x2C[0m; [0;33m/* , */[0m
-      | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/selfmtimpl.h:38:29: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
-   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
-      | [0;1;32m                            ^
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
-[1m./third_party/include/unicode/src/selfmtimpl.h:38:29: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
-   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
-      | [0;1;32m                            ^
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;36mnote: [0mto match this '('[0m
-[1m./third_party/include/unicode/src/selfmtimpl.h:38:28: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
-   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
-      | [0;1;32m                           ^
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
-   31 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m COMMA = [0;32m0x2C[0m; [0;33m/* , */[0m
-      | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/selfmtimpl.h:38:38: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
-   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
-      | [0;1;32m                                     ^
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;36mnote: [0mto match this '('[0m
-[1m./third_party/include/unicode/src/selfmtimpl.h:38:27: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
-   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
-      | [0;1;32m                          ^
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:32:23: [0m[0;1;31merror: [0m[1mredefinition of 'PLUS'[0m
-   32 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m PLUS = [0;32m0x2B[0m; [0;33m/* + */[0m
-      | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/tzfmt.cpp:120:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
-  120 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m PLUS         = [0;32m0x002B[0m;[0m
-      | [0;1;32m                      ^
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:33:23: [0m[0;1;31merror: [0m[1mredefinition of 'MINUS'[0m
-   33 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m MINUS = [0;32m0x2D[0m; [0;33m/* - */[0m
-      | [0;1;32m                      ^
-[0m[1m./third_party/include/unicode/src/tzfmt.cpp:121:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
-  121 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m MINUS        = [0;32m0x002D[0m;[0m
-      | [0;1;32m                      ^
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:537:17: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
-  537 |     int32_t days[[0;32m7[0m];[0m
-      | [0;1;32m    ~~~~~~~~~~~~^~
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:538:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
-  538 |     int32_t daysCount = UPRV_LENGTHOF(days);[0m
-      | [0;1;32m                        ^~~~~~~~~~~~~~~~~~~
-[0m[1m./third_party/include/unicode/src/cmemory.h:99:68: [0m[0;1;36mnote: [0mexpanded from macro 'UPRV_LENGTHOF'[0m
-   99 | #define UPRV_LENGTHOF(array) (int32_t)([0;34msizeof[0m(array)/[0;34msizeof[0m((array)[[0;32m0[0m]))[0m
-      | [0;1;32m                                                            ~~~~~~~^~
-[0mIn file included from ./include/icu.cpp:1164:
-[1m./third_party/include/unicode/src/vtzone.cpp:541:5: [0m[0;1;31merror: [0m[1mno matching function for call to 'parseRRULE'[0m
-  541 |     parseRRULE(rrule, month, dayOfWeek, nthDayOfWeek, days, daysCount, until, status);[0m
-      | [0;1;32m    ^~~~~~~~~~
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:377:13: [0m[0;1;36mnote: [0mcandidate function not viable: no known conversion from 'long long' to 'int32_t *' (aka 'int *') for 5th argument[0m
-  377 | [0;34mstatic[0m [0;34mvoid[0m parseRRULE([0;34mconst[0m UnicodeString& rrule, int32_t& month, int32_t& dow, int32_t& wim,[0m
+[0m[1m./third_party/include/unicode/normlzr.h:768:19: [0m[0;1;35mwarning: [0m[1mprivate field 'currentIndex' is not used [-Wunused-private-field][0m
+  768 |   int32_t         currentIndex, nextIndex;[0m
+      | [0;1;32m                  ^
+[0m[1m./third_party/include/unicode/normlzr.h:768:33: [0m[0;1;35mwarning: [0m[1mprivate field 'nextIndex' is not used [-Wunused-private-field][0m
+  768 |   int32_t         currentIndex, nextIndex;[0m
+      | [0;1;32m                                ^
+[0m[1m./third_party/include/unicode/normlzr.h:772:19: [0m[0;1;35mwarning: [0m[1mprivate field 'bufferPos' is not used [-Wunused-private-field][0m
+  772 |   int32_t         bufferPos;[0m
+      | [0;1;32m                  ^
+[0mIn file included from ./include/boost/locale.cpp:18:
+In file included from ./third_party/include/boost/locale/src/icu/date_time.cpp:21:
+[1m./third_party/include/unicode/gregocal.h:671:26: [0m[0;1;35mwarning: [0m[1mprivate field 'fGregorianCutover' is not used [-Wunused-private-field][0m
+  671 |     UDate                fGregorianCutover;[0m
+      | [0;1;32m                         ^
+[0m[1m./third_party/include/unicode/gregocal.h:676:25: [0m[0;1;35mwarning: [0m[1mprivate field 'fCutoverJulianDay' is not used [-Wunused-private-field][0m
+  676 |     int32_t             fCutoverJulianDay;[0m
+      | [0;1;32m                        ^
+[0m[1m./third_party/include/unicode/gregocal.h:682:13: [0m[0;1;35mwarning: [0m[1mprivate field 'fGregorianCutoverYear' is not used [-Wunused-private-field][0m
+  682 |     int32_t fGregorianCutoverYear;// = 1582;[0m
       | [0;1;32m            ^
-[0m  378 |                        int32_t* dom, int32_t& domCount, UDate& until, UErrorCode& status) {[0m
-      | [0;1;32m                       ~~~~~~~~~~~~
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:560:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
-  560 |                 [0;34mif[0m (days[i] < [0;32m0[0m) {[0m
-      | [0;1;32m                    ~~~~^~
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:561:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
-  561 |                     days[i] = MONTHLENGTH[month] + days[i] + [0;32m1[0m;[0m
-      | [0;1;32m                    ~~~~^~
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:561:56: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
-  561 |                     days[i] = MONTHLENGTH[month] + days[i] + [0;32m1[0m;[0m
-      | [0;1;32m                                                   ~~~~^~
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:563:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
-  563 |                 [0;34mif[0m (days[i] < firstDay) {[0m
-      | [0;1;32m                    ~~~~^~
-[0m[1m./third_party/include/unicode/src/vtzone.cpp:564:36: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
-  564 |                     firstDay = days[i];[0m
-      | [0;1;32m                               ~~~~^~
-[0m[0;1;31mfatal error: [0m[1mtoo many errors emitted, stopping now [-ferror-limit=][0m
-9 warnings and 20 errors generated.
+[0m[1m./third_party/include/unicode/gregocal.h:706:11: [0m[0;1;35mwarning: [0m[1mprivate field 'fIsGregorian' is not used [-Wunused-private-field][0m
+  706 |     UBool fIsGregorian;[0m
+      | [0;1;32m          ^
+[0m[1m./third_party/include/unicode/gregocal.h:713:11: [0m[0;1;35mwarning: [0m[1mprivate field 'fInvertGregorian' is not used [-Wunused-private-field][0m
+  713 |     UBool fInvertGregorian;[0m
+      | [0;1;32m          ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:12:
+In file included from ./third_party/include/boost/locale/src/icu/../util/numeric_conversion.hpp:19:
+[1m./third_party/include/unicode/fmtable.h:703:27: [0m[0;1;35mwarning: [0m[1mprivate field 'fDecimalStr' is not used [-Wunused-private-field][0m
+  703 |     CharString           *fDecimalStr;[0m
+      | [0;1;32m                          ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:13:
+In file included from ./third_party/include/boost/locale/src/icu/formatters_cache.hpp:21:
+In file included from ./third_party/include/unicode/numfmt.h:39:
+In file included from ./third_party/include/unicode/format.h:41:
+[1m./third_party/include/unicode/fpositer.h:114:16: [0m[0;1;35mwarning: [0m[1mprivate field 'data' is not used [-Wunused-private-field][0m
+  114 |     UVector32 *data;[0m
+      | [0;1;32m               ^
+[0m[1m./third_party/include/unicode/fpositer.h:115:13: [0m[0;1;35mwarning: [0m[1mprivate field 'pos' is not used [-Wunused-private-field][0m
+  115 |     int32_t pos;[0m
+      | [0;1;32m            ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:13:
+In file included from ./third_party/include/boost/locale/src/icu/formatters_cache.hpp:21:
+In file included from ./third_party/include/unicode/numfmt.h:39:
+[1m./third_party/include/unicode/format.h:301:17: [0m[0;1;35mwarning: [0m[1mprivate field 'actualLocale' is not used [-Wunused-private-field][0m
+  301 |     CharString* actualLocale = nullptr;[0m
+      | [0;1;32m                ^
+[0m[1m./third_party/include/unicode/format.h:302:17: [0m[0;1;35mwarning: [0m[1mprivate field 'validLocale' is not used [-Wunused-private-field][0m
+  302 |     CharString* validLocale = nullptr;[0m
+      | [0;1;32m                ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:13:
+In file included from ./third_party/include/boost/locale/src/icu/formatters_cache.hpp:21:
+In file included from ./third_party/include/unicode/numfmt.h:43:
+In file included from ./third_party/include/unicode/curramt.h:23:
+In file included from ./third_party/include/unicode/currunit.h:22:
+[1m./third_party/include/unicode/measunit.h:4703:22: [0m[0;1;35mwarning: [0m[1mprivate field 'fImpl' is not used [-Wunused-private-field][0m
+ 4703 |     MeasureUnitImpl* fImpl;[0m
+      | [0;1;32m                     ^
+[0m[1m./third_party/include/unicode/measunit.h:4707:13: [0m[0;1;35mwarning: [0m[1mprivate field 'fSubTypeId' is not used [-Wunused-private-field][0m
+ 4707 |     int16_t fSubTypeId;[0m
+      | [0;1;32m            ^
+[0m[1m./third_party/include/unicode/measunit.h:4710:12: [0m[0;1;35mwarning: [0m[1mprivate field 'fTypeId' is not used [-Wunused-private-field][0m
+ 4710 |     int8_t fTypeId;[0m
+      | [0;1;32m           ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:13:
+In file included from ./third_party/include/boost/locale/src/icu/formatters_cache.hpp:22:
+In file included from ./third_party/include/unicode/smpdtfmt.h:42:
+In file included from ./third_party/include/unicode/tzfmt.h:25:
+[1m./third_party/include/unicode/tznames.h:392:18: [0m[0;1;35mwarning: [0m[1mprivate field 'fMatches' is not used [-Wunused-private-field][0m
+  392 |         UVector* fMatches;  // vector of MatchEntry[0m
+      | [0;1;32m                 ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:13:
+In file included from ./third_party/include/boost/locale/src/icu/formatters_cache.hpp:22:
+In file included from ./third_party/include/unicode/smpdtfmt.h:42:
+[1m./third_party/include/unicode/tzfmt.h:681:10: [0m[0;1;35mwarning: [0m[1mprivate field 'fTargetRegion' is not used [-Wunused-private-field][0m
+  681 |     char fTargetRegion[ULOC_COUNTRY_CAPACITY];[0m
+      | [0;1;32m         ^
+[0m[1m./third_party/include/unicode/tzfmt.h:684:20: [0m[0;1;35mwarning: [0m[1mprivate field 'fTimeZoneNames' is not used [-Wunused-private-field][0m
+  684 |     TimeZoneNames* fTimeZoneNames;[0m
+      | [0;1;32m                   ^
+[0m[1m./third_party/include/unicode/tzfmt.h:687:27: [0m[0;1;35mwarning: [0m[1mprivate field 'fTimeZoneGenericNames' is not used [-Wunused-private-field][0m
+  687 |     TimeZoneGenericNames* fTimeZoneGenericNames;[0m
+      | [0;1;32m                          ^
+[0m[1m./third_party/include/unicode/tzfmt.h:696:13: [0m[0;1;35mwarning: [0m[1mprivate field 'fGMTOffsetDigits' is not used [-Wunused-private-field][0m
+  696 |     UChar32 fGMTOffsetDigits[10];[0m
+      | [0;1;32m            ^
+[0m[1m./third_party/include/unicode/tzfmt.h:702:14: [0m[0;1;35mwarning: [0m[1mprivate field 'fDefParseOptionFlags' is not used [-Wunused-private-field][0m
+  702 |     uint32_t fDefParseOptionFlags;[0m
+      | [0;1;32m             ^
+[0m[1m./third_party/include/unicode/tzfmt.h:709:14: [0m[0;1;35mwarning: [0m[1mprivate field 'fGMTOffsetPatternItems' is not used [-Wunused-private-field][0m
+  709 |     UVector* fGMTOffsetPatternItems[UTZFMT_PAT_COUNT];[0m
+      | [0;1;32m             ^
+[0m[1m./third_party/include/unicode/tzfmt.h:711:11: [0m[0;1;35mwarning: [0m[1mprivate field 'fAbuttingOffsetHoursAndMinutes' is not used [-Wunused-private-field][0m
+  711 |     UBool fAbuttingOffsetHoursAndMinutes;[0m
+      | [0;1;32m          ^
+[0m[1m./third_party/include/unicode/tzfmt.h:714:24: [0m[0;1;35mwarning: [0m[1mprivate field 'fTZDBTimeZoneNames' is not used [-Wunused-private-field][0m
+  714 |     TZDBTimeZoneNames* fTZDBTimeZoneNames;[0m
+      | [0;1;32m                       ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:13:
+In file included from ./third_party/include/boost/locale/src/icu/formatters_cache.hpp:22:
+[1m./third_party/include/unicode/smpdtfmt.h:1256:25: [0m[0;1;35mwarning: [0m[1mprivate field 'fSymbols' is not used [-Wunused-private-field][0m
+ 1256 |     DateFormatSymbols*  fSymbols = nullptr;   // Owned[0m
+      | [0;1;32m                        ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1261:21: [0m[0;1;35mwarning: [0m[1mprivate field 'fTimeZoneFormat' is not used [-Wunused-private-field][0m
+ 1261 |     TimeZoneFormat* fTimeZoneFormat = nullptr;[0m
+      | [0;1;32m                    ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1273:26: [0m[0;1;35mwarning: [0m[1mprivate field 'fHasMinute' is not used [-Wunused-private-field][0m
+ 1273 |     UBool                fHasMinute;[0m
+      | [0;1;32m                         ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1274:26: [0m[0;1;35mwarning: [0m[1mprivate field 'fHasSecond' is not used [-Wunused-private-field][0m
+ 1274 |     UBool                fHasSecond;[0m
+      | [0;1;32m                         ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1275:26: [0m[0;1;35mwarning: [0m[1mprivate field 'fHasHanYearChar' is not used [-Wunused-private-field][0m
+ 1275 |     UBool                fHasHanYearChar; // pattern contains the Han year character \u5E74[0m
+      | [0;1;32m                         ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1285:29: [0m[0;1;35mwarning: [0m[1mprivate field 'fDefaultCenturyStartYear' is not used [-Wunused-private-field][0m
+ 1285 |     /*transient*/ int32_t   fDefaultCenturyStartYear;[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1301:35: [0m[0;1;35mwarning: [0m[1mprivate field 'fSharedNumberFormatters' is not used [-Wunused-private-field][0m
+ 1301 |     const SharedNumberFormat    **fSharedNumberFormatters = nullptr;[0m
+      | [0;1;32m                                  ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1310:42: [0m[0;1;35mwarning: [0m[1mprivate field 'fSimpleNumberFormatter' is not used [-Wunused-private-field][0m
+ 1310 |     const number::SimpleNumberFormatter* fSimpleNumberFormatter = nullptr;[0m
+      | [0;1;32m                                         ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1312:11: [0m[0;1;35mwarning: [0m[1mprivate field 'fHaveDefaultCentury' is not used [-Wunused-private-field][0m
+ 1312 |     UBool fHaveDefaultCentury;[0m
+      | [0;1;32m          ^
+[0m[1m./third_party/include/unicode/smpdtfmt.h:1314:26: [0m[0;1;35mwarning: [0m[1mprivate field 'fCapitalizationBrkIter' is not used [-Wunused-private-field][0m
+ 1314 |     const BreakIterator* fCapitalizationBrkIter = nullptr;[0m
+      | [0;1;32m                         ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:28:
+In file included from ./third_party/include/unicode/rbnf.h:34:
+In file included from ./third_party/include/unicode/dcfmtsym.h:39:
+[1m./third_party/include/unicode/numsys.h:200:21: [0m[0;1;35mwarning: [0m[1mprivate field 'radix' is not used [-Wunused-private-field][0m
+  200 |     int32_t         radix;[0m
+      | [0;1;32m                    ^
+[0m[1m./third_party/include/unicode/numsys.h:201:21: [0m[0;1;35mwarning: [0m[1mprivate field 'algorithmic' is not used [-Wunused-private-field][0m
+  201 |     UBool           algorithmic;[0m
+      | [0;1;32m                    ^
+[0m[1m./third_party/include/unicode/numsys.h:202:21: [0m[0;1;35mwarning: [0m[1mprivate field 'name' is not used [-Wunused-private-field][0m
+  202 |     char            name[kInternalNumSysNameCapacity+1];[0m
+      | [0;1;32m                    ^
+[0mIn file included from ./include/boost/locale.cpp:19:
+In file included from ./third_party/include/boost/locale/src/icu/formatter.cpp:28:
+In file included from ./third_party/include/unicode/rbnf.h:34:
+[1m./third_party/include/unicode/dcfmtsym.h:508:17: [0m[0;1;35mwarning: [0m[1mprivate field 'actualLocale' is not used [-Wunused-private-field][0m
+  508 |     CharString* actualLocale = nullptr;[0m
+      | [0;1;32m                ^
+[0m[1m./third_party/include/unicode/dcfmtsym.h:509:17: [0m[0;1;35mwarning: [0m[1mprivate field 'validLocale' is not used [-Wunused-private-field][0m
+  509 |     CharString* validLocale = nullptr;[0m
+      | [0;1;32m                ^
+[0m66 warnings and 4 errors generated.

@@ -1,5 +1,8 @@
 module;
 #undef in
+#include <unicode/umachine.h> // include this header first to avoid deprecation
+#undef U_ATTRIBUTE_DEPRECATED // avoid deprecation
+#define U_ATTRIBUTE_DEPRECATED // avoid deprecation
 #include <unicode/appendable.h>
 #include <unicode/brkiter.h>
 #include <unicode/bytestream.h>
@@ -70,7 +73,6 @@ module;
 #include <unicode/uloc.h>
 #include <unicode/ulocale.h>
 #include <unicode/ulocbuilder.h>
-#include <unicode/umachine.h>
 #include <unicode/umisc.h>
 #include <unicode/umutablecptrie.h>
 #include <unicode/unifilt.h>
@@ -207,6 +209,7 @@ module;
 
 #define U_COMMON_IMPLEMENTATION
 #define U_I18N_IMPLEMENTATION
+#define U_IO_IMPLEMENTATION
 #include <unicode/src/appendable.cpp>
 #include <unicode/src/bmpset.cpp>
 #include <unicode/src/bmpset.h>
@@ -267,7 +270,7 @@ module;
 #include <unicode/src/locid.cpp>
 #include <unicode/src/loclikely.cpp>
 #define gInitOnce gInitOnce$1 // avoid redefinition
-#define cleanup cleanup$1 // avoid redifinition, later cancelled in <unicode/src/umutex.cpp>
+#define cleanup cleanup$1 // avoid redifinition, later undef in <unicode/src/umutex.cpp>
 #include <unicode/src/loclikelysubtags.cpp>
 #include <unicode/src/loclikelysubtags.h>
 #include <unicode/src/locmap.cpp>
@@ -370,7 +373,7 @@ module;
 #include <unicode/src/ucasemap_titlecase_brkiter.cpp>
 #include <unicode/src/ucasemap.cpp>
 #include <unicode/src/ucat.cpp>
-#define dataVersion dataVersion$1 // This #define is later #undef in <unicode/src/usprep.cpp>, because <unicode/src/usprep.cpp> needs `dataVersion` in both file.
+#define dataVersion dataVersion$1 // This #define is later undef in <unicode/src/usprep.cpp>, because <unicode/src/usprep.cpp> needs `dataVersion` in both file.
 #include <unicode/src/uchar_props_data.h>
 #define _enumPropertyStartsRange$1 _enumPropertyStartsRange$2 // avoid redefinition
 #include <unicode/src/uchar.cpp>
@@ -449,8 +452,8 @@ module;
 #include <unicode/src/ulist.h>
 #include <unicode/src/uloc_keytype.cpp>
 #include <unicode/src/uloc_tag.cpp>
-#define UPRV_ISDIGIT UPRV_ISDIGIT$1  // avoid redefinition
-#define UPRV_ISALPHANUM UPRV_ISALPHANUM$1  // avoid redefinition
+#define UPRV_ISDIGIT UPRV_ISDIGIT$1 // avoid redefinition
+#define UPRV_ISALPHANUM UPRV_ISALPHANUM$1 // avoid redefinition
 #undef MINLEN // from src
 #include <unicode/src/uloc.cpp>
 #include <unicode/src/ulocale.cpp>
@@ -464,7 +467,7 @@ module;
 #include <unicode/src/umath.cpp>
 #define getRange getRange$1 // avoid redefinition
 #include <unicode/src/umutablecptrie.cpp>
-#undef cleanup // cancel macro in <unicode/src/loclikelysubtags.cpp>, because `UMutex::cleanup` cannot be renamed.
+#undef cleanup // undef macro in <unicode/src/loclikelysubtags.cpp>, because `UMutex::cleanup` cannot be renamed.
 #include <unicode/src/umutex.cpp>
 #include <unicode/src/umutex.h>
 #include <unicode/src/unames.cpp>
@@ -497,7 +500,7 @@ module;
 #include <unicode/src/uprops.h>
 #include <unicode/src/ures_cnv.cpp>
 #define gCacheInitOnce gCacheInitOnce$1 // avoid redefinition
-#define cache cache$1 // avoid redefinition, later cancelled in <unicode/src/measfmt.cpp>
+#define cache cache$1 // avoid redefinition, later undef in <unicode/src/measfmt.cpp>
 #include <unicode/src/uresbund.cpp>
 #define gEmptyString gEmptyString$1 // avoid redefinition
 #define isAcceptable isAcceptable$1 // avoid redefinition
@@ -801,7 +804,7 @@ module;
 #include <unicode/src/japancal.cpp>
 #include <unicode/src/japancal.h>
 #include <unicode/src/listformatter.cpp>
-#undef cache // cancel macro in <unicode/src/uresbund.cpp>, because `MeasureFormat::cache` cannot be renamed, later recorvered in <unicode/src/ucol_res.cpp>
+#undef cache // undef macro in <unicode/src/uresbund.cpp>, because `MeasureFormat::cache` cannot be renamed, later re-define in <unicode/src/ucol_res.cpp>
 #include <unicode/src/measfmt.cpp>
 #include <unicode/src/measunit_extra.cpp>
 #include <unicode/src/measunit_impl.h>
@@ -860,7 +863,7 @@ module;
 #include <unicode/src/number_asformat.cpp>
 #include <unicode/src/number_asformat.h>
 #include <unicode/src/number_capi.cpp>
-#define getIndex getIndex$1 // avoid adl, later cancelled in <unicode/src/numfmt.cpp>
+#define getIndex getIndex$1 // avoid adl, later undef in <unicode/src/numfmt.cpp>
 #include <unicode/src/number_compact.cpp>
 #include <unicode/src/number_compact.h>
 #include <unicode/src/number_currencysymbols.cpp>
@@ -908,7 +911,7 @@ module;
 #include <unicode/src/number_utypes.h>
 #define gService$2 gService$3 // avoid redefinition
 #define gServiceInitOnce$1 gServiceInitOnce$2 // avoid redefinition
-#undef getIndex // cancel macro in <unicode/src/number_compact.cpp>, because `ParsePosition::getIndex` cannot be renamed
+#undef getIndex // undef macro in <unicode/src/number_compact.cpp>, because `ParsePosition::getIndex` cannot be renamed
 #define kKeyValueLenMax kKeyValueLenMax$1 // avoid redefinition
 #include <unicode/src/numfmt.cpp>
 #include <unicode/src/numparse_affixes.cpp>
@@ -937,7 +940,7 @@ module;
 #define LNF LNF$1 // avoid redefinition
 #define UNF UNF$1 // avoid redefinition
 namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // create alias
-#define impl impl$ // avoid adl, later cancelled in <unicode/src/scientificnumberformatter.cpp> 
+#define impl impl$ // avoid adl, later undef in <unicode/src/scientificnumberformatter.cpp> 
 #include <unicode/src/numrange_fluent.cpp>
 #include <unicode/src/numrange_impl.cpp>
 #include <unicode/src/numrange_impl.h>
@@ -980,7 +983,7 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #include <unicode/src/rbt.cpp>
 #include <unicode/src/rbt.h>
 #include <unicode/src/rbtz.cpp>
-#undef RBBIRPT_H // fixme: see pull request of icu, this will be recorvered soon.
+#undef RBBIRPT_H // fixme: see pull request of icu, this will be re-define soon.
 #define kRuleSet_digit_char kRuleSet_digit_char$1 // avoid redefinition
 #define kRuleSet_rule_char kRuleSet_rule_char$1 // avoid redefinition
 #define doNOP doNOP$1 // avoid redefinition
@@ -989,7 +992,7 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #define doDotAny doDotAny$1 // avoid redefinition
 #define rbbiLastAction rbbiLastAction$1 // avoid redefinition
 #define gRuleParseStateTable gRuleParseStateTable$1 // avoid redefinition
-#undef RBBISCAN_H // fixme: see pull request of icu, this will be recorvered soon.
+#undef RBBISCAN_H // fixme: see pull request of icu, this will be re-define soon.
 #define chCR chCR$1 // avoid redefinition
 #define chLF chLF$1 // avoid redefinition
 #define chPound chPound$1 // avoid redefinition
@@ -1019,7 +1022,7 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #include <unicode/src/remtrans.h>
 #include <unicode/src/repattrn.cpp>
 #include <unicode/src/rulebasedcollator.cpp>
-#undef impl // cancel macro in <unicode/src/numrange_fluent.cpp>, because `icu::numparse::impl` cannot be renamed
+#undef impl // undef macro in <unicode/src/numrange_fluent.cpp>, because `icu::numparse::impl` cannot be renamed
 #include <unicode/src/scientificnumberformatter.cpp>
 #include <unicode/src/scriptset.cpp>
 #include <unicode/src/scriptset.h>
@@ -1109,7 +1112,7 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 // #include <unicode/src/ucln_in.cpp>: this file can only be included once
 #include <unicode/src/ucln_in.h>
 #include <unicode/src/ucol_imp.h>
-#define cache cache$1 // recorver macro in <unicode/src/measfmt.cpp>, because `CollationLoader::cache$1` cannot be renamed
+#define cache cache$1 // re-define macro in <unicode/src/measfmt.cpp>, because `CollationLoader::cache$1` cannot be renamed
 #define defaultKeywordValues$1 defaultKeywordValues$2 // avoid redefinition
 #include <unicode/src/ucol_res.cpp>
 #include <unicode/src/ucol_sit.cpp>
@@ -1132,6 +1135,7 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #include <unicode/src/unesctrn.cpp>
 #include <unicode/src/unesctrn.h>
 #define OPEN_DELIM OPEN_DELIM$1 // avoid redefinition
+#define CLOSE_DELIM CLOSE_DELIM$1 // avoid redefinition
 #include <unicode/src/uni2name.cpp>
 #include <unicode/src/uni2name.h>
 #include <unicode/src/units_complexconverter.cpp>
@@ -1145,6 +1149,8 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #include <unicode/src/unum.cpp>
 #include <unicode/src/unumsys.cpp>
 #include <unicode/src/upluralrules.cpp>
+#undef BACKSLASH // from src
+#define BACKSLASH BACKSLASH$1 // avoid redefinition
 #include <unicode/src/uregex.cpp>
 #include <unicode/src/uregexc.cpp>
 #include <unicode/src/uregion.cpp>
@@ -1162,6 +1168,14 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #include <unicode/src/utf8collationiterator.h>
 #include <unicode/src/utmscale.cpp>
 #include <unicode/src/utrans.cpp>
+#undef COLON // from src
+#undef COMMA // from src
+#undef days // from src
+#define PLUS PLUS$1 // avoid redefinition
+#define MINUS MINUS$1 // avoid redefinition
+#define COLON COLON$1 // avoid redefinition
+#define COMMA COMMA$2 // avoid redefinition
+#define days days$1 // avoid redefinition
 #include <unicode/src/vtzone.cpp>
 #include <unicode/src/vzone.cpp>
 #include <unicode/src/vzone.h>
@@ -1181,7 +1195,8 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #include <unicode/src/locbund.h>
 #include <unicode/src/sprintf.cpp>
 #include <unicode/src/sscanf.cpp>
-#include <unicode/src/ucln_io.cpp>
+#define copyright copyright$1 // avoid redefinition
+// #include <unicode/src/ucln_io.cpp>: fixme
 #include <unicode/src/ucln_io.h>
 #include <unicode/src/ufile.cpp>
 #include <unicode/src/ufile.h>
@@ -1189,7 +1204,27 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl$ = impl; } } // cr
 #include <unicode/src/ufmt_cmn.h>
 #include <unicode/src/uprintf.cpp>
 #include <unicode/src/uprintf.h>
+#undef PERCENT // from src
+#undef DIGIT_ZERO // from src
+#undef DIGIT_ONE // from src
 #include <unicode/src/uprntf_p.cpp>
+#undef ISFLAG // from src
+#undef UFMT_SIMPLE_PERCENT // from src
+#undef UFMT_STRING // from src
+#undef UFMT_CHAR // from src
+#undef UFMT_INT // from src
+#undef UFMT_UINT // from src
+#undef UFMT_OCTAL // from src
+#undef UFMT_HEX // from src
+#undef UFMT_DOUBLE // from src
+#undef UFMT_SCIENTIFIC // from src
+#undef UFMT_SCIDBL // from src
+#undef UFMT_COUNT // from src
+#undef UFMT_POINTER // from src
+#undef UFMT_SPELLOUT // from src
+#undef UFMT_PERCENT // from src
+#undef UFMT_UCHAR // from src
+#undef UFMT_USTRING // from src
 #include <unicode/src/uscanf_p.cpp>
 #include <unicode/src/uscanf.cpp>
 #include <unicode/src/uscanf.h>

@@ -14,7 +14,7 @@ module;
 #include <tbb/src/tbb/dynamic_link.cpp>
 #include <tbb/src/tbb/exception.cpp>
 #include <tbb/src/tbb/global_control.cpp>
-#define system_topology system_topology_2
+#define system_topology system_topology$1
 #include <tbb/src/tbb/governor.cpp>
 #undef system_topology
 #undef LIBRARY_PREFIX
@@ -43,12 +43,12 @@ module;
 // #include <tbb/src/tbbbind/tbb_bind.cpp> fixme
 #include <tbb/src/tbbmalloc_proxy/function_replacement.cpp>
 #include <tbb/src/tbbmalloc_proxy/proxy.cpp>
-#define notify_type notify_type_2
-#define prepare prepare_2
-#define cancel cancel_2
-#define acquired acquired_2
-#define releasing releasing_2
-#define call_itt_notify call_itt_notify_2
+#define notify_type notify_type$1
+#define prepare prepare$1
+#define cancel cancel$1
+#define acquired acquired$1
+#define releasing releasing$1
+#define call_itt_notify call_itt_notify$1
 #include <tbb/src/tbbmalloc/backend.cpp>
 #include <tbb/src/tbbmalloc/backref.cpp>
 #include <tbb/src/tbbmalloc/frontend.cpp>

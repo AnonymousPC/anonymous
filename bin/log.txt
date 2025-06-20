@@ -1,374 +1,357 @@
-Undefined symbols for architecture arm64:
-  "_UCNV_FROM_U_CALLBACK_SKIP_78", referenced from:
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-  "_UCNV_FROM_U_CALLBACK_STOP_78", referenced from:
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-  "_UCNV_TO_U_CALLBACK_SKIP_78", referenced from:
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-  "_UCNV_TO_U_CALLBACK_STOP_78", referenced from:
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-  "icu_78::DateFormat::createDateInstance(icu_78::DateFormat::EStyle, icu_78::Locale const&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::DateFormat::createTimeInstance(icu_78::DateFormat::EStyle, icu_78::Locale const&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::DateFormat::createDateTimeInstance(icu_78::DateFormat::EStyle, icu_78::DateFormat::EStyle, icu_78::Locale const&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::date_formatter() const in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::Normalizer::normalize(icu_78::UnicodeString const&, UNormalizationMode, int, icu_78::UnicodeString&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::(anonymous namespace)::normalize_string(icu_78::UnicodeString&, int) in boost.locale.o
-  "icu_78::Formattable::getDecimalNumber(UErrorCode&)", referenced from:
-      bool boost::locale::util::try_parse_icu<unsigned long long>(icu_78::Formattable&, unsigned long long&) in boost.locale.o
-  "icu_78::Formattable::Formattable()", referenced from:
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<double>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<unsigned long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<int>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, int&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<wchar_t>::do_parse<double>(std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<wchar_t>::do_parse<unsigned long long>(std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<wchar_t>::do_parse<long long>(std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> const&, long long&) const in boost.locale.o
-      ...
-  "icu_78::Formattable::~Formattable()", referenced from:
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<double>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<double>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<unsigned long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<unsigned long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<int>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, int&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<int>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, int&) const in boost.locale.o
-      ...
-  "icu_78::NumberFormat::createInstance(icu_78::Locale const&, UNumberFormatStyle, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-  "icu_78::NumberFormat::createInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-  "icu_78::NumberFormat::createPercentInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-  "icu_78::NumberFormat::createScientificInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-  "icu_78::BreakIterator::createLineInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::boundary::impl_icu::get_iterator(boost::locale::boundary::boundary_type, icu_78::Locale const&) in boost.locale.o
-  "icu_78::BreakIterator::createWordInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::boundary::impl_icu::get_iterator(boost::locale::boundary::boundary_type, icu_78::Locale const&) in boost.locale.o
-  "icu_78::BreakIterator::createSentenceInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::boundary::impl_icu::get_iterator(boost::locale::boundary::boundary_type, icu_78::Locale const&) in boost.locale.o
-  "icu_78::BreakIterator::createCharacterInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::boundary::impl_icu::get_iterator(boost::locale::boundary::boundary_type, icu_78::Locale const&) in boost.locale.o
-  "icu_78::ParsePosition::~ParsePosition()", referenced from:
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<double>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<double>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<unsigned long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<unsigned long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<int>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, int&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::number_format<char>::do_parse<int>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, int&) const in boost.locale.o
-      ...
-  "icu_78::UnicodeString::append(int)", referenced from:
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::icu(wchar_t const*, wchar_t const*) const in boost.locale.o
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::icu_checked(wchar_t const*, wchar_t const*) const in boost.locale.o
-  "icu_78::UnicodeString::toLower(icu_78::Locale const&)", referenced from:
-      boost::locale::impl_icu::converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::converter_impl<wchar_t>::convert(boost::locale::converter_base::conversion_type, wchar_t const*, wchar_t const*, int) const in boost.locale.o
-  "icu_78::UnicodeString::toTitle(icu_78::BreakIterator*, icu_78::Locale const&)", referenced from:
-      boost::locale::impl_icu::converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::converter_impl<wchar_t>::convert(boost::locale::converter_base::conversion_type, wchar_t const*, wchar_t const*, int) const in boost.locale.o
-  "icu_78::UnicodeString::toUpper(icu_78::Locale const&)", referenced from:
-      boost::locale::impl_icu::converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::converter_impl<wchar_t>::convert(boost::locale::converter_base::conversion_type, wchar_t const*, wchar_t const*, int) const in boost.locale.o
-  "icu_78::UnicodeString::doAppend(char16_t const*, int, int)", referenced from:
-      icu_78::UnicodeString::operator+=(char16_t) in boost.locale.o
-  "icu_78::UnicodeString::doAppend(icu_78::UnicodeString const&, int, int)", referenced from:
-      icu_78::UnicodeString::operator+=(icu_78::UnicodeString const&) in boost.locale.o
-  "icu_78::UnicodeString::foldCase(unsigned int)", referenced from:
-      boost::locale::impl_icu::converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::converter_impl<wchar_t>::convert(boost::locale::converter_base::conversion_type, wchar_t const*, wchar_t const*, int) const in boost.locale.o
-  "icu_78::UnicodeString::fromUTF32(int const*, int)", referenced from:
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::icu_checked(wchar_t const*, wchar_t const*) const in boost.locale.o
-  "icu_78::UnicodeString::UnicodeString(char const*)", referenced from:
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      ...
-  "icu_78::UnicodeString::UnicodeString(char const*, int, UConverter*, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::icu_std_converter<char, 1>::icu(char const*, char const*) const in boost.locale.o
-      boost::locale::impl_icu::icu_std_converter<char8_t, 1>::icu(char8_t const*, char8_t const*) const in boost.locale.o
-  "icu_78::UnicodeString::UnicodeString(icu_78::UnicodeString const&)", referenced from:
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_symbol_to_icu(char, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&)::$_0::operator()(icu_78::UnicodeString const&, char const*) const in boost.locale.o
-  "icu_78::UnicodeString::UnicodeString(int, int, int)", referenced from:
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::icu(wchar_t const*, wchar_t const*) const in boost.locale.o
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::icu_checked(wchar_t const*, wchar_t const*) const in boost.locale.o
-  "icu_78::UnicodeString::~UnicodeString()", referenced from:
-      boost::locale::conv::impl::uconv_between::convert(char const*, char const*) in boost.locale.o
-      boost::locale::conv::impl::uconv_between::convert(char const*, char const*) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      boost::locale::impl_icu::strftime_to_icu(icu_78::UnicodeString const&, boost::locale::impl_icu::formatters_cache const&) in boost.locale.o
-      ...
-  "icu_78::UnicodeString::operator=(icu_78::UnicodeString&&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::UnicodeString::operator=(icu_78::UnicodeString const&)", referenced from:
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      ...
-  "icu_78::SimpleDateFormat::getStaticClassID()", referenced from:
-      icu_78::SimpleDateFormat* boost::locale::impl_icu::icu_cast<icu_78::SimpleDateFormat, icu_78::DateFormat>(icu_78::DateFormat*) in boost.locale.o
-  "icu_78::SimpleDateFormat::SimpleDateFormat(icu_78::UnicodeString const&, icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::GregorianCalendar::getStaticClassID()", referenced from:
-      icu_78::GregorianCalendar const* boost::locale::impl_icu::icu_cast<icu_78::GregorianCalendar const, icu_78::Calendar const>(icu_78::Calendar const*) in boost.locale.o
-  "icu_78::RuleBasedNumberFormat::RuleBasedNumberFormat(icu_78::URBNFRuleSetTag, icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-  "icu_78::Locale::createCanonical(char const*)", referenced from:
-      boost::locale::impl_icu::cdata::set(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::Locale::Locale(icu_78::Locale const&)", referenced from:
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<char>::boundary_indexing_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<wchar_t>::boundary_indexing_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<char8_t>::boundary_indexing_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::impl_icu::cdata::cdata(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::impl_icu::collate_impl<char8_t>::collate_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::impl_icu::collate_impl<wchar_t>::collate_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      ...
-  "icu_78::Locale::Locale()", referenced from:
-      boost::locale::impl_icu::cdata::cdata() in boost.locale.o
-  "icu_78::Locale::~Locale()", referenced from:
-      boost::locale::impl_icu::formatters_cache::formatters_cache(icu_78::Locale const&) in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<char>::boundary_indexing_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<char>::~boundary_indexing_impl() in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<wchar_t>::boundary_indexing_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<wchar_t>::~boundary_indexing_impl() in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<char8_t>::boundary_indexing_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-      boost::locale::boundary::impl_icu::boundary_indexing_impl<char8_t>::~boundary_indexing_impl() in boost.locale.o
-      ...
-  "icu_78::Locale::operator=(icu_78::Locale&&)", referenced from:
-      boost::locale::impl_icu::cdata::set(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::UMemory::operator delete(void*)", referenced from:
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::UMemory::operator new(unsigned long)", referenced from:
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-      boost::locale::impl_icu::formatters_cache::create_number_format(boost::locale::impl_icu::num_fmt_type, UErrorCode&) const in boost.locale.o
-      boost::locale::impl_icu::formatter<char>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<wchar_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::formatter<char8_t>::create(std::__1::ios_base&, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::Calendar::adoptTimeZone(icu_78::TimeZone*)", referenced from:
-      boost::locale::impl_icu::calendar_impl::set_timezone(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::Calendar::createInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::calendar_impl::calendar_impl(boost::locale::impl_icu::cdata const&) in boost.locale.o
-  "icu_78::Calendar::setTimeInMillis(double, UErrorCode&)", referenced from:
-      icu_78::Calendar::setTime(double, UErrorCode&) in boost.locale.o
-  "icu_78::Calendar::set(UCalendarDateFields, int)", referenced from:
-      boost::locale::impl_icu::calendar_impl::set_value(boost::locale::period::marks::period_mark, int) in boost.locale.o
-  "icu_78::Collator::createInstance(icu_78::Locale const&, UErrorCode&)", referenced from:
-      boost::locale::impl_icu::collate_impl<char8_t>::get_collator(boost::locale::collate_level) const in boost.locale.o
-      boost::locale::impl_icu::collate_impl<wchar_t>::get_collator(boost::locale::collate_level) const in boost.locale.o
-      boost::locale::impl_icu::collate_impl<char>::get_collator(boost::locale::collate_level) const in boost.locale.o
-  "icu_78::TimeZone::createDefault()", referenced from:
-      boost::locale::impl_icu::get_time_zone(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::TimeZone::createTimeZone(icu_78::UnicodeString const&)", referenced from:
-      boost::locale::impl_icu::get_time_zone(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "icu_78::DateFormat::parse(icu_78::UnicodeString const&, icu_78::ParsePosition&) const", referenced from:
-      unsigned long boost::locale::impl_icu::date_format<char>::do_parse<double>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::date_format<char>::do_parse<unsigned long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::date_format<char>::do_parse<long long>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::date_format<char>::do_parse<int>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, int&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::date_format<wchar_t>::do_parse<double>(std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> const&, double&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::date_format<wchar_t>::do_parse<unsigned long long>(std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> const&, unsigned long long&) const in boost.locale.o
-      unsigned long boost::locale::impl_icu::date_format<wchar_t>::do_parse<long long>(std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> const&, long long&) const in boost.locale.o
-      ...
-  "icu_78::DateFormat::format(double, icu_78::UnicodeString&) const", referenced from:
-      boost::locale::impl_icu::date_format<char>::do_format(double, unsigned long&) const in boost.locale.o
-      boost::locale::impl_icu::date_format<wchar_t>::do_format(double, unsigned long&) const in boost.locale.o
-      boost::locale::impl_icu::date_format<char8_t>::do_format(double, unsigned long&) const in boost.locale.o
-  "icu_78::Formattable::getLong(UErrorCode&) const", referenced from:
-      boost::locale::impl_icu::number_format<char>::get_value(int&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<wchar_t>::get_value(int&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<char8_t>::get_value(int&, icu_78::Formattable&) const in boost.locale.o
-  "icu_78::Formattable::getInt64(UErrorCode&) const", referenced from:
-      boost::locale::impl_icu::number_format<char>::get_value(unsigned long long&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<char>::get_value(long long&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<wchar_t>::get_value(unsigned long long&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<wchar_t>::get_value(long long&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<char8_t>::get_value(unsigned long long&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<char8_t>::get_value(long long&, icu_78::Formattable&) const in boost.locale.o
-  "icu_78::Formattable::getDouble(UErrorCode&) const", referenced from:
-      boost::locale::impl_icu::number_format<char>::get_value(double&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<wchar_t>::get_value(double&, icu_78::Formattable&) const in boost.locale.o
-      boost::locale::impl_icu::number_format<char8_t>::get_value(double&, icu_78::Formattable&) const in boost.locale.o
-  "icu_78::Formattable::isNumeric() const", referenced from:
-      bool boost::locale::util::try_parse_icu<unsigned long long>(icu_78::Formattable&, unsigned long long&) in boost.locale.o
-  "icu_78::NumberFormat::getMaximumIntegerDigits() const", referenced from:
-      boost::locale::impl_icu::(anonymous namespace)::set_fraction_digits(icu_78::NumberFormat&, unsigned int, long) in boost.locale.o
-  "icu_78::NumberFormat::format(double, icu_78::UnicodeString&) const", referenced from:
-      std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> boost::locale::impl_icu::number_format<char>::do_format<double>(double, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> boost::locale::impl_icu::number_format<wchar_t>::do_format<double>(double, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<char8_t, std::__1::char_traits<char8_t>, std::__1::allocator<char8_t>> boost::locale::impl_icu::number_format<char8_t>::do_format<double>(double, unsigned long&) const in boost.locale.o
-  "icu_78::NumberFormat::format(int, icu_78::UnicodeString&) const", referenced from:
-      std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> boost::locale::impl_icu::number_format<char>::do_format<int>(int, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> boost::locale::impl_icu::number_format<wchar_t>::do_format<int>(int, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<char8_t, std::__1::char_traits<char8_t>, std::__1::allocator<char8_t>> boost::locale::impl_icu::number_format<char8_t>::do_format<int>(int, unsigned long&) const in boost.locale.o
-  "icu_78::NumberFormat::format(long long, icu_78::UnicodeString&) const", referenced from:
-      std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> boost::locale::impl_icu::number_format<char>::do_format<long long>(long long, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<wchar_t, std::__1::char_traits<wchar_t>, std::__1::allocator<wchar_t>> boost::locale::impl_icu::number_format<wchar_t>::do_format<long long>(long long, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<char8_t, std::__1::char_traits<char8_t>, std::__1::allocator<char8_t>> boost::locale::impl_icu::number_format<char8_t>::do_format<long long>(long long, unsigned long&) const in boost.locale.o
-  "icu_78::UnicodeString::countChar32(int, int) const", referenced from:
-      boost::locale::impl_icu::icu_std_converter<char, 1>::cut(icu_78::UnicodeString const&, char const*, char const*, unsigned long, unsigned long, unsigned long) const in boost.locale.o
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::cut(icu_78::UnicodeString const&, wchar_t const*, wchar_t const*, unsigned long, unsigned long, unsigned long) const in boost.locale.o
-      boost::locale::impl_icu::number_format<char>::format(unsigned long long, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> boost::locale::impl_icu::number_format<char>::do_format<double>(double, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> boost::locale::impl_icu::number_format<char>::do_format<long long>(long long, unsigned long&) const in boost.locale.o
-      std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> boost::locale::impl_icu::number_format<char>::do_format<int>(int, unsigned long&) const in boost.locale.o
-      boost::locale::impl_icu::date_format<char>::do_format(double, unsigned long&) const in boost.locale.o
-      ...
-  "icu_78::Calendar::getTimeZone() const", referenced from:
-      boost::locale::impl_icu::calendar_impl::get_timezone() const in boost.locale.o
-  "icu_78::Calendar::getTimeInMillis(UErrorCode&) const", referenced from:
-      icu_78::Calendar::getTime(UErrorCode&) const in boost.locale.o
-  "icu_78::Calendar::getFirstDayOfWeek(UErrorCode&) const", referenced from:
-      boost::locale::impl_icu::calendar_impl::get_value(boost::locale::period::marks::period_mark, boost::locale::abstract_calendar::value_type) const in boost.locale.o
-  "icu_78::Calendar::get(UCalendarDateFields, UErrorCode&) const", referenced from:
-      boost::locale::impl_icu::calendar_impl::normalize() in boost.locale.o
-      boost::locale::impl_icu::calendar_impl::get_value(boost::locale::period::marks::period_mark, boost::locale::abstract_calendar::value_type) const in boost.locale.o
-  "typeinfo for icu_78::DateFormat", referenced from:
-      icu_78::SimpleDateFormat* boost::locale::impl_icu::icu_cast<icu_78::SimpleDateFormat, icu_78::DateFormat>(icu_78::DateFormat*) in boost.locale.o
-  "typeinfo for icu_78::SimpleDateFormat", referenced from:
-      icu_78::SimpleDateFormat* boost::locale::impl_icu::icu_cast<icu_78::SimpleDateFormat, icu_78::DateFormat>(icu_78::DateFormat*) in boost.locale.o
-  "typeinfo for icu_78::GregorianCalendar", referenced from:
-      icu_78::GregorianCalendar const* boost::locale::impl_icu::icu_cast<icu_78::GregorianCalendar const, icu_78::Calendar const>(icu_78::Calendar const*) in boost.locale.o
-  "typeinfo for icu_78::Calendar", referenced from:
-      icu_78::GregorianCalendar const* boost::locale::impl_icu::icu_cast<icu_78::GregorianCalendar const, icu_78::Calendar const>(icu_78::Calendar const*) in boost.locale.o
-  "vtable for icu_78::Replaceable", referenced from:
-      icu_78::Replaceable::Replaceable() in boost.locale.o
-   NOTE: a missing vtable usually means the first non-inline virtual member function has no definition.
-  "vtable for icu_78::ParsePosition", referenced from:
-      icu_78::ParsePosition::ParsePosition() in boost.locale.o
-   NOTE: a missing vtable usually means the first non-inline virtual member function has no definition.
-  "vtable for icu_78::UnicodeString", referenced from:
-      icu_78::UnicodeString::UnicodeString() in boost.locale.o
-   NOTE: a missing vtable usually means the first non-inline virtual member function has no definition.
-  "vtable for icu_78::UObject", referenced from:
-      icu_78::UObject::UObject() in boost.locale.o
-   NOTE: a missing vtable usually means the first non-inline virtual member function has no definition.
-  "_u_errorName_78", referenced from:
-      boost::locale::impl_icu::check_and_throw_dt(UErrorCode&) in boost.locale.o
-      boost::locale::impl_icu::collate_impl<char8_t>::do_compare(boost::locale::collate_level, char8_t const*, char8_t const*, char8_t const*, char8_t const*) const in boost.locale.o
-      boost::locale::impl_icu::collate_impl<char8_t>::get_collator(boost::locale::collate_level) const in boost.locale.o
-      boost::locale::impl_icu::collate_impl<wchar_t>::do_compare(boost::locale::collate_level, wchar_t const*, wchar_t const*, wchar_t const*, wchar_t const*) const in boost.locale.o
-      boost::locale::impl_icu::collate_impl<wchar_t>::get_collator(boost::locale::collate_level) const in boost.locale.o
-      boost::locale::impl_icu::collate_impl<char>::do_compare(boost::locale::collate_level, char const*, char const*, char const*, char const*) const in boost.locale.o
-      boost::locale::impl_icu::collate_impl<char>::get_collator(boost::locale::collate_level) const in boost.locale.o
-      ...
-  "_u_strFromUTF32_78", referenced from:
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::icu_checked(wchar_t const*, wchar_t const*) const in boost.locale.o
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::icu_checked(wchar_t const*, wchar_t const*) const in boost.locale.o
-  "_u_strToUTF32_78", referenced from:
-      boost::locale::impl_icu::icu_std_converter<wchar_t, 4>::std(icu_78::UnicodeString const&) const in boost.locale.o
-  "_ucasemap_close_78", referenced from:
-      boost::locale::impl_icu::raii_casemap<char>::~raii_casemap() in boost.locale.o
-      boost::locale::impl_icu::raii_casemap<char8_t>::~raii_casemap() in boost.locale.o
-  "_ucasemap_open_78", referenced from:
-      boost::locale::impl_icu::raii_casemap<char>::raii_casemap(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      boost::locale::impl_icu::raii_casemap<char8_t>::raii_casemap(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-  "_ucasemap_utf8FoldCase_78", referenced from:
-      boost::locale::impl_icu::utf8_converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::utf8_converter_impl<char8_t>::convert(boost::locale::converter_base::conversion_type, char8_t const*, char8_t const*, int) const in boost.locale.o
-  "_ucasemap_utf8ToLower_78", referenced from:
-      boost::locale::impl_icu::utf8_converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::utf8_converter_impl<char8_t>::convert(boost::locale::converter_base::conversion_type, char8_t const*, char8_t const*, int) const in boost.locale.o
-  "_ucasemap_utf8ToTitle_78", referenced from:
-      boost::locale::impl_icu::utf8_converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::utf8_converter_impl<char8_t>::convert(boost::locale::converter_base::conversion_type, char8_t const*, char8_t const*, int) const in boost.locale.o
-  "_ucasemap_utf8ToUpper_78", referenced from:
-      boost::locale::impl_icu::utf8_converter_impl<char>::convert(boost::locale::converter_base::conversion_type, char const*, char const*, int) const in boost.locale.o
-      boost::locale::impl_icu::utf8_converter_impl<char8_t>::convert(boost::locale::converter_base::conversion_type, char8_t const*, char8_t const*, int) const in boost.locale.o
-  "_ucnv_close_78", referenced from:
-      boost::locale::impl_icu::icu_handle::close() in boost.locale.o
-  "_ucnv_fromUChars_78", referenced from:
-      std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> boost::locale::impl_icu::uconv::go<char>(char16_t const*, int, int) const in boost.locale.o
-      std::__1::basic_string<char8_t, std::__1::char_traits<char8_t>, std::__1::allocator<char8_t>> boost::locale::impl_icu::uconv::go<char8_t>(char16_t const*, int, int) const in boost.locale.o
-      boost::locale::impl_icu::uconv_converter::from_unicode(unsigned int, char*, char const*) in boost.locale.o
-  "_ucnv_getMaxCharSize_78", referenced from:
-      boost::locale::impl_icu::uconv::max_char_size() const in boost.locale.o
-  "_ucnv_getNextUChar_78", referenced from:
-      boost::locale::impl_icu::uconv::cut(unsigned long, char const*, char const*) const in boost.locale.o
-      boost::locale::impl_icu::uconv_converter::to_unicode(char const*&, char const*) in boost.locale.o
-  "_ucnv_open_78", referenced from:
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-  "_ucnv_reset_78", referenced from:
-      boost::locale::impl_icu::uconv_converter::to_unicode(char const*&, char const*) in boost.locale.o
-      boost::locale::impl_icu::uconv_converter::from_unicode(unsigned int, char*, char const*) in boost.locale.o
-  "_ucnv_setFromUCallBack_78", referenced from:
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-  "_ucnv_setToUCallBack_78", referenced from:
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-      boost::locale::impl_icu::uconv::uconv(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, boost::locale::impl_icu::cpcvt_type) in boost.locale.o
-  "_utext_close_78", referenced from:
-      std::__1::default_delete<UText>::operator()(UText*) in boost.locale.o
-  "_utext_openUTF8_78", referenced from:
-      std::__1::vector<boost::locale::boundary::break_info, std::__1::allocator<boost::locale::boundary::break_info>> boost::locale::boundary::impl_icu::do_map<char>(boost::locale::boundary::boundary_type, char const*, char const*, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-      std::__1::vector<boost::locale::boundary::break_info, std::__1::allocator<boost::locale::boundary::break_info>> boost::locale::boundary::impl_icu::do_map<char8_t>(boost::locale::boundary::boundary_type, char8_t const*, char8_t const*, icu_78::Locale const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) in boost.locale.o
-ld: symbol(s) not found for architecture arm64
-clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+In module imported from main:
+In module imported from boost:
+In module imported from boost.locale:
+In module imported from icu:
+In file included from ./include/icu.cpp:363:
+[1m./third_party/include/unicode/src/ubrk.cpp:179:12: [0m[0;1;35mwarning: [0m[1m'ubrk_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
+  179 |     [0;34mreturn[0m ubrk_safeClone(bi, [0;32mnullptr[0m, [0;32mnullptr[0m, status);[0m
+      | [0;1;32m           ^
+[0m[1m./third_party/include/unicode/urename.h:515:24: [0m[0;1;36mnote: [0mexpanded from macro 'ubrk_safeClone'[0m
+  515 | #define ubrk_safeClone U_ICU_ENTRY_POINT_RENAME(ubrk_safeClone)[0m
+      | [0;1;32m                       ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:42:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+   42 | ubrk_safeClone_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/ubrk.h:320:1: [0m[0;1;36mnote: [0m'ubrk_safeClone_78' has been explicitly marked deprecated here[0m
+  320 | U_DEPRECATED UBreakIterator * U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:410:
+[1m./third_party/include/unicode/src/ucnv.cpp:326:12: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
+  326 |     [0;34mreturn[0m ucnv_safeClone(cnv, [0;32mnullptr[0m, [0;32mnullptr[0m, status);[0m
+      | [0;1;32m           ^
+[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
+  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
+      | [0;1;32m                       ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:29:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+   29 | ucnv_safeClone_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
+  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:410:
+[1m./third_party/include/unicode/src/ucnv.cpp:492:13: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
+  492 |     clone = ucnv_safeClone(cnv, cloneBuffer, &cloneSize, err);[0m
+      | [0;1;32m            ^
+[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
+  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
+      | [0;1;32m                       ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:55:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+   55 | ucnv_safeClone_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
+  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:413:
+[1m./third_party/include/unicode/src/ucnv2022.cpp:3620:13: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
+ 3620 |             ucnv_safeClone(cnvData->currentConverter,[0m
+      | [0;1;32m            ^
+[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
+  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
+      | [0;1;32m                       ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:86:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+   86 | ucnv_safeClone_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
+  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:416:
+[1m./third_party/include/unicode/src/ucnvhz.cpp:558:9: [0m[0;1;35mwarning: [0m[1m'ucnv_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
+  558 |         ucnv_safeClone(((UConverterDataHZ*)cnv->extraInfo)->gbConverter, &localClone->subCnv, &size, status);[0m
+      | [0;1;32m        ^
+[0m[1m./third_party/include/unicode/urename.h:710:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucnv_safeClone'[0m
+  710 | #define ucnv_safeClone U_ICU_ENTRY_POINT_RENAME(ucnv_safeClone)[0m
+      | [0;1;32m                       ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:116:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+  116 | ucnv_safeClone_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/ucnv.h:554:1: [0m[0;1;36mnote: [0m'ucnv_safeClone_78' has been explicitly marked deprecated here[0m
+  554 | U_DEPRECATED UConverter * U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:442:
+[1m./third_party/include/unicode/src/uidna.cpp:523:17: [0m[0;1;35mwarning: [0m[1m'uidna_toASCII_78' is deprecated [-Wdeprecated-declarations][0m
+  523 |         b3Len = uidna_toASCII(b2, b2Len, b3, b3Capacity, options, parseError, &bufferStatus);[0m
+      | [0;1;32m                ^
+[0m[1m./third_party/include/unicode/urename.h:1058:23: [0m[0;1;36mnote: [0mexpanded from macro 'uidna_toASCII'[0m
+ 1058 | #define uidna_toASCII U_ICU_ENTRY_POINT_RENAME(uidna_toASCII)[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:163:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+  163 | uidna_toASCII_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/uidna.h:597:1: [0m[0;1;36mnote: [0m'uidna_toASCII_78' has been explicitly marked deprecated here[0m
+  597 | U_DEPRECATED int32_t U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:442:
+[1m./third_party/include/unicode/src/uidna.cpp:536:22: [0m[0;1;35mwarning: [0m[1m'uidna_toASCII_78' is deprecated [-Wdeprecated-declarations][0m
+  536 |             b3Len =  uidna_toASCII(b2,b2Len,b3,b3Len,options,parseError,&bufferStatus);[0m
+      | [0;1;32m                     ^
+[0m[1m./third_party/include/unicode/urename.h:1058:23: [0m[0;1;36mnote: [0mexpanded from macro 'uidna_toASCII'[0m
+ 1058 | #define uidna_toASCII U_ICU_ENTRY_POINT_RENAME(uidna_toASCII)[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:165:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+  165 | uidna_toASCII_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/uidna.h:597:1: [0m[0;1;36mnote: [0m'uidna_toASCII_78' has been explicitly marked deprecated here[0m
+  597 | U_DEPRECATED int32_t U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:1116:
+[1m./third_party/include/unicode/src/ucol.cpp:108:12: [0m[0;1;35mwarning: [0m[1m'ucol_safeClone_78' is deprecated [-Wdeprecated-declarations][0m
+  108 |     [0;34mreturn[0m ucol_safeClone(coll, [0;32mnullptr[0m, [0;32mnullptr[0m, status);[0m
+      | [0;1;32m           ^
+[0m[1m./third_party/include/unicode/urename.h:787:24: [0m[0;1;36mnote: [0mexpanded from macro 'ucol_safeClone'[0m
+  787 | #define ucol_safeClone U_ICU_ENTRY_POINT_RENAME(ucol_safeClone)[0m
+      | [0;1;32m                       ^
+[0m[1m./third_party/include/unicode/uvernum.h:123:47: [0m[0;1;36mnote: [0mexpanded from macro 'U_ICU_ENTRY_POINT_RENAME'[0m
+  123 | #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)[0m
+      | [0;1;32m                                              ^
+[0m[1m./third_party/include/unicode/uvernum.h:122:51: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF2_ICU_ENTRY_POINT_RENAME'[0m
+  122 | #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)[0m
+      | [0;1;32m                                                  ^
+[0m[1m./third_party/include/unicode/uvernum.h:121:50: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEF_ICU_ENTRY_POINT_RENAME'[0m
+  121 | #       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y[0m
+      | [0;1;32m                                                 ^
+[0m[1m<scratch space>:22:1: [0m[0;1;36mnote: [0mexpanded from here[0m
+   22 | ucol_safeClone_78[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/ucol.h:1359:1: [0m[0;1;36mnote: [0m'ucol_safeClone_78' has been explicitly marked deprecated here[0m
+ 1359 | U_DEPRECATED UCollator* U_EXPORT2[0m
+      | [0;1;32m^
+[0m[1m./third_party/include/unicode/umachine.h:116:29: [0m[0;1;36mnote: [0mexpanded from macro 'U_DEPRECATED'[0m
+  116 | #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/umachine.h:96:52: [0m[0;1;36mnote: [0mexpanded from macro 'U_ATTRIBUTE_DEPRECATED'[0m
+   96 | #    define U_ATTRIBUTE_DEPRECATED [0;34m__attribute__[0m ((deprecated))[0m
+      | [0;1;32m                                                   ^
+[0mIn file included from ./include/icu.cpp:1134:
+[1m./third_party/include/unicode/src/uni2name.cpp:29:23: [0m[0;1;31merror: [0m[1mredefinition of 'OPEN_DELIM' with a different type: 'const char16_t[]' vs 'const char16_t'[0m
+   29 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m OPEN_DELIM[] = {[0;32m92[0m,[0;32m78[0m,[0;32m123[0m,[0;32m0[0m}; [0;33m// "\N{"[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/name2uni.cpp:33:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
+   33 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m OPEN_DELIM  = [0;32m92[0m;  [0;33m// '\\' first char of OPEN[0m
+      | [0;1;32m                      ^
+[0mIn file included from ./include/icu.cpp:1134:
+[1m./third_party/include/unicode/src/uni2name.cpp:30:23: [0m[0;1;31merror: [0m[1mredefinition of 'CLOSE_DELIM'[0m
+   30 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m CLOSE_DELIM  = [0;32m125[0m; [0;33m// "}"[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/name2uni.cpp:34:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
+   34 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m CLOSE_DELIM = [0;32m125[0m; [0;33m// '}'[0m
+      | [0;1;32m                      ^
+[0mIn file included from ./include/icu.cpp:1147:
+[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;31merror: [0m[1mexpected unqualified-id[0m
+ 1318 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m BACKSLASH  = [0;32m0x5c[0m;[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/selfmtimpl.h:33:29: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
+   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
+      | [0;1;32m                            ^
+[0mIn file included from ./include/icu.cpp:1147:
+[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
+[1m./third_party/include/unicode/src/selfmtimpl.h:33:29: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
+   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;36mnote: [0mto match this '('[0m
+[1m./third_party/include/unicode/src/selfmtimpl.h:33:28: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
+   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
+      | [0;1;32m                           ^
+[0mIn file included from ./include/icu.cpp:1147:
+[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
+ 1318 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m BACKSLASH  = [0;32m0x5c[0m;[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/selfmtimpl.h:33:38: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
+   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
+      | [0;1;32m                                     ^
+[0m[1m./third_party/include/unicode/src/uregex.cpp:1318:23: [0m[0;1;36mnote: [0mto match this '('[0m
+[1m./third_party/include/unicode/src/selfmtimpl.h:33:27: [0m[0;1;36mnote: [0mexpanded from macro 'BACKSLASH'[0m
+   33 | #define BACKSLASH         (([0;34mchar16_t[0m)[0;32m0x005C[0m)[0m
+      | [0;1;32m                          ^
+[0mIn file included from ./include/icu.cpp:1156:
+[1m./third_party/include/unicode/src/uspoof.cpp:733:45: [0m[0;1;35mwarning: [0m[1mresult of comparison of constant 16777216 with expression of type 'UBiDiDirection' is always true [-Wtautological-constant-out-of-range-compare][0m
+  733 |     [0;34mif[0m (direction != UBIDI_LTR && direction != UBIDI_RTL) {[0m
+      | [0;1;32m                                  ~~~~~~~~~ ^  ~~~~~~~~~
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:28:23: [0m[0;1;31merror: [0m[1mexpected unqualified-id[0m
+   28 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m COLON = [0;32m0x3A[0m; [0;33m/* : */[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/timezone.cpp:105:15: [0m[0;1;36mnote: [0mexpanded from macro 'COLON'[0m
+  105 | #define COLON [0;32m0x003A[0m
+      | [0;1;32m              ^
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;31merror: [0m[1mexpected unqualified-id[0m
+   31 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m COMMA = [0;32m0x2C[0m; [0;33m/* , */[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/selfmtimpl.h:38:29: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
+   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
+      | [0;1;32m                            ^
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
+[1m./third_party/include/unicode/src/selfmtimpl.h:38:29: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
+   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
+      | [0;1;32m                            ^
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;36mnote: [0mto match this '('[0m
+[1m./third_party/include/unicode/src/selfmtimpl.h:38:28: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
+   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
+      | [0;1;32m                           ^
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;31merror: [0m[1mexpected ')'[0m
+   31 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m COMMA = [0;32m0x2C[0m; [0;33m/* , */[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/selfmtimpl.h:38:38: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
+   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
+      | [0;1;32m                                     ^
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:31:23: [0m[0;1;36mnote: [0mto match this '('[0m
+[1m./third_party/include/unicode/src/selfmtimpl.h:38:27: [0m[0;1;36mnote: [0mexpanded from macro 'COMMA'[0m
+   38 | #define COMMA             (([0;34mchar16_t[0m)[0;32m0x002C[0m)[0m
+      | [0;1;32m                          ^
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:32:23: [0m[0;1;31merror: [0m[1mredefinition of 'PLUS'[0m
+   32 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m PLUS = [0;32m0x2B[0m; [0;33m/* + */[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/tzfmt.cpp:120:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
+  120 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m PLUS         = [0;32m0x002B[0m;[0m
+      | [0;1;32m                      ^
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:33:23: [0m[0;1;31merror: [0m[1mredefinition of 'MINUS'[0m
+   33 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m MINUS = [0;32m0x2D[0m; [0;33m/* - */[0m
+      | [0;1;32m                      ^
+[0m[1m./third_party/include/unicode/src/tzfmt.cpp:121:23: [0m[0;1;36mnote: [0mprevious definition is here[0m
+  121 | [0;34mstatic[0m [0;34mconst[0m [0;34mchar16_t[0m MINUS        = [0;32m0x002D[0m;[0m
+      | [0;1;32m                      ^
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:537:17: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
+  537 |     int32_t days[[0;32m7[0m];[0m
+      | [0;1;32m    ~~~~~~~~~~~~^~
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:538:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
+  538 |     int32_t daysCount = UPRV_LENGTHOF(days);[0m
+      | [0;1;32m                        ^~~~~~~~~~~~~~~~~~~
+[0m[1m./third_party/include/unicode/src/cmemory.h:99:68: [0m[0;1;36mnote: [0mexpanded from macro 'UPRV_LENGTHOF'[0m
+   99 | #define UPRV_LENGTHOF(array) (int32_t)([0;34msizeof[0m(array)/[0;34msizeof[0m((array)[[0;32m0[0m]))[0m
+      | [0;1;32m                                                            ~~~~~~~^~
+[0mIn file included from ./include/icu.cpp:1164:
+[1m./third_party/include/unicode/src/vtzone.cpp:541:5: [0m[0;1;31merror: [0m[1mno matching function for call to 'parseRRULE'[0m
+  541 |     parseRRULE(rrule, month, dayOfWeek, nthDayOfWeek, days, daysCount, until, status);[0m
+      | [0;1;32m    ^~~~~~~~~~
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:377:13: [0m[0;1;36mnote: [0mcandidate function not viable: no known conversion from 'long long' to 'int32_t *' (aka 'int *') for 5th argument[0m
+  377 | [0;34mstatic[0m [0;34mvoid[0m parseRRULE([0;34mconst[0m UnicodeString& rrule, int32_t& month, int32_t& dow, int32_t& wim,[0m
+      | [0;1;32m            ^
+[0m  378 |                        int32_t* dom, int32_t& domCount, UDate& until, UErrorCode& status) {[0m
+      | [0;1;32m                       ~~~~~~~~~~~~
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:560:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
+  560 |                 [0;34mif[0m (days[i] < [0;32m0[0m) {[0m
+      | [0;1;32m                    ~~~~^~
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:561:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
+  561 |                     days[i] = MONTHLENGTH[month] + days[i] + [0;32m1[0m;[0m
+      | [0;1;32m                    ~~~~^~
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:561:56: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
+  561 |                     days[i] = MONTHLENGTH[month] + days[i] + [0;32m1[0m;[0m
+      | [0;1;32m                                                   ~~~~^~
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:563:25: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
+  563 |                 [0;34mif[0m (days[i] < firstDay) {[0m
+      | [0;1;32m                    ~~~~^~
+[0m[1m./third_party/include/unicode/src/vtzone.cpp:564:36: [0m[0;1;31merror: [0m[1msubscripted value is not an array, pointer, or vector[0m
+  564 |                     firstDay = days[i];[0m
+      | [0;1;32m                               ~~~~^~
+[0m[0;1;31mfatal error: [0m[1mtoo many errors emitted, stopping now [-ferror-limit=][0m
+9 warnings and 20 errors generated.

@@ -7,4 +7,7 @@ class Binary:
 
     def link(self):
         print(f"link binary [1/1]: {self.executable}")
-        link(executable_path=f"./bin/{self.executable}{executable_suffix}")
+        if executable_suffix != "":
+            link_binary(executable_path=f"./bin/{self.executable}.{executable_suffix}")
+        else:
+            link_binary(executable_path=f"./bin/{self.executable}")

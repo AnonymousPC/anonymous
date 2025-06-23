@@ -1,11 +1,11 @@
 module;
-#ifdef __linux__
-    #define _GNU_SOURCE
-#elifdef __MACH__
-    #define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
-#endif
 #undef in
 #undef self
+#ifdef __linux__
+    #define _GNU_SOURCE
+#else
+    #define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
+#endif
 #include <boost/stacktrace.hpp>
 
 export module boost.stacktrace;

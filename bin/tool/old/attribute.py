@@ -49,8 +49,8 @@ def apply_attribute(module):
 _compile_env = os.environ.copy()
 _compile_env["CC"]       = c_compiler
 _compile_env["CXX"]      = compiler
-_compile_env["CFLAGS"]   = ' '.join(c_compile_args)
-_compile_env["CXXFLAGS"] = ' '.join(compile_args)
+_compile_env["CFLAGS"]   = ' '.join(c_compile_flags)
+_compile_env["CXXFLAGS"] = ' '.join(compile_flags)
 
 def _run_command(command, **kwargs):
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, **kwargs)

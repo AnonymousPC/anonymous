@@ -1,12 +1,12 @@
 module;
+#undef in
+#undef self
 #define BOOST_LOCALE_WITH_ICU
 #ifdef _WIN32
     #define BOOST_LOCALE_NO_POSIX_BACKEND
 #elif defined(__linux__) or defined(__MACH__)
     #define BOOST_LOCALE_NO_WINAPI_BACKEND
 #endif
-#undef in
-#undef self
 #include <boost/locale.hpp>
 #include <boost/locale/src/util/gregorian.cpp> // Include this file first
 #include <boost/locale/src/encoding/codepage.cpp>

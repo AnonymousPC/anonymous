@@ -1,5 +1,4 @@
 import os
-from config import *
 
 class ProgressBar:
     def prefix(self, prefix_str):
@@ -16,11 +15,11 @@ class ProgressBar:
         _print_progress(self.prefix_str)
         print()
 
-    verbose = False
 
 
 def _print_progress(str):
-    print(f"\r{str}".replace('\t', ' ').ljust(os.get_terminal_size().columns)[:os.get_terminal_size().columns+1], end="")
+    print(f"\r{str}".replace('\t', ' ').ljust(os.get_terminal_size().columns+1)[:os.get_terminal_size().columns+1], end="")
+
 
 
 progress_bar = ProgressBar()

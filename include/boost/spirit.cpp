@@ -2,13 +2,6 @@ module;
 #undef extends
 #undef in
 #undef self
-#if defined(__GNUC__) and not defined(__clang__)
-
-#elifdef __clang__
-    #pragma clang diagnostic ignored "-Wdeprecated-missing-comma-variadic-parameter"
-#elif defined(_MSC_VER) and not defined(__clang__)
-
-#endif
 #include <boost/spirit/home/classic.hpp>
 #include <boost/spirit/home/karma.hpp>
 #include <boost/spirit/home/lex.hpp>

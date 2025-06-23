@@ -8,12 +8,18 @@ class Module:
     def __init__(self, export_name, from_modules=[]):
         try:
             # Info
-            self.export_name  = export_name
-            self.source_path  = f"./include/{self.export_name.replace('.', '/')}.cpp" if self.export_name != "main" else "./main.cpp"
-            self.module_path  = f"./bin/{type}/module/{self.export_name}{module_suffix}"
-            self.object_path  = f"./bin/{type}/module/{self.export_name}{object_suffix}"
+            if export_name == "main":
+                self.export_name = export_name
+                self.source_path = f"./{self.export_name.replace('.', '/')}.cpp"
+                self.module_path = None
+                self.object_path = f"./bin/{type}/module/{self.export_name}.{object_suffix}"
+            else:
+                self.export_name = export_name
+                self.source_path = f"./include/{self.export_name.replace('.', '/')}.cpp"
+                self.module_path = f"./bin/{type}/module/{self.export_name}.{module_suffix}"
+                self.object_path = f"./bin/{type}/module/{self.export_name}.{object_suffix}"
             self.from_modules = from_modules
-            self.content      = preprocess(export_name=self.export_name, source_path=self.source_path, module_path=self.module_path)
+            self.content      = preprocess_file(export_name=self.export_name, source_path=self.source_path, module_path=self.module_path)
             Module.modules.append(self)
 
             # Import
@@ -28,16 +34,18 @@ class Module:
                     self.import_modules.append(Module(import_str, from_modules=self.from_modules + [self]))
 
             # Built
-            self.is_built = all(module.is_built for module in self.import_modules) and \
-                            os.path.isfile  (self.module_path) and \
-                            os.path.getmtime(self.source_path) <= os.path.getmtime(self.module_path)
+            if self.module_path is not None:
+                self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.module_path) and os.path.getmtime(self.source_path) <= os.path.getmtime(self.module_path)
+            else:
+                self.is_built = False
             if not self.is_built:
                 Module.total += 1
 
             # Check
-            export_strs = re.findall(r'^\s*export\s+module\s+([\w\.:]+)\s*;\s*$', self.content, flags=re.MULTILINE)
-            if (len(export_strs) != 1 or export_strs[0] != export_name) and export_name != "main":
-                raise Exception(f"fatal error: file {self.source_path} should export module {self.export_name}")
+            if self.module_path is not None:
+                export_strs = re.findall(r'^\s*export\s+module\s+([\w\.:]+)\s*;\s*$', self.content, flags=re.MULTILINE)
+                if (len(export_strs) != 1 or export_strs[0] != export_name):
+                    raise Exception(f"fatal error: file {self.source_path} should export module {self.export_name}")
 
         except Exception as e:
             raise Exception(f"In module imported from {self.export_name}:\n{e}")
@@ -52,8 +60,11 @@ class Module:
             # Self
             if not self.is_built:
                 print(f"compile module [{Module.current}/{Module.total}]: {self.export_name}")
-                pragma(content=self.content)
-                compile(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
+                if self.module_path is not None:
+                    pragma_file(content=self.content)
+                    compile_module(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
+                else:
+                    compile_source(source_path=self.source_path, object_path=self.object_path)
                 self.is_built = True
                 Module.current += 1
 

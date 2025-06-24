@@ -1,14 +1,14 @@
 #if defined(__GNUC__) and not defined(__clang__)
-    #error "not coded yet"
+    #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #elifdef __clang__
     #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #elif defined(_MSC_VER) and not defined(__clang__)
-    #error "not coded yet"
+    #warning "not coded yet"
 #endif
 
 #ifdef _WIN32
-    #pragma build "cmake -S $anonymous/third_party/git/hwloc/contrib/windows-cmake -B $anonymous/bin/$type/cmake/hwloc-build --install-prefix=$anonymous/bin/$type/cmake/hwloc-install -DHWLOC_BUILD_SHARED_LIBS=false"
-    #pragma build "cmake --build   $anonymous/bin/$type/cmake/hwloc-build -j8"
+    #pragma build "cmake -S $anonymous/third_party/git/hwloc/contrib/windows-cmake -B $anonymous/bin/$type/cmake/hwloc-build --install-prefix=$anonymous/bin/$type/cmake/hwloc-install -DCMAKE_BUILD_TYPE=$type -DHWLOC_BUILD_SHARED_LIBS=false"
+    #pragma build "cmake --build   $anonymous/bin/$type/cmake/hwloc-build -j$parallel"
     #pragma build "cmake --install $anonymous/bin/$type/cmake/hwloc-build"
     #error copy library.
 #elif defined(__linux__) or defined(__MACH__)
@@ -16,10 +16,10 @@
     #pragma build "cd $anonymous/bin/$type/cmake/hwloc-build"
     #pragma build "sh $anonymous/third_party/git/hwloc/autogen.sh"
     #pragma build "sh $anonymous/third_party/git/hwloc/configure --prefix=$anonymous/bin/$type/cmake/hwloc-install --enable-static=true --enable-shared=false --enable-doxygen=false --disable-readme"
-    #pragma build "make -j8"
+    #pragma build "make -j$parallel"
     #pragma build "make install"
     #pragma build "cp $anonymous/bin/$type/cmake/hwloc-install/include/hwloc/autogen/config.h $anonymous/third_party/include/hwloc/autogen/config.h"
-    #pragma build "cp $anonymous/bin/$type/cmake/hwloc-install/lib/libhwloc.$library_suffix    $anonymous/bin/$type/module/hwloc.$library_suffix"
+    #pragma build "cp $anonymous/bin/$type/cmake/hwloc-install/lib/libhwloc.$library_suffix   $anonymous/bin/$type/module/hwloc.$library_suffix"
 #endif
 
 /* 

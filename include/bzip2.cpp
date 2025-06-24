@@ -1,13 +1,13 @@
 #if defined(__GNUC__) and not defined(__clang__)
-    #error "not coded yet"
+    #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #elifdef __clang__
     #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #elif defined(_MSC_VER) and not defined(__clang__)
-    #error "not coded yet"
+    #warning "not coded yet"
 #endif
 
-#pragma build "cmake -S $anonymous/third_party/git/bzip2 -B $anonymous/bin/$type/cmake/bzip2-build --install-prefix=$anonymous/bin/$type/cmake/bzip2-install -DENABLE_APP=false -DENABLE_TESTS=false -DENABLE_DOCS=false -DENABLE_EXAMPLES=false -DENABLE_LIB_ONLY=true -DENABLE_STATIC_LIB=true -DENABLE_SHARED_LIB=false"
-#pragma build "cmake --build   $anonymous/bin/$type/cmake/bzip2-build -j8"
+#pragma build "cmake -S $anonymous/third_party/git/bzip2 -B $anonymous/bin/$type/cmake/bzip2-build --install-prefix=$anonymous/bin/$type/cmake/bzip2-install -DCMAKE_BUILD_TYPE=$type -DENABLE_APP=false -DENABLE_TESTS=false -DENABLE_DOCS=false -DENABLE_EXAMPLES=false -DENABLE_LIB_ONLY=true -DENABLE_STATIC_LIB=true -DENABLE_SHARED_LIB=false"
+#pragma build "cmake --build   $anonymous/bin/$type/cmake/bzip2-build -j$parallel"
 #pragma build "cmake --install $anonymous/bin/$type/cmake/bzip2-build"
 #pragma build "cp $anonymous/bin/$type/cmake/bzip2-install/lib/libbz2_static.$library_suffix $anonymous/bin/$type/module/bzip2.$library_suffix"
 

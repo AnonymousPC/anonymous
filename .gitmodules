@@ -1,49 +1,65 @@
 [submodule "third_party/git/boost"]
 	path = third_party/git/boost
 	url = https://github.com/boostorg/boost
+    branch = master
 [submodule "third_party/git/bzip2"]
 	path = third_party/git/bzip2
 	url = https://gitlab.com/bzip2/bzip2
+    branch = master
 [submodule "third_party/git/cccl"]
 	path = third_party/git/cccl
 	url = https://github.com/NVIDIA/cccl
+    branch = main
 [submodule "third_party/git/eigen"]
 	path = third_party/git/eigen
 	url = https://gitlab.com/libeigen/eigen
+    branch = master
 [submodule "third_party/git/hwloc"]
 	path = third_party/git/hwloc
 	url = https://github.com/open-mpi/hwloc
+    branch = master
 [submodule "third_party/git/icu"]
 	path = third_party/git/icu
 	url = https://github.com/unicode-org/icu
+    branch = main
 	shallow = true
 [submodule "third_party/git/libjpeg-turbo"]
 	path = third_party/git/libjpeg-turbo
 	url = https://github.com/libjpeg-turbo/libjpeg-turbo
+    branch = main
 [submodule "third_party/git/libpng"]
 	path = third_party/git/libpng
 	url = https://github.com/pnggroup/libpng
+    branch = libpng16
 [submodule "third_party/git/libtiff"]
 	path = third_party/git/libtiff
 	url = https://gitlab.com/libtiff/libtiff
+    branch = master
 [submodule "third_party/git/oneTBB"]
 	path = third_party/git/oneTBB
 	url = https://github.com/uxlfoundation/oneTBB
+    branch = master
 [submodule "third_party/git/openssl"]
 	path = third_party/git/openssl
 	url = https://github.com/openssl/openssl
+    branch = master
 [submodule "third_party/git/plf_hive"]
 	path = third_party/git/plf_hive
 	url = https://github.com/mattreecebentley/plf_hive
+    branch = main
 [submodule "third_party/git/stdexec"]
 	path = third_party/git/stdexec
 	url = https://github.com/NVIDIA/stdexec
+    branch = main
 [submodule "third_party/git/xz"]
 	path = third_party/git/xz
 	url = https://github.com/tukaani-project/xz
+    branch = master
 [submodule "third_party/git/zlib"]
 	path = third_party/git/zlib
 	url = https://github.com/madler/zlib
+    branch = develop
 [submodule "third_party/git/zstd"]
 	path = third_party/git/zstd
 	url = https://github.com/facebook/zstd
+    branch = dev

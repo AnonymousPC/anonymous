@@ -30,11 +30,8 @@ def preprocess_file(export_name, source_path, module_path):
 def pragma_file(content):
     commands = re.findall(r'^\s*#\s*pragma\s+build\s+"(.*)"$', content, flags=re.MULTILINE)
     env = os.environ.copy()
-    env["CC"]                = c_compiler
-    env["CXX"]               = compiler
-    env["CFLAGS"]            = ' '.join(c_compile_flags)
-    env["CXXFLAGS"]          = ' '.join(compile_flags)
     env["anonymous"]         = os.getcwd()
+    env["parallel"]          = str(os.cpu_count())
     env["type"]              = type
     env["module_suffix"]     = module_suffix
     env["object_suffix"]     = object_suffix

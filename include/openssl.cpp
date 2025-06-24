@@ -1,3 +1,19 @@
+#if defined(__GNUC__) and not defined(__clang__)
+    #pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#elifdef __clang__
+    #pragma clang diagnostic ignored "-Wunknown-pragmas"
+#elif defined(_MSC_VER) and not defined(__clang__)
+    #warning "not coded yet"
+#endif
+
+#ifdef _WIN32
+    #warning "not coded yet"
+#elif defined(__linux__) or defined(__MACH__)
+    #pragma build "mkdir -p $anonymous/bin/$type/cmake/openssl-build"
+    #pragma build "cd   $anonymous/bin/$type/cmake/openssl-build"
+    #pragma build "perl $annonymous/third_party/git/openssl/Configure"
+#endif
+
 module;
 #undef in
 #include <openssl/ssl.h>

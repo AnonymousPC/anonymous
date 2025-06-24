@@ -1,24 +1,22 @@
 #if defined(__GNUC__) and not defined(__clang__)
-    #error "not coded yet"
+    #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #elifdef __clang__
     #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #elif defined(_MSC_VER) and not defined(__clang__)
-    #error "not coded yet"
+    #warning "not coded yet"
 #endif
 
 #ifdef _WIN32
-    #error "not coded yet"
+    #warning "not coded yet" // msbuild
 #elif defined(__linux__) or defined(__MACH__)
     #pragma build "mkdir -p $anonymous/bin/$type/cmake/icu-build"
     #pragma build "cd $anonymous/bin/$type/cmake/icu-build"
     #pragma build "sh $anonymous/third_party/git/icu/icu4c/source/configure --prefix=$anonymous/bin/$type/cmake/icu-install --disable-icu-config --disable-shared --enable-static --disable-tools --disable-tests --disable-samples"
-    #pragma build "make -j8"
+    #pragma build "make -j$parallel"
     #pragma build "make install"
     #pragma build "cp $anonymous/bin/$type/cmake/icu-install/lib/libicudata.$library_suffix $anonymous/bin/$type/module/icu.data.$library_suffix"
     #pragma build "cp $anonymous/bin/$type/cmake/icu-install/lib/libicui18n.$library_suffix $anonymous/bin/$type/module/icu.internationalization.$library_suffix"
     #pragma build "cp $anonymous/bin/$type/cmake/icu-install/lib/libicuio.$library_suffix   $anonymous/bin/$type/module/icu.io.$library_suffix"
-    #pragma build "cp $anonymous/bin/$type/cmake/icu-install/lib/libicutest.$library_suffix $anonymous/bin/$type/module/icu.test.$library_suffix"
-    #pragma build "cp $anonymous/bin/$type/cmake/icu-install/lib/libicutu.$library_suffix   $anonymous/bin/$type/module/icu.tools.$library_suffix"
     #pragma build "cp $anonymous/bin/$type/cmake/icu-install/lib/libicuuc.$library_suffix   $anonymous/bin/$type/module/icu.common.$library_suffix"
 #endif
 

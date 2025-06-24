@@ -41,7 +41,6 @@ elif sys.platform == "darwin":
     executable_suffix = ""
 
 if compiler == "g++":
-    c_compiler = "gcc"
     compile_flags = [
         "-std=c++26", 
         "-g",
@@ -50,22 +49,15 @@ if compiler == "g++":
         "-fmodules",
        f"-fmodule-mapper=./bin/{type}/modules.txt",
     ]
-    c_compile_flags = [
-        "-g",
-        "-fdiagnostics-color=always"
-    ]
     if type == "debug":
-        compile_flags   += ["-O0", "-fno-inline"]
-        c_compile_flags += ["-O0", "-fno-inline"]
+        compile_flags += ["-O0", "-fno-inline"]
     elif type == "release":
-        compile_flags   += ["-O3", "-DNDEBUG"]
-        c_compile_flags += ["-O3", "-DNDEBUG"]
+        compile_flags += ["-O3", "-DNDEBUG"]
     link_flags = []
     module_suffix  = "gcm"
     object_suffix  = "o"
     library_suffix = "a"
 elif compiler == "clang++":
-    c_compiler = "clang"
     compile_flags = [
         "-std=c++26", 
         "-g", 
@@ -73,30 +65,21 @@ elif compiler == "clang++":
         "-fdiagnostics-color=always",
        f"-fprebuilt-module-path=./bin/{type}/module",
     ]
-    c_compile_flags = [
-        "-g",
-        "-fdiagnostics-color=always"
-    ]
     if type == "debug":
-        compile_flags   += ["-O0", "-fno-inline"]
-        c_compile_flags += ["-O0", "-fno-inline"]
+        compile_flags += ["-O0", "-fno-inline"]
     elif type == "release":
-        compile_flags   += ["-O3", "-DNDEBUG"]
-        c_compile_flags += ["-O3", "-DNDEBUG"]
+        compile_flags += ["-O3", "-DNDEBUG"]
     link_flags = []
     module_suffix  = "pcm"
     object_suffix  = "o"
     library_suffix = "a"
 elif compiler == "cl":
-    c_compiler = "cl"
     compile_flags = [
         "/std:c++latest",
         "/EHsc",
         "/Z7",
         "/W4"
     ]
-    c_compile_flags = ["/Z7"]
-    compile_env = ["/EHsc", "/Z7"]
     if type == "debug":
         compile_flags += ["/Od"]
     elif type == "release":

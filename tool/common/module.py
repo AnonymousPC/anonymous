@@ -12,12 +12,12 @@ class Module:
                 self.export_name = export_name
                 self.source_path = f"./{self.export_name.replace('.', '/')}.cpp"
                 self.module_path = None
-                self.object_path = f"./bin/{type}/{self.export_name}.{object_suffix}"
+                self.object_path = f"./bin/{type}/module/{self.export_name}.{object_suffix}"
             else:
                 self.export_name = export_name
                 self.source_path = f"./module/{self.export_name.replace('.', '/')}.cpp"
-                self.module_path = f"./bin/{type}/{self.export_name}.{module_suffix}"
-                self.object_path = f"./bin/{type}/{self.export_name}.{object_suffix}"
+                self.module_path = f"./bin/{type}/module/{self.export_name}.{module_suffix}"
+                self.object_path = f"./bin/{type}/module/{self.export_name}.{object_suffix}"
             self.from_modules = from_modules
             self.content      = preprocess_file(source_path=self.source_path, module_path=self.module_path)
             Module.modules.append(self)

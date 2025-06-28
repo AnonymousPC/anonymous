@@ -1,3 +1,2 @@
 bin/*
-third_party/include/*
-third_party/lib/*
+!bin/log.txt

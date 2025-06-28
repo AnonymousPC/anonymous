@@ -1,2 +1,3 @@
-bin/*
-!bin/log.txt
+bin/debug/*
+bin/release/*
+bin/main

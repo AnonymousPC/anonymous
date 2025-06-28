@@ -1,8 +1,7 @@
 import sys
 sys.dont_write_bytecode = True
-
-from module import *
-from binary import *
+from common.module import *
+from common.binary import *
 
 if __name__ == "__main__":
     try:

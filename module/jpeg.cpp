@@ -1,15 +1,7 @@
-#if defined(__GNUC__) and not defined(__clang__)
-    #pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#elifdef __clang__
-    #pragma clang diagnostic ignored "-Wunknown-pragmas"
-#elif defined(_MSC_VER) and not defined(__clang__)
-    #warning "not coded yet"
-#endif
-
-#pragma build "cmake -S $anonymous/third_party/git/libjpeg-turbo -B $anonymous/bin/$type/cmake/jpeg-build --install-prefix=$anonymous/bin/$type/cmake/jpeg-install -DCMAKE_BUILD_TYPE=$type -DENABLE_SHARED=false -DENABLE_STATIC=true"
-#pragma build "cmake --build   $anonymous/bin/$type/cmake/jpeg-build -j8"
-#pragma build "cmake --install $anonymous/bin/$type/cmake/jpeg-build"
-#pragma build "cp $anonymous/bin/$type/cmake/jpeg-install/lib*/libturbojpeg.$library_suffix $anonymous/bin/$type/module/jpeg.$library_suffix" // Copy lib*/... because jpeg might install library into directories like jpeg-install/lib64 or jpeg-install/libx32.
+#pragma build "cmake -S {os.getcwd()}/third_party/git/libjpeg-turbo -B {os.getcwd()}/bin/{type}/cmake/jpeg-build --install-prefix={os.getcwd()}/bin/{type}/cmake/jpeg-install -DCMAKE_BUILD_TYPE={type} -DENABLE_SHARED=false -DENABLE_STATIC=true"
+#pragma build "cmake --build   {os.getcwd()}/bin/{type}/cmake/jpeg-build -j{os.cpu_count()}"
+#pragma build "cmake --install {os.getcwd()}/bin/{type}/cmake/jpeg-build"
+#pragma build "cp {os.getcwd()}/bin/{type}/cmake/jpeg-install/lib*/libturbojpeg.{library_suffix} {os.getcwd()}/bin/{type}/module/jpeg.{library_suffix}" // Copy lib*/... because jpeg might install library into directories like jpeg-install/lib64 or jpeg-install/libx32.
 
 /*
 >>> cat ./third_party/git/libjpeg-turbo/CMakeLists.txt | grep option

@@ -12,10 +12,14 @@ os.chdir(f"{os.path.dirname(__file__)}/../..")
 # Arguments
 
 parser = argparse.ArgumentParser(description="build.py")
-parser.add_argument("--type",  choices=["debug", "release"], default="debug")
-parser.add_argument("--clean", action="store_true")
+parser.add_argument("--type",    choices=["debug", "release"], default="debug", help="compile flags")
+parser.add_argument("--clean",   action="store_true",                           help="clean caches" )
+parser.add_argument("--verbose", action="store_true",                           help="full output"  )
 argv = parser.parse_args()
-type = argv.type
+type    = argv.type
+clean   = argv.clean
+verbose = argv.verbose
+
 if argv.clean:
     for file in os.listdir(f"./bin/{type}/module"):
         os.remove         (f"./bin/{type}/module/{file}")
@@ -43,33 +47,33 @@ elif sys.platform == "darwin":
 if compiler == "g++":
     compile_flags = [
         "-std=c++26", 
-        "-g",
-        "-Wall", 
+        "-Wall",
         "-fdiagnostics-color=always",
         "-fmodules",
        f"-fmodule-mapper=./bin/{type}/modules.txt",
     ]
-    if type == "debug":
-        compile_flags += ["-O0", "-fno-inline"]
-    elif type == "release":
-        compile_flags += ["-O3", "-DNDEBUG"]
     link_flags = []
+    if type == "debug":
+        compile_flags += ["-g",  "-O0", "-DDEBUG" ]
+    elif type == "release":
+        compile_flags += ["-g0", "-O3", "-DNDEBUG"]
+        link_flags    += ["-s"]
     module_suffix  = "gcm"
     object_suffix  = "o"
     library_suffix = "a"
 elif compiler == "clang++":
     compile_flags = [
         "-std=c++26", 
-        "-g", 
         "-Wall", 
         "-fdiagnostics-color=always",
        f"-fprebuilt-module-path=./bin/{type}/module",
     ]
-    if type == "debug":
-        compile_flags += ["-O0", "-fno-inline"]
-    elif type == "release":
-        compile_flags += ["-O3", "-DNDEBUG"]
     link_flags = []
+    if type == "debug":
+        compile_flags += ["-g",  "-O0", "-DDEBUG" ]
+    elif type == "release":
+        compile_flags += ["-g0", "-O3", "-DNDEBUG"]
+        link_flags    += ["-s"]
     module_suffix  = "pcm"
     object_suffix  = "o"
     library_suffix = "a"
@@ -77,14 +81,13 @@ elif compiler == "cl":
     compile_flags = [
         "/std:c++latest",
         "/EHsc",
-        "/Z7",
         "/W4"
     ]
-    if type == "debug":
-        compile_flags += ["/Od"]
-    elif type == "release":
-        compile_flags += ["/O2", "/DNDEBUG"]
     link_flags = []
+    if type == "debug":
+        compile_flags += ["/Z7", "/Od", "/DDEBUG" ]
+    elif type == "release":
+        compile_flags += [       "/O2", "/DNDEBUG"]
     module_suffix  = "ifc"
     object_suffix  = "obj"
     library_suffix = "lib"
@@ -104,11 +107,7 @@ define_flags = {
 
 try: os.mkdir(f"./bin/{type}")
 except: pass
-try: os.mkdir(f"./bin/{type}/cmake")
-except: pass
-try: os.mkdir(f"./bin/{type}/module")
-except: pass
-
-open("./bin/log.txt", 'w')
 if compiler == "g++":
     open(f"./bin/{type}/modules.txt", 'w')
+
+open("./bin/log.txt", 'w')

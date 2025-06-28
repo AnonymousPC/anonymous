@@ -1,26 +1,34 @@
-#if defined(__GNUC__) and not defined(__clang__)
-    #pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#elifdef __clang__
-    #pragma clang diagnostic ignored "-Wunknown-pragmas"
-#elif defined(_MSC_VER) and not defined(__clang__)
-    #warning "not coded yet"
+module;
+#include <hwloc.h>
+#ifdef _WIN32
+    #define MAKE                                                       \
+        anonymous::cmake_directory                                     \
+        (                                                              \
+            "./third_party/git/hwloc/contrib/windows-cmake",           \
+            "-DHWLOC_ENABLE_TESTING=false",                            \
+            "-DHWLOC_SKIP_LSTOPO=true",                                \
+            "-DHWLOC_SKIP_TOOLS=true",                                 \
+            "-DHWLOC_BUILD_SHARED_LIBS=false"                          \
+        )
+#elif defined(__linux__) or defined(__MACH__)
+    #define MAKE                                                       \
+        anonymous::autogen_file("./third_party/git/hwloc/autogen.sh"), \
+        anonymous::configure_file                                      \
+        (                                                              \
+            "./third_party/git/hwloc/configure",                       \
+            "--enable-static",                                         \
+            "--disable-shared",                                        \
+            "--disable-readme"                                         \
+        ),                                                             \
+        anonymous::make_directory("./third_party/git/hwloc")
 #endif
 
-#ifdef _WIN32
-    #pragma build "cmake -S $anonymous/third_party/git/hwloc/contrib/windows-cmake -B $anonymous/bin/$type/cmake/hwloc-build --install-prefix=$anonymous/bin/$type/cmake/hwloc-install -DCMAKE_BUILD_TYPE=$type -DHWLOC_BUILD_SHARED_LIBS=false"
-    #pragma build "cmake --build   $anonymous/bin/$type/cmake/hwloc-build -j$parallel"
-    #pragma build "cmake --install $anonymous/bin/$type/cmake/hwloc-build"
-    #error copy library.
-#elif defined(__linux__) or defined(__MACH__)
-    #pragma build "mkdir -p $anonymous/bin/$type/cmake/hwloc-build"
-    #pragma build "cd $anonymous/bin/$type/cmake/hwloc-build"
-    #pragma build "sh $anonymous/third_party/git/hwloc/autogen.sh"
-    #pragma build "sh $anonymous/third_party/git/hwloc/configure --prefix=$anonymous/bin/$type/cmake/hwloc-install --enable-static=true --enable-shared=false --enable-doxygen=false --disable-readme"
-    #pragma build "make -j$parallel"
-    #pragma build "make install"
-    #pragma build "cp $anonymous/bin/$type/cmake/hwloc-install/include/hwloc/autogen/config.h $anonymous/third_party/include/hwloc/autogen/config.h"
-    #pragma build "cp $anonymous/bin/$type/cmake/hwloc-install/lib/libhwloc.$library_suffix   $anonymous/bin/$type/module/hwloc.$library_suffix"
-#endif
+export module hwloc                                      \
+[[                                                       \
+    anonymous::cmake_if(..., _WIN32),                                                \
+    anonymous::update_header ("hwloc/autogen/config.h"), \
+    anonymous::update_library("libhwloc", "hwloc")       \
+]];
 
 /* 
 >>> cat ./third_party/git/hwloc/contrib/windows-cmake/CMakeLists.txt | grep option
@@ -280,7 +288,3 @@ it to find libraries and programs with nonstandard names/locations.
 Report bugs to <https://github.com/open-mpi/hwloc/issues>.
 */
 
-module;
-#include <hwloc.h>
-
-export module hwloc;

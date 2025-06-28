@@ -1,18 +1,20 @@
 import os
 import shutil
+from common.run import *
 
 # Environment
-os.chdir(f"{os.path.dirname(__file__)}/../..")
+os.chdir(f"{os.path.dirname(__file__)}/..")
 
+# Git
+run("git submodule update --init --recursive")
 
-
-# Clean
-try:
-    shutil.rmtree("./third_party/include")
-except FileNotFoundError:
-    pass
-os.mkdir("./third_party/include")
-
+# Make
+try: shutil.rmtree("./third_party/include")
+except: pass
+try: shutil.rmtree("./third_party/lib")
+except: pass
+for file in os.listdir("./third_party/make"):
+    exec(f"import detail.{file.removesuffix('.py')}")
 
 # Copy
 for lib in os.listdir              (f"./third_party/git/boost/libs"):

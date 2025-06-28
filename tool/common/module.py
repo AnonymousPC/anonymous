@@ -1,4 +1,4 @@
-from compiler import *
+from .compiler import *
 
 class Module:
     modules = []
@@ -12,14 +12,14 @@ class Module:
                 self.export_name = export_name
                 self.source_path = f"./{self.export_name.replace('.', '/')}.cpp"
                 self.module_path = None
-                self.object_path = f"./bin/{type}/module/{self.export_name}.{object_suffix}"
+                self.object_path = f"./bin/{type}/{self.export_name}.{object_suffix}"
             else:
                 self.export_name = export_name
-                self.source_path = f"./include/{self.export_name.replace('.', '/')}.cpp"
-                self.module_path = f"./bin/{type}/module/{self.export_name}.{module_suffix}"
-                self.object_path = f"./bin/{type}/module/{self.export_name}.{object_suffix}"
+                self.source_path = f"./module/{self.export_name.replace('.', '/')}.cpp"
+                self.module_path = f"./bin/{type}/{self.export_name}.{module_suffix}"
+                self.object_path = f"./bin/{type}/{self.export_name}.{object_suffix}"
             self.from_modules = from_modules
-            self.content      = preprocess_file(export_name=self.export_name, source_path=self.source_path, module_path=self.module_path)
+            self.content      = preprocess_file(source_path=self.source_path, module_path=self.module_path)
             Module.modules.append(self)
 
             # Import
@@ -61,7 +61,6 @@ class Module:
             if not self.is_built:
                 print(f"compile module [{Module.current}/{Module.total}]: {self.export_name}")
                 if self.module_path is not None:
-                    pragma_file(content=self.content)
                     compile_module(source_path=self.source_path, module_path=self.module_path, object_path=self.object_path)
                 else:
                     compile_source(source_path=self.source_path, object_path=self.object_path)

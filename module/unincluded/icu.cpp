@@ -769,6 +769,7 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl_2 = impl; } } // c
 #undef impl // undef macro in <unicode/src/numrange_fluent.cpp>, because `icu::numparse::impl` cannot be renamed
 #include <unicode/src/scientificnumberformatter.cpp>
 #include <unicode/src/scriptset.cpp>
+#include <unicode/src/scrptrun.cpp>
 #include <unicode/src/search.cpp>
 #undef DOT // from src
 #undef BACKSLASH // from src
@@ -839,9 +840,9 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl_2 = impl; } } // c
 #include <unicode/src/ucln_in.cpp>
 #define cache cache_1 // re-define macro in <unicode/src/measfmt.cpp>, because `CollationLoader::cache_1` cannot be renamed
 #define defaultKeywordValues_1 defaultKeywordValues_2 // avoid redefinition
+#include <unicode/src/ucol.cpp>
 #include <unicode/src/ucol_res.cpp>
 #include <unicode/src/ucol_sit.cpp>
-#include <unicode/src/ucol.cpp>
 #undef NEW_ARRAY // from src
 #include <unicode/src/ucoleitr.cpp>
 #undef NEW_ARRAY // from src
@@ -898,6 +899,7 @@ namespace U_ICU_NAMESPACE { namespace number { namespace impl_2 = impl; } } // c
 #include <unicode/src/ztrans.cpp>
 #include <unicode/src/locbund.cpp>
 #include <unicode/src/sprintf.cpp>
+#include <unicode/src/srtest.cpp>
 #include <unicode/src/sscanf.cpp>
 #undef UCLN_TYPE // from src
 #undef __UCLN_IMP_H__ // from src

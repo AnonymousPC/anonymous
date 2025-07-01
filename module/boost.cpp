@@ -14,3 +14,10 @@ export import boost.spirit;
 export import boost.stacktrace;
 export import boost.system;
 export import boost.thread;
+
+import tool;
+auto build = tool::include("./third_party/boost/libs/*/include");
+           | tool::include("./third_party/boost/libs/*/*/include");
+           | tool::src    ("./third_party/boost/libs/*/src",   "$1/src");
+           | tool::src    ("./third_party/boost/libs/*/*/src", "$1/$2/src");
+

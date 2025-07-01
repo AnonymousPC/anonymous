@@ -1,9 +1,11 @@
-from ..common.cmake import *
+from module.make import *
 
-cmake_file(
-    file="./third_party/git/bzip2/CMakeLists.txt",
+cmake(
+    export_name="bzip2",
+    dir="./third_party/bzip2",
     args=[
-        "-DENABLE_WERROR=false",                      
+        "-DENABLE_WERROR=false",
+       f"-DENABLE_DEBUG={type=='debug'}",
         "-DENABLE_APP=false",
         "-DENABLE_TESTS=false",
         "-DENABLE_DOCS=false",
@@ -14,13 +16,8 @@ cmake_file(
     ]
 )
 
-lib_file(
-    lib   =f"libbz2_static.{library_suffix}",
-    rename=f"bzip2.{library_suffix}"
-)
-
-'''
->>> cat ./third_party/git/bzip2/CMakeOptions.txt | grep option
+"""
+>>> cat ./third_party/bzip2/CMakeOptions.txt | grep option
 option(ENABLE_WERROR     "Turn on compile time warnings")
 option(ENABLE_DEBUG      "Turn on debug output")
 option(ENABLE_APP        "Build applications (bzip2, and bzip2recover)"
@@ -32,5 +29,4 @@ option(ENABLE_STATIC_LIB "Build libbz2 in static mode also")
 option(ENABLE_SHARED_LIB "Build libbz2 as a shared library" ON)
 option(USE_OLD_SONAME "Use libbz2.so.1.0 for compatibility with old Makefiles" OFF)
 option(ENABLE_STATIC_LIB_IS_PIC "Enable position independent code for the static library" ON)
-*/
-'''
+"""

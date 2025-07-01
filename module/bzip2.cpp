@@ -3,35 +3,9 @@ module;
 #include <bzlib.h>
 
 export module bzip2;
-// build: 
-/*
-    cmake_file
-    (
-        "./third_party/git/bzip2/CMakeLists.txt",
-        "-DENABLE_WERROR=false",                      
-        #if DEBUG
-            "-DENABLE_DEBUG=true",                        
-        #else
-            "-DENABLE_DEBUG=false",     
-        #endif
-        "-DENABLE_APP=false",
-        "-DENABLE_TESTS=false",
-        "-DENABLE_DOCS=false",
-        "-DENABLE_EXAMPLES=false",
-        "-DENABLE_LIB_ONLY=true",
-        "-DENABLE_STATIC_LIB=true",
-        "-DENABLE_SHARED_LIB=false"
-    ),
-    library_file
-    (
-        "libbz2_static", 
-        "bzip2"
-    )
-*/
-
 
 /* 
->>> cat ./third_party/git/bzip2/CMakeOptions.txt | grep option
+>>> cat ./third_party/bzip2/CMakeOptions.txt | grep option
 option(ENABLE_WERROR     "Turn on compile time warnings")
 option(ENABLE_DEBUG      "Turn on debug output")
 option(ENABLE_APP        "Build applications (bzip2, and bzip2recover)"

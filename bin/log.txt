@@ -1,5 +1,0 @@
-In module imported from main:
-In module imported from bzip2:
-[01m[K./include/bzip2.cpp:6:1:[m[K [01;31m[Kerror: [m[Kexpected unqualified-id before string constant
-    6 | [01;31m[K"hello"[m[K
-      | [01;31m[K^~~~~~~[m[K

@@ -1,20 +1,23 @@
 import sys
 sys.dont_write_bytecode = True
-from common.module import *
-from common.binary import *
+from module.module import *
+from module.binary import *
+from module.init   import *
+
 
 if __name__ == "__main__":
-    try:
-        Module("main").compile()
-        Binary("main").link()
+    with open("./bin/log.txt", 'w') as logger:
+        try:
+            Module("main").compile()
+            Binary("main").link()
 
-    except Exception as e:
-        print(e, end="", file=sys.stderr)
-        print(e, end="", file=open("./bin/log.txt", 'w'))
-        exit(-1)
+        except Exception as e:
+            print(e, end="", file=sys.stderr)
+            print(e, end="", file=logger)
+            exit(-1)
 
-    except KeyboardInterrupt as e:
-        exit(-1)
-        
-    except:
-        raise
+        except KeyboardInterrupt as e:
+            exit(-1)
+            
+        except:
+            raise

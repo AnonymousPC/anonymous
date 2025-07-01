@@ -2,10 +2,8 @@ import argparse
 import os
 import shutil
 import sys
-
-# Environment
-
 os.chdir(f"{os.path.dirname(__file__)}/../..")
+os.environ["LANG"] = "en_US.UTF-8"
 
 
 
@@ -21,10 +19,7 @@ clean   = argv.clean
 verbose = argv.verbose
 
 if argv.clean:
-    for file in os.listdir(f"./bin/{type}/module"):
-        os.remove         (f"./bin/{type}/module/{file}")
-    for dir  in os.listdir(f"./bin/{type}/cmake"):
-        shutil.rmtree     (f"./bin/{type}/cmake/{dir}")
+    shutil.rmtree(f"./bin/{type}")
     exit(0)
 
 
@@ -50,13 +45,13 @@ if compiler == "g++":
         "-Wall",
         "-fdiagnostics-color=always",
         "-fmodules",
-       f"-fmodule-mapper=./bin/{type}/modules.txt",
+       f"-fmodule-mapper=./bin/{type}/module/mapper.txt",
     ]
     link_flags = []
     if type == "debug":
         compile_flags += ["-g",  "-O0", "-DDEBUG" ]
     elif type == "release":
-        compile_flags += ["-g0", "-O3", "-DNDEBUG"]
+        compile_flags += [       "-O3", "-DNDEBUG"]
         link_flags    += ["-s"]
     module_suffix  = "gcm"
     object_suffix  = "o"
@@ -72,7 +67,7 @@ elif compiler == "clang++":
     if type == "debug":
         compile_flags += ["-g",  "-O0", "-DDEBUG" ]
     elif type == "release":
-        compile_flags += ["-g0", "-O3", "-DNDEBUG"]
+        compile_flags += [       "-O3", "-DNDEBUG"]
         link_flags    += ["-s"]
     module_suffix  = "pcm"
     object_suffix  = "o"
@@ -98,16 +93,3 @@ define_flags = {
     "in"      : ':', 
     "self"    : "(*this)"
 }
-
-
-
-
-
-# Initialize
-
-try: os.mkdir(f"./bin/{type}")
-except: pass
-if compiler == "g++":
-    open(f"./bin/{type}/modules.txt", 'w')
-
-open("./bin/log.txt", 'w')

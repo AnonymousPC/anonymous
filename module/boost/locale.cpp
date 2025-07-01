@@ -8,16 +8,13 @@ module;
     #define BOOST_LOCALE_NO_WINAPI_BACKEND
 #endif
 #include <boost/locale.hpp>
-#include <boost/locale/src/util/gregorian.cpp> // Include this file first
 #include <boost/locale/src/encoding/codepage.cpp>
-#undef BOOST_LOCALE_INSTANTIATE
 #include <boost/locale/src/icu/boundary.cpp>
 #include <boost/locale/src/icu/codecvt.cpp>
 #include <boost/locale/src/icu/collator.cpp>
 #include <boost/locale/src/icu/conversion.cpp>
 #include <boost/locale/src/icu/date_time.cpp>
 #include <boost/locale/src/icu/formatter.cpp>
-#undef BOOST_LOCALE_INSTANTIATE
 #include <boost/locale/src/icu/formatters_cache.cpp>
 #include <boost/locale/src/icu/icu_backend.cpp>
 #include <boost/locale/src/icu/numeric.cpp>
@@ -38,6 +35,7 @@ module;
 #include <boost/locale/src/util/codecvt_converter.cpp>
 #include <boost/locale/src/util/default_locale.cpp>
 #include <boost/locale/src/util/encoding.cpp>
+#include <boost/locale/src/util/gregorian.cpp>
 #include <boost/locale/src/util/info.cpp>
 #include <boost/locale/src/util/locale_data.cpp>
 #ifdef _WIN32

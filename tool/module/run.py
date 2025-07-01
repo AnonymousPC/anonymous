@@ -1,6 +1,6 @@
 import subprocess
 import threading
-from .config import *
+from module.config import *
 
 def run(command, **kwargs):
     if not verbose:

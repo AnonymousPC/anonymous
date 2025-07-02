@@ -1,4 +1,19 @@
-In module imported from boost:
-In module imported from boost.gil:
-In module imported from tiff:
-fatal error: file ./module/tiff.cpp should export module tiff
+In file included from /usr/include/c++/15.1.1/atomic:52,
+                 from /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/../../include/oneapi/tbb/detail/_utils.h:22,
+                 from /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/task_dispatcher.h:20,
+                 from /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/arena.cpp:17:
+In member function ‘void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]’,
+    inlined from ‘void std::atomic<bool>::store(bool, std::memory_order)’ at /usr/include/c++/15.1.1/atomic:113:20,
+    inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one_relaxed() [with Context = long unsigned int]’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/concurrent_monitor.h:300:53,
+    inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one_relaxed() [with Context = long unsigned int]’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/concurrent_monitor.h:280:10,
+    inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one() [with Context = long unsigned int]’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/concurrent_monitor.h:276:27,
+    inlined from ‘tbb::detail::r1::nested_arena_context::~nested_arena_context()’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/arena.cpp:741:53:
+/usr/include/c++/15.1.1/bits/atomic_base.h:477:25: error: ‘void __atomic_store_1(volatile void*, unsigned char, int)’ writing 1 byte into a region of size 0 overflows the destination [-Werror=stringop-overflow=]
+  477 |         __atomic_store_n(&_M_i, __i, int(__m));
+      |         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated due to -Wfatal-errors.
+cc1plus: all warnings being treated as errors
+make[2]: *** [src/tbb/CMakeFiles/tbb.dir/build.make:107: src/tbb/CMakeFiles/tbb.dir/arena.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:175: src/tbb/CMakeFiles/tbb.dir/all] Error 2
+make: *** [Makefile:156: all] Error 2

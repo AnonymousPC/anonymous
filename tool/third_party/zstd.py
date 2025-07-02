@@ -4,8 +4,6 @@ cmake(
     module_name="zstd",
     dir="./third_party/zstd/build/cmake",
     args=[
-        "-DZSTD_LEGACY_SUPPORT=false",
-        "-DZSTD_MULTITHREAD_SUPPORT=true",
         "-DZSTD_BUILD_PROGRAMS=false",
         "-DZSTD_BUILD_CONTRIB=false",
         "-DZSTD_BUILD_TESTS=false",

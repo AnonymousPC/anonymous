@@ -10,8 +10,6 @@ cmake(
         "-Dtiff-tests=false",
         "-Dtiff-contrib=false",
         "-Dtiff-docs=false",
-        "-Dtiff-deprecated=false",
-        "-Dtiff-install=true"
     ]
 )
 

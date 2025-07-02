@@ -4,7 +4,7 @@ perl(
     module_name="openssl",
     file="./third_party/openssl/Configure",
     args=[
-        "-static"
+        "no-shared"
     ]
 )
 

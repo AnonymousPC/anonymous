@@ -6,17 +6,7 @@ cmake(
     args=[
         "-DTBB_TEST=false",
         "-DTBB_EXAMPLES=false",
-        "-DTBB4PY_BUILD=false",
-        "-DTBB_BUILD=true",
-        "-DTBBMALLOC_BUILD=true",
-        "-DTBB_CPF=true",
-        "-DTBB_FIND_PACKAGE=true",
-        "-DTBB_DISABLE_HWLOC_AUTOMATIC_SEARCH=false",
-        "-DTBB_ENABLE_IPO=true",
-        "-DTBB_CONTROL_FLOW_GUARD=true",
-        "-DTBB_FUZZ_TESTING=false",
-        "-DTBB_INSTALL=true",
-        "-DTBB_FILE_TRIM=true"
+        "-DBUILD_SHARED_LIBS=false"
     ]
 )
 

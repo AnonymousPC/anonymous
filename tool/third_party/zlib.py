@@ -7,8 +7,7 @@ cmake(
         "-DZLIB_BUILD_TESTING=false",
         "-DZLIB_BUILD_SHARED=false",
         "-DZLIB_BUILD_STATIC=true",
-        "-DZLIB_BUILD_MINIZIP=false",
-        "-DZLIB_INSTALL=true"
+        "-DZLIB_BUILD_MINIZIP=false"
     ]
 )
 

@@ -7,8 +7,7 @@ cmake(
         "-DPNG_SHARED=false",
         "-DPNG_STATIC=true",
         "-DPNG_TESTS=false",
-        "-DPNG_TOOLS=false",
-        "-DPNG_HARDWARE_OPTIMIZATIONS=true"
+        "-DPNG_TOOLS=false"
     ]
 )
 

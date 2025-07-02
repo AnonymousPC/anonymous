@@ -1,6 +1,7 @@
 module;
 #undef in
 #undef self
+#define __cpp_lib_execution false
 #include <stdexec/concepts.hpp>
 #include <stdexec/coroutine.hpp>
 #include <stdexec/execution.hpp>
@@ -12,6 +13,5 @@ import std.compiler; // This library might be depended by std.sender.
 
 namespace stdexec
 {
-    export using stdexec::receiver;
-    export using stdexec::sender;
+    export using stdexec::schedule;
 }

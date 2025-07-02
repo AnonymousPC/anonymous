@@ -2,7 +2,7 @@ from module.make import *
 
 if system == "windows":
     cmake(
-        export_name="hwloc",
+        module_name="hwloc",
         dir="./third_party/hwloc/contrib/windows-cmake",
         args=[
             "-DHWLOC_ENABLE_TESTING=false",
@@ -14,11 +14,11 @@ if system == "windows":
     )
 elif system == "linux" or system == "macos":
     autogen(
-        export_name="hwloc",
+        module_name="hwloc",
         file="./third_party/hwloc/autogen.sh"
     )
     configure(
-        export_name="hwloc",
+        module_name="hwloc",
         file="./third_party/hwloc/configure",
         args=[
             "--enable-static",
@@ -28,7 +28,7 @@ elif system == "linux" or system == "macos":
         ]
     )
     make(
-        export_name="hwloc",
+        module_name="hwloc",
         dir="./third_aprty/hwloc"
     )
     

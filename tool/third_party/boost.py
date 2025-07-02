@@ -1,4 +1,6 @@
-from module.make import *
+import os
+import shutil
+from module.config import *
 
 for lib in os.listdir  ( "./third_party/boost/libs"):
     if os.path.isdir   (f"./third_party/boost/libs/{lib}"):

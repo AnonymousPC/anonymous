@@ -1,7 +1,7 @@
 from module.make import *
 
 cmake(
-    export_name="jpeg",
+    module_name="jpeg",
     dir="./third_party/libjpeg-turbo",
     args=[
         "-DENABLE_SHARED=false",

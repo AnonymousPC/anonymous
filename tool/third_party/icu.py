@@ -1,7 +1,7 @@
 from module.make import *
 
 configure(
-    export_name="icu",
+    module_name="icu",
     file="./third_party/icu/icu4c/source/configure",
     args=[
         "--disable-icu-config",
@@ -15,7 +15,7 @@ configure(
     ]
 )
 make(
-    export_name="icu",
+    module_name="icu",
     dir="./third_party/icu/icu4c/source"
 )
 

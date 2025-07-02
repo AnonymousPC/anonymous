@@ -4,7 +4,7 @@ import subprocess
 from module.config import *
 from module.run import *
 
-def preprocess_file(export_name, source_file, module_file):
+def preprocess_file(code_file, module_name=None, module_file=None):
     command = ""
     if compiler == "g++" or compiler == "clang++":
         command = f"{compiler} "                                            \
@@ -12,17 +12,17 @@ def preprocess_file(export_name, source_file, module_file):
                   f"-E -x c++ - "                                           \
                   f"-o -"
         if compiler == "g++":
-            if module_file is not None:
+            if module_name is not None and module_file is not None:
                 with open(f"./bin/{type}/module/mapper.txt", 'a') as writer:
-                    writer.write(f"{export_name} {module_file}\n")
+                    writer.write(f"{module_name} {module_file}\n")
     elif compiler == "cl":
         command = f"{compiler} "                                            \
-                  f"/E {source_file}"
+                  f"/E {code_file}"
 
     try:
-        reader = open(source_file, 'r').read()
-        reader = re.sub(r'^\s*#\s*include.*$', "", reader, flags=re.MULTILINE)
-        return subprocess.run(command, shell=True, capture_output=True, check=True, text=True, input=reader).stdout
+        reader = open(code_file, 'r').read()
+        reader = re.sub(r'^\s*#\s*include\s+(?!<version>).*$', "", reader, flags=re.MULTILINE)
+        return subprocess.run(command, shell=True, check=True, capture_output=True, text=True, input=reader).stdout
     except FileNotFoundError as e:
         raise Exception(f"fatal error: {e.filename} not found")
     except subprocess.CalledProcessError as e:
@@ -31,21 +31,21 @@ def preprocess_file(export_name, source_file, module_file):
 def compile_tool(tool_file):
     exec(f"from {os.path.relpath(tool_file, "./tool").replace('\\', '/').replace('/', '.').removesuffix('.py')} import *")
 
-def compile_module(source_file, include_dir, module_file, object_file):
+def compile_module(code_file, include_dir, module_file, object_file):
     commands = []
     if compiler == "g++":
         commands = [f"g++ "
                     f"{' '.join(compile_flags)} "
                     f"-I {include_dir} "
                     f"{' '.join(f'-D {key}="{value}"' for key, value in define_flags.items())} "
-                    f"-c {source_file} "
+                    f"-c {code_file} "
                     f"-o {object_file}"]
     elif compiler == "clang++":
         commands = [f"clang++ "
                     f"{' '.join(compile_flags)} "
                     f"-I {include_dir} "
                     f"{' '.join(f'-D {key}="{value}"' for key, value in define_flags.items())} "
-                    f"--precompile -x c++-module {source_file} "
+                    f"--precompile -x c++-module {code_file} "
                     f"-o                         {module_file}",
                     
                     f"clang++ "
@@ -57,28 +57,28 @@ def compile_module(source_file, include_dir, module_file, object_file):
                     f"{' '.join(compile_flags)} "
                     f"/I {include_dir} "
                     f"{' '.join(f'/D {key}="{value}"' for key, value in define_flags.items())} "
-                    f"/c /interface /TP {source_file} "
+                    f"/c /interface /TP {code_file} "
                     f"/ifcOutput        {module_file} "
                     f"/Fo               {object_file}"]
         
     for command in commands:
         run(command)
         
-def compile_source(source_file, include_dir, object_file):
+def compile_source(code_file, include_dir, object_file):
     command = ""
     if compiler == "g++" or compiler == "clang++":
         command = f"{compiler} "                                                              \
                   f"{' '.join(compile_flags)} "                                               \
                   f"-I {include_dir} "                                                        \
                   f"{' '.join(f'-D{key}="{value}"' for key, value in define_flags.items())} " \
-                  f"-c {source_file} "                                                        \
+                  f"-c {code_file} "                                                        \
                   f"-o {object_file}"
     elif compiler == "cl":
         command = f"cl "                                                                      \
                   f"{' '.join(compile_flags)} "                                               \
                   f"/I {include_dir} "                                                        \
                   f"{' '.join(f'/D{key}="{value}"' for key, value in define_flags.items())} " \
-                  f"/c  {source_file} "                                                       \
+                  f"/c  {code_file} "                                                       \
                   f"/Fo {object_file}"
     
     run(command)

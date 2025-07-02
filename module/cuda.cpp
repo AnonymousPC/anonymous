@@ -46,7 +46,7 @@ module;
 #include <cuda/std/tuple>
 #include <cuda/std/type_traits>
 #include <cuda/std/utility>
-// #include <cuda/std/variant>: fixme
+#include <cuda/std/variant>
 #include <cuda/std/version>
 #include <cuda/stream_ref>
 #include <cuda/type_traits>
@@ -63,8 +63,3 @@ module;
 
 export module cuda;
 import std;
-
-namespace cuda
-{
-
-}

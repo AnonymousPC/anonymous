@@ -1,7 +1,7 @@
 from module.make import *
 
 cmake(
-    export_name="zlib",
+    module_name="zlib",
     dir="./third_party/zlib",
     args=[
         "-DZLIB_BUILD_TESTING=false",

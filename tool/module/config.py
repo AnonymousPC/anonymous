@@ -1,6 +1,5 @@
 import argparse
 import os
-import shutil
 import sys
 os.chdir(f"{os.path.dirname(__file__)}/../..")
 os.environ["LANG"] = "en_US.UTF-8"
@@ -10,17 +9,11 @@ os.environ["LANG"] = "en_US.UTF-8"
 # Arguments
 
 parser = argparse.ArgumentParser(description="build.py")
-parser.add_argument("--type",    choices=["debug", "release"], default="debug", help="compile flags")
-parser.add_argument("--clean",   action="store_true",                           help="clean caches" )
-parser.add_argument("--verbose", action="store_true",                           help="full output"  )
+parser.add_argument("--type",    choices=["debug", "release"], default="debug")
+parser.add_argument("--verbose", action="store_true",                         )
 argv = parser.parse_args()
 type    = argv.type
-clean   = argv.clean
 verbose = argv.verbose
-
-if argv.clean:
-    shutil.rmtree(f"./bin/{type}")
-    exit(0)
 
 
 

@@ -1,35 +1,21 @@
 import subprocess
-import threading
 from module.config import *
 
-def run(command, **kwargs):
-    if not verbose:
+def run(command, quiet=False, **kwargs):
+    if verbose:
+        print(command)
+        p = subprocess.Popen(command, shell=True, stdout=None if verbose >= 2 else subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, **kwargs)
+        e = ""
+        while p.poll() is None:
+            e += p.stderr.readline()
+        if p.poll() == 0:
+            print(e, end="", file=sys.stderr)
+        else:
+            raise Exception(e)
+    else:
         try:
-            p = subprocess.run(command, shell=True, capture_output=True, check=True, text=True, **kwargs)
-            print(p.stderr, end="", file=sys.stderr)
+            p = subprocess.run(command, shell=True, check=True, capture_output=True, text=True, **kwargs)
+            if not quiet:
+                print(p.stderr, end="", file=sys.stderr)
         except subprocess.CalledProcessError as e:
             raise Exception(e.stderr)
-
-    else:
-        print(command)
-        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, **kwargs)
-        e = ""
-
-        def read_stdout():
-            while p.poll() is None:
-                print(p.stdout.readline(), end="", file=sys.stdout)
-        def read_stderr():
-            while p.poll() is None:
-                print(p.stderr.readline(), end="", file=sys.stderr)
-                nonlocal e
-                e += p.stderr.readline()
-                
-        stdout_thread = threading.Thread(target=read_stdout)
-        stderr_thread = threading.Thread(target=read_stderr)
-        stdout_thread.start()
-        stderr_thread.start()
-        stdout_thread.join()
-        stderr_thread.join()
-
-        if p.poll() != 0:
-            raise Exception(e)

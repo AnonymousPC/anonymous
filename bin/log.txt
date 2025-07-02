@@ -1,0 +1,4 @@
+In module imported from boost:
+In module imported from boost.gil:
+In module imported from tiff:
+fatal error: file ./module/tiff.cpp should export module tiff

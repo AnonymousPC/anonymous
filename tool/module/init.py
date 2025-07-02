@@ -1,4 +1,4 @@
-from module.config import *
+from module.config   import *
 from module.compiler import *
 
 def try_write_file(file):

@@ -1,7 +1,7 @@
 from module.make import *
 
 cmake(
-    export_name="bzip2",
+    module_name="bzip2",
     dir="./third_party/bzip2",
     args=[
         "-DENABLE_WERROR=false",

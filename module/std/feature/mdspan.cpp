@@ -1,7 +1,8 @@
+module;
+#include <cassert>
+
 export module std.feature.mdspan;
 import std.compiler;
-
-#if false
 
 export namespace std
 {
@@ -499,6 +500,17 @@ struct layout_left {
   class mapping;
 };
 
+struct layout_right {
+  template <class _Extents>
+  class mapping;
+};
+
+struct layout_stride {
+  template <class _Extents>
+  class mapping;
+};
+
+
 template <class _Extents>
 class layout_left::mapping {
 public:
@@ -653,11 +665,6 @@ private:
  extents_type __extents_{};
 };
 
-struct layout_right {
-  template <class _Extents>
-  class mapping;
-};
-
 template <class _Extents>
 class layout_right::mapping {
 public:
@@ -808,11 +815,6 @@ public:
 
 private:
    extents_type __extents_{};
-};
-
-struct layout_stride {
-  template <class _Extents>
-  class mapping;
 };
 
 namespace __mdspan_detail {
@@ -1381,4 +1383,3 @@ mdspan(const typename _AccessorType::data_handle_type, const _MappingType&, cons
 
 }
 
-#endif

@@ -1,5 +1,6 @@
 export module std.feature.aligned_accessor;
 import std.compiler;
+import std.feature.mdspan;
 
 export namespace std
 {

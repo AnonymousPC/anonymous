@@ -6,7 +6,7 @@
             "group": "none",
             "type": "shell",
             "problemMatcher": [],
-            "command": "python ./tool/build.py --type=debug --clean"
+            "command": "python ./tool/clean.py --type=debug"
         },
         {
             "label": "debug.build",
@@ -39,7 +39,7 @@
             "group": "none",
             "type": "shell",
             "problemMatcher": [],
-            "command": "python ./tool/build.py --type=release --clean"
+            "command": "python ./tool/clean.py --type=release"
         },
         {
             "label": "release.build",

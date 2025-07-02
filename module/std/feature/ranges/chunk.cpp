@@ -1,6 +1,3 @@
-module;
-#include <ranges>
-
 export module std.feature.ranges.chunk;
 import std.compiler;
 

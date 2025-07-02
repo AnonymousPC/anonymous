@@ -64,3 +64,7 @@
 	path = third_party/zstd
 	url = https://github.com/facebook/zstd
 	branch = dev
+[submodule "third_party/lz4"]
+	path = third_party/lz4
+	url = https://github.com/lz4/lz4
+	branch = dev

@@ -12,7 +12,7 @@ class Module:
             self.code_file    = f"./module/{self.module_name.replace('.', '/')}.cpp"
             self.module_file  = f"./bin/{type}/module/{self.module_name}.{module_suffix}"
             self.object_file  = f"./bin/{type}/module/{self.module_name}.{object_suffix}"
-            self.tool_file    = f"./tool/third_party/{self.module_name}.py" if os.path.isfile(f"./tool/third_party/{self.module_name}.py") else None
+            self.tool_file    = f"./tool/third_party/{self.module_name.partition('.')[0]}.py" if os.path.isfile(f"./tool/third_party/{self.module_name.partition('.')[0]}.py") else None
             self.from_modules = from_modules
             self.content      = preprocess_file(code_file=self.code_file, module_name=self.module_name, module_file=self.module_file)
             Module.modules.append(self)

@@ -1,3 +1,9 @@
+module;
+#ifdef __clang__
+    #pragma clang diagnostic ignored "-Wreserved-module-identifier"
+#endif
+#include <ranges>
+
 export module std.feature.ranges.as_const;
 import std.compiler;
 

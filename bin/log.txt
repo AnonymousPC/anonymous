@@ -1,13 +1,4 @@
-[1m./module/std/feature/ranges/as_const.cpp:1:15: [0m[0;1;35mwarning: [0m[1m'std' is a reserved name for a module [-Wreserved-module-identifier][0m
-    1 | [0;34mexport[0m module std.feature.ranges.as_const;[0m
-      | [0;1;32m              ^
-[0m[1m./module/std/feature/ranges/as_const.cpp:112:14: [0m[0;1;31merror: [0m[1mno template named '__different_from'[0m
-  112 |     template<__different_from<basic_const_iterator> _Tp>[0m
-      | [0;1;32m             ^
-[0m[1m./module/std/feature/ranges/as_const.cpp:113:31: [0m[0;1;31merror: [0m[1mtemplate argument for template type parameter must be a type[0m
-  113 |       requires convertible_to<_Tp, _It>[0m
-      | [0;1;32m                              ^~~
-[0m[1m/opt/homebrew/Cellar/llvm/20.1.7/bin/../include/c++/v1/__concepts/convertible_to.h:26:17: [0m[0;1;36mnote: [0mtemplate parameter is declared here[0m
-   26 | template <class _From, class _To>[0m
-      | [0;1;32m                ^
-[0m1 warning and 2 errors generated.
+[1m./module/boost/stacktrace.cpp:9:10: [0m[0;1;31mfatal error: [0m[1m'boost/stacktrace.hpp' file not found[0m
+    9 | #include <boost/stacktrace.hpp>[0m
+      | [0;1;32m         ^~~~~~~~~~~~~~~~~~~~~~
+[0m1 error generated.

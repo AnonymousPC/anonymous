@@ -1,4 +1,7 @@
 module;
+#ifdef __clang__
+    #pragma clang diagnostic ignored "-Wreserved-module-identifier"
+#endif
 #include <version>
 
 export module std.feature.aligned_accessor;

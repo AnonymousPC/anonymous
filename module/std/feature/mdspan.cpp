@@ -1,4 +1,7 @@
 module;
+#ifdef __clang__
+    #pragma clang diagnostic ignored "-Wreserved-module-identifier"
+#endif
 #include <cassert>
 
 export module std.feature.mdspan;

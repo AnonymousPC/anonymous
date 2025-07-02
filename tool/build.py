@@ -1,5 +1,3 @@
-import sys
-sys.dont_write_bytecode = True
 from module.source import *
 from module.object import *
 from module.init   import *

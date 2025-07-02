@@ -1,3 +1,4 @@
 bin/debug/*
 bin/release/*
 bin/main
+__pycache__

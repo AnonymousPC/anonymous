@@ -1,19 +1,13 @@
-In file included from /usr/include/c++/15.1.1/atomic:52,
-                 from /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/../../include/oneapi/tbb/detail/_utils.h:22,
-                 from /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/task_dispatcher.h:20,
-                 from /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/arena.cpp:17:
-In member function ‘void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]’,
-    inlined from ‘void std::atomic<bool>::store(bool, std::memory_order)’ at /usr/include/c++/15.1.1/atomic:113:20,
-    inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one_relaxed() [with Context = long unsigned int]’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/concurrent_monitor.h:300:53,
-    inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one_relaxed() [with Context = long unsigned int]’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/concurrent_monitor.h:280:10,
-    inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one() [with Context = long unsigned int]’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/concurrent_monitor.h:276:27,
-    inlined from ‘tbb::detail::r1::nested_arena_context::~nested_arena_context()’ at /home/anonymous/Code/anonymous/third_party/oneTBB/src/tbb/arena.cpp:741:53:
-/usr/include/c++/15.1.1/bits/atomic_base.h:477:25: error: ‘void __atomic_store_1(volatile void*, unsigned char, int)’ writing 1 byte into a region of size 0 overflows the destination [-Werror=stringop-overflow=]
-  477 |         __atomic_store_n(&_M_i, __i, int(__m));
-      |         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-compilation terminated due to -Wfatal-errors.
-cc1plus: all warnings being treated as errors
-make[2]: *** [src/tbb/CMakeFiles/tbb.dir/build.make:107: src/tbb/CMakeFiles/tbb.dir/arena.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:175: src/tbb/CMakeFiles/tbb.dir/all] Error 2
-make: *** [Makefile:156: all] Error 2
+[1m./module/std/feature/ranges/as_const.cpp:1:15: [0m[0;1;35mwarning: [0m[1m'std' is a reserved name for a module [-Wreserved-module-identifier][0m
+    1 | [0;34mexport[0m module std.feature.ranges.as_const;[0m
+      | [0;1;32m              ^
+[0m[1m./module/std/feature/ranges/as_const.cpp:112:14: [0m[0;1;31merror: [0m[1mno template named '__different_from'[0m
+  112 |     template<__different_from<basic_const_iterator> _Tp>[0m
+      | [0;1;32m             ^
+[0m[1m./module/std/feature/ranges/as_const.cpp:113:31: [0m[0;1;31merror: [0m[1mtemplate argument for template type parameter must be a type[0m
+  113 |       requires convertible_to<_Tp, _It>[0m
+      | [0;1;32m                              ^~~
+[0m[1m/opt/homebrew/Cellar/llvm/20.1.7/bin/../include/c++/v1/__concepts/convertible_to.h:26:17: [0m[0;1;36mnote: [0mtemplate parameter is declared here[0m
+   26 | template <class _From, class _To>[0m
+      | [0;1;32m                ^
+[0m1 warning and 2 errors generated.

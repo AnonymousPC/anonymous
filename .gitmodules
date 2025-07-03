@@ -1,72 +1,72 @@
 [submodule "third_party/boost"]
-	path = third_party/boost
+	path = package/boost
 	url = https://github.com/boostorg/boost
 	branch = master
     shallow = true
 [submodule "third_party/bzip2"]
-	path = third_party/bzip2
+	path = package/bzip2
 	url = https://gitlab.com/bzip2/bzip2
 	branch = master
 [submodule "third_party/cccl"]
-	path = third_party/cccl
+	path = package/cccl
 	url = https://github.com/NVIDIA/cccl
 	branch = main
 [submodule "third_party/eigen"]
-	path = third_party/eigen
+	path = package/eigen
 	url = https://gitlab.com/libeigen/eigen
 	branch = master
 [submodule "third_party/hwloc"]
-	path = third_party/hwloc
+	path = package/hwloc
 	url = https://github.com/open-mpi/hwloc
 	branch = master
 [submodule "third_party/icu"]
-	path = third_party/icu
+	path = package/icu
 	url = https://github.com/unicode-org/icu
 	branch = main
 	shallow = true
 [submodule "third_party/libjpeg-turbo"]
-	path = third_party/libjpeg-turbo
+	path = package/libjpeg-turbo
 	url = https://github.com/libjpeg-turbo/libjpeg-turbo
 	branch = main
 [submodule "third_party/libpng"]
-	path = third_party/libpng
+	path = package/libpng
 	url = https://github.com/pnggroup/libpng
 	branch = libpng16
 [submodule "third_party/libtiff"]
-	path = third_party/libtiff
+	path = package/libtiff
 	url = https://gitlab.com/libtiff/libtiff
 	branch = master
 [submodule "third_party/lz4"]
-	path = third_party/lz4
+	path = package/lz4
 	url = https://github.com/lz4/lz4
 	branch = dev
 [submodule "third_party/oneTBB"]
-	path = third_party/oneTBB
+	path = package/oneTBB
 	url = https://github.com/uxlfoundation/oneTBB
 	branch = master
 [submodule "third_party/openssl"]
-	path = third_party/openssl
+	path = package/openssl
 	url = https://github.com/openssl/openssl
 	branch = master
 	shallow = true
 [submodule "third_party/plf_hive"]
-	path = third_party/plf_hive
+	path = package/plf_hive
 	url = https://github.com/mattreecebentley/plf_hive
 	branch = main
 [submodule "third_party/stdexec"]
-	path = third_party/stdexec
+	path = package/stdexec
 	url = https://github.com/NVIDIA/stdexec
 	branch = main
 [submodule "third_party/xz"]
-	path = third_party/xz
+	path = package/xz
 	url = https://github.com/tukaani-project/xz
 	branch = master
 [submodule "third_party/zlib"]
-	path = third_party/zlib
+	path = package/zlib
 	url = https://github.com/madler/zlib
 	branch = develop
 [submodule "third_party/zstd"]
-	path = third_party/zstd
+	path = package/zstd
 	url = https://github.com/facebook/zstd
 	branch = dev
 

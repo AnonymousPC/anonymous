@@ -2,6 +2,7 @@
 	path = third_party/boost
 	url = https://github.com/boostorg/boost
 	branch = master
+    shallow = true
 [submodule "third_party/bzip2"]
 	path = third_party/bzip2
 	url = https://gitlab.com/bzip2/bzip2

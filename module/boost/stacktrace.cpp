@@ -1,7 +1,7 @@
 module;
 #undef in
 #undef self
-#ifdef __linux__
+#ifdef __GNUC__
     #define _GNU_SOURCE
 #else
     #define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED

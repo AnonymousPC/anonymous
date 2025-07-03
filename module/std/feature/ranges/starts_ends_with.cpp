@@ -1,3 +1,8 @@
+module;
+#ifdef __clang__
+    #pragma clang diagnostic ignored "-Wreserved-module-identifier"
+#endif
+
 export module std.feature.ranges.starts_ends_with;
 import std.compiler;
 

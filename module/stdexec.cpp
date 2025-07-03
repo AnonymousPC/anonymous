@@ -11,4 +11,7 @@ module;
 export module stdexec;
 import std.compiler; // This library might be depended by std.sender.
 
-export namespace stdexec { }
+export namespace stdexec 
+{ 
+
+}

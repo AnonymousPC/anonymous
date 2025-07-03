@@ -63,3 +63,8 @@ module;
 
 export module cuda;
 import std;
+
+export namespace cuda
+{
+    
+}

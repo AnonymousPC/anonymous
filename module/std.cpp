@@ -1,3 +1,4 @@
+module;
 #ifdef __clang__
     #pragma clang diagnostic ignored "-Wreserved-module-identifier"
 #endif

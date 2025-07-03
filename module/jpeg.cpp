@@ -3,3 +3,8 @@ module;
 #include <jpeglib.h>
 
 export module jpeg;
+
+export
+{
+    
+}

@@ -4,3 +4,8 @@ module;
 
 export module png;
 import zlib;
+
+export
+{
+    
+}

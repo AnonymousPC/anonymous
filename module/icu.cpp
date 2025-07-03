@@ -1,6 +1,5 @@
 module;
 #undef in
-#include <ranges>
 #include <unicode/appendable.h>
 #include <unicode/brkiter.h>
 #include <unicode/bytestream.h>
@@ -208,3 +207,8 @@ module;
 
 export module icu;
 import std;
+
+export
+{
+
+}

@@ -10,7 +10,7 @@ import png;
 import tiff;
 import zlib;
 
-namespace boost::gil
+export namespace boost::gil
 {
     
 }

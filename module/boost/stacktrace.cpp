@@ -11,8 +11,8 @@ module;
 export module boost.stacktrace;
 import std.compiler; // This library might be depended by std.stacktrace.
 
-namespace boost::stacktrace
+export namespace boost::stacktrace
 {
-    export using boost::stacktrace::frame;
-    export using boost::stacktrace::stacktrace;
+    using boost::stacktrace::frame;
+    using boost::stacktrace::stacktrace;
 }

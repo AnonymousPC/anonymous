@@ -22,7 +22,7 @@ import xz;
 import zlib;
 import zstd;
 
-namespace boost::iostreams
+export namespace boost::iostreams
 {
     
 }

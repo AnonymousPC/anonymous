@@ -2,13 +2,18 @@ module;
 #undef in
 #include <cuda/access_property>
 #include <cuda/annotated_ptr>
+#include <cuda/atomic>
+#include <cuda/barrier>
 #include <cuda/bit>
 #include <cuda/cmath>
 #include <cuda/discard_memory>
 #include <cuda/functional>
 #include <cuda/iterator>
+#include <cuda/latch>
 #include <cuda/numeric>
+#include <cuda/pipeline>
 #include <cuda/ptx>
+#include <cuda/semaphore>
 #include <cuda/std/array>
 #include <cuda/std/bit>
 #include <cuda/std/bitset>
@@ -53,13 +58,6 @@ module;
 #include <cuda/version>
 #include <cuda/warp>
 #include <cuda/work_stealing>
-#ifndef __MACH__
-    #include <cuda/atomic>
-    #include <cuda/barrier>
-    #include <cuda/latch>
-    #include <cuda/pipeline>
-    #include <cuda/semaphore>
-#endif
 
 export module cuda;
 import std;

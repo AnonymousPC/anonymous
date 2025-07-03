@@ -8,7 +8,7 @@ class Object:
         # Info
         self.object_name     = object_name
         self.object_file     = f"./bin/{type}/module/{self.object_name}.{object_suffix}"
-        self.executable_file = f"./bin/{type}/module/{self.object_name}.{executable_suffix}" if executable_suffix != "" else f"./bin/{type}/module/{self.object_name}"
+        self.executable_file = f"./bin/{self.object_name}.{executable_suffix}" if executable_suffix != "" else f"./bin/{self.object_name}"
 
         # Built
         self.is_built = os.path.isfile(self.executable_file) and os.path.getmtime(self.object_file) <= os.path.getmtime(self.executable_file)

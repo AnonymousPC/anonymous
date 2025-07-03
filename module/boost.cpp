@@ -5,7 +5,7 @@ export import boost.charconv;
 export import boost.date_time;
 export import boost.dll;
 export import boost.filesystem;
-export import boost.gil;
+// export import boost.gil;
 export import boost.iostreams;
 export import boost.locale;
 export import boost.mysql;

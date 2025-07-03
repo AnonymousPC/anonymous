@@ -8,7 +8,7 @@ module;
 export module boost.charconv;
 import std;
 
-namespace boost::charconv
+export namespace boost::charconv
 {
     
 }

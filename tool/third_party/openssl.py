@@ -1,6 +1,6 @@
 from module.make import *
 
-perl(
+configure(
     module_name="openssl",
     file="./third_party/openssl/Configure",
     args=[

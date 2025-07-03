@@ -6,7 +6,7 @@ module;
 export module boost.date_time;
 import std;
 
-namespace boost::date_time
+export namespace boost::date_time
 {
     
 }

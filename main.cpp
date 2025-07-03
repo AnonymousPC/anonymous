@@ -1,7 +1,6 @@
 import tbb;
 import boost;
 import bzip2;
-import cuda;
 import eigen;
 import hwloc;
 import icu;
@@ -13,11 +12,14 @@ import png;
 import std;
 import stdexec;
 import tbb;
-import thrust;
 import tiff;
-import xz;
+import xz; 
 import zlib;
 import zstd;
+#ifndef __MACH__
+import cuda;
+import thrust;
+#endif
 
 int main ( )
 {

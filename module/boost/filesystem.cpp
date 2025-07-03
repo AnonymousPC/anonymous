@@ -16,7 +16,7 @@ module;
 export module boost.filesystem;
 import std;
 
-namespace boost::filesystem
+export namespace boost::filesystem
 {
     
 }

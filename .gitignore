@@ -1,4 +1,5 @@
 bin/debug/*
 bin/release/*
 bin/main
+bin/log.txt
 __pycache__

@@ -15,5 +15,7 @@ import std;
 
 export namespace Eigen
 {
-    
+    using Eigen::Matrix;
+    using Eigen::Vector;
+    using Eigen::operator<<;
 }

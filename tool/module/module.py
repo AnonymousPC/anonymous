@@ -18,7 +18,8 @@ class Module:
                 self.code_file    = f"./module/{self.name.replace('.', '/')}.cpp"
                 self.module_file  = f"./bin/{type}/module/{self.name}.{module_suffix}"
                 self.object_file  = f"./bin/{type}/module/{self.name}.{object_suffix}"
-                self.tool_file    = f"./tool/package/{self.name.partition('.')[0]}.py" if os.path.isfile(f"./tool/package/{self.name.partition('.')[0]}.py") else None
+                self.library_file = f"./bin/{type}/module/{self.name}.{library_suffix}" if os.path.isfile(f"./bin/{type}/module/{self.name}.{library_suffix}") else None
+                self.tool_file    = f"./tool/package/{self.name.partition('.')[0]}.py"  if os.path.isfile(f"./tool/package/{self.name.partition('.')[0]}.py")  else None
                 self.from_modules = from_modules
                 self.content      = preprocess_file(code_file=self.code_file, name=self.name, module_file=self.module_file)
 

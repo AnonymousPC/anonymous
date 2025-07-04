@@ -37,7 +37,7 @@ class Object:
     def link(self):
         if not self.is_built:
             Object.current += 1
-            print(f"link object [{Object.current}/{Object.total}]: {self.name}")
+            print(f"link object [{Object.current}/{1}]: {self.name}")
             link_object(object_files=self._recursive_linkable_files(), executable_file=self.executable_file)
 
     def _recursive_linkable_files(self, linkable_files=[]):

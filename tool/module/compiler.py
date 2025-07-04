@@ -106,7 +106,9 @@ def archieve_libraries(library_files, archieve_file):
         try:
             for library_file in library_files:
                 run(f"ar x {os.path.relpath(library_file, cwd)}", cwd=cwd)
-            run(f"ar rcs {os.path.relpath(archieve_file, cwd)} {' '.join(os.listdir(cwd))}", cwd=cwd)
+            try: os.remove(archieve_file)
+            except: pass
+            run(f"ar rcs {os.path.relpath(archieve_file, cwd)} {' '.join([object_file for object_file in os.listdir(cwd) if not object_file.startswith("__")])}", cwd=cwd)
         finally:
             shutil.rmtree(cwd)
     elif archiever == "lib":

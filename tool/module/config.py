@@ -62,7 +62,7 @@ elif compiler == "clang++":
         "-fdiagnostics-color=always",
        f"-fprebuilt-module-path=./bin/{type}/module",
     ]
-    link_flags = ["-static"]
+    link_flags = []
     if type == "debug":
         compile_flags += ["-g",  "-O0", "-DDEBUG" ]
     elif type == "release":

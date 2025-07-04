@@ -23,5 +23,6 @@ import thrust;
 
 int main ( )
 {
-    
+    auto mat = Eigen::Matrix<int,-1,-1>(2, 3);
+    std::cout << mat << std::endl;
 }

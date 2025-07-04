@@ -2,7 +2,7 @@ module;
 #undef extends
 #undef in
 #undef self
-#ifdef __GNUC__
+#if defined(__GNUC__) and not defined(__clang__)
     #pragma GCC diagnostic ignored "-Wdeprecated-variadic-comma-omission"
 #elifdef __clang__
     #pragma clang diagnostic ignored "-Wdeprecated-missing-comma-variadic-parameter"

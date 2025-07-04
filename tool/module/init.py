@@ -15,10 +15,10 @@ def try_mkdir(dir):
 
 try_mkdir(f"./bin/{type}")
 try_mkdir(f"./bin/{type}/module")
-try_mkdir(f"./bin/{type}/third_party")
-try_mkdir(f"./bin/{type}/third_party/build")
-try_mkdir(f"./bin/{type}/third_party/install")
-try_mkdir(f"./bin/{type}/third_party/install/include")
-try_mkdir(f"./bin/{type}/third_party/install/lib")
+try_mkdir(f"./bin/{type}/package")
+try_mkdir(f"./bin/{type}/package/build")
+try_mkdir(f"./bin/{type}/package/install")
+try_mkdir(f"./bin/{type}/package/install/include")
+try_mkdir(f"./bin/{type}/package/install/lib")
 if compiler == "g++":
     try_write_file(f"./bin/{type}/module/mapper.txt")

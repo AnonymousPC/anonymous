@@ -2,8 +2,8 @@ from module.make import *
 
 if system == "windows":
     cmake(
-        module_name="hwloc",
-        dir="./third_party/hwloc/contrib/windows-cmake",
+        name="hwloc",
+        dir="./package/hwloc/contrib/windows-cmake",
         args=[
             "-DHWLOC_ENABLE_TESTING=false",
             "-DHWLOC_SKIP_LSTOPO=true",
@@ -14,12 +14,12 @@ if system == "windows":
     )
 elif system == "linux" or system == "macos":
     autogen(
-        module_name="hwloc",
-        file="./third_party/hwloc/autogen.sh"
+        name="hwloc",
+        file="./package/hwloc/autogen.sh"
     )
     configure(
-        module_name="hwloc",
-        file="./third_party/hwloc/configure",
+        name="hwloc",
+        file="./package/hwloc/configure",
         args=[
             "--enable-static",
             "--disable-shared",
@@ -28,12 +28,16 @@ elif system == "linux" or system == "macos":
         ]
     )
     make(
-        module_name="hwloc",
+        name="hwloc",
         dir="./third_aprty/hwloc"
     )
+archieve(
+    name="hwloc",
+    libs=["libhwloc"]
+)
     
 """ 
->>> cat ./third_party/hwloc/contrib/windows-cmake/CMakeLists.txt | grep option
+>>> cat ./package/hwloc/contrib/windows-cmake/CMakeLists.txt | grep option
 option(HWLOC_ENABLE_TESTING "Enable testing" ON)
 option(HWLOC_SKIP_LSTOPO "don't build/install lstopo")
 option(HWLOC_SKIP_TOOLS "don't build/install other hwloc tools")
@@ -47,7 +51,7 @@ option(HWLOC_BUILD_SHARED_LIBS "build shared libraries" ${BUILD_SHARED_LIBS})
 """
 
 """
->>> ./third_party/hwloc/configure -h | grep -E 'enable|disable'
+>>> ./package/hwloc/configure -h | grep -E 'enable|disable'
       --cache-file=FILE   cache test results in FILE [disabled]
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)

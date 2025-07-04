@@ -1,6 +1,9 @@
 module;
 #undef in
 #undef self
+#ifdef __GNUC__
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>

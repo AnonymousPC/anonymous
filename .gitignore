@@ -1,5 +1,4 @@
-bin/debug/*
-bin/release/*
-bin/main
-bin/log.txt
+bin/*
+.log
+
 __pycache__

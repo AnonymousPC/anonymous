@@ -1,8 +1,8 @@
 from module.make import *
 
 cmake(
-    module_name="png",
-    dir="./third_party/libpng",
+    name="png",
+    dir="./package/libpng",
     args=[
         "-DPNG_SHARED=false",
         "-DPNG_STATIC=true",
@@ -10,9 +10,13 @@ cmake(
         "-DPNG_TOOLS=false"
     ]
 )
+archieve(
+    name="png",
+    libs=["libpng"]
+)
 
 """
->>> cat ./third_party/libpng/CMakeLists.txt | grep option
+>>> cat ./package/libpng/CMakeLists.txt | grep option
   message(SEND_ERROR "The options DFA_XTRA=\"${DFA_XTRA}\" "
 option(PNG_SHARED "Build libpng as a shared library" ON)
 option(PNG_STATIC "Build libpng as a static library" ON)

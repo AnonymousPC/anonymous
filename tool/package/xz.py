@@ -1,8 +1,8 @@
 from module.make import *
 
 cmake(
-    module_name="xz",
-    dir="./third_party/xz",
+    name="xz",
+    dir="./package/xz",
     args=[
         "-DBUILD_SHARED_LIBS=false",
         "-DXZ_MICROLZMA_ENCODER=false",
@@ -16,9 +16,13 @@ cmake(
         "-DXZ_DOC=false"
     ]
 )
+archieve(
+    name="xz",
+    libs=["liblzma"]
+)
 
 """
->>> cat ./third_party/xz/CMakeLists.txt | grep option
+>>> cat ./package/xz/CMakeLists.txt | grep option
 #     With empty CMAKE_BUILD_TYPE, the -UNDEBUG option will go
 #     after the -DNDEBUG option on the compiler command line and
 # option with find_package() to avoid a conflict with the FindLibLZMA module

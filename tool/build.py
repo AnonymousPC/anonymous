@@ -3,7 +3,7 @@ from module.object import *
 from module.init   import *
 
 if __name__ == "__main__":
-    with open("./bin/log.txt", 'w') as logger:
+    with open(".log", 'w') as logger:
         try:
             Source("main").compile()
             Object("main").link()

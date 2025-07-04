@@ -22,14 +22,20 @@ verbose = argv.verbose
 if sys.platform == "win32":
     system            = "windows"
     compiler          = "cl"
+    linker            = "cl"
+    archiever         = "lib"
     executable_suffix = "exe"
 elif sys.platform == "linux":
     system            = "linux"
     compiler          = "g++"
+    linker            = "g++"
+    archiever         = "ar"
     executable_suffix = ""
 elif sys.platform == "darwin":
     system            = "macos"
     compiler          = "clang++"
+    linker            = "clang++"
+    archiever         = "ar"
     executable_suffix = ""
 
 if compiler == "g++":
@@ -40,7 +46,7 @@ if compiler == "g++":
         "-fmodules",
        f"-fmodule-mapper=./bin/{type}/module/mapper.txt",
     ]
-    link_flags = []
+    link_flags = ["-static"]
     if type == "debug":
         compile_flags += ["-g",  "-O0", "-DDEBUG" ]
     elif type == "release":
@@ -56,7 +62,7 @@ elif compiler == "clang++":
         "-fdiagnostics-color=always",
        f"-fprebuilt-module-path=./bin/{type}/module",
     ]
-    link_flags = []
+    link_flags = ["-static"]
     if type == "debug":
         compile_flags += ["-g",  "-O0", "-DDEBUG" ]
     elif type == "release":
@@ -71,7 +77,7 @@ elif compiler == "cl":
         "/EHsc",
         "/W4"
     ]
-    link_flags = []
+    link_flags = ["/MT"]
     if type == "debug":
         compile_flags += ["/Z7", "/Od", "/DDEBUG" ]
     elif type == "release":

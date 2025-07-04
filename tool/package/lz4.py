@@ -1,8 +1,8 @@
 from module.make import *
 
 cmake(
-    module_name="lz4",
-    dir="./third_party/lz4/build/cmake",
+    name="lz4",
+    dir="./package/lz4/build/cmake",
     args=[
         "-DLZ4_BUILD_CLI=false",
         "-DLZ4_BUILD_LEGACY_LZ4C=false",
@@ -10,9 +10,13 @@ cmake(
         "-DBUILD_STATIC_LIBS=true"
     ]
 )
+archieve(
+    name="lz4",
+    libs=["liblz4"]
+)
 
 """
->>> cat ./third_party/lz4/build/cmake/CMakeLists.txt | grep -i option
+>>> cat ./package/lz4/build/cmake/CMakeLists.txt | grep -i option
 # BUILD OPTIONS - Configure build targets and features
 option(LZ4_BUILD_CLI "Build lz4 program" ON)
 option(LZ4_BUILD_LEGACY_LZ4C "Build lz4c program with legacy argument support" OFF)

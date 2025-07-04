@@ -1,10 +1,11 @@
 import os
 import re
+import shutil
 import subprocess
 from module.config import *
 from module.run import *
 
-def preprocess_file(code_file, module_name=None, module_file=None):
+def preprocess_file(code_file, name=None, module_file=None):
     command = ""
     if compiler == "g++" or compiler == "clang++":
         command = f"{compiler} "                                            \
@@ -12,9 +13,9 @@ def preprocess_file(code_file, module_name=None, module_file=None):
                   f"-E -x c++ - "                                           \
                   f"-o -"
         if compiler == "g++":
-            if module_name is not None and module_file is not None:
+            if name is not None and module_file is not None:
                 with open(f"./bin/{type}/module/mapper.txt", 'a') as writer:
-                    writer.write(f"{module_name} {module_file}\n")
+                    writer.write(f"{name} {module_file}\n")
     elif compiler == "cl":
         command = f"{compiler} "                                            \
                   f"/E {code_file}"
@@ -28,9 +29,6 @@ def preprocess_file(code_file, module_name=None, module_file=None):
     except subprocess.CalledProcessError as e:
         raise Exception(e.stderr)
     
-def compile_tool(tool_file):
-    exec(f"from {os.path.relpath(tool_file, "./tool").replace('\\', '/').replace('/', '.').removesuffix('.py')} import *")
-
 def compile_module(code_file, include_dir, module_file, object_file):
     commands = []
     if compiler == "g++":
@@ -83,35 +81,37 @@ def compile_source(code_file, include_dir, object_file):
     
     run(command)
         
-def link_binary(object_dir, lib_dir, executable_file):
-    link_files = []
-    for file in os.listdir(f"./{object_dir}"):
-        if file.endswith(f".{object_suffix}"):
-            link_files.append(f"./{object_dir}/{file}")
-    link_libs = []
-    for file in os.listdir(f"./{lib_dir}"):
-        if file.endswith(f".{library_suffix}"):
-            link_libs.append(f"./{lib_dir}/{file}")
-    
+def link_object(object_files, executable_file):
     command = ""
-    if compiler == "g++" or compiler == "clang++":
-        command = f"{compiler} "             \
-                  f"{' '.join(link_flags)} " \
-                  f"{' '.join(link_files)} " \
-                  f"-L {lib_dir} "           \
-                  f"{' '.join(link_libs)} "  \
+    if linker == "g++" or linker == "clang++":
+        command = f"{linker} "                 \
+                  f"{' '.join(link_flags)} "   \
+                  f"{' '.join(object_files)} " \
                   f"-o {executable_file}"
-    elif compiler == "cl":
-        command = f"{compiler} "             \
-                  f"{' '.join(link_flags)} " \
-                  f"{' '.join(link_files)} " \
-                  f"/L {lib_dir} "           \
-                  f"{' '.join(link_libs)} "  \
+    elif compiler == "link":
+        command = f"link "                     \
+                  f"{' '.join(link_flags)} "   \
+                  f"{' '.join(object_files)} " \
                   f"/Fe {executable_file}"
 
     run(command)
 
+def compile_tool(tool_file):
+    exec(f"from {os.path.relpath(tool_file, "./tool").replace('\\', '/').replace('/', '.').removesuffix('.py')} import *")
 
+def archieve_libraries(library_files, archieve_file):   
+    if archiever == "ar":
+        cwd = f"./tmp"
+        os.mkdir(cwd)
+        try:
+            for library_file in library_files:
+                run(f"ar x {os.path.relpath(library_file, cwd)}", cwd=cwd)
+            run(f"ar rcs {os.path.relpath(archieve_file, cwd)} {' '.join(os.listdir(cwd))}", cwd=cwd)
+        finally:
+            shutil.rmtree(cwd)
+    elif archiever == "lib":
+        run(f"lib /OUT:{archieve_file} {' '.join(library_files)}")
+        
 
 
 

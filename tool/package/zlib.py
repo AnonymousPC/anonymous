@@ -1,8 +1,8 @@
 from module.make import *
 
 cmake(
-    module_name="zlib",
-    dir="./third_party/zlib",
+    name="zlib",
+    dir="./package/zlib",
     args=[
         "-DZLIB_BUILD_TESTING=false",
         "-DZLIB_BUILD_SHARED=false",
@@ -10,9 +10,13 @@ cmake(
         "-DZLIB_BUILD_MINIZIP=false"
     ]
 )
+archieve(
+    name="zlib",
+    libs=["libz"]
+)
 
 """
->>> cat ./third_party/zlib/CMakeLists.txt | grep option
+>>> cat ./package/zlib/CMakeLists.txt | grep option
 option(ZLIB_BUILD_TESTING "Enable Zlib Examples as tests" ON)
 option(ZLIB_BUILD_SHARED "Enable building zlib shared library" ON)
 option(ZLIB_BUILD_STATIC "Enable building zlib static library" ON)

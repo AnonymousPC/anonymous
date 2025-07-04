@@ -10,12 +10,5 @@ import openssl;
 
 export namespace boost::asio
 {
-    using boost::asio::buffer;
-    using boost::asio::io_context;
-    
-    namespace ip
-    {
-        using boost::asio::ip::tcp;
-        using boost::asio::ip::udp;
-    }
+
 }

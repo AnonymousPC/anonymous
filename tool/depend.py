@@ -1,14 +1,15 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 from module.source import *
+from module.init   import *
 
 G = nx.DiGraph()
 
 def _get_name(module):
-    if hasattr(module, "source_name"):
-        return module.source_name
-    elif hasattr(module, "module_name"):
-        return module.module_name
+    if hasattr(module, "name"):
+        return module.name
+    elif hasattr(module, "name"):
+        return module.name
 
 def _summon_graph(module):
     G.add_node(_get_name(module))

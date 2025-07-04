@@ -1,10 +1,10 @@
 from module.make import *
 
 cmake(
-    module_name="tiff",
-    dir="./third_party/libtiff",
+    name="tiff",
+    dir="./package/libtiff",
     args=[
-        "-DBUILD_SHARED_LIBS=false"
+        "-DBUILD_SHARED_LIBS=false",
         "-Dtiff-static=true",
         "-Dtiff-tools=false",
         "-Dtiff-tests=false",
@@ -12,9 +12,16 @@ cmake(
         "-Dtiff-docs=false",
     ]
 )
+archieve(
+    name="tiff",
+    libs=[
+        "libtiff",
+        "libtiffxx"
+    ]
+)
 
 """
->>> cat ./third_party/libtiff/CMakeLists.txt | grep option
+>>> cat ./package/libtiff/CMakeLists.txt | grep option
   option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(tiff-static "build TIFF static libraries" ${TIFF_STATIC_LIBS_DEFAULT})
 option(tiff-tools "build TIFF tools" ON)

@@ -1,21 +1,27 @@
 from module.make import *
 
 configure(
-    module_name="openssl",
-    file="./third_party/openssl/Configure",
+    name="openssl",
+    file="./package/openssl/Configure",
     args=[
         "no-shared"
     ]
 )
-
 make(
-    module_name="openssl",
-    dir="./third_party/openssl"
+    name="openssl",
+    dir="./package/openssl",
+)
+archieve(
+    name="openssl",
+    libs=[
+        "libssl",
+        "libcrypto"
+    ]
 )
 
 
 """
->>> cat ./third_party/openssl/Configure
+>>> cat ./package/openssl/Configure
 ...
 # Options:
 #

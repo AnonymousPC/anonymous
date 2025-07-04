@@ -1,8 +1,8 @@
 from module.make import *
 
 configure(
-    module_name="icu",
-    file="./third_party/icu/icu4c/source/configure",
+    name="icu",
+    file="./package/icu/icu4c/source/configure",
     args=[
         "--disable-icu-config",
         "--enable-debug"    if type == "debug" else "",
@@ -15,12 +15,23 @@ configure(
     ]
 )
 make(
-    module_name="icu",
-    dir="./third_party/icu/icu4c/source"
+    name="icu",
+    dir="./package/icu/icu4c/source"
+)
+archieve(
+    name="icu",
+    libs=[
+        "libicudata",
+        "libicui18n",
+        "libicuio",
+        "libicutest",
+        "libicutu",
+        "libicuuc"
+    ]
 )
 
 """
->>> ./third_party/icu/icu4c/source/configure -h | grep -E 'enable|disable'
+>>> ./package/icu/icu4c/source/configure -h | grep -E 'enable|disable'
       --cache-file=FILE   cache test results in FILE [disabled]
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)

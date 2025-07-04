@@ -1,17 +1,23 @@
 from module.make import *
 
 cmake(
-    module_name="jpeg",
-    dir="./third_party/libjpeg-turbo",
+    name="jpeg",
+    dir="./package/libjpeg-turbo",
     args=[
         "-DENABLE_SHARED=false",
-        "-DENABLE_STATIC=true",
-        "-DCMAKE_INSTALL_LIBDIR=lib"
+        "-DENABLE_STATIC=true"
+    ]
+)
+archieve(
+    name="jpeg",
+    libs=[
+        "libjpeg", 
+        "libturbojpeg"
     ]
 )
 
 """
->>> cat ./third_party/libjpeg-turbo/CMakeLists.txt | grep option
+>>> cat ./package/libjpeg-turbo/CMakeLists.txt | grep option
 # 3. optionally provide a way to skip the installation of libjpeg-turbo
 # 4. optionally provide a way to postfix target names, to avoid namespace
 option(ENABLE_SHARED "Build shared libraries" TRUE)
@@ -39,7 +45,7 @@ option(FORCE_INLINE "Force function inlining" TRUE)
 """
 
 """
->>> cat ./third_party/libjpeg-turbo/CMakeLists.txt | grep CMAKE_INSTALL_DEFAULT_LIBDIR
+>>> cat ./package/libjpeg-turbo/CMakeLists.txt | grep CMAKE_INSTALL_DEFAULT_LIBDIR
       set(CMAKE_INSTALL_DEFAULT_LIBDIR "lib64")
       set(CMAKE_INSTALL_DEFAULT_LIBDIR "libx32")
       set(CMAKE_INSTALL_DEFAULT_LIBDIR "lib32")

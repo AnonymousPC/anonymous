@@ -1,8 +1,8 @@
 from module.make import *
 
 cmake(
-    module_name="bzip2",
-    dir="./third_party/bzip2",
+    name="bzip2",
+    dir="./package/bzip2",
     args=[
         "-DENABLE_WERROR=false",
        f"-DENABLE_DEBUG={type=='debug'}",
@@ -15,9 +15,13 @@ cmake(
         "-DENABLE_SHARED_LIB=false"
     ]
 )
+archieve(
+    name="bzip2",
+    libs=["libbz2_static"]
+)
 
 """
->>> cat ./third_party/bzip2/CMakeOptions.txt | grep option
+>>> cat ./package/bzip2/CMakeOptions.txt | grep option
 option(ENABLE_WERROR     "Turn on compile time warnings")
 option(ENABLE_DEBUG      "Turn on debug output")
 option(ENABLE_APP        "Build applications (bzip2, and bzip2recover)"

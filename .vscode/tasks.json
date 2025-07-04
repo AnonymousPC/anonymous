@@ -20,7 +20,7 @@
             "group": "test",
             "type": "shell",
             "problemMatcher": [],
-            "command": "./bin/main"
+            "command": "./bin/debug/main"
         },
         {
             "label": "debug",
@@ -53,7 +53,7 @@
             "group": "test",
             "type": "shell",
             "problemMatcher": [],
-            "command": "./bin/main"
+            "command": "./bin/release/main"
         },
         {
             "label": "release",

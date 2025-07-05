@@ -11,6 +11,7 @@ configure(
         "--enable-static",
         "--disable-dyload",
         "--disable-tests",
+      # "--disable-tools",
         "--disable-samples"
     ]
 )

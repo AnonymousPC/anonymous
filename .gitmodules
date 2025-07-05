@@ -49,6 +49,7 @@
 	url = https://github.com/openssl/openssl
 	branch = master
 	shallow = true
+	fetchRecurseSubmodules = false
 [submodule "package/plf_hive"]
 	path = package/plf_hive
 	url = https://github.com/mattreecebentley/plf_hive

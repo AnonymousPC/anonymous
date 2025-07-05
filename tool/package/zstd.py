@@ -8,11 +8,7 @@ cmake(
         "-DZSTD_BUILD_CONTRIB=false",
         "-DZSTD_BUILD_TESTS=false",
         "-DZSTD_BUILD_STATIC=true",
-        "-DZSTD_BUILD_SHARED=false",
-        "-DZSTD_BUILD_COMPRESSION=true",
-        "-DZSTD_BUILD_DECOMPRESSION=true",
-        "-DZSTD_BUILD_DICTBUILDER=true",
-        "-DZSTD_BUILD_DEPRECATED=false"
+        "-DZSTD_BUILD_SHARED=false"
     ]
 )
 archieve(

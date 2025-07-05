@@ -5,7 +5,10 @@ cmake(
     dir="./package/libjpeg-turbo",
     args=[
         "-DENABLE_SHARED=false",
-        "-DENABLE_STATIC=true"
+        "-DENABLE_STATIC=true",
+        "-DWITH_TOOLS=false",
+        "-DWITH_TESTS=false",
+        "-DWITH_FUZZ=false",
     ]
 )
 archieve(
@@ -28,8 +31,10 @@ option(WITH_ARITH_ENC
   option(WITH_JAVA
 option(WITH_JPEG7
 option(WITH_JPEG8
-option(WITH_SIMD "Include SIMD extensions, if available for this platform" TRUE)
+option(WITH_SIMD "Include SIMD extensions, if available for this platform"
 option(WITH_TURBOJPEG
+option(WITH_TOOLS
+option(WITH_TESTS "Enable regression tests, and build associated test programs (WARNING: Disable this at your own risk. If a build is not validated with the regression tests, then it is the responsibility of the builder to ensure, via other means, that the build produces mathematically correct results.)"
 option(WITH_FUZZ "Build fuzz targets" FALSE)
 macro(report_option var desc)
 report_option(ENABLE_SHARED "Shared libraries")
@@ -38,15 +43,10 @@ report_option(WITH_ARITH_DEC "Arithmetic decoding support")
 report_option(WITH_ARITH_ENC "Arithmetic encoding support")
 report_option(WITH_TURBOJPEG "TurboJPEG API library")
 report_option(WITH_JAVA "TurboJPEG Java wrapper")
+report_option(WITH_TOOLS "Command-line tools")
+report_option(WITH_TESTS "Regression tests")
   option(WITH_CRT_DLL
 option(FORCE_INLINE "Force function inlining" TRUE)
 # depending on the compiler and compiler options.  We leave it to the user to
 # depending on the compiler and compiler options.  We leave it to the user to
-"""
-
-"""
->>> cat ./package/libjpeg-turbo/CMakeLists.txt | grep CMAKE_INSTALL_DEFAULT_LIBDIR
-      set(CMAKE_INSTALL_DEFAULT_LIBDIR "lib64")
-      set(CMAKE_INSTALL_DEFAULT_LIBDIR "libx32")
-      set(CMAKE_INSTALL_DEFAULT_LIBDIR "lib32")
 """

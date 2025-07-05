@@ -7,7 +7,8 @@ cmake(
         "-DPNG_SHARED=false",
         "-DPNG_STATIC=true",
         "-DPNG_TESTS=false",
-        "-DPNG_TOOLS=false"
+        "-DPNG_TOOLS=false",
+      # "-DPNG_EXECUTABLES=false"
     ]
 )
 archieve(

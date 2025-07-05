@@ -5,9 +5,7 @@ configure(
     file="./package/openssl/Configure",
     args=[
         "no-apps",
-        "no-engine",
         "no-docs",
-        "no-legacy",
         "no-module",
         "no-shared",
         "zlib"
@@ -27,7 +25,7 @@ archieve(
 
 
 """
->>> /* git clone openssl && cd openssl && */ mkdir build && cd build && ../Configure && perl configdata.pm --dump
+>>> cd ./package/openssl && ./Configure && perl configdata.pm --dump
 ...
 Enabled features:
 

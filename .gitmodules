@@ -2,7 +2,7 @@
 	path = package/boost
 	url = https://github.com/boostorg/boost
 	branch = master
-    shallow = true
+	shallow = true
 [submodule "package/bzip2"]
 	path = package/bzip2
 	url = https://gitlab.com/bzip2/bzip2

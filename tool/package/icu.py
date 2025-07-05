@@ -9,7 +9,7 @@ configure(
         "--disable-release" if type == "debug" else "",
         "--disable-shared",
         "--enable-static",
-      # "--disable-tools",
+        "--disable-dyload",
         "--disable-tests",
         "--disable-samples"
     ]

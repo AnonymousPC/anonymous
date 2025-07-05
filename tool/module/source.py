@@ -15,7 +15,7 @@ class Source:
 
             # Info
             self.name        = name
-            self.code_file   = f"./{self.name}.cpp"
+            self.code_file   = f"./{self.name.replace('.', '/')}.cpp"
             self.object_file = f"./bin/{type}/module/{self.name}.{object_suffix}"
             self.content     = preprocess_file(code_file=self.code_file)
 
@@ -26,8 +26,8 @@ class Source:
                 self.import_modules.append(Module(name=import_name))
 
             # Built
-            self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.object_file) and os.path.getmtime(self.code_file) <= os.path.getmtime(self.object_file)
-            if not self.is_built:
+            self.is_compiled = all(module.is_compiled for module in self.import_modules) and os.path.isfile(self.object_file) and os.path.getmtime(self.code_file) <= os.path.getmtime(self.object_file)
+            if not self.is_compiled:
                 Source.total += 1
 
             # Return
@@ -36,15 +36,15 @@ class Source:
     def compile(self):
         # Dependency
         for import_module in self.import_modules:
-            if not import_module.is_built:
+            if not import_module.is_compiled:
                 import_module.compile()
 
         # Self
-        if not self.is_built:
+        if not self.is_compiled:
             Source.current += 1
             print(f"compile source [{Source.current}/{Source.total}]: {self.name}")
             compile_source(code_file=self.code_file, include_dir=f"./bin/{type}/package/install/include", object_file=self.object_file)
-            self.is_built = True
+            self.is_compiled = True
     
     def __eq__(self, str: str):
         return self.name == str

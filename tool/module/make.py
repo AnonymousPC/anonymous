@@ -10,8 +10,8 @@ def cmake(name, dir, args=[]):
             f"      -DCMAKE_INSTALL_PREFIX=./bin/{type}/package/install "
             f"      -DCMAKE_BUILD_TYPE={type} "
             f"{' '.join(args)}")
-    run(f"cmake --build   ./bin/{type}/package/build/{name} -j{os.cpu_count()}", quiet=True)
-    run(f"cmake --install ./bin/{type}/package/build/{name}")
+    run(f"cmake --build   ./bin/{type}/package/build/{name} -j {os.cpu_count()}", quiet=True)
+    run(f"cmake --install ./bin/{type}/package/build/{name} -j {os.cpu_count()}")
 
 def autogen(name, file, args=[]):
     if not os.path.isdir(f"./bin/{type}/package/build/{name}"):
@@ -20,20 +20,28 @@ def autogen(name, file, args=[]):
 def configure(name, file, args=[]):
     if not os.path.isdir(f"./bin/{type}/package/build/{name}"):
         cwd = f"./bin/{type}/package/build/{name}"
-        try: os.mkdir(cwd)
-        except: pass
-        run(f"./{os.path.relpath(file, cwd)} --prefix={os.path.abspath(f"./bin/{type}/package/install")} {' '.join(args)}", cwd=cwd)
+        try:
+            try: os.mkdir(cwd)
+            except: pass
+            run(f"./{os.path.relpath(file, cwd)} --prefix={os.path.abspath(f"./bin/{type}/package/install")} {' '.join(args)}", cwd=cwd)
+        except:
+            try: shutil.rmtree(cwd)
+            except: pass
+            raise
 
 def make(name, dir, args=[]):
+    if system != "linux" and system != "macos":
+        raise Exception("make is only supported on linux and macos")
     cwd = f"./bin/{type}/package/build/{name}"
-    try: os.mkdir(cwd)
-    except: pass
-    if system == "windows":
-        run(f"nmake -j{os.cpu_count()} {' '.join(args)}", cwd=cwd, quiet=True)
-        run(f"nmake install",                             cwd=cwd, quiet=True)
-    elif system == "linux" or system == "macos":
-        run(f"make -j{os.cpu_count()} {' '.join(args)}", cwd=cwd, quiet=True)
-        run(f"make install",                             cwd=cwd, quiet=True)
+    run(f"make         -j{os.cpu_count()} {' '.join(args)}", cwd=cwd, quiet=True)
+    run(f"make install -j{os.cpu_count()}",                  cwd=cwd, quiet=True)
+
+def nmake(name, dir, args=[]):
+    if system != "windows":
+        raise Exception("nmake is only supported on windows")
+    cwd = f"./bin/{type}/package/build/{name}"
+    run(f"nmake         -j{os.cpu_count()} {' '.join(args)}", cwd=cwd, quiet=True)
+    run(f"nmake install -j{os.cpu_count()}",                  cwd=cwd, quiet=True)
 
 def archieve(name, libs):
     archieved = False

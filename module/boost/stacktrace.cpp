@@ -1,9 +1,7 @@
 module;
 #undef in
 #undef self
-#ifdef __GNUC__
-    #define _GNU_SOURCE
-#else
+#ifndef _GNU_SOURCE
     #define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
 #endif
 #include <boost/stacktrace.hpp>

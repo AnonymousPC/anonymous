@@ -14,11 +14,12 @@ class Object:
             self = super().__new__(self)
             Object.pool[name] = self
 
+
             # Info
             self.name            = name
             self.object_file     = f"./bin/{type}/module/{self.name}.{object_suffix}"
-            self.library_file    = f"./bin/{type}/module/{self.name}.{library_suffix}" if os.path.isfile(f"./bin/{type}/module/{self.name}.{library_suffix}") else None
-            self.executable_file = f"./bin/{type}/{self.name}.{executable_suffix}"     if executable_suffix != "" else f"./bin/{type}/{self.name}"
+            self.library_file    = f"./bin/{type}/module/{self.name}.{library_suffix}"                  if os.path.isfile(f"./bin/{type}/module/{self.name}.{library_suffix}") else None
+            self.executable_file = f"./bin/{type}/{self.name.replace('.', '/', 1)}.{executable_suffix}" if executable_suffix != "" else f"./bin/{type}/{self.name.replace('.', '/', 1)}"
                 
             # Import
             if self.name in Source.pool.keys():
@@ -27,18 +28,18 @@ class Object:
                 self.import_objects = [Object(import_module.name) for import_module in Module(name=self.name).import_modules]
 
             # Built
-            self.is_built = os.path.isfile(self.executable_file) and os.path.getmtime(self.object_file) <= os.path.getmtime(self.executable_file)
-            if not self.is_built:
+            self.is_linked = self.name in Source.pool.keys() and os.path.isfile(self.executable_file) and os.path.getmtime(self.object_file) <= os.path.getmtime(self.executable_file)
+            if not self.is_linked:
                 Object.total += 1
 
             # Return
             return self
 
     def link(self):
-        if not self.is_built:
+        if not self.is_linked:
             Object.current += 1
-            print(f"link object [{Object.current}/{1}]: {self.name}")
-            link_object(object_files=self._recursive_linkable_files(), executable_file=self.executable_file)
+            print(f"link object [{Object.current}/{Source.total}]: {self.name}")
+            link_object(object_files=self._recursive_linkable_files([]), executable_file=self.executable_file)
 
     def _recursive_linkable_files(self, linkable_files=[]):
         if not self.object_file in linkable_files:
@@ -48,3 +49,4 @@ class Object:
         for import_object in self.import_objects:
             import_object._recursive_linkable_files(linkable_files)
         return linkable_files
+    

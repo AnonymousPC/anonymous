@@ -1,7 +1,7 @@
 from module.config import *
+from module.init   import *
 import shutil
 
-try: 
-    shutil.rmtree(f"./bin/{type}")
-except:
-    pass
+if __name__ == "__main__":
+    try:  shutil.rmtree(f"./bin/{type}")
+    except: pass

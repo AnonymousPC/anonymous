@@ -32,8 +32,8 @@ class Module:
                     self.import_modules.append(Module(name=import_name, from_modules=self.from_modules + [self]))
 
                 # Built
-                self.is_built = all(module.is_built for module in self.import_modules) and os.path.isfile(self.module_file) and os.path.getmtime(self.code_file) <= os.path.getmtime(self.module_file)
-                if not self.is_built:
+                self.is_compiled = all(module.is_compiled for module in self.import_modules) and os.path.isfile(self.module_file) and os.path.getmtime(self.code_file) <= os.path.getmtime(self.module_file)
+                if not self.is_compiled:
                     Module.total += 1
 
                 # Check
@@ -51,17 +51,17 @@ class Module:
     def compile(self):
         # Dependency
         for import_module in self.import_modules:
-            if not import_module.is_built:
+            if not import_module.is_compiled:
                 import_module.compile()
 
         # Self
-        if not self.is_built:
+        if not self.is_compiled:
             Module.current += 1
             print(f"compile module [{Module.current}/{Module.total}]: {self.name}")
             if self.tool_file is not None:
                 compile_tool(tool_file=self.tool_file)
             compile_module(code_file=self.code_file, include_dir=f"./bin/{type}/package/install/include", module_file=self.module_file, object_file=self.object_file)
-            self.is_built = True
+            self.is_compiled = True
         
     def __eq__(self, str: str):
         return self.name == str

@@ -3,18 +3,17 @@ from module.object import *
 from module.init   import *
 
 if __name__ == "__main__":
-    with open(".log", 'w') as logger:
-        try:
-            Source("main").compile()
-            Object("main").link()
+    try:
+        Source("main").compile()
+        Object("main").link()
 
-        except Exception as e:
-            print(e, end="", file=sys.stderr)
-            print(e, end="", file=logger)
-            exit(-1)
+    except Exception as e:
+        print(e, end="", file=sys.stderr)
+        print(e, end="", file=open(".log", 'a'))
+        exit(-1)
 
-        except KeyboardInterrupt as e:
-            exit(-1)
-            
-        except:
-            raise
+    except KeyboardInterrupt as e:
+        exit(-1)
+        
+    except:
+        raise
